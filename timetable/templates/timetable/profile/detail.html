@@ -1,0 +1,28 @@
+{% extends 'timetable/base.html' %}
+{% load tz %}
+{% load gravatar_tags %}
+
+{% block main %}
+{% get_current_timezone as TIME_ZONE %}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="media">
+            <img src="{{ profile.email|gravatar_url:100 }}" class="mr-3 img-thumbnail" alt="{{ profile.username }}'s profile picture">
+            <div class="media-body">
+                <h5 class="mt-0">{{ profile.username }}</h5>
+                {% if profile.description == "" %}
+                <p class="font-italic">This user has not shared any information.</p>
+                {% else %}
+                {{ profile.description }}
+                {% endif %}
+            </div>
+            {% if request.user == profile %}
+            <a href="{% url 'profile_update' %}" class="card-link">Edit Profile</a>
+            {% endif %}
+        </div>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Joined on {{ profile.date_joined }} ({{ TIME_ZONE }})</li>
+    </ul>
+</div>
+{% endblock %}

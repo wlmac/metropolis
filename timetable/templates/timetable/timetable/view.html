@@ -1,0 +1,16 @@
+{% extends 'timetable/base.html' %}
+{% load tz %}
+{% load gravatar_tags %}
+{% load timetable_tags %}
+
+{% block main %}
+{% get_current_timezone as TIME_ZONE %}
+<div class="card mb-3">
+    <div class="card-body">
+        {{ timetable|render_timetable }}
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item"></li>
+    </ul>
+</div>
+{% endblock %}

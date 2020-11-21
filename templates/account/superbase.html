@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="jumbotron text-center">
+    <h1>{% block heading %}{% endblock %}</h1>
+</div>
+<div class="container">
+    {% if messages %}
+    <div>
+        <strong>Messages:</strong>
+        <ul>
+            {% for message in messages %}
+            <li>{{message}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+</div>
+
+{% block extra_body %}
+{% endblock %}
+{% endblock %}
+
+{% block title %}
+{% block head_title %}{% endblock %}
+{% endblock %}

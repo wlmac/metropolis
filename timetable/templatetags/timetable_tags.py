@@ -1,0 +1,28 @@
+from django import template
+from django.utils.safestring import mark_safe
+from courseshare.settings import TIMETABLE_FORMATS
+ 
+register = template.Library()
+ 
+@register.filter
+def render_timetable(timetable):
+    timetable_format = timetable.term.timetable_format
+    timetable_config = TIMETABLE_FORMATS[timetable_format]
+    courses = {}
+    for i in timetable.courses.all():
+        courses[i.position] = i
+    html = '<table class="table"><thead><tr><th scope="col">Period</th>'
+    for i in range(1, timetable_config['days']+1):
+        html += f'<th scope="col">Day {i}</th>'
+    html += '</tr></thead><tbody>'
+    for i in timetable_config['schedule']:
+        html += '<tr>'
+        html += f'<th scope="row">{i["info"]}</th>'
+        for j in i['position']:
+            if j in courses:
+                html += f'<td>{courses[j]}</td>'
+            else:
+                html += f'<td>-</td>'
+        html += '</tr>'
+    html += '</tbody></table>'
+    return mark_safe(html)

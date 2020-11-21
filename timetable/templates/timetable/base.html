@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load common_tags %}
+{% load settings_tags %}
+
+{% block body %}
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <a class="navbar-brand" href="{% url 'index' %}">CourseShare</a>
+    <ul class="navbar-nav">
+        {% settings_value "NAVBAR" as navbar %}
+        {% for heading, items in navbar.items %}
+        {% if items|gettype == 'str' %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ items }}">{{ heading }}</a>
+        </li>
+        {% elif items|gettype == 'dict' %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ heading }}</a>
+            <div class="dropdown-menu">
+                {% for item, path in items.items %}
+                <a class="dropdown-item" href="{{ path }}">{{ item }}</a>
+                {% endfor %}
+            </div>
+        </li>
+        {% else %}
+        {{ items|gettype }}
+        {% endif %}
+        {% endfor %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                {% if request.user.is_authenticated %}
+                Account
+                {% else %}
+                Login/Register
+                {% endif %}
+            </a>
+            <div class="dropdown-menu">
+                {% if request.user.is_authenticated %}
+                <a class="dropdown-item" href="{% url 'profile_redirect' %}">Profile</a>
+                {% if user.is_staff %}
+                <a class="dropdown-item" href="{% url 'admin:index' %}">Admin</a>
+                {% endif %}
+                <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+                {% else %}
+                <a class="dropdown-item" href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a>
+                <a class="dropdown-item" href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Register</a>
+                {% endif %}
+            </div>
+        </li>
+    </ul>
+</nav>
+<br>
+<div class="mx-3">
+    {% block main %}
+    {% endblock %}
+</div>
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+{% settings_value "GOOGLE_ANALYTICS_ON_ALL_VIEWS" as ganalytics_allviews %}
+{% if not ganalytics_allviews %}
+{% include "ganalytics/snippet.html" %}
+{% endif %}
+{% block deps %}
+{% endblock %}
+{% endblock %}

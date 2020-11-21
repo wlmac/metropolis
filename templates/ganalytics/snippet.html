@@ -1,0 +1,13 @@
+{% load settings_tags %}
+{% settings_value "GOOGLE_ANALYTICS_TRACKING_ID" as ga_trackingid %}
+{% if ga_trackingid %}
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_trackingid }}"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', '{{ ga_trackingid }}');
+</script>
+{% endif %}
