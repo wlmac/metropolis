@@ -4,5 +4,5 @@ from .. import models
 from . import mixins
 
 class Index(TemplateView, mixins.TitleMixin):
-    template_name = 'timetable/timetable/index.html'
+    template_name = 'timetable/index.html'
     title = 'Timetable'

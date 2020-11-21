@@ -7,10 +7,11 @@
     <div class="card-body">
         <form method="post">
             <h5 class="card-title">Add timetable</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Select Term</h6>
             {% csrf_token %}
             {{ form|crispy }}
             <div class="mt-3">
-                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button type="submit" class="btn btn-primary mr-2">Continue</button>
                 <a href="{% url 'profile_redirect' %}" class="btn btn-primary" role="button" aria-pressed="true">Cancel</a>
             </div>
         </form>

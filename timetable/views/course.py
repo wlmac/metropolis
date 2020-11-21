@@ -35,6 +35,6 @@ class ViewCourse(DetailView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['term'] = get_object_or_404(models.Term, pk=self.kwargs['term'])
-        context['users'] = [i.owner for i in models.Timetable.objects.filter(courses=self.get_object(), term=context['term'])]
+        course = self.get_object()
+        context['users'] = [i.owner for i in models.Timetable.objects.filter(courses=course, term=course.term)]
         return context

@@ -20,24 +20,32 @@ class CourseShareSignupForm(SignupForm):
         user.save()
         return user
 
-class AddTimetableForm(forms.ModelForm):
+
+class AddTimetableSelectTermForm(forms.Form):
+    term = forms.ModelChoiceField(queryset=models.Term.objects.none())
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
+        super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
+        self.fields['term'].queryset = models.Term.objects.filter(school=user.school).exclude(timetables__owner=user)
+
+class AddTimetableSelectCoursesForm(forms.ModelForm):
     class Meta:
         model = models.Timetable
-        fields = ['term', 'courses']
+        fields = ['courses']
         widgets = {
             'courses': forms.CheckboxSelectMultiple()
         }
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')
-        super(AddTimetableForm, self).__init__(*args, **kwargs)
-        self.fields['term'].queryset = models.Term.objects.exclude(timetables__owner=user)
+        self.term = kwargs.pop('term')
+        super(AddTimetableSelectCoursesForm, self).__init__(*args, **kwargs)
+        self.fields['courses'].queryset = models.Course.objects.filter(term=self.term)
 
     def clean(self):
         courses = self.cleaned_data['courses']
-        term = self.cleaned_data['term']
-        if courses.count() > term.num_courses:
-            raise forms.ValidationError(f'There are only {term.num_courses} courses in this term.')
+        if courses.count() > self.term.num_courses:
+            raise forms.ValidationError(f'There are only {self.term.num_courses} courses in this term.')
         position_set = set()
         for i in courses:
             if i.position in position_set:

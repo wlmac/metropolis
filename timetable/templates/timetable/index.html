@@ -1,0 +1,28 @@
+{% extends 'timetable/base.html' %}
+{% load static %}
+{% load timetable_tags %}
+
+{% block main %}
+{% if request.user.is_anonymous %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Welcome to CourseShare</h5>
+        <p class="card-text">Please register or log in to see who you have classes with.</p>
+    </div>
+</div>
+{% else %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Your timetable</h5>
+        {% for i in request.user.get_ongoing_timetables %}
+        {{ i|render_timetable }}
+        {% empty %}
+        <p class="font-italic">You do not have a timetable for an active term.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block deps %}
+{% endblock %}
