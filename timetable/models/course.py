@@ -24,6 +24,6 @@ class Course(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     position = models.PositiveSmallIntegerField()
-    
+
     def __str__(self):
         return self.code

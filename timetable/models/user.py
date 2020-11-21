@@ -7,5 +7,5 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     description = models.TextField(blank=True)
-    school = models.ForeignKey(School, null=True, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, null=True, on_delete=models.CASCADE, related_name='users')
     timezone = models.CharField(max_length=50, choices=timezone_choices, default="UTC")

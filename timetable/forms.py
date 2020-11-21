@@ -17,6 +17,7 @@ class CourseShareSignupForm(SignupForm):
         user.last_name = self.cleaned_data['last_name']
         print(self.cleaned_data['school'])
         user.school = self.cleaned_data['school']
+        user.save()
         return user
 
 class AddTimetableForm(forms.ModelForm):

@@ -1,6 +1,7 @@
 {% extends 'timetable/base.html' %}
 {% load tz %}
 {% load gravatar_tags %}
+{% load link_tags %}
 
 {% block main %}
 {% get_current_timezone as TIME_ZONE %}
@@ -9,7 +10,7 @@
         <div class="media">
             <img src="{{ profile.email|gravatar_url:100 }}" class="mr-3 img-thumbnail" alt="{{ profile.username }}'s profile picture">
             <div class="media-body">
-                <h5 class="mt-0">{{ profile.username }}</h5>
+                <h5 class="mt-0">{{ profile.get_full_name }} ({{ profile.username }})</h5>
                 {% if profile.description == "" %}
                 <p class="font-italic">This user has not shared any information.</p>
                 {% else %}
@@ -23,6 +24,15 @@
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">Joined on {{ profile.date_joined }} ({{ TIME_ZONE }})</li>
+    </ul>
+</div>
+
+<div class="card my-3">
+    <div class="card-header">Timetable</div>
+    <ul class="list-group list-group-flush">
+        {% for timetable in user.timetables.all %}
+            <li class="list-group-item">{{ timetable.pk|timetable }}</li>
+        {% endfor %}
     </ul>
 </div>
 {% endblock %}

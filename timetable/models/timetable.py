@@ -12,12 +12,12 @@ def get_default_timetable_format():
     return settings.DEFAULT_TIMETABLE_FORMAT
 
 class Timetable(models.Model):
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='timetables')
     term = models.ForeignKey(Term, on_delete=models.RESTRICT, related_name='timetables')
     courses = models.ManyToManyField(Course)
 
     def __str__(self):
-        return f'{self.owner}\'s Timetable for {self.term}'
+        return f'{self.owner.get_full_name()} ({self.owner})\'s Timetable for {self.term}'
 
     def get_absolute_url(self):
         return reverse('view_timetable', kwargs={'pk': self.pk})

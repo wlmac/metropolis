@@ -137,17 +137,18 @@ AUTH_USER_MODEL = 'timetable.User'
 TIMETABLE_FORMATS = {
     '2019': {
         'schedule': [
-            {'info': '08:45 - 10:05', 'position': [1, 1]},
-            {'info': '10:15 - 11:30', 'position': [2, 2]},
-            {'info': '12:30 - 13:45', 'position': [3, 4]},
-            {'info': '13:50 - 15:05', 'position': [4, 3]},
+            {'info': '08:45 - 10:05', 'position': [{1}, {1}]},
+            {'info': '10:15 - 11:30', 'position': [{2}, {2}]},
+            {'info': '12:30 - 13:45', 'position': [{3}, {4}]},
+            {'info': '13:50 - 15:05', 'position': [{4}, {3}]},
         ],
         'days': 2,
     },
     'covid': {
         'schedule': [
-            {'info': '08:45 - 12:30', 'position': [1, 1, 2, 2]},
-            {'info': '14:00 - 15:15', 'position': [2, 2, 1, 1]},
+            {'info': '08:45 - 12:30 (In person)', 'position': [{1}, {2}, {3}, {4}]},
+            {'info': '08:45 - 12:30 (At home)', 'position': [{2}, {1}, {4}, {3}]},
+            {'info': '14:00 - 15:15 (At home)', 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
         ],
         'days': 4,
     },
@@ -180,11 +181,8 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 # NavBar settings
 
 NAVBAR = {
-    'Dashboard': '/dashboard',
-    'About': {
-        'About Us': '/about',
-        'Terms': '/terms',
-    },
+    'School': '/accounts/school',
+    'Add a timetable': '/timetable/add',
 }
 
 # Google Analytics settings

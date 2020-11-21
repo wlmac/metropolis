@@ -3,7 +3,10 @@ from django.views.generic import DetailView
 from .. import models
 from . import mixins
 from ..forms import AddTimetableForm
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
+@method_decorator(login_required, name='dispatch')
 class AddTimetable(CreateView, mixins.TitleMixin):
     template_name = 'timetable/timetable/add.html'
     title = 'Add a Timetable'

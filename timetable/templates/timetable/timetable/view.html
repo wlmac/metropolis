@@ -2,15 +2,14 @@
 {% load tz %}
 {% load gravatar_tags %}
 {% load timetable_tags %}
+{% load link_tags %}
 
 {% block main %}
 {% get_current_timezone as TIME_ZONE %}
 <div class="card mb-3">
     <div class="card-body">
+        <h5 class="card-title">{{ timetable.owner|user }}'s Timetable for {{ timetable.term.name }}</h5>
         {{ timetable|render_timetable }}
     </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item"></li>
-    </ul>
 </div>
 {% endblock %}
