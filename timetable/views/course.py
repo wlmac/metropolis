@@ -25,6 +25,14 @@ class ViewSchool(DetailView, mixins.TitleMixin):
     def get_title(self):
         return f'School {self.get_object().name}'
 
+class ViewTerm(DetailView, mixins.TitleMixin):
+    model = models.Term
+    context_object_name = 'term'
+    template_name = 'timetable/term/view.html'
+
+    def get_title(self):
+        return f'Term {self.get_object().name}'
+
 class ViewCourse(DetailView, mixins.TitleMixin):
     model = models.Course
     context_object_name = 'course'

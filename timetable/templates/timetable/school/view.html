@@ -13,6 +13,15 @@
 </div>
 
 <div class="card my-3">
+    <div class="card-header">Term</div>
+    <ul class="list-group list-group-flush">
+        {% for term in school.terms.all %}
+            <li class="list-group-item">{{ term.pk|term }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="card my-3">
     <div class="card-header">People</div>
     <ul class="list-group list-group-flush">
         {% for user in school.users.all %}

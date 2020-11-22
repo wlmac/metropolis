@@ -40,7 +40,7 @@ class AddTimetableSelectCoursesForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.term = kwargs.pop('term')
         super(AddTimetableSelectCoursesForm, self).__init__(*args, **kwargs)
-        self.fields['courses'].queryset = models.Course.objects.filter(term=self.term)
+        self.fields['courses'].queryset = models.Course.objects.filter(term=self.term).order_by('code')
 
     def clean(self):
         courses = self.cleaned_data['courses']

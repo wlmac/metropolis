@@ -13,12 +13,15 @@ class School(models.Model):
 
 class Term(models.Model):
     name = models.CharField(max_length=128)
-    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='terms')
     description = models.TextField(blank=True)
     num_courses = models.PositiveSmallIntegerField()
     timetable_format = models.CharField(max_length=64)
     start_date = models.DateField()
     end_date = models.DateField()
+
+    def get_absolute_url(self):
+        return reverse('view_term', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
@@ -30,7 +33,7 @@ class Term(models.Model):
 
 class Course(models.Model):
     code = models.CharField(max_length=16)
-    term = models.ForeignKey(Term, on_delete=models.CASCADE)
+    term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name='courses')
     description = models.TextField(blank=True)
     position = models.PositiveSmallIntegerField()
 

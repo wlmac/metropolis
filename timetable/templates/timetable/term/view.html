@@ -1,0 +1,24 @@
+{% extends 'timetable/base.html' %}
+{% load tz %}
+{% load gravatar_tags %}
+{% load link_tags %}
+
+{% block main %}
+{% get_current_timezone as TIME_ZONE %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ term.name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ term.school.name }}</h6>
+        <p class="card-text">{{ term.description }}</p>
+    </div>
+</div>
+
+<div class="card my-3">
+    <div class="card-header">Course</div>
+    <ul class="list-group list-group-flush">
+        {% for course in term.courses.all %}
+            <li class="list-group-item">{{ course.pk|course }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
