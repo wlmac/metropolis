@@ -22,6 +22,11 @@ class SchoolAdmin(admin.ModelAdmin):
         TermInline,
     ]
 
+class EventInline(admin.StackedInline):
+    ordering = ['start_date']
+    model = models.Event
+    extra = 0
+
 class CourseInline(admin.TabularInline):
     formfield_overrides = {
         django.db.models.TextField: {'widget': Textarea(attrs={'rows': 1})},
@@ -33,6 +38,7 @@ class CourseInline(admin.TabularInline):
 
 class TermAdmin(admin.ModelAdmin):
     inlines = [
+        EventInline,
         CourseInline,
     ]
 
