@@ -1,5 +1,6 @@
 from django import template
 from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from django.shortcuts import reverse
 from .. import models
  
@@ -13,14 +14,14 @@ def user_url(username):
 def user(username, postfix=''):
     url = user_url(username)
     user_obj = models.User.objects.get(username=username)
-    return mark_safe('<a href="{0}{1}">{2}</a>'.format(url, postfix, f'{user_obj.get_full_name()} ({username})'))
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), f'{user_obj.get_full_name()} ({username})')
 
 @register.filter
 def users(usernames, postfix=''):
     users_string = ""
     for username in usernames:
         users_string += user(username, postfix) + ", "
-    return mark_safe(users_string[:-2])
+    return users_string[:-2]
 
 @register.filter
 def course_url(course):
@@ -31,7 +32,7 @@ def course_url(course):
 def course(course, postfix=''):
     url = course_url(course)
     course_obj = models.Course.objects.get(pk=course)
-    return mark_safe('<a href="{0}{1}">{2}</a>'.format(url, postfix, str(course_obj)))
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(course_obj))
 
 @register.filter
 def term_url(term):
@@ -42,7 +43,7 @@ def term_url(term):
 def term(term, postfix=''):
     url = term_url(term)
     term_obj = models.Term.objects.get(pk=term)
-    return mark_safe('<a href="{0}{1}">{2}</a>'.format(url, postfix, str(term_obj)))
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(term_obj))
 
 @register.filter
 def timetable_url(timetable):
@@ -52,4 +53,4 @@ def timetable_url(timetable):
 def timetable(timetable, postfix=''):
     url = timetable_url(timetable)
     timetable_obj = models.Timetable.objects.get(pk=timetable)
-    return mark_safe('<a href="{0}{1}">{2}</a>'.format(url, postfix, str(timetable_obj)))
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(timetable_obj))
