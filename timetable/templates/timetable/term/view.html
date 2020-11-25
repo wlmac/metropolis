@@ -17,7 +17,12 @@
     <div class="card-header">Course</div>
     <ul class="list-group list-group-flush">
         {% for course in term.courses.all %}
-            <li class="list-group-item">{{ course.pk|course }}</li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ course.pk|course }}
+            {% with usercount=course.timetables.count %}
+            <span class="badge badge-primary badge-pill">{{ usercount }} User{{ usercount|pluralize }}</span>
+            {% endwith %}
+        </li>
         {% endfor %}
     </ul>
 </div>

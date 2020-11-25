@@ -14,7 +14,7 @@ def get_default_timetable_format():
 class Timetable(models.Model):
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='timetables')
     term = models.ForeignKey(Term, on_delete=models.RESTRICT, related_name='timetables')
-    courses = models.ManyToManyField(Course)
+    courses = models.ManyToManyField(Course, related_name='timetables')
 
     def __str__(self):
         return f'{self.owner.get_full_name()} ({self.owner})\'s Timetable for {self.term}'
