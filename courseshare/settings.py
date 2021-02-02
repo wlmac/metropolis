@@ -143,6 +143,8 @@ TIMETABLE_FORMATS = {
             {'info': '13:50 - 15:05', 'position': [{4}, {3}]},
         ],
         'days': 2,
+        'positions': {1, 2, 3, 4},
+        'question': 'Your Nth course on day 1 is this course. N = ?',
     },
     'covid': {
         'schedule': [
@@ -151,6 +153,8 @@ TIMETABLE_FORMATS = {
             {'info': '14:00 - 15:15 (At home)', 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
         ],
         'days': 4,
+        'positions': {1, 2, 3, 4},
+        'question': 'On which day are you in person for this course?',
     },
 }
 
@@ -169,6 +173,7 @@ ACCOUNT_FORMS = {
     'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
+LOGIN_URL = '/accounts/login'
 LOGIN_REDIRECT_URL = '/accounts/profile'
 LOGOUT_REDIRECT_URL = "/"
 

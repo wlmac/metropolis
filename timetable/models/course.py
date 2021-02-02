@@ -24,6 +24,7 @@ class Term(models.Model):
     timetable_format = models.CharField(max_length=64)
     start_date = models.DateField()
     end_date = models.DateField()
+    is_frozen = models.BooleanField(default=True)
 
     def get_absolute_url(self):
         return reverse('view_term', kwargs={'pk': self.pk})
@@ -60,6 +61,11 @@ class Course(models.Model):
 
     def __str__(self):
         return self.code
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['code', 'term'], name='unique_course'),
+        ]
 
 class Event(models.Model):
     name = models.CharField(max_length=128)

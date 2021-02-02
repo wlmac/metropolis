@@ -3,6 +3,7 @@ from allauth.account.forms import SignupForm
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV3
 from . import models
+from courseshare import settings
 
 class CourseShareSignupForm(SignupForm):
     captcha = ReCaptchaField(widget=ReCaptchaV3, label='')
@@ -52,3 +53,39 @@ class AddTimetableSelectCoursesForm(forms.ModelForm):
                 raise forms.ValidationError(f'There are two or more conflicting courses.')
             else:
                 position_set.add(i.position)
+
+class AddCourseForm(forms.ModelForm):
+    class Meta:
+        model = models.Course
+        fields = ['code', 'position']
+        widgets = {
+            'position': forms.RadioSelect(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.term = kwargs.pop('term')
+        super(AddCourseForm, self).__init__(*args, **kwargs)
+
+        self.question_prompt = settings.TIMETABLE_FORMATS[self.term.timetable_format]['question']
+        self.fields['position'].label = self.question_prompt
+
+        term_courses = self.term.courses.order_by('?')
+        if term_courses:
+            self.fields['code'].widget.attrs['placeholder'] = f'Ex. {term_courses[0].code}'
+
+        self.position_set = list(settings.TIMETABLE_FORMATS[self.term.timetable_format]['positions'])
+        self.position_set.sort()
+        self.fields['position'].choices = ((i, i) for i in self.position_set)
+
+    def clean_code(self):
+        code = self.cleaned_data['code']
+        courses = self.term.courses.filter(code=code)
+        if courses:
+            raise forms.ValidationError('A course with the same code exists for the selected term.')
+        return code
+
+    def clean_position(self):
+        position = self.cleaned_data['position']
+        if position not in self.position_set:
+            raise forms.ValidationError('Must be one of ' + ', '.join([str(i) for i in self.position_set]) + '.')
+        return position

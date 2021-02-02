@@ -1,5 +1,10 @@
 from .. import models
 from django.views.generic.base import ContextMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.utils.decorators import method_decorator
+from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 
 class TitleMixin(ContextMixin):
     title = ''
