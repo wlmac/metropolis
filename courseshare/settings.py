@@ -44,11 +44,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'crispy_forms',
     'captcha',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -194,6 +196,18 @@ NAVBAR = {
 
 GOOGLE_ANALYTICS_TRACKING_ID = None
 GOOGLE_ANALYTICS_ON_ALL_VIEWS = False
+
+# CORS settings
+
+CORS_URLS_REGEX = r'^.*/data/?$'
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'HEAD',
+    'OPTIONS',
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Misc settings
 
