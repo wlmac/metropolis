@@ -13,6 +13,9 @@ class School(models.Model):
     def __str__(self):
         return self.name
 
+    def get_ongoing_terms(self):
+        return [term for term in self.terms.all() if term.is_ongoing()]
+
 def is_instructional(day, events):
     return day.weekday() < 5 and not events.filter(is_instructional=False, start_date__lte=day, end_date__gt=day).exists()
 

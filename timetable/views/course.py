@@ -1,3 +1,4 @@
+from django.views import View
 from django.views.generic import DetailView
 from django.views.generic.base import RedirectView
 from django.shortcuts import get_object_or_404
@@ -7,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
+from django.http import JsonResponse
+from django.template.defaultfilters import date
 from .. import models
 from ..forms import AddCourseForm
 from . import mixins
@@ -29,6 +32,15 @@ class ViewSchool(DetailView, mixins.TitleMixin):
     def get_title(self):
         return f'School {self.get_object().name}'
 
+class ViewSchoolData(View):
+    def get(self, request, pk):
+        school = get_object_or_404(models.School, pk=pk)
+        return JsonResponse({
+            'name': school.name,
+            'description': school.description,
+            'ongoing_terms': [term.pk for term in school.get_ongoing_terms()]
+        })
+
 class ViewTerm(DetailView, mixins.TitleMixin):
     model = models.Term
     context_object_name = 'term'
@@ -36,6 +48,20 @@ class ViewTerm(DetailView, mixins.TitleMixin):
 
     def get_title(self):
         return f'Term {self.get_object().name}'
+
+class ViewTermData(View):
+    def get(self, request, pk):
+        term = get_object_or_404(models.Term, pk=pk)
+        return JsonResponse({
+            'name': term.name,
+            'description': term.description,
+            'school': term.school.pk,
+            'start_date': date(term.start_date, 'U'),
+            'end_date': date(term.end_date, 'U'),
+            'is_ongoing': term.is_ongoing(),
+            'day': term.day(),
+            'events': [event.pk for event in term.events.all()]
+        })
 
 class ViewCourse(DetailView, mixins.TitleMixin):
     model = models.Course
@@ -83,3 +109,16 @@ class AddCourse(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.Titl
         context = super().get_context_data(**kwargs)
         context['term'] = get_object_or_404(models.Term, pk=self.kwargs['pk'])
         return context
+
+class ViewEventData(View):
+    def get(self, request, pk):
+        event = get_object_or_404(models.Event, pk=pk)
+        return JsonResponse({
+            'name': event.name,
+            'description': event.description,
+            'term': event.term.pk,
+            'start_date': date(event.start_date, 'U'),
+            'end_date': date(event.end_date, 'U'),
+            'is_instructional': event.is_instructional,
+            'is_ongoing': event.is_ongoing()
+        })

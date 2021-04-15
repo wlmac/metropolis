@@ -15,5 +15,8 @@ urlpatterns = [
     path('accounts/profile/update', views.ProfileUpdate.as_view(), name='profile_update'),
     path('user/<str:slug>', views.Profile.as_view(), name='profile_detail'),
     path('school/<int:pk>', views.ViewSchool.as_view(), name='view_school'),
+    path('school/<int:pk>/data', views.ViewSchoolData.as_view(), name='view_school_data'),
     path('term/<int:pk>', views.ViewTerm.as_view(), name='view_term'),
+    path('term/<int:pk>/data', views.ViewTermData.as_view(), name='view_term_data'),
+    path('event/<int:pk>/data', views.ViewEventData.as_view(), name='view_event_data'),
 ]
