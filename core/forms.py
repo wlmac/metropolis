@@ -5,16 +5,18 @@ from captcha.widgets import ReCaptchaV3
 from . import models
 from metropolis import settings
 
-class CourseShareSignupForm(SignupForm):
+class MetropolisSignupForm(SignupForm):
     captcha = ReCaptchaField(widget=ReCaptchaV3, label='')
     first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "First Name", "autocomplete": "given-name"}))
     last_name = forms.CharField(max_length=30, label='Last Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "Last Name", "autocomplete": "family-name"}))
-    field_order = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2', 'captcha']
+    graduating_year = forms.ChoiceField(choices=models.graduatingyear_choices)
+    field_order = ['email', 'username', 'first_name', 'last_name', 'graduating_year', 'password1', 'password2', 'captcha']
 
     def save(self, request):
-        user = super(CourseShareSignupForm, self).save(request)
+        user = super(MetropolisSignupForm, self).save(request)
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
+        user.graduating_year = self.cleaned_data['graduating_year']
         user.save()
         return user
 

@@ -40,3 +40,6 @@ class TermAdmin(admin.ModelAdmin):
 admin.site.register(User)
 admin.site.register(models.Timetable)
 admin.site.register(models.Term, TermAdmin)
+admin.site.register(models.Organization)
+admin.site.register(models.Announcement)
+admin.site.register(models.Tag)

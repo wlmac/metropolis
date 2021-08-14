@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% load link_tags %}
+
+{% block main %}
+<div class="card">
+    <div class="card-header">
+        Clubs
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for organization in organizations %}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+                <div class="fw-bold">{{ organization.pk|organization }}</div>
+                {{ organization.description }}
+                <br>
+                {% for tag in organization.tags.all %}
+                    <span class="badge rounded-pill bg-primary text-white">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

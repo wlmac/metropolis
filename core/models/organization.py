@@ -1,9 +1,11 @@
 from django.db import models
+from django.urls import reverse
+from .user import User
 
 # Create your models here.
 
 class Organization(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name="organizations_owning")
+    owner = models.ForeignKey("User", on_delete=models.PROTECT, related_name="organizations_owning")
     supervisors = models.ManyToManyField("User", related_name="organizations_supervising")
     execs = models.ManyToManyField("User", related_name="organizations_leading")
 
@@ -19,7 +21,7 @@ class Organization(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("organization_detail", args=[self.slug])
+        return reverse("organization_detail", args=[self.pk])
 
     def member_count(self):
         return User.objects.filter(organizations=self).count()

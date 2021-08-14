@@ -167,7 +167,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_FORMS = {
     'login': 'allauth.account.forms.LoginForm',
-    'signup': 'core.forms.CourseShareSignupForm',
+    'signup': 'core.forms.MetropolisSignupForm',
     'add_email': 'allauth.account.forms.AddEmailForm',
     'change_password': 'allauth.account.forms.ChangePasswordForm',
     'set_password': 'allauth.account.forms.SetPasswordForm',
@@ -188,7 +188,8 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 # NavBar settings
 
 NAVBAR = {
-    'Add a timetable': '/timetable/add',
+    'News': '/news',
+    'Clubs': '/clubs',
 }
 
 # Google Analytics settings

@@ -12,4 +12,6 @@ urlpatterns = [
     path('accounts/profile', views.ProfileRedirect.as_view(), name='profile_redirect'),
     path('accounts/profile/update', views.ProfileUpdate.as_view(), name='profile_update'),
     path('user/<str:slug>', views.Profile.as_view(), name='profile_detail'),
+    path('clubs', views.OrganizationList.as_view(), name='organization_list'),
+    path('club/<int:pk>', views.OrganizationDetail.as_view(), name='organization_detail'),
 ]

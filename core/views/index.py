@@ -5,4 +5,4 @@ from . import mixins
 
 class Index(TemplateView, mixins.TitleMixin):
     template_name = 'core/index.html'
-    title = 'Timetable'
+    title = 'Dashboard'

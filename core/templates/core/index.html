@@ -6,19 +6,15 @@
 {% if request.user.is_anonymous %}
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Welcome to CourseShare</h5>
-        <p class="card-text">Please register or log in to see who you have classes with.</p>
+        <h5 class="card-title">Welcome to Metropolis</h5>
+        <p class="card-text">Please register or log in to use the app.</p>
     </div>
 </div>
 {% else %}
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Your timetable</h5>
-        {% for i in request.user.get_ongoing_timetables %}
-        {{ i|render_timetable }}
-        {% empty %}
-        <p class="font-italic">You do not have a timetable for an active term.</p>
-        {% endfor %}
+        <h5 class="card-title">Dashboard</h5>
+        <p class="font-italic">WIP</p>
     </div>
 </div>
 {% endif %}

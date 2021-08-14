@@ -24,28 +24,6 @@ def users(usernames, postfix=''):
     return users_string[:-2]
 
 @register.filter
-def course_url(course):
-    course_obj = models.Course.objects.get(pk=course)
-    return course_obj.get_absolute_url()
- 
-@register.filter
-def course(course, postfix=''):
-    url = course_url(course)
-    course_obj = models.Course.objects.get(pk=course)
-    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(course_obj))
-
-@register.filter
-def term_url(term):
-    term_obj = models.Term.objects.get(pk=term)
-    return term_obj.get_absolute_url()
- 
-@register.filter
-def term(term, postfix=''):
-    url = term_url(term)
-    term_obj = models.Term.objects.get(pk=term)
-    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(term_obj))
-
-@register.filter
 def timetable_url(timetable):
     return reverse('view_timetable', args=[timetable])
  
@@ -54,3 +32,13 @@ def timetable(timetable, postfix=''):
     url = timetable_url(timetable)
     timetable_obj = models.Timetable.objects.get(pk=timetable)
     return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(timetable_obj))
+
+@register.filter
+def organization_url(organization):
+    return reverse('organization_detail', args=[organization])
+ 
+@register.filter
+def organization(organization, postfix=''):
+    url = organization_url(organization)
+    organization_obj = models.Organization.objects.get(pk=organization)
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(organization_obj))
