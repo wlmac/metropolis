@@ -188,7 +188,6 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 # NavBar settings
 
 NAVBAR = {
-    'School': '/accounts/school',
     'Add a timetable': '/timetable/add',
 }
 

@@ -29,9 +29,6 @@ class Term(models.Model):
     end_date = models.DateField()
     is_frozen = models.BooleanField(default=True)
 
-    def get_absolute_url(self):
-        return reverse('view_term', kwargs={'pk': self.pk})
-
     def __str__(self):
         return self.name
 
@@ -58,9 +55,6 @@ class Course(models.Model):
     term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name='courses')
     description = models.TextField(blank=True)
     position = models.PositiveSmallIntegerField()
-
-    def get_absolute_url(self):
-        return reverse('view_course', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.code
