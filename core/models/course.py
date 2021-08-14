@@ -6,22 +6,11 @@ import datetime
 
 # Create your models here.
 
-class School(models.Model):
-    name = models.CharField(max_length=128)
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.name
-
-    def get_ongoing_terms(self):
-        return [term for term in self.terms.all() if term.is_ongoing()]
-
 def is_instructional(day, events):
     return day.weekday() < 5 and not events.filter(is_instructional=False, start_date__lte=day, end_date__gt=day).exists()
 
 class Term(models.Model):
     name = models.CharField(max_length=128)
-    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name='terms')
     description = models.TextField(blank=True)
     num_courses = models.PositiveSmallIntegerField()
     timetable_format = models.CharField(max_length=64)

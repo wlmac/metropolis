@@ -17,11 +17,6 @@ class TermInline(admin.TabularInline):
     model = models.Term
     extra = 0
 
-class SchoolAdmin(admin.ModelAdmin):
-    inlines = [
-        TermInline,
-    ]
-
 class EventInline(admin.StackedInline):
     ordering = ['start_date']
     model = models.Event
@@ -44,5 +39,4 @@ class TermAdmin(admin.ModelAdmin):
 
 admin.site.register(User)
 admin.site.register(models.Timetable)
-admin.site.register(models.School, SchoolAdmin)
 admin.site.register(models.Term, TermAdmin)

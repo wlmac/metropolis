@@ -34,8 +34,6 @@ class AddTimetableSelectCourses(LoginRequiredMixin, UserPassesTestMixin, CreateV
 
     def test_func(self):
         term = get_object_or_404(models.Term, pk=self.kwargs['pk'])
-        if self.request.user.school != term.school:
-            return False
         try:
             models.Timetable.objects.get(owner=self.request.user, term=term)
         except models.Timetable.DoesNotExist:
@@ -68,8 +66,6 @@ class AddCourse(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.Titl
 
     def test_func(self):
         term = get_object_or_404(models.Term, pk=self.kwargs['pk'])
-        if self.request.user.school != term.school:
-            return False
         print(term.is_frozen)
         return not term.is_frozen
 
