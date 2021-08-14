@@ -18,4 +18,4 @@ COPY . /app/
 
 EXPOSE 8000
 
-CMD ["gunicorn", "courseshare.wsgi", "-b", "0.0.0.0:8000"]
+CMD ["gunicorn", "metropolis.wsgi", "-b", "0.0.0.0:8000"]

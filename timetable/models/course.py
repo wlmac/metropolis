@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from courseshare import settings
+from metropolis import settings
 from django.utils import timezone
 import datetime
 

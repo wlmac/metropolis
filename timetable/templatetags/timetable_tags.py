@@ -1,6 +1,6 @@
 from django import template
 from django.utils.safestring import mark_safe
-from courseshare.settings import TIMETABLE_FORMATS
+from metropolis.settings import TIMETABLE_FORMATS
  
 register = template.Library()
  

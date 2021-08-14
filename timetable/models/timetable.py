@@ -3,7 +3,7 @@ from .choices import timezone_choices
 from django.contrib.auth import get_user_model
 from .user import User
 from .course import School, Term, Course
-from courseshare import settings
+from metropolis import settings
 from django.urls import reverse
 
 # Create your models here.

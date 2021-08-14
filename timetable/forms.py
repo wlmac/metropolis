@@ -3,7 +3,7 @@ from allauth.account.forms import SignupForm
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV3
 from . import models
-from courseshare import settings
+from metropolis import settings
 
 class CourseShareSignupForm(SignupForm):
     captcha = ReCaptchaField(widget=ReCaptchaV3, label='')

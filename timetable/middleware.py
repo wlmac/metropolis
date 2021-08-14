@@ -1,6 +1,6 @@
 import pytz
 from django.utils import timezone
-from courseshare import settings
+from metropolis import settings
 
 class TimezoneMiddleware:
     def __init__(self, get_response):
