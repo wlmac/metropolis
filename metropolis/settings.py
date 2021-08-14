@@ -192,6 +192,11 @@ NAVBAR = {
     'Clubs': '/clubs',
 }
 
+# News settings
+
+NEWS_CUSTOM_FEEDS = [
+]
+
 # Google Analytics settings
 
 GOOGLE_ANALYTICS_TRACKING_ID = None

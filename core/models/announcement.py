@@ -13,7 +13,7 @@ class Announcement(models.Model):
     slug = models.SlugField(unique=True)
 
     organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="announcements", related_query_name="announcement")
-    approver = models.ForeignKey("User", null=True, on_delete=models.SET_NULL, related_name="announcements_approved")
+    approver = models.ForeignKey("User", blank=True, null=True, on_delete=models.SET_NULL, related_name="announcements_approved")
     is_public = models.BooleanField(default=True)
     is_approved = models.BooleanField(default=False)
     tags = models.ManyToManyField("Tag", blank=True, related_name="announcements", related_query_name="announcement")
