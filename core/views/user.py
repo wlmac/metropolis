@@ -18,7 +18,7 @@ class ProfileRedirect(RedirectView):
 class Profile(DetailView, mixins.TitleMixin):
     model = models.User
     context_object_name = 'profile'
-    template_name = 'timetable/profile/detail.html'
+    template_name = 'core/profile/detail.html'
 
     def get_slug_field(self):
         return 'username'
@@ -29,7 +29,7 @@ class Profile(DetailView, mixins.TitleMixin):
 class ProfileUpdate(UpdateView, mixins.TitleMixin):
     model = models.User
     fields = ['description', 'timezone']
-    template_name = 'timetable/profile/update.html'
+    template_name = 'core/profile/update.html'
     success_url = reverse_lazy('profile_redirect')
     title = 'Update Profile'
 

@@ -27,7 +27,7 @@ class SchoolRedirect(RedirectView):
 class ViewSchool(DetailView, mixins.TitleMixin):
     model = models.School
     context_object_name = 'school'
-    template_name = 'timetable/school/view.html'
+    template_name = 'core/school/view.html'
 
     def get_title(self):
         return f'School {self.get_object().name}'
@@ -44,7 +44,7 @@ class ViewSchoolData(View):
 class ViewTerm(DetailView, mixins.TitleMixin):
     model = models.Term
     context_object_name = 'term'
-    template_name = 'timetable/term/view.html'
+    template_name = 'core/term/view.html'
 
     def get_title(self):
         return f'Term {self.get_object().name}'
@@ -66,7 +66,7 @@ class ViewTermData(View):
 class ViewCourse(DetailView, mixins.TitleMixin):
     model = models.Course
     context_object_name = 'course'
-    template_name = 'timetable/course/view.html'
+    template_name = 'core/course/view.html'
 
     def get_title(self):
         return f'Course'
@@ -78,7 +78,7 @@ class ViewCourse(DetailView, mixins.TitleMixin):
         return context
 
 class AddCourse(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin):
-    template_name = 'timetable/course/add.html'
+    template_name = 'core/course/add.html'
     title = 'Add a Course'
     model = models.Course
     form_class = AddCourseForm

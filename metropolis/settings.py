@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'timetable',
+    'core',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'timetable.middleware.TimezoneMiddleware',
+    'core.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'metropolis.urls'
@@ -132,7 +132,7 @@ STATIC_URL = '/static/'
 
 # Auth settings
 
-AUTH_USER_MODEL = 'timetable.User'
+AUTH_USER_MODEL = 'core.User'
 
 # Timetable settings
 
@@ -167,7 +167,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "username"
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_FORMS = {
     'login': 'allauth.account.forms.LoginForm',
-    'signup': 'timetable.forms.CourseShareSignupForm',
+    'signup': 'core.forms.CourseShareSignupForm',
     'add_email': 'allauth.account.forms.AddEmailForm',
     'change_password': 'allauth.account.forms.ChangePasswordForm',
     'set_password': 'allauth.account.forms.SetPasswordForm',

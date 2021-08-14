@@ -6,7 +6,7 @@ on:
       - master
     paths:
       - 'metropolis/**'
-      - 'timetable/**'
+      - 'core/**'
       - 'templates/**'
       - 'requirements.txt'
       - 'Dockerfile'

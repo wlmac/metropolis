@@ -14,7 +14,7 @@ from django.http import JsonResponse
 
 @method_decorator(login_required, name='dispatch')
 class AddTimetableSelectTerm(FormView, mixins.TitleMixin):
-    template_name = 'timetable/timetable/add/select_term.html'
+    template_name = 'core/timetable/add/select_term.html'
     title = 'Add a Timetable'
     form_class = AddTimetableSelectTermForm
 
@@ -27,7 +27,7 @@ class AddTimetableSelectTerm(FormView, mixins.TitleMixin):
         return kwargs
 
 class AddTimetableSelectCourses(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin):
-    template_name = 'timetable/timetable/add/select_courses.html'
+    template_name = 'core/timetable/add/select_courses.html'
     title = 'Add a Timetable'
     model = models.Timetable
     form_class = AddTimetableSelectCoursesForm
@@ -63,7 +63,7 @@ class AddTimetableSelectCourses(LoginRequiredMixin, UserPassesTestMixin, CreateV
 class ViewTimetable(DetailView, mixins.TitleMixin):
     model = models.Timetable
     context_object_name = 'timetable'
-    template_name = 'timetable/timetable/view.html'
+    template_name = 'core/timetable/view.html'
 
     def get_title(self):
         return f'Timetable'
