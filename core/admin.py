@@ -38,6 +38,21 @@ class TermAdmin(admin.ModelAdmin):
         CourseInline,
     ]
 
+class OrganizationAdmin(admin.ModelAdmin):
+    fields = ['name', 'description', 'is_open', 'tags', 'owner', 'supervisors', 'execs']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj == None or request.user.is_superuser or request.user == obj.owner:
+            return []
+        else:
+            return ['owner', 'supervisors', 'execs']
+
 class OrganizationListFilter(admin.SimpleListFilter):
     title = 'organization'
     parameter_name = 'org'
@@ -126,12 +141,21 @@ class AnnouncementAdmin(admin.ModelAdmin):
                 kwargs["queryset"] = models.Organization.objects.filter(Q(supervisors=request.user) | Q(execs=request.user)).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def has_change_permission(self, request, obj=None):
+        if obj != None and obj.status != 'p' and request.user in obj.organization.supervisors.all() and request.user not in obj.organization.execs.all():
+            return False
+        return super().has_change_permission(request, obj)
+
     def save_model(self, request, obj, form, change):
         if not change:
             obj.author = request.user
 
         if request.user in obj.organization.supervisors.all():
             obj.supervisor = request.user
+            if obj.status != 'p' and request.user != obj.author:
+                # Notify user
+                pass
+                self.message_user(request, f'Successfully marked announcement as {obj.get_status_display()}.')
         else:
             if obj.status != 'p':
                 # Notify supervisors
@@ -143,7 +167,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 admin.site.register(User)
 admin.site.register(models.Timetable)
 admin.site.register(models.Term, TermAdmin)
-admin.site.register(models.Organization)
+admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.Tag)
 
