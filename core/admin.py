@@ -48,7 +48,7 @@ class OrganizationListFilter(admin.SimpleListFilter):
             yield (org.pk, org.name)
 
     def queryset(self, request, queryset):
-        if self.value() == None:
+        if self.value() == None or request.user.is_superuser:
             return queryset
         else:
             return queryset.filter(organization__slug=self.value())
@@ -65,7 +65,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         return qs.filter(Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
 
     def get_readonly_fields(self, request, obj=None):
-        if obj == None:
+        if obj == None or request.user.is_superuser:
             return []
 
         all_fields = ['organization', 'author', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason', 'supervisor']
@@ -88,7 +88,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         return fields
 
     def get_fields(self, request, obj=None):
-        all_fields = ['organization', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason', 'supervisor']
+        all_fields = ['organization', 'author', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason', 'supervisor']
 
         fields = set(all_fields)
         fields.difference_update(self.get_exclude(request, obj))
@@ -99,6 +99,9 @@ class AnnouncementAdmin(admin.ModelAdmin):
         return fields
 
     def get_exclude(self, request, obj=None):
+        if request.user.is_superuser:
+            return {}
+
         if obj == None:
             return {'author', 'supervisor', 'status', 'rejection_reason'}
 
@@ -119,7 +122,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
-            kwargs["queryset"] = models.Organization.objects.filter(Q(supervisors=request.user) | Q(execs=request.user)).distinct()
+            if not request.user.is_superuser:
+                kwargs["queryset"] = models.Organization.objects.filter(Q(supervisors=request.user) | Q(execs=request.user)).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):
