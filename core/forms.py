@@ -9,7 +9,7 @@ class MetropolisSignupForm(SignupForm):
     captcha = ReCaptchaField(widget=ReCaptchaV3, label='')
     first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "First Name", "autocomplete": "given-name"}))
     last_name = forms.CharField(max_length=30, label='Last Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "Last Name", "autocomplete": "family-name"}))
-    graduating_year = forms.ChoiceField(choices=models.graduatingyear_choices)
+    graduating_year = forms.ChoiceField(choices=models.graduating_year_choices)
     field_order = ['email', 'username', 'first_name', 'last_name', 'graduating_year', 'password1', 'password2', 'captcha']
 
     def save(self, request):

@@ -11,7 +11,6 @@ class Organization(models.Model):
 
     name = models.CharField(max_length=64)
     description = models.TextField(blank=True)
-    slug = models.SlugField(unique=True)
 
     registered_date = models.DateTimeField(auto_now_add=True)
     is_open = models.BooleanField(default=True)
