@@ -59,14 +59,13 @@ class AddTimetableSelectCourses(LoginRequiredMixin, UserPassesTestMixin, CreateV
         return context
 
 class AddCourse(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin):
-    template_name = 'timetable/course/add.html'
+    template_name = 'core/course/add.html'
     title = 'Add a Course'
     model = models.Course
     form_class = AddCourseForm
 
     def test_func(self):
         term = get_object_or_404(models.Term, pk=self.kwargs['pk'])
-        print(term.is_frozen)
         return not term.is_frozen
 
     def form_valid(self, form):

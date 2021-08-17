@@ -12,7 +12,6 @@ def is_instructional(day, events):
 class Term(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    num_courses = models.PositiveSmallIntegerField()
     timetable_format = models.CharField(max_length=64)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -21,23 +20,30 @@ class Term(models.Model):
     def __str__(self):
         return self.name
 
-    def is_ongoing(self):
-        today = timezone.localdate()
-        if today >= self.start_date and today < self.end_date: return True
-        else: return False
+    def is_ongoing(self, target_date=None):
+        if target_date == None:
+            target_date = timezone.localdate()
+        return target_date >= self.start_date and target_date < self.end_date
 
-    def day(self):
+    def day(self, target_date=None):
+        cycle_duration = settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['duration']
         events = Event.objects.filter(term=self, is_instructional=False)
-        today = timezone.localdate()
+        if target_date == None:
+            target_date = timezone.localdate()
         cur_iter_day = self.start_date
-        day_num = 0
-        if not is_instructional(today, events):
+        cycle_day_type_set = set()
+        if not self.is_ongoing(target_date) or not is_instructional(target_date, events):
             return None
-        while cur_iter_day < today:
+        while cur_iter_day <= target_date:
             if is_instructional(cur_iter_day, events):
-                day_num += 1
+                if cycle_duration == 'day':
+                    cycle_day_type_set.add(cur_iter_day.timetuple().tm_yday)
+                elif cycle_duration == 'week':
+                    cycle_day_type_set.add(cur_iter_day.isocalendar()[1])
+                else:
+                    raise NotImplementedError
             cur_iter_day += datetime.timedelta(1)
-        return day_num % settings.TIMETABLE_FORMATS[self.timetable_format]['days'] + 1
+        return (len(cycle_day_type_set) - 1) % settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['length'] + 1
 
 class Course(models.Model):
     code = models.CharField(max_length=16)

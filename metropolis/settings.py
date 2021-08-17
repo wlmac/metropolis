@@ -137,16 +137,28 @@ AUTH_USER_MODEL = 'core.User'
 # Timetable settings
 
 TIMETABLE_FORMATS = {
-    '2019': {
+    'pre-2020': {
         'schedule': [
             {'info': '08:45 - 10:05', 'position': [{1}, {1}]},
             {'info': '10:15 - 11:30', 'position': [{2}, {2}]},
             {'info': '12:30 - 13:45', 'position': [{3}, {4}]},
             {'info': '13:50 - 15:05', 'position': [{4}, {3}]},
         ],
-        'days': 2,
+        'courses': 4,
         'positions': {1, 2, 3, 4},
-        'question': 'Your Nth course on day 1 is this course. N = ?',
+        'cycle': {
+            'length': 2,
+            'duration': 'day',
+        },
+        'question': {
+            'prompt': 'Your Nth course on day 1 is this course. N = ?',
+            'choices': [
+                (1, 1),
+                (2, 2),
+                (3, 3),
+                (4, 4),
+            ]
+        }
     },
     'covid': {
         'schedule': [
@@ -154,9 +166,45 @@ TIMETABLE_FORMATS = {
             {'info': '08:45 - 12:30 (At home)', 'position': [{2}, {1}, {4}, {3}]},
             {'info': '14:00 - 15:15 (At home)', 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
         ],
-        'days': 4,
+        'courses': 2,
         'positions': {1, 2, 3, 4},
-        'question': 'On which day are you in person for this course?',
+        'cycle': {
+            'length': 4,
+            'duration': 'day',
+        },
+        'question': {
+            'prompt': 'On which day are you in person for this course?',
+            'choices': [
+                (1, 1),
+                (2, 2),
+                (3, 3),
+                (4, 4),
+            ]
+        }
+    },
+    'week': {
+        'schedule': [
+            {'info': '09:00 - 11:30', 'position': [{1, 5, 7}, {3, 6, 7}]},
+            {'info': '12:15 - 14:45', 'position': [{2, 5, 7}, {4, 6, 7}]},
+        ],
+        'courses': 4,
+        'positions': {1, 2, 3, 4, 5, 6, 7},
+        'cycle': {
+            'length': 2,
+            'duration': 'week',
+        },
+        'question': {
+            'prompt': 'When do you have class for this course?',
+            'choices': [
+                (1, 'Week 1 Morning'),
+                (2, 'Week 1 Afternoon'),
+                (3, 'Week 2 Morning'),
+                (4, 'Week 2 Afternoon'),
+                (5, 'This course is a 2-credit Co-op in Week 1.'),
+                (6, 'This course is a 2-credit Co-op in Week 2.'),
+                (7, 'This course is a 4-credit Co-op.'),
+            ]
+        }
     },
 }
 

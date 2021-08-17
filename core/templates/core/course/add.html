@@ -8,7 +8,7 @@
     <div class="card-body">
         <form method="post">
             <h5 class="card-title">Add course</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Add a course for {{ term.pk|term }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Add a course for {{ term }}</h6>
             {% csrf_token %}
             {{ form|crispy }}
             <div class="mt-3">

@@ -64,8 +64,8 @@ class AddCourseForm(forms.ModelForm):
         self.term = kwargs.pop('term')
         super(AddCourseForm, self).__init__(*args, **kwargs)
 
-        self.question_prompt = settings.TIMETABLE_FORMATS[self.term.timetable_format]['question']
-        self.fields['position'].label = self.question_prompt
+        self.fields['position'].label = settings.TIMETABLE_FORMATS[self.term.timetable_format]['question']['prompt']
+        self.fields['position'].choices = settings.TIMETABLE_FORMATS[self.term.timetable_format]['question']['choices']
 
         term_courses = self.term.courses.order_by('?')
         if term_courses:
@@ -73,7 +73,6 @@ class AddCourseForm(forms.ModelForm):
 
         self.position_set = list(settings.TIMETABLE_FORMATS[self.term.timetable_format]['positions'])
         self.position_set.sort()
-        self.fields['position'].choices = ((i, i) for i in self.position_set)
 
     def clean_code(self):
         code = self.cleaned_data['code']
