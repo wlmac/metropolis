@@ -43,8 +43,8 @@ class AddTimetableSelectCoursesForm(forms.ModelForm):
 
     def clean(self):
         courses = self.cleaned_data['courses']
-        if courses.count() > self.term.num_courses:
-            raise forms.ValidationError(f'There are only {self.term.num_courses} courses in this term.')
+        if courses.count() > settings.TIMETABLE_FORMATS[self.term.timetable_format]['courses']:
+            raise forms.ValidationError(f'There are only {settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]} courses in this term.')
         position_set = set()
         for i in courses:
             if i.position in position_set:
