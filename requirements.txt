@@ -14,6 +14,7 @@ django-crispy-forms==1.11.2
 django-recaptcha==2.0.6
 django-storages==1.11.1
 djangorestframework==3.12.4
+djangorestframework-simplejwt==4.7.2
 gunicorn==20.1.0
 idna==3.2
 jmespath==0.10.0
