@@ -3,53 +3,111 @@
 {% load settings_tags %}
 
 {% block body %}
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-    <a class="navbar-brand" href="{% url 'index' %}">Metropolis</a>
-    <ul class="navbar-nav">
-        {% settings_value "NAVBAR" as navbar %}
-        {% for heading, items in navbar.items %}
-        {% if items|gettype == 'str' %}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ items }}">{{ heading }}</a>
-        </li>
-        {% elif items|gettype == 'dict' %}
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ heading }}</a>
-            <div class="dropdown-menu">
-                {% for item, path in items.items %}
-                <a class="dropdown-item" href="{{ path }}">{{ item }}</a>
-                {% endfor %}
-            </div>
-        </li>
-        {% else %}
-        {{ items|gettype }}
-        {% endif %}
+<ul id="dropdownAcc" class="dropdown-content">
+    {% if request.user.is_authenticated %}
+    <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
+    {% if user.is_staff %}
+    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+    {% endif %}
+    <li><a href="{% url 'account_logout' %}">Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
+    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Register</a></li>
+    {% endif %}
+    <li><a>hi</a></li>
+</ul>
+<ul class="sidenav" id="mobile-demo">
+    {% settings_value "NAVBAR" as navbar %}
+    {% for heading, items in navbar.items %}
+    {% if items|gettype == 'str' %}
+    <li >
+        <a href="{{ items }}">{{ heading }}</a>
+    </li>
+    {% elif items|gettype == 'dict' %}
+    <li class="divider"></li>
+    <li>
+        {% for item, path in items.items %}
+            <li>
+                <a href="#!">{{ item }}</a>
+            </li>
         {% endfor %}
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+    </li>
+    {% else %}
+    {{ items|gettype }}
+    {% endif %}
+    {% endfor %}
+    <li class="divider"></li>
+    {% if request.user.is_authenticated %}
+    <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
+    {% if user.is_staff %}
+    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+    {% endif %}
+    <li><a href="{% url 'account_logout' %}">Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
+    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Register</a></li>
+    {% endif %}
+</ul>
+<nav>
+    <div class="nav-wrapper">
+        <a class="brand-logo" href="{% url 'index' %}">Metropolis</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            {% settings_value "NAVBAR" as navbar %}
+            {% for heading, items in navbar.items %}
+            {% if items|gettype == 'str' %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ items }}">{{ heading }}</a>
+            </li>
+            {% elif items|gettype == 'dict' %}
+            <li>
+                <a class="dropdown-trigger" href="#!" data-target="dropdown1">{{ heading }}<i class="material-icons right">arrow_drop_down</i></a>
+                <ul id="dropdown1" class="dropdown-content">
+                    {% for item, path in items.items %}
+                        <li>
+                            <a href="#!">{{ item }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% else %}
+            {{ items|gettype }}
+            {% endif %}
+            {% endfor %}
+            <li><a class="dropdown-trigger" href="#!" data-target="dropdownAcc">
                 {% if request.user.is_authenticated %}
                 Account
                 {% else %}
                 Login/Register
                 {% endif %}
-            </a>
-            <div class="dropdown-menu">
-                {% if request.user.is_authenticated %}
-                <a class="dropdown-item" href="{% url 'profile_redirect' %}">Profile</a>
-                {% if user.is_staff %}
-                <a class="dropdown-item" href="{% url 'admin:index' %}">Admin</a>
-                {% endif %}
-                <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
-                {% else %}
-                <a class="dropdown-item" href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a>
-                <a class="dropdown-item" href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Register</a>
-                {% endif %}
-            </div>
-        </li>
-    </ul>
+                <i class="material-icons right">arrow_drop_down</i>
+            </a></li>
+            <script>
+                $(document).ready(function(){
+                   $('.modal').modal();
+                   $('.dropdown-trigger').dropdown();
+                });
+                $(document).ready(function(){
+                   $('.modal').modal();
+                   $('.sidenav-trigger').dropdown();
+                });
+            </script>
+            <style>
+                .dropdown-content{
+                    width: max-content !important;
+                    height: auto !important;
+                    top: 100% !important;
+                }
+                .sidenav{
+                    width: max-content !important;
+                    height: auto !important;
+                }
+            </style>
+        </ul>
+    </div>
 </nav>
 <br>
-<div class="mx-3">
+<div class="container">
     {% block main %}
     {% endblock %}
 </div>
