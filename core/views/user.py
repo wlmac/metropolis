@@ -28,7 +28,7 @@ class Profile(DetailView, mixins.TitleMixin):
     
 class ProfileUpdate(UpdateView, mixins.TitleMixin):
     model = models.User
-    fields = ['description', 'timezone']
+    fields = ['bio', 'timezone']
     template_name = 'core/profile/update.html'
     success_url = reverse_lazy('profile_redirect')
     title = 'Update Profile'

@@ -17,8 +17,10 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         approved_announcements = models.Announcement.objects.filter(status='a')
-        context['feed_all'] = approved_announcements.filter(Q(is_public=True) | Q(organization__member=self.request.user))
-        context['feed_my'] = approved_announcements.filter(Q(is_public=True, tags__follower=self.request.user) | Q(organization__member=self.request.user)).distinct()
+        context['feed_all'] = approved_announcements.filter(is_public=True)
+        if self.request.user.is_authenticated:
+            context['feed_all'] |= approved_announcements.filter(organization__member=self.request.user)
+            context['feed_my'] = approved_announcements.filter(Q(is_public=True, tags__follower=self.request.user) | Q(organization__member=self.request.user)).distinct()
 
         context['feeds_custom'] = []
         for custom_feed_organization_pk in settings.NEWS_CUSTOM_FEEDS:

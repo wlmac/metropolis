@@ -9,6 +9,7 @@
     </div>
 </div>
 
+{% if user.is_authenticated %}
 <div class="card">
     <div class="card-header">
         Membership
@@ -24,4 +25,5 @@
         {% endif %}
     </form>
 </div>
+{% endif %}
 {% endblock %}
