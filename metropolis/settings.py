@@ -238,13 +238,13 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 # NavBar settings
 
 NAVBAR = {
-    'News': '/news',
+    'Announcements': '/announcements',
     'Clubs': '/clubs',
 }
 
-# News settings
+# Announcements settings
 
-NEWS_CUSTOM_FEEDS = [
+ANNOUNCEMENTS_CUSTOM_FEEDS = [
 ]
 
 # Google Analytics settings

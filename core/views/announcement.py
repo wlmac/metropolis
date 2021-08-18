@@ -23,7 +23,7 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
             context['feed_my'] = approved_announcements.filter(Q(is_public=True, tags__follower=self.request.user) | Q(organization__member=self.request.user)).distinct()
 
         context['feeds_custom'] = []
-        for custom_feed_organization_pk in settings.NEWS_CUSTOM_FEEDS:
+        for custom_feed_organization_pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS:
             custom_feed_organization = models.Organization.objects.get(pk=custom_feed_organization_pk)
             custom_feed_queryset = approved_announcements.filter(organization__pk=custom_feed_organization_pk)
             if self.request.user not in custom_feed_organization.members.all():
