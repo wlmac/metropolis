@@ -1,9 +1,10 @@
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
 urlpatterns = [
     path('', views.Index.as_view(), name='index'),
+    path('api/', include('core.api.urls')),
     path('timetable/add', views.AddTimetableSelectTerm.as_view(), name='add_timetable_select_term'),
     path('timetable/add/term/<int:pk>', views.AddTimetableSelectCourses.as_view(), name='add_timetable_select_courses'),
     path('timetable/view/<int:pk>', views.ViewTimetable.as_view(), name='view_timetable'),

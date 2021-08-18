@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'captcha',
     'corsheaders',
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -249,6 +251,14 @@ NEWS_CUSTOM_FEEDS = [
 
 GOOGLE_ANALYTICS_TRACKING_ID = None
 GOOGLE_ANALYTICS_ON_ALL_VIEWS = False
+
+# API settings
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 # CORS settings
 
