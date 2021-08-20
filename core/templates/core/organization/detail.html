@@ -2,28 +2,83 @@
 {% load link_tags %}
 
 {% block main %}
-<div class="card mb-3">
-    <div class="card-body">
-        <h5 class="card-title">{{ organization.name }}</h5>
-        <p class="card-text">{{ organization.description }}</p>
+<div class="row">
+    <div class="col s3">
+        <img class="responsive-img circle" src="https://via.placeholder.com/150">
+    </div>
+    <div class="col s5">
+        <h2>{{ organization.name }}</h2>
+        <div class="tag-section">
+            {% for tag in organization.tags.all %}
+            <p>{{tag}}</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col s4">
+        <form method="POST" class="right-align">
+            {% csrf_token %}
+            {% if organization not in request.user.organizations.all %}
+            <button type="submit" class="btn">Join</button>
+            {% else %}
+            <button type="submit" class="btn">Leave</button>
+            {% endif %}
+        </form>
     </div>
 </div>
+<div class="row">
+    <div class="col s8">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae
+        velit cursus, viverra nisl a, commodo odio. Quisque vel urna eget augue
+        vehicula bibendum nec quis neque. Nunc laoreet purus sit amet elit
+        condimentum faucibus. Ut mi ligula, semper nec pellentesque at, lacinia
+        id purus. Phasellus ut pretium leo, vitae rutrum velit. Praesent ac elit
+        egestas, scelerisque augue sit amet, aliquet ante. Fusce nec massa
+        porttitor, dapibus urna eu, viverra augue. Praesent dignissim vehicula
+        est, id fermentum mauris hendrerit sed. Aliquam pellentesque quam ut
+        dolor efficitur imperdiet. Etiam ut lacus viverra, aliquam mi in, dictum
+        tellus. Nam posuere est ut ante lacinia sagittis. Proin quam augue,
+        euismod ac lorem non, faucibus tincidunt purus. Sed vitae convallis
+        odio. Donec ligula libero, finibus a tellus accumsan, mollis fermentum
+        justo.</p>
+    </div>
+    <div class="col s4">
+        <ul class="right-align">
+            <li><a href="http://example.org">http://example.org</a></li>
+            <li><a href="http://example.org">http://example.org</a></li>
+            <li><a href="http://example.org">http://example.org</a></li>
+        </ul>
+    </div>
+</div>
+{% comment %}
+<div class="row">
+    <div class="col s2 teal lighten-2">
+        <h5>{{ organization.name }}</h5>
+        <p>{{ organization.description }}</p>
+    </div>
+    <div class="col s2 teal lighten-2">
+        <h5>{{ organization.name }}</h5>
+        <p>{{ organization.description }}</p>
+    </div>
+</div>
+{% endcomment %}
 
-{% if user.is_authenticated %}
-<div class="card">
-    <div class="card-header">
+{#% if user.is_authenticated %#}
+{% comment %}
+<div>
+    <div>
         Membership
     </div>
-    <form method="POST" class="card-body">
+    <form method="POST">
         {% csrf_token %}
         {% if organization not in request.user.organizations.all %}
-        <h5 class="card-title">Subscribe to announcements from {{ organization.name }}</h5>
-        <button type="submit" class="btn btn-primary">Join</button>
+        <h5>Subscribe to announcements from {{ organization.name }}</h5>
+        <button type="submit" class="btn">Join</button>
         {% else %}
-        <h5 class="card-title">Unsubscribe to announcements from {{ organization.name }}</h5>
-        <button type="submit" class="btn btn-primary">Leave</button>
+        <h5>Unsubscribe to announcements from {{ organization.name }}</h5>
+        <button type="submit" class="btn">Leave</button>
         {% endif %}
     </form>
 </div>
-{% endif %}
+{% endcomment %}
+{#% endif %#}
 {% endblock %}
