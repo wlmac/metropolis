@@ -58,10 +58,6 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block head %}
-{% settings_value "GOOGLE_ANALYTICS_ON_ALL_VIEWS" as ganalytics_allviews %}
-{% if not ganalytics_allviews %}
-{% include "ganalytics/snippet.html" %}
-{% endif %}
 {% block deps %}
 {% endblock %}
 {% endblock %}

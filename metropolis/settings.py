@@ -245,10 +245,6 @@ NAVBAR = {
 NEWS_CUSTOM_FEEDS = [
 ]
 
-# Google Analytics settings
-
-GOOGLE_ANALYTICS_TRACKING_ID = None
-GOOGLE_ANALYTICS_ON_ALL_VIEWS = False
 
 # CORS settings
 
