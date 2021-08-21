@@ -3,13 +3,13 @@ from ... import models
 
 
 class OrganizationSerializer(serializers.Serializer):
-    owner = serializers.SlugRelatedField(slug_field='username', allow_null=True)
-    supervisors = serializers.SlugRelatedField(slug_field='username', allow_null=True, many=True)
-    execs = serializers.SlugRelatedField(slug_field='username', allow_null=True, many=True)
+    owner = serializers.SlugRelatedField(slug_field='username', allow_null=True, queryset=models.User.objects.all())
+    supervisors = serializers.SlugRelatedField(slug_field='username', allow_null=True, many=True, queryset=models.User.objects.all())
+    execs = serializers.SlugRelatedField(slug_field='username', allow_null=True, many=True, queryset=models.User.objects.all())
 
     name = serializers.CharField(max_length=64)
     description = serializers.CharField(allow_blank=True)
 
     registered_date = serializers.DateTimeField()
     is_open = serializers.BooleanField(default=True)
-    tags = serializers.SlugRelatedField(slug_field='name', many=True)
+    tags = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Tag.objects.all())
