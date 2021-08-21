@@ -8,7 +8,7 @@ class OrganizationSerializer(serializers.Serializer):
     execs = serializers.SlugRelatedField(slug_field='username', allow_null=True, many=True, queryset=models.User.objects.all())
 
     name = serializers.CharField(max_length=64)
-    description = serializers.CharField(allow_blank=True)
+    description = serializers.CharField(allow_blank=True, style={'base_template': 'textarea.html'})
 
     registered_date = serializers.DateTimeField()
     is_open = serializers.BooleanField(default=True)

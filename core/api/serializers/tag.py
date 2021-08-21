@@ -4,4 +4,4 @@ from ... import models
 
 class TagSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=30)
-    description = serializers.CharField(allow_blank=True)
+    description = serializers.CharField(allow_blank=True, style={'base_template': 'textarea.html'})

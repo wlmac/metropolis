@@ -8,7 +8,7 @@ class AnnouncementSerializer(serializers.Serializer):
     last_modified_date = serializers.DateTimeField()
 
     title = serializers.CharField(max_length=128, allow_blank=True)
-    body = serializers.CharField(allow_blank=True)
+    body = serializers.CharField(allow_blank=True, style={'base_template': 'textarea.html'})
     tags = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Tag.objects.all())
 
     organization = serializers.SlugRelatedField(slug_field='name', queryset=models.Organization.objects.all())
