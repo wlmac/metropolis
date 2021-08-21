@@ -1,0 +1,73 @@
+.tag-section {
+    display: flex;
+    margin: 0;
+}
+
+.tag {
+    padding: 2px 5px;
+    margin: 5px 2px;
+    background-color: lightblue;
+}
+
+.member-button {
+    display: flex; 
+    justify-content: flex-end;
+}
+
+.description {
+    padding-left: 5%;
+    border-left: black 2px solid;
+    margin: 0;
+}
+
+.link-section {
+    margin: 0;
+}
+
+.circle-icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: blue;
+    margin-right: 2%;
+}
+
+li {
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width:600px) {
+    .club {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+    .club-name {
+        margin: 0;
+    }
+    .tag-section {
+        justify-content: center;
+    }
+    .member-button {
+        margin-top: 5%;
+        justify-content: center; 
+    }
+    .club-info {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .link-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .circle-icon {
+        display: none; 
+    }
+    .description {
+        border: none;
+        padding: 0;
+        margin-top: 1rem;
+    }
+}

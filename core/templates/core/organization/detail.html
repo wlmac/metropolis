@@ -1,33 +1,39 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
+{% endblock %}
 
 {% block main %}
-<div class="row">
-    <div class="col s3">
+<div class="club"> 
+<div class="row club-header">
+    <div class="col m3 s12 club-icon">
         <img class="responsive-img circle" src="https://via.placeholder.com/150">
     </div>
-    <div class="col s5">
-        <h2>{{ organization.name }}</h2>
+    <div class="col m5 s12"> 
+        <h2 class="club-name">{{ organization.name }}</h2>
         <div class="tag-section">
             {% for tag in organization.tags.all %}
-            <p>{{tag}}</p>
+            <p class="tag">{{tag}}</p>
             {% endfor %}
         </div>
     </div>
-    <div class="col s4">
-        <form method="POST" class="right-align">
+    <div class="col m4 s12"> 
+        <form method="POST" class="member-button">
             {% csrf_token %}
             {% if organization not in request.user.organizations.all %}
-            <button type="submit" class="btn">Join</button>
+            <button type="submit" class="btn">+ Join</button>
             {% else %}
-            <button type="submit" class="btn">Leave</button>
+            <button type="submit" class="btn">- Leave</button>
             {% endif %}
         </form>
     </div>
 </div>
-<div class="row">
-    <div class="col s8">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae
+<div class="row club-info">
+    <div class="col m8"> 
+        <p class="description" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae
         velit cursus, viverra nisl a, commodo odio. Quisque vel urna eget augue
         vehicula bibendum nec quis neque. Nunc laoreet purus sit amet elit
         condimentum faucibus. Ut mi ligula, semper nec pellentesque at, lacinia
@@ -41,26 +47,16 @@
         odio. Donec ligula libero, finibus a tellus accumsan, mollis fermentum
         justo.</p>
     </div>
-    <div class="col s4">
-        <ul class="right-align">
-            <li><a href="http://example.org">http://example.org</a></li>
-            <li><a href="http://example.org">http://example.org</a></li>
-            <li><a href="http://example.org">http://example.org</a></li>
+    <div class="col m4"> 
+        {# TODO: Add club links #}
+        <ul class="link-section">
+            <li><div class="circle-icon"></div><a href="http://example.org">http://example.org</a></li>
+            <li><div class="circle-icon"></div><a href="http://example.org">http://example.org</a></li>
+            <li><div class="circle-icon"></div><a href="http://example.org">http://example.org</a></li>
         </ul>
     </div>
 </div>
-{% comment %}
-<div class="row">
-    <div class="col s2 teal lighten-2">
-        <h5>{{ organization.name }}</h5>
-        <p>{{ organization.description }}</p>
-    </div>
-    <div class="col s2 teal lighten-2">
-        <h5>{{ organization.name }}</h5>
-        <p>{{ organization.description }}</p>
-    </div>
 </div>
-{% endcomment %}
 
 {#% if user.is_authenticated %#}
 {% comment %}
