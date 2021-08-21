@@ -62,24 +62,4 @@
         </div>
     </div>
 </div>
-
-{#% if user.is_authenticated %#}
-{% comment %}
-<div>
-    <div>
-        Membership
-    </div>
-    <form method="POST">
-        {% csrf_token %}
-        {% if organization not in request.user.organizations.all %}
-        <h5>Subscribe to announcements from {{ organization.name }}</h5>
-        <button type="submit" class="btn">Join</button>
-        {% else %}
-        <h5>Unsubscribe to announcements from {{ organization.name }}</h5>
-        <button type="submit" class="btn">Leave</button>
-        {% endif %}
-    </form>
-</div>
-{% endcomment %}
-{#% endif %#}
 {% endblock %}
