@@ -1,0 +1,9 @@
+.dropdown-content{
+    width: max-content !important;
+    height: auto !important;
+    top: 100% !important;
+}
+.sidenav{
+    width: max-content !important;
+    height: auto !important;
+}
