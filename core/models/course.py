@@ -62,8 +62,8 @@ class Course(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     is_instructional = models.BooleanField(default=False)
     organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="events", related_query_name="event", blank=True, null=True)
     tags = models.ManyToManyField("Tag", blank=True, related_name="events", related_query_name="event")
