@@ -61,11 +61,12 @@ class Course(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=128)
-    term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name='events')
     description = models.TextField(blank=True)
     start_date = models.DateField()
     end_date = models.DateField()
     is_instructional = models.BooleanField(default=False)
+    organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="events", related_query_name="event", blank=True, null=True)
+    tags = models.ManyToManyField("Tag", blank=True, related_name="events", related_query_name="event")
 
     def __str__(self):
         return self.name

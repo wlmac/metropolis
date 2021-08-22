@@ -18,11 +18,6 @@ class TermInline(admin.TabularInline):
     model = models.Term
     extra = 0
 
-class EventInline(admin.StackedInline):
-    ordering = ['start_date']
-    model = models.Event
-    extra = 0
-
 class CourseInline(admin.TabularInline):
     formfield_overrides = {
         django.db.models.TextField: {'widget': Textarea(attrs={'rows': 1})},
@@ -34,7 +29,6 @@ class CourseInline(admin.TabularInline):
 
 class TermAdmin(admin.ModelAdmin):
     inlines = [
-        EventInline,
         CourseInline,
     ]
 
@@ -170,6 +164,7 @@ admin.site.register(models.Term, TermAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.Tag)
+admin.site.register(models.Event)
 
 admin.site.site_header = "Metropolis administration"
 admin.site.site_title = "Metropolis admin"
