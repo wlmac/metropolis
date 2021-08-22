@@ -50,13 +50,16 @@ li {
     .club {
         display: flex;
         flex-direction: column;
-        text-align: center;
     }
     .club-banner {
         display: none;
     }
+    .club-logo {
+        text-align: center; 
+    }
     .club-name {
         margin: 0;
+        text-align: center; 
     }
     .tag-section {
         justify-content: center;
@@ -84,3 +87,4 @@ li {
         margin-top: 1rem;
     }
 }
+
