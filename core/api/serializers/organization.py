@@ -3,6 +3,8 @@ from ... import models
 
 
 class OrganizationSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+
     owner = serializers.SlugRelatedField(slug_field='username', allow_null=True, queryset=models.User.objects.all())
     supervisors = serializers.SlugRelatedField(slug_field='username', allow_null=True, many=True, queryset=models.User.objects.all())
     execs = serializers.SlugRelatedField(slug_field='username', allow_null=True, many=True, queryset=models.User.objects.all())
