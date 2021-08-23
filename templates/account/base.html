@@ -1,5 +1,21 @@
-{% extends 'account/superbase.html' %}
+{% extends 'base.html' %}
 
-{% block heading %}
-{% block head_title %}{% endblock %}
+{% block body %}
+<div>
+    <h1>{% block heading %}{% endblock %}</h1>
+</div>
+<div class="container">
+    {% if messages %}
+    <div>
+        <strong>Messages:</strong>
+        <ul>
+            {% for message in messages %}
+                <li>{{message}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+</div>
 {% endblock %}
