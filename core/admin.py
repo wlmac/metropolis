@@ -39,6 +39,8 @@ class TermAdmin(admin.ModelAdmin):
     ]
 
 class OrganizationAdmin(admin.ModelAdmin):
+    list_display = ['name', 'is_open', 'owner']
+    list_filter = ['is_open', 'tags']
     fields = ['name', 'description', 'is_open', 'tags', 'owner', 'supervisors', 'execs']
 
     def get_queryset(self, request):
