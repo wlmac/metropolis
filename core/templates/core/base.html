@@ -21,7 +21,6 @@
     <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
     {% if user.is_staff %}
     <li><a href="{% url 'admin:index' %}">Admin</a></li>
-    <li class="divider"></li>
     {% endif %}
     <li><a href="{% url 'account_logout' %}">Logout</a></li>
     {% else %}
