@@ -3,8 +3,25 @@
     padding: 0 !important;
 }
 
-.club-name {
+.club-header, .club-name, .member-button {
     margin-top: 3%; 
+}
+
+.club-logo {
+    margin-left: 0px !important;
+    padding: 0px !important;
+    width: auto !important;
+}
+
+.club-name {
+    margin-bottom: 3%;
+    font-weight: 600;
+}
+
+.club-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .tag-section {
@@ -13,9 +30,13 @@
 }
 
 .tag {
-    padding: 2px 5px;
-    margin: 5px 2px;
+    padding: 2px 7px;
+    margin: 0px 3px;
     background-color: lightblue;
+    border-radius: 0.25rem;
+    color: var(--dark-grey);
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
 }
 
 .member-button {
@@ -23,14 +44,29 @@
     justify-content: flex-end;
 }
 
+.member-button > .btn{
+    background-color: var(--link-blue) !important;
+}
+
 .description {
     padding-left: 5%;
     border-left: black 3px solid;
     margin: 0;
+    font-weight: 400;
 }
 
 .link-section {
     margin: 0;
+    display: flex; 
+    justify-content: flex-end;
+}
+
+.link-section > div > li > i {
+    margin-right: 6px;
+}
+
+.link-section > div > li > a {
+    color: var(--link-blue);
 }
 
 .circle-icon {
@@ -47,7 +83,7 @@ li {
 }
 
 @media screen and (max-width:600px) {
-    .club {
+    .club, .club-header {
         display: flex;
         flex-direction: column;
     }
