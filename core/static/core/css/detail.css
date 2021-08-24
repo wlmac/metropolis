@@ -1,0 +1,126 @@
+.club-banner {
+    border-bottom: 5px black solid;
+    padding: 0 !important;
+}
+
+.club-header, .club-name, .member-button {
+    margin-top: 3%; 
+}
+
+.club-logo {
+    margin-left: 0px !important;
+    padding: 0px !important;
+    width: auto !important;
+}
+
+.club-name {
+    margin-bottom: 3%;
+    font-weight: 600;
+}
+
+.club-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tag-section {
+    display: flex;
+    margin: 0;
+}
+
+.tag {
+    padding: 2px 7px;
+    margin: 0px 3px;
+    background-color: lightblue;
+    border-radius: 0.25rem;
+    color: var(--dark-grey);
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.member-button {
+    display: flex; 
+    justify-content: flex-end;
+}
+
+.member-button > .btn{
+    background-color: var(--link-blue) !important;
+}
+
+.description {
+    padding-left: 5%;
+    border-left: black 3px solid;
+    margin: 0;
+    font-weight: 400;
+}
+
+.link-section {
+    margin: 0;
+    display: flex; 
+    justify-content: flex-end;
+}
+
+.link-section > div > li > i {
+    margin-right: 6px;
+}
+
+.link-section > div > li > a {
+    color: var(--link-blue);
+}
+
+.circle-icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black;  
+    margin-right: 4%;
+}
+
+li {
+    display: flex;
+    align-items: center;
+}
+
+@media screen and (max-width:600px) {
+    .club, .club-header {
+        display: flex;
+        flex-direction: column;
+    }
+    .club-banner {
+        display: none;
+    }
+    .club-logo {
+        text-align: center; 
+    }
+    .club-name {
+        margin: 0;
+        text-align: center; 
+    }
+    .tag-section {
+        justify-content: center;
+        margin-top: 2%;
+    }
+    .member-button {
+        margin-top: 5%;
+        justify-content: center; 
+    }
+    .club-info {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .link-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .circle-icon {
+        display: none; 
+    }
+    .description {
+        border: none;
+        padding: 0;
+        margin-top: 1rem;
+    }
+}
+
