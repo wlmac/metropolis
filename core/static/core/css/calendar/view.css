@@ -66,12 +66,6 @@
     padding-top: 1%;
 }
 
-.dayEvent .detailPanel .icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-}
-
 .dayEvent .intermediate_to {
     color: grey;
 }
@@ -86,6 +80,7 @@
     padding: 3px 15px;
     border-radius: 5px;
     font-size: 85%;
+    margin-right: 10px;
 }
 
 .fc-daygrid {
