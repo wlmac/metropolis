@@ -1,6 +1,6 @@
 .club-banner {
     border-bottom: 5px black solid;
-    padding: 0;
+    padding: 0 !important;
 }
 
 .club-name {

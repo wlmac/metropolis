@@ -11,46 +11,49 @@
     <div class="row">
         <img class="club-banner responsive-img col s12" src="https://via.placeholder.com/150x40">
     </div>
-    <div class="row club-header">
-        <div class="col m3 s12 club-logo">
-            <img class="responsive-img circle" src="https://via.placeholder.com/150">
-        </div>
-        <div class="col m5 s12">
-            <h2 class="club-name">{{ organization.name }}</h2>
-            <div class="tag-section">
-                {% for tag in organization.tags.all %}
-                <p class="tag">{{tag}}</p>
-                {% endfor %}
+    <div class="container">
+        <div class="row club-header">
+            <div class="col m3 s12 club-logo">
+                <img class="responsive-img circle" src="https://via.placeholder.com/150">
             </div>
+            <div class="col m5 s12">
+                <h2 class="club-name">{{ organization.name }}</h2>
+                <div class="tag-section">
+                    {% for tag in organization.tags.all %}
+                    <p class="tag">{{tag}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="col m4 s12">
+                <form method="POST" class="member-button">
+                    {% csrf_token %}
+                    {% if organization not in request.user.organizations.all %}
+                    <button type="submit" class="btn">+ Join</button>
+                    {% else %}
+                    <button type="submit" class="btn">- Leave</button>
+                    {% endif %}
+                </form>
+            </div>
+            {% endif %}
         </div>
-        {% if user.is_authenticated %}
-        <div class="col m4 s12">
-            <form method="POST" class="member-button">
-                {% csrf_token %}
-                {% if organization not in request.user.organizations.all %}
-                <button type="submit" class="btn">+ Join</button>
-                {% else %}
-                <button type="submit" class="btn">- Leave</button>
-                {% endif %}
-            </form>
-        </div>
-        {% endif %}
-    </div>
-    <div class="row club-info">
-        <div class="col m8">
-            <p class="description" >
-            {{ organization.description }}
-            </p>
-        </div>
-        <div class="col m4">
-            {# TODO: Add club links #}
-            <ul class="link-section">
-                <li><div class="circle-icon" aria-hidden="true"></div><a href="http://example.org">http://example.org</a></li>
-                <li><div class="circle-icon" aria-hidden="true"></div><a href="http://example.org">http://example.org</a></li>
-                <li><div class="circle-icon" aria-hidden="true"></div><a href="http://example.org">http://example.org</a></li>
-            </ul>
-        </div>
+        <div class="row club-info">
+            <div class="col m8">
+                <p class="description" >
+                {{ organization.description }}
+                </p>
+            </div>
+            <div class="col m4">
+                {# TODO: Add club links #}
+                <ul class="link-section">
+                    <li><div class="circle-icon" aria-hidden="true"></div><a href="http://example.org">http://example.org</a></li>
+                    <li><div class="circle-icon" aria-hidden="true"></div><a href="http://example.org">http://example.org</a></li>
+                    <li><div class="circle-icon" aria-hidden="true"></div><a href="http://example.org">http://example.org</a></li>
+                </ul>
+            </div>
+        </div>       
     </div>
 </div>
+<link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
 {% endblock %}
 

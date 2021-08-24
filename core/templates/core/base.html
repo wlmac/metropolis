@@ -96,11 +96,9 @@
         </ul>
     </div>
 </nav>
-<br>
-<div class="container">
-    {% block main %}
-    {% endblock %}
-</div>
+{% block main %}
+{% endblock %}
+
 {% endblock %}
 
 {% block title %}{{ title }}{% endblock %}
