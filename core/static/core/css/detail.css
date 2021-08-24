@@ -3,7 +3,7 @@
     padding: 0 !important;
 }
 
-.club-header, .club-name, .member-button {
+.club-header {
     margin-top: 3%; 
 }
 
@@ -44,8 +44,12 @@
     justify-content: flex-end;
 }
 
-.member-button > .btn{
+.member-button > .join{
     background-color: var(--link-blue) !important;
+}
+
+.member-button > .leave{
+    background-color: var(--mid-grey) !important;
 }
 
 .description {
@@ -61,8 +65,10 @@
     justify-content: flex-end;
 }
 
-.link-section > div > li > i {
+.link-section > div > li > i{
     margin-right: 6px;
+    color: var(--link-blue);
+    line-height: inherit;
 }
 
 .link-section > div > li > a {
@@ -113,9 +119,6 @@ li {
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-    .circle-icon {
-        display: none; 
     }
     .description {
         border: none;

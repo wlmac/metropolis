@@ -30,9 +30,9 @@
                 <form method="POST" class="member-button">
                     {% csrf_token %}
                     {% if organization not in request.user.organizations.all %}
-                    <button type="submit" class="btn">+ Join</button>
+                    <button type="submit" class="btn join">+ Join</button>
                     {% else %}
-                    <button type="submit" class="btn">- Leave</button>
+                    <button type="submit" class="btn leave">- Leave</button>
                     {% endif %}
                 </form>
             </div>
@@ -48,9 +48,9 @@
                 {# TODO: Add club links #}
                 <ul class="link-section">
                     <div>
-                        <li><i class="material-icons" aria-hidden="true">link</i><a href="http://example.org">http://example.org</a></li>
-                        <li><i class="material-icons" aria-hidden="true">add</i><a href="http://example.org">http://example.org</a></li>
-                        <li><i class="material-icons" aria-hidden="true">link</i><a href="http://example.org">http://example.org</a></li>
+                        <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a href="http://example.org">http://example.org</a></li>
+                        <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a href="http://example.org">http://example.org</a></li>
+                        <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a href="http://example.org">http://example.org</a></li>
                     </div>
                       
                 </ul>
