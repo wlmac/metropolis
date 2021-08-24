@@ -26,12 +26,13 @@
 
 .tag-section {
     display: flex;
+    flex-flow: row wrap;
     margin: 0;
 }
 
 .tag {
-    padding: 2px 7px;
-    margin: 0px 3px;
+    padding: 2px 7px !important;
+    margin: 3px !important;
     background-color: lightblue;
     border-radius: 0.25rem;
     color: var(--dark-grey);
