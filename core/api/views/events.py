@@ -16,8 +16,14 @@ class EventsList(APIView):
         start = timezone.now()
         if request.data.get('start'):
             start = request.data.get('start')
+        elif request.query_params.get('start'):
+            start = request.query_params.get('start')
+
         if request.data.get('end'):
             end = request.data.get('end')
+            events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end).order_by('start_date')
+        elif request.query_params.get('end'):
+            end = request.query_params.get('end')
             events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end).order_by('start_date')
         else:
             events = models.Event.objects.filter(end_date__gte=start).order_by('start_date')
