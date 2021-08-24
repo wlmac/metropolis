@@ -18,9 +18,9 @@ class EventsList(APIView):
             start = request.data.get('start')
         if request.data.get('end'):
             end = request.data.get('end')
-            events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end)
+            events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end).order_by('start_date')
         else:
-            events = models.Event.objects.filter(end_date__gte=start)
+            events = models.Event.objects.filter(end_date__gte=start).order_by('start_date')
 
         serializer = serializers.EventSerializer(events, many=True)
         return Response(serializer.data)
