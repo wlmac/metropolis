@@ -56,8 +56,8 @@ function parseEvents(toParse) {
     for (let curEvent of toParse) {
         parsed.push({
             title: curEvent.name,
-            start: curEvent.start_date.split("T")[0], // get rid of the "time" element
-            end: curEvent.end_date.split("T")[0],
+            start: curEvent.start_date, // get rid of the "time" element
+            end: curEvent.end_date,
             color: curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue",
         })
     }
