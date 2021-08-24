@@ -3,6 +3,18 @@
 {% load settings_tags %}
 {% load static %}
 
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+{% settings_value "GOOGLE_ANALYTICS_ON_ALL_VIEWS" as ganalytics_allviews %}
+{% if not ganalytics_allviews %}
+{% include "ganalytics/snippet.html" %}
+{% endif %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+{% block deps %}
+{% endblock %}
+{% endblock %}
+
 {% block body %}
 <ul id="dropdownAcc" class="dropdown-content">
     {% if request.user.is_authenticated %}
@@ -96,21 +108,7 @@
         </ul>
     </div>
 </nav>
-<br>
-<div class="container">
-    {% block main %}
-    {% endblock %}
-</div>
+{% block main %}
 {% endblock %}
 
-{% block title %}{{ title }}{% endblock %}
-
-{% block head %}
-{% settings_value "GOOGLE_ANALYTICS_ON_ALL_VIEWS" as ganalytics_allviews %}
-{% if not ganalytics_allviews %}
-{% include "ganalytics/snippet.html" %}
-{% endif %}
-<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-{% block deps %}
-{% endblock %}
 {% endblock %}
