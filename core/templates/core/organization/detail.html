@@ -1,62 +1,29 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
-{% load static %}
-
-{% block head %}
-<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-<link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
-{% endblock %}
 
 {% block main %}
-<div class="club">
-    <div class="row">
-        <img class="club-banner responsive-img col s12" src="https://via.placeholder.com/150x40">
-    </div>
-    <div class="container">
-        <div class="row club-header">
-            <div class="col m3 s12 club-logo">
-                <img class="responsive-img circle" src="https://via.placeholder.com/150">
-            </div>
-            <div class="col m5 s12">
-                <h2 class="club-name">{{ organization.name }}</h2>
-                <div class="tag-section">
-                    {% for tag in organization.tags.all %}
-                    <p class="tag">{{tag}}</p>
-                    {% endfor %}
-                </div>
-            </div>
-            {% if user.is_authenticated %}
-            <div class="col m4 s12">
-                <form method="POST" class="member-button">
-                    {% csrf_token %}
-                    {% if organization not in request.user.organizations.all %}
-                    <button type="submit" class="btn">+ Join</button>
-                    {% else %}
-                    <button type="submit" class="btn">- Leave</button>
-                    {% endif %}
-                </form>
-            </div>
-            {% endif %}
-        </div>
-        <div class="row club-info">
-            <div class="col m8">
-                <p class="description" >
-                {{ organization.description }}
-                </p>
-            </div>
-            <div class="col m4">
-                {# TODO: Add club links #}
-                <ul class="link-section">
-                    <div>
-                        <li><i class="material-icons" aria-hidden="true">link</i><a href="http://example.org">http://example.org</a></li>
-                        <li><i class="material-icons" aria-hidden="true">add</i><a href="http://example.org">http://example.org</a></li>
-                        <li><i class="material-icons" aria-hidden="true">link</i><a href="http://example.org">http://example.org</a></li>
-                    </div>
-                      
-                </ul>
-            </div>
-        </div>       
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ organization.name }}</h5>
+        <p class="card-text">{{ organization.description }}</p>
     </div>
 </div>
-{% endblock %}
 
+{% if user.is_authenticated %}
+<div class="card">
+    <div class="card-header">
+        Membership
+    </div>
+    <form method="POST" class="card-body">
+        {% csrf_token %}
+        {% if organization not in request.user.organizations.all %}
+        <h5 class="card-title">Subscribe to announcements from {{ organization.name }}</h5>
+        <button type="submit" class="btn btn-primary">Join</button>
+        {% else %}
+        <h5 class="card-title">Unsubscribe to announcements from {{ organization.name }}</h5>
+        <button type="submit" class="btn btn-primary">Leave</button>
+        {% endif %}
+    </form>
+</div>
+{% endif %}
+{% endblock %}

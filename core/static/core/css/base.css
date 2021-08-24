@@ -1,24 +1,3 @@
-:root{
-    --text-grey: #fafafa;
-    --bg-grey: #f3f3f3;
-    --light-grey: #efefef;
-    --line-grey: #b7b7b7;
-    --mid-grey: #787878;
-    --dark-grey: #434343;
-    --near-black: #0b0b0b;
-
-    --dark-blue: #073763;
-    --link-blue: #3a6a96;
-    --highlight-blue: e7f2fb;
-    /*--gold: ;*/
-    --status-red: #e85856;
-    --status-yellow: #ebc942;
-    --status-green: #5cc478;
-    
-    font-family: 'Roboto', sans-serif;
-    letter-spacing: 0.15px;
-}
-
 .dropdown-content{
     width: max-content !important;
     height: auto !important;
