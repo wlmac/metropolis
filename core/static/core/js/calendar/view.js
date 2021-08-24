@@ -1,5 +1,6 @@
 let calendarElement;
 let calendar;
+let firstLoad = true; // the first time we load we want to auto select the current date
 
 // constants; should be gotten from database but sadge no database so frick
 let events = [];
@@ -30,13 +31,14 @@ $(document).ready(function () {
             const url = "/api/events?start=" + fetchInfo.startStr + "&end=" + fetchInfo.endStr
             $.get(url, function(data, status){
                 if(status !== "success"){
-                    console.log("no")
                     failureCallback("Returned status " + status)
                 }else{
-                    console.log(status)
-                    console.log(data)
                     events = data
                     successCallback(parseEvents(events))
+                    if(firstLoad){
+                        calendar.select(new Date())
+                        firstLoad = false;
+                    }
                 }
             })
         },
@@ -44,7 +46,6 @@ $(document).ready(function () {
         aspectRatio: 1.6,
         initialView: "dayGridMonth",
     });
-    calendar.select(new Date())
 
     calendar.render()
 })
