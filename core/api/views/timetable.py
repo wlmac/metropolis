@@ -46,3 +46,8 @@ class TimetableToday(APIView):
             })
 
         return Response(response)
+
+
+class TimetableDetails(generics.RetrieveAPIView):
+    queryset = models.Timetable.objects.all()
+    serializer_class = serializers.TimetableSerializer
