@@ -16,4 +16,5 @@ urlpatterns = [
     path('events', EventsList.as_view(), name='event_list'),
     path('timetables', TimetableList.as_view(), name='timetable_list'),
     path('timetable/<int:pk>/today', TimetableToday.as_view(), name='timetable_today'),
+    path('timetable/<int:pk>', TimetableDetails.as_view(), name='timetable_detail'),
 ]
