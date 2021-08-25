@@ -28,7 +28,7 @@ class AddTimetableSelectTermForm(forms.Form):
         super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
         self.fields['term'].queryset = models.Term.objects.exclude(timetables__owner=user)
 
-class AddTimetableSelectCoursesForm(forms.ModelForm):
+class TimetableSelectCoursesForm(forms.ModelForm):
     class Meta:
         model = models.Timetable
         fields = ['courses']
@@ -37,8 +37,11 @@ class AddTimetableSelectCoursesForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        self.term = kwargs.pop('term')
-        super(AddTimetableSelectCoursesForm, self).__init__(*args, **kwargs)
+        if kwargs['instance'] is not None:
+            self.term = kwargs['instance'].term
+        else:
+            self.term = kwargs.pop('term')
+        super(TimetableSelectCoursesForm, self).__init__(*args, **kwargs)
         self.fields['courses'].queryset = models.Course.objects.filter(term=self.term).order_by('code')
 
     def clean(self):
