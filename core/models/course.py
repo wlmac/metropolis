@@ -27,7 +27,7 @@ class Term(models.Model):
 
     def day(self, target_date=None):
         cycle_duration = settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['duration']
-        events = Event.objects.filter(term=self, is_instructional=False)
+        events = Event.objects.filter(end_date__gt=self.start_date, start_date__lt=self.end_date , is_instructional=False)
         if target_date == None:
             target_date = timezone.localdate()
         cur_iter_day = self.start_date
