@@ -41,8 +41,6 @@ INSTALLED_APPS = [
     'core',
     'allauth',
     'allauth.account',
-    'crispy_forms',
-    'captcha',
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
