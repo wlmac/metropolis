@@ -1,3 +1,52 @@
-select {
-    display: revert; 
+.row {
+    display: flex;
 }
+
+select {
+    display: revert;
+}
+
+/*input[type="text"], input[type="password"] {
+    box-shadow: none !important;
+    border: none !important; 
+    background-color: #dbdbdb !important;
+}*/
+
+::placeholder {
+    color: black; 
+}
+
+label {
+    color: #9e9e9e !important;
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5%;
+}
+
+.tab-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.tab {
+    text-align: center;
+    border-bottom: 2px gray solid;
+    padding: 2% 0;
+}
+
+.current {
+    border-bottom: 2px black solid;
+    color: blue;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+}
+
+
