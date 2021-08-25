@@ -92,6 +92,7 @@
 
 #details #detailsCurrentDay {
     font-size: 150%;
+    font-weight: bolder;
 }
 
 .fc-toolbar-chunk .fc-toolbar-title {
@@ -133,4 +134,17 @@
 .fc-button:focus {
     outline: none !important;
     box-shadow: none !important;
+}
+
+.fc-daygrid-day-number-circle{
+    border-radius: 50%;
+    text-align: center;
+    padding: 1px;
+    margin-top: 3%;
+    margin-right: 5%;
+    transition-duration: 0.3s;
+}
+
+.fc-daygrid-day-number{
+    transition-duration: 0.3s;
 }
