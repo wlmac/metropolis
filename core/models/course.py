@@ -27,7 +27,7 @@ class Term(models.Model):
 
     def day(self, target_date=None):
         cycle_duration = settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['duration']
-        events = Event.objects.filter(term=self, is_instructional=False)
+        events = Event.objects.filter(end_date__gt=self.start_date, start_date__lt=self.end_date , is_instructional=False)
         if target_date == None:
             target_date = timezone.localdate()
         cur_iter_day = self.start_date
@@ -61,11 +61,12 @@ class Course(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=128)
-    term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name='events')
     description = models.TextField(blank=True)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     is_instructional = models.BooleanField(default=False)
+    organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="events", related_query_name="event", blank=True, null=True)
+    tags = models.ManyToManyField("Tag", blank=True, related_name="events", related_query_name="event")
 
     def __str__(self):
         return self.name

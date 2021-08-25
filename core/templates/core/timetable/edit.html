@@ -9,7 +9,7 @@
             <h5 class="card-title">Edit timetable for {{ timetable.term.name }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Select Courses</h6>
             {% csrf_token %}
-            {{ form|crispy }}
+            {{ form }}
             {% if not term.is_frozen %}
             <a href="{% url 'course_create' timetable.term.pk %}?next={{ request.path }}">Add a missing course</a><br>
             {% endif %}

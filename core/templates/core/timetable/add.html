@@ -1,6 +1,5 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
 
 {% block main %}
 <div class="card">
@@ -9,7 +8,7 @@
             <h5 class="card-title">Add timetable</h5>
             <h6 class="card-subtitle mb-2 text-muted">Select Courses</h6>
             {% csrf_token %}
-            {{ form|crispy }}
+            {{ form }}
             {% if not term.is_frozen %}
             <a href="{% url 'course_create' term.pk %}?next={{ request.path }}">Add a missing course</a><br>
             {% endif %}
