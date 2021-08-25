@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'core',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
     'crispy_forms',
     'captcha',
     'corsheaders',
