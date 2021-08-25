@@ -1,9 +1,91 @@
+:root{
+    --text-grey: #fafafa;
+    --bg-grey: #f3f3f3;
+    --light-grey: #efefef;
+    --line-grey: #b7b7b7;
+    --mid-grey: #787878;
+    --dark-grey: #434343;
+    --near-black: #0b0b0b;
+
+    --dark-blue: #073763;
+    --link-blue: #3a6a96;
+    --mid-blue: #6e9bc4;
+    --highlight-blue: #e7f2fb;
+    /*--gold: ;*/
+    --status-red: #e85856;
+    --status-yellow: #ebc942;
+    --status-green: #5cc478;
+    
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.15px;
+}
+
+.nav-wrapper{
+    background-color: var(--dark-blue);
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+}
+
+.brand-logo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: auto;
+    height: 80%;
+    padding: 0px 15px !important;
+    margin-top: 8px;
+
+    font-size: 1.25rem !important;
+    font-weight: 500;
+    object-fit: contain;
+}
+
+.img-logo{
+    height: 100%;
+    width: auto;
+}
+
+.dropdown-trigger{
+    display: flex;
+}
+
+.dropdown-trigger > i{
+    margin-left: 10px;
+}
+
 .dropdown-content{
-    width: max-content !important;
     height: auto !important;
     top: 100% !important;
 }
+
 .sidenav{
+    height: 100% !important;
+}
+
+.dropdown-content, .sidenav{
+    background-color: var(--dark-blue);
     width: max-content !important;
-    height: auto !important;
+    filter: brightness(0.9);
+}
+
+.dropdown-content > li:not(.divider):hover, .sidenav > li:not(.divider):hover{
+    background-color: var(--dark-blue);
+    filter: brightness(0.9);
+}
+
+.dropdown-content > li > a, .sidenav > li > a{
+    color: var(--mid-blue);
+    width: 100%;
+}
+
+.dropdown-content> li > a:hover, .sidenav > li > a:hover{
+    color: white;
+    transition: color linear 0.15s;
+}
+
+.dropdown-content > .divider, .sidenav > .divider{
+    background-color: var(--link-blue);
+    margin: 10px 15px;
+    width: calc(100% - 30px);
 }
