@@ -14,4 +14,6 @@ urlpatterns = [
     path('clubs', OrganizationList.as_view(), name='list_clubs'),
     path('club/<int:pk>', OrganizationDetail.as_view(), name='club_detail'),
     path('events', EventsList.as_view(), name='event_list'),
+    path('timetables', TimetableList.as_view(), name='timetable_list'),
+    path('timetable/<int:pk>/today', TimetableToday.as_view(), name='timetable_today'),
 ]
