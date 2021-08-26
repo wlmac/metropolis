@@ -20,11 +20,15 @@ label {
     color: #9e9e9e !important;
 }
 
+.graphic {
+    background-size: cover;
+    background-position: center center;
+}
+
 .form-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     padding: 0 5%;
 }
 
