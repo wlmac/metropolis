@@ -4,23 +4,41 @@
 {% load static %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% static 'core/css/account.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/account.css' %}">
 {% endblock %}
 
-{% block heading %}{% trans "Signup" %}{% endblock %}
-
 {% block content %}
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
-
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-    {% csrf_token %}
-    {{form}}
-  </div>
-    {% if redirect_field_value %}
-    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-    {% endif %}
-    <p>By clicking this button, you agree to our <a href="{% settings_value "TOS_URL" %}">terms</a>.</p>
-    <button type="submit" class="btn btn-primary mb-3 g-recaptcha">{% trans "Sign Up" %}</button>
-</form>
-
+<div class="row wrapper">
+    <div class="col m6">
+        <img class="responsive-img" src="{% static 'core/image/sign-up.png' %}" />
+    </div>
+    <div class="col s12 m6 valign-wrapper">
+        <div class="form-wrapper">
+            <div class="tab-wrapper row">
+                <div class="col s6">
+                    <a href="/accounts/login">
+                        <div class="tab">Log In
+                        </div>
+                    </a>
+                </div>
+                <div class="col s6">
+                    <a href="/accounts/signup">
+                        <div class="tab current">
+                            Sign Up
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                {{form}}
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                <p>By clicking this button, you agree to our <a href="{% settings_value "TOS_URL" %}">terms</a>.</p>
+                <button type="submit" class="btn">{% trans "Sign Up" %}</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
