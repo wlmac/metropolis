@@ -28,3 +28,7 @@ class Organization(models.Model):
 
     def member_count(self):
         return User.objects.filter(organizations=self).count()
+
+class OrganizationURL(models.Model):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='links')
+    url = models.URLField()
