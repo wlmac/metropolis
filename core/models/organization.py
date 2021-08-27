@@ -14,6 +14,7 @@ class Organization(models.Model):
 
     registered_date = models.DateTimeField(auto_now_add=True)
     is_open = models.BooleanField(default=True)
+    applications_open = models.BooleanField(default=False)
     tags = models.ManyToManyField("Tag", blank=True, related_name="organizations", related_query_name="organization")
 
     def __str__(self):

@@ -14,4 +14,5 @@ class OrganizationSerializer(serializers.Serializer):
 
     registered_date = serializers.DateTimeField()
     is_open = serializers.BooleanField(default=True)
+    applications_open = serializers.BooleanField(default=False)
     tags = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Tag.objects.all())
