@@ -2,8 +2,11 @@ from django.contrib import admin
 from . import models
 from django.contrib.auth import get_user_model
 from django.forms import Textarea
-from django.db.models import Q
 import django.db
+from django.db.models import Q
+from django.contrib.flatpages.admin import FlatPageAdmin
+from django.contrib.flatpages.models import FlatPage
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
@@ -175,6 +178,18 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'start_date', 'end_date']
     list_filter = ['is_instructional', 'organization']
 
+class FlatPageAdmin(FlatPageAdmin):
+    fieldsets = (
+        (None, {'fields': ('url', 'title', 'content', 'sites')}),
+        (_('Advanced options'), {
+            'classes': ('collapse',),
+            'fields': (
+                'registration_required',
+                'template_name',
+            ),
+        }),
+    )
+
 admin.site.register(User)
 admin.site.register(models.Timetable)
 admin.site.register(models.Term, TermAdmin)
@@ -182,6 +197,9 @@ admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
+
+admin.site.unregister(FlatPage)
+admin.site.register(FlatPage, FlatPageAdmin)
 
 admin.site.site_header = "Metropolis administration"
 admin.site.site_title = "Metropolis admin"
