@@ -10,12 +10,20 @@
 {% block main %}
 <div class="club">
     <div class="row">
-        <img class="club-banner responsive-img col s12" src="https://via.placeholder.com/150x40">
+        {% if organization.banner %}
+            <img class="club-banner responsive-img col s12" src="{{ organization.banner.url }}">
+        {% else %}
+            <img class="club-banner responsive-img col s12" src="https://via.placeholder.com/150x40">
+        {% endif %}
     </div>
     <div class="container">
         <div class="row club-header">
             <div class="col m3 s12 club-logo">
-                <img class="responsive-img circle" src="https://via.placeholder.com/150">
+                {% if organization.icon %}
+                    <img class="responsive-img circle" src="{{ organization.icon.url }}">
+                {% else %}
+                    <img class="responsive-img circle" src="https://via.placeholder.com/150">
+                {% endif %}
             </div>
             <div class="col m5 s12">
                 <h2 class="club-name">{{ organization.name }}</h2>
