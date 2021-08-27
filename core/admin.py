@@ -32,6 +32,9 @@ class TermAdmin(admin.ModelAdmin):
         CourseInline,
     ]
 
+class TagAdmin(admin.ModelAdmin):
+    readonly_fields = ['color']
+
 class OrganizationURLInline(admin.TabularInline):
     fields = ['url']
     model = models.OrganizationURL
@@ -177,7 +180,7 @@ admin.site.register(models.Timetable)
 admin.site.register(models.Term, TermAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
-admin.site.register(models.Tag)
+admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
 
 admin.site.site_header = "Metropolis administration"

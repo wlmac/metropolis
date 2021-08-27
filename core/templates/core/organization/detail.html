@@ -29,7 +29,7 @@
                 <h2 class="club-name">{{ organization.name }}</h2>
                 <div class="tag-section">
                     {% for tag in organization.tags.all %}
-                    <p class="tag">{{tag}}</p>
+                    <p class="tag" style="background-color: {{ tag.color }};">{{tag}}</p>
                     {% endfor %}
                 </div>
             </div>

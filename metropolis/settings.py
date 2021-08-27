@@ -273,6 +273,11 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+# Color settings
+
+TAG_COLOR_SATURATION = 0.2
+TAG_COLOR_VALUE = 1.0
+
 # Misc settings
 
 SITE_ID = 1
