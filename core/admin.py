@@ -32,10 +32,18 @@ class TermAdmin(admin.ModelAdmin):
         CourseInline,
     ]
 
+class OrganizationURLInline(admin.TabularInline):
+    fields = ['url']
+    model = models.OrganizationURL
+    extra = 0
+
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['name', 'is_open', 'owner']
     list_filter = ['is_open', 'tags']
     fields = ['name', 'description', 'is_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
+    inlines = [
+        OrganizationURLInline,
+    ]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
