@@ -9,7 +9,7 @@
 
     --dark-blue: #073763;
     --link-blue: #3a6a96;
-    --highlight-blue: e7f2fb;
+    --highlight-blue: #e7f2fb;
     /*--gold: ;*/
     --status-red: #e85856;
     --status-yellow: #ebc942;
@@ -17,6 +17,7 @@
     
     font-family: 'Roboto', sans-serif;
     letter-spacing: 0.15px;
+    background-color: var(--bg-grey);
 }
 
 .dropdown-content{
