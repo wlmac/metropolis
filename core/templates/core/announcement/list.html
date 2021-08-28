@@ -76,16 +76,21 @@
                 });
                 $(".expandable").click(function() {
                     if($(this).data("expanded") == "true") {
+                        var lineHeight = parseFloat($(this).parent().find(".card-body").css("line-height").replace('px',''));
+                        $(this).parent().find(".card-body").animate({"height": lineHeight*3});
                         $(this).parent().find(".card-body").css("display", "-webkit-box");
                         $(this).data("expanded", "false").text("Expand");
                     } else {
                         $(".card-body").each(function () {
                             if($(this).parent().find(".expandable").data("expanded") == "true") {
+                                var lineHeight = parseFloat($(this).parent().find(".card-body").css("line-height").replace('px',''));
+                                $(this).animate({"height": lineHeight*3});
                                 $(this).css("display", "-webkit-box");
                                 $(this).parent().find(".expandable").data("expanded", "false").text("Expand");
                                 console.log(this);
                             }
                         });
+                        $(this).parent().find(".card-body").animate({"height": $(this).parent().find(".card-body").prop("scrollHeight")});
                         $(this).parent().find(".card-body").css("display", "block");
                         $(this).data("expanded", "true").text("Collapse");
                     }
