@@ -44,6 +44,7 @@
 .card h1 {
     font-weight: bold;
     margin: 0;
+    margin-top: 8px;
     font-size: 2rem;
 }
 .card-authors {
@@ -76,7 +77,7 @@
 }
 .tag {
     padding: 2px 7px !important;
-    margin: 3px !important;
+    margin: 3px 6px 3px 0px !important;
     background-color: lightblue;
     border-radius: 0.25rem;
     color: var(--dark-grey);
