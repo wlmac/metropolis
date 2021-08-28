@@ -30,16 +30,12 @@ class TimetableToday(APIView):
             'schedule': []
         }
 
-        if not timetable.term.is_ongoing():
+        if day is None:
             response['schedule'] = None
             return Response(response)
 
         for i in timetable_config['schedule']:
-            course = None
-            for j in i['position'][day-1]:
-                if j in courses.keys():
-                    course = courses[j]
-                    break
+            course = i['position'][day-1].intersection(set(courses.keys())).pop()
             response['schedule'].append({
                 'info': i['info'],
                 'course': course.code
