@@ -35,21 +35,10 @@
     padding: 20px;
     border-radius: 5px;
 }
-.card p {
-    margin: 0;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-}
-h1 {
+.card h1 {
     font-weight: bold;
     margin: 0;
     font-size: 2rem;
-}
-hr {
-    border: 0px solid var(--light-grey);
-    border-top-width: 2px;
 }
 .card-authors {
     color: var(--line-grey);
@@ -58,7 +47,19 @@ hr {
     color: var(--link-blue);
     font-weight: bold;
 }
-.card a {
+.card hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}
+.card-body {
+    margin: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+.expandable {
     color: var(--link-blue);
     cursor: pointer;
+}
 }
