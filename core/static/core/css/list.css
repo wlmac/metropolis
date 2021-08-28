@@ -20,10 +20,12 @@
     border-bottom: 3px solid var(--link-blue);
     display: inline;
 }
-.headers li:hover {
+.header:hover {
     font-weight: bold;
-    color: var(--highlight-blue);
-    border-color: var(--highlight-blue);
+    color: var(--mid-blue);
+    border-color: var(--mid-blue);
+    transition: color 0.1s linear, border-color 0.1s linear;
+}
 }
 .card-container {
     background-color: white;
