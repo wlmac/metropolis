@@ -26,6 +26,10 @@
     border-color: var(--mid-blue);
     transition: color 0.1s linear, border-color 0.1s linear;
 }
+.active {
+    font-weight: bold;
+    color: var(--highlight-blue) !important;
+    border-color: var(--highlight-blue) !important;
 }
 .card-container {
     background-color: white;
