@@ -90,7 +90,8 @@
                                 console.log(this);
                             }
                         });
-                        $(this).parent().find(".card-body").animate({"height": $(this).parent().find(".card-body").prop("scrollHeight")});
+                        var scrollHeight = $(this).parent().find(".card-body").prop("scrollHeight");
+                        $(this).parent().find(".card-body").animate({"height": scrollHeight});
                         $(this).parent().find(".card-body").css("display", "block");
                         $(this).data("expanded", "true").text("Collapse");
                     }
