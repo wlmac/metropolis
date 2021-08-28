@@ -47,6 +47,11 @@
         <div class="cards" id="cards-all">
             {% for announcement in feed_all reversed %}
             <div class="card">
+                <div class="tag-section">
+                    {% for tag in announcement.tags.all %}
+                    <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+                    {% endfor %}
+                </div>
                 <h1>{{announcement.title}}</h1>
                 <div class="card-authors">
                     <a href="">{{announcement.organization}}</a>,
