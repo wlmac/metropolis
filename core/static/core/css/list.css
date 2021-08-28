@@ -8,7 +8,7 @@
     padding-left: 40px;
 }
 .headers ul {
-    justify-content: center;
+    display: flex;
     margin: 0;
 }
 .headers li {
