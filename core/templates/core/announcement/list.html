@@ -43,48 +43,55 @@
             });
         </script>
     </div>
-    <ul class="list-group list-group-flush">
-        {% for announcement in feed_all %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">{{ announcement.title }}</div>
-                {{ announcement.body }}
-                <br>
-                {% for tag in announcement.tags.all %}
-                    <span class="badge rounded-pill bg-primary text-white">{{ tag.name }}</span>
-                {% endfor %}
+    <div class="card-container">
+        <div class="cards" id="cards-all">
+            {% for announcement in feed_all %}
+            <div class="card">
+                <h1>{{announcement.title}}</h1>
+                <div class="card-authors">
+                    <a href="">{{announcement.organization}}</a>,
+                    <a href="">{{announcement.author}}</a>
+                    • {{announcement.created_date}}
+                </div>
+                <hr>
+                <p class="card-body">{{announcement.body}}</p>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-
-{% if user.is_authenticated %}
-<div class="card mb-3">
-    <div class="card-header">
-        My Feed
-    </div>
-    <ul class="list-group list-group-flush">
-        {% for announcement in feed_my %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">{{ announcement.title }}</div>
-                {{ announcement.body }}
-                <br>
-                {% for tag in announcement.tags.all %}
-                    <span class="badge rounded-pill bg-primary text-white">{{ tag.name }}</span>
-                {% endfor %}
+            {% endfor %}
+        </div>
+        {% if user.is_authenticated %}
+        <div class="cards" id="cards-my-feed">
+            {% for announcement in feed_my %}
+            <div class="card">
+                {{announcement.title}}
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-{% endif %}
-
-{% for feed_custom in feeds_custom %}
-<div class="card mb-3">
-    <div class="card-header">
-        {{ feed_custom.0.name }}
+            {% endfor %}
+        </div>
+        {% endif %}
+        <script>
+            $(document).ready(function(){
+                $(".card-body").each(function () {
+                    if(Math.round($(this).prop("scrollHeight")) > Math.round($(this).innerHeight())) {
+                        $(this).parent().append("<br><a class='expandable' data-expanded='false'>Expand</a>");
+                    }
+                });
+                $(".expandable").click(function() {
+                    if($(this).data("expanded") == "true") {
+                        $(this).parent().find(".card-body").css("display", "-webkit-box");
+                        $(this).data("expanded", "false").text("Expand");
+                    } else {
+                        $(".card-body").each(function () {
+                            if($(this).parent().find(".expandable").data("expanded") == "true") {
+                                $(this).css("display", "-webkit-box");
+                                $(this).parent().find(".expandable").data("expanded", "false").text("Expand");
+                                console.log(this);
+                            }
+                        });
+                        $(this).parent().find(".card-body").css("display", "block");
+                        $(this).data("expanded", "true").text("Collapse");
+                    }
+                });
+            });
+        </script>
     </div>
     <ul class="list-group list-group-flush">
         {% for announcement in feed_custom.1 %}
