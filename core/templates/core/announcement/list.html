@@ -45,7 +45,7 @@
     </div>
     <div class="card-container">
         <div class="cards" id="cards-all">
-            {% for announcement in feed_all %}
+            {% for announcement in feed_all reversed %}
             <div class="card">
                 <h1>{{announcement.title}}</h1>
                 <div class="card-authors">
@@ -60,7 +60,7 @@
         </div>
         {% if user.is_authenticated %}
         <div class="cards" id="cards-my-feed">
-            {% for announcement in feed_my %}
+            {% for announcement in feed_my reversed %}
             <div class="card">
                 {{announcement.title}}
             </div>
