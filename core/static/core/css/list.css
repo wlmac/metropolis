@@ -1,0 +1,64 @@
+.container {
+    background-color: white;
+    height: 100%;
+}
+.headers {
+    margin-top: 50px;
+    overflow: hidden;
+    background-color: var(--dark-blue);
+    padding: 20px;
+    padding-left: 40px;
+}
+.headers ul {
+    justify-content: center;
+    margin: 0;
+}
+.headers li {
+    cursor: pointer;
+    text-align: center;
+    padding: 0 20px;
+    padding-bottom: 5px;
+    color: var(--link-blue);
+    border-bottom: 3px solid var(--link-blue);
+    display: inline;
+}
+.headers li:hover {
+    font-weight: bold;
+    color: var(--highlight-blue);
+    border-color: var(--highlight-blue);
+}
+.card-container {
+    padding: 10px 40px;
+}
+.card {
+    margin: 1.5rem 0;
+    padding: 20px;
+    border-radius: 5px;
+}
+.card p {
+    margin: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+h1 {
+    font-weight: bold;
+    margin: 0;
+    font-size: 2rem;
+}
+hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}
+.card-authors {
+    color: var(--line-grey);
+}
+.card-authors a {
+    color: var(--link-blue);
+    font-weight: bold;
+}
+.card a {
+    color: var(--link-blue);
+    cursor: pointer;
+}

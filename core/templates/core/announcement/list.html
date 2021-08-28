@@ -8,9 +8,40 @@
 {% endblock %}
 
 {% block main %}
-<div class="card mb-3">
-    <div class="card-header">
-        All
+<div class="container">
+    <div class="headers">
+        <ul>
+            <li class="header" id="all">ALL</li>
+            {% if user.is_authenticated %}
+            <li class="header" id="my-feed">MY FEED</li>
+            {% endif %}
+            <li class="header" id="top">TOP</li>
+        </ul>
+        <script>
+            $(document).ready(function(){
+                $("#all").css({
+                    "font-weight": "bold",
+                    "color": "var(--highlight-blue)",
+                    "border-color": "var(--highlight-blue)"
+                });
+                $(".header").click(function(){
+                    $(".header").each(function() {
+                        $(this).css({
+                            "font-weight": "normal",
+                            "color": "var(--link-blue)",
+                            "border-color": "var(--link-blue)"
+                        });
+                    });
+                    $(".cards").hide();
+                    $("#cards-"+this.id).show();
+                    $(this).css({
+                        "font-weight": "bold",
+                        "color": "var(--highlight-blue)",
+                        "border-color": "var(--highlight-blue)"
+                    });
+                });
+            });
+        </script>
     </div>
     <ul class="list-group list-group-flush">
         {% for announcement in feed_all %}
