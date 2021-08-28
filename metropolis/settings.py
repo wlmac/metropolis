@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'django.contrib.flatpages',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'core.middleware.TimezoneMiddleware',
 ]
 
@@ -240,6 +242,7 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 NAVBAR = {
     'Announcements': '/announcements',
     'Clubs': '/clubs',
+    'Calendar': '/calendar',
 }
 
 # Announcements settings
@@ -272,6 +275,11 @@ CORS_ALLOW_METHODS = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+# Color settings
+
+TAG_COLOR_SATURATION = 0.2
+TAG_COLOR_VALUE = 1.0
+
 # Misc settings
 
 SITE_ID = 1
@@ -281,6 +289,9 @@ TOS_URL = '/terms'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 try:
     from metropolis.config import *

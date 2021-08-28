@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from .tag import TagSerializer
 from ... import models
 
 
@@ -33,4 +34,4 @@ class EventSerializer(serializers.Serializer):
     end_date = serializers.DateTimeField()
     is_instructional = serializers.BooleanField(default=False)
     organization = serializers.SlugRelatedField(slug_field='name', queryset=models.Organization.objects.all(), required=False, allow_null=True, allow_empty=True)
-    tags = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Tag.objects.all())
+    tags = TagSerializer(many=True)

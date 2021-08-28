@@ -19,8 +19,5 @@ class Timetable(models.Model):
     def __str__(self):
         return f'{self.owner.get_full_name()} ({self.owner})\'s Timetable for {self.term}'
 
-    def get_absolute_url(self):
-        return reverse('view_timetable', kwargs={'pk': self.pk})
-
     class Meta:
         constraints = [models.UniqueConstraint(fields=['owner', 'term'], name='unique_timetable_owner_and_term')]
