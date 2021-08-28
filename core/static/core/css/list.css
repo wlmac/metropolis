@@ -41,6 +41,7 @@
     font-size: 2rem;
 }
 .card-authors {
+    margin-top: 10px;
     color: var(--line-grey);
 }
 .card-authors a {
