@@ -29,6 +29,7 @@
 }
 .card-container {
     padding: 10px 40px;
+    min-height: calc(100vh - 226.5px);
 }
 .card {
     margin: 1.5rem 0;
