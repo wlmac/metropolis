@@ -1,9 +1,9 @@
 .container {
+    margin-top: 50px;
     background-color: white;
     height: 100%;
 }
 .headers {
-    margin-top: 50px;
     overflow: hidden;
     background-color: var(--dark-blue);
     padding: 20px;
