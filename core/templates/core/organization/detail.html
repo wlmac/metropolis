@@ -10,18 +10,26 @@
 {% block main %}
 <div class="club">
     <div class="row">
-        <img class="club-banner responsive-img col s12" src="https://via.placeholder.com/150x40">
+        {% if organization.banner %}
+            <img class="club-banner responsive-img col s12" src="{{ organization.banner.url }}">
+        {% else %}
+            <img class="club-banner responsive-img col s12" src="https://via.placeholder.com/150x40">
+        {% endif %}
     </div>
     <div class="container">
         <div class="row club-header">
             <div class="col m3 s12 club-logo">
-                <img class="responsive-img circle" src="https://via.placeholder.com/150">
+                {% if organization.icon %}
+                    <img class="responsive-img circle" src="{{ organization.icon.url }}">
+                {% else %}
+                    <img class="responsive-img circle" src="https://via.placeholder.com/150">
+                {% endif %}
             </div>
             <div class="col m5 s12">
                 <h2 class="club-name">{{ organization.name }}</h2>
                 <div class="tag-section">
                     {% for tag in organization.tags.all %}
-                    <p class="tag">{{tag}}</p>
+                    <p class="tag" style="background-color: {{ tag.color }};">{{tag}}</p>
                     {% endfor %}
                 </div>
             </div>
@@ -30,9 +38,9 @@
                 <form method="POST" class="member-button">
                     {% csrf_token %}
                     {% if organization not in request.user.organizations.all %}
-                    <button type="submit" class="btn">+ Join</button>
+                    <button type="submit" class="btn join">+ Join</button>
                     {% else %}
-                    <button type="submit" class="btn">- Leave</button>
+                    <button type="submit" class="btn leave">- Leave</button>
                     {% endif %}
                 </form>
             </div>
@@ -48,9 +56,9 @@
                 {# TODO: Add club links #}
                 <ul class="link-section">
                     <div>
-                        <li><i class="material-icons" aria-hidden="true">link</i><a href="http://example.org">http://example.org</a></li>
-                        <li><i class="material-icons" aria-hidden="true">add</i><a href="http://example.org">http://example.org</a></li>
-                        <li><i class="material-icons" aria-hidden="true">link</i><a href="http://example.org">http://example.org</a></li>
+                        {% for i in organization.links.all %}
+                            <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a href="{{ i.url }}">{{ i.url }}</a></li>
+                        {% endfor %}
                     </div>
                       
                 </ul>

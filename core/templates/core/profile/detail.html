@@ -26,13 +26,4 @@
         <li class="list-group-item">Joined on {{ profile.date_joined }} ({{ TIME_ZONE }})</li>
     </ul>
 </div>
-
-<div class="card my-3">
-    <div class="card-header">Timetable</div>
-    <ul class="list-group list-group-flush">
-        {% for timetable in profile.timetables.all %}
-            <li class="list-group-item">{{ timetable.pk|timetable }}</li>
-        {% endfor %}
-    </ul>
-</div>
 {% endblock %}

@@ -19,6 +19,7 @@
 <ul id="dropdownAcc" class="dropdown-content">
     {% if request.user.is_authenticated %}
     <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
+    <li><a href="{% url 'timetable_list' %}">Timetable</a></li>
     {% if user.is_staff %}
     <li><a href="{% url 'admin:index' %}">Admin</a></li>
     {% endif %}
@@ -27,9 +28,8 @@
     <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
     <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Register</a></li>
     {% endif %}
-    <li><a>hi</a></li>
 </ul>
-<ul class="sidenav" id="mobile-demo">
+<ul class="sidenav" id="slide-out">
     {% settings_value "NAVBAR" as navbar %}
     {% for heading, items in navbar.items %}
     {% if items|gettype == 'str' %}
@@ -63,8 +63,14 @@
 </ul>
 <nav>
     <div class="nav-wrapper">
-        <a class="brand-logo" href="{% url 'index' %}">Metropolis</a>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <a href="{% url 'index' %}">
+            <div class="brand-logo">
+                <img class="img-logo" src="{% static 'core/img/logo-dark-transparent.png' %}"></img>
+                <!-- <span>Metropolis</span> -->
+            </div>
+        </a>
+            
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
         <ul class="right hide-on-med-and-down">
             {% settings_value "NAVBAR" as navbar %}
             {% for heading, items in navbar.items %}
@@ -74,7 +80,7 @@
             </li>
             {% elif items|gettype == 'dict' %}
             <li>
-                <a class="dropdown-trigger" href="#!" data-target="dropdown1">{{ heading }}<i class="material-icons right">arrow_drop_down</i></a>
+                <a class="dropdown-trigger" href="#!" data-target="dropdown1">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
                 <ul id="dropdown1" class="dropdown-content">
                     {% for item, path in items.items %}
                         <li>
@@ -93,16 +99,12 @@
                 {% else %}
                 Login/Register
                 {% endif %}
-                <i class="material-icons right">arrow_drop_down</i>
+                <i class="zmdi zmdi-caret-down"></i>
             </a></li>
             <script>
                 $(document).ready(function(){
-                   $('.modal').modal();
-                   $('.dropdown-trigger').dropdown();
-                });
-                $(document).ready(function(){
-                   $('.modal').modal();
-                   $('.sidenav-trigger').dropdown();
+                    $('.dropdown-trigger').dropdown();
+                    $('.sidenav').sidenav();
                 });
             </script>
         </ul>
