@@ -14,7 +14,7 @@ def user_url(username):
 def user(username, postfix=''):
     url = user_url(username)
     user_obj = models.User.objects.get(username=username)
-    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), f'{user_obj.get_full_name()} ({username})')
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), f'{user_obj.get_full_name()}')
 
 @register.filter
 def users(usernames, postfix=''):
