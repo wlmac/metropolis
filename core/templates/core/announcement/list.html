@@ -46,7 +46,7 @@
             $(document).ready(function(){
                 $(".card-body").each(function () {
                     if(Math.round($(this).prop("scrollHeight")) > Math.round($(this).innerHeight())) {
-                        $(this).parent().append("<br><a class='expandable' data-expanded='false'>Expand</a>");
+                        $(this).parent().append("<br><a class='expandable' data-expanded='false'>Expand ⯆</a>");
                     }
                 });
                 $(".cards").hide();
@@ -55,18 +55,18 @@
                     if($(this).data("expanded") == "true") {
                         var lineHeight = parseFloat($(this).parent().find(".card-body").css("line-height").replace('px',''));
                         $(this).parent().find(".card-body").animate({"height": lineHeight*3}, 200).css("display", "-webkit-box");
-                        $(this).data("expanded", "false").text("Expand");
+                        $(this).data("expanded", "false").text("Expand ⯆");
                     } else {
                         $(".card-body").each(function () {
                             if($(this).parent().find(".expandable").data("expanded") == "true") {
                                 var lineHeight = parseFloat($(this).parent().find(".card-body").css("line-height").replace('px',''));
                                 $(this).animate({"height": lineHeight*3}, 200).css("display", "-webkit-box");
-                                $(this).parent().find(".expandable").data("expanded", "false").text("Expand");
+                                $(this).parent().find(".expandable").data("expanded", "false").text("Expand ⯆");
                             }
                         });
                         var scrollHeight = $(this).parent().find(".card-body").prop("scrollHeight");
                         $(this).parent().find(".card-body").animate({"height": scrollHeight}, 200).css("display", "block");
-                        $(this).data("expanded", "true").text("Collapse");
+                        $(this).data("expanded", "true").text("Collapse ⯅");
                     }
                 });
             });
