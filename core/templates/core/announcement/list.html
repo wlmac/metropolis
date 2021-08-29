@@ -42,6 +42,8 @@
                 <div class="card-authors">
                     <img src="{{announcement.organization.icon.url}}" height="22.5px" style="border-radius: 100%">
                     <div>
+                        <a href="{% url 'organization_detail' announcement.organization.pk %}">{{announcement.organization}}</a>,
+                        <a href="{% url 'profile_detail' announcement.author.username %}">{{announcement.author}}</a>
                         • {{announcement.last_modified_date}}
                     </div>
                 </div>
@@ -63,8 +65,8 @@
                 <div class="card-authors">
                     <img src="{{announcement.organization.icon.url}}" height="22.5px" style="border-radius: 100%">
                     <div>
-                        <a href="/club/{{announcement.organization.id}}">{{announcement.organization}}</a>,
-                        <a href="/user/{{announcement.author}}">{{announcement.author}}</a>
+                        <a href="{% url 'organization_detail' announcement.organization.pk %}">{{announcement.organization}}</a>,
+                        <a href="{% url 'profile_detail' announcement.author.username %}">{{announcement.author}}</a>
                         • {{announcement.last_modified_date}}
                     </div>
                 </div>
