@@ -42,9 +42,14 @@
                 <div class="card-authors">
                     <img src="{{announcement.organization.icon.url}}" height="22.5px" style="border-radius: 100%">
                     <div>
-                        <a href="/club/{{announcement.organization.id}}">{{announcement.organization}}</a>,
-                        <a href="/user/{{announcement.author}}">{{announcement.author}}</a>
-                        • {{announcement.created_date}}
+                        {% if announcement.author %}
+                            <a href="{% url announcement.organization %}">{{announcement.organization}}</a>,
+                            <a href="{% url announcement.author %}">{{announcement.author}}</a>
+                            • {{announcement.created_date}}
+                        {% else %}
+                            <a href="{% url announcement.organization %}">{{announcement.organization}}</a>
+                            • {{announcement.created_date}}
+                        {% endif %}
                     </div>
                 </div>
                 <hr>
