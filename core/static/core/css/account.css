@@ -1,0 +1,80 @@
+.row {
+    display: flex;
+    margin: 0px;
+}
+
+select {
+    display: revert;
+    margin: 10px 0px;
+}
+
+/*input[type="text"], input[type="password"] {
+    box-shadow: none !important;
+    border: none !important; 
+    background-color: #dbdbdb !important;
+}*/
+
+.login, .signup {
+    width: 90%;
+}
+
+.graphic {
+    background-size: cover;
+    background-position: center center;
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5%;
+    height: 100%;
+}
+
+.tab-wrapper, .messages {
+    width: 90%;
+}
+
+.tab-wrapper {
+    display: flex;
+    margin: 0px 10px 20px;
+    display: flex;
+    align-items: center;
+}
+
+.col.s6 {
+    padding: 0px;
+}
+
+.tab {
+    text-align: center;
+    border-bottom: 2px solid var(--line-grey);
+    padding: 3% 0;
+    font-weight: bold;
+    color: var(--line-grey);
+}
+
+.tab:hover {
+    border-bottom: 2px solid var(--mid-blue);
+    color: var(--mid-blue);
+    transition: border 0.1s linear, color 0.1s linear;
+}
+
+.current {
+    border-bottom: 2px solid var(--link-blue);
+    color: var(--link-blue);
+}
+
+.login-btn {
+    margin-top: 30px;
+}
+
+.wrapper > .col {
+    padding: 0;
+}
+
+.grad-year {
+    color: var(--mid-grey);
+    margin-bottom: 10px;
+}

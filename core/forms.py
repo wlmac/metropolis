@@ -1,16 +1,13 @@
 from django import forms
 from allauth.account.forms import SignupForm
-from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV3
 from . import models
 from metropolis import settings
 
 class MetropolisSignupForm(SignupForm):
-    captcha = ReCaptchaField(widget=ReCaptchaV3, label='')
-    first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "First Name", "autocomplete": "given-name"}))
-    last_name = forms.CharField(max_length=30, label='Last Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "Last Name", "autocomplete": "family-name"}))
+    first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "given-name"}))
+    last_name = forms.CharField(max_length=30, label='Last Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "family-name"}))
     graduating_year = forms.ChoiceField(choices=models.graduating_year_choices)
-    field_order = ['email', 'username', 'first_name', 'last_name', 'graduating_year', 'password1', 'password2', 'captcha']
+    field_order = ['email', 'username', 'first_name', 'last_name', 'graduating_year', 'password1', 'password2']
 
     def save(self, request):
         user = super(MetropolisSignupForm, self).save(request)
@@ -19,6 +16,13 @@ class MetropolisSignupForm(SignupForm):
         user.graduating_year = self.cleaned_data['graduating_year']
         user.save()
         return user
+
+    def __init__(self, *args, **kwargs):
+        super(MetropolisSignupForm, self).__init__(*args, **kwargs)
+        del self.fields['email'].widget.attrs['placeholder']
+        del self.fields['username'].widget.attrs['placeholder']
+        del self.fields['password1'].widget.attrs['placeholder']
+        del self.fields['password2'].widget.attrs['placeholder']
 
 class AddTimetableSelectTermForm(forms.Form):
     term = forms.ModelChoiceField(queryset=models.Term.objects.none())

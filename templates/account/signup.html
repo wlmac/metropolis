@@ -1,21 +1,84 @@
 {% extends 'account/base.html' %}
-{% load crispy_forms_tags %}
 {% load i18n %}
 {% load settings_tags %}
+{% load static %}
 
-{% block head_title %}{% trans "Signup" %}{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/account.css' %}">
+{% endblock %}
 
 {% block content %}
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+<div class="row wrapper">
+    <div class="graphic col m12 l6 hide-on-med-and-down" style="background-image: url('{% static 'core/image/sign-up.png' %}')">
+    </div>
+    <div class="col m12 l6">
+        <div class="form-wrapper">
+            <div class="tab-wrapper row">
+            
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{message}}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
 
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-    {% csrf_token %}
-    {{ form|crispy }}
-    {% if redirect_field_value %}
-    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-    {% endif %}
-    <p>By clicking this button, you agree to our <a href="{% settings_value "TOS_URL" %}">terms</a>.</p>
-    <button type="submit" class="btn btn-primary mb-3 g-recaptcha">{% trans "Sign Up" %}</button>
-</form>
+                <div class="col s6">
+                    <a href="/accounts/login">
+                        <div class="tab">Log In</div>
+                    </a>
+                </div>
+                <div class="col s6">
+                    <a href="/accounts/signup">
+                        <div class="tab current">Sign Up</div>
+                    </a>
+                </div>
+            </div>
+            <!-- <form class="signup" method="POST" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                {{form}}
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                <p>By clicking this button, you agree to our <a href="{% settings_value 'TOS_URL' %}">terms</a>.</p>
+                <button type="submit" class="btn">{% trans "Sign Up" %}</button>
+            </form> -->
+            <form class="signup" method="POST" action="{% url 'account_signup' %}">
+                {% csrf_token %}
 
+                {{ form.non_field_errors }}
+
+                {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field.errors }}
+                {{ hidden_field }}
+                {% endfor %}
+
+                <table border="1" >
+                    {% for field in form.visible_fields %}
+                    <div class="row">
+                        <div class="input-field col s12">
+                        {% if field.auto_id != "id_graduating_year" %}
+                        {{ field.label_tag }}
+                        {{ field.errors }}
+                        {% else %}
+                        <span class="grad-year">Graduating Year:</span>
+                        {% endif %}
+
+                        {{ field }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </table>
+
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <p>By clicking this button, you agree to our <a class="link" href="{% settings_value 'TOS_URL' %}">terms</a>.</p>
+                <button type="submit" class="btn login-btn ">{% trans "Sign Up" %}</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

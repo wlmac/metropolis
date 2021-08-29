@@ -3,7 +3,7 @@
     --bg-grey: #f3f3f3;
     --light-grey: #efefef;
     --line-grey: #b7b7b7;
-    --mid-grey: #787878;
+    --mid-grey: #939393;
     --dark-grey: #434343;
     --near-black: #0b0b0b;
 
@@ -25,6 +25,10 @@ html {
 }
 body {
     min-height: 100%;
+}
+
+p{
+    color: var(--near-black);
 }
 
 .nav-wrapper{
@@ -95,4 +99,64 @@ body {
     background-color: var(--link-blue);
     margin: 10px 15px;
     width: calc(100% - 30px);
+}
+
+.link{
+    color: var(--link-blue);
+}
+
+.link:hover {
+    color: var(--dark-blue);
+    transition: color 0.15s linear;
+}
+
+.link-light{
+    color: white;
+}
+
+.link-light:hover {
+    color: var(--highlight-blue);
+    transition: color 0.15s linear;
+}
+
+.checkbox-blue[type="checkbox"].filled-in:checked+span:not(.lever):after {
+    border: 2px solid var(--link-blue);
+    background-color: var(--link-blue);
+}
+
+.btn{
+    width: 100%;
+    background-color: var(--link-blue);
+}
+
+.btn:hover, .btn:active {
+    background-color: var(--dark-blue)
+}
+
+.errorlist {
+    color: var(--status-red);
+    margin: 0.5em 0px 1em;
+}
+
+.messages {
+    color: var(--status-green);
+    margin-bottom: 15px;
+}
+
+.messages > li {
+    margin: 5px 0px;
+}
+
+input {
+    color: var(--near-black);
+}
+
+.input-field input:focus {
+    color: var(--dark-blue);
+    border-bottom: 1px solid var(--link-blue) !important;
+    box-shadow: 0 1px 0 0 var(--link-blue) !important;
+}
+
+label {
+    color: var(--mid-grey) !important;
 }
