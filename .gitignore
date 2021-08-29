@@ -1,4 +1,6 @@
 metropolis/config.py
 db.sqlite3
 *.pyc
+venv/
+env/
 media/*

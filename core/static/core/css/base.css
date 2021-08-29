@@ -18,6 +18,13 @@
     
     font-family: 'Roboto', sans-serif;
     letter-spacing: 0.15px;
+    background-color: var(--bg-grey);
+}
+html {
+    height: 100%;
+}
+body {
+    min-height: 100%;
 }
 
 .nav-wrapper{

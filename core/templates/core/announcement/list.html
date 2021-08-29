@@ -1,68 +1,137 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/list.css' %}">
+{% endblock %}
 
 {% block main %}
-<div class="card mb-3">
-    <div class="card-header">
-        All
+<div class="container">
+    <div class="headers">
+        <ul>
+            <li class="header" id="all">ALL</li>
+            {% if user.is_authenticated %}
+            <li class="header" id="my-feed">MY FEED</li>
+            {% endif %}
+            <li class="header" id="top">TOP</li>
+        </ul>
+        <script>
+            $(document).ready(function() {
+                $("#all").addClass("active");
+                $(".header").click(function(){
+                    $(".header").removeClass("active");
+                    $(this).addClass("active");
+                    $(".cards").hide();
+                    $("#cards-"+this.id).show();
+                });
+            });
+        </script>
     </div>
-    <ul class="list-group list-group-flush">
-        {% for announcement in feed_all %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">{{ announcement.title }}</div>
-                {{ announcement.body }}
-                <br>
-                {% for tag in announcement.tags.all %}
-                    <span class="badge rounded-pill bg-primary text-white">{{ tag.name }}</span>
-                {% endfor %}
+    <div class="card-container">
+        <div class="cards" id="cards-all">
+            {% for announcement in feed_all reversed %}
+            <div class="card">
+                <div class="tag-section">
+                    {% for tag in announcement.tags.all %}
+                    <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+                    {% endfor %}
+                </div>
+                <h1>{{announcement.title}}</h1>
+                <div class="card-authors">
+                    <img src="{{announcement.organization.icon.url}}" height="22.5px" style="border-radius: 100%">
+                    <div>
+                        <a href="/club/{{announcement.organization.id}}">{{announcement.organization}}</a>,
+                        <a href="/user/{{announcement.author}}">{{announcement.author}}</a>
+                        • {{announcement.created_date}}
+                    </div>
+                </div>
+                <hr>
+                <p class="card-body">{{announcement.body}}</p>
             </div>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-
-{% if user.is_authenticated %}
-<div class="card mb-3">
-    <div class="card-header">
-        My Feed
+            {% endfor %}
+        </div>
+        {% if user.is_authenticated %}
+        <div class="cards" id="cards-my-feed">
+            {% for announcement in feed_my reversed %}
+            <div class="card">
+                <div class="tag-section">
+                    {% for tag in announcement.tags.all %}
+                    <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+                    {% endfor %}
+                </div>
+                <h1>{{announcement.title}}</h1>
+                <div class="card-authors">
+                    <img src="{{announcement.organization.icon.url}}" height="22.5px" style="border-radius: 100%">
+                    <div>
+                        <a href="/club/{{announcement.organization.id}}">{{announcement.organization}}</a>,
+                        <a href="/user/{{announcement.author}}">{{announcement.author}}</a>
+                        • {{announcement.created_date}}
+                    </div>
+                </div>
+                <hr>
+                <p class="card-body">{{announcement.body}}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <script>
+            $(document).ready(function(){
+                $(".card-body").each(function () {
+                    if(Math.round($(this).prop("scrollHeight")) > Math.round($(this).innerHeight())) {
+                        $(this).parent().append("<br><a class='expandable' data-expanded='false'>Expand</a>");
+                    }
+                });
+                $(".cards").hide();
+                    $("#cards-all").show();
+                $(".expandable").click(function() {
+                    if($(this).data("expanded") == "true") {
+                        var lineHeight = parseFloat($(this).parent().find(".card-body").css("line-height").replace('px',''));
+                        $(this).parent().find(".card-body").animate({"height": lineHeight*3});
+                        $(this).parent().find(".card-body").css("display", "-webkit-box");
+                        $(this).data("expanded", "false").text("Expand");
+                    } else {
+                        $(".card-body").each(function () {
+                            if($(this).parent().find(".expandable").data("expanded") == "true") {
+                                var lineHeight = parseFloat($(this).parent().find(".card-body").css("line-height").replace('px',''));
+                                $(this).animate({"height": lineHeight*3});
+                                $(this).css("display", "-webkit-box");
+                                $(this).parent().find(".expandable").data("expanded", "false").text("Expand");
+                                console.log(this);
+                            }
+                        });
+                        var scrollHeight = $(this).parent().find(".card-body").prop("scrollHeight");
+                        $(this).parent().find(".card-body").animate({"height": scrollHeight});
+                        $(this).parent().find(".card-body").css("display", "block");
+                        $(this).data("expanded", "true").text("Collapse");
+                    }
+                });
+            });
+        </script>
     </div>
-    <ul class="list-group list-group-flush">
-        {% for announcement in feed_my %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">{{ announcement.title }}</div>
-                {{ announcement.body }}
-                <br>
-                {% for tag in announcement.tags.all %}
-                    <span class="badge rounded-pill bg-primary text-white">{{ tag.name }}</span>
-                {% endfor %}
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-{% endif %}
-
-{% for feed_custom in feeds_custom %}
-<div class="card mb-3">
-    <div class="card-header">
-        {{ feed_custom.0.name }}
+    <!--
+    {% for feed_custom in feeds_custom %}
+    <div class="card mb-3">
+        <div class="card-header">
+            {{ feed_custom.0.name }}
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for announcement in feed_custom.1 %}
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">{{ announcement.title }}</div>
+                    {{ announcement.body }}
+                    <br>
+                    {% for tag in announcement.tags.all %}
+                        <span class="badge rounded-pill bg-primary text-white">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
-    <ul class="list-group list-group-flush">
-        {% for announcement in feed_custom.1 %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">{{ announcement.title }}</div>
-                {{ announcement.body }}
-                <br>
-                {% for tag in announcement.tags.all %}
-                    <span class="badge rounded-pill bg-primary text-white">{{ tag.name }}</span>
-                {% endfor %}
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
+    {% endfor %}
+    -->
 </div>
-{% endfor %}
 {% endblock %}
