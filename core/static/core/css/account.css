@@ -83,3 +83,7 @@ select {
     color: var(--mid-grey);
     margin-bottom: 10px;
 }
+
+.responsive-img {
+    height: 100% !important;
+}
