@@ -3,6 +3,7 @@
 }
 
 .row {
+    background-color: white;
     display: flex;
     margin: 0px;
 }
