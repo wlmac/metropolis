@@ -25,12 +25,12 @@
             {% endif %}
 
                 <div class="col s6">
-                    <a href="/accounts/login">
+                    <a href="{% url 'account_login' %}">
                         <div class="tab">Log In</div>
                     </a>
                 </div>
                 <div class="col s6">
-                    <a href="/accounts/signup">
+                    <a href="{% url 'account_signup' %}">
                         <div class="tab current">Sign Up</div>
                     </a>
                 </div>
