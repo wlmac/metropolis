@@ -50,6 +50,7 @@
                             <a href="{% url announcement.organization %}">{{announcement.organization}}</a>
                             • {{announcement.created_date}}
                         {% endif %}
+                        • {{announcement.last_modified_date}}
                     </div>
                 </div>
                 <hr>
@@ -73,6 +74,7 @@
                         <a href="/club/{{announcement.organization.id}}">{{announcement.organization}}</a>,
                         <a href="/user/{{announcement.author}}">{{announcement.author}}</a>
                         • {{announcement.created_date}}
+                        • {{announcement.last_modified_date}}
                     </div>
                 </div>
                 <hr>
