@@ -1,36 +1,50 @@
-from django.views.generic.edit import CreateView, FormView
-from django.views.generic import DetailView
+from django.views.generic.edit import CreateView, UpdateView, FormView, FormMixin
+from django.views.generic import DetailView, ListView
 from django.views import View
 from .. import models
 from . import mixins
-from ..forms import AddTimetableSelectTermForm, AddTimetableSelectCoursesForm, AddCourseForm
+from ..forms import AddTimetableSelectTermForm, TimetableSelectCoursesForm, AddCourseForm
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.http import JsonResponse
 
-@method_decorator(login_required, name='dispatch')
-class AddTimetableSelectTerm(FormView, mixins.TitleMixin):
-    template_name = 'core/timetable/add/select_term.html'
-    title = 'Add a Timetable'
+class TimetableList(LoginRequiredMixin, ListView, FormMixin, mixins.TitleMixin):
+    template_name = 'core/timetable/list.html'
+    title = 'Timetable'
+    context_object_name = 'timetables'
+    model = models.Timetable
     form_class = AddTimetableSelectTermForm
 
+    def get_queryset(self):
+        return models.Timetable.objects.filter(owner=self.request.user)
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
     def form_valid(self, form, **kwargs):
-        return redirect('add_timetable_select_courses', pk=form.cleaned_data.get('term').pk)
+        return redirect('timetable_create', pk=form.cleaned_data.get('term').pk)
 
     def get_form_kwargs(self):
-        kwargs = super(FormView, self).get_form_kwargs()
+        kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
 
-class AddTimetableSelectCourses(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin):
-    template_name = 'core/timetable/add/select_courses.html'
+class TimetableCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin):
+    template_name = 'core/timetable/add.html'
     title = 'Add a Timetable'
     model = models.Timetable
-    form_class = AddTimetableSelectCoursesForm
+    form_class = TimetableSelectCoursesForm
+    success_url = reverse_lazy('timetable_list')
 
     def test_func(self):
         term = get_object_or_404(models.Term, pk=self.kwargs['pk'])
@@ -58,7 +72,18 @@ class AddTimetableSelectCourses(LoginRequiredMixin, UserPassesTestMixin, CreateV
         context['term'] = get_object_or_404(models.Term, pk=self.kwargs['pk'])
         return context
 
-class AddCourse(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin):
+class TimetableUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView, mixins.TitleMixin):
+    template_name = 'core/timetable/edit.html'
+    title = 'Edit Timetable'
+    model = models.Timetable
+    context_object_name = 'timetable'
+    form_class = TimetableSelectCoursesForm
+    success_url = reverse_lazy('timetable_list')
+
+    def test_func(self):
+        return self.get_object().owner == self.request.user
+
+class CourseCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin):
     template_name = 'core/course/add.html'
     title = 'Add a Course'
     model = models.Course
@@ -76,7 +101,10 @@ class AddCourse(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.Titl
         return super().form_valid(form)
     
     def get_success_url(self):
-        return reverse('add_timetable_select_courses', kwargs={'pk': self.kwargs['pk']})
+        if 'next' in self.request.GET:
+            return self.request.GET['next']
+        else:
+            return reverse('timetable_list')
 
     def get_form_kwargs(self):
         kwargs = super(CreateView, self).get_form_kwargs()
@@ -87,16 +115,3 @@ class AddCourse(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.Titl
         context = super().get_context_data(**kwargs)
         context['term'] = get_object_or_404(models.Term, pk=self.kwargs['pk'])
         return context
-
-class ViewTimetable(DetailView, mixins.TitleMixin):
-    model = models.Timetable
-    context_object_name = 'timetable'
-    template_name = 'core/timetable/view.html'
-
-    def get_title(self):
-        return f'Timetable'
-
-class ViewTimetableData(View):
-    def get(self, request, pk):
-        timetable = get_object_or_404(models.Timetable, pk=pk)
-        return JsonResponse({'courses': [i.code for i in timetable.courses.all()]})

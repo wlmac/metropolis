@@ -1,15 +1,27 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
+{% load timetable_tags %}
 
 {% block main %}
+{% for timetable in timetables %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ timetable.term.name }}</h5>
+        <p class="card-text">
+            {{ timetable|render_timetable }}
+        </p>
+        <a href="{% url 'timetable_update' timetable.pk %}" class="card-link">Edit timetable</a>
+    </div>
+</div>
+{% endfor %}
+
 <div class="card">
     <div class="card-body">
         <form method="post">
             <h5 class="card-title">Add timetable</h5>
             <h6 class="card-subtitle mb-2 text-muted">Select Term</h6>
             {% csrf_token %}
-            {{ form|crispy }}
+            {{ form }}
             <div class="mt-3">
                 <button type="submit" class="btn btn-primary mr-2">Continue</button>
                 <a href="{% url 'profile_redirect' %}" class="btn btn-primary" role="button" aria-pressed="true">Cancel</a>

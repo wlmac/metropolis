@@ -1,29 +1,70 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
+{% endblock %}
 
 {% block main %}
-<div class="card mb-3">
-    <div class="card-body">
-        <h5 class="card-title">{{ organization.name }}</h5>
-        <p class="card-text">{{ organization.description }}</p>
-    </div>
-</div>
-
-{% if user.is_authenticated %}
-<div class="card">
-    <div class="card-header">
-        Membership
-    </div>
-    <form method="POST" class="card-body">
-        {% csrf_token %}
-        {% if organization not in request.user.organizations.all %}
-        <h5 class="card-title">Subscribe to announcements from {{ organization.name }}</h5>
-        <button type="submit" class="btn btn-primary">Join</button>
+<div class="club">
+    <div class="row">
+        {% if organization.banner %}
+            <img class="club-banner responsive-img col s12" src="{{ organization.banner.url }}">
         {% else %}
-        <h5 class="card-title">Unsubscribe to announcements from {{ organization.name }}</h5>
-        <button type="submit" class="btn btn-primary">Leave</button>
+            <img class="club-banner responsive-img col s12" src="https://via.placeholder.com/150x40">
         {% endif %}
-    </form>
+    </div>
+    <div class="container">
+        <div class="row club-header">
+            <div class="col m3 s12 club-logo">
+                {% if organization.icon %}
+                    <img class="responsive-img circle" src="{{ organization.icon.url }}">
+                {% else %}
+                    <img class="responsive-img circle" src="https://via.placeholder.com/150">
+                {% endif %}
+            </div>
+            <div class="col m5 s12">
+                <h2 class="club-name">{{ organization.name }}</h2>
+                <div class="tag-section">
+                    {% for tag in organization.tags.all %}
+                    <p class="tag" style="background-color: {{ tag.color }};">{{tag}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="col m4 s12">
+                <form method="POST" class="member-button">
+                    {% csrf_token %}
+                    {% if organization not in request.user.organizations.all %}
+                    <button type="submit" class="btn join">+ Join</button>
+                    {% else %}
+                    <button type="submit" class="btn leave">- Leave</button>
+                    {% endif %}
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <div class="row club-info">
+            <div class="col m8">
+                <p class="description" >
+                {{ organization.description }}
+                </p>
+            </div>
+            <div class="col m4">
+                {# TODO: Add club links #}
+                <ul class="link-section">
+                    <div>
+                        {% for i in organization.links.all %}
+                            <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a href="{{ i.url }}">{{ i.url }}</a></li>
+                        {% endfor %}
+                    </div>
+                      
+                </ul>
+            </div>
+        </div>       
+    </div>
 </div>
-{% endif %}
 {% endblock %}
+

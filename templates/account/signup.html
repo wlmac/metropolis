@@ -4,6 +4,7 @@
 {% load static %}
 
 {% block head %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
 <link rel="stylesheet" href="{% static 'core/css/account.css' %}">
 {% endblock %}
 
@@ -14,27 +15,70 @@
     <div class="col m12 l6">
         <div class="form-wrapper">
             <div class="tab-wrapper row">
+            
+            {% if messages %}
+            <div>
+                <strong>Messages:</strong>
+                <ul>
+                    {% for message in messages %}
+                        <li>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
                 <div class="col s6">
                     <a href="/accounts/login">
-                        <div class="tab">Log In
-                        </div>
+                        <div class="tab">Log In</div>
                     </a>
                 </div>
                 <div class="col s6">
                     <a href="/accounts/signup">
-                        <div class="tab current">
-                            Sign Up
-                        </div>
+                        <div class="tab current">Sign Up</div>
                     </a>
                 </div>
             </div>
-            <form class="signup" method="POST" action="{% url 'account_signup' %}">
+            <!-- <form class="signup" method="POST" action="{% url 'account_signup' %}">
                 {% csrf_token %}
                 {{form}}
                 {% if redirect_field_value %}
                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                 {% endif %}
-                <p>By clicking this button, you agree to our <a href="{% settings_value "TOS_URL" %}">terms</a>.</p>
+                <p>By clicking this button, you agree to our <a href="{% settings_value 'TOS_URL' %}">terms</a>.</p>
+                <button type="submit" class="btn">{% trans "Sign Up" %}</button>
+            </form> -->
+            <form class="signup" method="POST" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+
+                {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field.errors }}
+                {{ hidden_field }}
+                {% endfor %}
+
+                <table border="1" >
+                    {% for field in form.visible_fields %}
+                    <div class="row">
+                        <div class="input-field col s12">
+                        {% if field.auto_id != "id_graduating_year" %}
+                        {{ field.label_tag }}
+                        {{ field.errors }}
+                        {% else %}
+                        <span class="grad-year">Graduating Year:</span>
+                        {% endif %}
+
+                        {{ field }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </table>
+
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+
+                <p>By clicking this button, you agree to our <a class="link" href="{% settings_value 'TOS_URL' %}">terms</a>.</p>
                 <button type="submit" class="btn">{% trans "Sign Up" %}</button>
             </form>
         </div>

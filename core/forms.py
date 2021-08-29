@@ -4,8 +4,8 @@ from . import models
 from metropolis import settings
 
 class MetropolisSignupForm(SignupForm):
-    first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "First Name", "autocomplete": "given-name"}))
-    last_name = forms.CharField(max_length=30, label='Last Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "Last Name", "autocomplete": "family-name"}))
+    first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "given-name"}))
+    last_name = forms.CharField(max_length=30, label='Last Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "family-name"}))
     graduating_year = forms.ChoiceField(choices=models.graduating_year_choices)
     field_order = ['email', 'username', 'first_name', 'last_name', 'graduating_year', 'password1', 'password2']
 
@@ -17,6 +17,13 @@ class MetropolisSignupForm(SignupForm):
         user.save()
         return user
 
+    def __init__(self, *args, **kwargs):
+        super(MetropolisSignupForm, self).__init__(*args, **kwargs)
+        del self.fields['email'].widget.attrs['placeholder']
+        del self.fields['username'].widget.attrs['placeholder']
+        del self.fields['password1'].widget.attrs['placeholder']
+        del self.fields['password2'].widget.attrs['placeholder']
+
 class AddTimetableSelectTermForm(forms.Form):
     term = forms.ModelChoiceField(queryset=models.Term.objects.none())
 
@@ -25,7 +32,7 @@ class AddTimetableSelectTermForm(forms.Form):
         super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
         self.fields['term'].queryset = models.Term.objects.exclude(timetables__owner=user)
 
-class AddTimetableSelectCoursesForm(forms.ModelForm):
+class TimetableSelectCoursesForm(forms.ModelForm):
     class Meta:
         model = models.Timetable
         fields = ['courses']
@@ -34,8 +41,11 @@ class AddTimetableSelectCoursesForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        self.term = kwargs.pop('term')
-        super(AddTimetableSelectCoursesForm, self).__init__(*args, **kwargs)
+        if kwargs['instance'] is not None:
+            self.term = kwargs['instance'].term
+        else:
+            self.term = kwargs.pop('term')
+        super(TimetableSelectCoursesForm, self).__init__(*args, **kwargs)
         self.fields['courses'].queryset = models.Course.objects.filter(term=self.term).order_by('code')
 
     def clean(self):

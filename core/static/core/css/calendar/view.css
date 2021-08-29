@@ -1,0 +1,150 @@
+#inlineContainer {
+    padding: 10px 10%;
+    background-color: #eeeeee;
+}
+
+#calendar {
+    margin-bottom: 50px;
+    background-color: white;
+    padding: 3%;
+}
+
+.fc-toolbar-title {
+    font-weight: bold;
+}
+
+.dayEvent {
+    margin-bottom: 5%;
+    width: 100%;
+    box-shadow: 3px 3px #cccccc;
+}
+
+.dayEvent .leftPanel {
+    background-color: lightgreen;
+    padding-right: 25px;
+    font-size: 130%;
+    width: 150px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    text-align: right;
+}
+
+.dayEvent .leftPanel .timeDisplay {
+    text-align: right;
+    margin: auto;
+    font-weight: bolder;
+}
+
+.dayEvent .leftPanel .intermediate_to {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.dayEvent .detailPanel {
+    background-color: white;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 2% 3% 3%;
+}
+
+.dayEvent .detailPanel #event_title {
+    font-size: 170%;
+    margin-top: 0;
+    margin-bottom: 2%;
+    font-weight: bolder;
+}
+
+.dayEvent, .dayEvent tr, .dayEvent tr .leftPanel, .dayEvent tr .detailPanel {
+    border: none;
+    border-collapse: collapse;
+}
+
+#details {
+    background-color: #f2f2f2;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 1%;
+}
+
+.dayEvent .intermediate_to {
+    color: grey;
+}
+
+.dayEvent .detailPanel .eventHost {
+    font-weight: bold;
+    color: #4271cf;
+}
+
+.dayEvent .eventTag {
+    color: grey;
+    padding: 3px 15px;
+    border-radius: 5px;
+    font-size: 85%;
+    margin-right: 10px;
+}
+
+.fc-daygrid {
+    border-color: #eeeeee;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 5px;
+}
+
+#details #detailsCurrentDay {
+    font-size: 150%;
+    font-weight: bolder;
+}
+
+.fc-toolbar-chunk .fc-toolbar-title {
+    font-size: 170%;
+    font-weight: 800;
+}
+
+.fc-toolbar-chunk .fc-button {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #aaaaaa;
+    color: black;
+    border: none;
+    transition-duration: 0.5s;
+}
+
+.fc-button-group {
+    background-color: #aaaaaa !important;
+}
+
+.fc-toolbar-chunk .fc-button-active {
+    background-color: #555555 !important;
+    transition-duration: 0.5s;
+}
+
+.fc-button-group, .fc-button {
+    border-radius: 5px !important;
+}
+
+.fc-toolbar-chunk .fc-button-group .fc-button:hover, .fc-today-button:enabled:hover {
+    background-color: #555555 !important;
+}
+
+.fc-today-button:disabled {
+    background-color: #999999 !important;
+    color: #666666 !important;
+}
+
+.fc-button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.fc-daygrid-day-number-circle{
+    border-radius: 50%;
+    text-align: center;
+    padding: 1px;
+    margin-top: 3%;
+    margin-right: 5%;
+    transition-duration: 0.3s;
+}
+
+.fc-daygrid-day-number{
+    transition-duration: 0.3s;
+}

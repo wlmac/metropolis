@@ -2,8 +2,11 @@ from django.contrib import admin
 from . import models
 from django.contrib.auth import get_user_model
 from django.forms import Textarea
-from django.db.models import Q
 import django.db
+from django.db.models import Q
+from django.contrib.flatpages.admin import FlatPageAdmin
+from django.contrib.flatpages.models import FlatPage
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
@@ -18,11 +21,6 @@ class TermInline(admin.TabularInline):
     model = models.Term
     extra = 0
 
-class EventInline(admin.StackedInline):
-    ordering = ['start_date']
-    model = models.Event
-    extra = 0
-
 class CourseInline(admin.TabularInline):
     formfield_overrides = {
         django.db.models.TextField: {'widget': Textarea(attrs={'rows': 1})},
@@ -34,12 +32,24 @@ class CourseInline(admin.TabularInline):
 
 class TermAdmin(admin.ModelAdmin):
     inlines = [
-        EventInline,
         CourseInline,
     ]
 
+class TagAdmin(admin.ModelAdmin):
+    readonly_fields = ['color']
+
+class OrganizationURLInline(admin.TabularInline):
+    fields = ['url']
+    model = models.OrganizationURL
+    extra = 0
+
 class OrganizationAdmin(admin.ModelAdmin):
-    fields = ['name', 'description', 'is_open', 'tags', 'owner', 'supervisors', 'execs']
+    list_display = ['name', 'is_open', 'owner']
+    list_filter = ['is_open', 'tags']
+    fields = ['name', 'description', 'is_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
+    inlines = [
+        OrganizationURLInline,
+    ]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -164,12 +174,32 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
         super().save_model(request, obj, form, change)
 
+class EventAdmin(admin.ModelAdmin):
+    list_display = ['name', 'start_date', 'end_date']
+    list_filter = ['is_instructional', 'organization']
+
+class FlatPageAdmin(FlatPageAdmin):
+    fieldsets = (
+        (None, {'fields': ('url', 'title', 'content', 'sites')}),
+        (_('Advanced options'), {
+            'classes': ('collapse',),
+            'fields': (
+                'registration_required',
+                'template_name',
+            ),
+        }),
+    )
+
 admin.site.register(User)
 admin.site.register(models.Timetable)
 admin.site.register(models.Term, TermAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
-admin.site.register(models.Tag)
+admin.site.register(models.Tag, TagAdmin)
+admin.site.register(models.Event, EventAdmin)
+
+admin.site.unregister(FlatPage)
+admin.site.register(FlatPage, FlatPageAdmin)
 
 admin.site.site_header = "Metropolis administration"
 admin.site.site_title = "Metropolis admin"

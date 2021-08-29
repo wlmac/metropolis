@@ -25,7 +25,7 @@ def users(usernames, postfix=''):
 
 @register.filter
 def timetable_url(timetable):
-    return reverse('view_timetable', args=[timetable])
+    return reverse('timetable_detail', args=[timetable])
  
 @register.filter
 def timetable(timetable, postfix=''):
