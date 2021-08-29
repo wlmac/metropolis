@@ -78,6 +78,12 @@ label {
     color: var(--line-grey);
 }
 
+.tab:hover{
+    border-bottom: 2px solid var(--mid-blue);
+    color: var(--mid-blue);
+    transition: border 0.1s linear, color 0.1s linear;
+}
+
 .current {
     border-bottom: 2px solid var(--link-blue);
     color: var(--link-blue);
