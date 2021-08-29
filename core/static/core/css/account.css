@@ -1,3 +1,7 @@
+.container {
+    padding: 50px 0px;
+}
+
 .row {
     display: flex;
     margin: 0px;
