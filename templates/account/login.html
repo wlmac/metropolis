@@ -16,14 +16,11 @@
         <div class="form-wrapper">
 
             {% if messages %}
-            <div>
-                <strong>Messages:</strong>
-                <ul>
-                    {% for message in messages %}
-                        <li>{{message}}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{message}}</li>
+                {% endfor %}
+            </ul>
             {% endif %}
 
             <div class="tab-wrapper row">
@@ -34,7 +31,7 @@
                 </div>
                 <div class="col s6">
                     <a href="/accounts/signup">
-                        <div class="tab">Sign Up</div>
+                        <div class="tab">Register</div>
                     </a>
                 </div>
             </div>

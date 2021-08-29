@@ -17,14 +17,11 @@
             <div class="tab-wrapper row">
             
             {% if messages %}
-            <div>
-                <strong>Messages:</strong>
-                <ul>
-                    {% for message in messages %}
-                        <li>{{message}}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{message}}</li>
+                {% endfor %}
+            </ul>
             {% endif %}
 
                 <div class="col s6">
@@ -34,7 +31,7 @@
                 </div>
                 <div class="col s6">
                     <a href="/accounts/signup">
-                        <div class="tab current">Sign Up</div>
+                        <div class="tab current">Register</div>
                     </a>
                 </div>
             </div>

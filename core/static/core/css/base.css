@@ -113,6 +113,6 @@ p{
 }
 
 .checkbox-blue[type="checkbox"].filled-in:checked+span:not(.lever):after {
-    border: 2px solid var(--dark-blue);
-    background-color: var(--dark-blue);
+    border: 2px solid var(--link-blue);
+    background-color: var(--link-blue);
 }
