@@ -62,8 +62,8 @@ select {
 }
 
 .current {
-    border-bottom: 2px solid var(--link-blue);
-    color: var(--link-blue);
+    border-bottom: 2px solid var(--link-blue) !important;
+    color: var(--link-blue) !important;
 }
 
 .login-btn {
