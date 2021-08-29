@@ -14,22 +14,8 @@ select {
     background-color: #dbdbdb !important;
 }*/
 
-.login, .signup{
+.login, .signup {
     width: 90%;
-}
-
-input{
-    color: var(--near-black);
-}
-
-.input-field input:focus {
-    color: var(--dark-blue);
-    border-bottom: 1px solid var(--link-blue) !important;
-    box-shadow: 0 1px 0 0 var(--link-blue) !important;
-}
-
-label {
-    color: var(--mid-grey) !important;
 }
 
 .graphic {
@@ -46,17 +32,8 @@ label {
     height: 100%;
 }
 
-.tab-wrapper, .messages{
+.tab-wrapper, .messages {
     width: 90%;
-}
-
-.messages{
-    color: var(--status-green);
-    margin-bottom: 15px;
-}
-
-.messages > li{
-    margin: 5px 0px;
 }
 
 .tab-wrapper {
@@ -66,7 +43,7 @@ label {
     align-items: center;
 }
 
-.col.s6{
+.col.s6 {
     padding: 0px;
 }
 
@@ -78,7 +55,7 @@ label {
     color: var(--line-grey);
 }
 
-.tab:hover{
+.tab:hover {
     border-bottom: 2px solid var(--mid-blue);
     color: var(--mid-blue);
     transition: border 0.1s linear, color 0.1s linear;
@@ -89,27 +66,15 @@ label {
     color: var(--link-blue);
 }
 
-.btn {
+.login-btn {
     margin-top: 30px;
-    display: block;
-    width: 100%;
-    background-color: var(--link-blue);
-}
-
-.btn:hover{
-    background-color: var(--dark-blue)
 }
 
 .wrapper > .col {
     padding: 0;
 }
 
-.grad-year{
+.grad-year {
     color: var(--mid-grey);
     margin-bottom: 10px;
-}
-
-.errorlist{
-    color: var(--status-red);
-    margin: 0.5em 0px 1em;
 }

@@ -116,3 +116,40 @@ p{
     border: 2px solid var(--link-blue);
     background-color: var(--link-blue);
 }
+
+.btn{
+    width: 100%;
+    background-color: var(--link-blue);
+}
+
+.btn:hover, .btn:active {
+    background-color: var(--dark-blue)
+}
+
+.errorlist {
+    color: var(--status-red);
+    margin: 0.5em 0px 1em;
+}
+
+.messages {
+    color: var(--status-green);
+    margin-bottom: 15px;
+}
+
+.messages > li {
+    margin: 5px 0px;
+}
+
+input {
+    color: var(--near-black);
+}
+
+.input-field input:focus {
+    color: var(--dark-blue);
+    border-bottom: 1px solid var(--link-blue) !important;
+    box-shadow: 0 1px 0 0 var(--link-blue) !important;
+}
+
+label {
+    color: var(--mid-grey) !important;
+}
