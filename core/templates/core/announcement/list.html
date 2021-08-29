@@ -32,47 +32,13 @@
     <div class="card-container">
         <div class="cards" id="cards-all">
             {% for announcement in feed_all reversed %}
-            <div class="card">
-                <div class="tag-section">
-                    {% for tag in announcement.tags.all %}
-                    <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
-                    {% endfor %}
-                </div>
-                <h1>{{announcement.title}}</h1>
-                <div class="card-authors">
-                    <img src="{{announcement.organization.icon.url}}" height="22.5px" style="border-radius: 100%">
-                    <div>
-                        {{announcement.organization.pk|organization}},
-                        {{announcement.author.username|user}}
-                        • {{announcement.last_modified_date}}
-                    </div>
-                </div>
-                <hr>
-                <p class="card-body">{{announcement.body}}</p>
-            </div>
+            {% include "./card_snippet.html" %}
             {% endfor %}
         </div>
         {% if user.is_authenticated %}
         <div class="cards" id="cards-my-feed">
             {% for announcement in feed_my reversed %}
-            <div class="card">
-                <div class="tag-section">
-                    {% for tag in announcement.tags.all %}
-                    <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
-                    {% endfor %}
-                </div>
-                <h1>{{announcement.title}}</h1>
-                <div class="card-authors">
-                    <img src="{{announcement.organization.icon.url}}" height="22.5px" style="border-radius: 100%">
-                    <div>
-                        {{announcement.organization.pk|organization}},
-                        {{announcement.author.username|user}}
-                        • {{announcement.last_modified_date}}
-                    </div>
-                </div>
-                <hr>
-                <p class="card-body">{{announcement.body}}</p>
-            </div>
+            {% include "./card_snippet.html" %}
             {% endfor %}
         </div>
         {% endif %}
