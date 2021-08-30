@@ -32,6 +32,47 @@
     padding: 10px 40px;
     min-height: calc(100vh - 226px);
 }
+.search-items {
+    display: flex;
+    align-items: center;
+}
+.search-items .input-field {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    background-color: var(--light-grey);
+    border-radius: 1.5rem;
+    padding: 0.5rem 1.25rem;
+    margin-right: 10px;
+}
+.search-items .input-field input:focus {
+    box-shadow: none !important;
+    border: none !important;
+}
+.search-items .input-field .search-bar {
+    margin: 0;
+    margin-right: 8px;
+    border: none;
+    font-size: 1rem;
+    height: auto;
+}
+.dropdown {
+    width: 12rem;
+    font-size: 1rem;
+}
+.dropdown .anchor {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    color: var(--line-grey);
+    background-color: var(--light-grey);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1.25rem;
+}
+.dropdown .anchor .material-icons {
+    color: var(--near-black);
+}
 .card {
     margin: 1.5rem 0;
     padding: 20px;

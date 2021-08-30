@@ -31,6 +31,16 @@
         </script>
     </div>
     <div class="card-container">
+        <div class="search-items">
+            <div class="input-field">
+                <form action="{% url 'announcement_list' %}"></form>
+                <input class="search-bar" type="text" placeholder="Search">
+                <span class="material-icons md-24 md-bold">search</span>
+            </div>
+            <div class="filter dropdown">
+                <span class="anchor">Filter Tags <span class="material-icons md-24">arrow_drop_down</span></span>
+            </div>
+        </div>
         <div class="cards" id="cards-all">
             {% for announcement in feed_all reversed %}
             {% include "./card_snippet.html" %}
