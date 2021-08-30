@@ -79,28 +79,5 @@
             });
         </script>
     </div>
-    <!--
-    {% for feed_custom in feeds_custom %}
-    <div class="card mb-3">
-        <div class="card-header">
-            {{ feed_custom.0.name }}
-        </div>
-        <ul class="list-group list-group-flush">
-            {% for announcement in feed_custom.1 %}
-            <li class="list-group-item d-flex justify-content-between align-items-start">
-                <div class="ms-2 me-auto">
-                    <div class="fw-bold">{{ announcement.title }}</div>
-                    {{ announcement.body }}
-                    <br>
-                    {% for tag in announcement.tags.all %}
-                        <span class="badge rounded-pill bg-primary text-white">{{ tag.name }}</span>
-                    {% endfor %}
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endfor %}
-    -->
 </div>
 {% endblock %}
