@@ -147,3 +147,8 @@
     font-size: 0.8rem;
     font-family: 'Roboto Mono', monospace;
 }
+.message {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+}

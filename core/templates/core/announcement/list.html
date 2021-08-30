@@ -53,12 +53,18 @@
             -->
         </div>
         <div class="cards" id="cards-all">
+            {% if feed_all.count == 0 %}
+            <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
+            {% endif %}
             {% for announcement in feed_all reversed %}
             {% include "./card_snippet.html" %}
             {% endfor %}
         </div>
         {% if user.is_authenticated %}
         <div class="cards" id="cards-my-feed">
+            {% if feed_my.count == 0 %}
+            <div class="message">There are no announcements in your feed. Join a club!</div>
+            {% endif %}
             {% for announcement in feed_my reversed %}
             {% include "./card_snippet.html" %}
             {% endfor %}
