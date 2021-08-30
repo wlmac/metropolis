@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import gettext_lazy as _
+from martor.widgets import AdminMartorWidget
 
 User = get_user_model()
 
@@ -82,6 +83,9 @@ class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'organization', 'status']
     list_filter = [OrganizationListFilter, 'status']
     empty_value_display = "Not specified."
+    formfield_overrides = {
+        django.db.models.TextField: {'widget': AdminMartorWidget},
+    }
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

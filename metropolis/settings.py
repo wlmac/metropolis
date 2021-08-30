@@ -38,13 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.flatpages',
     'core',
     'allauth',
     'allauth.account',
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
-    'django.contrib.flatpages',
+    'martor',
 ]
 
 MIDDLEWARE = [
@@ -134,6 +135,11 @@ STATIC_URL = '/static/'
 # Auth settings
 
 AUTH_USER_MODEL = 'core.User'
+
+# Media settings
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Timetable settings
 
@@ -273,6 +279,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 TAG_COLOR_SATURATION = 0.2
 TAG_COLOR_VALUE = 1.0
 
+# Martor settings
+
+MARTOR_MARKDOWN_BASE_MENTION_URL = '/user/'
+MARTOR_UPLOAD_URL = '/api/martor/upload-image'
+MARTOR_UPLOAD_MEDIA_DIR = 'martor'
+MARTOR_UPLOAD_SAFE_EXTS = {'.jpg', '.jpeg', '.png', '.gif'}
+
 # Misc settings
 
 SITE_ID = 1
@@ -282,9 +295,6 @@ TOS_URL = '/terms'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 try:
     from metropolis.config import *
