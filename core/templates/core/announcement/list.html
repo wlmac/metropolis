@@ -33,9 +33,11 @@
     <div class="card-container">
         <div class="search-items">
             <div class="input-field">
-                <form action="{% url 'announcement_list' %}"></form>
-                <input class="search-bar" type="text" placeholder="Search">
-                <span class="material-icons md-24 md-bold">search</span>
+                <form class="search-form" method="get">
+                    <input id="feed-input" type="hidden" name="s" value="">
+                    <input id="search-bar" type="text" name="q" placeholder="Search">
+                    <button id="search-button" type="submit"><span class="material-icons md-24 md-bold">search</span></button>
+                </form>
             </div>
             <!-- to-do: filter tags, DNR
             <div class="filter dropdown">
