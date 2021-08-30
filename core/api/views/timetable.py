@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from ... import models
 from rest_framework.response import Response
 from metropolis.settings import TIMETABLE_FORMATS
+from rest_framework import status
 
 
 class TimetableList(APIView):
@@ -16,8 +17,14 @@ class TimetableList(APIView):
 
 
 class TimetableToday(APIView):
+    permissions_classes = [permissions.IsAuthenticated]
+
     def get(self, request, pk):
         timetable = models.Timetable.objects.get(pk=pk)
+
+        if request.user != timetable.owner:
+            return Response({}, status=status.HTTP_403_FORBIDDEN)
+
         timetable_format = timetable.term.timetable_format
         timetable_config = TIMETABLE_FORMATS[timetable_format]
         day = timetable.term.day()
@@ -38,7 +45,7 @@ class TimetableToday(APIView):
             course = i['position'][day-1].intersection(set(courses.keys())).pop()
             response['schedule'].append({
                 'info': i['info'],
-                'course': course.code
+                'course': courses[course].code
             })
 
         return Response(response)
