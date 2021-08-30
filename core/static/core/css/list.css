@@ -39,7 +39,6 @@
 .search-items .input-field {
     width: 100%;
     box-sizing: border-box;
-    display: flex;
     background-color: var(--light-grey);
     border-radius: 1.5rem;
     padding: 0.5rem 1.25rem;
@@ -49,12 +48,22 @@
     box-shadow: none !important;
     border: none !important;
 }
-.search-items .input-field .search-bar {
+.search-items .input-field form {
+    display: flex;
+}
+.search-items .input-field #search-bar {
     margin: 0;
     margin-right: 8px;
     border: none;
     font-size: 1rem;
     height: auto;
+}
+.search-items .input-field #search-button {
+    cursor: pointer;
+    border: none;
+}
+.search-items .input-field #search-button:focus {
+    background-color: var(--light-grey);
 }
 .dropdown {
     width: 12rem;
