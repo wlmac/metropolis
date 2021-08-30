@@ -3,11 +3,10 @@
 {% load link_tags %}
 
 {% block main %}
-<div class="card">
+<div class="card" id="content-container">
     <div class="card-body">
         <form method="post">
-            <h5 class="card-title">Add course</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Add a course for {{ term }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted card-top">Add a course for {{ term }}</h6>
             {% csrf_token %}
             {{ form }}
             <div class="mt-3">
@@ -20,4 +19,12 @@
 {% endblock %}
 
 {% block deps %}
+    <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}"/>
+    <style>
+        form label{
+            font-size: 100%;
+            color: var(--link-blue) !important;
+            font-weight: bolder;
+        }
+    </style>
 {% endblock %}

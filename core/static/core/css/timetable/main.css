@@ -30,7 +30,7 @@ body{
     background-color: var(--bg-grey);
 }
 
-#id_courses input{
+#id_courses input, #id_position input{
     position: static;
     opacity: 100;
     margin-right: 5px;
