@@ -11,6 +11,7 @@ class Organization(models.Model):
     execs = models.ManyToManyField("User", related_name="organizations_leading")
 
     name = models.CharField(max_length=64)
+    bio = models.CharField(blank=True, max_length=512)
     description = models.TextField(blank=True)
     slug = models.SlugField(unique=True)
 
