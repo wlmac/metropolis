@@ -42,7 +42,7 @@
     background-color: var(--light-grey);
     border-radius: 1.5rem;
     padding: 0.5rem 1.25rem;
-    margin-right: 10px;
+    /*margin-right: 16px; to-doL filter tags, DNR*/
     z-index: 1;
 }
 .search-items .input-field input:focus {
