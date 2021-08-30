@@ -23,16 +23,14 @@
         <script>
             $(document).ready(function() {
                 $("#all").addClass("active");
-                $("#feed-input").val("all");
                 $(".header").click(function() {
                     $(".header").removeClass("active");
                     $(this).addClass("active");
                     $(".cards").hide();
                     $("#cards-"+this.id).show();
-                    $("#feed-input").val(this.id);
                     $("#search-bar").val("");
                     var urlParams = new URLSearchParams(window.location.search);
-                    urlParams.set("s", this.id);
+                    urlParams.delete("ft");
                     urlParams.set("q", "");
                     history.replaceState(null, null, "?"+urlParams.toString());
                 });
@@ -43,7 +41,6 @@
         <div class="search-items">
             <div class="input-field">
                 <form class="search-form" method="get">
-                    <input id="feed-input" type="hidden" name="s" value="">
                     <input id="search-bar" type="text" name="q" placeholder="Search">
                     <button id="search-button" type="submit"><span class="material-icons md-24 md-bold">search</span></button>
                 </form>
@@ -98,16 +95,16 @@
                     }
                 });
                 var urlParams = new URLSearchParams(window.location.search);
-                if(urlParams.get("s") != "get") {
-                    $("#search-bar").val(urlParams.get("q").split("+").join(" "));
-                    $(".header").removeClass("active");
-                    $("#"+urlParams.get("s")).addClass("active");
-                }
                 $(".cards").hide();
                 if(urlParams.get("q")) {
+                    if(urlParams.get("ft") != "get") {
+                        $("#search-bar").val(urlParams.get("q").split("+").join(" "));
+                    }
+                    $(".header").removeClass("active");
+                    $("#all").addClass("active");
                     $("#cards-search").show();
                 } else {
-                    $("#cards-"+urlParams.get("s")).show();
+                    $("#cards-all").show();
                 }
                 $(".expandable").click(function() {
                     if($(this).data("expanded") == "true") {
