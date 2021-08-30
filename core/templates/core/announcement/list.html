@@ -57,6 +57,14 @@
             {% endfor %}
         </div>
         {% endif %}
+        <div class="cards" id="cards-search">
+            {% if search.count == 0 %}
+            <div class="message">There are no announcements that match your search terms</div>
+            {% endif %}
+            {% for announcement in search reversed %}
+            {% include "./card_snippet.html" %}
+            {% endfor %}
+        </div>
         <script>
             $(document).ready(function(){
                 $(".card-body").each(function () {
