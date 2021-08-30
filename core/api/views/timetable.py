@@ -7,6 +7,11 @@ from metropolis.settings import TIMETABLE_FORMATS
 from rest_framework import status
 
 
+class IsOwner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.owner == request.user
+
+
 class TimetableList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -52,5 +57,6 @@ class TimetableToday(APIView):
 
 
 class TimetableDetails(generics.RetrieveAPIView):
+    permission_classes = [IsOwner]
     queryset = models.Timetable.objects.all()
     serializer_class = serializers.TimetableSerializer
