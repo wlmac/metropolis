@@ -48,8 +48,17 @@
     margin: 10px 0;
     color: var(--line-grey);
 }
-.card-authors img {
+.circular-image {
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    border-radius: 50%;
     margin-right: 5px;
+}
+.circular-image img {
+    width: auto;
+    height: 100%;
+    margin-left: -3px;
 }
 .card-authors a {
     color: var(--link-blue);

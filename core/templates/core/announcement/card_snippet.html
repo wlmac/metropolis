@@ -8,7 +8,9 @@
     </div>
     <h1>{{announcement.title}}</h1>
     <div class="card-authors">
-        <img src="{{announcement.organization.icon.url}}" height="22.5px" style="border-radius: 100%">
+        <div class="circular-image">
+            <img src="{{announcement.organization.icon.url}}">
+        </div>
         <div>
             {{announcement.organization.pk|organization}},
             {{announcement.author.username|user}}
