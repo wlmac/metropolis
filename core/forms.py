@@ -24,6 +24,12 @@ class MetropolisSignupForm(SignupForm):
         del self.fields['password1'].widget.attrs['placeholder']
         del self.fields['password2'].widget.attrs['placeholder']
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not (email.endswith('@student.tdsb.on.ca') or email.endswith('@tdsb.on.ca')):
+            raise forms.ValidationError('A TDSB email must be used.')
+        return email
+
 class AddTimetableSelectTermForm(forms.Form):
     term = forms.ModelChoiceField(queryset=models.Term.objects.none())
 
