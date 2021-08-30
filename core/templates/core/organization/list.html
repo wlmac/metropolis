@@ -10,7 +10,7 @@
         {% for organization in organizations %}
         <li class="list-group-item d-flex justify-content-between align-items-start">
             <div class="ms-2 me-auto">
-                <div class="fw-bold">{{ organization.pk|organization }}</div>
+                <div class="fw-bold">{{ organization.slug|organization }}</div>
                 {{ organization.description }}
                 <br>
                 {% for tag in organization.tags.all %}

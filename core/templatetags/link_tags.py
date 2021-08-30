@@ -40,5 +40,5 @@ def organization_url(organization):
 @register.filter
 def organization(organization, postfix=''):
     url = organization_url(organization)
-    organization_obj = models.Organization.objects.get(pk=organization)
+    organization_obj = models.Organization.objects.get(slug=organization)
     return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(organization_obj))

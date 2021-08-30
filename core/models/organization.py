@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from .user import User
+import uuid
 
 # Create your models here.
 
@@ -11,6 +12,7 @@ class Organization(models.Model):
 
     name = models.CharField(max_length=64)
     description = models.TextField(blank=True)
+    slug = models.SlugField(unique=True)
 
     registered_date = models.DateTimeField(auto_now_add=True)
     is_open = models.BooleanField(default=True)
@@ -24,7 +26,7 @@ class Organization(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("organization_detail", args=[self.pk])
+        return reverse("organization_detail", args=[self.slug])
 
     def member_count(self):
         return User.objects.filter(organizations=self).count()

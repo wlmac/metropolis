@@ -13,7 +13,7 @@ urlpatterns = [
     path('accounts/profile/update', views.ProfileUpdate.as_view(), name='profile_update'),
     path('user/<str:slug>', views.Profile.as_view(), name='profile_detail'),
     path('clubs', views.OrganizationList.as_view(), name='organization_list'),
-    path('club/<int:pk>', views.OrganizationDetail.as_view(), name='organization_detail'),
+    path('club/<str:slug>', views.OrganizationDetail.as_view(), name='organization_detail'),
     path('announcements', views.AnnouncementList.as_view(), name='announcement_list'),
     path('calendar', views.calendar, name="calendar")
 ]
