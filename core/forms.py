@@ -60,12 +60,11 @@ class TimetableSelectCoursesForm(forms.ModelForm):
                 position_set.add(i.position)
 
 class AddCourseForm(forms.ModelForm):
+    position = forms.ChoiceField(widget=forms.RadioSelect())
+
     class Meta:
         model = models.Course
         fields = ['code', 'position']
-        widgets = {
-            'position': forms.RadioSelect(),
-        }
 
     def __init__(self, *args, **kwargs):
         self.term = kwargs.pop('term')
@@ -89,7 +88,7 @@ class AddCourseForm(forms.ModelForm):
         return code
 
     def clean_position(self):
-        position = self.cleaned_data['position']
+        position = int(self.cleaned_data['position'])
         if position not in self.position_set:
             raise forms.ValidationError('Must be one of ' + ', '.join([str(i) for i in self.position_set]) + '.')
         return position
