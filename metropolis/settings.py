@@ -285,6 +285,19 @@ MARTOR_MARKDOWN_BASE_MENTION_URL = '/user/'
 MARTOR_UPLOAD_URL = '/api/martor/upload-image'
 MARTOR_UPLOAD_MEDIA_DIR = 'martor'
 MARTOR_UPLOAD_SAFE_EXTS = {'.jpg', '.jpeg', '.png', '.gif'}
+MARTOR_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.smarty',
+    'markdown.extensions.fenced_code',
+    'martor.extensions.urlize',
+    'martor.extensions.del_ins',
+    'martor.extensions.mention',
+    'martor.extensions.emoji',
+    'martor.extensions.mdx_video',
+    'martor.extensions.escape_html',
+    'core.markdown',
+]
 
 # Misc settings
 
