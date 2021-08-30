@@ -45,6 +45,7 @@
 }
 .card-authors {
     display: flex;
+    align-items: center;
     margin: 10px 0;
     color: var(--line-grey);
 }
@@ -76,6 +77,8 @@
     -webkit-box-orient: vertical;
 }
 .expandable {
+    display: flex;
+    align-items: center;
     color: var(--link-blue);
     cursor: pointer;
 }
