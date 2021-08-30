@@ -30,4 +30,12 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
                 custom_feed_queryset = custom_feed_queryset.filter(is_public=True)
             context['feeds_custom'].append((custom_feed_organization, custom_feed_queryset))
 
+        query = self.request.GET.get('q' ,'')
+        feed_type = self.request.GET.get('ft','')
+        print(feed_type)
+        if query != '':
+            if feed_type == 'get':
+                context['search'] = context['feed_all'].filter(pk=query)
+            else:
+                context['search'] = context['feed_all'].filter(Q(body__icontains=query) | Q(title__icontains=query))
         return context
