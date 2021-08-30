@@ -52,39 +52,35 @@
             -->
         </div>
         <div class="cards" id="cards-all">
-            {% if feed_all.count == 0 %}
-            <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
-            {% endif %}
             {% for announcement in feed_all %}
             {% include "./card_snippet.html" %}
+            {% empty %}
+            <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
             {% endfor %}
         </div>
         {% if user.is_authenticated %}
         <div class="cards" id="cards-my-feed">
-            {% if feed_my.count == 0 %}
-            <div class="message">There are no announcements in your feed. Join a club!</div>
-            {% endif %}
             {% for announcement in feed_my %}
             {% include "./card_snippet.html" %}
+            {% empty %}
+            <div class="message">There are no announcements in your feed. Join a club!</div>
             {% endfor %}
         </div>
         {% endif %}
         {% for feed_custom in feeds_custom %}
         <div class="cards" id="cards-{{feed_custom.0.name|lower}}">
-            {% if feed_custom.count == 0 %}
-            <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
-            {% endif %}
             {% for announcement in feed_custom.1 %}
             {% include "./card_snippet.html" %}
+            {% empty %}
+            <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
             {% endfor %}
         </div>
         {% endfor %}
         <div class="cards" id="cards-search">
-            {% if search.count == 0 %}
-            <div class="message">There are no announcements that match your search terms</div>
-            {% endif %}
             {% for announcement in search %}
             {% include "./card_snippet.html" %}
+            {% empty %}
+            <div class="message">There are no announcements that match your search terms</div>
             {% endfor %}
         </div>
         <script>
