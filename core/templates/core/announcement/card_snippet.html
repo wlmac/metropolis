@@ -1,4 +1,5 @@
 {% load link_tags %}
+{% load martortags %}
 
 <div class="card">
     <div class="tag-section">
@@ -18,5 +19,5 @@
         </div>
     </div>
     <hr>
-    <p class="card-body">{{announcement.body|linebreaksbr}}</p>
+    <p class="card-body">{{announcement.body|safe_markdown}}</p>
 </div>
