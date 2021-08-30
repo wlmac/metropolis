@@ -21,11 +21,18 @@
         <script>
             $(document).ready(function() {
                 $("#all").addClass("active");
-                $(".header").click(function(){
+                $("#feed-input").val("all");
+                $(".header").click(function() {
                     $(".header").removeClass("active");
                     $(this).addClass("active");
                     $(".cards").hide();
                     $("#cards-"+this.id).show();
+                    $("#feed-input").val(this.id);
+                    $("#search-bar").val("");
+                    var urlParams = new URLSearchParams(window.location.search);
+                    urlParams.set("s", this.id);
+                    urlParams.set("q", "");
+                    history.replaceState(null, null, "?"+urlParams.toString());
                 });
             });
         </script>
