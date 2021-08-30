@@ -12,7 +12,7 @@
             <a href="{% url 'course_create' timetable.term.pk %}?next={{ request.path }}">Add a missing course</a><br>
             {% endif %}
             <div class="mt-3">
-                <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                <button type="submit" class="btn btn-primary mr-2">Save</button>
                 <a href="{% url 'timetable_list' %}" class="btn btn-primary" role="button" aria-pressed="true">Cancel</a>
             </div>
         </form>

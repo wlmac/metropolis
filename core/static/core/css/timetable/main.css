@@ -30,3 +30,8 @@ body{
     background-color: var(--bg-grey);
 }
 
+#id_courses input{
+    position: static;
+    opacity: 100;
+    margin-right: 5px;
+}

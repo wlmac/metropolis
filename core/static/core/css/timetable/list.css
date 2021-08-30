@@ -41,7 +41,7 @@ details > summary::marker {
 }
 
 .table tbody td, .table tbody th {
-    border-bottom: 2px solid var(--line-grey);
+    border-bottom: 1px solid var(--line-grey);
 }
 
 .card-body label {
