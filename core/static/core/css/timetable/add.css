@@ -1,0 +1,9 @@
+.card-body label:not(#id_courses label){
+    color: blue !important;
+    font-size: 110%;
+    font-weight: 500;
+}
+
+.card-body h5{
+    font-weight: bold;
+}

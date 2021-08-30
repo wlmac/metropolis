@@ -1,0 +1,32 @@
+select{
+    display: inline !important;
+}
+
+strong{
+    font-weight: bold;
+}
+
+#content-container{
+    margin: 3%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 3px;
+}
+
+
+.btn-primary{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+    border-radius: 7px;
+    width: 100px;
+}
+
+.card-top{
+    font-size: 150%;
+}
+
+body{
+    background-color: #ededed;
+}
+

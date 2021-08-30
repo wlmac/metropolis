@@ -1,0 +1,55 @@
+.timetable-add-container {
+    padding: 15px 0;
+}
+
+details > summary::marker {
+    color: #aaaaaa;
+    box-shadow: 1px 1px 2px #555555;
+    float: right;
+    cursor: pointer;
+}
+
+.mb-3 {
+    padding: 15px 0;
+    border-radius: 5px;
+}
+
+.timetable-details {
+    padding: 15px;
+    background-color: #eaeaea;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+#id_term {
+    background-color: #eaeaea;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#id_term:focus {
+    outline: none;
+    border-color: lightblue;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.table thead th {
+    border-bottom: 3px solid #d7d7d7;
+    color: darkblue;
+}
+
+.table tbody td, .table tbody th {
+    border-bottom: 2px solid #dbdbdb;
+}
+
+.card-body label {
+    color: blue !important;
+    font-size: 110%;
+    font-weight: 500;
+}
+
+.card-body h5 {
+    font-weight: bold;
+}
