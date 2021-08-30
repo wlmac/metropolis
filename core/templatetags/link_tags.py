@@ -42,3 +42,13 @@ def organization(organization, postfix=''):
     url = organization_url(organization)
     organization_obj = models.Organization.objects.get(slug=organization)
     return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(organization_obj))
+
+@register.filter
+def announcement_url(announcement):
+    return reverse('announcement_detail', args=[announcement])
+ 
+@register.filter
+def announcement(announcement, postfix=''):
+    url = announcement_url(announcement)
+    announcement_obj = models.Announcement.objects.get(slug=announcement)
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(announcement_obj))
