@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{% static 'core/css/timetable/add.css' %}"/>
     <script>
         $(function(){
-            $("#id_courses").select2({
+            $("#id_courses").attr("data-minimum-input-length", 0).select2({
                 width: "100%"
             })
         })

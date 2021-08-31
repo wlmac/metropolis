@@ -25,7 +25,9 @@
     <link rel="stylesheet" href="{% static 'core/css/timetable/edit.css' %}"/>
     <script>
         $(function(){
-            $("#id_courses").select2()
+            $("#id_courses").attr("data-minimum-input-length", 0).select2({
+                minimumInputLength: 0
+            })
         })
     </script>
     {{ form.media.js }}

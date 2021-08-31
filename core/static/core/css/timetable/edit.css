@@ -8,6 +8,10 @@
     font-weight: bold;
 }
 
+.select2{
+    width: 100% !important;
+}
+
 .select2-selection{
     margin-top: 5px;
     margin-bottom: 5px;
