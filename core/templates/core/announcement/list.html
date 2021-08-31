@@ -4,7 +4,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-<link rel="stylesheet" href="{% static 'core/css/list.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/announcement-list.css' %}">
 <link rel="stylesheet" href="{% static 'core/css/material-icons.css' %}">
 {% endblock %}
 
@@ -95,6 +95,8 @@
                         $(this).append("<br><a class='expandable' data-expanded='false'>Expand <span class='material-icons md-18'>expand_more</span></a>");
                     }
                 });
+                $(".title").find("a").addClass("link");
+                $(".card-authors-text").find("a").addClass("link");
                 $(".cards").hide();
                 /* to-do: search bar, DNR
                 var urlParams = new URLSearchParams(window.location.search);
