@@ -2,6 +2,7 @@ from django import forms
 from allauth.account.forms import SignupForm
 from . import models
 from metropolis import settings
+from django_select2 import forms as s2forms
 
 class MetropolisSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "given-name"}))
@@ -38,12 +39,17 @@ class AddTimetableSelectTermForm(forms.Form):
         super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
         self.fields['term'].queryset = models.Term.objects.exclude(timetables__owner=user)
 
+class SelectCoursesWidget(s2forms.ModelSelect2MultipleWidget):
+    search_fields = [
+        "code__icontains",
+    ]
+
 class TimetableSelectCoursesForm(forms.ModelForm):
     class Meta:
         model = models.Timetable
         fields = ['courses']
         widgets = {
-            'courses': forms.CheckboxSelectMultiple()
+            'courses': SelectCoursesWidget
         }
 
     def __init__(self, *args, **kwargs):
