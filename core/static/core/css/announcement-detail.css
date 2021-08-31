@@ -1,0 +1,54 @@
+.card-container {
+    background-color: white;
+    padding: 40px 40px;
+    min-height: calc(100vh - 164px);
+}
+.card-container h1 {
+    font-weight: bold;
+    margin: 0;
+    margin-top: 8px;
+    font-size: 3rem;
+}
+.card-authors {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    color: var(--line-grey);
+}
+.circular-image {
+    width: 32px;
+    height: 32px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.circular-image img {
+    width: auto;
+    height: 100%;
+    margin-left: -4px;
+}
+.card-authors a {
+    font-weight: bold;
+}
+.card hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}
+.card-body p {
+    margin: 0;
+}
+.tag-section {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0;
+}
+.tag {
+    padding: 2px 7px !important;
+    margin: 3px 6px 3px 0px !important;
+    background-color: lightblue;
+    border-radius: 0.25rem;
+    color: var(--dark-grey);
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
+}
