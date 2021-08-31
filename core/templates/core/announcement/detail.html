@@ -18,7 +18,7 @@
             <li class="header" id="my-feed">MY FEED</li>
             {% endif %}
             {% for feed_custom in feeds_custom %}
-            <li class="header" id="{{feed_custom.0.name|lower}}">{{feed_custom.0.name|upper}}</li>
+            <li class="header" id="{{feed_custom.name|lower}}">{{feed_custom.name|upper}}</li>
             {% endfor %}
         </ul>
         <script>

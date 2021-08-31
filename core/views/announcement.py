@@ -53,3 +53,13 @@ class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
     def test_func(self):
         announcement = self.get_object()
         return announcement.status == 'a' and (announcement.is_public or self.request.user in announcement.organization.members.all())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['feeds_custom'] = []
+        for custom_feed_organization_pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS:
+            custom_feed_organization = models.Organization.objects.get(pk=custom_feed_organization_pk)
+            context['feeds_custom'].append(custom_feed_organization)
+        
+        return context
