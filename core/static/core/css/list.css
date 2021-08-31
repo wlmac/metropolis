@@ -120,7 +120,7 @@
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
-.card-body {
+.card-body p {
     margin: 0;
     overflow: hidden;
     display: -webkit-box;
