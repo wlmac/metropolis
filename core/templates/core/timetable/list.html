@@ -44,13 +44,4 @@
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}"/>
     <link rel="stylesheet" href="{% static 'core/css/timetable/list.css' %}"/>
-
-    <script>
-        $(function () {
-            $("#id_term").select2({
-                placeholder: "Select a course",
-                width: "100%"
-            })
-        })
-    </script>
 {% endblock %}

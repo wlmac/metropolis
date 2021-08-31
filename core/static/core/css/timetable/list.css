@@ -40,19 +40,20 @@ details > summary::marker {
     font-weight: bold;
 }
 
-.select2-search__field{
-    border-radius: 5px !important;
-    height: 2.5rem !important;
-    background-color: var(--light-grey) !important;
+#id_term {
+    background-color: #eaeaea;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.select2-selection{
-    margin-top: 5px;
-    margin-bottom: 5px;
-    background-color: var(--light-grey) !important;
+#id_term:focus {
+    outline: none;
+    border-color: lightblue;
+    border-width: 2px;
+    border-style: solid;
 }
 
-.select2-results__option{
-    font-size: 110%;
-    transition-duration: 0.2s;
+select{
+    display: inline !important;
 }
