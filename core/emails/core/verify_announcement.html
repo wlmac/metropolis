@@ -15,47 +15,48 @@
             </noscript>
         <![endif]-->
         <style>
-table, td, div, h1, p {font-family: Arial, sans-serif;}
+table, td, div, h1, p {font-family: Times New Roman, sans-serif;}
 table, td {border:2px solid #000000 !important;}
+a {text-decoration: none;}
         </style>
     </head>
     <body style="margin:0;padding:0;">
         <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
             <tr>
                 <td align="center" style="padding:0;">
-                    <table role="presentation" style="width:60%;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;background-color:grey;">
-                        <tr>
-                            <td style="padding:0;">
-                                <img src="/static/core/img/logo-light-transparent.png" alt="" width="300" />
-                            </td>
-                        </tr>
+                    <table role="presentation" style="width:70%;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
                         <tr>
                             <td align="center" style="padding:0;">
-                                <table role="presentation" style="width:500px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                                <table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
                                     <tr>
-                                        <td align="center" style="padding:0;">
-                                            {{ teacher_name }}
+                                        <td align="center" style="padding:3%;">
+                                            {{ teacher_name }},
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="padding:0;">
+                                        <td>
                                             An announcement for {{ organization }} by {{ user }} has requested your approval:
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td align="center" style="padding:0;">
-                                            {{ announcement_title }}
+                                        <td style="padding-top:3%;padding-bottom:3%;">
+                                            <table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                                                <tr>
+                                                    <td align="center" bgcolor="#cccccc" style="padding:2%;">
+                                                        {{ announcement_title }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td bgcolor="#cccccc" style="padding:2%">
+                                                        {{ announcement_content }}
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="padding:0;">
-                                            {{ announcement_content }}
-                                        </td>
-                                    </tr>
-                                    <tr>
                                         <td align="center" style="padding:0;">
-                                            Review
-                                            <a>link to review</a>
+                                            <a href={{ announcement_link }}>Review</a>
                                         </td>
                                     </tr>
                                 </table>
@@ -66,11 +67,9 @@ table, td {border:2px solid #000000 !important;}
             </tr>
             <tr>
                 <td align="center" style="padding:0;">
-                    <table role="presentation" style="width:602px;">
+                    <table role="presentation" style="width:70%;">
                         <tr>
-                            <td style="padding:0;">Terms and Conditions</td>
-                            <td style="padding:0;">Unsubscribe</td>
-                            <td style="padding:0;">Visit Site</td>
+                            <td align="center" style="padding:0;"><a href={{ tos_link }}>Terms and Conditions</a> | <a href={{ unsubscribe_link }}>Unsubscribe</a> | <a href={{ site }}>Visit Site</a></td>
                         </tr>
                     </table>
                 </td>
