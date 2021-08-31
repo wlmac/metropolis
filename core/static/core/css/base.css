@@ -106,20 +106,20 @@ p{
 
 .link{
     color: var(--link-blue);
+    transition: color 0.15s linear;
 }
 
 .link:hover {
     color: var(--dark-blue);
-    transition: color 0.15s linear;
 }
 
 .link-light{
     color: white;
+    transition: color 0.15s linear;
 }
 
 .link-light:hover {
     color: var(--highlight-blue);
-    transition: color 0.15s linear;
 }
 
 .checkbox-blue[type="checkbox"].filled-in:checked+span:not(.lever):after {

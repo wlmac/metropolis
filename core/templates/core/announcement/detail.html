@@ -1,13 +1,42 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
+{% load martortags %}
 {% load static %}
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-<link rel="stylesheet" href="{% static 'core/css/list.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/announcement-detail.css' %}">
 <link rel="stylesheet" href="{% static 'core/css/material-icons.css' %}">
 {% endblock %}
 
 {% block main %}
-{% include "./card_snippet.html" %}
+<div class=container>
+    <div class="card-container">
+        <div class="tag-section">
+            {% for tag in announcement.tags.all %}
+            <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+            {% endfor %}
+        </div>
+        <h1 class="title">{{announcement.title}}</h1>
+        <div class="card-authors">
+            <div class="circular-image">
+                <img src="{{announcement.organization.icon.url}}">
+            </div>
+            <div class="card-authors-text">
+                {{announcement.organization.slug|organization}},
+                {{announcement.author.username|user}}
+                • {{announcement.last_modified_date}}
+            </div>
+        </div>
+        <hr>
+        <div class="card-body">
+            {{announcement.body|safe_markdown}}
+        </div>
+        <script>
+            $(document).ready(function() {
+                $(".card-authors-text").find("a").addClass("link");
+            });
+        </script>
+    </div>
+</div>
 {% endblock %}

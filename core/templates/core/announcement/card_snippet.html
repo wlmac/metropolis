@@ -7,17 +7,19 @@
         <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
         {% endfor %}
     </div>
-    <h1>{{announcement.title}}</h1>
+    <h1 class="title">{{announcement.pk|announcement}}</h1>
     <div class="card-authors">
         <div class="circular-image">
             <img src="{{announcement.organization.icon.url}}">
         </div>
-        <div>
+        <div class="card-authors-text">
             {{announcement.organization.slug|organization}},
             {{announcement.author.username|user}}
             • {{announcement.last_modified_date}}
         </div>
     </div>
     <hr>
-    <p class="card-body">{{announcement.body|safe_markdown}}</p>
+    <div class="card-body">
+        {{announcement.body|safe_markdown}}
+    </div>
 </div>
