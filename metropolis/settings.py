@@ -297,16 +297,12 @@ MARTOR_UPLOAD_URL = '/api/martor/upload-image'
 MARTOR_UPLOAD_MEDIA_DIR = 'martor'
 MARTOR_UPLOAD_SAFE_EXTS = {'.jpg', '.jpeg', '.png', '.gif'}
 MARTOR_MARKDOWN_EXTENSIONS = [
-    'markdown.extensions.extra',
+    'markdown.extensions.tables',
     'markdown.extensions.nl2br',
-    'markdown.extensions.smarty',
     'markdown.extensions.fenced_code',
-    'martor.extensions.urlize',
-    'martor.extensions.del_ins',
-    'martor.extensions.mention',
     'martor.extensions.emoji',
-    'martor.extensions.mdx_video',
     'martor.extensions.escape_html',
+    'martor.extensions.urlize',
     'core.markdown',
 ]
 
