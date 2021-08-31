@@ -22,12 +22,19 @@
         </ul>
         <script>
             $(document).ready(function() {
-                $("#all").addClass("active");
+                var urlParams = new URLSearchParams(window.location.search);
+                if(!urlParams.get("feed")) {
+                    $("#all").addClass("active");
+                    urlParams.set("feed", "all");
+                }
+                history.replaceState(null, null, "?"+urlParams.toString());
                 $(".header").click(function() {
                     $(".header").removeClass("active");
                     $(this).addClass("active");
                     $(".cards").hide();
                     $("#cards-"+this.id).show();
+                    urlParams.set("feed", this.id);
+                    history.replaceState(null, null, "?"+urlParams.toString());
                     /* to-do: search bar, DNR
                     $("#search-bar").val("");
                     var urlParams = new URLSearchParams(window.location.search);
@@ -97,7 +104,11 @@
                 });
                 $(".title").find("a").addClass("link");
                 $(".card-authors-text").find("a").addClass("link");
+                var urlParams = new URLSearchParams(window.location.search);
                 $(".cards").hide();
+                $("#cards-"+urlParams.get("feed")).show(); //remove when search reimplemented
+                $(".header").removeClass("active");
+                $("#"+urlParams.get("feed")).addClass("active");
                 /* to-do: search bar, DNR
                 var urlParams = new URLSearchParams(window.location.search);
                 if(urlParams.get("q")) {
@@ -110,7 +121,6 @@
                 } else {
                     $("#cards-all").show();
                 }*/
-                $("#cards-all").show(); //remove when search reimplemented
                 $(".expandable").click(function() {
                     if($(this).data("expanded") == "true") {
                         var lineHeight = parseFloat($(this).parent().find("p").css("line-height").replace('px',''));
