@@ -11,6 +11,24 @@
 
 {% block main %}
 <div class=container>
+    <div class="headers">
+        <ul>
+            <li class="header" id="all">ALL</li>
+            {% if user.is_authenticated %}
+            <li class="header" id="my-feed">MY FEED</li>
+            {% endif %}
+            {% for feed_custom in feeds_custom %}
+            <li class="header" id="{{feed_custom.0.name|lower}}">{{feed_custom.0.name|upper}}</li>
+            {% endfor %}
+        </ul>
+        <script>
+            $(document).ready(function() {
+                $(".header").click(function() {
+                    window.location.href = "{% url 'announcement_list' %}?feed="+this.id;
+                });
+            });
+        </script>
+    </div>
     <div class="card-container">
         <div class="tag-section">
             {% for tag in announcement.tags.all %}
