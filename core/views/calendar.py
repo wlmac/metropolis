@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
-def calendar(request):
-    return render(request, "core/calendar/view.html")
+class CalendarView(TemplateView):
+    template_name = "core/calendar/view.html"
