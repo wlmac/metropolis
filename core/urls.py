@@ -16,5 +16,6 @@ urlpatterns = [
     path('club/<str:slug>', views.OrganizationDetail.as_view(), name='organization_detail'),
     path('announcements', views.AnnouncementList.as_view(), name='announcement_list'),
     path('announcement/<int:pk>', views.AnnouncementDetail.as_view(), name='announcement_detail'),
-    path('calendar', views.calendar, name="calendar")
+    path('calendar', views.CalendarView.as_view(), name="calendar"),
+    path('teapot', views.Teapot.as_view(), name="teapot"),
 ]
