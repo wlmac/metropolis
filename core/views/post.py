@@ -63,3 +63,25 @@ class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
             context['feeds_custom'].append(custom_feed_organization)
         
         return context
+
+class BlogPostList(ListView, mixins.TitleMixin):
+    context_object_name = "blogposts"
+    template_name = 'core/blogpost/list.html'
+    title = 'Blog Posts'
+
+    def get_ordering(self):
+        return "-last_modified_date"
+
+    def get_queryset(self):
+        return models.BlogPost.objects.filter(is_published=True)
+
+class BlogPostDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
+    model = models.BlogPost
+    context_object_name = "blogpost"
+    template_name = "core/blogpost/detail.html"
+
+    def get_title(self):
+        return self.get_object().title
+
+    def test_func(self):
+        return self.get_object().is_published

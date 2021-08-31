@@ -18,7 +18,7 @@ class TermInline(admin.TabularInline):
         django.db.models.TextField: {'widget': Textarea(attrs={'rows': 1})},
     }
     fields = ['name', 'num_courses', 'timetable_format', 'start_date', 'end_date']
-    ordering = ['start_date']
+    ordering = ['-start_date']
     model = models.Term
     extra = 0
 
@@ -72,12 +72,14 @@ class OrganizationListFilter(admin.SimpleListFilter):
     parameter_name = 'org'
 
     def lookups(self, request, model_admin):
-        qs = models.Organization.objects.filter(Q(owner=request.user) | Q(supervisors=request.user) | Q(execs=request.user)).distinct()
+        qs = models.Organization.objects.all()
+        if not request.user.is_superuser:
+            qs = qs.filter(Q(owner=request.user) | Q(supervisors=request.user) | Q(execs=request.user)).distinct()
         for org in qs:
-            yield (org.pk, org.name)
+            yield (org.slug, org.name)
 
     def queryset(self, request, queryset):
-        if self.value() == None or request.user.is_superuser:
+        if self.value() == None:
             return queryset
         else:
             return queryset.filter(organization__slug=self.value())
@@ -85,6 +87,7 @@ class OrganizationListFilter(admin.SimpleListFilter):
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'organization', 'status']
     list_filter = [OrganizationListFilter, 'status']
+    ordering = ['-created_date']
     empty_value_display = "Not specified."
     formfield_overrides = {
         django.db.models.TextField: {'widget': AdminMartorWidget},
@@ -181,6 +184,33 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
         super().save_model(request, obj, form, change)
 
+class BlogPostAuthorListFilter(admin.SimpleListFilter):
+    title = 'author'
+    parameter_name = 'author'
+
+    def lookups(self, request, model_admin):
+        qs = User.objects.filter(blogposts_authored__isnull=False).distinct()
+        for author in qs:
+            yield (author.pk, author.username)
+
+    def queryset(self, request, queryset):
+        if self.value() == None:
+            return queryset
+        else:
+            return queryset.filter(author__pk=self.value())
+
+class BlogPostAdmin(admin.ModelAdmin):
+    list_display = ['title', 'author', 'is_published']
+    list_filter = [BlogPostAuthorListFilter, 'is_published']
+    ordering = ['-created_date']
+    fields = ['author', 'title', 'slug', 'body', 'featured_image', 'tags', 'is_published']
+    formfield_overrides = {
+        django.db.models.TextField: {'widget': AdminMartorWidget},
+    }
+
+    def get_changeform_initial_data(self, request):
+        return {'author': request.user.pk}
+
 class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'start_date', 'end_date']
     list_filter = ['is_instructional', 'organization']
@@ -202,6 +232,7 @@ admin.site.register(models.Timetable)
 admin.site.register(models.Term, TermAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
+admin.site.register(models.BlogPost, BlogPostAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
 

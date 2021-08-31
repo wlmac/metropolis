@@ -52,3 +52,13 @@ def announcement(announcement, postfix=''):
     url = announcement_url(announcement)
     announcement_obj = models.Announcement.objects.get(pk=announcement)
     return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(announcement_obj))
+
+@register.filter
+def blogpost_url(blogpost):
+    return reverse('blogpost_detail', args=[blogpost])
+ 
+@register.filter
+def blogpost(blogpost, postfix=''):
+    url = blogpost_url(blogpost)
+    blogpost_obj = models.BlogPost.objects.get(slug=blogpost)
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(blogpost_obj))

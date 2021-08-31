@@ -254,6 +254,7 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 
 NAVBAR = {
     'Announcements': '/announcements',
+    'Blog': '/blog',
     'Clubs': '/clubs',
     'Calendar': '/calendar',
 }

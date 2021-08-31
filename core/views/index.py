@@ -9,6 +9,9 @@ class Index(TemplateView, mixins.TitleMixin):
     template_name = 'core/index.html'
     title = 'Dashboard'
 
+class CalendarView(TemplateView):
+    template_name = "core/calendar/view.html"
+
 class Teapot(View):
     def get(self, request):
         return HttpResponse('orz teapot', status=418)
