@@ -32,6 +32,7 @@
     padding: 10px 40px;
     min-height: calc(100vh - 226px);
 }
+/* to-do: search bar, DNR
 .search-items {
     display: flex;
     align-items: center;
@@ -42,7 +43,7 @@
     background-color: var(--light-grey);
     border-radius: 1.5rem;
     padding: 0.5rem 1.25rem;
-    /*margin-right: 16px; to-doL filter tags, DNR*/
+    //margin-right: 16px; to-do: filter tags, DNR
     z-index: 1;
 }
 .search-items .input-field input:focus {
@@ -66,6 +67,7 @@
 .search-items .input-field #search-button:focus {
     background-color: var(--light-grey);
 }
+//to-do: filter tags, DNR
 .dropdown {
     width: 12rem;
     font-size: 1rem;
@@ -83,6 +85,7 @@
 .dropdown .anchor .material-icons {
     color: var(--near-black);
 }
+*/
 .card {
     margin: 1.5rem 0;
     padding: 20px;
