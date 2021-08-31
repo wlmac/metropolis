@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'martor',
-    'django_select2',
 ]
 
 MIDDLEWARE = [
@@ -93,15 +92,6 @@ DATABASES = {
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
             }
         }
-
-
-# Cache
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    }
-}
 
 
 # Password validation
@@ -308,10 +298,6 @@ MARTOR_MARKDOWN_EXTENSIONS = [
     'martor.extensions.escape_html',
     'core.markdown',
 ]
-
-# Select2 settings
-
-SELECT2_CACHE_BACKEND = "default"
 
 # Misc settings
 

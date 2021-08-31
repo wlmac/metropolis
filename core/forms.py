@@ -2,7 +2,6 @@ from django import forms
 from allauth.account.forms import SignupForm
 from . import models
 from metropolis import settings
-from django_select2 import forms as s2forms
 
 class MetropolisSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "given-name"}))
@@ -39,17 +38,12 @@ class AddTimetableSelectTermForm(forms.Form):
         super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
         self.fields['term'].queryset = models.Term.objects.exclude(timetables__owner=user)
 
-class SelectCoursesWidget(s2forms.ModelSelect2MultipleWidget):
-    search_fields = [
-        "code__icontains",
-    ]
-
 class TimetableSelectCoursesForm(forms.ModelForm):
     class Meta:
         model = models.Timetable
         fields = ['courses']
         widgets = {
-            'courses': SelectCoursesWidget
+            'courses': forms.CheckboxSelectMultiple()
         }
 
     def __init__(self, *args, **kwargs):
@@ -72,12 +66,11 @@ class TimetableSelectCoursesForm(forms.ModelForm):
                 position_set.add(i.position)
 
 class AddCourseForm(forms.ModelForm):
+    position = forms.ChoiceField(widget=forms.RadioSelect())
+
     class Meta:
         model = models.Course
         fields = ['code', 'position']
-        widgets = {
-            'position': forms.RadioSelect(),
-        }
 
     def __init__(self, *args, **kwargs):
         self.term = kwargs.pop('term')
@@ -101,7 +94,7 @@ class AddCourseForm(forms.ModelForm):
         return code
 
     def clean_position(self):
-        position = self.cleaned_data['position']
+        position = int(self.cleaned_data['position'])
         if position not in self.position_set:
             raise forms.ValidationError('Must be one of ' + ', '.join([str(i) for i in self.position_set]) + '.')
         return position
