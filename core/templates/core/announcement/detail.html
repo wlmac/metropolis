@@ -20,7 +20,7 @@
         <h1 class="title">{{announcement.title}}</h1>
         <div class="card-authors">
             <div class="circular-image">
-                <img src="{{announcement.organization.icon.url}}">
+                <a href="{{announcement.organization.slug|organization_url}}"><img src="{{announcement.organization.icon.url}}"></a>
             </div>
             <div class="card-authors-text">
                 {{announcement.organization.slug|organization}},
