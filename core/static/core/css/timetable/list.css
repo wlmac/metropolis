@@ -21,20 +21,6 @@ details > summary::marker {
     margin: 20px;
 }
 
-#id_term {
-    background-color: var(--light-grey);
-    border-radius: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-#id_term:focus {
-    outline: none;
-    border-color: var(--highlight-blue);
-    border-width: 2px;
-    border-style: solid;
-}
-
 .table thead th {
     border-bottom: 3px solid var(--line-grey);
     color: var(--dark-blue);
@@ -52,4 +38,21 @@ details > summary::marker {
 
 .card-body h5 {
     font-weight: bold;
+}
+
+.select2-search__field{
+    border-radius: 5px !important;
+    height: 2.5rem !important;
+    background-color: var(--light-grey) !important;
+}
+
+.select2-selection{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: var(--light-grey) !important;
+}
+
+.select2-results__option{
+    font-size: 110%;
+    transition-duration: 0.2s;
 }

@@ -7,3 +7,14 @@
 .card-body h5{
     font-weight: bold;
 }
+
+.select2-selection{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: var(--light-grey) !important;
+}
+
+.select2-results__option{
+    font-size: 110%;
+    transition-duration: 0.2s;
+}
