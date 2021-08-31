@@ -7,7 +7,7 @@ import datetime
 # Create your models here.
 
 def is_instructional(day, events):
-    return day.weekday() < 5 and not events.filter(is_instructional=False, start_date__lte=day, end_date__gt=day).exists()
+    return day.weekday() < 5 and not events.filter(is_instructional=False, start_date__lte=day, end_date__gte=day).exists()
 
 class Term(models.Model):
     name = models.CharField(max_length=128)
@@ -20,20 +20,32 @@ class Term(models.Model):
     def __str__(self):
         return self.name
 
+    def start_datetime(self):
+        return timezone.make_aware(datetime.datetime.combine(self.start_date, datetime.time()))
+
+    def end_datetime(self):
+        return timezone.make_aware(datetime.datetime.combine(self.end_date, datetime.time(hour=23, minute=59, second=59)))
+
     def is_ongoing(self, target_date=None):
         if target_date == None:
             target_date = timezone.localdate()
-        return target_date >= self.start_date and target_date < self.end_date
+        return target_date >= self.start_datetime() and target_date < self.end_datetime()
 
     def day(self, target_date=None):
         cycle_duration = settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['duration']
-        events = Event.objects.filter(end_date__gt=self.start_date, start_date__lt=self.end_date , is_instructional=False)
+
+        events = Event.objects.filter(end_date__gte=self.start_datetime(), start_date__lte=self.end_datetime(), is_instructional=False)
+
         if target_date == None:
             target_date = timezone.localdate()
-        cur_iter_day = self.start_date
+        target_date = timezone.make_aware(datetime.datetime.combine(target_date, datetime.time(hour=23, minute=59, second=59)))
+
+        cur_iter_day = self.start_datetime().replace(hour=11, minute=0, second=0)
         cycle_day_type_set = set()
+
         if not self.is_ongoing(target_date) or not is_instructional(target_date, events):
             return None
+
         while cur_iter_day <= target_date:
             if is_instructional(cur_iter_day, events):
                 if cycle_duration == 'day':
@@ -43,6 +55,7 @@ class Term(models.Model):
                 else:
                     raise NotImplementedError
             cur_iter_day += datetime.timedelta(1)
+
         return (len(cycle_day_type_set) - 1) % settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['length'] + 1
 
 class Course(models.Model):
