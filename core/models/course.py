@@ -77,7 +77,7 @@ class Event(models.Model):
     description = models.TextField(blank=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    is_instructional = models.BooleanField(default=False)
+    is_instructional = models.BooleanField(default=True)
     organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="events", related_query_name="event", blank=True, null=True)
     tags = models.ManyToManyField("Tag", blank=True, related_name="events", related_query_name="event")
 
