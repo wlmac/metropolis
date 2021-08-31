@@ -50,5 +50,5 @@ def announcement_url(announcement):
 @register.filter
 def announcement(announcement, postfix=''):
     url = announcement_url(announcement)
-    announcement_obj = models.Announcement.objects.get(slug=announcement)
+    announcement_obj = models.Announcement.objects.get(pk=announcement)
     return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(announcement_obj))

@@ -7,7 +7,7 @@
         <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
         {% endfor %}
     </div>
-    <h1>{{announcement.title}}</h1>
+    <h1>{{announcement.pk|announcement}}</h1>
     <div class="card-authors">
         <div class="circular-image">
             <img src="{{announcement.organization.icon.url}}">
