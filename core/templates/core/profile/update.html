@@ -1,6 +1,5 @@
 {% extends 'core/base.html' %}
 {% load gravatar_tags %}
-{% load crispy_forms_tags %}
 
 {% block main %}
 <div class="card">
@@ -8,7 +7,7 @@
         <form method="post">
             <h5 class="card-title">Edit profile</h5>
             {% csrf_token %}
-            {{ form|crispy }}
+            {{ form }}
             <a href="https://gravatar.com">Edit profile photo</a><br>
             <div class="mt-3">
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
