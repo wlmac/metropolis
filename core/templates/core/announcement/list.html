@@ -106,6 +106,10 @@
                 $(".card-authors-text").find("a").addClass("link");
                 var urlParams = new URLSearchParams(window.location.search);
                 $(".cards").hide();
+                if(!$("#cards-"+urlParams.get("feed")).length) {
+                    urlParams.set("feed", "all");
+                    history.replaceState(null, null, "?"+urlParams.toString());
+                } 
                 $("#cards-"+urlParams.get("feed")).show(); //remove when search reimplemented
                 $(".header").removeClass("active");
                 $("#"+urlParams.get("feed")).addClass("active");
