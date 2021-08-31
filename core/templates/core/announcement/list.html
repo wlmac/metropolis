@@ -28,16 +28,19 @@
                     $(this).addClass("active");
                     $(".cards").hide();
                     $("#cards-"+this.id).show();
+                    /* to-do: search bar, DNR
                     $("#search-bar").val("");
                     var urlParams = new URLSearchParams(window.location.search);
                     urlParams.delete("ft");
                     urlParams.set("q", "");
                     history.replaceState(null, null, "?"+urlParams.toString());
+                    */
                 });
             });
         </script>
     </div>
     <div class="card-container">
+        <!-- to-do: search bar, DNR
         <div class="search-items">
             <div class="input-field">
                 <form class="search-form" method="get">
@@ -45,12 +48,12 @@
                     <button id="search-button" type="submit"><span class="material-icons md-24 md-bold">search</span></button>
                 </form>
             </div>
-            <!-- to-do: filter tags, DNR
+            to-do: filter tags, DNR
             <div class="filter dropdown">
                 <span class="anchor">Filter Tags <span class="material-icons md-24">arrow_drop_down</span></span>
             </div>
-            -->
         </div>
+        -->
         <div class="cards" id="cards-all">
             {% for announcement in feed_all %}
             {% include "./card_snippet.html" %}
@@ -76,6 +79,7 @@
             {% endfor %}
         </div>
         {% endfor %}
+        <!-- to-do: search bar, DNR
         <div class="cards" id="cards-search">
             {% for announcement in search %}
             {% include "./card_snippet.html" %}
@@ -83,15 +87,18 @@
             <div class="message">There are no announcements that match your search terms</div>
             {% endfor %}
         </div>
+        -->
         <script>
             $(document).ready(function() {
                 $(".card-body").each(function () {
                     if(Math.round($(this).prop("scrollHeight")) > Math.round($(this).innerHeight())) {
+                        console.log("TEST");
                         $(this).parent().append("<br><a class='expandable' data-expanded='false'>Expand <span class='material-icons md-18'>expand_more</span></a>");
                     }
                 });
-                var urlParams = new URLSearchParams(window.location.search);
                 $(".cards").hide();
+                /* to-do: search bar, DNR
+                var urlParams = new URLSearchParams(window.location.search);
                 if(urlParams.get("q")) {
                     if(urlParams.get("ft") != "get") {
                         $("#search-bar").val(urlParams.get("q").split("+").join(" "));
@@ -101,7 +108,8 @@
                     $("#cards-search").show();
                 } else {
                     $("#cards-all").show();
-                }
+                }*/
+                $("#cards-all").show(); //remove when search reimplemented
                 $(".expandable").click(function() {
                     if($(this).data("expanded") == "true") {
                         var lineHeight = parseFloat($(this).parent().find(".card-body").css("line-height").replace('px',''));
