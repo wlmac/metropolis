@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('martor/', include('martor.urls')),
+    path("select2/", include("django_select2.urls")),
     path('/<path:url>', include('django.contrib.flatpages.urls')),
 ]
 

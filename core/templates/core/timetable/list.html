@@ -17,7 +17,7 @@
                     <a href="{% url 'timetable_update' timetable.pk %}" class="card-link">Edit timetable</a>
                 </div>
             </details>
-            {% if forloop.counter < timetables|length  %}
+            {% if forloop.counter < timetables|length %}
                 <hr>
             {% endif %}
         {% endfor %}
@@ -26,7 +26,8 @@
         <div class="timetable-add-container">
             <div class="card-body">
                 <form method="post">
-                    <h5 class="card-title">Add timetable</h5><hr>
+                    <h5 class="card-title">Add timetable</h5>
+                    <hr>
                     {% csrf_token %}
                     {{ form }}
                     <div class="mt-3">

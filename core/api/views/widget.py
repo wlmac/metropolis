@@ -6,6 +6,7 @@ import uuid
 import os
 from metropolis import settings
 from urllib.parse import urljoin
+from core.utils.file_upload import file_upload_path_generator
 
 
 class MartorImageUpload(APIView):
@@ -19,14 +20,12 @@ class MartorImageUpload(APIView):
 
         image = request.FILES['markdown-image-upload']
 
-        file_name, ext = os.path.splitext(image.name)
+        ext = os.path.splitext(image.name)[1]
         
         if ext not in settings.MARTOR_UPLOAD_SAFE_EXTS:
             return Response({'status': 400, 'error': 'Invalid image format.'})
 
-        file_name = uuid.uuid4().hex
-
-        file_path = default_storage.save(os.path.join(settings.MARTOR_UPLOAD_MEDIA_DIR, file_name + ext), image)
+        file_path = default_storage.save(file_upload_path_generator(settings.MARTOR_UPLOAD_MEDIA_DIR)(image, image.name), image)
         
         image_url = urljoin(settings.MEDIA_URL, file_path)
 
