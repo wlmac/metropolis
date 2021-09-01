@@ -280,7 +280,7 @@ TAG_COLOR_VALUE = 1.0
 
 SITE_ID = 1
 
-SITE_URL = 'https://localhost'
+SITE_URL = 'http://127.0.0.1:8000'
 
 TOS_URL = '/terms'
 
