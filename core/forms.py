@@ -104,3 +104,35 @@ class AddCourseForm(forms.ModelForm):
         if position not in self.position_set:
             raise forms.ValidationError('Must be one of ' + ', '.join([str(i) for i in self.position_set]) + '.')
         return position
+
+class TermAdminForm(forms.ModelForm):
+    timetable_format = forms.ChoiceField(widget=forms.Select())
+
+    def __init__(self, *args, **kwargs):
+        super(TermAdminForm, self).__init__(*args, **kwargs)
+        self.fields['timetable_format'].choices = [(timetable_format, timetable_format) for timetable_format in settings.TIMETABLE_FORMATS]
+
+class EventAdminForm(forms.ModelForm):
+    schedule_format = forms.ChoiceField(widget=forms.Select())
+
+    def __init__(self, *args, **kwargs):
+        super(EventAdminForm, self).__init__(*args, **kwargs)
+        timetable_configs = settings.TIMETABLE_FORMATS
+
+        if 'instance' in kwargs:
+            instance = kwargs['instance']
+            self.fields['schedule_format'].choices = [(timetable_format, timetable_format) for timetable_format in timetable_configs[instance.term.timetable_format]['schedules']]
+        else:
+            schedule_format_set = set()
+            for timetable_config in timetable_configs.values():
+                schedule_format_set.update(set(timetable_config['schedules'].keys()))
+            self.fields['schedule_format'].choices = [(schedule_format, schedule_format) for schedule_format in schedule_format_set]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        term = cleaned_data.get('term')
+        schedule_format = cleaned_data.get('schedule_format')
+
+        timetable_configs = settings.TIMETABLE_FORMATS
+        if schedule_format not in timetable_configs[term.timetable_format]['schedules']:
+            raise forms.ValidationError(f'Schedule format "{schedule_format}" is not a valid day schedule in Term {term.name}.')

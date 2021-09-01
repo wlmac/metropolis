@@ -8,6 +8,7 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
+from .forms import TermAdminForm, EventAdminForm
 
 User = get_user_model()
 
@@ -35,6 +36,7 @@ class TermAdmin(admin.ModelAdmin):
     inlines = [
         CourseInline,
     ]
+    form = TermAdminForm
 
 class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['color']
@@ -214,6 +216,7 @@ class BlogPostAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'start_date', 'end_date']
     list_filter = ['is_instructional', 'organization']
+    form = EventAdminForm
 
 class FlatPageAdmin(FlatPageAdmin):
     fieldsets = (

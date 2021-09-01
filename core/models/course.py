@@ -90,13 +90,13 @@ class Course(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=128)
+    organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="events", related_query_name="event", blank=True, null=True)
     term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name='events')
-    description = models.TextField(blank=True)
     schedule_format = models.CharField(blank=True, max_length=64)
+    description = models.TextField(blank=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     is_instructional = models.BooleanField(default=True)
-    organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="events", related_query_name="event", blank=True, null=True)
     tags = models.ManyToManyField("Tag", blank=True, related_name="events", related_query_name="event")
 
     def __str__(self):
