@@ -155,12 +155,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 TIMETABLE_FORMATS = {
     'pre-2020': {
-        'schedule': [
-            {'info': '08:45 - 10:05', 'position': [{1}, {1}]},
-            {'info': '10:15 - 11:30', 'position': [{2}, {2}]},
-            {'info': '12:30 - 13:45', 'position': [{3}, {4}]},
-            {'info': '13:50 - 15:05', 'position': [{4}, {3}]},
-        ],
+        'schedules': {
+            'default': [
+                {'description': '08:45 - 10:05', 'time': [[8, 45], [10, 5]], 'position': [{1}, {1}]},
+                {'description': '10:15 - 11:30', 'time': [[10, 15], [11, 30]], 'position': [{2}, {2}]},
+                {'description': '12:30 - 13:45', 'time': [[12, 30], [13, 45]], 'position': [{3}, {4}]},
+                {'description': '13:50 - 15:05', 'time': [[13, 50], [15, 5]], 'position': [{4}, {3}]},
+            ]
+        },
         'courses': 4,
         'positions': {1, 2, 3, 4},
         'cycle': {
@@ -178,11 +180,13 @@ TIMETABLE_FORMATS = {
         }
     },
     'covid': {
-        'schedule': [
-            {'info': '08:45 - 12:30 (In person)', 'position': [{1}, {2}, {3}, {4}]},
-            {'info': '08:45 - 12:30 (At home)', 'position': [{2}, {1}, {4}, {3}]},
-            {'info': '14:00 - 15:15 (At home)', 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
-        ],
+        'schedules': {
+            'default': [
+                {'description': '08:45 - 12:30 (In person)', 'time': [[8, 45], [12, 30]], 'position': [{1}, {2}, {3}, {4}]},
+                {'description': '08:45 - 12:30 (At home)', 'time': [[8, 45], [12, 30]], 'position': [{2}, {1}, {4}, {3}]},
+                {'description': '14:00 - 15:15 (At home)', 'time': [[14, 0], [15, 15]], 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
+            ],
+        },
         'courses': 2,
         'positions': {1, 2, 3, 4},
         'cycle': {
@@ -200,10 +204,12 @@ TIMETABLE_FORMATS = {
         }
     },
     'week': {
-        'schedule': [
-            {'info': '09:00 - 11:30', 'position': [{1, 5, 7}, {3, 6, 7}]},
-            {'info': '12:15 - 14:45', 'position': [{2, 5, 7}, {4, 6, 7}]},
-        ],
+        'schedules': {
+            'default': [
+                {'description': '09:00 - 11:30', 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
+                {'description': '12:15 - 14:45', 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
+            ],
+        },
         'courses': 4,
         'positions': {1, 2, 3, 4, 5, 6, 7},
         'cycle': {

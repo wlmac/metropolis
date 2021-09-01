@@ -18,9 +18,9 @@ def render_timetable(timetable):
         else: color = ''
         html += f'<th scope="col" class="{color}">{timetable_config["cycle"]["duration"].title()} {i}</th>'
     html += '</tr></thead><tbody>'
-    for i in timetable_config['schedule']:
+    for i in timetable_config['schedules'][timetable.term.day_schedule()]:
         html += '<tr>'
-        html += f'<th scope="row">{i["info"]}</th>'
+        html += f'<th scope="row">{i["description"]}</th>'
         for j in range(0, len(i['position'])):
             if day == j+1: color = 'table-primary'
             else: color = ''

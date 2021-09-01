@@ -6,8 +6,6 @@ import datetime
 
 # Create your models here.
 
-def is_instructional(day, events):
-    return day.weekday() < 5 and not events.filter(is_instructional=False, start_date__lte=day, end_date__gte=day).exists()
 
 class Term(models.Model):
     name = models.CharField(max_length=128)
@@ -31,10 +29,15 @@ class Term(models.Model):
             target_date = timezone.localdate()
         return target_date >= self.start_datetime() and target_date < self.end_datetime()
 
+    def day_is_instructional(self, target_date=None):
+        if target_date == None:
+            target_date = timezone.localdate()
+        target_date = timezone.make_aware(datetime.datetime.combine(target_date, datetime.time(hour=11, minute=00, second=00)))
+
+        return target_date.weekday() < 5 and not self.events.filter(is_instructional=False, start_date__lte=target_date, end_date__gte=target_date).exists()
+
     def day(self, target_date=None):
         cycle_duration = settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['duration']
-
-        events = Event.objects.filter(end_date__gte=self.start_datetime(), start_date__lte=self.end_datetime(), is_instructional=False)
 
         if target_date == None:
             target_date = timezone.localdate()
@@ -43,11 +46,11 @@ class Term(models.Model):
         cur_iter_day = self.start_datetime().replace(hour=11, minute=0, second=0)
         cycle_day_type_set = set()
 
-        if not self.is_ongoing(target_date) or not is_instructional(target_date, events):
+        if not self.is_ongoing(target_date) or not self.day_is_instructional(target_date):
             return None
 
         while cur_iter_day <= target_date:
-            if is_instructional(cur_iter_day, events):
+            if self.day_is_instructional(cur_iter_day):
                 if cycle_duration == 'day':
                     cycle_day_type_set.add(cur_iter_day.timetuple().tm_yday)
                 elif cycle_duration == 'week':
@@ -57,6 +60,19 @@ class Term(models.Model):
             cur_iter_day += datetime.timedelta(1)
 
         return (len(cycle_day_type_set) - 1) % settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['length'] + 1
+
+    def day_schedule(self, target_date=None):
+        if target_date == None:
+            target_date = timezone.localdate()
+        target_date = timezone.make_aware(datetime.datetime.combine(target_date, datetime.time(hour=11, minute=0, second=0)))
+
+        schedule_formats = settings.TIMETABLE_FORMATS[self.timetable_format]['schedules']
+        schedule_format_set = set(self.events.filter(start_date__lte=target_date, end_date__gte=target_date).values_list('schedule_format', flat=True)).intersection(set(schedule_formats.keys()))
+
+        for schedule_format in list(schedule_formats.keys())[::-1]:
+            if schedule_format in schedule_format_set: return schedule_format
+
+        return 'default'
 
 class Course(models.Model):
     code = models.CharField(max_length=16)
@@ -74,7 +90,9 @@ class Course(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=128)
+    term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name='events')
     description = models.TextField(blank=True)
+    schedule_format = models.CharField(blank=True, max_length=64)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     is_instructional = models.BooleanField(default=True)
