@@ -280,6 +280,8 @@ TAG_COLOR_VALUE = 1.0
 
 SITE_ID = 1
 
+SITE_URL = 'https://localhost'
+
 TOS_URL = '/terms'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

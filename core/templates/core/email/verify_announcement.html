@@ -27,12 +27,12 @@
                                 <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;text-align:left;">
                                     <tr>
                                         <td align="center" style="padding-bottom:3%;font-size:25px;">
-                                            {{ teacher_name }},
+                                            {{ teacher.get_full_name }},
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            An announcement for {{ organization }} by {{ user }} has requested your approval:
+                                            An announcement for {{ announcement.organization.name }} by {{ announcement.author.get_full_name }} has requested your approval:
                                         </td>
                                     </tr>
                                     <tr>
@@ -40,12 +40,12 @@
                                             <table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #ffffff;border-spacing:0;text-align:left;">
                                                 <tr>
                                                     <td align="center" style="padding:2%;background-color:#f2f2f2;font-size:20px;">
-                                                        {{ announcement_title }}
+                                                        {{ announcement.title }}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td style="padding:2%;background-color:#f2f2f2;border-top:3px solid #ffffff">
-                                                        {{ announcement_content }}
+                                                        {{ announcement.body }}
                                                     </td>
                                                 </tr>
                                             </table>
@@ -53,7 +53,7 @@
                                     </tr>
                                     <tr>
                                         <td align="center" style="padding:2%;background-color:#b59659">
-                                            <a href={{ announcement_link }} style="background:#b59659;color:#ffffff;text-decoration:none;font-size:25px;" target="_blank">review</a>
+                                            <a href="{{ review_link }}" style="background:#b59659;color:#ffffff;text-decoration:none;font-size:25px;" target="_blank">review</a>
                                         </td>
                                     </tr>
                                 </table>
@@ -66,7 +66,7 @@
                 <td align="center" style="padding-top:2%;padding-bottom:3%;">
                     <table role="presentation" style="width:80%;">
                         <tr>
-                            <td align="center" style="padding:0;"><a href={{ tos_link }} style="text-decoration:none;color:#000000">Terms and Conditions</a> | <a href={{ unsubscribe_link }} style="text-decoration:none;color:#000000">Unsubscribe</a> | <a href={{ site }} style="text-decoration:none;color:#000000">Visit Site</a></td>
+                            <td align="center" style="padding:0;"><a href="{{ settings.SITE_URL }}{{ settings.TOS_URL }}" style="text-decoration:none;color:#000000">Terms and Conditions</a> | <a href="{{ settings.SITE_URL }}" style="text-decoration:none;color:#000000">Visit Site</a></td>
                         </tr>
                     </table>
                 </td>

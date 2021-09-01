@@ -7,6 +7,10 @@ from django.db.models import Q
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import gettext_lazy as _
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.core.mail import send_mail
+from metropolis import settings
 
 User = get_user_model()
 
@@ -169,6 +173,23 @@ class AnnouncementAdmin(admin.ModelAdmin):
         else:
             if obj.status != 'p':
                 # Notify supervisors
+
+                for teacher in obj.organization.supervisors.all():
+                    email_template_context = {
+                        'teacher': teacher,
+                        'announcement': obj,
+                        'settings': settings,
+                        'review_link': settings.SITE_URL + reverse('admin:core_announcement_change', args=(obj.pk,)),
+                    }
+
+                    send_mail(
+                        f'[ACTION REQUIRED] An announcement for {obj.organization.name} needs your approval.',
+                        render_to_string('core/email/verify_announcement.txt', email_template_context),
+                        None,
+                        [teacher.email],
+                        html_message=render_to_string('core/email/verify_announcement.html', email_template_context)
+                    )
+
                 self.message_user(request, f'Successfully sent announcement for review.')
             obj.status = 'p'
 
