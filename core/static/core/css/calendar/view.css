@@ -1,6 +1,6 @@
 #inlineContainer {
     padding: 10px 10%;
-    background-color: #eeeeee;
+    background-color: var(--bg-grey);
 }
 
 #calendar {
@@ -16,11 +16,11 @@
 .dayEvent {
     margin-bottom: 5%;
     width: 100%;
-    box-shadow: 3px 3px #cccccc;
+    box-shadow: 3px 3px var(--line-grey);
 }
 
 .dayEvent .leftPanel {
-    background-color: lightgreen;
+    background-color: var(--status-green);
     padding-right: 25px;
     font-size: 130%;
     width: 150px;
@@ -60,14 +60,14 @@
 }
 
 #details {
-    background-color: #f2f2f2;
+    background-color: var(--light-grey);
     padding-left: 10%;
     padding-right: 10%;
     padding-top: 1%;
 }
 
 .dayEvent .intermediate_to {
-    color: grey;
+    color: var(--mid-grey);
 }
 
 .dayEvent .detailPanel .eventHost {
@@ -76,17 +76,17 @@
 }
 
 .dayEvent .eventTag {
-    color: grey;
+    color: var(--mid-grey);
     padding: 3px 15px;
     border-radius: 5px;
     font-size: 85%;
     margin-right: 10px;
 }
 
-.fc-daygrid {
-    border-color: #eeeeee;
-    border-style: solid;
-    border-width: 3px;
+.fc-scrollgrid {
+    border-collapse: collapse !important;
+    border-style: solid !important;
+    border-width: 2px !important;
     border-radius: 5px;
 }
 
@@ -103,18 +103,18 @@
 .fc-toolbar-chunk .fc-button {
     padding-top: 5px;
     padding-bottom: 5px;
-    background-color: #aaaaaa;
+    background-color: var(--line-grey);
     color: black;
     border: none;
     transition-duration: 0.5s;
 }
 
 .fc-button-group {
-    background-color: #aaaaaa !important;
+    background-color: var(--line-grey) !important;
 }
 
 .fc-toolbar-chunk .fc-button-active {
-    background-color: #555555 !important;
+    background-color: var(--dark-grey) !important;
     transition-duration: 0.5s;
 }
 
@@ -123,12 +123,12 @@
 }
 
 .fc-toolbar-chunk .fc-button-group .fc-button:hover, .fc-today-button:enabled:hover {
-    background-color: #555555 !important;
+    background-color: var(--dark-grey) !important;
 }
 
 .fc-today-button:disabled {
-    background-color: #999999 !important;
-    color: #666666 !important;
+    background-color: var(--line-grey) !important;
+    color: var(--dark-grey) !important;
 }
 
 .fc-button:focus {
@@ -143,6 +143,7 @@
     margin-top: 3%;
     margin-right: 5%;
     transition-duration: 0.3s;
+    z-index: 10;
 }
 
 .fc-daygrid-day-number{

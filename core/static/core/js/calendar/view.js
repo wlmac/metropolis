@@ -1,6 +1,6 @@
 let calendarElement;
 let calendar;
-let selectedNumberColor = "#005bd5"
+let selectedNumberColor = "var(--dark-blue)"
 let selectedDate = null
 
 // constants; should be gotten from database but sadge no database so frick
@@ -217,7 +217,7 @@ function initializeCard(curEvent, date, working = null) {
     working.querySelector("#event_title").innerHTML = curEvent.name
     working.querySelector("#event_description").innerHTML = curEvent.description
     // the background color will be the same as the color of the first tag
-    working.querySelector(".leftPanel").style = "background-color: " + (curEvent.tags.length > 0 ? curEvent.tags[0].color : "blue")
+    working.querySelector(".leftPanel").style = "background-color: " + (curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue")
     working.querySelector("#event_host_name").innerHTML = curEvent.organization
 
     for (let tag of curEvent.tags) {
