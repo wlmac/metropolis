@@ -131,6 +131,9 @@
     color: var(--link-blue);
     cursor: pointer;
 }
+.zmdi {
+    margin-left: 0.25rem;
+}
 .tag-section {
     display: flex;
     flex-flow: row wrap;
