@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from metropolis.settings import TIMETABLE_FORMATS
 from rest_framework import status
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 import datetime
 
 
@@ -27,7 +28,7 @@ class TimetableToday(APIView):
     permissions_classes = [permissions.IsAuthenticated]
 
     def get(self, request, pk):
-        timetable = models.Timetable.objects.get(pk=pk)
+        timetable = get_object_or_404(models.Timetable, pk=pk)
 
         if request.user != timetable.owner:
             return Response({}, status=status.HTTP_403_FORBIDDEN)
