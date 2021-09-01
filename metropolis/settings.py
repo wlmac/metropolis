@@ -328,6 +328,8 @@ SELECT2_CACHE_BACKEND = "default"
 
 SITE_ID = 1
 
+SITE_URL = 'http://127.0.0.1:8000'
+
 TOS_URL = '/terms'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
