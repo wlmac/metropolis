@@ -1,24 +1,54 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/club-list.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'core/css/detail.css' %}"> -->
+{% endblock %}
 
 {% block main %}
-<div class="card">
-    <div class="card-header">
-        Clubs
-    </div>
-    <ul class="list-group list-group-flush">
+<div class="container club-list">
+    <div class="row">
+        <div class="col s12 valign-wrapper">
+            <div class="green-square"></div>
+            <span>Open Membership</span>
+            <div class="yellow-square"> </div>
+            <span>Accepting Applications</span>
+            <div class="red-square"> </div>
+            <span>Closed Applications</span>
+        </div>
+        
         {% for organization in organizations %}
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">{{ organization.slug|organization }}</div>
-                {{ organization.description }}
-                <br>
-                {% for tag in organization.tags.all %}
-                    <span class="badge rounded-pill bg-primary text-white">{{ tag.name }}</span>
-                {% endfor %}
+        <div class="col s12 m6">
+            <div class="collection">
+                <div class="collection-item club-item {% if not organization.is_open %} red-status {% elif organization.applications_open %} yellow-status {% else %} green-status {% endif %}">
+                    <div class="valign-wrapper">
+                        <div class="club-logo">
+                            {% if organization.icon %}
+                                <img class="responsive-img circle" style="height: 100px; width: 100px;" src="{{ organization.icon.url }}">
+                            {% else %}
+                                <img class="responsive-img circle" src="https://via.placeholder.com/100">
+                            {% endif %}
+                        </div>
+                        <h4 class="club-title">
+                            {{ organization.slug|organization }}
+                        </h4>
+                    </div>
+                    
+                    <hr>
+                    <div class="club-description">
+                        {{ organization.description }}
+                    </div>
+
+                    {% for tag in organization.tags.all %}
+                        <span class="tag" style="background-color:{{tag.color}}">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
             </div>
-        </li>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}
