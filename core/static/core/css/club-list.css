@@ -1,0 +1,109 @@
+body{
+    background-color: #eeeeee;
+}
+
+.red-square {
+    height: 20px;
+    width: 20px;
+    background-color: var(--status-red);
+    margin: 6px;
+    margin-left: 30px;
+    border-radius: 20%;
+}
+
+.green-square {
+    height: 20px;
+    width: 20px;
+    background-color: var(--status-green);
+    margin: 6px;
+    /* margin-left: 30px; */
+    border-radius: 20%;
+}
+
+.yellow-square {
+    height: 20px;
+    width: 20px;
+    background-color: var(--status-yellow);
+    margin: 6px;
+    margin-left: 30px;
+    border-radius: 20%;
+}
+
+/* .valign-wrapper{
+    display:flex; flex-direction: row; justify-content: center; align-items: center
+} */
+
+.club-list{
+    margin-top: 1%;
+    background-color: white;
+    padding:10px !important;
+}
+
+.club-item{
+    background-color: #eeeeee;
+    border-radius: 2%;
+    height: 225px;
+}
+
+.collection{
+    border: 1px solid var(--line-grey);
+    border-radius: 2%;
+    box-shadow: 3px 3px var(--light-grey);
+}
+
+hr {
+    height: 1px;
+    border: none;
+    background-color: var(--line-grey);
+}
+
+.green-status{
+    border-left: 5px solid var(--status-green);
+}
+
+.red-status{
+    border-left: 5px solid var(--status-red);
+}
+
+.yellow-status{
+    border-left: 5px solid var(--status-yellow);
+}
+
+.club-title{
+    font-weight: 500;
+    margin-left: 3%;
+    vertical-align: top;
+    padding-bottom: 8px;
+}
+
+.club-description{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    -webkit-box-orient: vertical;
+    margin: 0;
+    font-weight: 400;
+    color: gray;
+}
+
+.tag {
+    padding: 2px 7px !important;
+    margin: 3px !important;
+    background-color: lightblue;
+    border-radius: 0.25rem;
+    color: var(--dark-grey);
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.club-logo {
+    margin-left: 0px !important;
+    padding: 0px !important;
+    width: 100px;
+    height: 100px ;
+}
+
+@media screen and (max-width: 800px) {
+
+}
