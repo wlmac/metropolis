@@ -9,8 +9,8 @@
     </div>
     <h1 class="title">{{announcement.pk|announcement}}</h1>
     <div class="card-authors">
-        <div class="circular-image">
-            <a href="{{announcement.organization.slug|organization_url}}"><img src="{{announcement.organization.icon.url}}"></a>
+        <div class="card-authors-image">
+            <a href="{{announcement.organization.slug|organization_url}}"><img class="circle" src="{{announcement.organization.icon.url}}"></a>
         </div>
         <div class="card-authors-text">
             {{announcement.organization.slug|organization}},

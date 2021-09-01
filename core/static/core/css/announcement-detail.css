@@ -45,17 +45,12 @@
     margin: 10px 0;
     color: var(--line-grey);
 }
-.circular-image {
-    width: 32px;
+.card-authors-image {
     height: 32px;
-    overflow: hidden;
-    border-radius: 50%;
     margin-right: 5px;
 }
-.circular-image img {
-    width: auto;
-    height: 100%;
-    margin-left: -4px;
+.circle {
+    height: 32px;
 }
 .card-authors a {
     font-weight: bold;
