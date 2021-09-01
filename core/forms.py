@@ -7,7 +7,7 @@ from django_select2 import forms as s2forms
 class MetropolisSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "given-name"}))
     last_name = forms.CharField(max_length=30, label='Last Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "family-name"}))
-    graduating_year = forms.ChoiceField(choices=models.graduating_year_choices)
+    graduating_year = forms.ChoiceField(choices=models.graduating_year_choices, required=False)
     field_order = ['email', 'username', 'first_name', 'last_name', 'graduating_year', 'password1', 'password2']
 
     def save(self, request):
@@ -30,6 +30,12 @@ class MetropolisSignupForm(SignupForm):
         if not (email.endswith('@student.tdsb.on.ca') or email.endswith('@tdsb.on.ca')):
             raise forms.ValidationError('A TDSB email must be used.')
         return email
+
+    def clean_graduating_year(self):
+        graduating_year = self.cleaned_data['graduating_year']
+        if graduating_year == '':
+            return None
+        return graduating_year
 
 class AddTimetableSelectTermForm(forms.Form):
     term = forms.ModelChoiceField(queryset=models.Term.objects.none())

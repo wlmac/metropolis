@@ -7,7 +7,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     bio = models.TextField(blank=True)
     timezone = models.CharField(max_length=50, choices=timezone_choices, default="UTC")
-    graduating_year = models.PositiveSmallIntegerField(choices=graduating_year_choices, null=True)
+    graduating_year = models.PositiveSmallIntegerField(blank=True, null=True, choices=graduating_year_choices)
     organizations = models.ManyToManyField("Organization", blank=True, related_name="members", related_query_name="member")
     tags_following = models.ManyToManyField("Tag", blank=True, related_name="followers", related_query_name="follower")
 
