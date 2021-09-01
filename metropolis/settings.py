@@ -157,10 +157,10 @@ TIMETABLE_FORMATS = {
     'pre-2020': {
         'schedules': {
             'default': [
-                {'description': '08:45 - 10:05', 'time': [[8, 45], [10, 5]], 'position': [{1}, {1}]},
-                {'description': '10:15 - 11:30', 'time': [[10, 15], [11, 30]], 'position': [{2}, {2}]},
-                {'description': '12:30 - 13:45', 'time': [[12, 30], [13, 45]], 'position': [{3}, {4}]},
-                {'description': '13:50 - 15:05', 'time': [[13, 50], [15, 5]], 'position': [{4}, {3}]},
+                {'description': '08:45 AM - 10:05 AM', 'time': [[8, 45], [10, 5]], 'position': [{1}, {1}]},
+                {'description': '10:15 AM - 11:30 AM', 'time': [[10, 15], [11, 30]], 'position': [{2}, {2}]},
+                {'description': '12:30 PM - 01:45 PM', 'time': [[12, 30], [13, 45]], 'position': [{3}, {4}]},
+                {'description': '01:50 PM - 03:05 PM', 'time': [[13, 50], [15, 5]], 'position': [{4}, {3}]},
             ]
         },
         'courses': 4,
@@ -182,9 +182,9 @@ TIMETABLE_FORMATS = {
     'covid': {
         'schedules': {
             'default': [
-                {'description': '08:45 - 12:30 (In person)', 'time': [[8, 45], [12, 30]], 'position': [{1}, {2}, {3}, {4}]},
-                {'description': '08:45 - 12:30 (At home)', 'time': [[8, 45], [12, 30]], 'position': [{2}, {1}, {4}, {3}]},
-                {'description': '14:00 - 15:15 (At home)', 'time': [[14, 0], [15, 15]], 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
+                {'description': '08:45 AM - 12:30 PM (In person)', 'time': [[8, 45], [12, 30]], 'position': [{1}, {2}, {3}, {4}]},
+                {'description': '08:45 AM - 12:30 PM (At home)', 'time': [[8, 45], [12, 30]], 'position': [{2}, {1}, {4}, {3}]},
+                {'description': '02:00 PM - 03:15 PM (At home)', 'time': [[14, 0], [15, 15]], 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
             ],
         },
         'courses': 2,
@@ -206,8 +206,8 @@ TIMETABLE_FORMATS = {
     'week': {
         'schedules': {
             'default': [
-                {'description': '09:00 - 11:30', 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
-                {'description': '12:15 - 14:45', 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
+                {'description': '09:00 AM - 11:30 AM', 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
+                {'description': '12:15 PM - 02:45 PM', 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
             ],
         },
         'courses': 4,
@@ -328,7 +328,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 SILENCED_SYSTEM_CHECKS = ['urls.W002']
 
-API_VERSION = "0.0.0"
+API_VERSION = "0.1.0"
 
 try:
     from metropolis.config import *
