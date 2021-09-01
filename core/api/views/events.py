@@ -1,14 +1,17 @@
+from django.db.models import Q
 from django.utils import timezone
-from rest_framework import permissions
+from rest_framework import permissions, authentication
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt import authentication as jwt_auth
 
 from .. import serializers
 from ... import models
 
 
 class EventsList(APIView):
+    authentication_classes = [authentication.SessionAuthentication, jwt_auth.JWTTokenUserAuthentication]
     permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser]
 
@@ -19,14 +22,29 @@ class EventsList(APIView):
         elif request.query_params.get('start'):
             start = request.query_params.get('start')
 
-        if request.data.get('end'):
-            end = request.data.get('end')
-            events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end).order_by('start_date')
-        elif request.query_params.get('end'):
-            end = request.query_params.get('end')
-            events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end).order_by('start_date')
+        if not request.user.is_anonymous:
+            if request.data.get('end'):
+                end = request.data.get('end')
+                events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end).filter(
+                    Q(is_public=True) | Q(organization__member=request.user.id)).distinct().order_by('start_date')
+            elif request.query_params.get('end'):
+                end = request.query_params.get('end')
+                events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end).filter(
+                    Q(is_public=True) | Q(organization__member=request.user.id)).distinct().order_by('start_date')
+            else:
+                events = models.Event.objects.filter(end_date__gte=start).filter(
+                    Q(is_public=True) | Q(organization__member=request.user.id)).distinct().order_by('start_date')
         else:
-            events = models.Event.objects.filter(end_date__gte=start).order_by('start_date')
+            if request.data.get('end'):
+                end = request.data.get('end')
+                events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end, is_public=True).order_by(
+                    'start_date')
+            elif request.query_params.get('end'):
+                end = request.query_params.get('end')
+                events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end, is_public=True).order_by(
+                    'start_date')
+            else:
+                events = models.Event.objects.filter(end_date__gte=start, is_public=True).order_by('start_date')
 
         serializer = serializers.EventSerializer(events, many=True)
         return Response(serializer.data)
