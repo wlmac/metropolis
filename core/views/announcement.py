@@ -2,7 +2,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import TemplateView, RedirectView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.db.models import Q
@@ -30,4 +30,26 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
                 custom_feed_queryset = custom_feed_queryset.filter(is_public=True)
             context['feeds_custom'].append((custom_feed_organization, custom_feed_queryset))
 
+        """ to-do: search bar, DNR
+        query = self.request.GET.get('q' ,'')
+        feed_type = self.request.GET.get('ft','')
+        print(feed_type)
+        if query != '':
+            if feed_type == 'get':
+                context['search'] = context['feed_all'].filter(pk=query)
+            else:
+                context['search'] = context['feed_all'].filter(Q(body__icontains=query) | Q(title__icontains=query))
+        """
         return context
+
+class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
+    model = models.Announcement
+    context_object_name = "announcement"
+    template_name = "core/announcement/detail.html"
+
+    def get_title(self):
+        return self.get_object().title
+
+    def test_func(self):
+        announcement = self.get_object()
+        return announcement.status == 'a' and (announcement.is_public or self.request.user in announcement.organization.members.all())

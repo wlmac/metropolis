@@ -14,7 +14,7 @@ def user_url(username):
 def user(username, postfix=''):
     url = user_url(username)
     user_obj = models.User.objects.get(username=username)
-    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), f'{user_obj.get_full_name()} ({username})')
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), f'{user_obj.get_full_name()}')
 
 @register.filter
 def users(usernames, postfix=''):
@@ -40,5 +40,15 @@ def organization_url(organization):
 @register.filter
 def organization(organization, postfix=''):
     url = organization_url(organization)
-    organization_obj = models.Organization.objects.get(pk=organization)
+    organization_obj = models.Organization.objects.get(slug=organization)
     return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(organization_obj))
+
+@register.filter
+def announcement_url(announcement):
+    return reverse('announcement_detail', args=[announcement])
+ 
+@register.filter
+def announcement(announcement, postfix=''):
+    url = announcement_url(announcement)
+    announcement_obj = models.Announcement.objects.get(pk=announcement)
+    return format_html('<a href="{0}{1}">{2}</a>', mark_safe(url), mark_safe(postfix), str(announcement_obj))

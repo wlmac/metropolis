@@ -1,16 +1,14 @@
 from django import forms
 from allauth.account.forms import SignupForm
-from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV3
 from . import models
 from metropolis import settings
+from django_select2 import forms as s2forms
 
 class MetropolisSignupForm(SignupForm):
-    captcha = ReCaptchaField(widget=ReCaptchaV3, label='')
-    first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "First Name", "autocomplete": "given-name"}))
-    last_name = forms.CharField(max_length=30, label='Last Name', widget=forms.TextInput(attrs={"type": "text", "placeholder": "Last Name", "autocomplete": "family-name"}))
+    first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "given-name"}))
+    last_name = forms.CharField(max_length=30, label='Last Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "family-name"}))
     graduating_year = forms.ChoiceField(choices=models.graduating_year_choices)
-    field_order = ['email', 'username', 'first_name', 'last_name', 'graduating_year', 'password1', 'password2', 'captcha']
+    field_order = ['email', 'username', 'first_name', 'last_name', 'graduating_year', 'password1', 'password2']
 
     def save(self, request):
         user = super(MetropolisSignupForm, self).save(request)
@@ -20,6 +18,19 @@ class MetropolisSignupForm(SignupForm):
         user.save()
         return user
 
+    def __init__(self, *args, **kwargs):
+        super(MetropolisSignupForm, self).__init__(*args, **kwargs)
+        del self.fields['email'].widget.attrs['placeholder']
+        del self.fields['username'].widget.attrs['placeholder']
+        del self.fields['password1'].widget.attrs['placeholder']
+        del self.fields['password2'].widget.attrs['placeholder']
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not (email.endswith('@student.tdsb.on.ca') or email.endswith('@tdsb.on.ca')):
+            raise forms.ValidationError('A TDSB email must be used.')
+        return email
+
 class AddTimetableSelectTermForm(forms.Form):
     term = forms.ModelChoiceField(queryset=models.Term.objects.none())
 
@@ -28,12 +39,17 @@ class AddTimetableSelectTermForm(forms.Form):
         super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
         self.fields['term'].queryset = models.Term.objects.exclude(timetables__owner=user)
 
+class SelectCoursesWidget(s2forms.ModelSelect2MultipleWidget):
+    search_fields = [
+        "code__icontains",
+    ]
+
 class TimetableSelectCoursesForm(forms.ModelForm):
     class Meta:
         model = models.Timetable
         fields = ['courses']
         widgets = {
-            'courses': forms.CheckboxSelectMultiple()
+            'courses': SelectCoursesWidget
         }
 
     def __init__(self, *args, **kwargs):
@@ -56,12 +72,11 @@ class TimetableSelectCoursesForm(forms.ModelForm):
                 position_set.add(i.position)
 
 class AddCourseForm(forms.ModelForm):
+    position = forms.ChoiceField(widget=forms.RadioSelect())
+
     class Meta:
         model = models.Course
         fields = ['code', 'position']
-        widgets = {
-            'position': forms.RadioSelect(),
-        }
 
     def __init__(self, *args, **kwargs):
         self.term = kwargs.pop('term')
@@ -85,7 +100,7 @@ class AddCourseForm(forms.ModelForm):
         return code
 
     def clean_position(self):
-        position = self.cleaned_data['position']
+        position = int(self.cleaned_data['position'])
         if position not in self.position_set:
             raise forms.ValidationError('Must be one of ' + ', '.join([str(i) for i in self.position_set]) + '.')
         return position

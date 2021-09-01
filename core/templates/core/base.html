@@ -7,6 +7,8 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {% block deps %}
 {% endblock %}
 {% endblock %}
@@ -22,7 +24,7 @@
     <li><a href="{% url 'account_logout' %}">Logout</a></li>
     {% else %}
     <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
-    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Register</a></li>
+    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
     {% endif %}
 </ul>
 <ul class="sidenav" id="slide-out">
@@ -54,7 +56,7 @@
     <li><a href="{% url 'account_logout' %}">Logout</a></li>
     {% else %}
     <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
-    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Register</a></li>
+    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
     {% endif %}
 </ul>
 <nav>
@@ -93,7 +95,7 @@
                 {% if request.user.is_authenticated %}
                 Account
                 {% else %}
-                Login/Register
+                Login/Sign Up
                 {% endif %}
                 <i class="zmdi zmdi-caret-down"></i>
             </a></li>

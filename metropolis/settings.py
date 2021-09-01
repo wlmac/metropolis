@@ -38,16 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django.contrib.flatpages',
     'core',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'crispy_forms',
-    'captcha',
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
-    'django.contrib.flatpages',
+    'martor',
+    'django_select2',
 ]
 
 MIDDLEWARE = [
@@ -96,6 +95,15 @@ DATABASES = {
         }
 
 
+# Cache
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -137,6 +145,11 @@ STATIC_URL = '/static/'
 # Auth settings
 
 AUTH_USER_MODEL = 'core.User'
+
+# Media settings
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Timetable settings
 
@@ -276,6 +289,30 @@ CORS_ALLOW_ALL_ORIGINS = True
 TAG_COLOR_SATURATION = 0.2
 TAG_COLOR_VALUE = 1.0
 
+# Martor settings
+
+MARTOR_MARKDOWN_BASE_MENTION_URL = '/user/'
+MARTOR_UPLOAD_URL = '/api/martor/upload-image'
+MARTOR_UPLOAD_MEDIA_DIR = 'martor'
+MARTOR_UPLOAD_SAFE_EXTS = {'.jpg', '.jpeg', '.png', '.gif'}
+MARTOR_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.smarty',
+    'markdown.extensions.fenced_code',
+    'martor.extensions.urlize',
+    'martor.extensions.del_ins',
+    'martor.extensions.mention',
+    'martor.extensions.emoji',
+    'martor.extensions.mdx_video',
+    'martor.extensions.escape_html',
+    'core.markdown',
+]
+
+# Select2 settings
+
+SELECT2_CACHE_BACKEND = "default"
+
 # Misc settings
 
 SITE_ID = 1
@@ -288,8 +325,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+SILENCED_SYSTEM_CHECKS = ['urls.W002']
 
 try:
     from metropolis.config import *

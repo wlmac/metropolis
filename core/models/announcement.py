@@ -24,3 +24,6 @@ class Announcement(models.Model):
 
     def get_absolute_url(self):
         return reverse("announcement_detail", args=[self.slug])
+
+    class Meta:
+        ordering = ['-last_modified_date']

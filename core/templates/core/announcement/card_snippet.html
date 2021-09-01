@@ -1,0 +1,25 @@
+{% load link_tags %}
+{% load martortags %}
+
+<div class="card">
+    <div class="tag-section">
+        {% for tag in announcement.tags.all %}
+        <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+        {% endfor %}
+    </div>
+    <h1 class="title">{{announcement.pk|announcement}}</h1>
+    <div class="card-authors">
+        <div class="circular-image">
+            <img src="{{announcement.organization.icon.url}}">
+        </div>
+        <div class="card-authors-text">
+            {{announcement.organization.slug|organization}},
+            {{announcement.author.username|user}}
+            • {{announcement.last_modified_date}}
+        </div>
+    </div>
+    <hr>
+    <div class="card-body">
+        {{announcement.body|safe_markdown}}
+    </div>
+</div>

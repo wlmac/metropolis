@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.core.mail import send_mail
 from metropolis import settings
+from martor.widgets import AdminMartorWidget
 
 User = get_user_model()
 
@@ -50,10 +51,13 @@ class OrganizationURLInline(admin.TabularInline):
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['name', 'is_open', 'owner']
     list_filter = ['is_open', 'tags']
-    fields = ['name', 'description', 'is_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
+    fields = ['name', 'bio', 'description', 'slug', 'is_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
     inlines = [
         OrganizationURLInline,
     ]
+    formfield_overrides = {
+        django.db.models.TextField: {'widget': AdminMartorWidget},
+    }
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -86,6 +90,9 @@ class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'organization', 'status']
     list_filter = [OrganizationListFilter, 'status']
     empty_value_display = "Not specified."
+    formfield_overrides = {
+        django.db.models.TextField: {'widget': AdminMartorWidget},
+    }
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
