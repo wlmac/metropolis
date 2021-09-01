@@ -322,6 +322,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 SILENCED_SYSTEM_CHECKS = ['urls.W002']
 
+API_VERSION = "0.0.0"
+
 try:
     from metropolis.config import *
 except ImportError:
