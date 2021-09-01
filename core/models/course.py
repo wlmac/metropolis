@@ -92,7 +92,7 @@ class Event(models.Model):
     name = models.CharField(max_length=128)
     organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="events", related_query_name="event", blank=True, null=True)
     term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name='events')
-    schedule_format = models.CharField(blank=True, max_length=64)
+    schedule_format = models.CharField(max_length=64)
     description = models.TextField(blank=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
