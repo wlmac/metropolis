@@ -49,7 +49,7 @@ class OrganizationURLInline(admin.TabularInline):
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['name', 'is_open', 'owner']
     list_filter = ['is_open', 'tags']
-    fields = ['name', 'bio', 'description', 'slug', 'is_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
+    fields = ['name', 'bio', 'description', 'slug', 'is_open', 'applications_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
     inlines = [
         OrganizationURLInline,
     ]
