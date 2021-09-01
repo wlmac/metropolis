@@ -119,6 +119,8 @@ class EventAdminForm(forms.ModelForm):
         super(EventAdminForm, self).__init__(*args, **kwargs)
         timetable_configs = settings.TIMETABLE_FORMATS
 
+        self.fields['schedule_format'].initial = 'default'
+
         if 'instance' in kwargs:
             instance = kwargs['instance']
             self.fields['schedule_format'].choices = [(timetable_format, timetable_format) for timetable_format in timetable_configs[instance.term.timetable_format]['schedules']]

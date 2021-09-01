@@ -214,9 +214,35 @@ class BlogPostAdmin(admin.ModelAdmin):
         return {'author': request.user.pk}
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['name', 'start_date', 'end_date']
-    list_filter = ['is_instructional', 'organization']
-    form = EventAdminForm
+    list_display = ['name', 'organization', 'start_date', 'end_date']
+    list_filter = [OrganizationListFilter]
+    ordering = ['-start_date', '-end_date']
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+
+    def get_exclude(self, request, obj=None):
+        if not request.user.is_superuser:
+            return {'schedule_format', 'is_instructional'}
+
+    def get_form(self, request, obj=None, **kwargs):
+        if request.user.is_superuser:
+            kwargs['form'] = EventAdminForm
+        return super().get_form(request, obj, **kwargs)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "organization":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = models.Organization.objects.filter(Q(execs=request.user)).distinct()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def has_change_permission(self, request, obj=None):
+        if obj != None and (not request.user.is_superuser) and (request.user not in obj.organization.execs.all()):
+            return False
+        return super().has_change_permission(request, obj)
 
 class FlatPageAdmin(FlatPageAdmin):
     fieldsets = (
