@@ -33,5 +33,6 @@ class EventSerializer(serializers.Serializer):
     start_date = serializers.DateTimeField()
     end_date = serializers.DateTimeField()
     is_instructional = serializers.BooleanField(default=False)
+    is_public = serializers.BooleanField(default=True)
     organization = serializers.SlugRelatedField(slug_field='name', queryset=models.Organization.objects.all(), required=False, allow_null=True, allow_empty=True)
     tags = TagSerializer(many=True)
