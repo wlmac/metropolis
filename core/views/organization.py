@@ -16,9 +16,6 @@ class OrganizationList(ListView, mixins.TitleMixin):
     def get_ordering(self):
         return "-name"
 
-    def get_queryset(self):
-        return models.Organization.objects.filter(is_open=True)
-
 class OrganizationDetail(DetailView, mixins.TitleMixin):
     model = models.Organization
     context_object_name = "organization"
