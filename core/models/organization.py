@@ -26,8 +26,8 @@ class Organization(models.Model):
     applications_open = models.BooleanField(default=False)
     tags = models.ManyToManyField("Tag", blank=True, related_name="organizations", related_query_name="organization")
 
-    banner = models.ImageField(upload_to=banner_file_path_generator, default='banners/default.png')
-    icon = models.ImageField(upload_to=icon_file_path_generator, default='icons/default.png')
+    banner = models.ImageField(blank=True, upload_to=banner_file_path_generator, default='banners/default.png')
+    icon = models.ImageField(blank=True, upload_to=icon_file_path_generator, default='icons/default.png')
 
     def __str__(self):
         return self.name

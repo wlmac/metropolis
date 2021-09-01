@@ -10,20 +10,12 @@
 {% block main %}
 <div class="club">
     <div class="row">
-        {% if organization.banner %}
-            <img class="club-banner responsive-img col s12" src="{{ organization.banner.url }}">
-        {% else %}
-            <img class="club-banner responsive-img col s12" src="https://via.placeholder.com/150x40">
-        {% endif %}
+        <img class="club-banner responsive-img col s12" src="{{ organization.banner.url }}">
     </div>
     <div class="container">
         <div class="row club-header">
             <div class="col m3 s12 club-logo">
-                {% if organization.icon %}
-                    <img class="responsive-img circle" src="{{ organization.icon.url }}">
-                {% else %}
-                    <img class="responsive-img circle" src="https://via.placeholder.com/150">
-                {% endif %}
+                <img class="responsive-img circle" src="{{ organization.icon.url }}">
             </div>
             <div class="col m5 s12">
                 <h2 class="club-name">{{ organization.name }}</h2>
@@ -33,7 +25,7 @@
                     {% endfor %}
                 </div>
             </div>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and organization.is_open %}
             <div class="col m4 s12">
                 <form method="POST" class="member-button">
                     {% csrf_token %}
