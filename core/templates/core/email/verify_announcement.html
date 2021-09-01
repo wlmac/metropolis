@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
     <head>
@@ -39,7 +40,7 @@
                     <table role="presentation" style="width:80%;border-collapse:collapse;border:0;border-spacing:0;text-align:left;background-color:#ffffff;">
                         <tr>
                             <td align="center" style="padding:0px;padding-top:1%">
-                                <img src="https://raw.githubusercontent.com/wlmac/metropolis/master/core/static/core/img/logo-light-transparent.png" style="height: 8em"/>
+                                <img src="{{ settings.SITE_URL }}{% static 'core/img/logo-light-transparent.png' %}" style="height: 8em"/>
                             </td>
                         </tr>
                         <tr>
