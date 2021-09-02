@@ -1,0 +1,81 @@
+{% load martortags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="x-apple-disable-message-reformatting">
+        <!--[if mso]>
+            <noscript>
+            <xml>
+            <o:OfficeDocumentSettings>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+            </xml>
+            </noscript>
+        <![endif]-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;700&display=swap" rel="stylesheet">
+        <style>
+            table{font-size: 60%;}
+            @media screen and (min-width: 500px) {
+                table{font-size: 75%;}
+            }
+            @media screen and (min-width: 700px) {
+                table{font-size: 85%;}
+            }
+            @media screen and (min-width: 900px) {
+                table{font-size: 95%;}
+            }
+        </style>
+    </head>
+    <body style="margin:0;padding:0;">
+        <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background-color:#f3f3f3;">
+            <tr>
+                <td align="center" style="padding-top:3%;">
+                    <table role="presentation" style="width:80%;border-collapse:collapse;border:0;border-spacing:0;text-align:left;background-color:#ffffff;">
+                        <tr>
+                            <td align="center" style="padding:0px;padding-top:1%">
+                                <img src="{{ settings.SITE_URL }}{% static 'core/img/logo-light-transparent.png' %}" style="height: 8em"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="padding: 0px;">
+                                <hr style="border:none;border-left: 25vw #f3f3f3 solid;border-right: 25vw #f3f3f3 solid;background-color:#b59659;height:2.5px;margin:0px 0px 4%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" style="padding-bottom:4%;padding-right:7%;padding-left:7%;">
+                                <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;text-align:left;">
+                                    <tr>
+                                        <td align="center" style="padding-bottom:3%;font-family:Roboto, Arial, sans-serif;font-size:2em;color:#073763;font-weight:bold">
+                                            {% block recipient %}
+                                        </td>
+                                    </tr>
+                                    {% block information %} 
+
+                                    <tr>
+                                        <td align="center" style="background-color:#b59659;height:100%;width:100%">
+                                            {% block button %} 
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td align="center" style="padding-top:2%;padding-bottom:3%;">
+                    <table role="presentation" style="width:80%;">
+                        <tr>
+                            <td align="center" style="padding:0;color:#b7b7b7;"><a href="{{ settings.SITE_URL }}{{ settings.TOS_URL }}" style="font-family:Roboto,Arial,sans-serif;text-decoration:none;color:#073763;margin-right:2%;font-weight:300;font-size:0.8em">Terms and Conditions</a> | <a href="{{ settings.SITE_URL }}" style="font-family:Roboto,Arial,sans-serif;text-decoration:none;color:#073763;margin-left:2%;font-weight:300;font-size:0.8em">Visit Site</a></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
