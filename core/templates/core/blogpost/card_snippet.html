@@ -1,0 +1,32 @@
+{% load link_tags %}
+{% load martortags %}
+{% load gravatar_tags %}
+
+<div class="card">
+    <div class="card-headers">
+        <img class="card-image" src="{{blogpost.featured_image.url}}">
+        <div class="card-text">
+            <div class="tag-section">
+                {% for tag in blogpost.tags.all %}
+                <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+                {% endfor %}
+            </div>
+            <h1 class="title">{{blogpost.title}}</h1>
+            <div class="card-authors">
+                <div class="card-authors-image">
+                    <a href="{{blogpost.author.username|user_url}}"><img class="circle" src="{{blogpost.author.email|gravatar_url:100}}"></a>
+                </div>
+                <div class="card-authors-text">
+                    {{blogpost.author.username|user}}
+                    • {{blogpost.last_modified_date}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="card-body">
+        {{blogpost.body|safe_markdown}}
+    </div>
+    <br>
+    <a class="link" href="{{blogpost.slug|blogpost_url}}">See Post <i class='zmdi zmdi-chevron-right'></i></a>
+</div>
