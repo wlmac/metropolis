@@ -168,7 +168,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def has_change_permission(self, request, obj=None):
-        if obj != None and obj.status != 'p' and request.user in obj.organization.supervisors.all() and request.user not in obj.organization.execs.all():
+        if obj != None and obj.status != 'p' and not request.user.is_superuser and request.user in obj.organization.supervisors.all() and request.user not in obj.organization.execs.all():
             return False
         return super().has_change_permission(request, obj)
 
@@ -176,34 +176,35 @@ class AnnouncementAdmin(admin.ModelAdmin):
         if not change:
             obj.author = request.user
 
-        if request.user in obj.organization.supervisors.all():
-            obj.supervisor = request.user
-            if obj.status != 'p' and request.user != obj.author:
-                # Notify user
-                pass
-                self.message_user(request, f'Successfully marked announcement as {obj.get_status_display()}.')
-        else:
-            if obj.status != 'p':
-                # Notify supervisors
+        if not request.user.is_superuser:
+            if request.user in obj.organization.supervisors.all():
+                obj.supervisor = request.user
+                if obj.status != 'p' and request.user != obj.author:
+                    # Notify user
+                    pass
+                    self.message_user(request, f'Successfully marked announcement as {obj.get_status_display()}.')
+            else:
+                if obj.status != 'p':
+                    # Notify supervisors
 
-                for teacher in obj.organization.supervisors.all():
-                    email_template_context = {
-                        'teacher': teacher,
-                        'announcement': obj,
-                        'settings': settings,
-                        'review_link': settings.SITE_URL + reverse('admin:core_announcement_change', args=(obj.pk,)),
-                    }
+                    for teacher in obj.organization.supervisors.all():
+                        email_template_context = {
+                            'teacher': teacher,
+                            'announcement': obj,
+                            'settings': settings,
+                            'review_link': settings.SITE_URL + reverse('admin:core_announcement_change', args=(obj.pk,)),
+                        }
 
-                    send_mail(
-                        f'[ACTION REQUIRED] An announcement for {obj.organization.name} needs your approval.',
-                        render_to_string('core/email/verify_announcement.txt', email_template_context),
-                        None,
-                        [teacher.email],
-                        html_message=render_to_string('core/email/verify_announcement.html', email_template_context)
-                    )
+                        send_mail(
+                            f'[ACTION REQUIRED] An announcement for {obj.organization.name} needs your approval.',
+                            render_to_string('core/email/verify_announcement.txt', email_template_context),
+                            None,
+                            [teacher.email],
+                            html_message=render_to_string('core/email/verify_announcement.html', email_template_context)
+                        )
 
-                self.message_user(request, f'Successfully sent announcement for review.')
-            obj.status = 'p'
+                    self.message_user(request, f'Successfully sent announcement for review.')
+                obj.status = 'p'
 
         super().save_model(request, obj, form, change)
 
