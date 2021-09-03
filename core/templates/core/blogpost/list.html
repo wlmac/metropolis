@@ -1,24 +1,24 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
 {% load martortags %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/blog-list.css' %}">
+{% endblock %}
 
 {% block main %}
-{% for blogpost in blogposts %}
-<div class="row">
-    <div class="col s12 m7">
-        <div class="card">
-            <div class="card-image">
-                <img src="{{ blogpost.featured_image.url }}">
-                <span class="card-title">{{ blogpost.title }}</span>
-            </div>
-            <div class="card-content">
-                <p>{{ blogpost.body|safe_markdown }}</p>
-            </div>
-            <div class="card-action">
-                <a href="{{ blogpost.slug|blogpost_url }}">This is a link</a>
-            </div>
-        </div>
+<div class="container">
+    <div class="card-container">
+        {% for blogpost in blogposts %}
+        {% include "./card_snippet.html" %}
+        {% empty %}
+        <div class="message">There are no blog articles posted at this time. Check back in a bit!</div>
+        {% endfor %}
+        <script>
+            $(".card-authors-text").find("a").addClass("link");
+        </script>
     </div>
 </div>
-{% endfor %}
 {% endblock %}
