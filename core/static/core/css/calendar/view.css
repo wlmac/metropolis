@@ -11,11 +11,11 @@
 .fc-toolbar-title {
     font-weight: bold;
 }
-
 .dayEvent {
     margin-bottom: 5%;
     width: 100%;
-    box-shadow: 3px 3px var(--line-grey);
+    border-radius: 5px;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
 }
 
 .dayEvent .leftPanel {
@@ -63,7 +63,7 @@
 }
 
 hr {
-    margin: 20px 0 10px;
+    margin: 20px 0;
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
