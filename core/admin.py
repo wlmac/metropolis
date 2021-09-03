@@ -114,7 +114,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
         fields = set(all_fields)
         fields_matrix = [
-            [{'author', 'organization', 'title', 'body', 'tags', 'is_public'}, {'author', 'organization', 'title', 'body', 'tags', 'is_public', 'status', 'supervisor'}, {'author', 'organization', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason', 'supervisor'}],
+            [{'author', 'organization', 'title', 'tags', 'is_public'}, {'author', 'organization', 'title', 'body', 'tags', 'is_public', 'status', 'supervisor'}, {'author', 'organization', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason', 'supervisor'}],
             [{'author', 'organization', 'status'}, {'author', 'organization', 'status', 'supervisor'}, {'author', 'organization', 'status', 'supervisor', 'rejection_reason'}],
         ]
 
