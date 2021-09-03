@@ -133,7 +133,7 @@ p{
 }
 
 .btn:hover, .btn:active {
-    background-color: var(--dark-blue)
+    background-color: var(--dark-blue);
 }
 
 .errorlist {
@@ -162,4 +162,11 @@ input {
 
 label {
     color: var(--mid-grey) !important;
+}
+
+.white-bg{
+    background-color: white;
+    padding: 30px;
+    border-radius: 3px;
+    width: 75%;
 }

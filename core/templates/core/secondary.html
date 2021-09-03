@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+{% load link_tags %}
+{% load static %}
+{% load admin_urls %}
+
+{% block deps %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/secondary.css' %}">
+{% block hd %}
+{% endblock %}
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <div class="secondary-nav-wrapper">
+        <ul class="secondary-nav">
+            <li>
+                <a class="link" href="{% url 'profile_redirect' %}">Profile</a>
+            </li>
+            <li>
+                <a class="link" href="{% url 'timetable_list' %}">Timetable</a>
+            </li>
+            <li>
+                <a class="link" href="">Settings</a>
+            </li>
+            {% if not user.organizations_owning.all.empty %}
+            <hr>
+            {% if user.perms.core.announcement_add %}
+            <li>
+                <a class="link" href="{% url 'admin:core_announcement_add' %}">Add user</a>
+            </li>
+            {% endif %}
+            {% if user.perms.core.event_add %}
+            <li>
+                <a class="link" href="{% url 'admin:core_event_add' %}">Add event</a>
+            </li>
+            {% endif %}
+            {% for organization in user.organizations_owning.all %}
+            <li>
+                <a class="link" href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
+            </li>
+            {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    {% block content %}
+    {% endblock %}
+</div>
+{% endblock %}

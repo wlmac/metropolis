@@ -1,9 +1,10 @@
-{% extends 'core/base.html' %}
+{% extends 'core/secondary.html' %}
 {% load static %}
 {% load timetable_tags %}
+{% load admin_urls %}
 
-{% block main %}
-    <div id="content-container">
+{% block content %}
+    <div class="white-bg">
         {% for timetable in timetables %}
             <details class="mb-3">
                 <summary class="card-top" onclick="$('#card-body-{{ forloop.counter }}').toggle(100)">
@@ -41,7 +42,7 @@
     </div>
 {% endblock %}
 
-{% block deps %}
+{% block hd %}
     <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}"/>
     <link rel="stylesheet" href="{% static 'core/css/timetable/list.css' %}"/>
 {% endblock %}

@@ -1,0 +1,19 @@
+.container {
+    width: 100%;
+    min-height: calc(100vh - 64px);
+    padding: 25px;
+    display: flex;
+}
+.secondary-nav-wrapper {
+    padding: 10px 25px;
+    background-color: white;
+    width: 200px;
+    margin-right: 25px;
+}
+.secondary-nav > li {
+    margin: 10px 0;
+}
+.secondary-nav-wrapper hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}

@@ -1,8 +1,8 @@
-{% extends 'core/base.html' %}
+{% extends 'admin/base.html' %}
 {% load static %}
 
 {% block main %}
-    <div id="content-container">
+    <div class="white-bg">
         <div class="card-body">
             <form method="post">
                 <h5 class="card-title"><strong>Add timetable</strong></h5>
@@ -22,7 +22,7 @@
 
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}"/>
-    <link rel="stylesheet" href="{% static 'core/css/timetable/add.css' %}"/>
+    <link rel="stylesheet" href="{% static 'core/css/timetable/edit.css' %}"/>
     <script>
         $(function(){
             $("#id_courses").attr("data-minimum-input-length", 0).select2({

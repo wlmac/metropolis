@@ -1,0 +1,271 @@
+{% load common_tags %}
+{% load settings_tags %}
+{% load static %}
+
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+<head>
+<title>{% block title %}{% endblock %}</title>
+
+
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100;200;300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;900&family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js"></script>
+        <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+
+
+
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
+{% if not is_popup and is_nav_sidebar_enabled %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/nav_sidebar.css" %}">
+  <script src="{% static 'admin/js/nav_sidebar.js' %}" defer></script>
+{% endif %}
+{% block extrastyle %}{% endblock %}
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
+{% block extrahead %}{% endblock %}
+{% block responsive %}
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/responsive.css" %}">
+    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% static "admin/css/responsive_rtl.css" %}">{% endif %}
+{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+
+  {% if user.is_superuser %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static "core/css/base.css" %}">
+  <link rel="stylesheet" type="text/css" href="{% static "core/css/admin-secondary.css" %}">
+  {% endif %}
+</head>
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
+  data-admin-utc-offset="{% now "Z" %}">
+
+
+
+
+
+
+
+<ul id="dropdownAcc" class="dropdown-content">
+    {% if request.user.is_authenticated %}
+    <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
+    <li><a href="{% url 'timetable_list' %}">Timetable</a></li>
+    {% if user.is_staff %}
+    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+    {% endif %}
+    <li><a href="{% url 'account_logout' %}">Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
+    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
+    {% endif %}
+</ul>
+<ul class="sidenav" id="slide-out">
+    {% settings_value "NAVBAR" as navbar %}
+    {% for heading, items in navbar.items %}
+    {% if items|gettype == 'str' %}
+    <li >
+        <a href="{{ items }}">{{ heading }}</a>
+    </li>
+    {% elif items|gettype == 'dict' %}
+    <li class="divider"></li>
+    <li>
+        {% for item, path in items.items %}
+            <li>
+                <a href="#!">{{ item }}</a>
+            </li>
+        {% endfor %}
+    </li>
+    {% else %}
+    {{ items|gettype }}
+    {% endif %}
+    {% endfor %}
+    <li class="divider"></li>
+    {% if request.user.is_authenticated %}
+    <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
+    {% if user.is_staff %}
+    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+    {% endif %}
+    <li><a href="{% url 'account_logout' %}">Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
+    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
+    {% endif %}
+</ul>
+<nav>
+    <div class="nav-wrapper">
+        <a href="{% url 'index' %}">
+            <div class="brand-logo">
+                <img class="img-logo" src="{% static 'core/img/logo-dark-transparent.png' %}"></img>
+                <!-- <span>Metropolis</span> -->
+            </div>
+        </a>
+            
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
+        <ul class="right hide-on-med-and-down">
+            {% settings_value "NAVBAR" as navbar %}
+            {% for heading, items in navbar.items %}
+            {% if items|gettype == 'str' %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ items }}">{{ heading }}</a>
+            </li>
+            {% elif items|gettype == 'dict' %}
+            <li>
+                <a class="dropdown-trigger" href="#!" data-target="dropdown1">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
+                <ul id="dropdown1" class="dropdown-content">
+                    {% for item, path in items.items %}
+                        <li>
+                            <a href="#!">{{ item }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% else %}
+            {{ items|gettype }}
+            {% endif %}
+            {% endfor %}
+            <li><a class="dropdown-trigger" href="#!" data-target="dropdownAcc">
+                {% if request.user.is_authenticated %}
+                Account
+                {% else %}
+                Login/Sign Up
+                {% endif %}
+                <i class="zmdi zmdi-caret-down"></i>
+            </a></li>
+            <script>
+                $(document).ready(function(){
+                    $('.dropdown-trigger').dropdown();
+                    $('.sidenav').sidenav();
+                });
+            </script>
+        </ul>
+    </div>
+</nav>
+
+
+
+
+
+
+
+<!-- Container -->
+<div id="container">
+
+    {% if not is_popup %}
+    <!-- Header -->
+    {% block header %}
+    <div id="header">
+        <div id="branding">
+        {% block branding %}{% endblock %}
+        </div>
+        {% block usertools %}
+        {% if has_permission %}
+        <div id="user-tools">
+            {% block welcome-msg %}
+                {% translate 'Welcome,' %}
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+            {% endblock %}
+            {% block userlinks %}
+                {% if site_url %}
+                    <a href="{{ site_url }}">{% translate 'View site' %}</a> /
+                {% endif %}
+                {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <a href="{{ docsroot }}">{% translate 'Documentation' %}</a> /
+                    {% endif %}
+                {% endif %}
+                {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a> /
+                {% endif %}
+                <a href="{% url 'admin:logout' %}">{% translate 'Log out' %}</a>
+            {% endblock %}
+        </div>
+        {% endif %}
+        {% endblock %}
+        {% block nav-global %}{% endblock %}
+    </div>
+    {% endblock %}
+    <!-- END Header -->
+    {% block breadcrumbs %}
+    <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    {% if title %} &rsaquo; {{ title }}{% endif %}
+    </div>
+    {% endblock %}
+    {% endif %}
+
+    <div class="main" id="main">
+      {% if not is_popup and is_nav_sidebar_enabled %}
+        {% block nav-sidebar %}
+          {% include "admin/nav_sidebar.html" %}
+        {% endblock %}
+      {% endif %}
+      <div class="content">
+        {% block messages %}
+          {% if messages %}
+            <ul class="messagelist">{% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+            {% endfor %}</ul>
+          {% endif %}
+        {% endblock messages %}
+        <!-- Content -->
+        <div id="content" class="{% block coltype %}colM{% endblock %}">
+          {% block pretitle %}{% endblock %}
+          {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+          {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
+          {% block content %}
+            {% block object-tools %}{% endblock %}
+            {{ content }}
+          {% endblock %}
+          {% block sidebar %}{% endblock %}
+          <br class="clear">
+        </div>
+        <!-- END Content -->
+        {% block footer %}<div id="footer"></div>{% endblock %}
+      </div>
+    </div>
+    <script type="text/javascript">
+        $('input').addClass('browser-default');
+        $('select').addClass('browser-default');
+        $('input[type="checkbox"]').css({
+            'opacity': '1',
+            'position': 'relative',
+            'pointer-events': 'auto',
+        });
+        $('.btn').css('box-shadow', 'inherit');
+        $('.martor-toolbar').css('position', 'inherit');
+        $('.tab-martor-menu').css({
+           "box-shadow": "inherit",
+           "height": "auto",
+           "line-height": "1",
+           "background-color": "inherit",
+        });
+        $('.img-logo').css({
+            "vertical-align": "none",
+        });
+        $('.nav-item > .nav-link').css({
+           "line-height": "64px",
+           "padding": "0 15px",
+           "color": "white",
+        });
+        $('.dropdown-trigger').css({
+            "text-decoration": "none",
+            "line-height": "64px",
+            "color": "white",
+        });
+    </script>
+</div>
+<!-- END Container -->
+</body>
+</html>

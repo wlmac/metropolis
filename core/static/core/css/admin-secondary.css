@@ -1,0 +1,60 @@
+#main{
+  background-color: var(--bg-grey);
+  font-family: 'Roboto', sans-serif;
+}
+
+#nav-sidebar{
+  background-color: white;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.main.shifted > #nav-sidebar{
+}
+
+#header{
+  display:none !important;
+}
+
+#content{
+  margin: 20px;
+  background-color: white;
+}
+
+tr{
+  background: none !important;
+  border: none !important;
+}
+
+td, th {
+  border: none !important;
+  padding: 8px 0px !important;
+}
+
+.module {
+  margin: 0px !important;
+}
+
+.module > table > tbody > tr > th > a{
+  font-weight: 500 !important;
+  color: var(--link-blue);
+}
+
+.module > table > tbody > tr > td > a{
+  font-weight: 500 !important;
+  color: var(--mid-grey);
+}
+
+.applist-divider{
+  margin: 10px 0;
+}
+
+.btn-light{
+    width: 100%;
+    background-color: var(--light-grey);
+}
+
+.btn-light:hover, .btn-light:active {
+    background-color: var(--line-grey);
+}
