@@ -1,0 +1,71 @@
+.card-container {
+    background-color: white;
+    padding: 40px;
+    min-height: calc(100vh - 164px);
+}
+.card-image {
+    width: 100%;
+    margin-bottom: 20px;
+}
+.card-container h1 {
+    font-weight: bold;
+    margin: 0;
+    margin-top: 8px;
+    font-size: 3rem;
+}
+.card-authors {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    color: var(--line-grey);
+}
+.card-authors-image {
+    height: 32px;
+    margin-right: 10px;
+}
+.circle {
+    object-fit: cover;
+    height: 32px;
+    width: 32px;
+}
+.card-authors a {
+    color: var(--link-blue);
+    font-weight: bold;
+}
+hr {
+    margin: 20px 0 10px;
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}
+.card-body p {
+    line-height: 1.6rem;
+}
+.card-body p:first-child {
+    margin-top: 0;
+}
+.card-body p:last-child {
+    margin-bottom: 0;
+}
+.zmdi {
+    margin-left: 0.25rem;
+}
+.tag-section {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0;
+}
+.tag {
+    padding: 2px 7px !important;
+    margin: 3px 6px 3px 0px !important;
+    background-color: lightblue;
+    border-radius: 0.25rem;
+    color: var(--dark-grey);
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
+}
+.message {
+    width: 100%;
+    margin-top: 30px;
+    text-align: center;
+}
