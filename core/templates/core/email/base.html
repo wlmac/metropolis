@@ -78,7 +78,7 @@
                 <td align="center" style="padding-top:2%;padding-bottom:3%;">
                     <table role="presentation" style="width:80%;">
                         <tr>
-                            <td align="center" style="padding:0;color:#b7b7b7;"><a href="{{ settings.SITE_URL }}{{ settings.TOS_URL }}" style="font-family:Roboto,Arial,sans-serif;text-decoration:none;color:#073763;margin-right:2%;font-weight:300;font-size:0.8em">Terms and Conditions</a> | <a href="{{ settings.SITE_URL }}" style="font-family:Roboto,Arial,sans-serif;text-decoration:none;color:#073763;margin-left:2%;font-weight:300;font-size:0.8em">Visit Site</a></td>
+                            <td align="center" style="padding:0;color:#b7b7b7;"><a href="{% settings_value 'SITE_URL' %}{% settings_value 'TOS_URL' %}" style="font-family:Roboto,Arial,sans-serif;text-decoration:none;color:#073763;margin-right:2%;font-weight:300;font-size:0.8em">Terms and Conditions</a> | <a href="{% settings_value 'SITE_URL' %}" style="font-family:Roboto,Arial,sans-serif;text-decoration:none;color:#073763;margin-left:2%;font-weight:300;font-size:0.8em">Visit Site</a></td>
                         </tr>
                     </table>
                 </td>

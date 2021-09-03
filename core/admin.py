@@ -190,7 +190,6 @@ class AnnouncementAdmin(admin.ModelAdmin):
                     email_template_context = {
                         'teacher': teacher,
                         'announcement': obj,
-                        'settings': settings,
                         'review_link': settings.SITE_URL + reverse('admin:core_announcement_change', args=(obj.pk,)),
                     }
 
