@@ -108,7 +108,9 @@
     margin-right: 5px;
 }
 .circle {
+    object-fit: cover;
     height: 24px;
+    width: 24px;
 }
 .card-authors a {
     color: var(--link-blue);
@@ -118,12 +120,18 @@
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
-.card-body p {
+.card-body {
     margin: 0;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+}
+.card-body p:first-child {
+    margin-top: 0;
+}
+.card-body p:last-child {
+    margin-bottom: 0;
 }
 .expandable {
     display: flex;

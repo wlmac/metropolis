@@ -96,13 +96,6 @@
         -->
         <script>
             $(document).ready(function() {
-                $(".card-body").each(function () {
-                    if(Math.round($(this).find("p").prop("scrollHeight")) > Math.round($(this).find("p").innerHeight())) {
-                        $(this).append("<br><a class='expandable' data-expanded='false'>Expand <i class='zmdi zmdi-chevron-down'></i></a>");
-                    }
-                });
-                $(".title").find("a").addClass("link");
-                $(".card-authors-text").find("a").addClass("link");
                 var urlParams = new URLSearchParams(window.location.search);
                 $(".cards").hide();
                 if(!$("#cards-"+urlParams.get("feed")).length) {
@@ -112,6 +105,7 @@
                 $("#cards-"+urlParams.get("feed")).show(); //remove when search reimplemented
                 $(".header").removeClass("active");
                 $("#"+urlParams.get("feed")).addClass("active");
+                $(".card-authors-text").find("a").addClass("link");
                 /* to-do: search bar, DNR
                 var urlParams = new URLSearchParams(window.location.search);
                 if(urlParams.get("q")) {
@@ -124,30 +118,6 @@
                 } else {
                     $("#cards-all").show();
                 }*/
-                $(".expandable").click(function() {
-                    if($(this).data("expanded") == "true") {
-                        var lineHeight = parseFloat($(this).parent().find("p").css("line-height").replace('px',''));
-                        $(this).parent().find("p").animate({"height": lineHeight*3-2}, 200).css("display", "-webkit-box");
-                        $(this).data("expanded", "false").text("Expand");
-                        $(this).find(".material-icons").remove();
-                        $(this).append("<i class='zmdi zmdi-chevron-down'></i>");
-                    } else {
-                        $(".card-body").each(function () {
-                            if($(this).find(".expandable").data("expanded") == "true") {
-                                var lineHeight = parseFloat($(this).find("p").css("line-height").replace('px',''));
-                                $(this).find("p").animate({"height": lineHeight*3-2}, 200).removeAttr("height").css("display", "-webkit-box");
-                                $(this).find(".expandable").data("expanded", "false").text("Expand");
-                                $(this).find(".material-icons").remove()
-                                $(this).find(".expandable").append("<i class='zmdi zmdi-chevron-down'></i>");
-                            }
-                        });
-                        var scrollHeight = $(this).parent().find("p").prop("scrollHeight");
-                        $(this).parent().find("p").animate({"height": scrollHeight}, 200).removeAttr("height").css("display", "block");
-                        $(this).data("expanded", "true").text("Collapse");
-                        $(this).find(".material-icons").remove();
-                        $(this).append("<i class='zmdi zmdi-chevron-up'></i>");
-                    }
-                });
             });
         </script>
     </div>
