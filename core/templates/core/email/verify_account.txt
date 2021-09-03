@@ -6,6 +6,8 @@ Please click or copy and paste the following link to finish creating your Metrop
 
 {{ verify_link }} 
 
+If you didn't create a Metropolis account, someone may have entered your email address by accident. Feel free to ignore this message. 
+
 Sincerely, 
 Metropolis Team
 
