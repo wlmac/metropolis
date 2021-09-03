@@ -60,9 +60,16 @@
                                             {% block button %}{% endblock %}
                                         </td>
                                     </tr>
+                                    {% block help_text %}{% endblock %}
                                 </table>
                             </td>
                         </tr>
+                        <tr>
+                            <td align="center" style="padding: 0px;">
+                                <hr style="border:none;border-left: 25vw #f3f3f3 solid;border-right: 25vw #f3f3f3 solid;background-color:#b59659;height:2.5px;margin:0px 0px 4%">
+                            </td>
+                        </tr>
+                        {% block ignore_message %}{% endblock %}
                     </table>
                 </td>
             </tr>
