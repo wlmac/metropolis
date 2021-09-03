@@ -55,12 +55,15 @@
 .card-authors a {
     font-weight: bold;
 }
-.card hr {
+hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
-.card-body p {
-    margin: 0;
+.card-body p:first-child {
+    margin-top: 0;
+}
+.card-body p:last-child {
+    margin-bottom: 0;
 }
 .tag-section {
     display: flex;
