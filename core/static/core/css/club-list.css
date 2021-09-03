@@ -1,13 +1,8 @@
-body{
-    background-color: #eeeeee;
-}
-
 .red-square {
     height: 20px;
     width: 20px;
     background-color: var(--status-red);
     margin: 6px;
-    margin-left: 30px;
     border-radius: 20%;
 }
 
@@ -16,7 +11,6 @@ body{
     width: 20px;
     background-color: var(--status-green);
     margin: 6px;
-    /* margin-left: 30px; */
     border-radius: 20%;
 }
 
@@ -25,36 +19,39 @@ body{
     width: 20px;
     background-color: var(--status-yellow);
     margin: 6px;
-    margin-left: 30px;
     border-radius: 20%;
 }
 
-/* .valign-wrapper{
-    display:flex; flex-direction: row; justify-content: center; align-items: center
-} */
-
-.club-list{
-    margin-top: 1%;
+.card-container {
+    padding: 40px;
     background-color: white;
-    padding:10px !important;
+    min-height: calc(100vh - 164px);
 }
-
-.club-item{
-    background-color: #eeeeee;
-    border-radius: 2%;
-    height: 225px;
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
-
-.collection{
-    border: 1px solid var(--line-grey);
-    border-radius: 2%;
-    box-shadow: 3px 3px var(--light-grey);
+.legend-items {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+}
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+}
+.card {
+    margin: 0.5rem 0.5rem;
+    padding: 20px;
+    width: calc(50% - 1rem);
+    min-height: 275px;
 }
 
 hr {
-    height: 1px;
-    border: none;
-    background-color: var(--line-grey);
+    margin: 20px 0 10px;
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
 }
 
 .green-status{
@@ -69,14 +66,17 @@ hr {
     border-left: 5px solid var(--status-yellow);
 }
 
-.club-title{
-    font-weight: 500;
-    margin-left: 3%;
-    vertical-align: top;
-    padding-bottom: 8px;
+.title  {
+    font-weight: bold;
+    margin: 0;
+    font-size: 2rem;
+    word-break: break-all;
+}
+.title > a {
+    color: inherit
 }
 
-.club-description{
+.club-description {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -86,10 +86,24 @@ hr {
     font-weight: 400;
     color: gray;
 }
+.club-description p:first-child {
+    margin-top: 0;
+}
+.club-description p:last-child {
+    margin-bottom: 0;
+}
 
+.tag-section {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0;
+    margin-top: 10px;
+}
 .tag {
     padding: 2px 7px !important;
-    margin: 3px !important;
+    margin: 3px 6px 3px 0px !important;
     background-color: lightblue;
     border-radius: 0.25rem;
     color: var(--dark-grey);
@@ -99,11 +113,23 @@ hr {
 
 .club-logo {
     margin-left: 0px !important;
+    margin-right: 20px;
     padding: 0px !important;
     width: 100px;
     height: 100px ;
 }
+.club-logo img {
+    object-fit: cover;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+}
 
 @media screen and (max-width: 800px) {
-
+    .card {
+        width: 100%;
+        min-height: auto;
+    }
+    .tag-section {
+        position: relative;
+        bottom: 0;
+    }
 }

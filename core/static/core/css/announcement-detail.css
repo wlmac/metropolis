@@ -32,7 +32,7 @@
     padding: 40px;
     min-height: calc(100vh - 232.5px);
 }
-.card-container h1 {
+.title {
     font-weight: bold;
     margin: 0;
     margin-top: 8px;
@@ -53,6 +53,7 @@
     object-fit: cover;
     height: 32px;
     width: 32px;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
 }
 .card-authors a {
     font-weight: bold;
