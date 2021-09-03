@@ -45,7 +45,7 @@ class TermAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['color']
 
-class OrganizationURLInline(admin.TabularInline):
+class OrganizationURLInline(admin.StackedInline):
     fields = ['url']
     model = models.OrganizationURL
     extra = 0
