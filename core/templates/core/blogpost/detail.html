@@ -1,22 +1,42 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
 {% load martortags %}
+{% load gravatar_tags %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/blog-detail.css' %}">
+{% endblock %}
 
 {% block main %}
-<div class="row">
-    <div class="col s12 m7">
-        <div class="card">
-            <div class="card-image">
-                <img src="{{ blogpost.featured_image.url }}">
-                <span class="card-title">{{ blogpost.title }}</span>
+<div class="container">
+    <div class="card-container">
+        <img class="card-image" src="{{ blogpost.featured_image.url }}">
+        <div class="tag-section">
+            {% for tag in blogpost.tags.all %}
+            <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+            {% endfor %}
+        </div>
+        <h1 class="title">{{blogpost.title}}</h1>
+        <div class="card-authors">
+            <div class="card-authors-image">
+                <a href="{{blogpost.author.username|user_url}}"><img class="circle" src="{{blogpost.author.email|gravatar_url:100}}"></a>
             </div>
-            <div class="card-content">
-                <p>{{ blogpost.body|safe_markdown }}</p>
-            </div>
-            <div class="card-action">
-                <a href="{{ blogpost.slug|blogpost_url }}">This is a link</a>
+            <div class="card-authors-text">
+                {{blogpost.author.username|user}}
+                • {{blogpost.last_modified_date}}
             </div>
         </div>
+        <hr>
+        <div class="card-body">
+            {{blogpost.body|safe_markdown}}
+        </div>
+        <br>
+        <a class="link" href="{% url 'blogpost_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Blog Posts</a>
+        <script>
+            $(".card-authors-text").find("a").addClass("link");
+        </script>
     </div>
 </div>
 {% endblock %}

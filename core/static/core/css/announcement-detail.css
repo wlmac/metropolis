@@ -29,10 +29,10 @@
 }
 .card-container {
     background-color: white;
-    padding: 40px 40px;
+    padding: 40px;
     min-height: calc(100vh - 232.5px);
 }
-.card-container h1 {
+.title {
     font-weight: bold;
     margin: 0;
     margin-top: 8px;
@@ -50,17 +50,26 @@
     margin-right: 5px;
 }
 .circle {
+    object-fit: cover;
     height: 32px;
+    width: 32px;
+    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
 }
 .card-authors a {
     font-weight: bold;
 }
-.card hr {
+hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
 .card-body p {
-    margin: 0;
+    line-height: 1.6rem;
+}
+.card-body p:first-child {
+    margin-top: 0;
+}
+.card-body p:last-child {
+    margin-bottom: 0;
 }
 .tag-section {
     display: flex;

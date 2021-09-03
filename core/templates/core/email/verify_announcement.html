@@ -1,103 +1,30 @@
-{% load martortags %}
-{% load static %}
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <meta name="x-apple-disable-message-reformatting">
-        <title></title>
-        <!--[if mso]>
-            <noscript>
-            <xml>
-            <o:OfficeDocumentSettings>
-            <o:PixelsPerInch>96</o:PixelsPerInch>
-            </o:OfficeDocumentSettings>
-            </xml>
-            </noscript>
-        <![endif]-->
-        <style>
-        </style>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;500;700&display=swap" rel="stylesheet">
-    </head>
-    <body style="margin:0;padding:0;">
-        <style>
-            table{font-size: 60%;}
-            @media screen and (min-width: 500px) {
-                table{font-size: 75%;}
-            }
-            @media screen and (min-width: 700px) {
-                table{font-size: 85%;}
-            }
-            @media screen and (min-width: 900px) {
-                table{font-size: 95%;}
-            }
-        </style>
-        <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background-color:#f3f3f3;">
+{% extends './base.html' %}
+{% block recipient %}
+{{ teacher.get_full_name }},
+{% endblock %}
+{% block information %}
+<tr>
+    <td style="font-family:Roboto,Arial,sans-serif;font-weight:300;font-size:1em;line-height:1.5;letter-spacing:0.25px;color:#073763">
+        {{ announcement.author.get_full_name }} has requested approval on behalf of {{ announcement.organization.name }} for the following announcement:
+    </td>
+</tr>
+<tr>
+    <td style="padding-top:3%;padding-bottom:3%;">
+        <table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #ffffff;border-spacing:0;text-align:left;">
             <tr>
-                <td align="center" style="padding-top:3%;">
-                    <table role="presentation" style="width:80%;border-collapse:collapse;border:0;border-spacing:0;text-align:left;background-color:#ffffff;">
-                        <tr>
-                            <td align="center" style="padding:0px;padding-top:1%">
-                                <img src="{{ settings.SITE_URL }}{% static 'core/img/logo-light-transparent.png' %}" style="height: 8em"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" style="padding: 0px;">
-                                <hr style="border:none;border-left: 25vw #f3f3f3 solid;border-right: 25vw #f3f3f3 solid;background-color:#b59659;height:2.5px;margin:0px 0px 4%">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" style="padding-bottom:4%;padding-right:7%;padding-left:7%;">
-                                <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;text-align:left;">
-                                    <tr>
-                                        <td align="center" style="padding-bottom:3%;font-family:Roboto, Arial, sans-serif;font-size:2em;color:#073763;font-weight:bold">
-                                            {{ teacher.get_full_name }},
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="font-family:Roboto,Arial,sans-serif;font-weight:300;font-size:1em;line-height:1.5;letter-spacing:0.25px;color:#073763">
-                                            {{ announcement.author.get_full_name }} has requested approval on behalf of {{ announcement.organization.name }} for the following announcement:
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-top:3%;padding-bottom:3%;">
-                                            <table role="presentation" style="width:100%;border-collapse:collapse;border:1px solid #ffffff;border-spacing:0;text-align:left;">
-                                                <tr>
-                                                    <td align="center" style="padding:2%;background-color:#f2f2f2;font-family:Roboto,Arial,sans-serif;font-size:1.2em;font-weight:500;line-height:1.5;letter-spacing:0.25px;color:#0b0b0b">
-                                                        {{ announcement.title }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding:2%;background-color:#f2f2f2;border-top:3px solid #ffffff;font-family:Roboto,Arial,sans-serif;font-size:1em;font-weight:300;line-height:1.5;letter-spacing:0.25px;color:#0b0b0b">
-                                                        {{ announcement.body|safe_markdown }}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="center" style="background-color:#b59659;height:100%;width:100%">
-                                            <a href="{{ review_link }}" style="display:block;width:100%;height:100%;padding:2% 0%;background:#b59659;color:#ffffff;font-family:Roboto,Arial,sans-serif;font-weight:500;text-decoration:none;font-size:1em;line-height:1.5;letter-spacing:0.25px" target="_blank">Review</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
+                <td align="center" style="padding:2%;background-color:#f2f2f2;font-family:Roboto,Arial,sans-serif;font-size:1.2em;font-weight:500;line-height:1.5;letter-spacing:0.25px;color:#0b0b0b">
+                    {{ announcement.title }}
                 </td>
             </tr>
             <tr>
-                <td align="center" style="padding-top:2%;padding-bottom:3%;">
-                    <table role="presentation" style="width:80%;">
-                        <tr>
-                            <td align="center" style="padding:0;color:#b7b7b7;"><a href="{{ settings.SITE_URL }}{{ settings.TOS_URL }}" style="font-family:Roboto,Arial,sans-serif;text-decoration:none;color:#073763;margin-right:2%;font-weight:300;font-size:0.8em">Terms and Conditions</a> | <a href="{{ settings.SITE_URL }}" style="font-family:Roboto,Arial,sans-serif;text-decoration:none;color:#073763;margin-left:2%;font-weight:300;font-size:0.8em">Visit Site</a></td>
-                        </tr>
-                    </table>
+                <td style="padding:2%;background-color:#f2f2f2;border-top:3px solid #ffffff;font-family:Roboto,Arial,sans-serif;font-size:1em;font-weight:300;line-height:1.5;letter-spacing:0.25px;color:#0b0b0b">
+                    {{ announcement.body }}
                 </td>
             </tr>
         </table>
-    </body>
-</html>
+    </td>
+</tr>
+{% endblock %}
+{% block button %}
+<a href="{{ review_link }}" style="display:block;width:100%;height:100%;padding:2% 0%;background:#b59659;color:#ffffff;font-family:Roboto,Arial,sans-serif;font-weight:500;text-decoration:none;font-size:1em;line-height:1.5;letter-spacing:0.25px" target="_blank">Review</a>
+{% endblock %}

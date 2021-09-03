@@ -1,3 +1,5 @@
+{% load settings_tags %}
+
 Dear {{ teacher.get_full_name }},
 
 {{ announcement.author.get_full_name }} has requested an approval for an announcement for {{ announcement.organization }}.
@@ -17,4 +19,4 @@ Please click or copy paste the following link to review this announcement.
 Sincerely,
 Metropolis Team
 
-This email is automated. Please send us an email at {{ settings.DEFAULT_FROM_EMAIL }} for any concerns.
+This email is automated. Please send us an email at {% settings_value 'DEFAULT_FROM_EMAIL' %} for any concerns.
