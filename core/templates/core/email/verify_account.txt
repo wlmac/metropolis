@@ -1,0 +1,12 @@
+Dear {{ user.get_full_name }},
+
+You're nearly finished registration! 
+
+Please click or copy and paste the following link to finish creating your Metropolis account. 
+
+{{ verify_link }} 
+
+Sincerely, 
+Metropolis Team
+
+This email is automated. Please send us at email at {{settings.DEFAULT_FROM_EMAIL }} for any concerns. 
