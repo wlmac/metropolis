@@ -306,6 +306,7 @@ TAG_COLOR_VALUE = 1.0
 
 # Martor settings
 
+MARTOR_THEME = 'bootstrap'
 MARTOR_MARKDOWN_BASE_MENTION_URL = '/user/'
 MARTOR_UPLOAD_URL = '/api/martor/upload-image'
 MARTOR_UPLOAD_MEDIA_DIR = 'martor'
