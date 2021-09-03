@@ -7,7 +7,7 @@
         <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
         {% endfor %}
     </div>
-    <h1 class="title">{{announcement.pk|announcement}}</h1>
+    <h1 class="title">{{announcement.title}}</h1>
     <div class="card-authors">
         <div class="card-authors-image">
             <a href="{{announcement.organization.slug|organization_url}}"><img class="circle" src="{{announcement.organization.icon.url}}"></a>
@@ -22,4 +22,6 @@
     <div class="card-body">
         {{announcement.body|safe_markdown}}
     </div>
+    <br>
+    <a class="link" href="{{announcement.pk|announcement_url}}">See Announcement <i class='zmdi zmdi-chevron-right'></i></a>
 </div>
