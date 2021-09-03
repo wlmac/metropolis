@@ -17,7 +17,6 @@
 .card-headers {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
 }
 .card-image {
     object-fit: cover;
@@ -33,16 +32,19 @@
 }
 .card-authors-image {
     height: 24px;
-    margin-right: 5px;
+    margin-right: 10px;
 }
 .circle {
+    object-fit: cover;
     height: 24px;
+    width: 24px;
 }
 .card-authors a {
     color: var(--link-blue);
     font-weight: bold;
 }
-.card hr {
+hr {
+    margin: 20px 0 10px;
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }

@@ -29,7 +29,7 @@
 }
 .card-container {
     background-color: white;
-    padding: 40px 40px;
+    padding: 40px;
     min-height: calc(100vh - 232.5px);
 }
 .card-container h1 {
@@ -50,7 +50,9 @@
     margin-right: 5px;
 }
 .circle {
+    object-fit: cover;
     height: 32px;
+    width: 32px;
 }
 .card-authors a {
     font-weight: bold;
@@ -58,6 +60,9 @@
 hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
+}
+.card-body p {
+    line-height: 1.6rem;
 }
 .card-body p:first-child {
     margin-top: 0;
