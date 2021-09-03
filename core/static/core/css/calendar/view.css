@@ -1,11 +1,10 @@
 #inlineContainer {
-    padding: 10px 10%;
-    background-color: var(--bg-grey);
+    background-color: white;
+    padding: 25px;
+    min-height: calc(100vh - 164px);
 }
-
 #calendar {
     margin-bottom: 50px;
-    background-color: white;
     padding: 3%;
 }
 
@@ -60,12 +59,14 @@
 }
 
 #details {
-    background-color: var(--light-grey);
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 1%;
+    padding: 0 5%;
 }
 
+hr {
+    margin: 20px 0 10px;
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}
 .dayEvent .intermediate_to {
     color: var(--mid-grey);
 }
