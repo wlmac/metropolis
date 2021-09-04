@@ -24,6 +24,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('martor/', include('martor.urls')),
     path("select2/", include("django_select2.urls")),
+    path('', include('pwa.urls')),
     path('/<path:url>', include('django.contrib.flatpages.urls')),
 ]
 

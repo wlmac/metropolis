@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'martor',
     'django_select2',
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -324,6 +325,26 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 # Select2 settings
 
 SELECT2_CACHE_BACKEND = "default"
+
+# PWA settings
+
+PWA_APP_NAME = 'Metropolis'
+PWA_APP_DESCRIPTION = "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
+PWA_APP_THEME_COLOR = '#073763'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_ICONS = [
+    {
+        'src': '/static/core/img/logo/logo-160.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_LANG = 'en-CA'
+PWA_APP_DEBUG_MODE = False
 
 # Misc settings
 
