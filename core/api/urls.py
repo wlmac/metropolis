@@ -17,6 +17,7 @@ urlpatterns = [
     path('timetables', TimetableList.as_view(), name='api_timetable_list'),
     path('timetable/<int:pk>/today', TimetableToday.as_view(), name='api_timetable_today'),
     path('timetable/<int:pk>', TimetableDetails.as_view(), name='api_timetable_detail'),
+    path('timetable/<int:pk>/date', TimetableDate.as_view(), name='api_timetable_date'),
     path('martor/upload-image', MartorImageUpload.as_view(), name='api_martor_image_upload'),
     path('version', APIVersion.as_view(), name='api_version'),
 ]

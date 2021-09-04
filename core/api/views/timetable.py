@@ -67,6 +67,57 @@ class TimetableToday(APIView):
         return Response(response)
 
 
+class TimetableDate(APIView):
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        timetable = get_object_or_404(models.Timetable, pk=pk)
+
+        if request.user != timetable.owner:
+            return Response({}, status=status.HTTP_403_FORBIDDEN)
+        if request.query_params.get('date') == None:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        date = request.query_params.get('date')
+        try:
+            date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+        except ValueError:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+        timetable_format = timetable.term.timetable_format
+        timetable_config = TIMETABLE_FORMATS[timetable_format]
+        day = timetable.term.day(target_date=date)
+        courses = {}
+        for i in timetable.courses.all():
+            courses[i.position] = i
+
+        response = {
+            'timetable': serializers.TimetableSerializer(timetable).data,
+            'schedule': []
+        }
+
+        if day is None:
+            response['schedule'] = None
+            return Response(response)
+
+        for i in timetable_config['schedules'][timetable.term.day_schedule(target_date=date)]:
+            course = i['position'][day-1].intersection(set(courses.keys())).pop()
+
+            start_time = timezone.make_aware(datetime.datetime.combine(date, datetime.time(*i['time'][0], 0)))
+            end_time = timezone.make_aware(datetime.datetime.combine(date, datetime.time(*i['time'][1], 0)))
+
+            response['schedule'].append({
+                'description': i['description'],
+                'time': {
+                    'start': start_time,
+                    'end': end_time,
+                },
+                'course': courses[course].code,
+            })
+
+        return Response(response)
+
+
 class TimetableDetails(generics.RetrieveAPIView):
     permission_classes = [IsOwner]
     queryset = models.Timetable.objects.all()
