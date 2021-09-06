@@ -279,13 +279,12 @@ NAVBAR = {
 ANNOUNCEMENTS_CUSTOM_FEEDS = [
 ]
 
-
 # API settings
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ],
 }
 
 # CORS settings
@@ -360,7 +359,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 SILENCED_SYSTEM_CHECKS = ['urls.W002']
 
-API_VERSION = "0.3.0"
+API_VERSION = "0.4.0"
 
 try:
     from metropolis.config import *

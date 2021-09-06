@@ -1,4 +1,5 @@
 from .. import serializers
+from .. import utils
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from ... import models
@@ -33,46 +34,9 @@ class TimetableSchedule(APIView):
         if request.user != timetable.owner:
             return Response({}, status=status.HTTP_403_FORBIDDEN)
 
-        if request.query_params.get('date') == None:
-            date = timezone.localdate()
-        else:
-            try:
-                date = datetime.datetime.strptime(request.query_params.get('date'), '%Y-%m-%d').date()
-            except ValueError:
-                return Response({}, status=status.HTTP_400_BAD_REQUEST)
+        date = utils.parse_date_query_param(request)
 
-        timetable_format = timetable.term.timetable_format
-        timetable_config = TIMETABLE_FORMATS[timetable_format]
-        day = timetable.term.day(target_date=date)
-        courses = {}
-        for i in timetable.courses.all():
-            courses[i.position] = i
-
-        response = {
-            'timetable': serializers.TimetableSerializer(timetable).data,
-            'schedule': []
-        }
-
-        if day is None:
-            response['schedule'] = None
-            return Response(response)
-
-        for i in timetable_config['schedules'][timetable.term.day_schedule(target_date=date)]:
-            course = i['position'][day-1].intersection(set(courses.keys())).pop()
-
-            start_time = timezone.make_aware(datetime.datetime.combine(date, datetime.time(*i['time'][0], 0)))
-            end_time = timezone.make_aware(datetime.datetime.combine(date, datetime.time(*i['time'][1], 0)))
-
-            response['schedule'].append({
-                'description': i['description'],
-                'time': {
-                    'start': start_time,
-                    'end': end_time,
-                },
-                'course': courses[course].code,
-            })
-
-        return Response(response)
+        return Response(timetable.day_schedule(target_date=date))
 
 
 class TimetableDetails(generics.RetrieveAPIView):

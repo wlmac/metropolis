@@ -3,6 +3,7 @@ from django.urls import reverse
 from metropolis import settings
 from django.utils import timezone
 import datetime
+from metropolis import settings
 
 # Create your models here.
 
@@ -27,7 +28,7 @@ class Term(models.Model):
     def is_ongoing(self, target_date=None):
         if target_date == None:
             target_date = timezone.localdate()
-        return target_date >= self.start_datetime() and target_date < self.end_datetime()
+        return target_date >= self.start_date and target_date < self.end_date
 
     def day_is_instructional(self, target_date=None):
         if target_date == None:
@@ -36,7 +37,7 @@ class Term(models.Model):
 
         return target_date.weekday() < 5 and not self.events.filter(is_instructional=False, start_date__lte=target_date, end_date__gte=target_date).exists()
 
-    def day(self, target_date=None):
+    def day_num(self, target_date=None):
         cycle_duration = settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['duration']
 
         if target_date == None:
@@ -46,7 +47,7 @@ class Term(models.Model):
         cur_iter_day = self.start_datetime().replace(hour=11, minute=0, second=0)
         cycle_day_type_set = set()
 
-        if not self.is_ongoing(target_date) or not self.day_is_instructional(target_date):
+        if not self.is_ongoing(target_date.date()) or not self.day_is_instructional(target_date):
             return None
 
         while cur_iter_day <= target_date:
@@ -61,7 +62,7 @@ class Term(models.Model):
 
         return (len(cycle_day_type_set) - 1) % settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['length'] + 1
 
-    def day_schedule(self, target_date=None):
+    def day_schedule_format(self, target_date=None):
         if target_date == None:
             target_date = timezone.localdate()
         target_date = timezone.make_aware(datetime.datetime.combine(target_date, datetime.time(hour=11, minute=0, second=0)))
@@ -73,6 +74,33 @@ class Term(models.Model):
             if schedule_format in schedule_format_set: return schedule_format
 
         return 'default'
+
+    def day_schedule(self, target_date=None):
+        if target_date == None:
+            target_date = timezone.localdate()
+
+        timetable_config = settings.TIMETABLE_FORMATS[self.timetable_format]
+        day_num = self.day_num(target_date=target_date)
+
+        if day_num is None:
+            return []
+
+        result = []
+
+        for i in timetable_config['schedules'][self.day_schedule_format(target_date=target_date)]:
+            start_time = timezone.make_aware(datetime.datetime.combine(target_date, datetime.time(*i['time'][0])))
+            end_time = timezone.make_aware(datetime.datetime.combine(target_date, datetime.time(*i['time'][1])))
+
+            result.append({
+                'description': i['description'],
+                'time': {
+                    'start': start_time,
+                    'end': end_time,
+                },
+                'courses': i['position'][day_num-1],
+            })
+
+        return result
 
 class Course(models.Model):
     code = models.CharField(max_length=16)
@@ -107,6 +135,5 @@ class Event(models.Model):
         return self.name
 
     def is_ongoing(self):
-        today = timezone.localdate()
-        if today >= self.start_date and today < self.end_date: return True
-        else: return False
+        today = timezone.localtime()
+        return today >= self.start_date and today < self.end_date
