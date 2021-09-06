@@ -163,3 +163,55 @@ input {
 label {
     color: var(--mid-grey) !important;
 }
+
+.install-popup{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+}
+
+.install-popup > *{
+    display: block;
+}
+
+.install-popup > img{
+    display: block;
+    height: 64px;
+    margin: none;
+    width: auto;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px 3px #ddddddaa;
+}
+
+.install-popup > span{
+    margin: 0px 15px;
+    font-size: 16px;
+}
+
+.install-popup > div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.install-popup > div > .btn{
+    width: auto;
+    border-radius: 25px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+
+.install-popup > div > a:not(.btn){
+    color: var(--line-grey);
+    font-size: 12px;
+}
+
+.install-popup > div > a:not(.btn):hover{
+    color: var(--mid-grey);
+    transition: color 0.1s linear;
+    cursor: pointer;
+}
