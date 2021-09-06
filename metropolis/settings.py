@@ -330,7 +330,7 @@ SELECT2_CACHE_BACKEND = "default"
 PWA_APP_NAME = 'Metropolis'
 PWA_APP_DESCRIPTION = "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
 PWA_APP_THEME_COLOR = '#073763'
-PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_BACKGROUND_COLOR = '#171c3d'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
 PWA_APP_ORIENTATION = 'any'
@@ -338,9 +338,35 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_APP_ICONS = [
     {
-        'src': '/static/core/img/logo/logo-160.png',
-        'sizes': '160x160'
-    }
+        'src': '/static/core/img/logo/logo-96.png',
+        'sizes': '96x96',
+        'type': 'image/png',
+        'purpose': 'any maskable',
+    },
+    {
+        'src': '/static/core/img/logo/logo-144.png',
+        'sizes': '144x144',
+        'type': 'image/png',
+        'purpose': 'any maskable',
+    },
+    {
+        'src': '/static/core/img/logo/logo-192.png',
+        'sizes': '192x192',
+        'type': 'image/png',
+        'purpose': 'any maskable',
+    },
+    {
+        'src': '/static/core/img/logo/logo-512.png',
+        'sizes': '512x512',
+        'type': 'image/png',
+        'purpose': 'any maskable',
+    },
+    {
+        'src': '/static/core/img/logo/logo-978.png',
+        'sizes': '978x978',
+        'type': 'image/png',
+        'purpose': 'any maskable',
+    },
 ]
 PWA_APP_LANG = 'en-CA'
 PWA_APP_DEBUG_MODE = False
