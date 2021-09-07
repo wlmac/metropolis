@@ -142,6 +142,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Auth settings
 
@@ -323,7 +326,9 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 
 # Select2 settings
 
-SELECT2_CACHE_BACKEND = "default"
+SELECT2_CACHE_BACKEND = 'default'
+SELECT2_JS = 'js/select2.min.js'
+SELECT2_CSS = 'css/select2.min.css'
 
 # PWA settings
 

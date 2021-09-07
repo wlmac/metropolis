@@ -4,7 +4,18 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE).then(cache => {
             return cache.addAll([
-                '/offline/'
+                '/offline/',
+                '/static/css/materialize.min.css',
+                '/static/css/material-design-iconic-font.min.css',
+                '/static/css/fullcalendar.min.css',
+                '/static/css/select2.min.css',
+                '/static/js/materialize.min.js',
+                '/static/js/jquery-3.6.0.min.js',
+                '/static/js/fullcalendar.min.js',
+                '/static/js/select2.min.js',
+                '/static/core/img/logo-light-transparent.png',
+                '/static/core/img/logo-dark-transparent.png',
+                '/static/fonts/Material-Design-Iconic-Font.woff2',
             ]);
         })
     );
