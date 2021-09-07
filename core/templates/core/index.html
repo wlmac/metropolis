@@ -3,22 +3,76 @@
 {% load timetable_tags %}
 
 {% block main %}
-{% if request.user.is_anonymous %}
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Welcome to Metropolis</h5>
-        <p class="card-text">Please register or log in to use the app.</p>
-    </div>
-</div>
-{% else %}
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Dashboard</h5>
-        <p class="font-italic">WIP</p>
-    </div>
-</div>
-{% endif %}
+    {% if request.user.is_anonymous %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Welcome to Metropolis</h5>
+                <p class="card-text">Please register or log in to use the app.</p>
+            </div>
+        </div>
+    {% else %}
+        <div id="content-container">
+            <div id="top-container">
+                <div id="banner"></div>
+                <div id="next-class" class="center-align">
+                    <h4>CLASS</h4><br>
+                    <span>starting in x minutes</span>
+                </div>
+                <div id="seperator"></div>
+            </div>
+            <div id="main-container">
+                <div class="blog row">
+                    <!-- sample blog -->
+                    <div class="blog-content col valign-wrapper">
+                        <div class="blog-content-container">
+                            <h4>{{ blogpost.title }}</h4>
+                            <p>{{ blogpost.body }}</p>
+                        </div>
+                    </div>
+                    <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
+                </div>
+                <div id="recent-events" class="card-list center-align">
+                    <div class="cards-container">
+                        {% for event in events %}
+                            <div class="event-card row card {% if forloop.counter == 3 %} hide-on-med-and-down {% endif %}">
+                                <div class="event-time col right-align valign-wrapper"
+                                     style="background-color: {{ event.tags.first.color }}">
+                                    <div class="time-container">
+                                        <span class="time">{{ event.start_date.time }}</span><br>
+                                        <span class="intermediate">to</span><br>
+                                        <span class="time">{{ event.end_date.time }}</span>
+                                    </div>
+                                </div>
+                                <div class="event-description col left-align">
+                                    <h5 class="title truncate">{{ event.name }}</h5>
+                                    <hr>
+                                    <p class="event-organization">{{ event.organization.name }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="full-content-page" href="{% url 'calendar' %}">View all events</a>
+                </div>
+                <hr>
+                <div id="recent-announcements" class="center-align">
+                    <div id="announcements" class="cards-container left-align">
+                        {% for announcement in announcements %}
+                            <div class="announcement-card card {% if forloop.counter == 3 %} hide-on-med-and-down {% endif %}"
+                                 style="border-color: {{ announcement.tags.first.color }}">
+                                <h5 class="title truncate">{{ announcement.title }}</h5>
+                                <span class="announcement-organization">{{ announcement.organization.name }}</span>
+                                <hr>
+                                <p class="announcement-description">{{ announcement.body }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="full-content-page" href="{% url 'announcement_list' %}">View all announcements</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block deps %}
+    <link rel="stylesheet" href="{% static 'core/css/index.css' %}" type="text/css">
 {% endblock %}
