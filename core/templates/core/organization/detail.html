@@ -27,7 +27,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col m4 s12 offset-m2">
+            <div class="col m4 s12">
                 {% if user.is_authenticated and organization.is_open %}
                 <form method="POST" class="member-button">
                     {% csrf_token %}
