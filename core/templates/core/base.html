@@ -44,7 +44,7 @@
     {% for heading, items in navbar.items %}
     {% if items|gettype == 'str' %}
     <li >
-        <a href="{{ items }}">{{ heading }}</a>
+        <a href="{{ items }}" class="sidenav-close">{{ heading }}</a>
     </li>
     {% elif items|gettype == 'dict' %}
     <li class="divider"></li>
