@@ -13,6 +13,7 @@ self.addEventListener('install', event => {
                 '/static/js/jquery-3.6.0.min.js',
                 '/static/js/fullcalendar.min.js',
                 '/static/js/select2.min.js',
+                '/static/js/quicklink.umd.js',
                 '/static/core/img/logo-light-transparent.png',
                 '/static/core/img/logo-dark-transparent.png',
                 '/static/fonts/Material-Design-Iconic-Font.woff2',
