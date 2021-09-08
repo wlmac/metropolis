@@ -2,7 +2,7 @@
 {% load link_tags %}
 {% load static %}
 
-{% block deps %}
+{% block head %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
 <link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
 {% endblock %}
@@ -14,10 +14,8 @@
     </div>
     <div class="container">
         <div class="row club-header">
-            <div class="col m3 s12 club-logo-out">
-                <div class="club-logo">
-                    <img class="circle" src="{{ organization.icon.url }}">
-                </div>
+            <div class="col m3 s12 club-logo">
+                <img class="responsive-img circle" src="{{ organization.icon.url }}">
             </div>
             <div class="col m5 s12">
                 <h2 class="club-name">{{ organization.name }}</h2>
@@ -27,8 +25,8 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col m4 s12 offset-m2">
-                {% if user.is_authenticated and organization.is_open %}
+            {% if user.is_authenticated and organization.is_open %}
+            <div class="col m4 s12">
                 <form method="POST" class="member-button">
                     {% csrf_token %}
                     {% if organization not in request.user.organizations.all %}
@@ -37,8 +35,8 @@
                     <button type="submit" class="btn leave">- Leave</button>
                     {% endif %}
                 </form>
-                {% endif %}
             </div>
+            {% endif %}
         </div>
         <div class="row club-info">
             <div class="col m8">
