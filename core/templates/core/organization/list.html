@@ -3,7 +3,7 @@
 {% load martortags %}
 {% load static %}
 
-{% block head %}
+{% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/club-list.css' %}">
     <!-- <link rel="stylesheet" href="{% static 'core/css/detail.css' %}"> -->
@@ -32,7 +32,7 @@
                 <div class="valign-wrapper">
                     <div class="club-logo">
                         {% if organization.icon %}
-                            <img class="circle" style="height: 100px; width: 100px;" src="{{ organization.icon.url }}">
+                            <img class="circle" src="{{ organization.icon.url }}">
                         {% else %}
                             <img class="circle" src="https://via.placeholder.com/100">
                         {% endif %}

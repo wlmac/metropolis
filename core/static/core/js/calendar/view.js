@@ -2,6 +2,7 @@ let calendarElement;
 let calendar;
 let selectedNumberColor = "var(--dark-blue)"
 let selectedDate = null
+let maxAspectRatio = 1.7
 
 // constants; should be gotten from database but sadge no database so frick
 let events = [];
@@ -20,13 +21,19 @@ $(document).ready(function () {
                 // format each day when it loads
                 dayCellDidMount: function (dayRenderInfo) {
                     reformatDay(dayRenderInfo.el)
-                }
+                },
+                aspectRatio: maxAspectRatio
             }
         },
         // select the current date whenever we change views
         viewDidMount: function () {
             calendar.select(new Date().setHours(0, 0, 0, 0))
+            if(maxAspectRatio * $(calendarElement).innerHeight() < $(calendarElement).innerWidth()){
+                calendar.setOption("height", null)
+                calendar.updateSize()
+            }
         },
+        selectable: true,
         selectAllow: function (selectInfo) {
             // only allow select to select one day
             if (selectInfo.end.getTime() - selectInfo.start.getTime() <= (24 * 60 * 60 * 1000)) {
@@ -41,9 +48,11 @@ $(document).ready(function () {
 
             // place the cards at the bottom
             placeCards(eventsToday, selectedDate)
+            highlightSelectedNumber()
         },
         unselect: function () {
             selectedDate = null
+            highlightSelectedNumber()
         },
         events: function (fetchInfo, successCallback, failureCallback) {
             // get events via url
@@ -60,15 +69,13 @@ $(document).ready(function () {
                 }
             })
         },
-        selectable: true,
-        aspectRatio: 1.6,
+        height: "auto",
+        selectLongPressDelay: 300,
         initialView: "dayGridMonth"
     });
+    // if the screen is too wide, the calendar kinda "stretches" so we need to reset the aspect ratio
 
-    // highlight the selected number whenever we click anywhere
-    document.addEventListener("click", function () {
-        highlightSelectedNumber()
-    })
+
     // start off by selecting today
     calendar.select(new Date())
     calendar.render()
@@ -114,15 +121,17 @@ function highlightSelectedNumber() {
         if (selectedDate !== null) {
             // get the selected element
             let selectedEl = $("[data-date='" + selectedDate.toISOString().split("T")[0] + "']")[0]
-            let topEl = selectedEl.querySelector(".fc-daygrid-day-top")
-            if (topEl.children.length !== 1 || !topEl.children[0].classList.contains(".fc-daygrid-day-number-circle")) {
-                // something weird is going on so we must fix it
-                reformatDay(selectedEl)
-            }
+            if (selectedEl != null) {
+                let topEl = selectedEl.querySelector(".fc-daygrid-day-top")
+                if (topEl.children.length !== 1 || !topEl.children[0].classList.contains(".fc-daygrid-day-number-circle")) {
+                    // something weird is going on so we must fix it
+                    reformatDay(selectedEl)
+                }
 
-            // change the background color of the circle
-            $(topEl.querySelector(".fc-daygrid-day-number-circle")).css("backgroundColor", selectedNumberColor)
-            $(topEl.querySelector(".fc-daygrid-day-number")).css("color", "white")
+                // change the background color of the circle
+                $(topEl.querySelector(".fc-daygrid-day-number-circle")).css("backgroundColor", selectedNumberColor)
+                $(topEl.querySelector(".fc-daygrid-day-number")).css("color", "white")
+            }
         }
     }
 }
