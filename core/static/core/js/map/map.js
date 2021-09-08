@@ -9,7 +9,7 @@ const map = new mapboxgl.Map({
 map.on("load", () => {
   map.addSource("floorOne", {
     type: "image",
-    url: "https://cdn.discordapp.com/attachments/882012007438626867/883199202774122506/floor1_v1.1.png",
+    url: "../static/core/img/FloorOne.png",
     coordinates: [
       [-79.462739, 43.754109], //TL
       [-79.46076, 43.754109], //TR
@@ -20,7 +20,7 @@ map.on("load", () => {
 
   map.addSource("floorTwo", {
     type: "image",
-    url: "https://cdn.discordapp.com/attachments/756619189158150145/883382366062665748/floor1_v1.1_1.png",
+    url: "../static/core/img/FloorTwo.png",
     coordinates: [
       [-79.462559, 43.754059], //TL
       [-79.46067, 43.75406], //TR
