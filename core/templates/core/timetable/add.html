@@ -1,13 +1,10 @@
-{% extends 'admin/base.html' %}
+{% extends 'core/secondary.html' %}
 {% load static %}
+{% load timetable_tags %}
+{% load admin_urls %}
 
-{% block main %}
-<<<<<<< HEAD
+{% block content %}
     <div class="white-bg">
-=======
-<div class="container">
-    <div id="content-container">
->>>>>>> aa4fd7a897d8b3db4b39b4ed9a9c332602078300
         <div class="card-body">
             <form method="post">
                 <h5 class="card-title"><strong>Add timetable</strong></h5>
@@ -26,9 +23,8 @@
 </div>
 {% endblock %}
 
-{% block deps %}
+{% block hd %}
     <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}"/>
-<<<<<<< HEAD
     <link rel="stylesheet" href="{% static 'core/css/timetable/edit.css' %}"/>
     <script>
         $(function(){
@@ -37,9 +33,6 @@
             })
         })
     </script>
-=======
-    <link rel="stylesheet" href="{% static 'core/css/timetable/add.css' %}"/>
     {{ form.media.css }}
->>>>>>> aa4fd7a897d8b3db4b39b4ed9a9c332602078300
     {{ form.media.js }}
 {% endblock %}

@@ -5,10 +5,6 @@
 
 {% block content %}
     <div class="white-bg">
-<!-- 
-
-<div class="container">
-    <div id="content-container"> -->
         {% for timetable in timetables %}
             <details class="mb-3">
                 <summary class="card-top" onclick="$('#card-body-{{ forloop.counter }}').toggle(100)">
