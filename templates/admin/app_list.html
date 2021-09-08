@@ -2,7 +2,7 @@
 
 {% if app_list %}
   
-  {% if user.is_superuser %}
+  <!-- {% if user.is_superuser %} -->
    <div class="module">
       <table>
         <tbody><tr>
@@ -24,25 +24,25 @@
         </tr></tbody>
       </table>
   </div>
-  {% endif %}
+  <!-- {% endif %} -->
 
   
 
   {% for app in app_list %}
 
-    {% if user.is_superuser %}
+    <!-- {% if user.is_superuser %} -->
       <hr class="applist-divider">
-    {% endif %}
+    <!-- {% endif %} -->
 
     <div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
       <table>
-        {% if not user.is_superuser %}
+        <!-- {% if not user.is_superuser %} -->
         <caption>
           <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
         </caption>
         <hr class="applist-divider">
 
-        {% endif %}
+        <!-- {% endif %} -->
 
         {% for model in app.models %}
           <tr class="model-{{ model.object_name|lower }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}">
@@ -53,11 +53,11 @@
             {% endif %}
 
             {% if model.add_url %}
-              {% if user.is_superuser %}
+              <!-- {% if user.is_superuser %} -->
               <td><a href="{{ model.add_url }}"><i class="zmdi zmdi-plus zmdi-hc-lg" aria="Add a new {{ model.name }}"></i></a></td>
-              {% else %}
+<!--               {% else %}
               <td><a href="{{ model.add_url }}" class="addlink">{% translate 'Add' %}</a></td>
-              {% endif %}
+              {% endif %} -->
             {% else %}
               <td></td>
             {% endif %}
