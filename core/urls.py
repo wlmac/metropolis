@@ -1,4 +1,3 @@
-from core.views.map import MapView
 from django.urls import include, path
 
 from . import views
@@ -20,6 +19,6 @@ urlpatterns = [
     path('blog', views.BlogPostList.as_view(), name='blogpost_list'),
     path('blog/<str:slug>', views.BlogPostDetail.as_view(), name='blogpost_detail'),
     path('calendar', views.CalendarView.as_view(), name="calendar"),
+    path('map', views.MapView.as_view(), name="map"),
     path('teapot', views.Teapot.as_view(), name="teapot"),
-    path('map/', MapView.as_view(), name="map"),
 ]

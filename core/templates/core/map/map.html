@@ -1,44 +1,30 @@
 {% extends 'core/base.html' %} 
 {% load static %} 
+
 {% block deps %}
 <link rel="stylesheet" href="{% static 'core/css/map.css' %}" />
-<meta
-  name="viewport"
-  content="initial-scale=1,maximum-scale=1,user-scalable=no"
-/>
-<!-- Compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-<!-- Compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<link
-  href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css"
-  rel="stylesheet"
-/>
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
 
+{{ mapbox_apikey|json_script:"mapbox-apikey" }}
 {% endblock %} 
 
 {% block main %}
-
-
-  <div class="map-container">
+<div class="map-container">
     <div class="switch-container">
-      <div class="switch" id="floor">
-        <label style="font-size: 1rem;">
-          Floor One
-          <input type="checkbox" name="checkbox" id="checkbox">
-          <span class="lever"></span>
-          Floor Two
-        </label>
-      </div>
+        <div class="switch" id="floor">
+            <label style="font-size: 1rem;">
+                Floor One
+                <input type="checkbox" name="checkbox" id="checkbox">
+                <span class="lever"></span>
+                Floor Two
+            </label>
+        </div>
     </div>
-    <div class="map" id="map"> </div>
-  </div>
-  
+    <div class="map" id="map"></div>
+</div>
 
 <script src="{% static 'core/js/map/map.js' %}"></script>
-
 {% endblock %}

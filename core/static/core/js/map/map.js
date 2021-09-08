@@ -1,5 +1,4 @@
-mapboxgl.accessToken =
-  "pk.eyJ1IjoibmlraXN1IiwiYSI6ImNrc3A3c2FieTAwM3kybnA3anNjY2c3MXMifQ.T_8vAyTc4PMuGUC23vIOhA";
+mapboxgl.accessToken = JSON.parse(document.getElementById("mapbox-apikey").textContent)["apikey"];
 const map = new mapboxgl.Map({
   container: "map", // container ID
   style: "mapbox://styles/mapbox/streets-v11", // style URL
@@ -10,7 +9,7 @@ const map = new mapboxgl.Map({
 map.on("load", () => {
   map.addSource("floorOne", {
     type: "image",
-    url: "../static/core/img/FloorOne.png",
+    url: "https://cdn.discordapp.com/attachments/882012007438626867/883199202774122506/floor1_v1.1.png",
     coordinates: [
       [-79.462739, 43.754109], //TL
       [-79.46076, 43.754109], //TR
@@ -21,7 +20,7 @@ map.on("load", () => {
 
   map.addSource("floorTwo", {
     type: "image",
-    url: "../static/core/img/FloorTwo.png",
+    url: "https://cdn.discordapp.com/attachments/756619189158150145/883382366062665748/floor1_v1.1_1.png",
     coordinates: [
       [-79.462559, 43.754059], //TL
       [-79.46067, 43.75406], //TR
