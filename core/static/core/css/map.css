@@ -1,0 +1,28 @@
+.map-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2vw,5vw,5vw,5vw;
+}
+
+
+.map { 
+    width: 80%; 
+    height: 80vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3vw; 
+}
+
+.switch>label{
+  font-size: 1.4rem !important;
+  font-family: "Poppins", sans-serif !important;
+  color: #073763 !important; 
+}
