@@ -3,10 +3,10 @@
 
 {% block deps %}
 <link rel="stylesheet" href="{% static 'core/css/map.css' %}" />
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet"/>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
-<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/mapbox-gl.css' %}" />
+<link rel="stylesheet" href="{% static 'css/mapbox-gl-geocoder.css' %}" />
+<script src="{% static 'js/mapbox-gl.js' %}"></script>
+<script src="{% static 'js/mapbox-gl-geocoder.min.js' %}"></script>
 
 {{ mapbox_apikey|json_script:"mapbox-apikey" }}
 {% endblock %} 
