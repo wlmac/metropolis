@@ -24,6 +24,7 @@
 
 .card-container {
     padding: 40px;
+    padding-bottom: 20px;
     background-color: white;
     min-height: calc(100vh - 164px);
 }
@@ -42,12 +43,18 @@
     flex-wrap: wrap;
 }
 .card {
-    margin: 0.5rem 0.5rem;
+    margin: 0;
+    margin-bottom: 1.4rem;
     padding: 20px;
     width: calc(50% - 1rem);
     min-height: 275px;
 }
-
+.card:nth-child(odd) {
+    margin-right: 0.7rem;
+}
+.card:nth-child(even) {
+    margin-left: 0.7rem;
+}
 hr {
     margin: 20px 0 10px;
     border: 0px solid var(--light-grey);
@@ -94,8 +101,8 @@ hr {
 }
 
 .tag-section {
-    position: absolute;
-    bottom: 20px;
+    position: relative;
+    bottom: 0;
     display: flex;
     flex-flow: row wrap;
     margin: 0;
@@ -116,20 +123,77 @@ hr {
     margin-right: 20px;
     padding: 0px !important;
     width: 100px;
-    height: 100px ;
+    height: 100px;
 }
 .club-logo img {
     object-fit: cover;
     box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
 }
 
+.circle {
+    height: 100px; 
+    width: 100px;
+}
+
 @media screen and (max-width: 800px) {
+    .cards {
+        display: block;
+    }
     .card {
         width: 100%;
+        margin: 1.5rem 0;
         min-height: auto;
     }
-    .tag-section {
+    .card:nth-child(odd) {
+        margin-right: 0;
+    }
+    .card:nth-child(even) {
+        margin-left: 0;
+    }
+    /* .tag-section {
         position: relative;
         bottom: 0;
+    } */
+}
+
+@media screen and (max-width: 600px) {
+    .card-container {
+        padding: 20px;
+        padding-bottom: 10px;
+        min-height: calc(100vh - 96px);
+    }
+    .legend {
+        margin-bottom: 5px;
+    }
+    .title {
+        font-size: 1.5rem;
+    }
+    .circle{
+        height: 57px; 
+        width: 57px;
+    }
+    .club-logo {
+        width: 57px;
+        height: 57px;
+        margin-right: 15px;
+    }
+    .card {
+        padding: 15px;
+        margin: 1rem 0;
+    }
+    hr {
+        margin-top: 12px;
+        margin-bottom: 5px;
+    }
+    .legend-items {
+        zoom: 0.8;
+        -moz-transform: scale(0.8);
+        transform: scale(0.8);
+    }
+    .tag-section {
+        zoom: 0.8;
+        -moz-transform: scale(0.8);
+        transform: scale(0.8);
     }
 }
+

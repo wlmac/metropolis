@@ -3,8 +3,14 @@
 {% load timetable_tags %}
 {% load admin_urls %}
 
+<<<<<<< HEAD
 {% block content %}
     <div class="white-bg">
+=======
+{% block main %}
+<div class="container">
+    <div id="content-container">
+>>>>>>> aa4fd7a897d8b3db4b39b4ed9a9c332602078300
         {% for timetable in timetables %}
             <details class="mb-3">
                 <summary class="card-top" onclick="$('#card-body-{{ forloop.counter }}').toggle(100)">
@@ -40,6 +46,7 @@
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block hd %}

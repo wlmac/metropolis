@@ -16,11 +16,9 @@
     <div class="secondary-nav-wrapper">
         <ul class="secondary-nav">
 
+        <!-- <span>{{ available_apps }}</span> -->
 
-
-        <span>{{ available_apps }}</span>
-
-        {% if available_apps %}
+        <!-- {% if available_apps %}
             {% for app in available_apps %}
             {% if user.is_superuser %}
               <hr class="applist-divider">
@@ -70,7 +68,7 @@
           {% endfor %}
         {% else %}
           <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
-        {% endif %}
+        {% endif %} -->
 
 
 
@@ -80,7 +78,7 @@
 
 
 
-           <!--  <li>
+            <li>
                 <a class="link" href="{% url 'profile_redirect' %}">Profile</a>
             </li>
             <li>
@@ -106,7 +104,7 @@
                 <a class="link" href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
             </li>
             {% endfor %}
-            {% endif %} -->
+            {% endif %}
         </ul>
     </div>
     {% block content %}

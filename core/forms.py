@@ -55,7 +55,7 @@ class TimetableSelectCoursesForm(forms.ModelForm):
         model = models.Timetable
         fields = ['courses']
         widgets = {
-            'courses': SelectCoursesWidget
+                'courses': SelectCoursesWidget(attrs={'data-minimum-input-length': 0, 'width': '100%', 'data-placeholder': 'Start typing course code...'})
         }
 
     def __init__(self, *args, **kwargs):

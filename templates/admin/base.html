@@ -41,11 +41,10 @@
 {% endblock %}
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
 
-  {% if user.is_superuser %}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+  <!-- {% if user.is_superuser %} -->
   <link rel="stylesheet" type="text/css" href="{% static "core/css/base.css" %}">
   <link rel="stylesheet" type="text/css" href="{% static "core/css/admin-secondary.css" %}">
-  {% endif %}
+  <!-- {% endif %} -->
 </head>
 
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
@@ -204,8 +203,7 @@
     </div>
     {% endblock %}
     {% endif %}
-
-    <div class="main" id="main">
+    <div class="main" id="main" style="overflow:hidden">
       {% if not is_popup and is_nav_sidebar_enabled %}
         {% block nav-sidebar %}
           {% include "admin/nav_sidebar.html" %}
@@ -215,7 +213,8 @@
         {% block messages %}
           {% if messages %}
             <ul class="messagelist">{% for message in messages %}
-              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+              <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}<i class="zmdi zmdi-close zmdi-hc-lg close-msg"></i></li>
+
             {% endfor %}</ul>
           {% endif %}
         {% endblock messages %}
@@ -263,6 +262,12 @@
             "text-decoration": "none",
             "line-height": "64px",
             "color": "white",
+        });
+        $(".close-msg").each(function () {
+          $(this).parent().css('display','flex');
+          $(this).click(function () {
+              $(this).parent().css('display','none');
+          });
         });
     </script>
 </div>

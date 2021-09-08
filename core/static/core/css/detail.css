@@ -5,15 +5,36 @@
     object-fit: cover;
 }
 
+.club-detail {
+    background-color: white;
+    padding: 40px;
+}
+
+.club-logo-out {
+    max-width: 17rem;
+}
+
 .club-logo {
-    margin-left: 0px !important;
-    padding: 0px !important;
-    width: 15rem !important;
+    overflow: hidden; 
+    position: relative;
+    padding-bottom: 100%; 
+}
+
+.club-logo img {
+    padding: 5px;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
 }
 
 .club-name {
     margin-bottom: 3%;
     font-weight: 600;
+    font-size: calc(16px + 2vw);
 }
 
 .club-header {
@@ -51,7 +72,7 @@
     background-color: var(--mid-grey) !important;
 }
 
-.description {
+.bio {
     padding-left: 5%;
     border-left: black 3px solid;
     margin: 0;
@@ -95,12 +116,18 @@ li {
     .club-banner {
         display: none;
     }
+    .club-logo-out {
+        margin-left: auto;
+        margin-right: auto;
+    }
     .club-logo {
-        text-align: center; 
+        /* width: 5rem; */
+        /* text-align: center;  */
     }
     .club-name {
         margin: 0;
         text-align: center; 
+        font-size: 3rem;
     }
     .tag-section {
         justify-content: center;
@@ -119,7 +146,7 @@ li {
         flex-direction: column;
         align-items: center;
     }
-    .description {
+    .bio {
         border: none;
         padding: 0;
         margin-top: 1rem;

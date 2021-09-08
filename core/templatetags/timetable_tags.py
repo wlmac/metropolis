@@ -8,7 +8,7 @@ register = template.Library()
 def render_timetable(timetable):
     timetable_format = timetable.term.timetable_format
     timetable_config = TIMETABLE_FORMATS[timetable_format]
-    day = timetable.term.day()
+    day = timetable.term.day_num()
     courses = {}
     for i in timetable.courses.all():
         courses[i.position] = i
@@ -18,7 +18,7 @@ def render_timetable(timetable):
         else: color = ''
         html += f'<th scope="col" class="{color}">{timetable_config["cycle"]["duration"].title()} {i}</th>'
     html += '</tr></thead><tbody>'
-    for i in timetable_config['schedules'][timetable.term.day_schedule()]:
+    for i in timetable_config['schedules'][timetable.term.day_schedule_format()]:
         html += '<tr>'
         html += f'<th scope="row">{i["description"]}</th>'
         for j in range(0, len(i['position'])):

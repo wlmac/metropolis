@@ -1,6 +1,14 @@
+.content{
+    background-color: white;
+}
+
 #main{
   background-color: var(--bg-grey);
   font-family: 'Roboto', sans-serif;
+}
+
+#footer{
+  padding: 0px;
 }
 
 #nav-sidebar{
@@ -17,8 +25,16 @@
   display:none !important;
 }
 
-#content{
+.messagelist, .content{
   margin: 20px;
+}
+
+.messagelist > li > .zmdi{
+  padding: 5px;
+  margin-left: auto;
+}
+
+#content{
   background-color: white;
 }
 
@@ -51,10 +67,36 @@ td, th {
 }
 
 .btn-light{
-    width: 100%;
-    background-color: var(--light-grey);
+  width: 100%;
+  background-color: var(--light-grey);
 }
 
 .btn-light:hover, .btn-light:active {
-    background-color: var(--line-grey);
+  background-color: var(--line-grey);
+}
+
+.form-row{
+  margin-top: 5px;
+}
+
+.actions > label, .checkbox-row {
+
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
+.form-row > div > .related-widget-wrapper, .actions, .messagelist > li{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkbox-row{
+  padding: 10px 0px;
+}
+
+.vCheckboxLabel{
+  margin: 0px !important;
+  padding: 0 0 0 5px !important;
 }
