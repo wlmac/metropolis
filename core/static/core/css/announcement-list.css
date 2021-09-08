@@ -187,7 +187,6 @@
         min-height: calc(100vh - 163px);
     }
     .card {
-        margin: 1rem 0;
         padding: 15px;
     }
     .title {

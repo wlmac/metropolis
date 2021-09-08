@@ -24,6 +24,7 @@
 
 .card-container {
     padding: 40px;
+    padding-bottom: 20px;
     background-color: white;
     min-height: calc(100vh - 164px);
 }
@@ -37,13 +38,23 @@
     align-items: center;
     margin-right: 1rem;
 }
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+}
 .card {
-    margin: 1.5rem 0;
+    margin: 0;
+    margin-bottom: 1.4rem;
     padding: 20px;
     width: calc(50% - 1rem);
     min-height: 275px;
 }
-
+.card:nth-child(odd) {
+    margin-right: 0.7rem;
+}
+.card:nth-child(even) {
+    margin-left: 0.7rem;
+}
 hr {
     margin: 20px 0 10px;
     border: 0px solid var(--light-grey);
@@ -125,9 +136,19 @@ hr {
 }
 
 @media screen and (max-width: 800px) {
+    .cards {
+        display: block;
+    }
     .card {
         width: 100%;
+        margin: 1.5rem 0;
         min-height: auto;
+    }
+    .card:nth-child(odd) {
+        margin-right: 0;
+    }
+    .card:nth-child(even) {
+        margin-left: 0;
     }
     /* .tag-section {
         position: relative;
@@ -138,6 +159,7 @@ hr {
 @media screen and (max-width: 600px) {
     .card-container {
         padding: 20px;
+        padding-bottom: 10px;
         min-height: calc(100vh - 96px);
     }
     .legend {
