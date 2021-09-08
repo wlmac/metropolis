@@ -19,7 +19,6 @@
     position: relative;
     padding-bottom: 100%; 
 }
-
 .club-logo img {
     padding: 5px;
     object-fit: cover;
@@ -31,6 +30,10 @@
     vertical-align: middle;
 }
 
+.circle {
+    height: 100%;
+    width: 100%;
+}
 .club-name {
     margin-bottom: 3%;
     font-weight: 600;

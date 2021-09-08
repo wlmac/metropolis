@@ -16,35 +16,37 @@
     <div class="container">
         <div id="inlineContainer">
             <div id="calendar"></div>
-            <div id="details">
-                <h3 id="detailsCurrentDay"></h3>
-                <p id="detailsCurrentWeek"></p>
-                <hr>
-                <div id="eventDetails">
-                </div>
-            </div>
-        
-            <template id="card">
-                <table class="dayEvent">
-                    <tr>
-                        <td class="leftPanel">
-                            <span class="timeDisplay" id="event_start"></span>
-                            <span class="ampm" id="event_start_ampm"></span>
-                            <br>
-                            <span class="intermediate_to">to</span><br>
-                            <span class="timeDisplay" id="event_end"></span>
-                            <span class="ampm" id="event_end_ampm"></span>
-                        </td>
-                        <td class="detailPanel">
-                            <h4 id="event_title"></h4>
-                            <em><a class="eventHost" id="event_host_name"></a></em>
-                            <hr>
-                            <p id="event_description"></p>
-                            <br>
-                        </td>
-                    </tr>
-                </table>
-            </template>
         </div>
     </div>
+    <div id="details">
+        <div class="container">
+            <h3 id="detailsCurrentDay"></h3>
+            <p id="detailsCurrentWeek"></p>
+            <hr>
+            <div id="eventDetails">
+            </div>
+        </div>
+    </div>
+
+    <template id="card">
+        <table class="dayEvent">
+            <tr>
+                <td class="leftPanel">
+                    <span class="timeDisplay" id="event_start"></span>
+                    <span class="ampm" id="event_start_ampm"></span>
+                    <br>
+                    <span class="intermediate_to">to</span><br>
+                    <span class="timeDisplay" id="event_end"></span>
+                    <span class="ampm" id="event_end_ampm"></span>
+                </td>
+                <td class="detailPanel">
+                    <h4 id="event_title"></h4>
+                    <em><a class="eventHost" id="event_host_name"></a></em>
+                    <hr>
+                    <p id="event_description"></p>
+                    <br>
+                </td>
+            </tr>
+        </table>
+    </template>
 {% endblock %}
