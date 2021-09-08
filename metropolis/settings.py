@@ -271,6 +271,7 @@ NAVBAR = {
     'Blog': '/blog',
     'Clubs': '/clubs',
     'Calendar': '/calendar',
+    'Map': '/map',
 }
 
 # Announcements settings
