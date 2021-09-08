@@ -17,6 +17,9 @@
             {{announcement.author.username|user}}
             <br>
             <dot>•</dot> {{announcement.last_modified_date}}
+            {% if announcement.last_modified_date != announcement.created_date %}
+            (Edited)
+            {% endif %}
         </div>
     </div>
     <hr>
