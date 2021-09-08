@@ -2,13 +2,18 @@ strong{
     font-weight: bold;
 }
 
-#content-container{
-    margin: 3%;
-    background-color: white;
-    padding: 20px;
-    border-radius: 3px;
+.container {
+    margin: 0;
+    padding: 50px;
+    width: 100%;
+    max-width: none;
 }
-
+#content-container{
+    background-color: white;
+    padding: 40px;
+    border-radius: 3px;
+    min-height: calc(100vh - 163px);
+}
 
 .btn-primary{
     margin-top: 5px;
@@ -30,4 +35,9 @@ body{
     position: static;
     opacity: 100;
     margin-right: 5px;
+}
+
+hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
 }

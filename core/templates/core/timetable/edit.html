@@ -2,20 +2,22 @@
 {% load static %}
 
 {% block main %}
-<div id="content-container">
-    <div class="card-body">
-        <form method="post">
-            <h5 class="card-title"><strong>Edit timetable for {{ timetable.term.name }}</strong></h5>
-            {% csrf_token %}
-            {{ form }}
-            {% if not term.is_frozen %}
-            <a href="{% url 'course_create' timetable.term.pk %}?next={{ request.path }}">Add a missing course</a><br>
-            {% endif %}
-            <div class="mt-3">
-                <button type="submit" class="btn btn-primary mr-2">Save</button>
-                <a href="{% url 'timetable_list' %}" class="btn btn-primary" role="button" aria-pressed="true">Cancel</a>
-            </div>
-        </form>
+<div class="container">
+    <div id="content-container">
+        <div class="card-body">
+            <form method="post">
+                <h5 class="card-title"><strong>Edit timetable for {{ timetable.term.name }}</strong></h5>
+                {% csrf_token %}
+                {{ form }}
+                {% if not term.is_frozen %}
+                <a href="{% url 'course_create' timetable.term.pk %}?next={{ request.path }}">Add a missing course</a><br>
+                {% endif %}
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary mr-2">Save</button>
+                    <a href="{% url 'timetable_list' %}" class="btn btn-primary" role="button" aria-pressed="true">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
