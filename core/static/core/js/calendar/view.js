@@ -11,7 +11,7 @@ $(document).ready(function () {
     calendarElement = document.getElementById("calendar")
 
     calendar = new FullCalendar.Calendar(calendarElement, {
-        headerToolbar: {right: "today dayGridMonth,timeGridWeek prev,next"},
+        headerToolbar: {right: "today prev,next"},
         views: {
             timeGridWeek: {
                 slotMinTime: "6:00:00",

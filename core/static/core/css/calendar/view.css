@@ -150,3 +150,16 @@ hr {
 .fc-daygrid-day-number{
     transition-duration: 0.3s;
 }
+
+@media screen and (max-width: 600px) {
+    #inlineContainer {
+        padding: 20px;
+        min-height: calc(100vh - 96px);
+    }
+    .fc-header-toolbar {
+        flex-direction: column;
+    }
+    .fc-header-toolbar > * {
+        margin-bottom: 5px;
+    }
+}
