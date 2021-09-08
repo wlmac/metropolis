@@ -148,6 +148,9 @@ hr {
 .fc-scrollgrid a {
     color: var(--dark-grey) !important; 
 }
+.fc-scrollgrid a[selected]{
+    color: white !important;
+}
 .tag-section {
     display: flex;
     flex-flow: row wrap;

@@ -70,7 +70,7 @@ $(document).ready(function () {
             })
         },
         height: "auto",
-        selectLongPressDelay: 300,
+        selectLongPressDelay: 0,
         initialView: "dayGridMonth"
     });
     // if the screen is too wide, the calendar kinda "stretches" so we need to reset the aspect ratio
@@ -115,7 +115,7 @@ function highlightSelectedNumber() {
         // unselect every cell
         $(".fc-daygrid-day").each(function (ind, el) {
             $(el.querySelector(".fc-daygrid-day-number-circle")).css("backgroundColor", "")
-            $(el.querySelector(".fc-daygrid-day-number")).css("color", "")
+            $(el.querySelector(".fc-daygrid-day-number")).attr("selected", false)
         })
 
         if (selectedDate !== null) {
@@ -130,7 +130,7 @@ function highlightSelectedNumber() {
 
                 // change the background color of the circle
                 $(topEl.querySelector(".fc-daygrid-day-number-circle")).css("backgroundColor", selectedNumberColor)
-                $(topEl.querySelector(".fc-daygrid-day-number")).css("color", "white")
+                $(topEl.querySelector(".fc-daygrid-day-number")).attr("selected", true)
             }
         }
     }
