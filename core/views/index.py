@@ -12,6 +12,10 @@ class Index(TemplateView, mixins.TitleMixin):
 class CalendarView(TemplateView):
     template_name = "core/calendar/view.html"
 
+class MapView(TemplateView):
+    template_name = "core/map/map.html"
+    title = 'Map'
+
 class Teapot(View):
     def get(self, request):
         return HttpResponse('orz teapot', status=418)
