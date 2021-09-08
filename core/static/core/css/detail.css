@@ -85,7 +85,7 @@
 .link-section {
     margin: 0;
     display: flex; 
-    justify-content: flex-end;
+    justify-content: left;
 }
 
 .link-section > div > li > i{
@@ -109,6 +109,31 @@
 li {
     display: flex;
     align-items: center;
+}
+
+.member {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    background-color: #F8F8F8;
+    padding: .5rem;
+    border-radius: 8px;
+}
+
+.member-image {
+    height: 32px;
+    margin-right: 10px;
+}
+
+.member-text {
+    color: var(--dark-grey);
+    font-size: 1rem;
+}
+
+hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
 }
 
 @media screen and (max-width:600px) {
