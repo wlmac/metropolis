@@ -33,7 +33,7 @@
 }
 
 .blog-content{
-    padding: 5%;
+    padding: 50px !important;
     display: flex;
     flex-direction: column;
 }
@@ -48,8 +48,15 @@
     font-weight: bolder;
 }
 
-.blog-body{
-    height: 70%;
+.blog-body > p {
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 7; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+.blog-body > p:not(:first-child) {
+    display: none;
 }
 
 .markdown-container{
@@ -128,6 +135,11 @@
 .announcement-card .announcement-organization{
     font-weight: bolder;
     color: var(--link-blue);
+}
+hr {
+    margin: 20px 0 10px;
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
 }
 
 #recent-announcements{
