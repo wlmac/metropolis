@@ -3,6 +3,7 @@
 {% load timetable_tags %}
 
 {% block main %}
+<div class="container">
     <div id="content-container">
         {% for timetable in timetables %}
             <details class="mb-3">
@@ -39,6 +40,7 @@
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block deps %}
