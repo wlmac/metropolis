@@ -1,4 +1,6 @@
 {% extends 'core/base.html' %}
+{% load link_tags %}
+{% load martortags %}
 {% load static %}
 {% load timetable_tags %}
 
@@ -23,10 +25,12 @@
             <div id="main-container">
                 <div class="blog row">
                     <!-- sample blog -->
-                    <div class="blog-content col valign-wrapper">
+                    <div class="blog-content col valign-wrapper left-align">
                         <div class="blog-content-container">
-                            <h4>{{ blogpost.title }}</h4>
-                            <p>{{ blogpost.body }}</p>
+                            <h4 class="title">{{ blogpost.title }}</h4>
+                            <hr>
+                            <div class="blog-body markdown-container">{{ blogpost.body | safe_markdown }}</div>
+                            <a class="full-content-page" href="{{ blogpost.slug|blogpost_url }}">Read full Blog</a>
                         </div>
                     </div>
                     <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
@@ -62,7 +66,7 @@
                                 <h5 class="title truncate">{{ announcement.title }}</h5>
                                 <span class="announcement-organization">{{ announcement.organization.name }}</span>
                                 <hr>
-                                <p class="announcement-description">{{ announcement.body }}</p>
+                                <div class="announcement-description markdown-container">{{ announcement.body | safe_markdown }}</div>
                             </div>
                         {% endfor %}
                     </div>
