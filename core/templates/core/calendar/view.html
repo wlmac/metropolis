@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block deps %}
-    <link rel="stylesheet" href="{% static 'css/fullcalendar.min.css' %}" type="text/css"/>
-    <script src="{% static 'js/fullcalendar.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'core/fullcalendar/lib/main.css' %}" type="text/css"/>
+    <script src="{% static 'core/fullcalendar/lib/main.js' %}"></script>
     <link rel="stylesheet" href="{% static 'core/css/calendar/view.css' %}" type="text/css">
     <script src="{% static 'core/js/calendar/view.js' %}"></script>
 {% endblock %}
@@ -27,27 +27,4 @@
             </div>
         </div>
     </div>
-
-    <template id="card">
-        <table class="dayEvent">
-            <tr>
-                <td class="leftPanel">
-                    <span class="timeDisplay" id="event_start"></span>
-                    <span class="ampm" id="event_start_ampm"></span>
-                    <br>
-                    <span class="intermediate_to">to</span><br>
-                    <span class="timeDisplay" id="event_end"></span>
-                    <span class="ampm" id="event_end_ampm"></span>
-                </td>
-                <td class="detailPanel">
-                    <h4 id="event_title"></h4>
-                    <em><a class="eventHost" id="event_host_name"></a></em>
-                    <hr>
-                    <p id="event_description"></p>
-                    <br>
-                    <div class="tag-section"></div>
-                </td>
-            </tr>
-        </table>
-    </template>
 {% endblock %}

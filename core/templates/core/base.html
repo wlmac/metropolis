@@ -7,23 +7,13 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-<script src="{% static 'core/js/install.js' %}" type="text/javascript"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {% block deps %}
 {% endblock %}
 {% endblock %}
 
 {% block body %}
-
-<div class="install-popup" style="display:none">
-    <img src="{% static 'core/img/logo-light-transparent.png' %}">
-    <span>Access info faster using our web app!</span>
-    <div>
-        <a id="install-popup-button" class="waves-effect waves-light btn">Install</a>
-        <a onclick="dismissInstallPrompt()">Not now</a>
-    </div>
-</div>
-
 <ul id="dropdownAcc" class="dropdown-content">
     {% if request.user.is_authenticated %}
     <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
@@ -42,7 +32,7 @@
     {% for heading, items in navbar.items %}
     {% if items|gettype == 'str' %}
     <li >
-        <a href="{{ items }}" class="sidenav-close">{{ heading }}</a>
+        <a href="{{ items }}">{{ heading }}</a>
     </li>
     {% elif items|gettype == 'dict' %}
     <li class="divider"></li>
@@ -59,14 +49,14 @@
     {% endfor %}
     <li class="divider"></li>
     {% if request.user.is_authenticated %}
-    <li><a href="{% url 'profile_redirect' %}" class="sidenav-close">Profile</a></li>
+    <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
     {% if user.is_staff %}
-    <li><a href="{% url 'admin:index' %}" class="sidenav-close">Admin</a></li>
+    <li><a href="{% url 'admin:index' %}">Admin</a></li>
     {% endif %}
-    <li><a href="{% url 'account_logout' %}" class="sidenav-close">Logout</a></li>
+    <li><a href="{% url 'account_logout' %}">Logout</a></li>
     {% else %}
-    <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}" class="sidenav-close">Login</a></li>
-    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}" class="sidenav-close">Sign Up</a></li>
+    <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
+    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
     {% endif %}
 </ul>
 <nav>
