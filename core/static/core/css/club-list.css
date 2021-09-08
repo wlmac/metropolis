@@ -37,12 +37,8 @@
     align-items: center;
     margin-right: 1rem;
 }
-.cards {
-    display: flex;
-    flex-wrap: wrap;
-}
 .card {
-    margin: 0.5rem 0.5rem;
+    margin: 1.5rem 0;
     padding: 20px;
     width: calc(50% - 1rem);
     min-height: 275px;
@@ -139,18 +135,16 @@ hr {
     } */
 }
 
-@media screen and (max-width: 493px) {
-    .container {
-        padding-top: 20px;
-    }
+@media screen and (max-width: 600px) {
     .card-container {
-        padding: 10px;
+        padding: 20px;
+        min-height: calc(100vh - 96px);
     }
     .legend {
         margin-bottom: 5px;
     }
     .title {
-        font-size: 20px;
+        font-size: 1.5rem;
     }
     .circle{
         height: 57px; 
@@ -163,7 +157,7 @@ hr {
     }
     .card {
         padding: 15px;
-        margin: 10px;
+        margin: 1rem 0;
     }
     hr {
         margin-top: 12px;
