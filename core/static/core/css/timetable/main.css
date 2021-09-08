@@ -2,19 +2,6 @@ strong{
     font-weight: bold;
 }
 
-.container {
-    margin: 0;
-    padding: 50px;
-    width: 100%;
-    max-width: none;
-}
-#content-container{
-    background-color: white;
-    padding: 40px;
-    border-radius: 3px;
-    min-height: calc(100vh - 163px);
-}
-
 .btn-primary{
     margin-top: 5px;
     margin-bottom: 5px;

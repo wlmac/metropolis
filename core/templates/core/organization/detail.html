@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
+{% load gravatar_tags %}
 {% load static %}
 
 {% block deps %}
@@ -59,6 +60,29 @@
                         </div>
                           
                     </ul>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col s12">
+                    <h4>
+                        Members
+                    </h4>
+                    <hr>
+                    <div class="members-list">
+                            {% for i in organization.members.all %}
+                            <a href="{{i.username|user_url}}">
+                                <div class="member">
+                                    <div class="member-image">
+                                        <img class="circle" src="{{i.email|gravatar_url:100}}">
+                                    </div>
+                                    <div class="member-text">
+                                        {{i.username}}
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                    </div>
                 </div>
             </div>
         </div> 
