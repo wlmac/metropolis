@@ -2,7 +2,7 @@
   background-color: white;
   max-width: 1200px !important;
   margin: auto !important;
-  margin-top: 50px !important;
+  margin-top: 20px !important;
 }
 
 #main{
@@ -17,6 +17,7 @@
 #nav-sidebar{
   background-color: white;
   padding: 20px;
+  margin-right: 20px;
 }
 
 #toggle-nav-sidebar, #nav-sidebar{
@@ -24,7 +25,9 @@
   margin-bottom: 20px;
 }
 
-.main.shifted > #nav-sidebar{
+.main.shifted{
+  padding-right: 20px;
+  padding-bottom: 30px;
 }
 
 #recent-actions-module{
@@ -35,7 +38,7 @@
   display:none !important;
 }
 
-.messagelist, .content{
+.messagelist {
   margin: 20px !important;
 }
 

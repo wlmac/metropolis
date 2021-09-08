@@ -40,6 +40,10 @@ p{
     font-weight: 300;
 }
 
+.sidenav{
+    padding-top: 20px;
+}
+
 .brand-logo{
     display: flex;
     flex-direction: row;
