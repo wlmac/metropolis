@@ -23,13 +23,6 @@
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}"/>
     <link rel="stylesheet" href="{% static 'core/css/timetable/add.css' %}"/>
-    <script>
-        $(function(){
-            $("#id_courses").attr("data-minimum-input-length", 0).select2({
-                width: "100%"
-            })
-        })
-    </script>
     {{ form.media.css }}
     {{ form.media.js }}
 {% endblock %}
