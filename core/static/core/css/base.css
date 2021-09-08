@@ -215,3 +215,8 @@ label {
     transition: color 0.1s linear;
     cursor: pointer;
 }
+@media screen and (max-width: 600px) {
+    .container {
+        padding: 20px 0;
+    }
+}
