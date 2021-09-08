@@ -5,6 +5,11 @@
     object-fit: cover;
 }
 
+.club-detail {
+    background-color: white;
+    padding: 40px;
+}
+
 .club-logo-out {
     max-width: 17rem;
 }
@@ -67,7 +72,7 @@
     background-color: var(--mid-grey) !important;
 }
 
-.description {
+.bio {
     padding-left: 5%;
     border-left: black 3px solid;
     margin: 0;
@@ -141,7 +146,7 @@ li {
         flex-direction: column;
         align-items: center;
     }
-    .description {
+    .bio {
         border: none;
         padding: 0;
         margin-top: 1rem;
