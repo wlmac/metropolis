@@ -325,6 +325,10 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 
 SELECT2_CACHE_BACKEND = "default"
 
+# Mapbox settings
+
+MAPBOX_APIKEY = 'change me'
+
 # Misc settings
 
 SITE_ID = 1
