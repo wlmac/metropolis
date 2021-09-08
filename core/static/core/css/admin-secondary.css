@@ -1,0 +1,130 @@
+.content{
+  background-color: white;
+  max-width: 1200px !important;
+  margin: auto !important;
+  margin-top: 20px !important;
+}
+
+#main{
+  background-color: var(--bg-grey);
+  font-family: 'Roboto', sans-serif;
+}
+
+#footer{
+  padding: 0px;
+}
+
+#nav-sidebar{
+  background-color: white;
+  padding: 20px;
+  margin-right: 20px;
+}
+
+#toggle-nav-sidebar, #nav-sidebar{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.main.shifted{
+  padding-right: 20px;
+  padding-bottom: 30px;
+}
+
+#recent-actions-module{
+  padding: 20px;
+}
+
+#header{
+  display:none !important;
+}
+
+.messagelist {
+  margin: 20px !important;
+}
+
+.messagelist > li > .zmdi{
+  padding: 5px;
+  margin-left: auto;
+}
+
+#content{
+  background-color: white;
+  width: 100% !important;
+  padding: 40px !important;
+}
+
+#content-related{
+  margin-left: auto !important;
+  margin-right: 0px !important;
+}
+
+tr{
+  background: none !important;
+  border: none !important;
+}
+
+td, th {
+  border: none !important;
+  padding: 8px 0px !important;
+}
+
+.module {
+  margin: 0px !important;
+}
+
+.module > table > tbody > tr > th > a{
+  font-weight: 500 !important;
+  color: var(--link-blue);
+}
+
+.module > table > tbody > tr > td > a{
+  font-weight: 500 !important;
+  color: var(--mid-grey);
+}
+
+.applist-divider{
+  margin: 10px 0;
+}
+
+.btn-light{
+  width: 100%;
+  background-color: var(--light-grey);
+}
+
+.btn-light:hover, .btn-light:active {
+  background-color: var(--line-grey);
+}
+
+.form-row{
+  margin-top: 5px;
+}
+
+.actions > label, .checkbox-row {
+
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
+.form-row > div > .related-widget-wrapper, .actions, .messagelist > li{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.form-row > div > select{
+  width: auto;
+}
+
+.checkbox-row{
+  padding: 10px 0px;
+}
+
+.vCheckboxLabel{
+  margin: 0px !important;
+  padding: 0 0 0 5px !important;
+}
+
+.submit-row{
+  margin: 20px 0 20px !important;
+}

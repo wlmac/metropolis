@@ -1,9 +1,13 @@
-{% extends 'core/base.html' %}
+{% extends 'admin/base.html' %}
 {% load static %}
 
 {% block main %}
+<<<<<<< HEAD
+    <div class="white-bg">
+=======
 <div class="container">
     <div id="content-container">
+>>>>>>> aa4fd7a897d8b3db4b39b4ed9a9c332602078300
         <div class="card-body">
             <form method="post">
                 <h5 class="card-title"><strong>Add timetable</strong></h5>
@@ -24,7 +28,18 @@
 
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}"/>
+<<<<<<< HEAD
+    <link rel="stylesheet" href="{% static 'core/css/timetable/edit.css' %}"/>
+    <script>
+        $(function(){
+            $("#id_courses").attr("data-minimum-input-length", 0).select2({
+                width: "100%"
+            })
+        })
+    </script>
+=======
     <link rel="stylesheet" href="{% static 'core/css/timetable/add.css' %}"/>
     {{ form.media.css }}
+>>>>>>> aa4fd7a897d8b3db4b39b4ed9a9c332602078300
     {{ form.media.js }}
 {% endblock %}

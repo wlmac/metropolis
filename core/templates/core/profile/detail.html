@@ -1,11 +1,11 @@
-{% extends 'core/base.html' %}
+{% extends 'core/secondary.html' %}
 {% load tz %}
 {% load gravatar_tags %}
 {% load link_tags %}
 
-{% block main %}
+{% block content %}
 {% get_current_timezone as TIME_ZONE %}
-<div class="card mb-3">
+<div class="white-bg">
     <div class="card-body">
         <div class="media">
             <img src="{{ profile.email|gravatar_url:100 }}" class="mr-3 img-thumbnail" alt="{{ profile.username }}'s profile picture">

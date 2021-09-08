@@ -1,0 +1,81 @@
+{% load i18n %}
+
+{% if app_list %}
+  
+  <!-- {% if user.is_superuser %} -->
+   <div class="module">
+      <table>
+        <tbody><tr>
+          <th><a href="{% url 'profile_redirect' %}">Profile</a></th>
+        </tr></tbody>
+      </table>
+  </div>
+  <div class="module">
+      <table>
+        <tbody><tr>
+          <th><a href="{% url 'timetable_list' %}">Timetable</a></th>
+        </tr></tbody>
+      </table>
+  </div>
+  <div class="module">
+      <table>
+        <tbody><tr>
+          <th><a href="#">Settings</a></th>
+        </tr></tbody>
+      </table>
+  </div>
+  <!-- {% endif %} -->
+
+  
+
+  {% for app in app_list %}
+
+    <!-- {% if user.is_superuser %} -->
+      <hr class="applist-divider">
+    <!-- {% endif %} -->
+
+    <div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
+      <table>
+        <!-- {% if not user.is_superuser %} -->
+        <caption>
+          <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
+        </caption>
+        <hr class="applist-divider">
+
+        <!-- {% endif %} -->
+
+        {% for model in app.models %}
+          <tr class="model-{{ model.object_name|lower }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}">
+            {% if model.admin_url %}
+              <th scope="row"><a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>{{ model.name }}</a></th>
+            {% else %}
+              <th scope="row">{{ model.name }}</th>
+            {% endif %}
+
+            {% if model.add_url %}
+              <!-- {% if user.is_superuser %} -->
+              <td><a href="{{ model.add_url }}"><i class="zmdi zmdi-plus zmdi-hc-lg" aria="Add a new {{ model.name }}"></i></a></td>
+<!--               {% else %}
+              <td><a href="{{ model.add_url }}" class="addlink">{% translate 'Add' %}</a></td>
+              {% endif %} -->
+            {% else %}
+              <td></td>
+            {% endif %}
+
+            {% if model.admin_url and show_changelinks %}
+              {% if model.view_only %}
+                <td><a href="{{ model.admin_url }}" class="viewlink">{% translate 'View' %}</a></td>
+              {% else %}
+                <td><a href="{{ model.admin_url }}" class="changelink">{% translate 'Change' %}</a></td>
+              {% endif %}
+            {% elif show_changelinks %}
+              <td></td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
+{% endif %}

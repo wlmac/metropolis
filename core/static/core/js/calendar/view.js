@@ -145,6 +145,7 @@ function parseEvents(toParse) {
             start: curEvent.start_date, // get rid of the "time" element
             end: curEvent.end_date,
             color: curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue",
+            textColor: "#434343",
         })
     }
     return parsed
