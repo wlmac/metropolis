@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'martor',
     'django_select2',
-    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -142,9 +141,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
 
 # Auth settings
 
@@ -283,12 +279,13 @@ NAVBAR = {
 ANNOUNCEMENTS_CUSTOM_FEEDS = [
 ]
 
+
 # API settings
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+    )
 }
 
 # CORS settings
@@ -327,74 +324,7 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 
 # Select2 settings
 
-SELECT2_CACHE_BACKEND = 'default'
-SELECT2_JS = 'js/select2.min.js'
-SELECT2_CSS = 'css/select2.min.css'
-
-# PWA settings
-
-PWA_APP_NAME = 'Metropolis'
-PWA_APP_DESCRIPTION = "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
-PWA_APP_THEME_COLOR = '#073763'
-PWA_APP_BACKGROUND_COLOR = '#1c233f'
-PWA_APP_DISPLAY = 'standalone'
-PWA_APP_SCOPE = '/'
-PWA_APP_ORIENTATION = 'any'
-PWA_APP_START_URL = '/'
-PWA_APP_STATUS_BAR_COLOR = 'default'
-PWA_APP_ICONS = [
-    {
-        'src': '/static/core/img/logo/logo-any-96.png',
-        'sizes': '96x96',
-        'type': 'image/png',
-        'purpose': 'any',
-    },
-    {
-        'src': '/static/core/img/logo/logo-maskable-96.png',
-        'sizes': '96x96',
-        'type': 'image/png',
-        'purpose': 'maskable',
-    },
-    {
-        'src': '/static/core/img/logo/logo-any-144.png',
-        'sizes': '144x144',
-        'type': 'image/png',
-        'purpose': 'any',
-    },
-    {
-        'src': '/static/core/img/logo/logo-maskable-144.png',
-        'sizes': '144x144',
-        'type': 'image/png',
-        'purpose': 'maskable',
-    },
-    {
-        'src': '/static/core/img/logo/logo-any-192.png',
-        'sizes': '192x192',
-        'type': 'image/png',
-        'purpose': 'any',
-    },
-    {
-        'src': '/static/core/img/logo/logo-maskable-192.png',
-        'sizes': '192x192',
-        'type': 'image/png',
-        'purpose': 'maskable',
-    },
-    {
-        'src': '/static/core/img/logo/logo-any-512.png',
-        'sizes': '512x512',
-        'type': 'image/png',
-        'purpose': 'any',
-    },
-    {
-        'src': '/static/core/img/logo/logo-maskable-512.png',
-        'sizes': '512x512',
-        'type': 'image/png',
-        'purpose': 'maskable',
-    },
-]
-PWA_APP_LANG = 'en-CA'
-PWA_APP_DEBUG_MODE = False
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'templates', 'serviceworker.js')
+SELECT2_CACHE_BACKEND = "default"
 
 # Mapbox settings
 
@@ -414,7 +344,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 SILENCED_SYSTEM_CHECKS = ['urls.W002']
 
-API_VERSION = "0.4.0"
+API_VERSION = "0.1.0"
 
 try:
     from metropolis.config import *

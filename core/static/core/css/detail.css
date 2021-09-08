@@ -37,7 +37,6 @@
 .club-name {
     margin-bottom: 3%;
     font-weight: 600;
-    font-size: calc(16px + 2vw);
 }
 
 .club-header {
@@ -144,18 +143,12 @@ hr {
     .club-banner {
         display: none;
     }
-    .club-logo-out {
-        margin-left: auto;
-        margin-right: auto;
-    }
     .club-logo {
-        /* width: 5rem; */
-        /* text-align: center;  */
+        text-align: center; 
     }
     .club-name {
         margin: 0;
         text-align: center; 
-        font-size: 3rem;
     }
     .tag-section {
         justify-content: center;

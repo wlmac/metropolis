@@ -4,11 +4,6 @@
     margin: 0px;
 }
 
-.col{
-    float: none !important;
-    width: 100%;
-}
-
 select {
     display: revert;
     margin: 10px 0px;

@@ -1,15 +1,18 @@
 from rest_framework import serializers
-from .tag import TagSerializer
 from ... import models
 
 
-class OrganizationSerializer(serializers.ModelSerializer):
-    owner = serializers.SlugRelatedField(slug_field='username', queryset=models.User.objects.all())
-    supervisors = serializers.SlugRelatedField(slug_field='username', many=True, queryset=models.User.objects.all())
-    execs = serializers.SlugRelatedField(slug_field='username', many=True, queryset=models.User.objects.all())
+class OrganizationSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
 
-    tags = TagSerializer(many=True)
+    owner = serializers.SlugRelatedField(slug_field='username', allow_null=True, queryset=models.User.objects.all())
+    supervisors = serializers.SlugRelatedField(slug_field='username', allow_null=True, many=True, queryset=models.User.objects.all())
+    execs = serializers.SlugRelatedField(slug_field='username', allow_null=True, many=True, queryset=models.User.objects.all())
 
-    class Meta:
-        model = models.Organization
-        fields = '__all__'
+    name = serializers.CharField(max_length=64)
+    description = serializers.CharField(allow_blank=True, style={'base_template': 'textarea.html'})
+
+    registered_date = serializers.DateTimeField()
+    is_open = serializers.BooleanField(default=True)
+    applications_open = serializers.BooleanField(default=False)
+    tags = serializers.SlugRelatedField(slug_field='name', many=True, queryset=models.Tag.objects.all())

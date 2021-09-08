@@ -4,4 +4,3 @@ from .events import *
 from .timetable import *
 from .widget import *
 from .meta import *
-from .user import *

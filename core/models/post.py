@@ -41,6 +41,3 @@ class BlogPost(Post):
 
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
-
-    class Meta:
-        ordering = ['-created_date']
