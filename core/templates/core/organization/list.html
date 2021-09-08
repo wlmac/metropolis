@@ -44,7 +44,7 @@
                 
                 <hr>
                 <div class="club-description">
-                    {{ organization.description|safe_markdown }}
+                    {{ organization.bio }}
                 </div>
                 <div class="tag-section">
                     {% for tag in organization.tags.all %}
