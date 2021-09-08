@@ -2,14 +2,6 @@ strong{
     font-weight: bold;
 }
 
-#content-container{
-    margin: 3%;
-    background-color: white;
-    padding: 20px;
-    border-radius: 3px;
-}
-
-
 .btn-primary{
     margin-top: 5px;
     margin-bottom: 5px;
@@ -30,4 +22,9 @@ body{
     position: static;
     opacity: 100;
     margin-right: 5px;
+}
+
+hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
 }

@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
+{% load gravatar_tags %}
 {% load static %}
 
 {% block head %}
@@ -44,18 +45,30 @@
                 {{ organization.description }}
                 </p>
             </div>
-            <div class="col m4">
-                {# TODO: Add club links #}
-                <ul class="link-section">
-                    <div>
-                        {% for i in organization.links.all %}
-                            <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a href="{{ i.url }}">{{ i.url }}</a></li>
-                        {% endfor %}
+            
+            <div class="row">
+                <div class="col s12">
+                    <h4>
+                        Members
+                    </h4>
+                    <hr>
+                    <div class="members-list">
+                            {% for i in organization.members.all %}
+                            <a href="{{i.username|user_url}}">
+                                <div class="member">
+                                    <div class="member-image">
+                                        <img class="circle" src="{{i.email|gravatar_url:100}}">
+                                    </div>
+                                    <div class="member-text">
+                                        {{i.username}}
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
                     </div>
-                      
-                </ul>
+                </div>
             </div>
-        </div>       
+        </div> 
     </div>
 </div>
 {% endblock %}

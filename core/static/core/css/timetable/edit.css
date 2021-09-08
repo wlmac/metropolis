@@ -17,7 +17,12 @@
     margin-bottom: 5px;
     background-color: var(--light-grey) !important;
 }
-
+.select2-selection__choice {
+    background-color: var(--bg-grey) !important;
+}
+.select2-selection__choice__remove {
+    border: none !important;
+}
 .select2-results__option{
     font-size: 110%;
     transition-duration: 0.2s;

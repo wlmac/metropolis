@@ -34,6 +34,9 @@
     height: 24px;
     margin-right: 10px;
 }
+.card-authors-text br {
+    display: none;
+}
 .circle {
     object-fit: cover;
     height: 24px;
@@ -83,4 +86,26 @@ hr {
     width: 100%;
     margin-top: 30px;
     text-align: center;
+}
+@media screen and (max-width: 600px) {
+    .card-container {
+        padding: 5px 20px;
+        min-height: calc(100vh - 96px);
+    }
+    .card-headers {
+        flex-direction: column;
+    }
+    .card-image {
+        height: auto;
+        max-height: 17rem;
+        width: 100%;
+        margin: 0;
+        margin-bottom: 20px;
+    }
+    .card-authors-text br {
+        display: block;
+    }
+    .card-authors-text dot {
+        display: none;
+    }
 }

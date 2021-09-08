@@ -25,7 +25,11 @@
             </div>
             <div class="card-authors-text">
                 {{blogpost.author.username|user}}
-                • {{blogpost.last_modified_date}}
+                <br>
+                <dot>•</dot> {{blogpost.last_modified_date}}
+                {% if blogpost.last_modified_date != blogpost.created_date %}
+                (Edited)
+                {% endif %}
             </div>
         </div>
         <hr>

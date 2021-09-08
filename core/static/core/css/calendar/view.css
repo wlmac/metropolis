@@ -1,11 +1,6 @@
-#inlineContainer {
-    background-color: white;
-    padding: 25px;
-    min-height: calc(100vh - 164px);
-}
 #calendar {
-    margin-bottom: 50px;
     padding: 3%;
+    background-color: white;
 }
 
 .fc-toolbar-title {
@@ -59,7 +54,7 @@
 }
 
 #details {
-    padding: 0 5%;
+    background-color: white;
 }
 
 hr {
@@ -149,4 +144,39 @@ hr {
 
 .fc-daygrid-day-number{
     transition-duration: 0.3s;
+}
+.fc-scrollgrid a {
+    color: var(--dark-grey) !important; 
+}
+.fc-scrollgrid a[selected]{
+    color: white !important;
+}
+.tag-section {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0;
+}
+.tag {
+    padding: 2px 7px !important;
+    margin: 3px 6px 3px 0px !important;
+    background-color: lightblue;
+    border-radius: 0.25rem;
+    color: var(--dark-grey);
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
+}
+
+@media screen and (max-width: 600px) {
+    .fc-header-toolbar {
+        margin-top: 10px;
+        flex-direction: column;
+    }
+    .fc-header-toolbar > * {
+        margin-bottom: 5px;
+    }
+    .tag-section {
+        zoom: 0.8;
+        -moz-transform: scale(0.8);
+        transform: scale(0.8);
+    }
 }

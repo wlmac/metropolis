@@ -1,0 +1,32 @@
+.map-container{
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.map { 
+    width: 100%; 
+    height: 80vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.switch-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px; 
+}
+
+.switch>label{
+  font-size: 1.4rem !important;
+  font-family: "Poppins", sans-serif !important;
+  color: #073763 !important; 
+}
+
+@media screen and (max-width:600px) {
+    .switch-container{
+        padding: 20px; 
+    }
+}

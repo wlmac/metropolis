@@ -270,6 +270,7 @@ NAVBAR = {
     'Announcements': '/announcements',
     'Blog': '/blog',
     'Clubs': '/clubs',
+    'Map': '/map',
     'Calendar': '/calendar',
 }
 
@@ -324,6 +325,10 @@ MARTOR_MARKDOWN_EXTENSIONS = [
 # Select2 settings
 
 SELECT2_CACHE_BACKEND = "default"
+
+# Mapbox settings
+
+MAPBOX_APIKEY = 'change me'
 
 # Misc settings
 

@@ -42,7 +42,11 @@
             <div class="card-authors-text">
                 {{announcement.organization.slug|organization}},
                 {{announcement.author.username|user}}
-                • {{announcement.last_modified_date}}
+                <br>
+                <dot>•</dot> {{announcement.last_modified_date}}
+                {% if announcement.last_modified_date != announcement.created_date %}
+                (Edited)
+                {% endif %}
             </div>
         </div>
         <hr>

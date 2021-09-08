@@ -10,7 +10,7 @@ $(document).ready(function () {
     calendarElement = document.getElementById("calendar")
 
     calendar = new FullCalendar.Calendar(calendarElement, {
-        headerToolbar: {right: "today dayGridMonth,timeGridWeek prev,next"},
+        headerToolbar: {right: "today prev,next"},
         views: {
             timeGridWeek: {
                 slotMinTime: "6:00:00",
@@ -108,7 +108,7 @@ function highlightSelectedNumber() {
         // unselect every cell
         $(".fc-daygrid-day").each(function (ind, el) {
             $(el.querySelector(".fc-daygrid-day-number-circle")).css("backgroundColor", "")
-            $(el.querySelector(".fc-daygrid-day-number")).css("color", "")
+            $(el.querySelector(".fc-daygrid-day-number")).attr("selected", false)
         })
 
         if (selectedDate !== null) {
@@ -136,6 +136,7 @@ function parseEvents(toParse) {
             start: curEvent.start_date, // get rid of the "time" element
             end: curEvent.end_date,
             color: curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue",
+            textColor: "#434343",
         })
     }
     return parsed
@@ -221,12 +222,12 @@ function initializeCard(curEvent, date, working = null) {
     working.querySelector("#event_host_name").innerHTML = curEvent.organization
 
     for (let tag of curEvent.tags) {
-        // for each tag in the event, we create a corresponding span and add it to the card
-        let tagEl = document.createElement("span")
-        tagEl.classList.add("eventTag")
+        // for each tag in the event, we create a corresponding p and add it to the card
+        let tagEl = document.createElement("p")
+        tagEl.classList.add("tag")
         tagEl.innerHTML = tag.name
         tagEl.style.backgroundColor = tag.color
-        working.querySelector(".detailPanel").appendChild(tagEl)
+        working.querySelector(".tag-section").appendChild(tagEl)
     }
 
     // return the card
