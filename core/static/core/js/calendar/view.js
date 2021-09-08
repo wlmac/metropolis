@@ -231,12 +231,12 @@ function initializeCard(curEvent, date, working = null) {
     working.querySelector("#event_host_name").innerHTML = curEvent.organization
 
     for (let tag of curEvent.tags) {
-        // for each tag in the event, we create a corresponding span and add it to the card
-        let tagEl = document.createElement("span")
-        tagEl.classList.add("eventTag")
+        // for each tag in the event, we create a corresponding p and add it to the card
+        let tagEl = document.createElement("p")
+        tagEl.classList.add("tag")
         tagEl.innerHTML = tag.name
         tagEl.style.backgroundColor = tag.color
-        working.querySelector(".detailPanel").appendChild(tagEl)
+        working.querySelector(".tag-section").appendChild(tagEl)
     }
 
     // return the card

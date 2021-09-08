@@ -148,6 +148,20 @@ hr {
 .fc-scrollgrid a {
     color: var(--dark-grey) !important; 
 }
+.tag-section {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0;
+}
+.tag {
+    padding: 2px 7px !important;
+    margin: 3px 6px 3px 0px !important;
+    background-color: lightblue;
+    border-radius: 0.25rem;
+    color: var(--dark-grey);
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
+}
 
 @media screen and (max-width: 600px) {
     .fc-header-toolbar {
@@ -156,5 +170,10 @@ hr {
     }
     .fc-header-toolbar > * {
         margin-bottom: 5px;
+    }
+    .tag-section {
+        zoom: 0.8;
+        -moz-transform: scale(0.8);
+        transform: scale(0.8);
     }
 }
