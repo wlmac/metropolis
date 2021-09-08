@@ -204,6 +204,13 @@
     {% endblock %}
     {% endif %}
     <div class="main" id="main" style="overflow:hidden">
+        {% if request.get_full_path == "/admin/" %}
+        <style>
+            #content-main{
+              width: 600px !important;
+            }
+        </style>
+        {% endif %}
       {% if not is_popup and is_nav_sidebar_enabled %}
         {% block nav-sidebar %}
           {% include "admin/nav_sidebar.html" %}

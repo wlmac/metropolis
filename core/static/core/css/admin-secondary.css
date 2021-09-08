@@ -1,5 +1,8 @@
 .content{
-    background-color: white;
+  background-color: white;
+  max-width: 1200px !important;
+  margin: auto !important;
+  margin-top: 50px !important;
 }
 
 #main{
@@ -14,6 +17,9 @@
 #nav-sidebar{
   background-color: white;
   padding: 20px;
+}
+
+#toggle-nav-sidebar, #nav-sidebar{
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -21,12 +27,16 @@
 .main.shifted > #nav-sidebar{
 }
 
+#recent-actions-module{
+  padding: 20px;
+}
+
 #header{
   display:none !important;
 }
 
 .messagelist, .content{
-  margin: 20px;
+  margin: 20px !important;
 }
 
 .messagelist > li > .zmdi{
@@ -36,6 +46,12 @@
 
 #content{
   background-color: white;
+  width: 100% !important;
+}
+
+#content-related{
+  margin-left: auto !important;
+  margin-right: 0px !important;
 }
 
 tr{
@@ -92,6 +108,10 @@ td, th {
   align-items: center;
 }
 
+.form-row > div > select{
+  width: auto;
+}
+
 .checkbox-row{
   padding: 10px 0px;
 }
@@ -99,4 +119,8 @@ td, th {
 .vCheckboxLabel{
   margin: 0px !important;
   padding: 0 0 0 5px !important;
+}
+
+.submit-row{
+  margin: 20px 0 20px !important;
 }
