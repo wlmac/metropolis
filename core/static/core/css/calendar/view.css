@@ -1,11 +1,6 @@
-#inlineContainer {
-    background-color: white;
-    padding: 25px;
-    min-height: calc(100vh - 164px);
-}
 #calendar {
-    margin-bottom: 50px;
     padding: 3%;
+    background-color: white;
 }
 
 .fc-toolbar-title {
@@ -59,7 +54,7 @@
 }
 
 #details {
-    padding: 0 5%;
+    background-color: white;
 }
 
 hr {
@@ -150,13 +145,13 @@ hr {
 .fc-daygrid-day-number{
     transition-duration: 0.3s;
 }
+.fc-scrollgrid a {
+    color: var(--dark-grey) !important; 
+}
 
 @media screen and (max-width: 600px) {
-    #inlineContainer {
-        padding: 20px;
-        min-height: calc(100vh - 96px);
-    }
     .fc-header-toolbar {
+        margin-top: 10px;
         flex-direction: column;
     }
     .fc-header-toolbar > * {
