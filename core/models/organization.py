@@ -38,6 +38,12 @@ class Organization(models.Model):
     def member_count(self):
         return User.objects.filter(organizations=self).count()
 
+    class Meta:
+        verbose_name = 'club'
+
 class OrganizationURL(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='links')
     url = models.URLField()
+
+    def __str__(self):
+        return self.url
