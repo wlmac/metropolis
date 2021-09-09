@@ -4,6 +4,7 @@ from rest_framework import generics, mixins, permissions, status
 from rest_framework.views import APIView
 from ... import models
 from rest_framework.response import Response
+import datetime
 
 
 class UserDetail(generics.RetrieveAPIView):
@@ -23,14 +24,20 @@ class UserMeSchedule(APIView):
 
     def get(self, request, format=None):
         date = utils.parse_date_query_param(request)
-        ongoing_timetables = request.user.get_ongoing_timetables()
 
-        result = []
+        return Response(request.user.schedule(target_date=date))
 
-        for timetable in ongoing_timetables:
-            result.extend(timetable.day_schedule(target_date=date))
+class UserMeScheduleWeek(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-        result.sort(key=lambda x: (x['time']['start'], x['time']['end']))
+    def get(self, request, format=None):
+        date = utils.parse_date_query_param(request)
+
+        result = {}
+
+        for day in range(7):
+            result[date.isoformat()] = request.user.schedule(target_date=date)
+            date += datetime.timedelta(days=1)
 
         return Response(result)
 

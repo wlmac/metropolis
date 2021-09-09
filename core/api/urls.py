@@ -16,6 +16,7 @@ urlpatterns = [
     path('user/<str:username>', UserDetail.as_view(), name='api_user_detail'),
     path('me', UserMe.as_view(), name='api_me'),
     path('me/schedule', UserMeSchedule.as_view(), name='api_me_schedule'),
+    path('me/schedule/week', UserMeScheduleWeek.as_view(), name='api_me_schedule_week'),
     path('me/timetable', UserMeTimetable.as_view(), name='api_me_timetable'),
     path('events', EventsList.as_view(), name='api_event_list'),
     path('timetables', TimetableList.as_view(), name='api_timetable_list'),

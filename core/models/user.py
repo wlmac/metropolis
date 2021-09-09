@@ -17,3 +17,16 @@ class User(AbstractUser):
 
     def get_ongoing_timetables(self):
         return [i for i in self.timetables.all() if i.term.is_ongoing()]
+
+    def schedule(self, target_date=None):
+        if target_date == None:
+            target_date = timezone.localdate()
+
+        result = []
+
+        for timetable in self.timetables.all():
+            result.extend(timetable.day_schedule(target_date=target_date))
+
+        result.sort(key=lambda x: (x['time']['start'], x['time']['end']))
+
+        return result

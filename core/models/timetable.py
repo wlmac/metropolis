@@ -31,9 +31,13 @@ class Timetable(models.Model):
 
         for i in range(0, len(result)):
             course_positions = result[i].pop('courses')
-            course = course_positions.intersection(set(courses.keys())).pop()
 
-            result[i]['course'] = courses[course].code;
+            try:
+                course_code = courses[course_positions.intersection(set(courses.keys())).pop()].code
+            except KeyError:
+                course_code = None
+
+            result[i]['course'] = course_code
 
         return result
 
