@@ -146,10 +146,16 @@
     font-weight: bolder;
     color: var(--link-blue);
 }
+.announcement-description p {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
 .announcement-description p:first-child {
     margin-top: 0;
 }
-.announcement-descriptio p:last-child {
+.announcement-description p:last-child {
     margin-bottom: 0;
 }
 hr {

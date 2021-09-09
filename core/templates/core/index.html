@@ -30,7 +30,7 @@
                             <h4 class="title">{{ blogpost.title }}</h4>
                             <hr>
                             <div class="blog-body markdown-container">{{ blogpost.body | safe_markdown }}</div>
-                            <a class="full-content-page" href="{{ blogpost.slug|blogpost_url }}">Read full Blog</a>
+                            <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i class='zmdi zmdi-chevron-right'></i></a>
                         </div>
                     </div>
                     <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
@@ -64,7 +64,7 @@
                         There are no events at this time.
                         {% endfor %}
                     </div>
-                    <a class="full-content-page" href="{% url 'calendar' %}">View all events <i class='zmdi zmdi-chevron-right'></i></a>
+                    <a class="full-content-page link" href="{% url 'calendar' %}">View all events <i class='zmdi zmdi-chevron-right'></i></a>
                 </div>
                 <hr style="margin: 10px calc(2% + 10px); border-top-width: 2.5px; border-color: #d9d9d9;">
                 <div id="recent-announcements" class="center-align">
@@ -83,12 +83,14 @@
                             </div>
                             <hr>
                             <div class="announcement-description markdown-container">{{ announcement.body | safe_markdown }}</div>
+                            <br>
+                            <a class="link" href="{{announcement.pk|announcement_url}}">See Announcement <i class='zmdi zmdi-chevron-right'></i></a>
                         </div>
                         {% empty %}
                         There are no announcements at this time.
                         {% endfor %}
                     </div>
-                    <a class="full-content-page" href="{% url 'announcement_list' %}">View all announcements <i class='zmdi zmdi-chevron-right'></i></a>
+                    <a class="full-content-page link" href="{% url 'announcement_list' %}">View all announcements <i class='zmdi zmdi-chevron-right'></i></a>
                 </div>
             </div>
         </div>
