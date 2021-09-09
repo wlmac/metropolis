@@ -19,7 +19,7 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
         approved_announcements = models.Announcement.objects.filter(status='a')
         context['feed_all'] = approved_announcements.filter(is_public=True)
         if self.request.user.is_authenticated:
-            context['feed_all'] |= approved_announcements.filter(organization__member=self.request.user)
+            context['feed_all'] = (context['feed_all'] | approved_announcements.filter(organization__member=self.request.user)).distinct()
             context['feed_my'] = approved_announcements.filter(Q(is_public=True, tags__follower=self.request.user) | Q(organization__member=self.request.user)).distinct()
 
         context['feeds_custom'] = []

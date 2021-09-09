@@ -17,7 +17,7 @@ class Index(TemplateView, mixins.TitleMixin):
         approved_announcements = models.Announcement.objects.filter(status='a')
         context['announcements'] = approved_announcements.filter(is_public=True)
         if self.request.user.is_authenticated:
-            context['announcements'] |= approved_announcements.filter(organization__member=self.request.user)
+            context['announcements'] = (context['announcements'] | approved_announcements.filter(organization__member=self.request.user)).distinct()
         context['announcements'] = context['announcements'][:3]
 
         context['events'] = models.Event.objects.filter(is_public=True)
