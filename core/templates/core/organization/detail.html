@@ -1,6 +1,5 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
-{% load martortags %}
 {% load gravatar_tags %}
 {% load static %}
 
@@ -17,7 +16,7 @@
     <div class="container">
         <div class="club-detail">
             <div class="row club-header">
-                <div class="col m3 s12 club-logo-out">
+                <div class="col m3 s12">
                     <div class="club-logo">
                         <img class="circle" src="{{ organization.icon.url }}">
                     </div>
@@ -49,7 +48,7 @@
                     {{ organization.bio }}
                     </p>
                     <br><br>
-                    {{ organization.description|safe_markdown }}
+                    {{ organization.description }}
                 </div>
                 <div class="col m4">
                     {# TODO: Add club links #}
@@ -90,4 +89,3 @@
     </div>
 </div>
 {% endblock %}
-
