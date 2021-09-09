@@ -46,7 +46,9 @@
     justify-content: center;
     align-items: center;
 }
-
+.description .markdown-embed, .description img {
+    width: 100%;
+}
 .tag-section {
     display: flex;
     flex-flow: row wrap;

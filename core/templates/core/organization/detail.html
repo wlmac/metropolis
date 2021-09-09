@@ -45,11 +45,13 @@
             </div>
             <div class="row club-info">
                 <div class="col m8">
-                    <p class="bio" >
+                    <p class="bio">
                     {{ organization.bio }}
                     </p>
                     <br><br>
-                    {{ organization.description|safe_markdown }}
+                    <div class="description">
+                        {{ organization.description|safe_markdown }}
+                    </div>
                 </div>
                 <div class="col m4">
                     {# TODO: Add club links #}

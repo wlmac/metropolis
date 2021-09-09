@@ -51,6 +51,9 @@ hr {
 .card-body p:last-child {
     margin-bottom: 0;
 }
+.card-body .markdown-embed, .card-body img {
+    width: 100%;
+}
 .zmdi {
     margin-left: 0.25rem;
 }
