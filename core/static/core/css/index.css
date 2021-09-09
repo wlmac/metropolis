@@ -158,6 +158,9 @@
 .announcement-description p:last-child {
     margin-bottom: 0;
 }
+.announcement-description .markdown-embed {
+    display: none;
+}
 hr {
     margin: 10px 0;
     border: 0px solid var(--light-grey);

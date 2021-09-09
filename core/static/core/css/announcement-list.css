@@ -140,6 +140,9 @@
 .card-body p:last-child {
     margin-bottom: 0;
 }
+.card-body .markdown-embed {
+    display: none;
+}
 .expandable {
     display: flex;
     align-items: center;
