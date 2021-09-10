@@ -22,7 +22,7 @@ class Index(TemplateView, mixins.TitleMixin):
 
         context['events'] = models.Event.objects.filter(is_public=True)
         if self.request.user.is_authenticated:
-            context['events'] |= models.Event.objects.filter(organization__member=self.request.user)
+            context['events'] = (context['events'] | models.Event.objects.filter(organization__member=self.request.user)).distinct()
         context['events'] = context['events'][:3]
 
         context['blogpost'] = models.BlogPost.objects.first()
