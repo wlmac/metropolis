@@ -9,7 +9,7 @@ const map = new mapboxgl.Map({
 map.on("load", () => {
   map.addSource("floorOne", {
     type: "image",
-    url: "../static/core/img/FloorOne.png",
+    url: "../static/core/img/FloorOneGeo.jpg",
     coordinates: [
       [-79.462739, 43.754109], //TL
       [-79.46076, 43.754109], //TR
