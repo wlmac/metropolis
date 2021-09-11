@@ -380,18 +380,6 @@ PWA_APP_ICONS = [
         'type': 'image/png',
         'purpose': 'maskable',
     },
-    {
-        'src': '/static/core/img/logo/logo-any-512.png',
-        'sizes': '512x512',
-        'type': 'image/png',
-        'purpose': 'any',
-    },
-    {
-        'src': '/static/core/img/logo/logo-maskable-512.png',
-        'sizes': '512x512',
-        'type': 'image/png',
-        'purpose': 'maskable',
-    },
 ]
 PWA_APP_LANG = 'en-CA'
 PWA_APP_DEBUG_MODE = False
