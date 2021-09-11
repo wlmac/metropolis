@@ -19,12 +19,12 @@ class User(AbstractUser):
     organizations = models.ManyToManyField("Organization", blank=True, related_name="members", related_query_name="member")
     tags_following = models.ManyToManyField("Tag", blank=True, related_name="followers", related_query_name="follower")
 
-    def get_ongoing_timetable(self):
-        ongoing_term = Term.get_ongoing_term()
-        if ongoing_term is None: return None
+    def get_current_timetable(self):
+        current_term = Term.get_current()
+        if current_term is None: return None
 
         try:
-            return self.timetables.get(term=ongoing_term)
+            return self.timetables.get(term=current_term)
         except ObjectDoesNotExist:
             return None
 

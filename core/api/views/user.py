@@ -45,10 +45,10 @@ class UserMeTimetable(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
-        ongoing_timetable = request.user.get_ongoing_timetable()
+        current_timetable = request.user.get_current_timetable()
 
-        if ongoing_timetable is None:
+        if current_timetable is None:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = serializers.TimetableSerializer(ongoing_timetable)
+        serializer = serializers.TimetableSerializer(current_timetable)
         return Response(serializer.data)

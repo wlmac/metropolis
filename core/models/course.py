@@ -27,7 +27,7 @@ class Term(models.Model):
     def end_datetime(self):
         return timezone.make_aware(datetime.datetime.combine(self.end_date, datetime.time(hour=23, minute=59, second=59)))
 
-    def is_ongoing(self, target_date=None):
+    def is_current(self, target_date=None):
         target_date = utils.get_localdate(date=target_date)
         return target_date >= self.start_date and target_date < self.end_date
 
@@ -43,7 +43,7 @@ class Term(models.Model):
         cur_iter_day = self.start_datetime().replace(hour=11, minute=0, second=0)
         cycle_day_type_set = set()
 
-        if not self.is_ongoing(target_date.date()) or not self.day_is_instructional(target_date):
+        if not self.is_current(target_date.date()) or not self.day_is_instructional(target_date):
             return None
 
         while cur_iter_day <= target_date:
@@ -101,7 +101,7 @@ class Term(models.Model):
         pass
 
     @classmethod
-    def get_ongoing_term(cls, target_date=None):
+    def get_current(cls, target_date=None):
         target_date = utils.get_localdate(date=target_date)
 
         try:
@@ -143,6 +143,6 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
-    def is_ongoing(self):
+    def is_current(self):
         today = timezone.localtime()
         return today >= self.start_date and today < self.end_date
