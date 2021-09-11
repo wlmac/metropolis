@@ -90,7 +90,6 @@ hr {
     -webkit-line-clamp: 3; /* number of lines to show */
     -webkit-box-orient: vertical;
     margin: 0;
-    font-weight: 400;
     color: gray;
 }
 .club-description p:first-child {

@@ -290,7 +290,6 @@ label {
 .footer-name {
     display: inline-block;
     font-size: 15px;
-    font-weight: 400;
     text-decoration: none;
     color: var(--light-grey);
     margin: 0px 20px;
