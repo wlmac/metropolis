@@ -3,10 +3,11 @@ from django.views.generic import DetailView
 from django.views.generic.edit import UpdateView
 from django.urls import reverse
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from . import mixins
 from .. import models
 
-class ProfileRedirect(RedirectView):
+class ProfileRedirect(LoginRequiredMixin, RedirectView):
     permanent = False
     query_string = False
     pattern_name = "profile_detail"

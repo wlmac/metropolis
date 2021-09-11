@@ -2,6 +2,10 @@ from django.db import models
 from .choices import timezone_choices, graduating_year_choices
 from django.contrib.auth.models import AbstractUser
 from metropolis import settings
+from .course import Term
+from .post import Announcement
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 
 # Create your models here.
 
@@ -15,5 +19,27 @@ class User(AbstractUser):
     organizations = models.ManyToManyField("Organization", blank=True, related_name="members", related_query_name="member")
     tags_following = models.ManyToManyField("Tag", blank=True, related_name="followers", related_query_name="follower")
 
-    def get_ongoing_timetables(self):
-        return [i for i in self.timetables.all() if i.term.is_ongoing()]
+    def get_current_timetable(self):
+        current_term = Term.get_current()
+        if current_term is None: return None
+
+        try:
+            return self.timetables.get(term=current_term)
+        except ObjectDoesNotExist:
+            return None
+
+    def schedule(self, target_date=None):
+        if target_date == None:
+            target_date = timezone.localdate()
+
+        result = []
+
+        for timetable in self.timetables.all():
+            result.extend(timetable.day_schedule(target_date=target_date))
+
+        result.sort(key=lambda x: (x['time']['start'], x['time']['end']))
+
+        return result
+
+    def get_feed(self):
+        return Announcement.get_approved().filter(Q(is_public=True, tags__follower=self) | Q(organization__member=self)).distinct()

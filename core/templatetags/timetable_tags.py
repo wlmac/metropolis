@@ -20,7 +20,7 @@ def render_timetable(timetable):
     html += '</tr></thead><tbody>'
     for i in timetable_config['schedules'][timetable.term.day_schedule_format()]:
         html += '<tr>'
-        html += f'<th scope="row">{i["description"]}</th>'
+        html += f'<th scope="row">{i["description"]["time"]}</th>'
         for j in range(0, len(i['position'])):
             if day == j+1: color = 'table-primary'
             else: color = ''

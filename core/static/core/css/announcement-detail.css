@@ -77,6 +77,9 @@ hr {
 .card-body p:last-child {
     margin-bottom: 0;
 }
+.card-body .markdown-embed, .card-body img {
+    width: 100%;
+}
 .tag-section {
     display: flex;
     flex-flow: row wrap;

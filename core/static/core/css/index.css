@@ -42,7 +42,6 @@
 
 .blog-content-container {
     border-left: 5px solid var(--mid-blue);
-    padding: 10px 0;
     padding-left: 5%;
     height: 100%;
 }
@@ -68,6 +67,8 @@
 .markdown-container{
     margin: 0;
     overflow: hidden;
+    display: inline-block;
+    height: 70%;
 }
 
 .markdown-container *{
@@ -146,11 +147,20 @@
     font-weight: bolder;
     color: var(--link-blue);
 }
+.announcement-description p {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
 .announcement-description p:first-child {
     margin-top: 0;
 }
-.announcement-descriptio p:last-child {
+.announcement-description p:last-child {
     margin-bottom: 0;
+}
+.announcement-description .markdown-embed {
+    display: none;
 }
 hr {
     margin: 10px 0;

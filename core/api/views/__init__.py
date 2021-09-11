@@ -5,3 +5,4 @@ from .timetable import *
 from .widget import *
 from .meta import *
 from .user import *
+from .term import *

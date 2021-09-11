@@ -161,10 +161,10 @@ TIMETABLE_FORMATS = {
     'pre-2020': {
         'schedules': {
             'default': [
-                {'description': '08:45 AM - 10:05 AM', 'time': [[8, 45], [10, 5]], 'position': [{1}, {1}]},
-                {'description': '10:15 AM - 11:30 AM', 'time': [[10, 15], [11, 30]], 'position': [{2}, {2}]},
-                {'description': '12:30 PM - 01:45 PM', 'time': [[12, 30], [13, 45]], 'position': [{3}, {4}]},
-                {'description': '01:50 PM - 03:05 PM', 'time': [[13, 50], [15, 5]], 'position': [{4}, {3}]},
+                {'description': {'time': '08:45 AM - 10:05 AM', 'course': 'Period 1'}, 'time': [[8, 45], [10, 5]], 'position': [{1}, {1}]},
+                {'description': {'time': '10:15 AM - 11:30 AM', 'course': 'Period 2'}, 'time': [[10, 15], [11, 30]], 'position': [{2}, {2}]},
+                {'description': {'time': '12:30 PM - 01:45 PM', 'course': 'Period 3'}, 'time': [[12, 30], [13, 45]], 'position': [{3}, {4}]},
+                {'description': {'time': '01:50 PM - 03:05 PM', 'course': 'Period 4'}, 'time': [[13, 50], [15, 5]], 'position': [{4}, {3}]},
             ]
         },
         'courses': 4,
@@ -186,9 +186,9 @@ TIMETABLE_FORMATS = {
     'covid': {
         'schedules': {
             'default': [
-                {'description': '08:45 AM - 12:30 PM (In person)', 'time': [[8, 45], [12, 30]], 'position': [{1}, {2}, {3}, {4}]},
-                {'description': '08:45 AM - 12:30 PM (At home)', 'time': [[8, 45], [12, 30]], 'position': [{2}, {1}, {4}, {3}]},
-                {'description': '02:00 PM - 03:15 PM (At home)', 'time': [[14, 0], [15, 15]], 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
+                {'description': {'time': '08:45 AM - 12:30 PM (In person)', 'course': 'Morning Class'}, 'time': [[8, 45], [12, 30]], 'position': [{1}, {2}, {3}, {4}]},
+                {'description': {'time': '08:45 AM - 12:30 PM (At home)', 'course': 'Morning Class'}, 'time': [[8, 45], [12, 30]], 'position': [{2}, {1}, {4}, {3}]},
+                {'description': {'time': '02:00 PM - 03:15 PM (At home)', 'course': 'Afternoon Class'}, 'time': [[14, 0], [15, 15]], 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
             ],
         },
         'courses': 2,
@@ -210,16 +210,16 @@ TIMETABLE_FORMATS = {
     'week': {
         'schedules': {
             'default': [
-                {'description': '09:00 AM - 11:30 AM', 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
-                {'description': '12:15 PM - 02:45 PM', 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
+                {'description': {'time': '09:00 AM - 11:30 AM', 'course': 'Morning Class'}, 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
+                {'description': {'time': '12:15 PM - 02:45 PM', 'course': 'Afternoon Class'}, 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
             ],
             'late-start': [
-                {'description': '09:00 AM - 11:30 AM', 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
-                {'description': '12:15 PM - 02:45 PM', 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
+                {'description': {'time': '09:00 AM - 11:30 AM', 'course': 'Morning Class'}, 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
+                {'description': {'time': '12:15 PM - 02:45 PM', 'course': 'Afternoon Class'}, 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
             ],
             'early-dismissal': [
-                {'description': '09:00 AM - 11:30 AM', 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
-                {'description': '12:15 PM - 02:45 PM', 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
+                {'description': {'time': '09:00 AM - 11:30 AM', 'course': 'Morning Class'}, 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
+                {'description': {'time': '12:15 PM - 02:45 PM', 'course': 'Afternoon Class'}, 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
             ],
         },
         'courses': 4,
@@ -287,6 +287,7 @@ ANNOUNCEMENTS_CUSTOM_FEEDS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
@@ -376,18 +377,6 @@ PWA_APP_ICONS = [
     {
         'src': '/static/core/img/logo/logo-maskable-192.png',
         'sizes': '192x192',
-        'type': 'image/png',
-        'purpose': 'maskable',
-    },
-    {
-        'src': '/static/core/img/logo/logo-any-512.png',
-        'sizes': '512x512',
-        'type': 'image/png',
-        'purpose': 'any',
-    },
-    {
-        'src': '/static/core/img/logo/logo-maskable-512.png',
-        'sizes': '512x512',
         'type': 'image/png',
         'purpose': 'maskable',
     },

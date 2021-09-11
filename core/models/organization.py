@@ -1,7 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from .user import User
+from .post import Announcement
 from ..utils.file_upload import file_upload_path_generator
+from metropolis import settings
 
 # Create your models here.
 
@@ -12,9 +14,9 @@ def icon_file_path_generator(instance, file_name):
     return file_upload_path_generator('icons')(instance, file_name)
 
 class Organization(models.Model):
-    owner = models.ForeignKey("User", on_delete=models.PROTECT, related_name="organizations_owning")
-    supervisors = models.ManyToManyField("User", related_name="organizations_supervising")
-    execs = models.ManyToManyField("User", related_name="organizations_leading")
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="organizations_owning")
+    supervisors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="organizations_supervising")
+    execs = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="organizations_leading")
 
     name = models.CharField(max_length=64)
     bio = models.CharField(blank=True, max_length=512)
@@ -38,6 +40,20 @@ class Organization(models.Model):
     def member_count(self):
         return User.objects.filter(organizations=self).count()
 
+    def get_feed(self, user=None):
+        org_feed = Announcement.get_approved().filter(organization=self)
+
+        if user is None or user not in self.members.all():
+            org_feed = org_feed.filter(is_public=True)
+
+        return org_feed
+
+    class Meta:
+        verbose_name = 'club'
+
 class OrganizationURL(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='links')
     url = models.URLField()
+
+    def __str__(self):
+        return self.url

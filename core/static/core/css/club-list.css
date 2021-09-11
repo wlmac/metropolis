@@ -99,6 +99,9 @@ hr {
 .club-description p:last-child {
     margin-bottom: 0;
 }
+.club-description .markdown-embed, .club-description img {
+    display: none;
+}
 
 .tag-section {
     position: relative;
