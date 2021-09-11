@@ -45,12 +45,10 @@ class UserMeTimetable(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
-        ongoing_timetables = request.user.get_ongoing_timetables()
+        ongoing_timetable = request.user.get_ongoing_timetable()
 
-        if len(ongoing_timetables) == 0:
+        if ongoing_timetable is None:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
-        elif len(ongoing_timetables) >= 2:
-            return Response({'detail': 'Misconfigured Terms: Contact Admin'}, status=500)
 
-        serializer = serializers.TimetableSerializer(ongoing_timetables[0])
+        serializer = serializers.TimetableSerializer(ongoing_timetable)
         return Response(serializer.data)

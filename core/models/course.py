@@ -4,6 +4,8 @@ from metropolis import settings
 from django.utils import timezone
 import datetime
 from metropolis import settings
+from .. import utils
+from django.core.exceptions import MultipleObjectsReturned
 
 # Create your models here.
 
@@ -26,23 +28,17 @@ class Term(models.Model):
         return timezone.make_aware(datetime.datetime.combine(self.end_date, datetime.time(hour=23, minute=59, second=59)))
 
     def is_ongoing(self, target_date=None):
-        if target_date == None:
-            target_date = timezone.localdate()
+        target_date = utils.get_localdate(date=target_date)
         return target_date >= self.start_date and target_date < self.end_date
 
     def day_is_instructional(self, target_date=None):
-        if target_date == None:
-            target_date = timezone.localdate()
-        target_date = timezone.make_aware(datetime.datetime.combine(target_date, datetime.time(hour=11, minute=00, second=00)))
-
+        target_date = utils.get_localdate(date=target_date, time=[11, 0, 0])
         return target_date.weekday() < 5 and not self.events.filter(is_instructional=False, start_date__lte=target_date, end_date__gte=target_date).exists()
 
     def day_num(self, target_date=None):
         cycle_duration = settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['duration']
 
-        if target_date == None:
-            target_date = timezone.localdate()
-        target_date = timezone.make_aware(datetime.datetime.combine(target_date, datetime.time(hour=23, minute=59, second=59)))
+        target_date = utils.get_localdate(date=target_date, time=[23, 59, 59])
 
         cur_iter_day = self.start_datetime().replace(hour=11, minute=0, second=0)
         cycle_day_type_set = set()
@@ -63,9 +59,7 @@ class Term(models.Model):
         return (len(cycle_day_type_set) - 1) % settings.TIMETABLE_FORMATS[self.timetable_format]['cycle']['length'] + 1
 
     def day_schedule_format(self, target_date=None):
-        if target_date == None:
-            target_date = timezone.localdate()
-        target_date = timezone.make_aware(datetime.datetime.combine(target_date, datetime.time(hour=11, minute=0, second=0)))
+        target_date = utils.get_localdate(date=target_date, time=[11, 0, 0])
 
         schedule_formats = settings.TIMETABLE_FORMATS[self.timetable_format]['schedules']
         schedule_format_set = set(self.events.filter(start_date__lte=target_date, end_date__gte=target_date).values_list('schedule_format', flat=True)).intersection(set(schedule_formats.keys()))
@@ -76,8 +70,7 @@ class Term(models.Model):
         return 'default'
 
     def day_schedule(self, target_date=None):
-        if target_date == None:
-            target_date = timezone.localdate()
+        target_date = utils.get_localdate(date=target_date)
 
         timetable_config = settings.TIMETABLE_FORMATS[self.timetable_format]
         day_num = self.day_num(target_date=target_date)
@@ -97,10 +90,26 @@ class Term(models.Model):
                     'start': start_time,
                     'end': end_time,
                 },
-                'courses': i['position'][day_num-1],
+                'position': i['position'][day_num-1],
+                'cycle': f'{timetable_config["cycle"]["duration"].title()} {day_num}',
+                'course': f'{timetable_config["cycle"]["duration"].title()} {day_num} {i["description"]["course"]}',
             })
 
         return result
+
+    class MisconfiguredTermError(Exception):
+        pass
+
+    @classmethod
+    def get_ongoing_term(cls, target_date=None):
+        target_date = utils.get_localdate(date=target_date)
+
+        try:
+            return cls.objects.get(start_date__lte=target_date, end_date__gt=target_date)
+        except cls.DoesNotExist:
+            return None
+        except MultipleObjectsReturned:
+            raise cls.MisconfiguredTermError
 
 class Course(models.Model):
     code = models.CharField(max_length=16)

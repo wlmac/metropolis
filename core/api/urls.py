@@ -22,6 +22,10 @@ urlpatterns = [
     path('timetables', TimetableList.as_view(), name='api_timetable_list'),
     path('timetable/<int:pk>/schedule', TimetableSchedule.as_view(), name='api_timetable_schedule'),
     path('timetable/<int:pk>', TimetableDetails.as_view(), name='api_timetable_detail'),
+    path('terms', TermList.as_view(), name='api_term_list'),
+    path('term/<int:pk>', TermDetail.as_view(), name='api_term_detail'),
+    path('term/<int:pk>/schedule', TermSchedule.as_view(), name='api_term_schedule'),
+    path('term/<int:pk>/schedule/week', TermScheduleWeek.as_view(), name='api_term_schedule_week'),
     path('martor/upload-image', MartorImageUpload.as_view(), name='api_martor_image_upload'),
     path('version', APIVersion.as_view(), name='api_version'),
 ]

@@ -11,7 +11,6 @@ from ... import models
 
 
 class EventsList(APIView):
-    authentication_classes = [authentication.SessionAuthentication, jwt_auth.JWTTokenUserAuthentication]
     permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser]
 

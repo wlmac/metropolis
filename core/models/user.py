@@ -2,6 +2,8 @@ from django.db import models
 from .choices import timezone_choices, graduating_year_choices
 from django.contrib.auth.models import AbstractUser
 from metropolis import settings
+from .course import Term
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your models here.
 
@@ -15,8 +17,14 @@ class User(AbstractUser):
     organizations = models.ManyToManyField("Organization", blank=True, related_name="members", related_query_name="member")
     tags_following = models.ManyToManyField("Tag", blank=True, related_name="followers", related_query_name="follower")
 
-    def get_ongoing_timetables(self):
-        return [i for i in self.timetables.all() if i.term.is_ongoing()]
+    def get_ongoing_timetable(self):
+        ongoing_term = Term.get_ongoing_term()
+        if ongoing_term is None: return None
+
+        try:
+            return self.timetables.get(term=ongoing_term)
+        except ObjectDoesNotExist:
+            return None
 
     def schedule(self, target_date=None):
         if target_date == None:

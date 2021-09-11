@@ -1,7 +1,5 @@
 from django.db import models
 from .choices import timezone_choices
-from django.contrib.auth import get_user_model
-from .user import User
 from .course import Term, Course
 from metropolis import settings
 from django.urls import reverse
@@ -12,7 +10,7 @@ def get_default_timetable_format():
     return settings.DEFAULT_TIMETABLE_FORMAT
 
 class Timetable(models.Model):
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='timetables')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='timetables')
     term = models.ForeignKey(Term, on_delete=models.RESTRICT, related_name='timetables')
     courses = models.ManyToManyField(Course, related_name='timetables')
 
@@ -30,7 +28,7 @@ class Timetable(models.Model):
         result = self.term.day_schedule(target_date=target_date)
 
         for i in range(0, len(result)):
-            course_positions = result[i].pop('courses')
+            course_positions = result[i]['position']
 
             try:
                 course_code = courses[course_positions.intersection(set(courses.keys())).pop()].code
