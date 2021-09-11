@@ -4,27 +4,40 @@
 {% load gravatar_tags %}
 {% load link_tags %}
 
-{% block hd %} 
+{% block hd %}
 <link rel="stylesheet" href="{% static 'core/css/profile/detail.css' %}">
 {% endblock %}
 
 {% block content %}
 {% get_current_timezone as TIME_ZONE %}
 <div class="white-bg">
-    <div>
+    <div class="header">
+        <img class="circle responsive-img profile-picture" src="{{ profile.email|gravatar_url:100 }}" alt="{{ profile.username }}'s profile picture">
+        <div class="name-info">
+            <h5 class="full-name">{{ profile.get_full_name }}</h5>
+            <h6 class="username">{{ profile.username }}</h6>
+        </div>
+    </div>
+    <hr>
+    <div class="body">
         <div>
-            <img src="{{ profile.email|gravatar_url:100 }}" alt="{{ profile.username }}'s profile picture">
-            <div> 
-                <h5 id="full-name">{{ profile.get_full_name }}<h5>
-                <h5 id="username">{{ profile.username }}
-                {% if profile.description == "" %}
-                    <p class="font-italic">This user has not shared any information.</p>
-                {% else %}
-                    {{ profile.description }}
-                {% endif %}
-            </div>
-            {% if request.user == profile %}
-                <a href="{% url 'profile_update' %}" class="card-link">Edit Profile</a>
+            {% if profile.bio == "" %}
+            This user has not shared any information.
+            {% else %}
+            {{ profile.bio }}
+            {% endif %}
+        </div>
+        <div class="stat">
+            {% if profile.graduating_year %}
+                <div class="key">Graduating</div><div>{{ profile.graduating_year }}</div>
+            {% endif %}
+        </div>
+        <div class="stat">
+            {% if profile.organizations %}
+                <div class="key">Following</div>
+                {% for organization in profile.organizations.all %}
+                <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
+                {% endfor %}
             {% endif %}
         </div>
     </div>

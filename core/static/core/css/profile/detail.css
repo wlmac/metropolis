@@ -1,3 +1,48 @@
-#full-name {
+.white-bg {
+    padding: 30px 5%;
+}
+
+.header {
+    display: flex; 
+    margin-bottom: 5%;
+}
+
+.profile-picture {
+    margin-right: 5%;
+}
+
+.name-info {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+}
+
+.full-name {
     font-weight: 900;
+    margin: 0;
+}
+
+.username {
+    margin: 0;
+    color: var(--dark-blue);
+}
+
+hr {
+    color: var(--light-grey); 
+    border-color: var(--light-grey); 
+}
+
+.body {
+    margin-top: 5%;
+}
+
+.stat {
+    display: flex; 
+    margin: 1rem 0;
+}
+
+.key { 
+    width: 6rem;
+    font-weight: 600; 
+    color: var(--mid-grey);
 }
