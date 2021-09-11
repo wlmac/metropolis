@@ -146,3 +146,11 @@ class Event(models.Model):
     def is_current(self):
         today = timezone.localtime()
         return today >= self.start_date and today < self.end_date
+
+    @classmethod
+    def get_events(cls, user=None):
+        events = cls.objects.filter(is_public=True)
+        if user is not None and user.is_authenticated:
+            events = (events | events.filter(organization__member=user)).distinct()
+
+        return events
