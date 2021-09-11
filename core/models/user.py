@@ -3,7 +3,9 @@ from .choices import timezone_choices, graduating_year_choices
 from django.contrib.auth.models import AbstractUser
 from metropolis import settings
 from .course import Term
+from .post import Announcement
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 
 # Create your models here.
 
@@ -38,3 +40,6 @@ class User(AbstractUser):
         result.sort(key=lambda x: (x['time']['start'], x['time']['end']))
 
         return result
+
+    def get_feed(self):
+        return Announcement.get_approved().filter(Q(is_public=True, tags__follower=self) | Q(organization__member=self)).distinct()
