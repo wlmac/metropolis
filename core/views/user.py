@@ -32,6 +32,7 @@ class ProfileUpdate(UpdateView, mixins.TitleMixin):
     template_name = 'core/profile/update.html'
     success_url = reverse_lazy('profile_redirect')
     title = 'Update Profile'
+    context_object_name = 'profile'
 
     def get_object(self):
         return self.request.user
