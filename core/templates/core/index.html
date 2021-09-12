@@ -6,31 +6,32 @@
 
 {% block main %}
     <div id="content-container">
-        <div id="top-container">
-            <div id="banner"></div>
-            <div id="next-class" class="center-align">
-                <h4 id="schedule-course">Loading...</h4><br>
-                <span id="schedule-description">Please wait a sec.</span>
+        <div class="banner">
+            <div class="background"><img src="{% static 'core/img/top-banner.jpeg' %}"/></div>
+            <div class="next-class center-align">
+                <h4 class="schedule-course">Loading...</h4>
+                <span class="schedule-description">Please wait a sec.</span>
             </div>
-            <div id="seperator"></div>
         </div>
         <div id="main-container">
-            <div class="blog row">
-                <!-- sample blog -->
-                <div class="blog-content col valign-wrapper left-align">
-                    <div class="blog-content-container">
-                        <h4 class="title">{{ blogpost.title }}</h4>
-                        <hr>
-                        <div class="blog-body markdown-container">
-                            {{ blogpost.body | safe_markdown }}
-                            <br>
-                            <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i
-                                class='zmdi zmdi-chevron-right'></i></a>
+            {% if blogpost %}
+                <div class="blog row">
+                    <!-- sample blog -->
+                    <div class="blog-content col valign-wrapper left-align">
+                        <div class="blog-content-container">
+                            <h4 class="title">{{ blogpost.title }}</h4>
+                            <hr>
+                            <div class="blog-body markdown-container">
+                                {{ blogpost.body | safe_markdown }}
+                                <br>
+                                <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i
+                                    class='zmdi zmdi-chevron-right'></i></a>
+                            </div>
                         </div>
                     </div>
+                    <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
                 </div>
-                <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
-            </div>
+            {% endif %}
             <div id="recent-events" class="card-list center-align">
                 <div class="cards-container">
                     {% for event in events %}
@@ -104,6 +105,7 @@
 
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/index.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'core/css/index-banner.css' %}" type="text/css">
     <script src="{% static 'js/luxon.min.js' %}"></script>
     <script src="{% static 'core/js/schedule.js' %}"></script>
 {% endblock %}

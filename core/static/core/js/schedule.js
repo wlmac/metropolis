@@ -69,8 +69,8 @@ function update() {
         description = "We were unable to fetch your schedule.";
     }
 
-    $("#schedule-course").text(course);
-    $("#schedule-description").text(description);
+    $(".schedule-course").text(course);
+    $(".schedule-description").text(description);
 }
 
 $(document).ready(function() {
