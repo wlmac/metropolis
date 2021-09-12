@@ -36,8 +36,14 @@
     min-height: calc(100vh - 226px);
 }
 .content-embed {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 53rem;
+}
+.content-embed iframe {
     width: 80%;
-    height: 51rem;
+    height: 100%;
 }
 .title {
     font-weight: bold;
@@ -132,7 +138,7 @@ hr {
         padding: 20px;
         min-height: calc(100vh - 163px);
     }
-    .content-embed {
+    .content-embed iframe {
         width: 100%;
     }
     .title {
