@@ -47,6 +47,12 @@
     margin: 15px 0;
     font-size: 1.5rem;
 }
+.section-title {
+    font-weight: bold;
+    margin: 0;
+    margin: 8px 0;
+    font-size: 1.2rem;
+}
 .title:first-child {
     margin-top: 0;
 }
@@ -68,12 +74,10 @@
     padding: .5rem;
     border-radius: 8px;
 }
-
 .member-image {
     height: 32px;
     margin-right: 10px;
 }
-
 .member-text {
     color: var(--dark-grey);
     font-size: 1rem;
@@ -87,6 +91,9 @@
     display: flex; 
     justify-content: start;
     align-items: center;
+}
+.link-section li {
+    margin: 4px 0;
 }
 .link-section .zmdi {
     margin-right: 4px;

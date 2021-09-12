@@ -138,7 +138,69 @@
             </ul>
         </div>
         <div class="content" id="content-school">
-
+            <h1 class="title">Contact the School</h1>
+            <hr>
+            <p class="text">
+                Project Metropolis is a site affiliated with William Lyon Mackenzie Collegiate Institute.
+                To contact the school or faculty, please blahblah idk ill fix this later.
+            </p>
+            <ul class="link-section">
+                <div>
+                    <li>
+                        <a class="link" href="https://wlmac.ca/" target="_blank">
+                            <i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i>
+                            WLMCI Offical Website
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="https://goo.gl/maps/WyfTKUqKrbecU4RE9" target="_blank">
+                            <i class="zmdi zmdi-map zmdi-hc-lg" aria-hidden="true"></i>
+                            20 Tillplain Road, North York, ON M3H 5R2
+                        </a>
+                    </li>
+                    <li>
+                        <a style="color: var(--near-black);">
+                            <i class="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
+                            (416) 395-3330
+                        </a>
+                    </li>
+                </div>
+            </ul>
+            <h2 class="subtitle">Admin</h2>
+            <hr>
+            <ul class="link-section">
+                <div>
+                    <h3 class="section-title">Principal</h3>
+                    <li>
+                        <a class="link" href="mailto:keith.johnson@tdsb.on.ca" target="_blank">
+                            <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                            Keith Johnson (keith.johnson@tdsb.on.ca)
+                        </a>
+                    </li>
+                    <h3 class="section-title">Vice Principals</h3>
+                    <li>
+                        <a class="link" href="mailto:joanne.d'addio@tdsb.on.ca" target="_blank">
+                            <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                            Joanne D'Addio (joanne.d'addio@tdsb.on.ca)
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="mailto:stephen.morris@tdsb.on.ca" target="_blank">
+                            <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                            Stephen Morris (stephen.morris@tdsb.on.ca)
+                        </a>
+                    </li>
+                </div>
+            </ul>
+            {% if user.is_authenticated %}
+            <h2 class="subtitle">Staff</h2>
+            <hr>
+            <ul class="link-section">
+                <div>
+                    <h3 class="section-title">Arts</h3>
+                </div>
+            </ul>
+            {% endif %}
         </div>
         <script>
             $(document).ready(function() {
