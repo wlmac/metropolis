@@ -4,6 +4,7 @@ label {
 
 .bio textarea {
     margin-top: 1rem; 
+    height: auto;
     resize: none; 
 }
 
