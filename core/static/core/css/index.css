@@ -68,7 +68,6 @@
     margin: 0;
     overflow: hidden;
     display: inline-block;
-    height: 70%;
 }
 
 .markdown-container *{
@@ -159,7 +158,7 @@
 .announcement-description p:last-child {
     margin-bottom: 0;
 }
-.announcement-description .markdown-embed {
+.announcement-description .markdown-embed, .announcement-description img {
     display: none;
 }
 hr {

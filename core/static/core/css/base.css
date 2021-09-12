@@ -34,6 +34,10 @@ p{
     color: var(--near-black);
 }
 
+select{
+    display: block;
+}
+
 .nav-wrapper{
     background-color: var(--dark-blue);
     font-family: "Poppins", sans-serif;
