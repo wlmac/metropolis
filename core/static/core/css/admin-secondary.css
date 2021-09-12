@@ -81,8 +81,8 @@
   background-color: white;
   padding: 20px;
   margin-right: 20px;
-  margin-left: -316px !important;
-  left: -316px !important;
+  margin-left: -316px;
+  left: -316px;
 }
 
 #toggle-nav-sidebar, #nav-sidebar{
