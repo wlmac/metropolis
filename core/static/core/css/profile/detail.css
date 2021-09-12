@@ -55,6 +55,7 @@ hr {
     }
     .profile-picture {
         width: 100px; 
+        margin-right: 0;
         margin-bottom: 1rem; 
     }
 }
