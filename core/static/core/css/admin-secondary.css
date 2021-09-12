@@ -1,3 +1,10 @@
+:root{
+  --primary: var(--link-blue);
+  --default-button-bg: var(--link-blue);
+  --button-bg: var(--mid-blue);
+  --link-fg: var(--primary);
+}
+
 .content{
   background-color: white;
   max-width: 1200px !important;
@@ -127,4 +134,24 @@ td, th {
 
 .submit-row{
   margin: 20px 0 20px !important;
+}
+
+textarea {
+  height: auto !important;
+}
+
+.submit-row a.deletelink {
+  height: auto;
+}
+
+.form-row div.help {
+  /*padding-left: 0px !important;*/
+}
+
+*, *:before, *:after {
+  box-sizing: initial !important;
+}
+
+.aligned label {
+  width: 160px !important;
 }

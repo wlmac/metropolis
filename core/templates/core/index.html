@@ -5,42 +5,35 @@
 {% load timetable_tags %}
 
 {% block main %}
-    {% if request.user.is_anonymous %}
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Welcome to Metropolis</h5>
-                <p class="card-text">Please register or log in to use the app.</p>
+    <div id="content-container">
+        <div id="top-container">
+            <div id="banner"></div>
+            <div id="next-class" class="center-align">
+                <h4 id="schedule-course">Loading...</h4><br>
+                <span id="schedule-description">Please wait a sec.</span>
             </div>
+            <div id="seperator"></div>
         </div>
-    {% else %}
-        <div id="content-container">
-            <div id="top-container">
-                <div id="banner"></div>
-                <div id="next-class" class="center-align">
-                    <h4>CLASS</h4><br>
-                    <span>starting in x minutes</span>
-                </div>
-                <div id="seperator"></div>
-            </div>
-            <div id="main-container">
-                <div class="blog row">
-                    <!-- sample blog -->
-                    <div class="blog-content col valign-wrapper left-align">
-                        <div class="blog-content-container">
-                            <h4 class="title">{{ blogpost.title }}</h4>
-                            <hr>
-                            <div class="blog-body markdown-container">{{ blogpost.body | safe_markdown }}</div>
-                            <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i class='zmdi zmdi-chevron-right'></i></a>
-                        </div>
+        <div id="main-container">
+            <div class="blog row">
+                <!-- sample blog -->
+                <div class="blog-content col valign-wrapper left-align">
+                    <div class="blog-content-container">
+                        <h4 class="title">{{ blogpost.title }}</h4>
+                        <hr>
+                        <div class="blog-body markdown-container">{{ blogpost.body | safe_markdown }}</div>
+                        <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i
+                                class='zmdi zmdi-chevron-right'></i></a>
                     </div>
-                    <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
                 </div>
-                <div id="recent-events" class="card-list center-align">
-                    <div class="cards-container">
-                        {% for event in events %}
+                <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
+            </div>
+            <div id="recent-events" class="card-list center-align">
+                <div class="cards-container">
+                    {% for event in events %}
                         <div class="event-card row card {% if forloop.counter == 3 %} hide-on-med-and-down {% endif %}">
                             <div class="event-time col right-align valign-wrapper"
-                                    style="background-color: {{ event.tags.first.color }}">
+                                 style="background-color: {{ event.tags.first.color }}">
                                 <div class="time-container">
                                     <span class="time">{{ event.start_date.time }}</span><br>
                                     <span class="intermediate">to</span><br>
@@ -52,51 +45,58 @@
                                 <hr>
                                 <div class="authors">
                                     <div class="authors-image">
-                                        <a href="{{event.organization.slug|organization_url}}"><img class="circle" src="{{event.organization.icon.url}}"></a>
+                                        <a href="{{ event.organization.slug|organization_url }}"><img class="circle"
+                                                                                                      src="{{ event.organization.icon.url }}"></a>
                                     </div>
                                     <div class="authors-text">
-                                        {{event.organization.slug|organization}}
+                                        {{ event.organization.slug|organization }}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        {% empty %}
+                    {% empty %}
                         There are no events at this time.
-                        {% endfor %}
-                    </div>
-                    <a class="full-content-page link" href="{% url 'calendar' %}">View all events <i class='zmdi zmdi-chevron-right'></i></a>
+                    {% endfor %}
                 </div>
-                <hr style="margin: 10px calc(2% + 10px); border-top-width: 2.5px; border-color: #d9d9d9;">
-                <div id="recent-announcements" class="center-align">
-                    <div id="announcements" class="cards-container">
-                        {% for announcement in announcements %}
+                <a class="full-content-page link" href="{% url 'calendar' %}">View all events <i
+                        class='zmdi zmdi-chevron-right'></i></a>
+            </div>
+            <hr style="margin: 10px calc(2% + 10px); border-top-width: 2.5px; border-color: #d9d9d9;">
+            <div id="recent-announcements" class="center-align">
+                <div id="announcements" class="cards-container">
+                    {% for announcement in announcements %}
                         <div class="announcement-card card {% if forloop.counter == 3 %} hide-on-med-and-down {% endif %} left-align"
-                                style="border-color: {{ announcement.tags.first.color }}">
+                             style="border-color: {{ announcement.tags.first.color }}">
                             <h5 class="title truncate">{{ announcement.title }}</h5>
                             <div class="authors">
                                 <div class="authors-image">
-                                    <a href="{{announcement.organization.slug|organization_url}}"><img class="circle" src="{{announcement.organization.icon.url}}"></a>
+                                    <a href="{{ announcement.organization.slug|organization_url }}"><img class="circle"
+                                                                                                         src="{{ announcement.organization.icon.url }}"></a>
                                 </div>
                                 <div class="authors-text">
-                                    {{announcement.organization.slug|organization}}
+                                    {{ announcement.organization.slug|organization }}
                                 </div>
                             </div>
                             <hr>
-                            <div class="announcement-description markdown-container">{{ announcement.body | safe_markdown }}</div>
-                            <br>
-                            <a class="link" href="{{announcement.pk|announcement_url}}">See Announcement <i class='zmdi zmdi-chevron-right'></i></a>
+                            <div class="announcement-description markdown-container">
+                                {{ announcement.body | safe_markdown }}
+                                <br>
+                                <a class="link" href="{{ announcement.pk|announcement_url }}">See Announcement <i class='zmdi zmdi-chevron-right'></i></a>
+                            </div>
                         </div>
-                        {% empty %}
+                    {% empty %}
                         There are no announcements at this time.
-                        {% endfor %}
-                    </div>
-                    <a class="full-content-page link" href="{% url 'announcement_list' %}">View all announcements <i class='zmdi zmdi-chevron-right'></i></a>
+                    {% endfor %}
                 </div>
+                <a class="full-content-page link" href="{% url 'announcement_list' %}">View all announcements <i
+                        class='zmdi zmdi-chevron-right'></i></a>
             </div>
         </div>
-    {% endif %}
+    </div>
 {% endblock %}
 
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/index.css' %}" type="text/css">
+    <script src="{% static 'js/luxon.min.js' %}"></script>
+    <script src="{% static 'core/js/schedule.js' %}"></script>
 {% endblock %}

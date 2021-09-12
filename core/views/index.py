@@ -13,17 +13,9 @@ class Index(TemplateView, mixins.TitleMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # TODO: Refactor this later
-        approved_announcements = models.Announcement.objects.filter(status='a')
-        context['announcements'] = approved_announcements.filter(is_public=True)
-        if self.request.user.is_authenticated:
-            context['announcements'] = (context['announcements'] | approved_announcements.filter(organization__member=self.request.user)).distinct()
-        context['announcements'] = context['announcements'][:3]
+        context['announcements'] = models.Announcement.get_all(user=self.request.user)[:3]
 
-        context['events'] = models.Event.objects.filter(is_public=True)
-        if self.request.user.is_authenticated:
-            context['events'] = (context['events'] | models.Event.objects.filter(organization__member=self.request.user)).distinct()
-        context['events'] = context['events'][:3]
+        context['events'] = models.Event.get_events(user=self.request.user)[:3]
 
         context['blogpost'] = models.BlogPost.objects.first()
 

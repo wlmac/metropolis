@@ -9,7 +9,7 @@ class AnnouncementListAll(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        announcements = models.Announcement.objects.filter(status='a').filter(is_public=True)
+        announcements = models.Announcement.get_all(user=request.user)
         serializer = serializers.AnnouncementSerializer(announcements, many=True)
         return Response(serializer.data)
 
@@ -17,6 +17,6 @@ class AnnouncementListMyFeed(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
-        announcements = models.Announcement.objects.filter(status='a').filter(Q(is_public=True, tags__follower=request.user) | Q(organization__member=request.user)).distinct()
+        announcements = request.user.get_feed()
         serializer = serializers.AnnouncementSerializer(announcements, many=True)
         return Response(serializer.data)

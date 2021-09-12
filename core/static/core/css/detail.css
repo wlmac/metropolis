@@ -36,7 +36,7 @@
 }
 .club-name {
     margin-bottom: 3%;
-    font-weight: 600;
+    font-weight: bold;
     font-size: calc(16px + 2vw);
 }
 
@@ -83,7 +83,6 @@
     padding-left: 4%;
     border-left: black 3px solid;
     margin: 0;
-    font-weight: 400;
 }
 
 .link-section {
