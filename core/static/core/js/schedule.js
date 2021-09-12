@@ -33,8 +33,7 @@ function update() {
     let course;
     let description;
 
-    // const now = DateTime.now()
-    const now = DateTime.local(2021, 9, 13, 11, 50, 0)
+    const now = DateTime.now()
     const todayDate = now.toISODate();
 
     if (todayDate in scheduleData) {
