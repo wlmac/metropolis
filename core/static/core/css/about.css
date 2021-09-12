@@ -100,7 +100,15 @@
     margin: 4px 0;
 }
 .link-section .zmdi {
-    margin-right: 4px;
+    margin-right: 8px;
+}
+.link-section li a {
+    display: flex;
+    align-items: center;
+}
+.link-section li a p {
+    margin: 0;
+    color: inherit;
 }
 hr {
     border: 0px solid var(--light-grey);
