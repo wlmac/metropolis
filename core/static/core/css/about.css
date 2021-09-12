@@ -94,14 +94,14 @@ hr {
         justify-content: center;
     }
     .headers li {
-        font-size: 0.9rem;
+        font-size: 0.75rem;
     }
     .header {
-        padding: 0 20px;
+        padding: 0 10px;
         padding-bottom: 5px;
     }
     .content-container {
-        padding: 5px 20px;
+        padding: 20px;
         min-height: calc(100vh - 163px);
     }
     .title {
