@@ -21,9 +21,12 @@
                     <div class="blog-content-container">
                         <h4 class="title">{{ blogpost.title }}</h4>
                         <hr>
-                        <div class="blog-body markdown-container">{{ blogpost.body | safe_markdown }}</div>
-                        <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i
+                        <div class="blog-body markdown-container">
+                            {{ blogpost.body | safe_markdown }}
+                            <br>
+                            <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i
                                 class='zmdi zmdi-chevron-right'></i></a>
+                        </div>
                     </div>
                 </div>
                 <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
