@@ -1,4 +1,5 @@
 :root{
+    --white: #ffffff;
     --text-grey: #fafafa;
     --bg-grey: #f3f3f3;
     --light-grey: #efefef;
@@ -6,6 +7,7 @@
     --mid-grey: #939393;
     --dark-grey: #434343;
     --near-black: #0b0b0b;
+    --black: #000000;
 
     --dark-blue: #073763;
     --link-blue: #3a6a96;
@@ -20,6 +22,33 @@
     letter-spacing: 0.15px;
     background-color: var(--bg-grey);
 }
+
+/*@media (prefers-color-scheme: dark) {
+    :root{
+        --white: #000000;
+        --text-grey: #0b0b0b;
+        --bg-grey: #434343;
+        --light-grey: #939393;
+        --line-grey: #b7b7b7;
+        --mid-grey: #efefef;
+        --dark-grey: #f3f3f3;
+        --near-black: #fafafa;
+        --black: #ffffff;
+
+        --dark-blue: #073763;
+        --link-blue: #3a6a96;
+        --mid-blue: #6e9bc4;
+        --highlight-blue: #e7f2fb;
+        --status-red: #e85856;
+        --status-yellow: #ebc942;
+        --status-green: #5cc478;
+        
+        font-family: 'Roboto', sans-serif;
+        letter-spacing: 0.15px;
+        background-color: var(--dark-grey);
+    }
+}*/
+
 html {
     height: 100%;
 }
@@ -98,11 +127,11 @@ select{
 
 .dropdown-content > li > a, .sidenav > li > a{
     color: var(--mid-blue);
-    width: 100%;
+    /*width: 100%;*/
 }
 
 .dropdown-content> li > a:hover, .sidenav > li > a:hover{
-    color: white;
+    color: var(--white);
     transition: color linear 0.15s;
 }
 
@@ -122,7 +151,7 @@ select{
 }
 
 .link-light{
-    color: white;
+    color: var(--white);
     transition: color 0.15s linear;
 }
 
@@ -136,7 +165,6 @@ select{
 }
 
 .btn{
-    width: 100%;
     background-color: var(--link-blue);
 }
 
@@ -173,7 +201,7 @@ label {
 }
 
 .white-bg{
-    background-color: white;
+    background-color: var(--white);
     padding: 30px;
     border-radius: 3px;
     width: 75%;
@@ -185,7 +213,7 @@ label {
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background-color: white;
+    background-color: var(--white);
 }
 
 .install-popup > *{

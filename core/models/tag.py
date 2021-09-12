@@ -10,7 +10,7 @@ class Tag(models.Model):
     description = models.TextField(blank=True)
 
     def color(self):
-        random.seed(self.pk)
+        random.seed(self.name + self.description)
         hue = random.random()
         return '#%02x%02x%02x' % tuple(int(i*255) for i in colorsys.hsv_to_rgb(hue, settings.TAG_COLOR_SATURATION, settings.TAG_COLOR_VALUE))
 

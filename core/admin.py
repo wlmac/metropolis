@@ -53,7 +53,7 @@ class OrganizationURLInline(admin.StackedInline):
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['name', 'is_open', 'owner']
     list_filter = ['is_open', 'tags']
-    fields = ['name', 'bio', 'description', 'slug', 'is_open', 'applications_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
+    fields = ['name', 'bio', 'long_description', 'slug', 'is_open', 'applications_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
     inlines = [
         OrganizationURLInline,
     ]
@@ -266,6 +266,9 @@ class EventAdmin(admin.ModelAdmin):
         return super().has_change_permission(request, obj)
 
 class FlatPageAdmin(FlatPageAdmin):
+    formfield_overrides = {
+        django.db.models.TextField: {'widget': AdminMartorWidget},
+    }
     fieldsets = (
         (None, {'fields': ('url', 'title', 'content', 'sites')}),
         (_('Advanced options'), {

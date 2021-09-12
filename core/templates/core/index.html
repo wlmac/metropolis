@@ -9,8 +9,8 @@
         <div id="top-container">
             <div id="banner"></div>
             <div id="next-class" class="center-align">
-                <h4>CLASS</h4><br>
-                <span>starting in x minutes</span>
+                <h4 id="schedule-course">Loading...</h4><br>
+                <span id="schedule-description">Please wait a sec.</span>
             </div>
             <div id="seperator"></div>
         </div>
@@ -21,9 +21,12 @@
                     <div class="blog-content-container">
                         <h4 class="title">{{ blogpost.title }}</h4>
                         <hr>
-                        <div class="blog-body markdown-container">{{ blogpost.body | safe_markdown }}</div>
-                        <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i
+                        <div class="blog-body markdown-container">
+                            {{ blogpost.body | safe_markdown }}
+                            <br>
+                            <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i
                                 class='zmdi zmdi-chevron-right'></i></a>
+                        </div>
                     </div>
                 </div>
                 <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
@@ -97,4 +100,6 @@
 
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/index.css' %}" type="text/css">
+    <script src="{% static 'js/luxon.min.js' %}"></script>
+    <script src="{% static 'core/js/schedule.js' %}"></script>
 {% endblock %}

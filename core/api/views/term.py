@@ -1,5 +1,5 @@
 from .. import serializers
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from ... import models
 from rest_framework.response import Response
@@ -35,3 +35,13 @@ class TermScheduleWeek(APIView):
             date += datetime.timedelta(days=1)
 
         return Response(result)
+
+class TermCurrent(APIView):
+    def get(self, request, format=None):
+        term = models.Term.get_current()
+
+        if term is None:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = serializers.TermSerializer(term)
+        return Response(serializer.data)

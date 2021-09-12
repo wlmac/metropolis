@@ -74,6 +74,7 @@ select {
 
 .login-btn {
     margin-top: 30px;
+    width: 100%;
 }
 
 .wrapper > .col {
