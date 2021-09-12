@@ -266,6 +266,9 @@ class EventAdmin(admin.ModelAdmin):
         return super().has_change_permission(request, obj)
 
 class FlatPageAdmin(FlatPageAdmin):
+    formfield_overrides = {
+        django.db.models.TextField: {'widget': AdminMartorWidget},
+    }
     fieldsets = (
         (None, {'fields': ('url', 'title', 'content', 'sites')}),
         (_('Advanced options'), {
