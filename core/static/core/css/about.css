@@ -82,6 +82,15 @@
     height: 100%;
     width: 100%;
 }
+.link-section {
+    margin: 0;
+    display: flex; 
+    justify-content: start;
+    align-items: center;
+}
+.link-section .zmdi {
+    margin-right: 4px;
+}
 hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
@@ -106,5 +115,8 @@ hr {
     }
     .title {
         font-size: 1.75rem;
+    }
+    .subtitle {
+        font-size: 1.25rem;
     }
 }
