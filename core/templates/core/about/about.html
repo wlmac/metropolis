@@ -1,0 +1,116 @@
+{% extends 'core/base.html' %}
+{% load link_tags %}
+{% load gravatar_tags %}
+{% load static %}
+{% load martortags %}
+
+{% block deps %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/about.css' %}">
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <div class="headers">
+        <ul>
+            <li class="header" id="about">ABOUT</li>
+            <li class="header" id="members">MEMBERS</li>
+            <li class="header" id="contact">CONTACT</li>
+        </ul>
+        <script>
+            $(document).ready(function() {
+                var urlParams = new URLSearchParams(window.location.search);
+                if(!urlParams.get("tab")) {
+                    $("#about").addClass("active");
+                    urlParams.set("tab", "about");
+                }
+                history.replaceState(null, null, "?"+urlParams.toString());
+                $(".header").click(function() {
+                    $(".header").removeClass("active");
+                    $(this).addClass("active");
+                    $(".content").hide();
+                    $("#content-"+this.id).show();
+                    urlParams.set("tab", this.id);
+                    history.replaceState(null, null, "?"+urlParams.toString());
+                });
+            });
+        </script>
+    </div>
+    <div class="content-container">
+        <div class="content" id="content-about">
+            <h1 class="title">Our Vision</h1>
+            <hr>
+            <p class="text">
+                By definition, a metropolis is a significant cultural center of a country or region
+                and a central hub for regional connections and communications.
+                Likewise, it is our goal at Project Metropolis to create a centralized website at WLMAC where all students can easily
+                access and share information with their peers, making this our own, online metropolis.
+            </p>
+            <h1 class="title">About the Site</h1>
+            <hr>
+            <p class="text">
+                Originally inspired by the previous Student Council information site and MAC Radio,
+                Project Metropolis aims to combines several previous platforms into one.
+            </p>
+            <p class="text">
+                With the shift towards increasing online connectivity,
+                we've worked on digitizing resources like announcements and club information
+                so that even students attending virtual school can easily have access.
+                The club system allows users to personalize their experience through "opt-in" memberships and tags.
+                Over the coming while, users can expect regular digital content via the blog,
+                such as "Humans of WLMAC" (a spontaneous photojournalism series),
+                or "Make or Break" (a series on setting habits).
+            </p>
+            <p class="text">
+                Our site will continue to roll out new features and updates in the coming months.
+                Users can look forward to a notification system, searching system, and possibly a mobile app.
+            </p>
+        </div>
+        <div class="content" id="content-members">
+            <h1 class="title">Our Team</h1>
+            <hr>
+            <p class="text">
+                A diverse group of 15  developers, artists, and creators worked in tandem to build this site.
+            </p>
+            <h1 class="title">Members</h1>
+            <hr>
+            {% for position, users in members.items %}
+            <div class="member-list">
+                <h2 class="subtitle">{{position}}{% if users|length > 1 %}s{% endif %}</h2>
+                {% for user in users %}
+                <a href="{{user.username|user_url}}">
+                    <div class="member">
+                        <div class="member-image">
+                            <img class="circle" src="{{user.email|gravatar_url:100}}">
+                        </div>
+                        <div class="member-text">
+                            {{user.username}}
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                No members under this position.
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="content" id="content-contact">
+
+        </div>
+        <script>
+            $(document).ready(function() {
+                var urlParams = new URLSearchParams(window.location.search);
+                $(".content").hide();
+                if(!$("#content-"+urlParams.get("tab")).length) {
+                    urlParams.set("tab", "about");
+                    history.replaceState(null, null, "?"+urlParams.toString());
+                }
+                $("#content-"+urlParams.get("tab")).show();
+                $(".header").removeClass("active");
+                $("#"+urlParams.get("tab")).addClass("active");
+                //$(".card-authors-text").find("a").addClass("link");
+            });
+        </script>
+    </div>
+</div>
+{% endblock %}

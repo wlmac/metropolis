@@ -1,0 +1,110 @@
+.headers {
+    overflow: hidden;
+    background-color: var(--dark-blue);
+    padding: 20px;
+    padding-left: 40px;
+}
+.headers ul {
+    display: flex;
+    margin: 0;
+}
+.headers li {
+    font-size: 1rem;
+}
+.header {
+    cursor: pointer;
+    text-align: center;
+    padding: 0 30px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    color: var(--link-blue);
+    border-bottom: 2px solid var(--link-blue);
+    display: inline;
+}
+.header:hover {
+    color: var(--mid-blue);
+    border-color: var(--mid-blue);
+    transition: color 0.1s linear, border-color 0.1s linear;
+}
+.active {
+    color: var(--highlight-blue) !important;
+    border-color: var(--highlight-blue) !important;
+}
+.content-container {
+    background-color: white;
+    padding: 40px;
+    min-height: calc(100vh - 226px);
+}
+.title {
+    font-weight: bold;
+    margin: 0;
+    margin-top: 40px;
+    font-size: 2rem;
+}
+.subtitle {
+    font-weight: bold;
+    margin: 0;
+    margin: 15px 0;
+    font-size: 1.5rem;
+}
+.title:first-child {
+    margin-top: 0;
+}
+.text {
+    color: var(--near-black);
+}
+.text:last-child {
+    margin-bottom: 0;
+}
+.member-list:not(:last-child) {
+    margin-bottom: 24px;
+}
+.member {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    background-color: var(--light-grey);
+    padding: .5rem;
+    border-radius: 8px;
+}
+
+.member-image {
+    height: 32px;
+    margin-right: 10px;
+}
+
+.member-text {
+    color: var(--dark-grey);
+    font-size: 1rem;
+}
+.circle {
+    height: 100%;
+    width: 100%;
+}
+hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}
+@media screen and (max-width: 600px) {
+    .headers {
+        padding: 20px;
+    }
+    .headers ul {
+        justify-content: center;
+    }
+    .headers li {
+        font-size: 0.9rem;
+    }
+    .header {
+        padding: 0 20px;
+        padding-bottom: 5px;
+    }
+    .content-container {
+        padding: 5px 20px;
+        min-height: calc(100vh - 163px);
+    }
+    .title {
+        font-size: 1.75rem;
+    }
+}

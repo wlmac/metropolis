@@ -405,6 +405,21 @@ SILENCED_SYSTEM_CHECKS = ['urls.W002']
 
 API_VERSION = "0.4.0"
 
+METROPOLIS_MEMBERS = {
+    "Project Manager": [
+    ],
+    "Frontend Developer": [
+    ],
+    "Backend Developer": [
+    ],
+    "App Developer": [
+    ],
+    "Graphic Designer": [
+    ],
+    "Content Creator": [
+    ]
+}
+
 try:
     from metropolis.config import *
 except ImportError:
