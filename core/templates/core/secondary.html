@@ -15,33 +15,33 @@
     <div class="secondary-nav-wrapper">
         <ul class="secondary-nav">
             <li>
-                <a class="link" href="{% url 'timetable_list' %}">Timetable</a>
+                {% url 'timetable_list' as timetable %}
+                <a class="link{% if request.path == timetable %} current{% endif %}" href="{% url 'timetable_list' %}">Timetable</a>
             </li>
             <li>
-                <a class="link" href="{% url 'profile_redirect' %}">Profile</a>
+            {% url 'profile_detail' slug=profile.username as profile_detail %}
+                <a class="link{% if request.path == profile_detail %} current{% endif %}" href="{% url 'profile_redirect' %}">Profile</a>
             </li>
-            <li>
-                <a class="link" href="">Settings</a>
-            </li>
-            {% if not user.organizations_owning.all.empty %}
-            <hr>
-            {% if user.perms.core.announcement_add %}
-            <li>
-                <a class="link" href="{% url 'admin:core_announcement_add' %}">Add user</a>
-            </li>
-            {% endif %}
-            {% if user.perms.core.event_add %}
-            <li>
-                <a class="link" href="{% url 'admin:core_event_add' %}">Add event</a>
-            </li>
-            {% endif %}
-            {% for organization in user.organizations_owning.all %}
-            <li>
-                <a class="link" href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
-            </li>
-            {% endfor %}
-            <hr>
-            {% endif %}
+            {# {% if not user.organizations_owning.all.empty %} #}
+                <hr>
+                {# {% if user.perms.core.announcement_add %} #}
+                    <li>
+                        <a class="link" href="{% url 'admin:core_announcement_add' %}">Announcements</a>
+                    </li>
+                {# {% endif %} #}
+                {# {% if user.perms.core.event_add %} #}
+                    <li>
+                        <a class="link" href="{% url 'admin:core_event_add' %}">Events</a>
+                    </li>
+                    <hr>
+                {# {% endif %} #} 
+                {% for organization in user.organizations_owning.all %}
+                    <li>
+                        <a class="link" href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
+                    </li>
+                {% endfor %}
+                <hr>
+            {# {% endif %} #}
             <li>
                 <a class="link" href="{% url 'account_logout' %}">Logout</a>
             </li>

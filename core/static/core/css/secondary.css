@@ -17,3 +17,6 @@
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
+.current {
+    font-weight: bold; 
+}
