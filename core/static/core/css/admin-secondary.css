@@ -139,3 +139,19 @@ td, th {
 textarea {
   height: auto !important;
 }
+
+.submit-row a.deletelink {
+  height: auto;
+}
+
+.form-row div.help {
+  /*padding-left: 0px !important;*/
+}
+
+*, *:before, *:after {
+  box-sizing: initial !important;
+}
+
+.aligned label {
+  width: 160px !important;
+}
