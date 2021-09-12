@@ -37,7 +37,18 @@ class Timetable(models.Model):
 
             result[i]['course'] = course_code
 
-        return result
+        merged_result = []
+
+        cur_period_idx = 0
+        while cur_period_idx < len(result):
+            merged_result.append(result[cur_period_idx])
+            cur_course = result[cur_period_idx]['course']
+            while cur_period_idx+1 < len(result) and cur_course is not None and cur_course == result[cur_period_idx+1]['course']:
+                cur_period_idx += 1
+                merged_result[-1]['time']['end'] = result[cur_period_idx]['time']['end']
+            cur_period_idx += 1
+
+        return merged_result
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['owner', 'term'], name='unique_timetable_owner_and_term')]
