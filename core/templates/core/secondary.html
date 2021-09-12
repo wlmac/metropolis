@@ -24,8 +24,8 @@
             <li>
                 <a class="link" href="">Settings</a>
             </li>
-            {% if not user.organizations_owning.all.empty %}
             <hr>
+            {% if user.is_staff %}
             {% if user.perms.core.announcement_add %}
             <li>
                 <a class="link" href="{% url 'admin:core_announcement_add' %}">Add user</a>
