@@ -35,6 +35,10 @@
     padding: 40px;
     min-height: calc(100vh - 226px);
 }
+.content-embed {
+    width: 80%;
+    height: 51rem;
+}
 .title {
     font-weight: bold;
     margin: 0;
@@ -119,6 +123,9 @@ hr {
     .content-container {
         padding: 20px;
         min-height: calc(100vh - 163px);
+    }
+    .content-embed {
+        width: 100%;
     }
     .title {
         font-size: 1.75rem;
