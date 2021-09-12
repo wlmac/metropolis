@@ -18,6 +18,7 @@ self.addEventListener('install', event => {
                 '/static/js/quicklink.umd.js',
                 '/static/js/mapbox-gl.js',
                 '/static/js/mapbox-gl-geocoder.min.js',
+                '/static/js/luxon.min.js',
                 '/static/core/img/logo-light-transparent.png',
                 '/static/core/img/logo-dark-transparent.png',
                 '/static/fonts/Material-Design-Iconic-Font.woff2',
