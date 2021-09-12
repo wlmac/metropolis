@@ -12,6 +12,10 @@
 {% endblock %} 
 
 {% block main %}
+
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+
 <div class="map-container">
     <div class="switch-container">
         <div class="switch" id="floor">
@@ -24,6 +28,7 @@
         </div>
     </div>
     <div class="map" id="map"></div>
+    
 </div>
 
 <script src="{% static 'core/js/map/map.js' %}"></script>
