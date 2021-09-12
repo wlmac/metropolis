@@ -78,10 +78,11 @@
                                 </div>
                             </div>
                             <hr>
-                            <div class="announcement-description markdown-container">{{ announcement.body | safe_markdown }}</div>
-                            <br>
-                            <a class="link" href="{{ announcement.pk|announcement_url }}">See Announcement <i
-                                    class='zmdi zmdi-chevron-right'></i></a>
+                            <div class="announcement-description markdown-container">
+                                {{ announcement.body | safe_markdown }}
+                                <br>
+                                <a class="link" href="{{ announcement.pk|announcement_url }}">See Announcement <i class='zmdi zmdi-chevron-right'></i></a>
+                            </div>
                         </div>
                     {% empty %}
                         There are no announcements at this time.
