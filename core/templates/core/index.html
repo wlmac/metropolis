@@ -38,8 +38,12 @@
                             <div class="event-time col right-align valign-wrapper"
                                  style="background-color: {{ event.tags.first.color }}">
                                 <div class="time-container">
+                                    {% if event.start_date.date != event.start_date.date.today %}
+                                        <span class="date">{{ event.start_date.date }}</span><br>{% endif %}
                                     <span class="time">{{ event.start_date.time }}</span><br>
                                     <span class="intermediate">to</span><br>
+                                    {% if event.end_date.date != now.date %}
+                                        <span class="date">{{ event.end_date.date }}</span><br>{% endif %}
                                     <span class="time">{{ event.end_date.time }}</span>
                                 </div>
                             </div>

@@ -194,6 +194,10 @@ hr {
     padding: 2%;
 }
 
+.date{
+    color: var(--mid-grey);
+}
+
 @media screen and (max-width: 600px){
     .cards-container{
         flex-wrap: wrap;
