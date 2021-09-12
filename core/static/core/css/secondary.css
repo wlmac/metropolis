@@ -22,7 +22,7 @@
 }
 
 .current {
-    font-weight: bold; 
+    font-weight: bold;
 }
 
 .secondnav{
@@ -36,6 +36,14 @@
 @media screen and (max-width: 1000px) {
     .secondnav-trigger{
         display: block;
+        position: absolute; 
+        margin: 10px 0 0 10px;
+    }
+    .secondary-nav-wrapper {
+        display: none; 
+    }
+    .white-bg {
+        width: 100%;
     }
 }
 
