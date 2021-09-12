@@ -27,15 +27,23 @@
             {{ profile.bio }}
             {% endif %}
         </div>
-        <div class="stat">
+        <div class="field">
             {% if profile.graduating_year %}
-                <div class="key">Graduating</div><div>{{ profile.graduating_year }}</div>
+                <div class="label">Graduating</div><div>{{ profile.graduating_year }}</div>
             {% endif %}
         </div>
-        <div class="stat">
+        <div class="field">
             {% if profile.organizations %}
-                <div class="key">Following</div>
+                <div class="label">Following</div>
                 {% for organization in profile.organizations.all %}
+                <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="field">
+            {% if profile.organizations_leading %}
+                <div class="label">Executive of</div>
+                {% for organization in profile.organizations_leading.all %}
                 <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
                 {% endfor %}
             {% endif %}
