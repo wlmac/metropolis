@@ -28,8 +28,8 @@
 }
 
 hr {
-    color: var(--light-grey); 
-    border-color: var(--light-grey); 
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
 }
 
 .body {
