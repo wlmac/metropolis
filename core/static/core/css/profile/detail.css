@@ -27,6 +27,15 @@
     color: var(--dark-blue);
 }
 
+.edit-button {
+    margin-left: auto; 
+    display: flex; 
+}
+
+.edit-button i {
+    margin: 3px 1rem 0 0; 
+}
+
 hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
@@ -57,5 +66,8 @@ hr {
         width: 100px; 
         margin-right: 0;
         margin-bottom: 1rem; 
+    }
+    .edit-button {
+        margin: 1rem 0 0;
     }
 }
