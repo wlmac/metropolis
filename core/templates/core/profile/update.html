@@ -1,9 +1,10 @@
 {% extends 'core/secondary.html' %}
 {% load gravatar_tags %}
-{% load static %} 
+{% load static %}
 
 {% block hd %}
 <link rel="stylesheet" href="{% static 'core/css/profile/detail.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/profile/update.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -16,14 +17,30 @@
         </div>
     </div>
     <hr>
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <a href="https://gravatar.com">Edit profile photo</a><br>
-        <div>
-            <button type="submit" class="btn">Submit</button>
-            <a href="{% url 'profile_redirect' %}" class="btn" role="button" aria-pressed="true">Cancel</a>
-        </div>
-    </form>
+    <div class="body">
+            <div class="avatar">
+                <a href="https://gravatar.com">Edit profile photo</a><br>
+            </div>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            {{ field.errors }}
+            <div class="field{% if field.id_for_label == "id_bio" %} bio{% endif %}">
+                <div class="label">{{ field.label_tag }}</div>
+                <span>{{ field }}</span>
+            </div>
+            {% endfor %}
+            <div class="field">
+                <div class="label">Password</div>
+                <span>
+                    <a href={% url 'account_change_password' %}>Reset</a>
+                </span>
+            </div>
+            <div>
+                <button type="submit" class="btn">Submit</button>
+                <a href="{% url 'profile_redirect' %}" class="btn" role="button" aria-pressed="true">Cancel</a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

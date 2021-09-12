@@ -36,13 +36,14 @@ hr {
     margin-top: 5%;
 }
 
-.stat {
+.field {
     display: flex; 
     margin: 1rem 0;
 }
 
-.key { 
+.label { 
     width: 6rem;
     font-weight: 600; 
     color: var(--mid-grey);
 }
+

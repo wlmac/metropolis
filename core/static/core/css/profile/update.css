@@ -1,0 +1,20 @@
+label {
+    font-size: 14px;
+}
+
+.bio textarea {
+    margin-top: 1rem; 
+    resize: none; 
+}
+
+.bio {
+    flex-direction: column; 
+} 
+
+.avatar {
+    margin-bottom: 1rem; 
+}
+
+button {
+    margin: 1rem 0;
+}
