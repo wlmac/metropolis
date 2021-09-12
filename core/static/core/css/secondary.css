@@ -4,19 +4,57 @@
     padding: 25px;
     display: flex;
 }
+
 .secondary-nav-wrapper {
     padding: 10px 25px;
     background-color: white;
     width: 200px;
     margin-right: 25px;
 }
+
 .secondary-nav > li {
     margin: 10px 0;
 }
+
 .secondary-nav-wrapper hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
+
 .current {
     font-weight: bold; 
+}
+
+.secondnav{
+    background-color: white;
+}
+
+.secondnav-trigger{
+    display: none;
+}
+
+@media screen and (max-width: 1000px) {
+    .secondnav-trigger{
+        display: block;
+    }
+}
+
+.dropdown-content > li:not(.divider):hover, .secondnav > li:not(.divider):hover{
+    background-color: white;
+}
+
+.dropdown-content > li > a, .secondnav > li > a{
+    color: var(--link-blue);
+    width: 100%;
+}
+
+.dropdown-content> li > a:hover, .secondnav > li > a:hover{
+    color: var(--dark-blue);
+    transition: color linear 0.15s;
+}
+
+.dropdown-content > .divider, .secondnav > .divider{
+    background-color: var(--line-grey);
+    margin: 10px 15px;
+    width: calc(100% - 30px);
 }
