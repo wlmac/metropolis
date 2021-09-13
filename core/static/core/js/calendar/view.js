@@ -73,9 +73,6 @@ $(document).ready(function () {
         selectLongPressDelay: 0,
         initialView: "dayGridMonth"
     });
-    // if the screen is too wide, the calendar kinda "stretches" so we need to reset the aspect ratio
-
-
     // start off by selecting today
     calendar.select(new Date())
     calendar.render()
