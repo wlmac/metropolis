@@ -3,10 +3,11 @@ mapboxgl.accessToken = JSON.parse(
 )["apikey"];
 const map = new mapboxgl.Map({
   container: "map", // container ID
-  style: "mapbox://styles/mapbox/streets-v11", // style URL
+  style: "mapbox://styles/nikisu/ckthu5pbc28d318oacchk9ntr", // style URL
   center: [-79.46155348420591, 43.753374130758445], // starting position [lng, lat]
   zoom: 19, // starting zoom
 });
+const coordinates = document.getElementById("coordinates");
 
 const customData = {
   features: [
@@ -887,7 +888,7 @@ function forwardGeocoder(query) {
       // Add a tree emoji as a prefix for custom
       // data results using carmen geojson format:
       // https://github.com/mapbox/carmen/blob/master/carmen-geojson.md
-      feature["place_name"] = `🌲 ${feature.properties.title}`;
+      feature["place_name"] = `${feature.properties.title}`;
       feature["center"] = feature.geometry.coordinates;
       matchingFeatures.push(feature);
     }
@@ -895,7 +896,7 @@ function forwardGeocoder(query) {
   return matchingFeatures;
 }
 
-var level = false; 
+var level = false;
 
 // Add the control to the map.
 map.addControl(
@@ -906,29 +907,37 @@ map.addControl(
     zoom: 19,
     placeholder: "Search School",
     mapboxgl: mapboxgl,
+    render: function (item) {
+      // extract the item's maki icon or use a default
+      return `<div class='geocoder-dropdown-item'>
+      <span class='geocoder-dropdown-text'>
+      ${item.properties.title}
+      </span>
+      </div>`;
+    },
   })
 );
 
 map.on("load", () => {
   map.addSource("floorOne", {
     type: "image",
-    url: "../static/core/img/FloorOneGeo.jpg",
+    url: "../static/core/img/FloorOne.jpg",
     coordinates: [
-      [-79.462739, 43.754109], //TL
-      [-79.46076, 43.754109], //TR
-      [-79.46079, 43.752709], //BR
-      [-79.462759, 43.752719], //BL
+      [-79.46280231730522, 43.75418610402343], //TL
+      [-79.46065948803763, 43.75418610402343], //TR
+      [-79.46065948803763, 43.75267989803223], //BR
+      [-79.46280231730522, 43.75267989803223], //BL
     ],
   });
 
   map.addSource("floorTwo", {
     type: "image",
-    url: "../static/core/img/FloorTwo.png",
+    url: "../static/core/img/FloorTwo.jpg",
     coordinates: [
-      [-79.462559, 43.754059], //TL
-      [-79.46067, 43.75406], //TR
-      [-79.46069, 43.75273], //BR
-      [-79.462569, 43.752739], //BL
+      [-79.46280231730522, 43.75418610402343], //TL
+      [-79.46065948803763, 43.75418610402343], //TR
+      [-79.46065948803763, 43.75267989803223], //BR
+      [-79.46280231730522, 43.75267989803223], //BL
     ],
   });
 
@@ -964,6 +973,20 @@ map.on("load", () => {
     },
   });
 
+  const marker = new mapboxgl.Marker({
+    draggable: true,
+  })
+    .setLngLat([-79.46155348420591, 43.753374130758445])
+    .addTo(map);
+
+  function onDragEnd() {
+    const lngLat = marker.getLngLat();
+    coordinates.style.display = "block";
+    coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
+  }
+
+  marker.on("dragend", onDragEnd);
+
   var checkbox = document.querySelector("input[name=checkbox]");
 
   checkbox.addEventListener("change", function () {
@@ -980,16 +1003,12 @@ map.on("load", () => {
     }
   });
 
-  geocoder.on('result', ({ result }) => {
-    console.log("gottem")
-    // checkbox.addEventListener("change", function () {
-      
-    // });
-    if (result.properties.floor==2) {
-      checkboxswitch.checked=true; 
+  geocoder.on("result", ({ result }) => {
+    console.log("gottem");
+    if (result.properties.floor == 2) {
+      checkboxswitch.checked = true;
     } else {
-      checkboxswitch.checked=false; 
+      checkboxswitch.checked = false;
     }
   });
-
 });
