@@ -24,11 +24,11 @@ class EventsList(APIView):
         if not request.user.is_anonymous:
             if request.data.get('end'):
                 end = request.data.get('end')
-                events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end).filter(
+                events = models.Event.objects.filter(end_date__gte=start, start_date__lte=end).filter(
                     Q(is_public=True) | Q(organization__member=request.user.id)).distinct().order_by('start_date')
             elif request.query_params.get('end'):
                 end = request.query_params.get('end')
-                events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end).filter(
+                events = models.Event.objects.filter(end_date__gte=start, start_date__lte=end).filter(
                     Q(is_public=True) | Q(organization__member=request.user.id)).distinct().order_by('start_date')
             else:
                 events = models.Event.objects.filter(end_date__gte=start).filter(
@@ -36,11 +36,11 @@ class EventsList(APIView):
         else:
             if request.data.get('end'):
                 end = request.data.get('end')
-                events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end, is_public=True).order_by(
+                events = models.Event.objects.filter(end_date__gte=start, start_date__lte=end, is_public=True).order_by(
                     'start_date')
             elif request.query_params.get('end'):
                 end = request.query_params.get('end')
-                events = models.Event.objects.filter(end_date__gte=start, end_date__lte=end, is_public=True).order_by(
+                events = models.Event.objects.filter(end_date__gte=start, start_date__lte=end, is_public=True).order_by(
                     'start_date')
             else:
                 events = models.Event.objects.filter(end_date__gte=start, is_public=True).order_by('start_date')
