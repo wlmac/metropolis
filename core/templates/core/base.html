@@ -60,9 +60,11 @@
     <li class="divider"></li>
     {% if request.user.is_authenticated %}
     <li><a href="{% url 'profile_redirect' %}" class="sidenav-close">Profile</a></li>
+    <li><a class="link" href="{% url 'timetable_list' %}">Timetable</a></li>
     {% if user.is_staff %}
     <li><a href="{% url 'admin:index' %}" class="sidenav-close">Admin</a></li>
     {% endif %}
+    <li class="divider"></li>
     <li><a href="{% url 'account_logout' %}" class="sidenav-close">Logout</a></li>
     {% else %}
     <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}" class="sidenav-close">Login</a></li>

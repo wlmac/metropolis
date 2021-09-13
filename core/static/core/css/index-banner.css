@@ -1,0 +1,42 @@
+:root{
+    --banner-text-brown: #654321;
+}
+
+.banner{
+    width: 100%;
+    height: 300px;
+    background-color: white;
+    position: relative;
+}
+
+.banner .background{
+    height: 100%;
+    width: 100%;
+}
+
+.banner .background img{
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
+.banner .next-class{
+    position: absolute;
+    left: 50%;
+    margin-left: -100px;
+    top: 65%;
+    margin-top: -100px;
+    text-align: center;
+}
+
+.next-class .schedule-course{
+    font-size: 5em;
+    font-weight: bold;
+    color: var(--banner-text-brown);
+    margin-bottom: 0;
+}
+
+.next-class .schedule-description{
+    font-size: 1.5em;
+    color: var(--banner-text-brown);
+}

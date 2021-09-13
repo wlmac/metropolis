@@ -60,19 +60,30 @@
     --object-tools-hover-bg: var(--close-button-hover-bg);
   }
 }
-
+#container {
+  background-color: var(--bg-grey);
+  padding: 20px;
+  width: auto;
+  height: auto;
+  min-height: calc(100vh - 64px);
+}
 .content{
   background-color: white;
-  max-width: 1200px !important;
-  margin: auto !important;
-  margin-top: 20px !important;
+  max-width: 90% !important;
+  margin: 0 auto!important;
 }
-
 #main{
   background-color: var(--bg-grey);
   font-family: 'Roboto', sans-serif;
 }
-
+.sticky {
+  position: sticky;
+  border: none !important;
+  max-height: 100% !important;
+}
+#toggle-nav-sidebar {
+  align-items: start;
+}
 #footer{
   padding: 0px;
 }
@@ -81,20 +92,12 @@
   background-color: white;
   padding: 20px;
   margin-right: 20px;
-  margin-left: -316px;
-  left: -316px;
+  margin-left: -376px;
+  left: -376px;
 }
-
-#toggle-nav-sidebar, #nav-sidebar{
-  margin-top: 20px;
-  margin-bottom: 20px;
+.img-logo {
+  vertical-align: initial;
 }
-
-.main.shifted{
-  padding-right: 20px;
-  padding-bottom: 30px;
-}
-
 #recent-actions-module{
   padding: 20px;
 }
@@ -216,4 +219,49 @@ textarea {
 
 .aligned label {
   width: 160px !important;
+}
+
+.submit-row > * {
+  width: initial;
+}
+
+@media screen and (max-width: 800px) {
+  .content {
+    max-width: 100% !important;
+  }
+  #content-related {
+    display: none;
+  }
+}
+@media screen and (max-width: 600px) {
+  #container {
+    min-height: calc(100vh - 56px);
+  }
+  .content {
+    height: calc(100vh - 96px);
+  }
+  #content{
+    padding: 20px !important;
+  }
+  #content #content-main {
+    width: 100% !important;
+  }
+  #content-main > .app-account td {
+    display: none;
+  }
+  #content-main > .app-auth td {
+    display: none;
+  }
+  #content-main > .app-core td {
+    display: none;
+  }
+  #content-main > .app-flatpages td {
+    display: none;
+  }
+  #content-main > .app-sites td {
+    display: none;
+  }
+  #changelist-filter {
+    display: none;
+  }
 }

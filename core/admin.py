@@ -73,6 +73,11 @@ class OrganizationAdmin(admin.ModelAdmin):
         else:
             return ['owner', 'supervisors', 'execs']
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "supervisors":
+            kwargs["queryset"] = models.User.objects.filter(is_teacher=True)
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
 class OrganizationListFilter(admin.SimpleListFilter):
     title = 'organization'
     parameter_name = 'org'
