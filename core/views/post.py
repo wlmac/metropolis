@@ -49,7 +49,20 @@ class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
 
     def test_func(self):
         announcement = self.get_object()
-        return announcement.status == 'a' and (announcement.is_public or self.request.user in announcement.organization.members.all())
+        if announcement.status == 'a':
+            if self.request.user in announcement.organization.members.all():
+                return True
+            if announcement.is_public:
+                return True
+        if self.request.user.is_superuser:
+            return True
+        if self.request.user == announcement.organization.owner:
+            return True
+        if self.request.user in announcement.organization.supervisors.all():
+            return True
+        if self.request.user in announcement.organization.execs.all():
+            return True
+        return False
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
