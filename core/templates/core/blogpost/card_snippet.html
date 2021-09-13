@@ -19,7 +19,7 @@
                 <div class="card-authors-text">
                     {{blogpost.author.username|user}}
                     <br>
-                    <dot>•</dot> {{blogpost.last_modified_date}}
+                    <dot>•</dot> {{ blogpost.last_modified_date|date:"M. j, Y" }}{{ blogpost.last_modified_date|date:", g:i A"|lower }}
                     {% if blogpost.last_modified_date != blogpost.created_date %}
                     (Edited)
                     {% endif %}
