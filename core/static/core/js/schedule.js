@@ -17,6 +17,7 @@ function setup() {
                         })
                         .then(data => {
                             scheduleData = data;
+                            console.log(scheduleData)
                             update();
                         })
                         .catch(err => {
@@ -32,6 +33,8 @@ function setup() {
 function update() {
     let course;
     let description;
+    let week;
+    let weekCourses = [];
 
     const now = DateTime.now()
     const todayDate = now.toISODate();
@@ -39,6 +42,10 @@ function update() {
     if (todayDate in scheduleData) {
         const todayData = scheduleData[todayDate];
         let courseData;
+        if (todayData.length > 0) {
+            week = todayData[0].cycle
+            weekCourses = todayData
+        }
 
         for (const course of todayData) {
             if (course.course && now <= DateTime.fromISO(course.time.end)) {
@@ -71,9 +78,17 @@ function update() {
 
     $(".schedule-course").text(course);
     $(".schedule-description").text(description);
+    $(".week-number").text(week)
+    let weekCoursesEl = $(".week-courses").empty()
+    for (let i = 0; i < weekCourses.length; i++) {
+        let courseEl = $("<span class='week-course'></span>").text(weekCourses[i].description.course + " - " + weekCourses[i].course)
+        if (weekCourses[i].course === course) courseEl.attr("data-active", true)
+        weekCoursesEl.append(courseEl)
+        if (i < weekCourses.length) weekCoursesEl.append($("<br>"))
+    }
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     setup();
     var time = 60 - parseInt((new Date().getTime() / 1000) % 60);
     setInterval(update, 1000);
