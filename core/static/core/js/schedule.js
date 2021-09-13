@@ -1,6 +1,10 @@
 const DateTime = luxon.DateTime;
 let scheduleData = [];
 
+function getDateTimeNow() {
+    return DateTime.now();
+}
+
 function setup() {
     fetch('/api/term/current')
         .then(response => response.json())
@@ -9,15 +13,14 @@ function setup() {
                 .then(response => response.json())
                 .then(data => {
                     scheduleData = data;
-                    update();
                     fetch(`/api/me/schedule/week`)
                         .then(response => {
                             if (!response.ok) throw new Error(`Status ${response.status} received`);
                             return response.json();
                         })
                         .then(data => {
-                            scheduleData = data;
-                            update();
+                            const todayDate = getDateTimeNow().toISODate();
+                            if (todayDate in data && data[todayDate].length != 0) scheduleData = data;
                         })
                         .catch(err => {
                             console.error('Fetch me_schedule_week request failed', err);
@@ -33,11 +36,10 @@ function update() {
     let course;
     let description;
 
-    const now = DateTime.now()
-    const todayDate = now.toISODate();
+    const now = getDateTimeNow();
 
-    if (todayDate in scheduleData) {
-        const todayData = scheduleData[todayDate];
+    if (now.toISODate() in scheduleData) {
+        const todayData = scheduleData[now.toISODate()];
         let courseData;
 
         for (const course of todayData) {
