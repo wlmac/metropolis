@@ -1,7 +1,17 @@
-{% extends 'core/base.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block main %}
-<div class="container">
-    You are currently offline.
-</div>
+{% block body %}
+{% include 'core/snippets/banner.html' %}
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'core/css/index-banner.css' %}" type="text/css">
+<script src="{% static 'js/luxon.min.js' %}"></script>
+<script src="{% static 'core/js/schedule.js' %}"></script>
+<style>
+    .banner {
+        height: 100vh;
+    }
+</style>
 {% endblock %}

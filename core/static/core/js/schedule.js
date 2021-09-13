@@ -55,40 +55,42 @@ function update() {
 
             if (now < DateTime.fromISO(courseData.time.start)) {
                 description = `Starting ${DateTime.fromISO(courseData.time.start).toRelative({base: now})}`;
+                } else {
+                    description = `Ending ${DateTime.fromISO(courseData.time.end).toRelative({base: now})}`;
+                    }
+                } else {
+                    if (todayData.length > 0) {
+                        currentCourse = 'School Over';
+                        description = 'Enjoy your evening!';
+                    } else {
+                        currentCourse = 'No School';
+                        description = 'Enjoy your day!';
+                    }
+                }
             } else {
-                description = `Ending ${DateTime.fromISO(courseData.time.end).toRelative({base: now})}`;
+                currentCourse = "Unknown";
+                description = "We were unable to fetch your schedule.";
             }
-        } else {
-            if (todayData.length > 0) {
-                currentCourse = 'School Over';
-                description = 'Enjoy your evening!';
-            } else {
-                currentCourse = 'No School';
-                description = 'Enjoy your day!';
+
+            $(".schedule-course").text(currentCourse);
+            $(".schedule-description").text(description);
+
+            if (todayData) {
+                if (todayData.length > 0) $(".schedule-cycle").text(todayData[0].cycle);
+                let todayCoursesEl = $(".schedule-today-courses").empty()
+                for (let i = 0; i < todayData.length; i++) {
+                    if (todayData[i].course) {
+                        let courseEl = $("<span class='schedule-today-course'></span>").text(`${todayData[i].description.course} - ${todayData[i].course}`)
+                        if (todayData[i].course === currentCourse) courseEl.attr("data-active", true)
+                        todayCoursesEl.append(courseEl)
+                        if (i < todayData.length) todayCoursesEl.append($("<br>"))
+                    }
+                }
             }
         }
-    } else {
-        currentCourse = "Unknown";
-        description = "We were unable to fetch your schedule.";
-    }
 
-    $(".schedule-course").text(currentCourse);
-    $(".schedule-description").text(description);
-
-    if (todayData.length > 0) $(".schedule-cycle").text(todayData[0].cycle);
-    let todayCoursesEl = $(".schedule-today-courses").empty()
-    for (let i = 0; i < todayData.length; i++) {
-        if (todayData[i].course) {
-            let courseEl = $("<span class='schedule-today-course'></span>").text(`${todayData[i].description.course} - ${todayData[i].course}`)
-            if (todayData[i].course === currentCourse) courseEl.attr("data-active", true)
-            todayCoursesEl.append(courseEl)
-            if (i < todayData.length) todayCoursesEl.append($("<br>"))
-        }
-    }
-}
-
-$(document).ready(function () {
-    setup();
-    var time = 60 - parseInt((new Date().getTime() / 1000) % 60);
-    setInterval(update, 1000);
-});
+        $(document).ready(function () {
+            setup();
+            var time = 60 - parseInt((new Date().getTime() / 1000) % 60);
+            setInterval(update, 1000);
+        });

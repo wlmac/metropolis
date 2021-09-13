@@ -6,21 +6,7 @@
 
 {% block main %}
     <div id="content-container">
-        <div class="banner">
-            <div class="background"><img src="{% static 'core/img/top-banner.jpeg' %}"/></div>
-            <div class="overlay-container valign-wrapper">
-                <div class="next-class center-align">
-                    <h4 class="schedule-course">Loading...</h4>
-                    <span class="schedule-description">Please wait a sec.</span>
-                </div>
-            </div>
-            <div class="schedule-today-overlay hide-on-small-and-down">
-                <h4 class="schedule-cycle"></h4>
-                <div class="schedule-today-courses">
-                    <!-- <p class="week-course" data-active>...</p>-->
-                </div>
-            </div>
-        </div>
+        {% include 'core/snippets/banner.html' %}
         <div id="main-container">
             {% if blogpost %}
                 <div class="blog row">

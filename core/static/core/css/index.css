@@ -192,3 +192,7 @@ hr {
         padding: 0 !important;
     }
 }
+
+.banner {
+    height: 300px;
+}
