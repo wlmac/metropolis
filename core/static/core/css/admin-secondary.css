@@ -92,8 +92,8 @@
   background-color: white;
   padding: 20px;
   margin-right: 20px;
-  margin-left: -316px;
-  left: -316px;
+  margin-left: -376px;
+  left: -376px;
 }
 .img-logo {
   vertical-align: initial;
@@ -220,6 +220,11 @@ textarea {
 .aligned label {
   width: 160px !important;
 }
+
+.submit-row > * {
+  width: initial;
+}
+
 @media screen and (max-width: 800px) {
   .content {
     max-width: 100% !important;
