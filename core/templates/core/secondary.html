@@ -25,12 +25,12 @@
         {% if user.is_staff %}
             {% if perms.core.announcement_add %}
                 <li>
-                    <a class="link" href="{% url 'admin:core_announcement_add' %}">Add announcement</a>
+                    <a class="link sidenav-close" href="{% url 'admin:core_announcement_add' %}">Add announcement</a>
                 </li>
             {% endif %}
             {% if perms.core.event_add %}
                 <li>
-                    <a class="link" href="{% url 'admin:core_event_add' %}">Add event</a>
+                    <a class="link sidenav-close" href="{% url 'admin:core_event_add' %}">Add event</a>
                 </li>
                 <li class="divider"></li>
             {% endif %}
