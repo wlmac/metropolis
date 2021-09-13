@@ -17,7 +17,7 @@ class Index(TemplateView, mixins.TitleMixin):
 
         context['events'] = models.Event.get_events(user=self.request.user)[:3]
 
-        context['blogpost'] = models.BlogPost.objects.first()
+        context['blogpost'] = models.BlogPost.objects.filter(is_published=True).first()
 
         return context
 
