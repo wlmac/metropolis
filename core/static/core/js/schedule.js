@@ -20,7 +20,7 @@ function setup() {
                         })
                         .then(data => {
                             const todayDate = getDateTimeNow().toISODate();
-                            if (todayDate in data && data[todayDate].length != 0) scheduleData = data;
+                            if (todayDate in data && data[todayDate].length > 0) scheduleData = data;
                         })
                         .catch(err => {
                             console.error('Fetch me_schedule_week request failed', err);
@@ -33,13 +33,14 @@ function setup() {
 }
 
 function update() {
-    let course;
+    let currentCourse;
     let description;
+    let todayData;
 
     const now = getDateTimeNow();
 
     if (now.toISODate() in scheduleData) {
-        const todayData = scheduleData[now.toISODate()];
+        todayData = scheduleData[now.toISODate()];
         let courseData;
 
         for (const course of todayData) {
@@ -50,7 +51,7 @@ function update() {
         }
 
         if (courseData) {
-            course = courseData.course;
+            currentCourse = courseData.course;
 
             if (now < DateTime.fromISO(courseData.time.start)) {
                 description = `Starting ${DateTime.fromISO(courseData.time.start).toRelative({base: now})}`;
@@ -59,23 +60,34 @@ function update() {
             }
         } else {
             if (todayData.length > 0) {
-                course = 'School Over';
+                currentCourse = 'School Over';
                 description = 'Enjoy your evening!';
             } else {
-                course = 'No School';
+                currentCourse = 'No School';
                 description = 'Enjoy your day!';
             }
         }
     } else {
-        course = "Unknown";
+        currentCourse = "Unknown";
         description = "We were unable to fetch your schedule.";
     }
 
-    $(".schedule-course").text(course);
+    $(".schedule-course").text(currentCourse);
     $(".schedule-description").text(description);
+
+    if (todayData.length > 0) $(".schedule-cycle").text(todayData[0].cycle);
+    let todayCoursesEl = $(".schedule-today-courses").empty()
+    for (let i = 0; i < todayData.length; i++) {
+        if (todayData[i].course) {
+            let courseEl = $("<span class='schedule-today-course'></span>").text(`${todayData[i].description.course} - ${todayData[i].course}`)
+            if (todayData[i].course === currentCourse) courseEl.attr("data-active", true)
+            todayCoursesEl.append(courseEl)
+            if (i < todayData.length) todayCoursesEl.append($("<br>"))
+        }
+    }
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     setup();
     var time = 60 - parseInt((new Date().getTime() / 1000) % 60);
     setInterval(update, 1000);

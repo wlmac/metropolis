@@ -1,5 +1,6 @@
 :root{
-    --banner-text-brown: #654321;
+    --banner-text-brown: #624018;
+    --darker-brown: #553311;
 }
 
 .banner{
@@ -45,4 +46,30 @@
 .next-class .schedule-description{
     font-size: 1.5em;
     color: var(--banner-text-brown);
+}
+
+.schedule-today-overlay{
+    position: absolute;
+    left: 0;
+    bottom: 10px;
+    padding: 10px;
+}
+
+.schedule-today-overlay .schedule-cycle{
+    color: var(--darker-brown);
+    font-weight: bolder;
+    margin-bottom: 0;
+}
+
+.schedule-today-courses{
+    color: var(--banner-text-brown);
+    padding-left: 10px;
+    border-left: solid var(--darker-brown) 3px;
+    font-weight: bolder;
+}
+
+.schedule-today-courses [data-active]{
+    font-weight: bold;
+    color: var(--darker-brown);
+    font-size: 1.1em;
 }
