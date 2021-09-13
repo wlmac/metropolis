@@ -16,10 +16,10 @@
 <div class="container">
     <ul class="sidenav secondnav" id="secondary-out">
         <li>
-            <a class="sidenav-close" href="{% url 'profile_redirect' %}">Profile</a>
+            <a class="sidenav-close" href="{% url 'timetable_list' %}">Timetable</a>
         </li>
         <li>
-            <a class="sidenav-close" href="{% url 'timetable_list' %}">Timetable</a>
+            <a class="sidenav-close" href="{% url 'profile_redirect' %}">Profile</a>
         </li>
         <li class="divider"></li>
         {% if user.is_staff %}
@@ -52,9 +52,6 @@
                 {% url 'timetable_list' as timetable %}
                 <a class="link{% if request.path == timetable %} current{% endif %}" href="{% url 'timetable_list' %}">Timetable</a>
             </li>
-            <hr>
-            {% if user.is_staff %}
-            {% if user.perms.core.announcement_add %}
             <li>
             {% url 'profile_detail' slug=profile.username as profile_detail %}
                 <a class="link{% if request.path == profile_detail %} current{% endif %}" href="{% url 'profile_redirect' %}">Profile</a>
@@ -88,8 +85,6 @@
                     $('.sidenav').sidenav();
                 });
             </script> -->
-            {% endif %}
-            {% endif %}
         </ul>
     </div>
     {% block content %}
