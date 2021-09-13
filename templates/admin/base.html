@@ -38,10 +38,8 @@
 {% endblock %}
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
 
-  <!-- {% if user.is_superuser %} -->
   <link rel="stylesheet" type="text/css" href="{% static "core/css/base.css" %}">
   <link rel="stylesheet" type="text/css" href="{% static "core/css/admin-secondary.css" %}">
-  <!-- {% endif %} -->
 </head>
 
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
@@ -200,7 +198,7 @@
     </div>
     {% endblock %}
     {% endif %}
-    <div class="main" id="main" style="overflow:hidden">
+    <div class="main" id="main">
         {% if request.get_full_path == "/admin/" %}
         <style>
             #content-main{
