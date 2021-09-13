@@ -8,9 +8,11 @@
     <div id="content-container">
         <div class="banner">
             <div class="background"><img src="{% static 'core/img/top-banner.jpeg' %}"/></div>
-            <div class="next-class center-align">
-                <h4 class="schedule-course">Loading...</h4>
-                <span class="schedule-description">Please wait a sec.</span>
+            <div class="overlay-container valign-wrapper">
+                <div class="next-class center-align">
+                    <h4 class="schedule-course">Loading...</h4>
+                    <span class="schedule-description">Please wait a sec.</span>
+                </div>
             </div>
         </div>
         <div id="main-container">
@@ -24,8 +26,9 @@
                             <div class="blog-body markdown-container">
                                 {{ blogpost.body | safe_markdown }}
                                 <br>
-                                <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog Post <i
-                                    class='zmdi zmdi-chevron-right'></i></a>
+                                <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog
+                                    Post <i
+                                            class='zmdi zmdi-chevron-right'></i></a>
                             </div>
                         </div>
                     </div>
@@ -89,7 +92,8 @@
                             <div class="announcement-description markdown-container">
                                 {{ announcement.body | safe_markdown }}
                                 <br>
-                                <a class="link" href="{{ announcement.pk|announcement_url }}">See Announcement <i class='zmdi zmdi-chevron-right'></i></a>
+                                <a class="link" href="{{ announcement.pk|announcement_url }}">See Announcement <i
+                                        class='zmdi zmdi-chevron-right'></i></a>
                             </div>
                         </div>
                     {% empty %}
