@@ -32,8 +32,8 @@
                             <div class="blog-body markdown-container">
                                 {{ blogpost.body | safe_markdown }}
                                 <br>
-                                <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read Full Blog
-                                    Post <i
+                                <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read full blog
+                                    post <i
                                             class='zmdi zmdi-chevron-right'></i></a>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                             <div class="event-time col right-align valign-wrapper"
                                  style="background-color: {{ event.tags.first.color }}">
                                 <div class="time-container">
-                                    {% now "Y-M-D" as today%}
+                                    {% now "Y-M-D" as today %}
                                     {% if event.start_date|date:"Y-M-D" != today %}
                                         <span class="date">{{ event.start_date|date }}</span><br>
                                     {% endif %}
