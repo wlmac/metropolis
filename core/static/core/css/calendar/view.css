@@ -145,6 +145,8 @@ hr {
 .fc-daygrid-day-number-circle .fc-daygrid-day-number{
     transition-duration: 0.3s;
     padding: 0 !important;
+    text-align: center;
+    width: 100%;
 }
 .fc-scrollgrid a {
     color: var(--dark-grey) !important; 
