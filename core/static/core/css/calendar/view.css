@@ -173,6 +173,11 @@ hr {
     box-shadow: 1px 1px 2px #44444444;
 }
 
+.no-event-inform{
+    font-size: 1.5em;
+    color: var(--dark-grey);
+}
+
 @media screen and (max-width: 600px) {
     .fc-header-toolbar {
         margin-top: 10px;

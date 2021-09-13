@@ -192,6 +192,13 @@ function placeCards(eventsToday, date) {
         })
     }
 
+    // if there are no events, then we tell them there are no events
+    if(eventsToday.length === 0){
+        $(".no-event-inform").stop().fadeIn(100)
+    }else{
+        $(".no-event-inform").stop().fadeOut(100)
+    }
+
     // replace the header of the "details" section at the bottom
     $("#details #detailsCurrentDay").html(date.toLocaleDateString(undefined, {
         day: "numeric",
