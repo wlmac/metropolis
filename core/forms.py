@@ -28,7 +28,7 @@ class MetropolisSignupForm(SignupForm):
         del self.fields['password2'].widget.attrs['placeholder']
 
     def clean_email(self):
-        email = self.cleaned_data['email']
+        email = super(MetropolisSignupForm, self).clean_email()
         if not (email.endswith('@student.tdsb.on.ca') or email.endswith('@tdsb.on.ca')):
             raise forms.ValidationError('A TDSB email must be used.')
         return email
