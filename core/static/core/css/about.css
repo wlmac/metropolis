@@ -60,14 +60,19 @@
 .section-title {
     font-weight: bold;
     margin: 0;
-    margin: 8px 0;
+    margin-top: 20px;
+    margin-bottom: 10px;
     font-size: 1.2rem;
+}
+.link-section .section-title:first-child {
+    margin-top: 5px;
 }
 .title:first-child {
     margin-top: 0;
 }
 .text {
     color: var(--near-black);
+    line-height: 1.6rem;
 }
 .text:last-child {
     margin-bottom: 0;
@@ -98,9 +103,13 @@
 }
 .link-section {
     margin: 0;
+    margin-bottom: 40px;
     display: flex; 
     justify-content: start;
     align-items: center;
+}
+.link-section:last-child {
+    margin: 0;
 }
 .link-section li {
     margin: 4px 0;
