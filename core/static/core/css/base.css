@@ -57,6 +57,7 @@ body {
 }
 .container {
     padding: 50px 0px;
+    min-height: calc(100vh - 64px);
 }
 
 p{
@@ -350,6 +351,7 @@ label {
 @media screen and (max-width: 600px) {
     .container {
         padding: 20px 0;
+        min-height: calc(100vh - 56px);
     }
     .markdown-embed {
         width: 100%;

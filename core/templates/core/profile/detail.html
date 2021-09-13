@@ -17,10 +17,12 @@
             <h5 class="full-name">{{ profile.get_full_name }}</h5>
             <h6 class="username">{{ profile.username }}</h6>
         </div>
+        {% if profile == request.user %}
         <div class="edit-button"> 
             <i class="zmdi zmdi-fw-3x zmdi-edit"></i>
             <a href="{% url 'profile_update' %}">Edit</a>
         </div>
+        {% endif %}
     </div>
     <hr>
     <div class="body">

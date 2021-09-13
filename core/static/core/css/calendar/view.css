@@ -166,6 +166,10 @@ hr {
     font-family: 'Roboto Mono', monospace;
 }
 
+.fc-daygrid-event{
+    box-shadow: 1px 1px 2px #44444444;
+}
+
 @media screen and (max-width: 600px) {
     .fc-header-toolbar {
         margin-top: 10px;

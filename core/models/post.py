@@ -2,6 +2,7 @@ from django.db import models
 from .choices import announcement_status_choices
 from ..utils.file_upload import file_upload_path_generator
 from metropolis import settings
+from django.urls import reverse
 
 # Create your models here.
 
@@ -30,7 +31,7 @@ class Announcement(Post):
     rejection_reason = models.CharField(max_length=140, blank=True, verbose_name='reason for rejection', help_text='Only fill this field in if you are rejecting this announcement.')
 
     def get_absolute_url(self):
-        return reverse("announcement_detail", args=[self.slug])
+        return reverse("announcement_detail", args=[self.pk])
 
     @classmethod
     def get_approved(cls):

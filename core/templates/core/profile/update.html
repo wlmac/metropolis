@@ -30,12 +30,12 @@
                 <span>{{ field }}</span>
             </div>
             {% endfor %}
-            <div class="field">
-                <div class="label">Password</div>
-                <span>
-                    <a href={% url 'account_change_password' %}>Reset</a>
-                </span>
-            </div>
+            <!-- <div class="field"> -->
+            <!--     <div class="label">Password</div> -->
+            <!--     <span> -->
+            <!--         <a href={% url 'account_change_password' %}>Change</a> -->
+            <!--     </span> -->
+            <!-- </div> -->
             <div>
                 <button type="submit" class="btn">Submit</button>
                 <a href="{% url 'profile_redirect' %}" class="btn" role="button" aria-pressed="true">Cancel</a>
