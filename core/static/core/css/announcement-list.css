@@ -99,6 +99,7 @@
     margin: 0;
     margin-top: 8px;
     font-size: 2rem;
+    word-break: break-word;
 }
 .card-authors {
     display: flex;
