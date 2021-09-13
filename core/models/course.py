@@ -126,7 +126,7 @@ class Course(models.Model):
         ]
 
 class Event(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=64)
     term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name='events')
     organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="events", related_query_name="event")
     description = models.TextField(blank=True)

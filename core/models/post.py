@@ -10,7 +10,7 @@ class Post(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     last_modified_date = models.DateTimeField(auto_now=True)
 
-    title = models.CharField(max_length=128, blank=True)
+    title = models.CharField(max_length=64, blank=True)
     body = models.TextField(blank=True)
     tags = models.ManyToManyField("Tag", blank=True, related_name="%(class)ss", related_query_name="%(class)s")
 
