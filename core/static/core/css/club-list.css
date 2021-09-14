@@ -89,23 +89,18 @@ hr {
     color: inherit
 }
 
-.club-description {
+.club-description p {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 3; /* number of lines to show */
     -webkit-box-orient: vertical;
     margin: 0;
-    color: gray;
-}
-.club-description p:first-child {
     margin-top: 0;
-}
-.club-description p:last-child {
-    margin-bottom: 0;
-}
-.club-description .markdown-embed, .club-description img {
-    display: none;
+    color: gray;
+    font-size: 1rem;
+    line-height: 1.6rem;
+    word-break: break-word;
 }
 
 .tag-section {

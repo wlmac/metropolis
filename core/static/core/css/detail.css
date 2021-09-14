@@ -84,6 +84,9 @@
     border-left: black 3px solid;
     margin: 0;
 }
+.description > * {
+    word-break: break-word;
+}
 
 .link-section {
     margin: 0;
