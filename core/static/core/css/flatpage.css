@@ -1,0 +1,41 @@
+.content {
+    background-color: white;
+    padding: 40px;
+    min-height: calc(100vh - 164px);
+}
+.title {
+    font-weight: bold;
+    margin: 0;
+    margin-top: 8px;
+    font-size: 3rem;
+    word-break: break-word;
+}
+hr {
+    margin: 20px 0 10px;
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+}
+.content-body p {
+    line-height: 1.6rem;
+}
+.content-body > * {
+    word-break: break-word;
+}
+.content-body > *:first-child {
+    margin-top: 0;
+}
+.content-body > *:last-child {
+    margin-bottom: 0;
+}
+.content-body .markdown-embed, .content-body img {
+    width: 100%;
+}
+@media screen and (max-width: 600px) {
+    .content {
+        padding: 20px;
+        min-height: calc(100vh - 96px);
+    }
+    .title {
+        font-size: 2.5rem;
+    }
+}
