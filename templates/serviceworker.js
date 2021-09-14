@@ -10,7 +10,6 @@ workbox.routing.setDefaultHandler(
 );
 
 workbox.precaching.precacheAndRoute([
-    {url: '/manifest.json', revision: '292ece3'},
     {url: '/static/js/jquery-3.6.0.min.js', revision: '3.6.0'},
     {url: '/static/css/materialize.min.css', revision: '1.0.0' },
     {url: '/static/js/materialize.min.js', revision: '1.0.0' },
