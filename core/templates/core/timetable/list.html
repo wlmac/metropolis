@@ -9,7 +9,6 @@
             <details class="mb-3">
                 <summary class="card-top" onclick="$('#card-body-{{ forloop.counter }}').toggle(100)">
                     <span class="card-title"><strong>{{ timetable.term.name }}</strong></span>
-                    <span class="card-title date-description">({{ timetable.term.start_date.year }}-{{ timetable.term.end_date.year }})</span>
                 </summary>
                 <div class="card-body timetable-details" id="card-body-{{ forloop.counter }}" hidden>
                     <p class="card-text">
