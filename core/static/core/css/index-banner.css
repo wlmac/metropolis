@@ -31,7 +31,6 @@
 .banner .banner-message{
     margin-top: 1em;
     font-size: 1em;
-    font-weight: bold;
     color: var(--banner-text-brown);
 }
 
