@@ -86,7 +86,7 @@
                             </a>
                             {% empty %}
                             <br>
-                            There are no members right now. Join us!
+                            There are no members right now. {% if organization.is_open %}Join us!{% endif %}
                             {% endfor %}
                     </div>
                 </div>
