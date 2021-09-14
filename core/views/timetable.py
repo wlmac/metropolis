@@ -95,6 +95,7 @@ class CourseCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.T
     def form_valid(self, form):
         model = form.save(commit=False)
         model.term = get_object_or_404(models.Term, pk=self.kwargs['pk'])
+        model.submitter = self.request.user
         model.save()
 
         return super().form_valid(form)
