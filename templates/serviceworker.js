@@ -1,53 +1,48 @@
-const CACHE = 'metropolis-v1';
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js');
 
-self.addEventListener('install', event => {
-    event.waitUntil(
-        caches.open(CACHE).then(cache => {
-            return cache.addAll([
-                '/offline/',
-                '/static/css/materialize.min.css',
-                '/static/css/material-design-iconic-font.min.css',
-                '/static/css/fullcalendar.min.css',
-                '/static/css/select2.min.css',
-                '/static/css/mapbox-gl.css',
-                '/static/css/mapbox-gl-geocoder.css',
-                '/static/js/materialize.min.js',
-                '/static/js/jquery-3.6.0.min.js',
-                '/static/js/fullcalendar.min.js',
-                '/static/js/select2.min.js',
-                '/static/js/quicklink.umd.js',
-                '/static/js/mapbox-gl.js',
-                '/static/js/mapbox-gl-geocoder.min.js',
-                '/static/js/luxon.min.js',
-                '/static/core/img/logo-light-transparent.png',
-                '/static/core/img/logo-dark-transparent.png',
-                '/static/fonts/Material-Design-Iconic-Font.woff2',
-            ]);
-        })
-    );
+workbox.core.setCacheNameDetails({
+    prefix: 'metropolis',
+    suffix: 'v2'
 });
 
-self.addEventListener('activate', event => {
-    event.waitUntil(
-        caches.keys().then(keys => Promise.all(
-            keys.map(key => {
-                if (key != CACHE) {
-                    console.log("delete " + key);
-                    return caches.delete(key);
-                }
-            })
-        ))
-    );
+workbox.routing.setDefaultHandler(
+    new workbox.strategies.NetworkOnly()
+);
+
+workbox.precaching.precacheAndRoute([
+    {url: '/static/js/jquery-3.6.0.min.js', revision: '3.6.0'},
+    {url: '/static/css/materialize.min.css', revision: '1.0.0' },
+    {url: '/static/js/materialize.min.js', revision: '1.0.0' },
+    {url: '/static/css/fullcalendar.min.css', revision: '5.9.0'},
+    {url: '/static/js/fullcalendar.min.js', revision: '5.9.0'},
+    {url: '/static/css/select2.min.css', revision: '4.1.0-rc.0'},
+    {url: '/static/js/select2.min.js', revision: '4.1.0-rc.0'},
+    {url: '/static/css/mapbox-gl.css', revision: '2.4.1'},
+    {url: '/static/js/mapbox-gl.js', revision: '2.4.1'},
+    {url: '/static/css/mapbox-gl-geocoder.css', revision: '4.7.2'},
+    {url: '/static/js/mapbox-gl-geocoder.min.js', revision: '4.7.2'},
+    {url: '/static/js/quicklink.umd.js', revision: '2.2.0'},
+    {url: '/static/js/luxon.min.js', revision: '2.0.2'},
+    {url: '/static/js/popper.min.js', revision: '2.9.2'},
+    {url: '/static/core/css/index-banner.css', revision: '292ece3'},
+    {url: '/static/core/js/schedule.js', revision: '292ece3'},
+    {url: '/static/css/material-design-iconic-font.min.css', revision: '2.2.0'},
+    {url: '/static/fonts/Material-Design-Iconic-Font.woff2', revision: '2.2.0'},
+    {url: '/static/core/img/logo-light-transparent.png', revision: '292ece3'},
+    {url: '/static/core/img/logo-dark-transparent.png', revision: '292ece3'},
+    {url: '/static/core/img/top-banner.jpeg', revision: '292ece3'},
+], {
+    directoryIndex: null,
+    cleanUrls: false,
 });
 
-self.addEventListener("fetch", event => {
-    event.respondWith(
-        caches.match(event.request)
-        .then(function (response) {
-            return response || fetch(event.request);
-        })
-        .catch(function () {
-            return caches.match('/offline/');
-        }),
-    );
+workbox.routing.registerRoute(
+    new RegExp('\/api.+'),
+    new workbox.strategies.NetworkFirst()
+);
+
+workbox.recipes.offlineFallback({
+    pageFallback: '/offline/',
 });
+
+workbox.recipes.googleFontsCache();
