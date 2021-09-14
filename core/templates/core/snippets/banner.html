@@ -1,6 +1,13 @@
 {% load static %}
 <div class="banner">
     <div class="background"><img src="{% static 'core/img/top-banner.jpeg' %}"/></div>
+    {% if banner_message %}
+    <div class="overlay-container">
+        <div class="banner-message center-align">
+            <span>{{ banner_message }}</span>
+        </div>
+    </div>
+    {% endif %}
     <div class="overlay-container valign-wrapper">
         <div class="next-class center-align">
             <h4 class="schedule-course">Loading...</h4>

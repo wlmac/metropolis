@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-{% include 'core/snippets/banner.html' %}
+{% include 'core/snippets/banner.html' with banner_message="You are currently offline" %}
 {% endblock %}
 
 {% block head %}

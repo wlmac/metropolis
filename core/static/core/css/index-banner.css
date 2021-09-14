@@ -28,6 +28,13 @@
     height: 100%;
 }
 
+.banner .banner-message{
+    margin-top: 1em;
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--banner-text-brown);
+}
+
 .banner .next-class{
     text-align: center;
     margin-top: auto;
