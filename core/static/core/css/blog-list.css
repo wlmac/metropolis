@@ -53,21 +53,16 @@ hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
-.card-body {
+.card-body p {
     margin: 0;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
-}
-.card-body p:first-child {
+    font-size: 1rem;
+    line-height: 1.6rem;
     margin-top: 0;
-}
-.card-body p:last-child {
-    margin-bottom: 0;
-}
-.card-body .markdown-embed, .card-body img {
-    display: none;
+    word-break: break-word;
 }
 .zmdi {
     margin-left: 0.25rem;

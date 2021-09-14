@@ -44,7 +44,7 @@
                 
                 <hr>
                 <div class="club-description">
-                    {{ organization.bio }}
+                    <p>{{ organization.bio }}</p>
                 </div>
                 <div class="tag-section">
                     {% for tag in organization.tags.all %}
@@ -52,6 +52,8 @@
                     {% endfor %}
                 </div>
             </div>
+            {% empty %}
+                <div class="message">There are no clubs open at this time. Check back in a bit!</div>
             {% endfor %}
         </div>
     </div>
