@@ -21,6 +21,7 @@ function setup() {
                         .then(data => {
                             const todayDate = getDateTimeNow().toISODate();
                             if (todayDate in data && data[todayDate].length > 0) scheduleData = data;
+                            update();
                         })
                         .catch(err => {
                             console.error('Fetch me_schedule_week request failed', err);
