@@ -396,7 +396,8 @@ SITE_ID = 1
 
 SITE_URL = 'http://127.0.0.1:8000'
 
-TOS_URL = '/terms'
+TOS_URL = '/terms/'
+PRIVPOL_URL = '/privacy/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

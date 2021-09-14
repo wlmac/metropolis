@@ -75,7 +75,7 @@
                 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                 {% endif %}
 
-                <p>By clicking this button, you agree to our <a class="link" href="{% settings_value 'TOS_URL' %}">terms</a>.</p>
+                <p>By clicking this button, you agree to our <a class="link" href="{% settings_value 'TOS_URL' %}">terms</a> and <a class="link" href="{% settings_value 'PRIVPOL_URL' %}">privacy policy</a>.</p>
                 <button type="submit" class="btn login-btn ">{% trans "Sign Up" %}</button>
             </form>
         </div>
