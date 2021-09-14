@@ -899,24 +899,43 @@ function forwardGeocoder(query) {
 var level = false;
 
 // Add the control to the map.
-map.addControl(
-  new MapboxGeocoder({
-    accessToken: mapboxgl.accessToken,
-    localGeocoder: forwardGeocoder,
-    localGeocoderOnly: true,
-    zoom: 19,
-    placeholder: "Search School",
-    mapboxgl: mapboxgl,
-    render: function (item) {
-      // extract the item's maki icon or use a default
-      return `<div class='geocoder-dropdown-item'>
-      <span class='geocoder-dropdown-text'>
-      ${item.properties.title}
-      </span>
-      </div>`;
-    },
-  })
-);
+// map.addControl(
+//   new MapboxGeocoder({
+//     accessToken: mapboxgl.accessToken,
+//     localGeocoder: forwardGeocoder,
+//     localGeocoderOnly: true,
+//     zoom: 19,
+//     placeholder: "Search School",
+//     mapboxgl: mapboxgl,
+//     render: function (item) {
+//       // extract the item's maki icon or use a default
+//       return `<div class='geocoder-dropdown-item'>
+//       <span class='geocoder-dropdown-text'>
+//       ${item.properties.title}
+//       </span>
+//       </div>`;
+//     },
+//   })
+// );
+
+const geocoder = new MapboxGeocoder({
+  accessToken: mapboxgl.accessToken,
+  localGeocoder: forwardGeocoder,
+  localGeocoderOnly: true,
+  zoom: 19,
+  placeholder: "Search School",
+  mapboxgl: mapboxgl,
+  render: function (item) {
+    // extract the item's maki icon or use a default
+    return `<div class='geocoder-dropdown-item'>
+    <span class='geocoder-dropdown-text'>
+    ${item.properties.title}
+    </span>
+    </div>`;
+  },
+})
+
+map.addControl(geocoder)
 
 map.on("load", () => {
   map.addSource("floorOne", {
@@ -994,21 +1013,24 @@ map.on("load", () => {
       console.log("Checkbox is checked..");
       map.setLayoutProperty("floorTwo", "visibility", "visible");
       map.setLayoutProperty("floorOne", "visibility", "none");
-      // this.checked=true;
     } else {
       console.log("Checkbox is not checked..");
       map.setLayoutProperty("floorOne", "visibility", "visible");
       map.setLayoutProperty("floorTwo", "visibility", "none");
-      // this.checked=false;
     }
   });
 
-  geocoder.on("result", ({ result }) => {
-    console.log("gottem");
-    if (result.properties.floor == 2) {
-      checkboxswitch.checked = true;
-    } else {
-      checkboxswitch.checked = false;
+  geocoder.on('result', ({ result }) => {
+    console.log(result.properties.title);
+    if(result.properties.floor==1){
+      checkbox.checked = false;
+      map.setLayoutProperty("floorOne", "visibility", "visible");
+      map.setLayoutProperty("floorTwo", "visibility", "none");
+    }else{
+      checkbox.checked = true;
+      map.setLayoutProperty("floorTwo", "visibility", "visible");
+      map.setLayoutProperty("floorOne", "visibility", "none");        
     }
+    
   });
 });
