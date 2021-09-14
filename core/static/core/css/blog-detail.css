@@ -46,10 +46,13 @@ hr {
 .card-body p {
     line-height: 1.6rem;
 }
-.card-body p:first-child {
+.card-body > * {
+    word-break: break-word;
+}
+.card-body > *:first-child {
     margin-top: 0;
 }
-.card-body p:last-child {
+.card-body > *:last-child {
     margin-bottom: 0;
 }
 .card-body .markdown-embed, .card-body img {
