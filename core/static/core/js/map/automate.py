@@ -12,6 +12,6 @@ for i in data_list:
         featuresList[k.strip()] = v.strip()
         print("feature: "+k.strip()+" "+featuresList[k.strip()])
     print(i)
-    geojson.write("{\n\t'type': 'Feature',\n\t'geometry':{\n\t\t'type':'Point',\n\t\t'coordinates': ["+featuresList['longitude'][0:-1]+", "+ featuresList['latitude']+"]\n\t},\n\t'properties':{\n\t\t'id':"+featuresList['id']+",\n\t\t'title':"+featuresList['room']+",\n\t\t'floor':"+featuresList['floor']+"\n\t}\n},\n")
+    geojson.write("{\n\t'type': 'Feature',\n\t'geometry':{\n\t\t'type':'Point',\n\t\t'coordinates': ["+featuresList['longitude'][0:-1]+", "+ featuresList['latitude']+"]\n\t},\n\t'properties':{\n\t\t'title':"+featuresList['room']+",\n\t\t'floor':"+featuresList['floor']+"\n\t}\n},\n")
 
 geojson.write("],\n'type': 'FeatureCollection'\n}")
