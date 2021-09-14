@@ -24,8 +24,8 @@
     </div>
     <hr>
     <div class="card-body">
-        {{announcement.body|safe_markdown}}
+        <p>{{announcement.body|safe_markdown|striptags|linebreaksbr}}</p>
     </div>
     <br>
-    <a class="link" href="{{announcement.pk|announcement_url}}">See Announcement <i class='zmdi zmdi-chevron-right'></i></a>
+    <a class="link" href="{{announcement.pk|announcement_url}}">See announcement <i class='zmdi zmdi-chevron-right'></i></a>
 </div>

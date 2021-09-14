@@ -29,8 +29,8 @@
     </div>
     <hr>
     <div class="card-body">
-        {{blogpost.body|safe_markdown}}
+        <p>{{blogpost.body|safe_markdown|striptags|linebreaksbr}}</p>
     </div>
     <br>
-    <a class="link" href="{{blogpost.slug|blogpost_url}}">Read Full Blog Post <i class='zmdi zmdi-chevron-right'></i></a>
+    <a class="link" href="{{blogpost.slug|blogpost_url}}">Read full blog post <i class='zmdi zmdi-chevron-right'></i></a>
 </div>
