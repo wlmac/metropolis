@@ -46,3 +46,5 @@ workbox.recipes.offlineFallback({
 });
 
 workbox.recipes.googleFontsCache();
+
+workbox.core.clientsClaim();
