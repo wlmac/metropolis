@@ -17,9 +17,9 @@
             {{announcement.author.username|user}}
             <br>
             <dot>•</dot> {{ announcement.last_modified_date|date:"M. j, Y" }}{{ announcement.last_modified_date|date:", g:i A"|lower }}
-            {% if announcement.last_modified_date != announcement.created_date %}
+            <!--{% if announcement.last_modified_date != announcement.created_date %}
             (Edited)
-            {% endif %}
+            {% endif %}-->
         </div>
     </div>
     <hr>
