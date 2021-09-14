@@ -15,7 +15,7 @@ def icon_file_path_generator(instance, file_name):
 
 class Organization(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="organizations_owning")
-    supervisors = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="organizations_supervising")
+    supervisors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="organizations_supervising")
     execs = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="organizations_leading")
 
     name = models.CharField(max_length=64)
