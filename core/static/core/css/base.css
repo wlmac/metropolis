@@ -79,9 +79,16 @@ select{
 }
 
 .brand-logo{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 
     width: auto;
     height: 80%;
@@ -90,7 +97,8 @@ select{
 
     font-size: 1.25rem !important;
     font-weight: 500;
-    object-fit: contain;
+    -o-object-fit: contain;
+       object-fit: contain;
 }
 
 .img-logo{
@@ -99,6 +107,8 @@ select{
 }
 
 .dropdown-trigger{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
 }
 
@@ -117,13 +127,17 @@ select{
 
 .dropdown-content, .sidenav{
     background-color: var(--dark-blue);
+    width: -webkit-max-content !important;
+    width: -moz-max-content !important;
     width: max-content !important;
-    filter: brightness(0.9);
+    -webkit-filter: brightness(0.9);
+            filter: brightness(0.9);
 }
 
 .dropdown-content > li:not(.divider):hover, .sidenav > li:not(.divider):hover{
     background-color: var(--dark-blue);
-    filter: brightness(0.9);
+    -webkit-filter: brightness(0.9);
+            filter: brightness(0.9);
 }
 
 .dropdown-content > li > a, .sidenav > li > a{
@@ -133,6 +147,8 @@ select{
 
 .dropdown-content> li > a:hover, .sidenav > li > a:hover{
     color: var(--white);
+    -webkit-transition: color linear 0.15s;
+    -o-transition: color linear 0.15s;
     transition: color linear 0.15s;
 }
 
@@ -144,6 +160,8 @@ select{
 
 .link{
     color: var(--link-blue);
+    -webkit-transition: color 0.15s linear;
+    -o-transition: color 0.15s linear;
     transition: color 0.15s linear;
 }
 
@@ -153,6 +171,8 @@ select{
 
 .link-light{
     color: var(--white);
+    -webkit-transition: color 0.15s linear;
+    -o-transition: color 0.15s linear;
     transition: color 0.15s linear;
 }
 
@@ -194,7 +214,8 @@ input {
 .input-field input:focus {
     color: var(--dark-blue);
     border-bottom: 1px solid var(--link-blue) !important;
-    box-shadow: 0 1px 0 0 var(--link-blue) !important;
+    -webkit-box-shadow: 0 1px 0 0 var(--link-blue) !important;
+            box-shadow: 0 1px 0 0 var(--link-blue) !important;
 }
 
 label {
@@ -209,10 +230,19 @@ label {
 }
 
 .install-popup{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     padding: 20px;
     background-color: var(--white);
 }
@@ -227,7 +257,8 @@ label {
     margin: none;
     width: auto;
     border-radius: 5px;
-    box-shadow: 2px 2px 5px 3px #ddddddaa;
+    -webkit-box-shadow: 2px 2px 5px 3px #ddddddaa;
+            box-shadow: 2px 2px 5px 3px #ddddddaa;
 }
 
 .install-popup > span{
@@ -236,10 +267,19 @@ label {
 }
 
 .install-popup > div{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 .install-popup > div > .btn{
@@ -256,6 +296,8 @@ label {
 
 .install-popup > div > a:not(.btn):hover{
     color: var(--mid-grey);
+    -webkit-transition: color 0.1s linear;
+    -o-transition: color 0.1s linear;
     transition: color 0.1s linear;
     cursor: pointer;
 }
@@ -269,6 +311,8 @@ label {
     /*height: 230px;*/
     width: 100%;
     background-color: var(--dark-blue);
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     margin: auto;
     flex-direction: column;
@@ -301,11 +345,15 @@ label {
 .foooter-icon-par {
     margin-top: 10px;
     padding-bottom: 40px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     flex-direction: row;
     -webkit-box-orient: horizontal;
     -ms-flex-direction: row;
-    justify-content: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
 }
 
 .footer-icon {

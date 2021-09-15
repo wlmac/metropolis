@@ -3,6 +3,8 @@
 }
 
 .header {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex; 
     margin-bottom: 5%;
 }
@@ -12,9 +14,16 @@
 }
 
 .name-info {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex; 
-    flex-direction: column; 
-    justify-content: center;
+    -webkit-box-orient: vertical; 
+    -webkit-box-direction: normal; 
+        -ms-flex-direction: column; 
+            flex-direction: column; 
+    -webkit-box-pack: center; 
+        -ms-flex-pack: center; 
+            justify-content: center;
 }
 
 .full-name {
@@ -29,6 +38,8 @@
 
 .edit-button {
     margin-left: auto; 
+    display: -webkit-box; 
+    display: -ms-flexbox; 
     display: flex; 
 }
 
@@ -46,6 +57,8 @@ hr {
 }
 
 .field {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex; 
     margin: 1rem 0;
 }
@@ -58,8 +71,13 @@ hr {
 
 @media screen and (max-width: 600px) {
     .header {
-        flex-direction: column; 
-        align-items: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column; 
+        -webkit-box-align: center; 
+            -ms-flex-align: center; 
+                align-items: center;
         text-align: center;
     }
     .profile-picture {

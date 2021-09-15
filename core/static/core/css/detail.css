@@ -2,7 +2,8 @@
     border-bottom: 5px black solid;
     padding: 0 !important;
     height: 18rem !important;
-    object-fit: cover;
+    -o-object-fit: cover;
+       object-fit: cover;
 }
 
 .club-detail {
@@ -20,14 +21,16 @@
     padding-bottom: 100%; 
 }
 .club-logo img {
-    object-fit: cover;
+    -o-object-fit: cover;
+       object-fit: cover;
     position: absolute;
     top: 0;
     bottom: 0;
     width: 100%;
     height: 100%;
     vertical-align: middle;
-    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+    -webkit-box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+            box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
 }
 
 .circle {
@@ -41,14 +44,25 @@
 }
 
 .club-header {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 .tag-section {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-flow: row wrap;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
     margin: 0;
 }
 
@@ -63,8 +77,12 @@
 }
 
 .member-button {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex; 
-    justify-content: flex-end;
+    -webkit-box-pack: end; 
+        -ms-flex-pack: end; 
+            justify-content: flex-end;
 }
 
 .member-button > .join{
@@ -90,8 +108,12 @@
 
 .link-section {
     margin: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex; 
-    justify-content: flex-end;
+    -webkit-box-pack: end; 
+        -ms-flex-pack: end; 
+            justify-content: flex-end;
 }
 
 .link-section > div > li > i{
@@ -113,14 +135,22 @@
 }
 
 li {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 .member {
     font-size: 1.2rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     margin: 10px 0;
     background-color: #F8F8F8;
     padding: .5rem;
@@ -144,8 +174,13 @@ hr {
 
 @media screen and (max-width:600px) {
     .club, .club-header {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        flex-direction: column;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
     }
     .club-banner {
         display: none;
@@ -160,21 +195,37 @@ hr {
         font-size: 3rem;
     }
     .tag-section {
-        justify-content: center;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
         margin-top: 2%;
     }
     .member-button {
         margin-top: 5%;
-        justify-content: center; 
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center; 
     }
     .club-info {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        flex-direction: column-reverse;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: reverse;
+            -ms-flex-direction: column-reverse;
+                flex-direction: column-reverse;
     }
     .link-section {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
     }
     .bio {
         border: none;

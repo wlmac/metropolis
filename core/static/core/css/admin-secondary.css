@@ -77,12 +77,15 @@
   font-family: 'Roboto', sans-serif;
 }
 .sticky {
+  position: -webkit-sticky;
   position: sticky;
   border: none !important;
   max-height: 100% !important;
 }
 #toggle-nav-sidebar {
-  align-items: start;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: start;
 }
 #footer{
   padding: 0px;
@@ -173,15 +176,31 @@ td, th {
 
 .actions > label, .checkbox-row {
 
+  display: -webkit-box !important;
+
+  display: -ms-flexbox !important;
+
   display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
+  -webkit-box-orient: horizontal !important;
+  -webkit-box-direction: normal !important;
+      -ms-flex-direction: row !important;
+          flex-direction: row !important;
+  -webkit-box-align: center !important;
+      -ms-flex-align: center !important;
+          align-items: center !important;
 }
 
 .form-row > div > .related-widget-wrapper, .actions, .messagelist > li{
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .form-row > div > select{
@@ -214,7 +233,8 @@ textarea {
 }
 
 *, *:before, *:after {
-  box-sizing: initial !important;
+  -webkit-box-sizing: initial !important;
+          box-sizing: initial !important;
 }
 
 .aligned label {
