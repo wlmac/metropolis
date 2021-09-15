@@ -15,7 +15,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4624674664498, 43.75395384426233]
+		'coordinates': [-79.46243325527307, 43.753970965485735]
 	},
 	'properties':{
 		'title':"Portable 2",
@@ -26,7 +26,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46221201860781, 43.75315570812597]
+		'coordinates': [-79.46221099031513, 43.75317237412631]
 	},
 	'properties':{
 		'title':"Portable 3",
@@ -37,7 +37,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46218231537334, 43.75304127913833]
+		'coordinates': [-79.4624108175995, 43.75314428115445]
 	},
 	'properties':{
 		'title':"Portable 4",
@@ -48,7 +48,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46240211926877, 43.75312710090293]
+		'coordinates': [-79.46218818873812, 43.75305128362666]
 	},
 	'properties':{
 		'title':"Portable 5",
@@ -59,7 +59,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46237835668141, 43.75301696295375]
+		'coordinates': [-79.46238399545628, 43.753030941531875]
 	},
 	'properties':{
 		'title':"Portable 6",
@@ -70,7 +70,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46255657608708, 43.75325583331394]
+		'coordinates': [-79.46256102100658, 43.75326634251712]
 	},
 	'properties':{
 		'title':"Portable 7",
@@ -81,7 +81,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46232772000198, 43.75333912391008]
+		'coordinates': [-79.462327663467, 43.75335158721401]
 	},
 	'properties':{
 		'title':"119",
@@ -92,7 +92,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4623469764093, 43.75344730771101]
+		'coordinates': [-79.46234644222046, 43.753461051808415]
 	},
 	'properties':{
 		'title':"121",
@@ -103,7 +103,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46236623281662, 43.75354003652805]
+		'coordinates': [-79.46236521768313, 43.75354726659225]
 	},
 	'properties':{
 		'title':"123",
@@ -114,7 +114,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46238762882443, 43.75362735603221]
+		'coordinates': [-79.46238265202406, 43.75363735643279]
 	},
 	'properties':{
 		'title':"125",
@@ -125,7 +125,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4621936537785, 43.75359207291845]
+		'coordinates': [-79.462198032334, 43.75360889118667]
 	},
 	'properties':{
 		'title':"small gym (124)",
@@ -136,7 +136,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46209095294103, 43.753463025387845]
+		'coordinates': [-79.4617303795912, 43.75362606385255]
 	},
 	'properties':{
 		'title':"fitness centre (124c)",
@@ -147,7 +147,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46208025493297, 43.75362375520521]
+		'coordinates': [-79.46208442599088, 43.75363465159106]
 	},
 	'properties':{
 		'title':"team change room",
@@ -158,7 +158,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.461995740702, 43.75365930116354]
+		'coordinates': [-79.46199855338851, 43.753670911751186]
 	},
 	'properties':{
 		'title':"girls change room",
@@ -169,7 +169,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46194546008348, 43.7534962532234]
+		'coordinates': [-79.46195099685673, 43.753506785659]
 	},
 	'properties':{
 		'title':"boys change room",
@@ -180,7 +180,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46190908686992, 43.75362993711252]
+		'coordinates': [-79.46193094840253, 43.75359351676818]
 	},
 	'properties':{
 		'title':"equipment office (127D)",
@@ -191,7 +191,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46187592305769, 43.75352329912107]
+		'coordinates': [-79.46188333944669, 43.75353345567834]
 	},
 	'properties':{
 		'title':"gym office (127E)",
@@ -202,7 +202,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46190908686992, 43.75362993711252]
+		'coordinates': [-79.46191351470047, 43.75364049932426]
 	},
 	'properties':{
 		'title':"gym office (127A)",
@@ -213,10 +213,10 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46172829042908, 43.7536059822186]
+		'coordinates': [-79.46172911873167, 43.75361606821852]
 	},
 	'properties':{
-		'title':"gym office (127A)",
+		'title':"large gym (127)",
 		'floor':1
 	}
 },
@@ -224,7 +224,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.462114731088, 43.75378701797311]
+		'coordinates': [-79.4621022029668, 43.75382222066108]
 	},
 	'properties':{
 		'title':"118T",
@@ -235,7 +235,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4621386073844, 43.753754877161555]
+		'coordinates': [-79.46215856297853, 43.753759532291014]
 	},
 	'properties':{
 		'title':"118C",
@@ -246,7 +246,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4619486823008, 43.753779178752524]
+		'coordinates': [-79.46195278569445, 43.75379119907919]
 	},
 	'properties':{
 		'title':"118E",
@@ -257,7 +257,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46180040894147, 43.75381567830766]
+		'coordinates': [-79.4618069554343, 43.75382092588782]
 	},
 	'properties':{
 		'title':"114",
@@ -268,7 +268,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46166541489782, 43.75378851914769]
+		'coordinates': [-79.46167722609954, 43.7537957223808]
 	},
 	'properties':{
 		'title':"music office",
@@ -279,7 +279,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46143822537765, 43.753929497447075]
+		'coordinates': [-79.46145355825836, 43.753934020553146]
 	},
 	'properties':{
 		'title':"dance room",
@@ -290,7 +290,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46119197175985, 43.753727055891716]
+		'coordinates': [-79.46121179888955, 43.75373700003314]
 	},
 	'properties':{
 		'title':"cafeteria/cafetorium",
@@ -301,7 +301,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46104935599587, 43.75332157069508]
+		'coordinates': [-79.46105544571898, 43.75333204884339]
 	},
 	'properties':{
 		'title':"library (134)",
@@ -312,7 +312,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46105650992905, 43.75321064103045]
+		'coordinates': [-79.46107005200406, 43.75322380678202]
 	},
 	'properties':{
 		'title':"special education resource",
@@ -323,7 +323,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4610222400155, 43.7532166058547]
+		'coordinates': [-79.46104008434995, 43.753229743456245]
 	},
 	'properties':{
 		'title':"SAC room",
@@ -334,7 +334,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46099168611664, 43.75322286891952]
+		'coordinates': [-79.46100721719883, 43.75323148904425]
 	},
 	'properties':{
 		'title':"cyw",
@@ -345,7 +345,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46096278377965, 43.753224658366946]
+		'coordinates': [-79.46098063358639, 43.753235329484454]
 	},
 	'properties':{
 		'title':"library office",
@@ -356,7 +356,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46098319927927, 43.75356356662772]
+		'coordinates': [-79.46100511477736, 43.75357005485046]
 	},
 	'properties':{
 		'title':"staff room",
@@ -367,7 +367,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46117219109146, 43.75347458092048]
+		'coordinates': [-79.4611868324436, 43.75348515432293]
 	},
 	'properties':{
 		'title':"student services",
@@ -378,7 +378,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4613063231389, 43.75351264347452]
+		'coordinates': [-79.4613271203871, 43.7535216196801]
 	},
 	'properties':{
 		'title':"Main Office (116)",
@@ -389,7 +389,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4612294356992, 43.75326779180898]
+		'coordinates': [-79.4612725332962, 43.75326367491422]
 	},
 	'properties':{
 		'title':"108b",
@@ -400,7 +400,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46122508822467, 43.75321557131289]
+		'coordinates': [-79.46127074403375, 43.75321326924049]
 	},
 	'properties':{
 		'title':"108a",
@@ -411,7 +411,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46127098499517, 43.7531449767591]
+		'coordinates': [-79.46128058522986, 43.75315898346079]
 	},
 	'properties':{
 		'title':"106",
@@ -422,7 +422,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46123918940455, 43.75303129706333]
+		'coordinates': [-79.46125649284252, 43.75304288437272]
 	},
 	'properties':{
 		'title':"104",
@@ -433,7 +433,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46121578443991, 43.75289734900633]
+		'coordinates': [-79.46122382537122, 43.752906633057165]
 	},
 	'properties':{
 		'title':"102",
@@ -444,7 +444,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46135081308083, 43.75288499455911]
+		'coordinates': [-79.46136354515774, 43.752898126964254]
 	},
 	'properties':{
 		'title':"101",
@@ -455,7 +455,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46138502033672, 43.75302804590089]
+		'coordinates': [-79.46139777712486, 43.753043114903306]
 	},
 	'properties':{
 		'title':"103",
@@ -466,7 +466,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46138592052752, 43.75312232955255]
+		'coordinates': [-79.46140380351744, 43.75312579142903]
 	},
 	'properties':{
 		'title':"Science Office (105)",
@@ -477,7 +477,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4614352157135, 43.75323058218939]
+		'coordinates': [-79.46145048325354, 43.753248299164255]
 	},
 	'properties':{
 		'title':"107",
@@ -488,7 +488,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46146178469338, 43.75338567006156]
+		'coordinates': [-79.4614761683771, 43.75338955719843]
 	},
 	'properties':{
 		'title':"109",
@@ -499,7 +499,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46163268826237, 43.75340901084962]
+		'coordinates': [-79.46164036883964, 43.75341958509614]
 	},
 	'properties':{
 		'title':"111",
@@ -510,7 +510,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46176978970212, 43.753393465274826]
+		'coordinates': [-79.4617811841459, 43.75340328772481]
 	},
 	'properties':{
 		'title':"113",
@@ -521,7 +521,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46185667774388, 43.753374792510044]
+		'coordinates': [-79.4618675399702, 43.75338755291526]
 	},
 	'properties':{
 		'title':"business office",
@@ -532,7 +532,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46192771832759, 43.753363879308466]
+		'coordinates': [-79.4619749024224, 43.753384181329636]
 	},
 	'properties':{
 		'title':"117",
@@ -543,7 +543,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46238618462642, 43.75362037478658]
+		'coordinates': [-79.46238565237367, 43.75363361197046]
 	},
 	'properties':{
 		'title':"231",
@@ -554,7 +554,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46236885877464, 43.753539028440656]
+		'coordinates': [-79.46236964343728, 43.75353590861371]
 	},
 	'properties':{
 		'title':"229",
@@ -565,7 +565,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46234978339967, 43.75344471356212]
+		'coordinates': [-79.46235355018324, 43.7534516311066]
 	},
 	'properties':{
 		'title':"227",
@@ -576,7 +576,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46232887682082, 43.75336651039095]
+		'coordinates': [-79.46233057723609, 43.753381976637144]
 	},
 	'properties':{
 		'title':"co-op office (226)",
@@ -587,7 +587,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46231917019374, 43.75332606043551]
+		'coordinates': [-79.46232115842207, 43.75333592207335]
 	},
 	'properties':{
 		'title':"225",
@@ -598,7 +598,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4621802907584, 43.75334385841933]
+		'coordinates': [-79.46218059901656, 43.75335319315036]
 	},
 	'properties':{
 		'title':"223",
@@ -609,7 +609,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46210637115912, 43.75345388207188]
+		'coordinates': [-79.46211394375436, 43.75346309583611]
 	},
 	'properties':{
 		'title':"computer office (233)",
@@ -620,7 +620,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46199063829641, 43.7533665102612]
+		'coordinates': [-79.46199367203847, 43.753379882216166]
 	},
 	'properties':{
 		'title':"222",
@@ -631,7 +631,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46186383479508, 43.75338215078125]
+		'coordinates': [-79.46186832688937, 43.75339349079542]
 	},
 	'properties':{
 		'title':"221",
@@ -642,7 +642,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46174810193233, 43.753395094757906]
+		'coordinates': [-79.46175240183594, 43.75340709778331]
 	},
 	'properties':{
 		'title':"220",
@@ -653,7 +653,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46162863575111, 43.75341073539221]
+		'coordinates': [-79.46163140622886, 43.75342489140834]
 	},
 	'properties':{
 		'title':"219",
@@ -664,7 +664,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4614748233558, 43.75339024061128]
+		'coordinates': [-79.46148515501359, 43.75340071235618]
 	},
 	'properties':{
 		'title':"213",
@@ -675,7 +675,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4614501076126, 43.75330386598583]
+		'coordinates': [-79.46146486998195, 43.75331017352619]
 	},
 	'properties':{
 		'title':"211",
@@ -686,7 +686,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46142994769447, 43.753214875953944]
+		'coordinates': [-79.46144603105236, 43.753222249695966]
 	},
 	'properties':{
 		'title':"209",
@@ -697,7 +697,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46141277443088, 43.753129121798224]
+		'coordinates': [-79.46142791795658, 43.753137991624214]
 	},
 	'properties':{
 		'title':"207",
@@ -708,7 +708,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46137891242998, 43.43.75298455462399]
+		'coordinates': [-79.46139302860175, 43.75298885245036]
 	},
 	'properties':{
 		'title':"203",
@@ -719,7 +719,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4613572591844, 43.752873451304396]
+		'coordinates': [-79.46136767069875, 43.75288156880836]
 	},
 	'properties':{
 		'title':"201",
@@ -730,7 +730,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46121240644001, 43.752886395391045]
+		'coordinates': [-79.46122821655393, 43.752901057246845]
 	},
 	'properties':{
 		'title':"202",
@@ -741,7 +741,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46123225915024, 43.75297204839015]
+		'coordinates': [-79.4612506789127, 43.75298740995075]
 	},
 	'properties':{
 		'title':"204",
@@ -752,7 +752,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46125540572287, 43.75305942077733]
+		'coordinates': [-79.46126661842634, 43.75306957486865]
 	},
 	'properties':{
 		'title':"206",
@@ -763,7 +763,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46126511235038, 43.75314895037479]
+		'coordinates': [-79.46128545635727, 43.75315802234198]
 	},
 	'properties':{
 		'title':"208",
@@ -774,7 +774,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46129252974201, 43.75322948124841]
+		'coordinates': [-79.46130284491909, 43.75324332707672]
 	},
 	'properties':{
 		'title':"210",
@@ -785,7 +785,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46131119633266, 43.75331469592737]
+		'coordinates': [-79.46132168256682, 43.75332549164267]
 	},
 	'properties':{
 		'title':"212",
@@ -796,7 +796,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46133229040255, 43.753404171796234]
+		'coordinates': [-79.46134559208431, 43.75341393834546]
 	},
 	'properties':{
 		'title':"214",
@@ -807,7 +807,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46151895631627, 43.753604263599016]
+		'coordinates': [-79.46154185196188, 43.75361634427]
 	},
 	'properties':{
 		'title':"dark room",
@@ -818,7 +818,18 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4615480761975, 43.75357837573341]
+		'coordinates': [-79.46144650667092, 43.75375052923056]
+	},
+	'properties':{
+		'title':"dark room (216A)",
+		'floor':2
+	}
+},
+{
+	'type': 'Feature',
+	'geometry':{
+		'type':'Point',
+		'coordinates': [-79.4615603074014, 43.75358834987574]
 	},
 	'properties':{
 		'title':"book room",
@@ -829,7 +840,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.4614211433802, 43.75382646731842]
+		'coordinates': [-79.4614354341234, 43.753830952741794]
 	},
 	'properties':{
 		'title':"216",
@@ -840,7 +851,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46156898277957, 43.75380273686321]
+		'coordinates': [-79.46158008591014, 43.753810213485025]
 	},
 	'properties':{
 		'title':"215",
@@ -851,7 +862,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46143831664382, 43.75390790585365]
+		'coordinates': [-79.46145890294959, 43.75391685074018]
 	},
 	'properties':{
 		'title':"218",
@@ -862,7 +873,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46159412840285, 43.75393149645012]
+		'coordinates': [-79.46160715142894, 43.75393995400347]
 	},
 	'properties':{
 		'title':"217",
@@ -873,7 +884,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46137493956924, 43.753442172247134]
+		'coordinates': [-79.46138769422942, 43.75345548469946]
 	},
 	'properties':{
 		'title':"modern languages office",
@@ -884,7 +895,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46138050236257, 43.75346800307909]
+		'coordinates': [-79.46139276605106, 43.753478131876875]
 	},
 	'properties':{
 		'title':"history office",
@@ -895,7 +906,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46137931033562, 43.75348694568186]
+		'coordinates': [-79.46139737638734, 43.75350077690234]
 	},
 	'properties':{
 		'title':"geography office",
@@ -906,7 +917,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46139440934593, 43.75354233841023]
+		'coordinates': [-79.46140705817172, 43.753543403070495]
 	},
 	'properties':{
 		'title':"english office",
@@ -917,7 +928,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46140156150852, 43.75358739877856]
+		'coordinates': [-79.46141581781006, 43.75359668555146]
 	},
 	'properties':{
 		'title':"math office (238)",
@@ -928,7 +939,7 @@
 	'type': 'Feature',
 	'geometry':{
 		'type':'Point',
-		'coordinates': [-79.46149383054909, 43.75396687020216]
+		'coordinates': [-79.46150331164226, 43.753973545031556]
 	},
 	'properties':{
 		'title':"art office (218A)",
