@@ -3,7 +3,7 @@ mapboxgl.accessToken = JSON.parse(
 )["apikey"];
 const map = new mapboxgl.Map({
   container: "map", // container ID
-  style: "mapbox://styles/nikisu/ckthu5pbc28d318oacchk9ntr", // style URL
+  style: "mapbox://styles/nikisu/cktk76xy90rgm17s7q7pg0g55", // style URL
   center: [-79.46155348420591, 43.753374130758445], // starting position [lng, lat]
   zoom: 19, // starting zoom
 });
@@ -991,23 +991,23 @@ map.addControl(geocoder);
 map.on("load", () => {
   map.addSource("floorOne", {
     type: "image",
-    url: "../static/core/img/FloorOne.jpg",
+    url: "../static/core/img/FloorOne1.jpg",
     coordinates: [
-      [-79.46280231730522, 43.75418610402343], //TL
-      [-79.46065948803763, 43.75418610402343], //TR
-      [-79.46065948803763, 43.75267989803223], //BR
-      [-79.46280231730522, 43.75267989803223], //BL
+      [-79.46270547634776, 43.75413886166868], //TL
+      [-79.46072668772469, 43.75413886166868], //TR
+      [-79.46072668772469, 43.75274955916902], //BR
+      [-79.46270547634776, 43.75274955916902], //BL
     ],
   });
 
   map.addSource("floorTwo", {
     type: "image",
-    url: "../static/core/img/FloorTwo.jpg",
+    url: "../static/core/img/FloorTwo1.jpg",
     coordinates: [
-      [-79.46280231730522, 43.75418610402343], //TL
-      [-79.46065948803763, 43.75418610402343], //TR
-      [-79.46065948803763, 43.75267989803223], //BR
-      [-79.46280231730522, 43.75267989803223], //BL
+      [-79.46270547634776, 43.75413886166868], //TL
+      [-79.46072668772469, 43.75413886166868], //TR
+      [-79.46072668772469, 43.75274955916902], //BR
+      [-79.46270547634776, 43.75274955916902], //BL
     ],
   });
 
@@ -1043,19 +1043,20 @@ map.on("load", () => {
     },
   });
 
-  // const marker = new mapboxgl.Marker({
-  //   draggable: true,
-  // })
-  //   .setLngLat([-79.46155348420591, 43.753374130758445])
-  //   .addTo(map);
+  const marker = new mapboxgl.Marker({
+    draggable: true,
+  })
+    .setLngLat([-78.46155348420591, 43.753374130758445])
+    .addTo(map);
+  
+  
+  function onDragEnd() {
+    const lngLat = marker.getLngLat();
+    coordinates.style.display = "block";
+    coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
+  }
 
-  // function onDragEnd() {
-  //   const lngLat = marker.getLngLat();
-  //   coordinates.style.display = "block";
-  //   coordinates.innerHTML = `Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`;
-  // }
-
-  // // marker.on("dragend", onDragEnd);
+  marker.on("dragend", onDragEnd);
 
   var checkbox = document.querySelector("input[name=checkbox]");
 
@@ -1084,3 +1085,73 @@ map.on("load", () => {
     }
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+// const marker2 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46234537003488, 43.75327269027164])
+  //   .addTo(map);
+    
+  // const marker3 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46244215769487, 43.75367965635641])
+  //   .addTo(map);
+
+  // const marker4 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46217382097582, 43.75371134269406])
+  //   .addTo(map);
+
+  // const marker5 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46191588301589, 43.753869889376745])
+  //   .addTo(map);
+
+  // const marker6 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46142684616693, 43.75403664808019])
+  //   .addTo(map);
+  
+  // const marker7 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46136479422033, 43.75378023469304])
+  //   .addTo(map);
+
+  // const marker8 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46105150065856, 43.75380760757483])
+  //   .addTo(map);
+  
+  // const marker9 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46087276984731, 43.75322304895161])
+  //   .addTo(map);
+  
+  // const marker10 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46123520974277, 43.753196161692586])
+  //   .addTo(map);
+
+  // const marker11 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46115824792733, 43.752850086508715])
+  //   .addTo(map);
+  
+  // const marker12 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46139159900635, 43.752824988257686])
+  //   .addTo(map);
+
+  // const marker13 = new mapboxgl.Marker({
+  // })
+  //   .setLngLat([-79.46156040136074, 43.753388033218926])
+  //   .addTo(map);
