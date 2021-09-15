@@ -1,7 +1,6 @@
 from django.db import models
 import random
-import colorsys
-from metropolis import settings
+from ..utils.tag_color import get_tag_color
 
 # Create your models here.
 
@@ -11,8 +10,7 @@ class Tag(models.Model):
 
     def color(self):
         random.seed(self.name + self.description)
-        hue = random.random()
-        return '#%02x%02x%02x' % tuple(int(i*255) for i in colorsys.hsv_to_rgb(hue, settings.TAG_COLOR_SATURATION, settings.TAG_COLOR_VALUE))
+        return get_tag_color(random.random())
 
     def __str__(self):
         return self.name
