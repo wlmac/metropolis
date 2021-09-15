@@ -34,10 +34,6 @@ class MapView(TemplateView, mixins.TitleMixin):
         context['mapbox_apikey'] = {'apikey': settings.MAPBOX_APIKEY}
         return context
 
-class Teapot(View):
-    def get(self, request):
-        return HttpResponse('orz teapot', status=418)
-
 class AboutView(TemplateView, mixins.TitleMixin):
     template_name = "core/about/about.html"
     title = 'About'
@@ -46,6 +42,12 @@ class AboutView(TemplateView, mixins.TitleMixin):
         context = super().get_context_data(**kwargs)
         members_config = settings.METROPOLIS_MEMBERS
         context['members'] = {}
+        context['member_count'] = 0
         for position in members_config:
             context['members'][position] = models.User.objects.filter(pk__in=members_config[position]).order_by('last_name', 'first_name')
+            context['member_count'] += len(members_config[position])
         return context
+
+class Teapot(View):
+    def get(self, request):
+        return HttpResponse('orz teapot', status=418)

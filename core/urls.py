@@ -20,6 +20,6 @@ urlpatterns = [
     path('blog/<str:slug>', views.BlogPostDetail.as_view(), name='blogpost_detail'),
     path('calendar', views.CalendarView.as_view(), name="calendar"),
     path('map', views.MapView.as_view(), name="map"),
-    path('teapot', views.Teapot.as_view(), name="teapot"),
     path('about', views.AboutView.as_view(), name="about"),
+    path('teapot', views.Teapot.as_view(), name="teapot"),
 ]
