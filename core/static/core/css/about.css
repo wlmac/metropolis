@@ -5,6 +5,8 @@
     padding-left: 40px;
 }
 .headers ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     margin: 0;
 }
@@ -24,6 +26,8 @@
 .header:hover {
     color: var(--mid-blue);
     border-color: var(--mid-blue);
+    -webkit-transition: color 0.1s linear, border-color 0.1s linear;
+    -o-transition: color 0.1s linear, border-color 0.1s linear;
     transition: color 0.1s linear, border-color 0.1s linear;
 }
 .active {
@@ -36,8 +40,12 @@
     min-height: calc(100vh - 226px);
 }
 .content-embed {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     width: 100%;
     height: 53rem;
 }
@@ -82,8 +90,12 @@
 }
 .member {
     font-size: 1.2rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     margin: 10px 0;
     background-color: var(--light-grey);
     padding: .5rem;
@@ -104,9 +116,15 @@
 .link-section {
     margin: 0;
     margin-bottom: 40px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex; 
-    justify-content: start;
-    align-items: center;
+    -webkit-box-pack: start; 
+        -ms-flex-pack: start; 
+            justify-content: start;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 .link-section:last-child {
     margin: 0;
@@ -118,8 +136,12 @@
     margin-right: 8px;
 }
 .link-section li a {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 .link-section li a p {
     margin: 0;
@@ -134,7 +156,9 @@ hr {
         padding: 20px;
     }
     .headers ul {
-        justify-content: center;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
     }
     .headers li {
         font-size: 0.75rem;

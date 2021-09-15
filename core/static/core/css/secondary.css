@@ -2,6 +2,8 @@
     width: 100%;
     min-height: calc(100vh - 64px);
     padding: 25px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
 }
 
@@ -58,6 +60,8 @@
 
 .dropdown-content> li > a:hover, .secondnav > li > a:hover{
     color: var(--dark-blue);
+    -webkit-transition: color linear 0.15s;
+    -o-transition: color linear 0.15s;
     transition: color linear 0.15s;
 }
 
