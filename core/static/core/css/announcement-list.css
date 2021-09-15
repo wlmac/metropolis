@@ -105,6 +105,17 @@
     font-size: 2rem;
     word-break: break-word;
 }
+.card-headers {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: start;
+}
 .card-authors {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -212,6 +223,18 @@
     .title {
         font-size: 1.75rem;
     }
+    .card-headers {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-align: start;
+            -ms-flex-align: start;
+                align-items: flex-start;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+    }
     .card-authors-image {
         margin-right: 10px;
     }
@@ -220,11 +243,5 @@
     }
     .card-authors-text dot {
         display: none;
-    }
-    .tag-section {
-        zoom: 0.8;
-        -webkit-transform: scale(0.8);
-            -ms-transform: scale(0.8);
-                transform: scale(0.8);
     }
 }
