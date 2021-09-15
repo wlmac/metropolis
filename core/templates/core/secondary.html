@@ -56,26 +56,30 @@
             {% url 'profile_detail' slug=profile.username as profile_detail %}
                 <a class="link{% if request.path == profile_detail %} current{% endif %}" href="{% url 'profile_redirect' %}">Profile</a>
             </li>
-            {# {% if not user.organizations_owning.all.empty %} #}
                 <hr>
-                {# {% if user.perms.core.announcement_add %} #}
-                    <li>
-                        <a class="link" href="{% url 'admin:core_announcement_add' %}">Announcements</a>
-                    </li>
-                {# {% endif %} #}
-                {# {% if user.perms.core.event_add %} #}
-                    <li>
-                        <a class="link" href="{% url 'admin:core_event_add' %}">Events</a>
-                    </li>
-                    <hr>
-                {# {% endif %} #} 
+            {% if user.is_staff %}
+                 {% if perms.core.announcement_add and perms.core.event_add %} 
+                     {% if perms.core.announcement_add %}
+                         <li>
+                             <a class="link" href="{% url 'admin:core_announcement_add' %}">Announcements</a>
+                         </li>
+                     {% endif %} 
+                     {% if perms.core.event_add %} 
+                         <li>
+                             <a class="link" href="{% url 'admin:core_event_add' %}">Events</a>
+                         </li>
+                     {% endif %} 
+                     <hr>
+                {% endif %}
+                {% if user.organizations_owning.all %} 
                 {% for organization in user.organizations_owning.all %}
                     <li>
                         <a class="link" href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
                     </li>
                 {% endfor %}
                 <hr>
-            {# {% endif %} #}
+                {% endif %}
+            {% endif %} 
             <li>
                 <a class="link" href="{% url 'account_logout' %}">Logout</a>
             </li>
