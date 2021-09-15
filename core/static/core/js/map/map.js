@@ -1054,19 +1054,19 @@ map.on("load", () => {
     },
   });
 
-  const marker = new mapboxgl.Marker({
-    draggable: true,
-  })
-    .setLngLat([-79.46155348420591, 43.753374130758445])
-    .addTo(map);
+  // const marker = new mapboxgl.Marker({
+  //   draggable: true,
+  // })
+  //   .setLngLat([-79.46155348420591, 43.753374130758445])
+  //   .addTo(map);
 
-  function onDragEnd() {
-    const lngLat = marker.getLngLat();
-    coordinates.style.display = "block";
-    coordinates.innerHTML = `latitude: ${lngLat.lat}, longitude: ${lngLat.lng}`;
-  }
+  // function onDragEnd() {
+  //   const lngLat = marker.getLngLat();
+  //   coordinates.style.display = "block";
+  //   coordinates.innerHTML = `latitude: ${lngLat.lat}, longitude: ${lngLat.lng}`;
+  // }
 
-  marker.on("dragend", onDragEnd);
+  // marker.on("dragend", onDragEnd);
 
   var checkbox = document.querySelector("input[name=checkbox]");
 
