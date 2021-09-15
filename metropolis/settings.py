@@ -422,6 +422,8 @@ METROPOLIS_MEMBERS = {
     ]
 }
 
+DEFAULT_TIMEZONE = 'UTC'
+
 try:
     from metropolis.config import *
 except ImportError:
