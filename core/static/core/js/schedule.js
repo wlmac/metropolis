@@ -1,5 +1,6 @@
 const DateTime = luxon.DateTime;
 let scheduleData = [];
+let scheduleIsPersonal = false;
 
 function getDateTimeNow() {
     return DateTime.now();
@@ -20,7 +21,10 @@ function setup() {
                         })
                         .then(data => {
                             const todayDate = getDateTimeNow().toISODate();
-                            if (todayDate in data && data[todayDate].length > 0) scheduleData = data;
+                            if (todayDate in data && data[todayDate].length > 0) {
+                                scheduleData = data;
+                                scheduleIsPersonal = true;
+                            }
                             update();
                         })
                         .catch(err => {
@@ -78,13 +82,17 @@ function update() {
 
             if (todayData) {
                 if (todayData.length > 0) $(".schedule-cycle").text(todayData[0].cycle);
-                let todayCoursesEl = $(".schedule-today-courses").empty()
+                let todayCoursesEl = $(".schedule-today-courses").empty();
                 for (let i = 0; i < todayData.length; i++) {
                     if (todayData[i].course) {
-                        let courseEl = $("<span class='schedule-today-course'></span>").text(`${todayData[i].description.course} - ${todayData[i].course}`)
-                        if (todayData[i].course === currentCourse) courseEl.attr("data-active", true)
-                        todayCoursesEl.append(courseEl)
-                        if (i < todayData.length) todayCoursesEl.append($("<br>"))
+                        let courseDescription;
+                        if (scheduleIsPersonal) courseDescription = `${todayData[i].description.course} - ${todayData[i].course}`;
+                        else courseDescription = `${todayData[i].description.course}`;
+
+                        let courseEl = $("<span class='schedule-today-course'></span>").text(courseDescription);
+                        if (todayData[i].course === currentCourse) courseEl.attr("data-active", true);
+                        todayCoursesEl.append(courseEl);
+                        if (i < todayData.length) todayCoursesEl.append($("<br>"));
                     }
                 }
             }
