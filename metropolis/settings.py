@@ -405,7 +405,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 SILENCED_SYSTEM_CHECKS = ['urls.W002']
 
-API_VERSION = "0.4.0"
+API_VERSION = "1.0.0"
 
 METROPOLIS_MEMBERS = {
     "Project Manager": {},
