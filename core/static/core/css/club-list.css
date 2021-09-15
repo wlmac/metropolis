@@ -90,6 +90,7 @@ hr {
 }
 
 .club-description p {
+    word-break: break-word;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
