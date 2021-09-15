@@ -30,6 +30,9 @@
     </div>
     <div class="card-container">
         <div class="tag-section">
+            {% if announcement.status != 'a' %}
+            <p class="tag" style="background-color:#ff6666">Unpublished</p>
+            {% endif %}
             {% for tag in announcement.tags.all %}
             <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
             {% endfor %}
@@ -49,6 +52,9 @@
                 {% endif %}-->
             </div>
         </div>
+        {% if announcement.status != 'a' %}
+        <p style="color: var(--mid-grey);">This post is not approved yet and is not visible to club members/everyone</p>
+        {% endif %}
         <hr>
         <div class="card-body">
             {{announcement.body|safe_markdown}}
