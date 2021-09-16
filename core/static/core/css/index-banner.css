@@ -73,11 +73,22 @@
     color: var(--banner-text-brown);
     padding-left: 10px;
     border-left: solid var(--darker-brown) 3px;
-    font-weight: bolder;
+    font-weight: normal;
 }
 
 .schedule-today-courses [data-active]{
-    font-weight: bold;
     color: var(--darker-brown);
-    font-size: 1.1em;
+    font-size: 1.05em;
+}
+
+@media screen and (max-width: 992px){
+    .next-class .schedule-course{
+        font-size: 4em;
+    }
+    .schedule-today-overlay .schedule-cycle{
+        font-size: 1.8em;
+    }
+    .next-class{
+        margin-top: 50px !important;
+    }
 }
