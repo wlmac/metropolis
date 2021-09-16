@@ -69,6 +69,27 @@
             <div class="row">
                 <div class="col s12">
                     <h4>
+                        Executives
+                    </h4>
+                    <hr>
+                    <div class="members-list">
+                            {% for i in organization.execs.all %}
+                            <a href="{{i.username|user_url}}">
+                                <div class="member">
+                                    <div class="member-image">
+                                        <img class="circle" src="{{i.email|gravatar_url:100}}">
+                                    </div>
+                                    <div class="member-text">
+                                        {{i.username}}
+                                    </div>
+                                </div>
+                            </a>
+                            {% empty %}
+                            <br>
+                            There are no executives right now.
+                            {% endfor %}
+                    </div>
+                    <h4>
                         Members
                     </h4>
                     <hr>
