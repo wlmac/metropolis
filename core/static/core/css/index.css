@@ -37,6 +37,7 @@
     padding: 15px 0;
     padding-left: 5%;
     height: 100%;
+    width: 100%;
 }
 
 .blog-content-container .title{
@@ -198,6 +199,7 @@ hr {
     }
     .blog-content {
         padding: 20px !important;
+        width: 100% !important;
     }
     .blog {
         -webkit-box-orient: vertical;
