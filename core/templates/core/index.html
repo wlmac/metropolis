@@ -4,6 +4,16 @@
 {% load static %}
 {% load timetable_tags %}
 
+{% block head %}
+<meta property="og:site_name" content="Mac Lyon's Den">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Project Metropolis">
+<meta name="og:description" content="Your hub for everything WLMAC">
+<meta property="og:url" content="/">
+<meta name="og:image" content="/static/core/img/logo/logo-any-192.png">
+<meta name="theme-color" content="#073763">
+{% endblock %}
+
 {% block main %}
     <div id="content-container">
         {% include 'core/snippets/banner.html' %}
