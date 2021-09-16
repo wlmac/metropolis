@@ -31,10 +31,12 @@ class TermAdmin(admin.ModelAdmin):
     inlines = [
         CourseInline,
     ]
+    list_display = ['name', 'timetable_format', 'start_date', 'end_date']
     form = TermAdminForm
 
 class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['color']
+    list_display = ['name', 'organization', 'color']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -87,6 +89,10 @@ class OrganizationAdmin(admin.ModelAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "supervisors":
             kwargs["queryset"] = models.User.objects.filter(is_teacher=True)
+        if db_field.name == 'tags':
+            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Tag.objects.all()
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 class OrganizationListFilter(admin.SimpleListFilter):
@@ -257,10 +263,18 @@ class BlogPostAdmin(admin.ModelAdmin):
     def get_changeform_initial_data(self, request):
         return {'author': request.user.pk}
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == 'tags':
+            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Tag.objects.all()
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
 class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'organization', 'start_date', 'end_date']
     list_filter = [OrganizationListFilter]
     ordering = ['-start_date', '-end_date']
+    search_fields = ['name']
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -277,6 +291,13 @@ class EventAdmin(admin.ModelAdmin):
             kwargs['form'] = EventAdminForm
         return super().get_form(request, obj, **kwargs)
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == 'tags':
+            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Tag.objects.all()
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
@@ -287,6 +308,15 @@ class EventAdmin(admin.ModelAdmin):
         if obj != None and (not request.user.is_superuser) and (request.user not in obj.organization.execs.all()):
             return False
         return super().has_change_permission(request, obj)
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ['username', 'is_superuser', 'is_staff', 'is_teacher']
+    list_filter = ['is_superuser', 'is_staff', 'is_teacher', 'groups', 'graduating_year']
+    search_fields = ['username']
+
+class TimetableAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'term']
+    list_filter = ['term']
 
 class FlatPageAdmin(FlatPageAdmin):
     formfield_overrides = {
@@ -303,8 +333,8 @@ class FlatPageAdmin(FlatPageAdmin):
         }),
     )
 
-admin.site.register(User)
-admin.site.register(models.Timetable)
+admin.site.register(User, UserAdmin)
+admin.site.register(models.Timetable, TimetableAdmin)
 admin.site.register(models.Term, TermAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
