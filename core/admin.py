@@ -1,7 +1,7 @@
 from django.contrib import admin
 from . import models
 from django.contrib.auth import get_user_model
-from django.forms import Textarea
+from django import forms
 import django.db
 from django.db.models import Q
 from django.contrib.flatpages.admin import FlatPageAdmin
@@ -18,18 +18,9 @@ User = get_user_model()
 
 # Register your models here.
 
-class TermInline(admin.TabularInline):
-    formfield_overrides = {
-        django.db.models.TextField: {'widget': Textarea(attrs={'rows': 1})},
-    }
-    fields = ['name', 'num_courses', 'timetable_format', 'start_date', 'end_date']
-    ordering = ['-start_date']
-    model = models.Term
-    extra = 0
-
 class CourseInline(admin.TabularInline):
     formfield_overrides = {
-        django.db.models.TextField: {'widget': Textarea(attrs={'rows': 1})},
+        django.db.models.TextField: {'widget': forms.Textarea(attrs={'rows': 1})},
     }
     fields = ['code', 'position', 'description']
     ordering = ['code']
