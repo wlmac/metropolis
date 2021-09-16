@@ -48,9 +48,9 @@
     <li class="divider"></li>
     <li>
         {% for item, path in items.items %}
-        <li>
-            <a href="#!">{{ item }}</a>
-        </li>
+            <li>
+                <a href="#!">{{ item }}</a>
+            </li>
         {% endfor %}
     </li>
     {% else %}
@@ -71,57 +71,55 @@
     <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}" class="sidenav-close">Sign Up</a></li>
     {% endif %}
 </ul>
-<div class="navbar-fixed">
-    <nav>
-        <div class="nav-wrapper">
-            <a href="{% url 'index' %}">
-                <div class="brand-logo">
-                    <img class="img-logo" src="{% static 'core/img/logo-dark-transparent.png' %}"></img>
-                    <!-- <span>Metropolis</span> -->
-                </div>
-            </a>
-
-            <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
-            <ul class="right hide-on-med-and-down">
-                {% settings_value "NAVBAR" as navbar %}
-                {% for heading, items in navbar.items %}
-                {% if items|gettype == 'str' %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ items }}">{{ heading }}</a>
-                </li>
-                {% elif items|gettype == 'dict' %}
-                <li>
-                    <a class="dropdown-trigger" href="#!" data-target="dropdown1">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
-                    <ul id="dropdown1" class="dropdown-content">
-                        {% for item, path in items.items %}
+<nav>
+    <div class="nav-wrapper">
+        <a href="{% url 'index' %}">
+            <div class="brand-logo">
+                <img class="img-logo" src="{% static 'core/img/logo-dark-transparent.png' %}"></img>
+                <!-- <span>Metropolis</span> -->
+            </div>
+        </a>
+            
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
+        <ul class="right hide-on-med-and-down">
+            {% settings_value "NAVBAR" as navbar %}
+            {% for heading, items in navbar.items %}
+            {% if items|gettype == 'str' %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ items }}">{{ heading }}</a>
+            </li>
+            {% elif items|gettype == 'dict' %}
+            <li>
+                <a class="dropdown-trigger" href="#!" data-target="dropdown1">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
+                <ul id="dropdown1" class="dropdown-content">
+                    {% for item, path in items.items %}
                         <li>
                             <a href="#!">{{ item }}</a>
                         </li>
-                        {% endfor %}
-                    </ul>
-                </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% else %}
+            {{ items|gettype }}
+            {% endif %}
+            {% endfor %}
+            <li><a class="dropdown-trigger" href="#!" data-target="dropdownAcc">
+                {% if request.user.is_authenticated %}
+                Account
                 {% else %}
-                {{ items|gettype }}
+                Login/Sign Up
                 {% endif %}
-                {% endfor %}
-                <li><a class="dropdown-trigger" href="#!" data-target="dropdownAcc">
-                        {% if request.user.is_authenticated %}
-                        Account
-                        {% else %}
-                        Login/Sign Up
-                        {% endif %}
-                        <i class="zmdi zmdi-caret-down"></i>
-                    </a></li>
-                    <script>
-                        $(document).ready(function(){
-                                                    $('.dropdown-trigger').dropdown();
-                                                    $('.sidenav').sidenav();
-                                                });
-                    </script>
-            </ul>
-        </div>
-    </nav>
-</div>
+                <i class="zmdi zmdi-caret-down"></i>
+            </a></li>
+            <script>
+                $(document).ready(function(){
+                    $('.dropdown-trigger').dropdown();
+                    $('.sidenav').sidenav();
+                });
+            </script>
+        </ul>
+    </div>
+</nav>
 
 {% block main %}
 {% endblock %}
