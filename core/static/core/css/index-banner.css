@@ -59,7 +59,8 @@
     position: absolute;
     left: 0;
     bottom: 10px;
-    padding: 10px;
+    padding-left: 50px;
+    padding-bottom: 10px;
 }
 
 .schedule-today-overlay .schedule-cycle{
