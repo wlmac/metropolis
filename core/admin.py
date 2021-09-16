@@ -172,6 +172,13 @@ class AnnouncementAdmin(admin.ModelAdmin):
                 kwargs["queryset"] = models.Organization.objects.filter(Q(supervisors=request.user) | Q(execs=request.user)).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == 'tags':
+            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Tag.objects.all()
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
     def has_change_permission(self, request, obj=None):
         if obj != None and obj.status != 'p' and not request.user.is_superuser and request.user in obj.organization.supervisors.all() and request.user not in obj.organization.execs.all():
             return False
