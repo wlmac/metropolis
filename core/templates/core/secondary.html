@@ -16,30 +16,34 @@
 <div class="container">
     <ul class="sidenav secondnav" id="secondary-out">
         <li>
-            <a class="sidenav-close" href="{% url 'timetable_list' %}">Timetable</a>
+            <a class="sidenav-close" href="{% url 'profile_redirect' %}">Profile</a>
         </li>
         <li>
-            <a class="sidenav-close" href="{% url 'profile_redirect' %}">Profile</a>
+            <a class="sidenav-close" href="{% url 'timetable_list' %}">Timetable</a>
         </li>
         <li class="divider"></li>
         {% if user.is_staff %}
-            {% if perms.core.announcement_add %}
-                <li>
-                    <a class="link sidenav-close" href="{% url 'admin:core_announcement_add' %}">Add announcement</a>
-                </li>
-            {% endif %}
-            {% if perms.core.event_add %}
-                <li>
-                    <a class="link sidenav-close" href="{% url 'admin:core_event_add' %}">Add event</a>
-                </li>
+            {% if perms.core.announcement_add and perms.core.event_add %} 
+                {% if perms.core.announcement_add %}
+                    <li>
+                        <a class="link sidenav-close" href="{% url 'admin:core_announcement_add' %}">Add announcement</a>
+                    </li>
+                {% endif %}
+                {% if perms.core.event_add %}
+                    <li>
+                        <a class="link sidenav-close" href="{% url 'admin:core_event_add' %}">Add event</a>
+                    </li>
+                {% endif %}
+                    <li class="divider"></li>
+            {% endif %} 
+            {% if user.organizations_owning.all %} 
+                 {% for organization in user.organizations_owning.all %}
+                     <li>
+                         <a class="sidenav-close" href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
+                     </li>
+                 {% endfor %}
                 <li class="divider"></li>
-            {% endif %}
-            {% for organization in user.organizations_owning.all %}
-                <li>
-                    <a class="sidenav-close" href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
-                </li>
-            {% endfor %}
-            <li class="divider"></li>
+            {% endif %} 
         {% endif %}
         <li><a href="{% url 'account_logout' %}" class="sidenav-close">Logout</a></li>
     </ul>
@@ -49,14 +53,14 @@
     <div class="secondary-nav-wrapper">
         <ul class="secondary-nav">
             <li>
-                {% url 'timetable_list' as timetable %}
-                <a class="link{% if request.path == timetable %} current{% endif %}" href="{% url 'timetable_list' %}">Timetable</a>
-            </li>
-            <li>
             {% url 'profile_detail' slug=profile.username as profile_detail %}
                 <a class="link{% if request.path == profile_detail %} current{% endif %}" href="{% url 'profile_redirect' %}">Profile</a>
             </li>
-                <hr>
+            <li>
+                {% url 'timetable_list' as timetable %}
+                <a class="link{% if request.path == timetable %} current{% endif %}" href="{% url 'timetable_list' %}">Timetable</a>
+            </li>
+            <hr>
             {% if user.is_staff %}
                  {% if perms.core.announcement_add and perms.core.event_add %} 
                      {% if perms.core.announcement_add %}
