@@ -214,8 +214,8 @@ TIMETABLE_FORMATS = {
                 {'description': {'time': '12:15 PM - 02:45 PM', 'course': 'Afternoon Class'}, 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
             ],
             'late-start': [
-                {'description': {'time': '09:00 AM - 11:30 AM', 'course': 'Morning Class'}, 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
-                {'description': {'time': '12:15 PM - 02:45 PM', 'course': 'Afternoon Class'}, 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
+                {'description': {'time': '10:00 AM - 12:00 PM', 'course': 'Morning Class'}, 'time': [[10, 0], [12, 0]], 'position': [{1, 5, 7}, {3, 6, 7}]},
+                {'description': {'time': '12:45 PM - 02:45 PM', 'course': 'Afternoon Class'}, 'time': [[12, 45], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
             ],
             'early-dismissal': [
                 {'description': {'time': '09:00 AM - 11:30 AM', 'course': 'Morning Class'}, 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
