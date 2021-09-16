@@ -13,7 +13,7 @@
     margin: 0;
     margin-top: 8px;
     font-size: 2rem;
-    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 .card-headers {
     display: -webkit-box;
@@ -76,7 +76,7 @@ hr {
     font-size: 1rem;
     line-height: 1.6rem;
     margin-top: 0;
-    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 .zmdi {
     margin-left: 0.25rem;

@@ -103,7 +103,7 @@
     margin: 0;
 }
 .description > * {
-    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 .link-section {

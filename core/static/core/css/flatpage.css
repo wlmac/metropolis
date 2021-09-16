@@ -8,7 +8,7 @@
     margin: 0;
     margin-top: 8px;
     font-size: 3rem;
-    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 hr {
     margin: 20px 0 10px;
@@ -19,7 +19,7 @@ hr {
     line-height: 1.6rem;
 }
 .content-body > * {
-    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 .content-body > *:first-child {
     margin-top: 0;
