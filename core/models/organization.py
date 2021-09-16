@@ -26,7 +26,7 @@ class Organization(models.Model):
     registered_date = models.DateTimeField(auto_now_add=True)
     is_open = models.BooleanField(default=True)
     applications_open = models.BooleanField(default=False)
-    tags = models.ManyToManyField("Tag", blank=True, related_name="organizations", related_query_name="organization")
+    tags = models.ManyToManyField("Tag", blank=True, related_name="organizations", related_query_name="org")
 
     banner = models.ImageField(blank=True, upload_to=banner_file_path_generator, default='banners/default.png')
     icon = models.ImageField(blank=True, upload_to=icon_file_path_generator, default='icons/default.png')
