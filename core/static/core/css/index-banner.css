@@ -88,7 +88,23 @@
     .schedule-today-overlay .schedule-cycle{
         font-size: 1.8em;
     }
-    .next-class{
-        margin-top: 50px !important;
+    .schedule-today-overlay{
+        left: 0;
+        right: 0;
+    }
+    .schedule-today-overlay-container{
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    .schedule-today-overlay .schedule-cycle{
+        margin-right: 15px;
+        margin-top: auto;
+        margin-bottom: auto;
     }
 }
