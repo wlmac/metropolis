@@ -28,7 +28,7 @@ $(document).ready(function () {
         // select the current date whenever we change views
         viewDidMount: function () {
             calendar.select(new Date().setHours(0, 0, 0, 0))
-            if(maxAspectRatio * $(calendarElement).innerHeight() < $(calendarElement).innerWidth()){
+            if (maxAspectRatio * $(calendarElement).innerHeight() < $(calendarElement).innerWidth()) {
                 calendar.setOption("height", null)
                 calendar.updateSize()
             }
@@ -193,9 +193,9 @@ function placeCards(eventsToday, date) {
     }
 
     // if there are no events, then we tell them there are no events
-    if(eventsToday.length === 0){
+    if (eventsToday.length === 0) {
         $(".no-event-inform").stop().fadeIn(100)
-    }else{
+    } else {
         $(".no-event-inform").stop().fadeOut(100)
     }
 
@@ -228,11 +228,15 @@ function initializeCard(curEvent, date, working = null) {
     working.querySelector("#event_end").innerHTML = endTime;
     working.querySelector("#event_start_ampm").innerHTML = startAMPM
     working.querySelector("#event_end_ampm").innerHTML = endAMPM
-    working.querySelector("#event_title").innerHTML = curEvent.name
-    working.querySelector("#event_description").innerHTML = curEvent.description
+    working.querySelector(".event_title").innerHTML = curEvent.name
+    working.querySelector(".event_description").innerHTML = curEvent.description
     // the background color will be the same as the color of the first tag
     working.querySelector(".leftPanel").style = "background-color: " + (curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue")
-    working.querySelector("#event_host_name").innerHTML = curEvent.organization
+    working.querySelector(".event_host_name").innerHTML = curEvent.organization
+    // since we cap the height of the event, which it's clicked, we can expand it
+    $(working.querySelector(".event_description")).click(function () {
+        $(this).toggleClass("truncate-100")
+    })
 
     for (let tag of curEvent.tags) {
         // for each tag in the event, we create a corresponding p and add it to the card

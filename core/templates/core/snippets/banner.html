@@ -2,11 +2,11 @@
 <div class="banner">
     <div class="background"><img src="{% static 'core/img/top-banner.jpeg' %}"/></div>
     {% if banner_message %}
-    <div class="overlay-container">
-        <div class="banner-message center-align">
-            <span>{{ banner_message }}</span>
+        <div class="overlay-container">
+            <div class="banner-message center-align">
+                <span>{{ banner_message }}</span>
+            </div>
         </div>
-    </div>
     {% endif %}
     <div class="overlay-container valign-wrapper">
         <div class="next-class center-align">
@@ -15,8 +15,10 @@
         </div>
     </div>
     <div class="schedule-today-overlay hide-on-small-and-down">
-        <h4 class="schedule-cycle"></h4>
-        <div class="schedule-today-courses">
+        <div class="schedule-today-overlay-container">
+            <h4 class="schedule-cycle"></h4>
+            <div class="schedule-today-courses">
+            </div>
         </div>
     </div>
 </div>

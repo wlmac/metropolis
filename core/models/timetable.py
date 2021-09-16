@@ -3,6 +3,7 @@ from .choices import timezone_choices
 from .course import Term, Course
 from metropolis import settings
 from django.urls import reverse
+from .. import utils
 
 # Create your models here.
 
@@ -18,8 +19,7 @@ class Timetable(models.Model):
         return f'{self.owner.get_full_name()} ({self.owner})\'s Timetable for {self.term}'
 
     def day_schedule(self, target_date=None):
-        if target_date == None:
-            target_date = timezone.localdate()
+        target_date = utils.get_localdate(date=target_date)
 
         courses = {}
         for i in self.courses.all():

@@ -59,7 +59,8 @@
     position: absolute;
     left: 0;
     bottom: 10px;
-    padding: 10px;
+    padding-left: 50px;
+    padding-bottom: 10px;
 }
 
 .schedule-today-overlay .schedule-cycle{
@@ -72,11 +73,38 @@
     color: var(--banner-text-brown);
     padding-left: 10px;
     border-left: solid var(--darker-brown) 3px;
-    font-weight: bolder;
+    font-weight: normal;
 }
 
 .schedule-today-courses [data-active]{
-    font-weight: bold;
     color: var(--darker-brown);
-    font-size: 1.1em;
+    font-size: 1.05em;
+}
+
+@media screen and (max-width: 992px){
+    .next-class .schedule-course{
+        font-size: 4em;
+    }
+    .schedule-today-overlay .schedule-cycle{
+        font-size: 1.8em;
+    }
+    .schedule-today-overlay{
+        left: 0;
+        right: 0;
+    }
+    .schedule-today-overlay-container{
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    .schedule-today-overlay .schedule-cycle{
+        margin-right: 15px;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
 }

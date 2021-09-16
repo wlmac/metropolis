@@ -1,7 +1,7 @@
 from django.contrib import admin
 from . import models
 from django.contrib.auth import get_user_model
-from django.forms import Textarea
+from django import forms
 import django.db
 from django.db.models import Q
 from django.contrib.flatpages.admin import FlatPageAdmin
@@ -18,18 +18,9 @@ User = get_user_model()
 
 # Register your models here.
 
-class TermInline(admin.TabularInline):
-    formfield_overrides = {
-        django.db.models.TextField: {'widget': Textarea(attrs={'rows': 1})},
-    }
-    fields = ['name', 'num_courses', 'timetable_format', 'start_date', 'end_date']
-    ordering = ['-start_date']
-    model = models.Term
-    extra = 0
-
 class CourseInline(admin.TabularInline):
     formfield_overrides = {
-        django.db.models.TextField: {'widget': Textarea(attrs={'rows': 1})},
+        django.db.models.TextField: {'widget': forms.Textarea(attrs={'rows': 1})},
     }
     fields = ['code', 'position', 'description']
     ordering = ['code']
@@ -47,6 +38,25 @@ class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['color']
     list_display = ['name', 'organization', 'color']
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(Q(organization__owner=request.user) | Q(organization__execs=request.user)).distinct()
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "organization":
+            if not request.user.is_superuser:
+                kwargs["queryset"] = models.Organization.objects.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+class TagInline(admin.StackedInline):
+    formfield_overrides = {
+        django.db.models.TextField: {'widget': forms.Textarea(attrs={'rows': 1})},
+    }
+    model = models.Tag
+    extra = 0
+
 class OrganizationURLInline(admin.StackedInline):
     fields = ['url']
     model = models.OrganizationURL
@@ -57,6 +67,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     list_filter = ['is_open', 'tags']
     fields = ['name', 'bio', 'long_description', 'slug', 'is_open', 'applications_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
     inlines = [
+        TagInline,
         OrganizationURLInline,
     ]
     formfield_overrides = {
@@ -290,7 +301,7 @@ class EventAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
-                kwargs["queryset"] = models.Organization.objects.filter(Q(execs=request.user)).distinct()
+                kwargs["queryset"] = models.Organization.objects.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def has_change_permission(self, request, obj=None):

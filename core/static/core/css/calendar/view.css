@@ -194,6 +194,14 @@ hr {
     color: var(--dark-grey);
 }
 
+.truncate-100{
+    max-height: 100px;
+}
+
+.event_description{
+    overflow: hidden;
+}
+
 @media screen and (max-width: 600px) {
     .fc-header-toolbar {
         margin-top: 10px;

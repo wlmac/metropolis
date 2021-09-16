@@ -100,7 +100,7 @@ hr {
 }
 
 .club-description p {
-    word-break: break-word;
+    overflow-wrap: anywhere;
     overflow: hidden;
     -o-text-overflow: ellipsis;
        text-overflow: ellipsis;
@@ -112,7 +112,7 @@ hr {
     color: gray;
     font-size: 1rem;
     line-height: 1.6rem;
-    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 .tag-section {

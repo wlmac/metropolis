@@ -26,16 +26,17 @@
     </div>
     <hr>
     <div class="body">
-        <div>
-            {% if profile.bio == "" %}
-            This user has not shared any information.
-            {% else %}
-            {{ profile.bio|linebreaksbr }}
-            {% endif %}
-        </div>
         <div class="field">
             {% if profile.graduating_year %}
                 <div class="label">Graduating</div><div>{{ profile.graduating_year }}</div>
+            {% endif %}
+        </div>
+        <div class="field">
+            {% if profile.organizations_leading %}
+                <div class="label">Executive of</div>
+                {% for organization in profile.organizations_leading.all %}
+                <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
+                {% endfor %}
             {% endif %}
         </div>
         <div class="field">
@@ -46,12 +47,11 @@
                 {% endfor %}
             {% endif %}
         </div>
-        <div class="field">
-            {% if profile.organizations_leading %}
-                <div class="label">Executive of</div>
-                {% for organization in profile.organizations_leading.all %}
-                <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
-                {% endfor %}
+        <div>
+            {% if profile.bio == "" %}
+            This user has not shared any information.
+            {% else %}
+            {{ profile.bio|linebreaksbr }}
             {% endif %}
         </div>
     </div>

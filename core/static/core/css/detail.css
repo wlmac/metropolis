@@ -103,7 +103,7 @@
     margin: 0;
 }
 .description > * {
-    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 .link-section {
@@ -159,6 +159,7 @@ li {
 
 .member-image {
     height: 32px;
+    width: 32px;
     margin-right: 10px;
 }
 
