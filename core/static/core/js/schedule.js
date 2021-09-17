@@ -100,6 +100,5 @@ function update() {
 
         $(document).ready(function () {
             setup();
-            var time = 60 - parseInt((new Date().getTime() / 1000) % 60);
-            setTimeout(setInterval(update, 1000), time*1000);
+            setInterval(update, 1000);
         });
