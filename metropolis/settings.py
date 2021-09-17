@@ -382,6 +382,7 @@ PWA_APP_ICONS = [
         'purpose': 'maskable',
     },
 ]
+PWA_APP_SPLASH_SCREEN = []
 PWA_APP_LANG = 'en-CA'
 PWA_APP_DEBUG_MODE = False
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'templates', 'serviceworker.js')
@@ -405,7 +406,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 SILENCED_SYSTEM_CHECKS = ['urls.W002']
 
-API_VERSION = "1.0.0"
+API_VERSION = "2.0.0"
+
+DEFAULT_TIMEZONE = 'UTC'
 
 METROPOLIS_MEMBERS = {
     "Project Manager": {},
@@ -416,7 +419,6 @@ METROPOLIS_MEMBERS = {
     "Content Creator": {},
 }
 
-DEFAULT_TIMEZONE = 'UTC'
 
 try:
     from metropolis.config import *

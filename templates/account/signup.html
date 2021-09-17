@@ -58,7 +58,9 @@
                     {% for field in form.visible_fields %}
                     <div class="row">
                         <div class="input-field col s12">
-                        {% if field.auto_id != "id_graduating_year" %}
+                        {% if field.auto_id == "id_email" %}
+                        <label for="id_email">TDSB Email:</label>
+                        {% elif field.auto_id != "id_graduating_year" %}
                         {{ field.label_tag }}
                         {{ field.errors }}
                         {% else %}
