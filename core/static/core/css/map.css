@@ -1,65 +1,76 @@
-.map-container{
-    background-color: white;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    /* padding: 2vw,5vw,10vw,5vw; */
+.map-container {
+  background-color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* padding: 2vw,5vw,10vw,5vw; */
 }
-.map { 
-    width: 100%; 
-    height: 80vh;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-}
-
-.switch-container{
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    padding: 30px; 
+.map {
+  width: 100%;
+  height: 80vh;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 
-.switch>label{
+.switch-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+.switch > label {
   font-size: 1.4rem !important;
   font-family: "Poppins", sans-serif !important;
-  color: #073763 !important; 
+  color: #073763 !important;
 }
 
-<<<<<<< HEAD
-@media screen and (max-width:600px) {
-    .switch-container{
-        padding: 20px; 
-    }
+@media screen and (max-width: 600px) {
+  .switch-container {
+    padding: 20px;
+  }
 }
 
-input:not([type]), input[type=text]:not(.browser-default), input[type=password]:not(.browser-default), input[type=email]:not(.browser-default), input[type=url]:not(.browser-default), input[type=time]:not(.browser-default), input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default), input[type=datetime-local]:not(.browser-default), input[type=tel]:not(.browser-default), input[type=number]:not(.browser-default), input[type=search]:not(.browser-default), textarea.materialize-textarea {
-    text-align: center ; 
+input:not([type]),
+input[type="text"]:not(.browser-default),
+input[type="password"]:not(.browser-default),
+input[type="email"]:not(.browser-default),
+input[type="url"]:not(.browser-default),
+input[type="time"]:not(.browser-default),
+input[type="date"]:not(.browser-default),
+input[type="datetime"]:not(.browser-default),
+input[type="datetime-local"]:not(.browser-default),
+input[type="tel"]:not(.browser-default),
+input[type="number"]:not(.browser-default),
+input[type="search"]:not(.browser-default),
+textarea.materialize-textarea {
+  text-align: center;
 }
 
-.legend-container{
+/* .legend-container{
     display: flex;
     flex-direction: row;
     width:80%; 
@@ -71,6 +82,96 @@ input:not([type]), input[type=text]:not(.browser-default), input[type=password]:
     padding: 1vh 20px 20px 20px; 
     text-align: center;
     /* align-items: center; */
-    justify-content: center;
+/* justify-content: center;
     font-family: "Poppins", sans-serif;
+} */
+
+.legend-square {
+  height: 20px;
+  width: 20px;
+  background-color: var(--status-yellow);
+  margin: 6px;
+  border-radius: 20%;
 }
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  /* width: 70%; */
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  padding-left: 16%/;
+}
+
+.mobile-controls {
+  text-align: left;
+  padding: 0 5vw 0 2vw;
+  margin-left: 2vw;
+  flex: 1;
+}
+.computer-controls {
+  text-align: left;
+  padding: 0 2vw 2vw 2vw;
+  flex: 1;
+}
+
+.legend {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legend-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+hr {
+  color: #b7b7b7;
+}
+
+.title {
+    font-weight: bold;
+    margin: 0;
+    margin-top: 30px;
+    font-size: 2rem;
+}
+
+details > summary {
+    padding: 5px;
+
+    background-color: #3a6a96;
+    color: white;
+    border: none;
+    /* box-shadow: 1px 1px 2px #bbbbbb; */
+    cursor: pointer;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  details > p {
+    background-color: #eeeeee;
+    padding: 10px;
+    margin: 0;
+    /* box-shadow: 1px 1px 2px #bbbbbb; */
+  }
+
+  summary {
+    display: block;
+    cursor: pointer;
+  }

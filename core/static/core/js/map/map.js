@@ -95,7 +95,7 @@ const customData = {
         coordinates: [-79.462327663467, 43.75335158721401],
       },
       properties: {
-        title: "119",
+        title: "Room 119",
         floor: 1,
       },
     },
@@ -106,7 +106,7 @@ const customData = {
         coordinates: [-79.46234644222046, 43.753461051808415],
       },
       properties: {
-        title: "121",
+        title: "Room 121",
         floor: 1,
       },
     },
@@ -117,7 +117,7 @@ const customData = {
         coordinates: [-79.46236521768313, 43.75354726659225],
       },
       properties: {
-        title: "123",
+        title: "Room 123",
         floor: 1,
       },
     },
@@ -128,7 +128,7 @@ const customData = {
         coordinates: [-79.46238265202406, 43.75363735643279],
       },
       properties: {
-        title: "125",
+        title: "Room 125",
         floor: 1,
       },
     },
@@ -147,7 +147,7 @@ const customData = {
       type: "Feature",
       geometry: {
         type: "Point",
-        coordinates: [-79.4617303795912, 43.75362606385255],
+        coordinates: [-79.46207609586855, 43.75347184182684],
       },
       properties: {
         title: "fitness centre (124c)",
@@ -238,7 +238,7 @@ const customData = {
         coordinates: [-79.4621022029668, 43.75382222066108],
       },
       properties: {
-        title: "118T",
+        title: "Room 118T",
         floor: 1,
       },
     },
@@ -249,7 +249,7 @@ const customData = {
         coordinates: [-79.46215856297853, 43.753759532291014],
       },
       properties: {
-        title: "118C",
+        title: "Room 118C",
         floor: 1,
       },
     },
@@ -260,7 +260,7 @@ const customData = {
         coordinates: [-79.46195278569445, 43.75379119907919],
       },
       properties: {
-        title: "118E",
+        title: "Room 118E",
         floor: 1,
       },
     },
@@ -271,7 +271,7 @@ const customData = {
         coordinates: [-79.4618069554343, 43.75382092588782],
       },
       properties: {
-        title: "114",
+        title: "Room 114",
         floor: 1,
       },
     },
@@ -403,7 +403,7 @@ const customData = {
         coordinates: [-79.4612725332962, 43.75326367491422],
       },
       properties: {
-        title: "108b",
+        title: "Room 108b",
         floor: 1,
       },
     },
@@ -414,7 +414,7 @@ const customData = {
         coordinates: [-79.46127074403375, 43.75321326924049],
       },
       properties: {
-        title: "108a",
+        title: "Room 108a",
         floor: 1,
       },
     },
@@ -425,7 +425,7 @@ const customData = {
         coordinates: [-79.46128058522986, 43.75315898346079],
       },
       properties: {
-        title: "106",
+        title: "Room 106",
         floor: 1,
       },
     },
@@ -436,7 +436,7 @@ const customData = {
         coordinates: [-79.46125649284252, 43.75304288437272],
       },
       properties: {
-        title: "104",
+        title: "Room 104",
         floor: 1,
       },
     },
@@ -447,7 +447,7 @@ const customData = {
         coordinates: [-79.46122382537122, 43.752906633057165],
       },
       properties: {
-        title: "102",
+        title: "Room 102",
         floor: 1,
       },
     },
@@ -458,7 +458,7 @@ const customData = {
         coordinates: [-79.46136354515774, 43.752898126964254],
       },
       properties: {
-        title: "101",
+        title: "Room 101",
         floor: 1,
       },
     },
@@ -469,7 +469,7 @@ const customData = {
         coordinates: [-79.46139777712486, 43.753043114903306],
       },
       properties: {
-        title: "103",
+        title: "Room 103",
         floor: 1,
       },
     },
@@ -491,7 +491,7 @@ const customData = {
         coordinates: [-79.46145048325354, 43.753248299164255],
       },
       properties: {
-        title: "107",
+        title: "Room 107",
         floor: 1,
       },
     },
@@ -502,7 +502,7 @@ const customData = {
         coordinates: [-79.4614761683771, 43.75338955719843],
       },
       properties: {
-        title: "109",
+        title: "Room 109",
         floor: 1,
       },
     },
@@ -513,7 +513,7 @@ const customData = {
         coordinates: [-79.46164036883964, 43.75341958509614],
       },
       properties: {
-        title: "111",
+        title: "Room 111",
         floor: 1,
       },
     },
@@ -524,7 +524,7 @@ const customData = {
         coordinates: [-79.4617811841459, 43.75340328772481],
       },
       properties: {
-        title: "113",
+        title: "Room 113",
         floor: 1,
       },
     },
@@ -546,7 +546,7 @@ const customData = {
         coordinates: [-79.4619749024224, 43.753384181329636],
       },
       properties: {
-        title: "117",
+        title: "Room 117",
         floor: 1,
       },
     },
@@ -557,7 +557,7 @@ const customData = {
         coordinates: [-79.46238565237367, 43.75363361197046],
       },
       properties: {
-        title: "231",
+        title: "Room 231",
         floor: 2,
       },
     },
@@ -568,7 +568,7 @@ const customData = {
         coordinates: [-79.46236964343728, 43.75353590861371],
       },
       properties: {
-        title: "229",
+        title: "Room 229",
         floor: 2,
       },
     },
@@ -579,7 +579,7 @@ const customData = {
         coordinates: [-79.46235355018324, 43.7534516311066],
       },
       properties: {
-        title: "227",
+        title: "Room 227",
         floor: 2,
       },
     },
@@ -601,7 +601,7 @@ const customData = {
         coordinates: [-79.46232115842207, 43.75333592207335],
       },
       properties: {
-        title: "225",
+        title: "Room 225",
         floor: 2,
       },
     },
@@ -612,7 +612,7 @@ const customData = {
         coordinates: [-79.46218059901656, 43.75335319315036],
       },
       properties: {
-        title: "223",
+        title: "Room 223",
         floor: 2,
       },
     },
@@ -634,7 +634,7 @@ const customData = {
         coordinates: [-79.46199367203847, 43.753379882216166],
       },
       properties: {
-        title: "222",
+        title: "Room 222",
         floor: 2,
       },
     },
@@ -645,7 +645,7 @@ const customData = {
         coordinates: [-79.46186832688937, 43.75339349079542],
       },
       properties: {
-        title: "221",
+        title: "Room 221",
         floor: 2,
       },
     },
@@ -656,7 +656,7 @@ const customData = {
         coordinates: [-79.46175240183594, 43.75340709778331],
       },
       properties: {
-        title: "220",
+        title: "Room 220",
         floor: 2,
       },
     },
@@ -667,7 +667,7 @@ const customData = {
         coordinates: [-79.46163140622886, 43.75342489140834],
       },
       properties: {
-        title: "219",
+        title: "Room 219",
         floor: 2,
       },
     },
@@ -678,7 +678,7 @@ const customData = {
         coordinates: [-79.46148515501359, 43.75340071235618],
       },
       properties: {
-        title: "213",
+        title: "Room 213",
         floor: 2,
       },
     },
@@ -689,7 +689,7 @@ const customData = {
         coordinates: [-79.46146486998195, 43.75331017352619],
       },
       properties: {
-        title: "211",
+        title: "Room 211",
         floor: 2,
       },
     },
@@ -700,7 +700,7 @@ const customData = {
         coordinates: [-79.46144603105236, 43.753222249695966],
       },
       properties: {
-        title: "209",
+        title: "Room 209",
         floor: 2,
       },
     },
@@ -711,7 +711,7 @@ const customData = {
         coordinates: [-79.46142791795658, 43.753137991624214],
       },
       properties: {
-        title: "207",
+        title: "Room 207",
         floor: 2,
       },
     },
@@ -722,7 +722,7 @@ const customData = {
         coordinates: [-79.46139302860175, 43.75298885245036],
       },
       properties: {
-        title: "203",
+        title: "Room 203",
         floor: 2,
       },
     },
@@ -733,7 +733,7 @@ const customData = {
         coordinates: [-79.46136767069875, 43.75288156880836],
       },
       properties: {
-        title: "201",
+        title: "Room 201",
         floor: 2,
       },
     },
@@ -744,7 +744,7 @@ const customData = {
         coordinates: [-79.46122821655393, 43.752901057246845],
       },
       properties: {
-        title: "202",
+        title: "Room 202",
         floor: 2,
       },
     },
@@ -755,7 +755,7 @@ const customData = {
         coordinates: [-79.4612506789127, 43.75298740995075],
       },
       properties: {
-        title: "204",
+        title: "Room 204",
         floor: 2,
       },
     },
@@ -766,7 +766,7 @@ const customData = {
         coordinates: [-79.46126661842634, 43.75306957486865],
       },
       properties: {
-        title: "206",
+        title: "Room 206",
         floor: 2,
       },
     },
@@ -777,7 +777,7 @@ const customData = {
         coordinates: [-79.46128545635727, 43.75315802234198],
       },
       properties: {
-        title: "208",
+        title: "Room 208",
         floor: 2,
       },
     },
@@ -788,7 +788,7 @@ const customData = {
         coordinates: [-79.46130284491909, 43.75324332707672],
       },
       properties: {
-        title: "210",
+        title: "Room 210",
         floor: 2,
       },
     },
@@ -799,7 +799,7 @@ const customData = {
         coordinates: [-79.46132168256682, 43.75332549164267],
       },
       properties: {
-        title: "212",
+        title: "Room 212",
         floor: 2,
       },
     },
@@ -810,7 +810,7 @@ const customData = {
         coordinates: [-79.46134559208431, 43.75341393834546],
       },
       properties: {
-        title: "214",
+        title: "Room 214",
         floor: 2,
       },
     },
@@ -854,7 +854,7 @@ const customData = {
         coordinates: [-79.4614354341234, 43.753830952741794],
       },
       properties: {
-        title: "216",
+        title: "Room 216",
         floor: 2,
       },
     },
@@ -865,7 +865,7 @@ const customData = {
         coordinates: [-79.46158008591014, 43.753810213485025],
       },
       properties: {
-        title: "215",
+        title: "Room 215",
         floor: 2,
       },
     },
@@ -876,7 +876,7 @@ const customData = {
         coordinates: [-79.46145890294959, 43.75391685074018],
       },
       properties: {
-        title: "218",
+        title: "Room 218",
         floor: 2,
       },
     },
@@ -887,7 +887,7 @@ const customData = {
         coordinates: [-79.46160715142894, 43.75393995400347],
       },
       properties: {
-        title: "217",
+        title: "Room 217",
         floor: 2,
       },
     },
@@ -957,6 +957,193 @@ const customData = {
         floor: 2,
       },
     },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46100506863056, 43.75350601053009],
+      },
+      properties: {
+        title: "library room A",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46098927243114, 43.753440973854964],
+      },
+      properties: {
+        title: "library room B",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.461073977011, 43.75360391989807],
+      },
+      properties: {
+        title: "Exit 1",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.4612968674094, 43.7528424736621],
+      },
+      properties: {
+        title: "Exit 2",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46154945637606, 43.75343068463039],
+      },
+      properties: {
+        title: "Exit 3",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46207053027169, 43.753387916496564],
+      },
+      properties: {
+        title: "Exit 4",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.462225356633, 43.75329998220087],
+      },
+      properties: {
+        title: "Exit 5",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.4623567892464, 43.75368485054281],
+      },
+      properties: {
+        title: "Exit 6",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46225551171938, 43.753697201431095],
+      },
+      properties: {
+        title: "Exit 7",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.4616471361122, 43.753852812405086],
+      },
+      properties: {
+        title: "Exit 7C",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46163294208165, 43.75396385435636],
+      },
+      properties: {
+        title: "Exit 7D",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46163524982596, 43.753980964854605],
+      },
+      properties: {
+        title: "Exit 7E",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.4616518679316, 43.75403205707923],
+      },
+      properties: {
+        title: "Exit 7F",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46154103707552, 43.754010022029945],
+      },
+      properties: {
+        title: "Exit 8",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46143369162724, 43.75400234476848],
+      },
+      properties: {
+        title: "Exit 8A",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46139309605415, 43.75381129680861],
+      },
+      properties: {
+        title: "Exit 8B",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46109108651713, 43.75380139567167],
+      },
+      properties: {
+        title: "Exit 8C",
+        floor: 1,
+      },
+    },
   ],
   type: "FeatureCollection",
 };
@@ -986,6 +1173,9 @@ const geocoder = new MapboxGeocoder({
   localGeocoderOnly: true,
   zoom: 19,
   placeholder: "Search School",
+  marker: {
+    color: 'red'
+  },
   mapboxgl: mapboxgl,
   render: function (item) {
     // extract the item's maki icon or use a default
@@ -998,6 +1188,8 @@ const geocoder = new MapboxGeocoder({
 });
 
 map.addControl(geocoder);
+// map.dragRotate.disable();
+// map.touchZoomRotate.disableRotation();
 
 map.on("load", () => {
   map.addSource("floorOne", {
