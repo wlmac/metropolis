@@ -183,3 +183,7 @@ details > summary {
   html{
     scroll-behavior: smooth;
   }
+
+  i.icon-blue {
+    color: #073763;
+}
