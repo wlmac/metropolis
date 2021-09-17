@@ -29,6 +29,9 @@ select {
 .graphic {
     background-size: cover;
     background-position: center center;
+}
+
+.account-art{
     object-fit: none;
 }
 
