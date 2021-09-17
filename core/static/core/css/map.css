@@ -39,7 +39,7 @@
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  padding: 30px;
+  padding: 20px;
 }
 
 .switch > label {
@@ -100,6 +100,7 @@ textarea.materialize-textarea {
   text-align: center;
   justify-content: center;
   align-items: center;
+  padding-top:3vh;
   /* width: 70%; */
 }
 
@@ -107,7 +108,7 @@ textarea.materialize-textarea {
   display: flex;
   flex-direction: row;
   width: 80%;
-  padding-left: 16%/;
+  margin-top: 20px; 
 }
 
 .mobile-controls {
@@ -129,6 +130,9 @@ textarea.materialize-textarea {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  background-color: #efefef;
+  padding: 1.5vh; 
 }
 
 .legend-items {
@@ -174,4 +178,8 @@ details > summary {
   summary {
     display: block;
     cursor: pointer;
+  }
+
+  html{
+    scroll-behavior: smooth;
   }
