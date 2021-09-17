@@ -25,5 +25,7 @@
 }
 .select2-results__option{
     font-size: 110%;
-    transition-duration: 0.2s;
+    -webkit-transition-duration: 0.2s;
+         -o-transition-duration: 0.2s;
+            transition-duration: 0.2s;
 }

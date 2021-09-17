@@ -2,30 +2,32 @@
 {% load martortags %}
 
 <div class="card">
-    <div class="tag-section">
-        {% for tag in announcement.tags.all %}
-        <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
-        {% endfor %}
-    </div>
-    <h1 class="title">{{announcement.title}}</h1>
-    <div class="card-authors">
-        <div class="card-authors-image">
-            <a href="{{announcement.organization.slug|organization_url}}"><img class="circle" src="{{announcement.organization.icon.url}}"></a>
+    <div class="card-headers">
+        <div class="tag-section">
+            {% for tag in announcement.tags.all %}
+            <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+            {% endfor %}
         </div>
-        <div class="card-authors-text">
-            {{announcement.organization.slug|organization}},
-            {{announcement.author.username|user}}
-            <br>
-            <dot>•</dot> {{announcement.last_modified_date}}
-            {% if announcement.last_modified_date != announcement.created_date %}
-            (Edited)
-            {% endif %}
+        <h1 class="title">{{announcement.title}}</h1>
+        <div class="card-authors">
+            <div class="card-authors-image">
+                <a href="{{announcement.organization.slug|organization_url}}"><img class="circle" src="{{announcement.organization.icon.url}}"></a>
+            </div>
+            <div class="card-authors-text">
+                {{announcement.organization.slug|organization}},
+                {{announcement.author.username|user}}
+                <br>
+                <dot>•</dot> {{ announcement.last_modified_date|date:"M. j, Y" }}{{ announcement.last_modified_date|date:", g:i A"|lower }}
+                <!--{% if announcement.last_modified_date != announcement.created_date %}
+                (Edited)
+                {% endif %}-->
+            </div>
         </div>
     </div>
     <hr>
     <div class="card-body">
-        {{announcement.body|safe_markdown}}
+        <p>{{announcement.body|safe_markdown|striptags|linebreaksbr}}</p>
     </div>
     <br>
-    <a class="link" href="{{announcement.pk|announcement_url}}">See Announcement <i class='zmdi zmdi-chevron-right'></i></a>
+    <a class="link" href="{{announcement.pk|announcement_url}}">See announcement <i class='zmdi zmdi-chevron-right'></i></a>
 </div>

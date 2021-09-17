@@ -1,0 +1,228 @@
+{% extends 'core/base.html' %}
+{% load link_tags %}
+{% load gravatar_tags %}
+{% load static %}
+{% load martortags %}
+
+{% block deps %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/about.css' %}">
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <div class="headers">
+        <ul>
+            <li class="header" id="about">ABOUT</li>
+            <li class="header" id="members">MEMBERS</li>
+            <li class="header" id="contact">CONTACT</li>
+            <li class="header" id="school">SCHOOL</li>
+        </ul>
+        <script>
+            $(document).ready(function() {
+                var urlParams = new URLSearchParams(window.location.search);
+                if(!urlParams.get("tab")) {
+                    $("#about").addClass("active");
+                    urlParams.set("tab", "about");
+                }
+                history.replaceState(null, null, "?"+urlParams.toString());
+                $(".header").click(function() {
+                    $(".header").removeClass("active");
+                    $(this).addClass("active");
+                    $(".content").hide();
+                    $("#content-"+this.id).show();
+                    urlParams.set("tab", this.id);
+                    history.replaceState(null, null, "?"+urlParams.toString());
+                });
+            });
+        </script>
+    </div>
+    <div class="content-container">
+        <div class="content" id="content-about">
+            <h1 class="title">Our Vision</h1>
+            <hr>
+            <p class="text">
+                By definition, a metropolis is a significant cultural center of a country or region
+                and a central hub for regional connections and communications.
+                Likewise, it is our goal at Project Metropolis to create a centralized website at WLMAC where all students can easily
+                access and share information with their peers, making this our own, online metropolis.
+            </p>
+            <h1 class="title">About the Site</h1>
+            <hr>
+            <p class="text">
+                Originally inspired by the previous Student Council information site and MAC Radio,
+                Project Metropolis aims to combines several previous platforms into one.
+            </p>
+            <p class="text">
+                With the shift towards increasing online connectivity,
+                we've worked on digitizing resources like announcements and club information
+                so that even students attending virtual school can easily have access.
+                The club system allows users to personalize their experience through "opt-in" memberships and tags.
+                Over the coming while, users can expect regular digital content via the blog,
+                such as "Humans of WLMAC" (a spontaneous photojournalism series),
+                or "Make or Break" (a series on setting habits).
+            </p>
+            <p class="text">
+                Our site will continue to roll out new features and updates in the coming months.
+                Users can look forward to a notification system, searching system, and possibly a mobile app.
+            </p>
+        </div>
+        <div class="content" id="content-members">
+            <h1 class="title">Our Team</h1>
+            <hr>
+            <p class="text">
+                A diverse group of {{ member_count }} developers, artists, and creators worked in tandem to build this site.
+            </p>
+            <h1 class="title">Members</h1>
+            <hr>
+            {% for position, users in members.items %}
+            <div class="member-list">
+                <h2 class="subtitle">{{position}}{% if users|length > 1 %}s{% endif %}</h2>
+                {% for user in users %}
+                <a href="{{user.username|user_url}}">
+                    <div class="member">
+                        <div class="member-image">
+                            <img class="circle" src="{{user.email|gravatar_url:100}}">
+                        </div>
+                        <div class="member-text">
+                            {{user.username}}
+                        </div>
+                    </div>
+                </a>
+                {% empty %}
+                No members under this position.
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="content" id="content-contact">
+            <h1 class="title">Contact Us</h1>
+            <hr>
+            <p class="text">
+                If you ever find bugs or problems with the site, or need to be granted the staff status,
+                feel free to <a class="link" href="mailto:hello@maclyonsden.com" target="_blank">email</a> us
+                or use the form below.
+            </p>
+            <ul class="link-section">
+                <div>
+                    <li>
+                        <a class="link" href="mailto:hello@maclyonsden.com" target="_blank">
+                            <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>hello@maclyonsden.com</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="https://github.com/wlmac" target="_blank">
+                            <i class="zmdi zmdi-github zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>wlmac</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="https://www.instagram.com/wlmac.sac/" target="_blank">
+                            <i class="zmdi zmdi-instagram zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>@wlmac.sac</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="https://www.facebook.com/groups/keeptrackofmac" target="_blank">
+                            <i class="zmdi zmdi-facebook-box zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>Keep Track of MAC</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="https://discord.gg/g5eBwgT" target="_blank">
+                            <i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>Keep Track of Mac Discord</p>
+                        </a>
+                    </li>
+                </div>
+            </ul>
+            <br>
+            <div class="content-embed">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSerD9wL2Sg8AIEVxc7ZPPIYcNPnCBnUuXTxOajhkvv8TMxwAw/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">
+                    Loading…
+                </iframe>
+            </div>
+        </div>
+        <div class="content" id="content-school">
+            <h1 class="title">Contact the School</h1>
+            <hr>
+            <p class="text">
+                Project Metropolis is a site affiliated with William Lyon Mackenzie Collegiate Institute.
+                To contact the school or faculty, please refer to the channels of communication listed below.
+            </p>
+            <ul class="link-section">
+                <div>
+                    <li>
+                        <a class="link" href="https://wlmac.ca/" target="_blank">
+                            <i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>WLMCI Offical Website</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="https://goo.gl/maps/WyfTKUqKrbecU4RE9" target="_blank">
+                            <i class="zmdi zmdi-map zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>20 Tillplain Road, North York, ON M3H 5R2</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a style="color: var(--near-black);">
+                            <i class="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>(416) 395-3330</p>
+                        </a>
+                    </li>
+                </div>
+            </ul>
+            <h2 class="subtitle">Admin</h2>
+            <hr>
+            <ul class="link-section">
+                <div>
+                    <h3 class="section-title">Principal</h3>
+                    <li>
+                        <a class="link" href="mailto:keith.johnson@tdsb.on.ca" target="_blank">
+                            <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>Keith Johnson (keith.johnson@tdsb.on.ca)</p>
+                        </a>
+                    </li>
+                    <h3 class="section-title">Vice Principals</h3>
+                    <li>
+                        <a class="link" href="mailto:joanne.d'addio@tdsb.on.ca" target="_blank">
+                            <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>Joanne D'Addio (joanne.d'addio@tdsb.on.ca)</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="mailto:stephen.morris@tdsb.on.ca" target="_blank">
+                            <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>Stephen Morris (stephen.morris@tdsb.on.ca)</p>
+                        </a>
+                    </li>
+                </div>
+            </ul>
+            {% if user.is_authenticated %}
+            <h2 class="subtitle">Staff</h2>
+            <hr>
+            <ul class="link-section">
+                <div>
+                    <h3 class="section-title">Arts</h3>
+                </div>
+            </ul>
+            {% endif %}
+        </div>
+        <script>
+            $(document).ready(function() {
+                var urlParams = new URLSearchParams(window.location.search);
+                $(".content").hide();
+                if(!$("#content-"+urlParams.get("tab")).length) {
+                    urlParams.set("tab", "about");
+                    history.replaceState(null, null, "?"+urlParams.toString());
+                }
+                $("#content-"+urlParams.get("tab")).show();
+                $(".header").removeClass("active");
+                $("#"+urlParams.get("tab")).addClass("active");
+                //$(".card-authors-text").find("a").addClass("link");
+            });
+        </script>
+    </div>
+</div>
+{% endblock %}

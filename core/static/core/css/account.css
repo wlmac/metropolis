@@ -1,5 +1,7 @@
 .row {
     background-color: white;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     margin: 0px;
 }
@@ -30,10 +32,19 @@ select {
 }
 
 .form-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     padding: 5%;
     height: 100%;
 }
@@ -43,10 +54,14 @@ select {
 }
 
 .tab-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     margin: 0px 10px 20px;
     display: flex;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 .col.s6 {
@@ -64,6 +79,8 @@ select {
 .tab:hover {
     border-bottom: 2px solid var(--mid-blue);
     color: var(--mid-blue);
+    -webkit-transition: border 0.1s linear, color 0.1s linear;
+    -o-transition: border 0.1s linear, color 0.1s linear;
     transition: border 0.1s linear, color 0.1s linear;
 }
 
@@ -74,6 +91,7 @@ select {
 
 .login-btn {
     margin-top: 30px;
+    width: 100%;
 }
 
 .wrapper > .col {

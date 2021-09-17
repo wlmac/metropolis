@@ -76,7 +76,6 @@ class TimetableUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView, mixin
     template_name = 'core/timetable/edit.html'
     title = 'Edit Timetable'
     model = models.Timetable
-    context_object_name = 'timetable'
     form_class = TimetableSelectCoursesForm
     success_url = reverse_lazy('timetable_list')
 
@@ -96,6 +95,7 @@ class CourseCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.T
     def form_valid(self, form):
         model = form.save(commit=False)
         model.term = get_object_or_404(models.Term, pk=self.kwargs['pk'])
+        model.submitter = self.request.user
         model.save()
 
         return super().form_valid(form)

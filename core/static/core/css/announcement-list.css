@@ -5,6 +5,8 @@
     padding-left: 40px;
 }
 .headers ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     margin: 0;
 }
@@ -24,6 +26,8 @@
 .header:hover {
     color: var(--mid-blue);
     border-color: var(--mid-blue);
+    -webkit-transition: color 0.1s linear, border-color 0.1s linear;
+    -o-transition: color 0.1s linear, border-color 0.1s linear;
     transition: color 0.1s linear, border-color 0.1s linear;
 }
 .active {
@@ -99,10 +103,26 @@
     margin: 0;
     margin-top: 8px;
     font-size: 2rem;
+    overflow-wrap: anywhere;
+}
+.card-headers {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
+            justify-content: flex-start;
 }
 .card-authors {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     margin: 10px 0;
     color: var(--line-grey);
 }
@@ -114,10 +134,12 @@
     display: none;
 }
 .circle {
-    object-fit: cover;
+    -o-object-fit: cover;
+       object-fit: cover;
     height: 24px;
     width: 24px;
-    box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+    -webkit-box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+            box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
 }
 .card-authors a {
     color: var(--link-blue);
@@ -127,22 +149,24 @@
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
-.card-body {
+.card-body p {
     margin: 0;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
-}
-.card-body p:first-child {
+    font-size: 1rem;
+    line-height: 1.6rem;
     margin-top: 0;
-}
-.card-body p:last-child {
-    margin-bottom: 0;
+    overflow-wrap: anywhere;
 }
 .expandable {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     color: var(--link-blue);
     cursor: pointer;
 }
@@ -150,8 +174,13 @@
     margin-left: 0.25rem;
 }
 .tag-section {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-flow: row wrap;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
     margin: 0;
 }
 .tag {
@@ -173,7 +202,9 @@
         padding: 20px;
     }
     .headers ul {
-        justify-content: center;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
     }
     .headers li {
         font-size: 0.9rem;
@@ -192,6 +223,18 @@
     .title {
         font-size: 1.75rem;
     }
+    .card-headers {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-align: start;
+            -ms-flex-align: start;
+                align-items: flex-start;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+    }
     .card-authors-image {
         margin-right: 10px;
     }
@@ -200,10 +243,5 @@
     }
     .card-authors-text dot {
         display: none;
-    }
-    .tag-section {
-        zoom: 0.8;
-        -moz-transform: scale(0.8);
-        transform: scale(0.8);
     }
 }

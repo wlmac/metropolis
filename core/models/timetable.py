@@ -1,10 +1,9 @@
 from django.db import models
 from .choices import timezone_choices
-from django.contrib.auth import get_user_model
-from .user import User
 from .course import Term, Course
 from metropolis import settings
 from django.urls import reverse
+from .. import utils
 
 # Create your models here.
 
@@ -12,7 +11,7 @@ def get_default_timetable_format():
     return settings.DEFAULT_TIMETABLE_FORMAT
 
 class Timetable(models.Model):
-    owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='timetables')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='timetables')
     term = models.ForeignKey(Term, on_delete=models.RESTRICT, related_name='timetables')
     courses = models.ManyToManyField(Course, related_name='timetables')
 
@@ -20,8 +19,7 @@ class Timetable(models.Model):
         return f'{self.owner.get_full_name()} ({self.owner})\'s Timetable for {self.term}'
 
     def day_schedule(self, target_date=None):
-        if target_date == None:
-            target_date = timezone.localdate()
+        target_date = utils.get_localdate(date=target_date)
 
         courses = {}
         for i in self.courses.all():
@@ -30,12 +28,27 @@ class Timetable(models.Model):
         result = self.term.day_schedule(target_date=target_date)
 
         for i in range(0, len(result)):
-            course_positions = result[i].pop('courses')
-            course = course_positions.intersection(set(courses.keys())).pop()
+            course_positions = result[i]['position']
 
-            result[i]['course'] = courses[course].code;
+            try:
+                course_code = courses[course_positions.intersection(set(courses.keys())).pop()].code
+            except KeyError:
+                course_code = None
 
-        return result
+            result[i]['course'] = course_code
+
+        merged_result = []
+
+        cur_period_idx = 0
+        while cur_period_idx < len(result):
+            merged_result.append(result[cur_period_idx])
+            cur_course = result[cur_period_idx]['course']
+            while cur_period_idx+1 < len(result) and cur_course is not None and cur_course == result[cur_period_idx+1]['course']:
+                cur_period_idx += 1
+                merged_result[-1]['time']['end'] = result[cur_period_idx]['time']['end']
+            cur_period_idx += 1
+
+        return merged_result
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['owner', 'term'], name='unique_timetable_owner_and_term')]

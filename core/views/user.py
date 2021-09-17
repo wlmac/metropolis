@@ -3,10 +3,11 @@ from django.views.generic import DetailView
 from django.views.generic.edit import UpdateView
 from django.urls import reverse
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from . import mixins
 from .. import models
 
-class ProfileRedirect(RedirectView):
+class ProfileRedirect(LoginRequiredMixin, RedirectView):
     permanent = False
     query_string = False
     pattern_name = "profile_detail"
@@ -28,10 +29,11 @@ class Profile(DetailView, mixins.TitleMixin):
     
 class ProfileUpdate(UpdateView, mixins.TitleMixin):
     model = models.User
-    fields = ['bio', 'timezone']
+    fields = ['bio', 'timezone', 'first_name', 'last_name']
     template_name = 'core/profile/update.html'
     success_url = reverse_lazy('profile_redirect')
     title = 'Update Profile'
+    context_object_name = 'profile'
 
     def get_object(self):
         return self.request.user

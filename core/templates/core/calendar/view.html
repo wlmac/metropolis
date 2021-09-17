@@ -23,6 +23,7 @@
             <h3 id="detailsCurrentDay"></h3>
             <p id="detailsCurrentWeek"></p>
             <hr>
+            <p class="no-event-inform">No events on this day</p>
             <div id="eventDetails">
             </div>
         </div>
@@ -40,11 +41,10 @@
                     <span class="ampm" id="event_end_ampm"></span>
                 </td>
                 <td class="detailPanel">
-                    <h4 id="event_title"></h4>
-                    <em><a class="eventHost" id="event_host_name"></a></em>
+                    <h4 class="event_title"></h4>
+                    <em><a class="eventHost event_host_name"></a></em>
                     <hr>
-                    <p id="event_description"></p>
-                    <br>
+                    <p class="event_description truncate-100"></p>
                     <div class="tag-section"></div>
                 </td>
             </tr>

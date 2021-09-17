@@ -2,6 +2,7 @@
 {% load link_tags %}
 {% load gravatar_tags %}
 {% load static %}
+{% load martortags %}
 
 {% block deps %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
@@ -16,7 +17,7 @@
     <div class="container">
         <div class="club-detail">
             <div class="row club-header">
-                <div class="col m3 s12 club-logo-out">
+                <div class="col m3 s12">
                     <div class="club-logo">
                         <img class="circle" src="{{ organization.icon.url }}">
                     </div>
@@ -48,7 +49,9 @@
                     {{ organization.bio }}
                     </p>
                     <br><br>
-                    {{ organization.description }}
+                    <div class="description">
+                    {{ organization.long_description|safe_markdown }}
+                    </div>
                 </div>
                 <div class="col m4">
                     {# TODO: Add club links #}
@@ -66,6 +69,27 @@
             <div class="row">
                 <div class="col s12">
                     <h4>
+                        Executives
+                    </h4>
+                    <hr>
+                    <div class="members-list">
+                            {% for i in organization.execs.all %}
+                            <a href="{{i.username|user_url}}">
+                                <div class="member">
+                                    <div class="member-image">
+                                        <img class="circle" src="{{i.email|gravatar_url:100}}">
+                                    </div>
+                                    <div class="member-text">
+                                        {{i.username}}
+                                    </div>
+                                </div>
+                            </a>
+                            {% empty %}
+                            <br>
+                            There are no executives right now.
+                            {% endfor %}
+                    </div>
+                    <h4>
                         Members
                     </h4>
                     <hr>
@@ -81,6 +105,9 @@
                                     </div>
                                 </div>
                             </a>
+                            {% empty %}
+                            <br>
+                            There are no members right now. {% if organization.is_open %}Join us!{% endif %}
                             {% endfor %}
                     </div>
                 </div>
@@ -89,4 +116,3 @@
     </div>
 </div>
 {% endblock %}
-

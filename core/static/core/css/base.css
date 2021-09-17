@@ -1,4 +1,5 @@
 :root{
+    --white: #ffffff;
     --text-grey: #fafafa;
     --bg-grey: #f3f3f3;
     --light-grey: #efefef;
@@ -6,6 +7,7 @@
     --mid-grey: #939393;
     --dark-grey: #434343;
     --near-black: #0b0b0b;
+    --black: #000000;
 
     --dark-blue: #073763;
     --link-blue: #3a6a96;
@@ -20,6 +22,33 @@
     letter-spacing: 0.15px;
     background-color: var(--bg-grey);
 }
+
+/*@media (prefers-color-scheme: dark) {
+    :root{
+        --white: #000000;
+        --text-grey: #0b0b0b;
+        --bg-grey: #434343;
+        --light-grey: #939393;
+        --line-grey: #b7b7b7;
+        --mid-grey: #efefef;
+        --dark-grey: #f3f3f3;
+        --near-black: #fafafa;
+        --black: #ffffff;
+
+        --dark-blue: #073763;
+        --link-blue: #3a6a96;
+        --mid-blue: #6e9bc4;
+        --highlight-blue: #e7f2fb;
+        --status-red: #e85856;
+        --status-yellow: #ebc942;
+        --status-green: #5cc478;
+        
+        font-family: 'Roboto', sans-serif;
+        letter-spacing: 0.15px;
+        background-color: var(--dark-grey);
+    }
+}*/
+
 html {
     height: 100%;
 }
@@ -28,10 +57,15 @@ body {
 }
 .container {
     padding: 50px 0px;
+    min-height: calc(100vh - 64px);
 }
 
 p{
     color: var(--near-black);
+}
+
+select{
+    display: block;
 }
 
 .nav-wrapper{
@@ -45,9 +79,16 @@ p{
 }
 
 .brand-logo{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 
     width: auto;
     height: 80%;
@@ -56,7 +97,8 @@ p{
 
     font-size: 1.25rem !important;
     font-weight: 500;
-    object-fit: contain;
+    -o-object-fit: contain;
+       object-fit: contain;
 }
 
 .img-logo{
@@ -65,6 +107,8 @@ p{
 }
 
 .dropdown-trigger{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
 }
 
@@ -83,22 +127,28 @@ p{
 
 .dropdown-content, .sidenav{
     background-color: var(--dark-blue);
+    width: -webkit-max-content !important;
+    width: -moz-max-content !important;
     width: max-content !important;
-    filter: brightness(0.9);
+    -webkit-filter: brightness(0.9);
+            filter: brightness(0.9);
 }
 
 .dropdown-content > li:not(.divider):hover, .sidenav > li:not(.divider):hover{
     background-color: var(--dark-blue);
-    filter: brightness(0.9);
+    -webkit-filter: brightness(0.9);
+            filter: brightness(0.9);
 }
 
 .dropdown-content > li > a, .sidenav > li > a{
     color: var(--mid-blue);
-    width: 100%;
+    /*width: 100%;*/
 }
 
 .dropdown-content> li > a:hover, .sidenav > li > a:hover{
-    color: white;
+    color: var(--white);
+    -webkit-transition: color linear 0.15s;
+    -o-transition: color linear 0.15s;
     transition: color linear 0.15s;
 }
 
@@ -110,6 +160,8 @@ p{
 
 .link{
     color: var(--link-blue);
+    -webkit-transition: color 0.15s linear;
+    -o-transition: color 0.15s linear;
     transition: color 0.15s linear;
 }
 
@@ -118,7 +170,9 @@ p{
 }
 
 .link-light{
-    color: white;
+    color: var(--white);
+    -webkit-transition: color 0.15s linear;
+    -o-transition: color 0.15s linear;
     transition: color 0.15s linear;
 }
 
@@ -132,7 +186,6 @@ p{
 }
 
 .btn{
-    width: 100%;
     background-color: var(--link-blue);
 }
 
@@ -161,7 +214,8 @@ input {
 .input-field input:focus {
     color: var(--dark-blue);
     border-bottom: 1px solid var(--link-blue) !important;
-    box-shadow: 0 1px 0 0 var(--link-blue) !important;
+    -webkit-box-shadow: 0 1px 0 0 var(--link-blue) !important;
+            box-shadow: 0 1px 0 0 var(--link-blue) !important;
 }
 
 label {
@@ -169,19 +223,28 @@ label {
 }
 
 .white-bg{
-    background-color: white;
+    background-color: var(--white);
     padding: 30px;
     border-radius: 3px;
     width: 75%;
 }
 
 .install-popup{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     padding: 20px;
-    background-color: white;
+    background-color: var(--white);
 }
 
 .install-popup > *{
@@ -194,7 +257,8 @@ label {
     margin: none;
     width: auto;
     border-radius: 5px;
-    box-shadow: 2px 2px 5px 3px #ddddddaa;
+    -webkit-box-shadow: 2px 2px 5px 3px #ddddddaa;
+            box-shadow: 2px 2px 5px 3px #ddddddaa;
 }
 
 .install-popup > span{
@@ -203,10 +267,19 @@ label {
 }
 
 .install-popup > div{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 .install-popup > div > .btn{
@@ -223,6 +296,8 @@ label {
 
 .install-popup > div > a:not(.btn):hover{
     color: var(--mid-grey);
+    -webkit-transition: color 0.1s linear;
+    -o-transition: color 0.1s linear;
     transition: color 0.1s linear;
     cursor: pointer;
 }
@@ -236,6 +311,8 @@ label {
     /*height: 230px;*/
     width: 100%;
     background-color: var(--dark-blue);
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     margin: auto;
     flex-direction: column;
@@ -268,11 +345,15 @@ label {
 .foooter-icon-par {
     margin-top: 10px;
     padding-bottom: 40px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     flex-direction: row;
     -webkit-box-orient: horizontal;
     -ms-flex-direction: row;
-    justify-content: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
 }
 
 .footer-icon {
@@ -290,7 +371,6 @@ label {
 .footer-name {
     display: inline-block;
     font-size: 15px;
-    font-weight: 400;
     text-decoration: none;
     color: var(--light-grey);
     margin: 0px 20px;
@@ -319,6 +399,7 @@ label {
 @media screen and (max-width: 600px) {
     .container {
         padding: 20px 0;
+        min-height: calc(100vh - 56px);
     }
     .markdown-embed {
         width: 100%;

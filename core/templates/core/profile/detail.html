@@ -1,29 +1,59 @@
 {% extends 'core/secondary.html' %}
+{% load static %}
 {% load tz %}
 {% load gravatar_tags %}
 {% load link_tags %}
 
+{% block hd %}
+<link rel="stylesheet" href="{% static 'core/css/profile/detail.css' %}">
+{% endblock %}
+
 {% block content %}
 {% get_current_timezone as TIME_ZONE %}
 <div class="white-bg">
-    <div class="card-body">
-        <div class="media">
-            <img src="{{ profile.email|gravatar_url:100 }}" class="mr-3 img-thumbnail" alt="{{ profile.username }}'s profile picture">
-            <div class="media-body">
-                <h5 class="mt-0">{{ profile.get_full_name }} ({{ profile.username }})</h5>
-                {% if profile.description == "" %}
-                <p class="font-italic">This user has not shared any information.</p>
-                {% else %}
-                {{ profile.description }}
-                {% endif %}
-            </div>
-            {% if request.user == profile %}
-            <a href="{% url 'profile_update' %}" class="card-link">Edit Profile</a>
+    <div class="header">
+        <img class="circle responsive-img profile-picture" src="{{ profile.email|gravatar_url:100 }}" alt="{{ profile.username }}'s profile picture">
+        <div class="name-info">
+            <h5 class="full-name">{{ profile.get_full_name }}</h5>
+            <h6 class="username">{{ profile.username }}</h6>
+        </div>
+        {% if profile == request.user %}
+        <div class="edit-button"> 
+            <i class="zmdi zmdi-fw-3x zmdi-edit"></i>
+            <a href="{% url 'profile_update' %}">Edit</a>
+        </div>
+        {% endif %}
+    </div>
+    <hr>
+    <div class="body">
+        <div class="field">
+            {% if profile.graduating_year %}
+                <div class="label">Graduating</div><div>{{ profile.graduating_year }}</div>
+            {% endif %}
+        </div>
+        <div class="field">
+            {% if profile.organizations_leading %}
+                <div class="label">Executive of</div>
+                {% for organization in profile.organizations_leading.all %}
+                <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="field">
+            {% if profile.organizations %}
+                <div class="label">Following</div>
+                {% for organization in profile.organizations.all %}
+                <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div>
+            {% if profile.bio == "" %}
+            This user has not shared any information.
+            {% else %}
+            {{ profile.bio|linebreaksbr }}
             {% endif %}
         </div>
     </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">Joined on {{ profile.date_joined }} ({{ TIME_ZONE }})</li>
-    </ul>
 </div>
 {% endblock %}

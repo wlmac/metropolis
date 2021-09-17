@@ -19,18 +19,18 @@
                 <div class="card-authors-text">
                     {{blogpost.author.username|user}}
                     <br>
-                    <dot>•</dot> {{blogpost.last_modified_date}}
-                    {% if blogpost.last_modified_date != blogpost.created_date %}
+                    <dot>•</dot> {{ blogpost.last_modified_date|date:"M. j, Y" }}{{ blogpost.last_modified_date|date:", g:i A"|lower }}
+                    <!--{% if blogpost.last_modified_date != blogpost.created_date %}
                     (Edited)
-                    {% endif %}
+                    {% endif %}-->
                 </div>
             </div>
         </div>
     </div>
     <hr>
     <div class="card-body">
-        {{blogpost.body|safe_markdown}}
+        <p>{{blogpost.body|safe_markdown|striptags|linebreaksbr}}</p>
     </div>
     <br>
-    <a class="link" href="{{blogpost.slug|blogpost_url}}">See Post <i class='zmdi zmdi-chevron-right'></i></a>
+    <a class="link" href="{{blogpost.slug|blogpost_url}}">Read full blog post <i class='zmdi zmdi-chevron-right'></i></a>
 </div>

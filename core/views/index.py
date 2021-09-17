@@ -13,19 +13,11 @@ class Index(TemplateView, mixins.TitleMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # TODO: Refactor this later
-        approved_announcements = models.Announcement.objects.filter(status='a')
-        context['announcements'] = approved_announcements.filter(is_public=True)
-        if self.request.user.is_authenticated:
-            context['announcements'] |= approved_announcements.filter(organization__member=self.request.user)
-        context['announcements'] = context['announcements'][:3]
+        context['announcements'] = models.Announcement.get_all(user=self.request.user)[:3]
 
-        context['events'] = models.Event.objects.filter(is_public=True)
-        if self.request.user.is_authenticated:
-            context['events'] |= models.Event.objects.filter(organization__member=self.request.user)
-        context['events'] = context['events'][:3]
+        context['events'] = models.Event.get_events(user=self.request.user)[:3]
 
-        context['blogpost'] = models.BlogPost.objects.first()
+        context['blogpost'] = models.BlogPost.objects.filter(is_published=True).first()
 
         return context
 
@@ -40,6 +32,20 @@ class MapView(TemplateView, mixins.TitleMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['mapbox_apikey'] = {'apikey': settings.MAPBOX_APIKEY}
+        return context
+
+class AboutView(TemplateView, mixins.TitleMixin):
+    template_name = "core/about/about.html"
+    title = 'About'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        members_config = settings.METROPOLIS_MEMBERS
+        context['members'] = {}
+        context['member_count'] = 0
+        for position in members_config:
+            context['members'][position] = models.User.objects.filter(pk__in=members_config[position]).order_by('last_name', 'first_name')
+            context['member_count'] += len(members_config[position])
         return context
 
 class Teapot(View):

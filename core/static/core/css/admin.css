@@ -54,7 +54,8 @@ nav {
   top: 0;
   margin: 0;
   -webkit-transform: translateX(-100%);
-          transform: translateX(-100%);
+          -ms-transform: translateX(-100%);
+      transform: translateX(-100%);
   height: 100%;
   height: calc(100% + 60px);
   height: -moz-calc(100%);
@@ -66,16 +67,19 @@ nav {
   -webkit-backface-visibility: hidden;
           backface-visibility: hidden;
   -webkit-transform: translateX(-105%);
-          transform: translateX(-105%);
+          -ms-transform: translateX(-105%);
+      transform: translateX(-105%);
 }
 
 .sidenav.right-aligned {
   right: 0;
   -webkit-transform: translateX(105%);
-          transform: translateX(105%);
+          -ms-transform: translateX(105%);
+      transform: translateX(105%);
   left: auto;
   -webkit-transform: translateX(100%);
-          transform: translateX(100%);
+          -ms-transform: translateX(100%);
+      transform: translateX(100%);
 }
 
 .sidenav .collapsible {
@@ -200,7 +204,7 @@ nav {
 
 .sidenav .user-view .email {
   padding-bottom: 16px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .drag-target {
@@ -218,7 +222,8 @@ nav {
 .sidenav.sidenav-fixed {
   left: 0;
   -webkit-transform: translateX(0);
-          transform: translateX(0);
+          -ms-transform: translateX(0);
+      transform: translateX(0);
   position: fixed;
 }
 
@@ -230,11 +235,13 @@ nav {
 @media only screen and (max-width: 992px) {
   .sidenav.sidenav-fixed {
     -webkit-transform: translateX(-105%);
-            transform: translateX(-105%);
+            -ms-transform: translateX(-105%);
+        transform: translateX(-105%);
   }
   .sidenav.sidenav-fixed.right-aligned {
     -webkit-transform: translateX(105%);
-            transform: translateX(105%);
+            -ms-transform: translateX(105%);
+        transform: translateX(105%);
   }
   .sidenav > a {
     padding: 0 16px;
@@ -374,19 +381,22 @@ nav .brand-logo {
 nav .brand-logo.center {
   left: 50%;
   -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+          -ms-transform: translateX(-50%);
+      transform: translateX(-50%);
 }
 
 @media only screen and (max-width: 992px) {
   nav .brand-logo {
     left: 50%;
     -webkit-transform: translateX(-50%);
-            transform: translateX(-50%);
+            -ms-transform: translateX(-50%);
+        transform: translateX(-50%);
   }
   nav .brand-logo.left, nav .brand-logo.right {
     padding: 0;
     -webkit-transform: none;
-            transform: none;
+            -ms-transform: none;
+        transform: none;
   }
   nav .brand-logo.left {
     left: 0.5rem;
@@ -421,6 +431,7 @@ nav ul {
 
 nav ul li {
   -webkit-transition: background-color .3s;
+  -o-transition: background-color .3s;
   transition: background-color .3s;
   float: left;
   padding: 0;
@@ -432,6 +443,7 @@ nav ul li.active {
 
 nav ul a {
   -webkit-transition: background-color .3s;
+  -o-transition: background-color .3s;
   transition: background-color .3s;
   font-size: 1rem;
   color: #fff;
@@ -489,6 +501,7 @@ nav .input-field label {
 nav .input-field label i {
   color: rgba(255, 255, 255, 0.7);
   -webkit-transition: color .3s;
+  -o-transition: color .3s;
   transition: color .3s;
 }
 
@@ -578,8 +591,6 @@ nav .nav-wrapper {
     height: 64px;
   }
 }
-;
-}
 
 @media only screen and (max-width: 992px) {
   .hide-on-med-and-down {
@@ -608,11 +619,16 @@ nav .nav-wrapper {
 ul {
     display: block;
     list-style-type: disc;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    padding-inline-start: 40px;
+    -webkit-margin-before: 1em;
+            margin-block-start: 1em;
+    -webkit-margin-after: 1em;
+            margin-block-end: 1em;
+    -webkit-margin-start: 0px;
+            margin-inline-start: 0px;
+    -webkit-margin-end: 0px;
+            margin-inline-end: 0px;
+    -webkit-padding-start: 40px;
+            padding-inline-start: 40px;
 }
 
 .left {
@@ -640,7 +656,8 @@ ul {
   top: 0;
   z-index: 9999;
   -webkit-transform-origin: 0 0;
-          transform-origin: 0 0;
+          -ms-transform-origin: 0 0;
+      transform-origin: 0 0;
 }
 
 .dropdown-content:focus {
@@ -701,9 +718,12 @@ body.keyboard-focused .dropdown-content li:focus {
   left: 0;
   height: 18px;
   -webkit-transform: none;
-          transform: none;
+          -ms-transform: none;
+      transform: none;
 }
 
 .dropdown-trigger {
   cursor: pointer;
+}
+;
 }

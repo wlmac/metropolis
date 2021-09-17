@@ -16,19 +16,16 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        approved_announcements = models.Announcement.objects.filter(status='a')
-        context['feed_all'] = approved_announcements.filter(is_public=True)
+
+        context['feed_all'] = models.Announcement.get_all(user=self.request.user)
+
         if self.request.user.is_authenticated:
-            context['feed_all'] |= approved_announcements.filter(organization__member=self.request.user)
-            context['feed_my'] = approved_announcements.filter(Q(is_public=True, tags__follower=self.request.user) | Q(organization__member=self.request.user)).distinct()
+            context['feed_my'] = self.request.user.get_feed()
 
         context['feeds_custom'] = []
         for custom_feed_organization_pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS:
             custom_feed_organization = models.Organization.objects.get(pk=custom_feed_organization_pk)
-            custom_feed_queryset = approved_announcements.filter(organization__pk=custom_feed_organization_pk)
-            if self.request.user not in custom_feed_organization.members.all():
-                custom_feed_queryset = custom_feed_queryset.filter(is_public=True)
-            context['feeds_custom'].append((custom_feed_organization, custom_feed_queryset))
+            context['feeds_custom'].append((custom_feed_organization, custom_feed_organization.get_feed(user=self.request.user)))
 
         """ to-do: search bar, DNR
         query = self.request.GET.get('q' ,'')
@@ -52,7 +49,20 @@ class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
 
     def test_func(self):
         announcement = self.get_object()
-        return announcement.status == 'a' and (announcement.is_public or self.request.user in announcement.organization.members.all())
+        if announcement.status == 'a':
+            if self.request.user in announcement.organization.members.all():
+                return True
+            if announcement.is_public:
+                return True
+        if self.request.user.is_superuser:
+            return True
+        if self.request.user == announcement.organization.owner:
+            return True
+        if self.request.user in announcement.organization.supervisors.all():
+            return True
+        if self.request.user in announcement.organization.execs.all():
+            return True
+        return False
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -1,21 +1,44 @@
 .map-container{
     background-color: white;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    /* padding: 2vw,5vw,10vw,5vw; */
 }
 .map { 
     width: 100%; 
     height: 80vh;
-    align-items: center;
-    justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
 }
 
 .switch-container{
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     padding: 30px; 
 }
 
@@ -25,8 +48,29 @@
   color: #073763 !important; 
 }
 
+<<<<<<< HEAD
 @media screen and (max-width:600px) {
     .switch-container{
         padding: 20px; 
     }
+}
+
+input:not([type]), input[type=text]:not(.browser-default), input[type=password]:not(.browser-default), input[type=email]:not(.browser-default), input[type=url]:not(.browser-default), input[type=time]:not(.browser-default), input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default), input[type=datetime-local]:not(.browser-default), input[type=tel]:not(.browser-default), input[type=number]:not(.browser-default), input[type=search]:not(.browser-default), textarea.materialize-textarea {
+    text-align: center ; 
+}
+
+.legend-container{
+    display: flex;
+    flex-direction: row;
+    width:80%; 
+    height: 10vh;
+}
+
+.legend{
+    flex: 1; 
+    padding: 1vh 20px 20px 20px; 
+    text-align: center;
+    /* align-items: center; */
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
 }

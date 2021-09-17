@@ -1,13 +1,17 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block main %}
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">404: Page Not Found</h5>
-        <p class="card-text">
+    <div id="main-container">
+        <h2 class="center-align">You're in the wrong class, buckaroo!</h2>
+        <h5 class="center-align description">404: Page Not Found</h5>
+        <p class="center-align">
             <a href="/">Return Home</a>
             <!-- No one is out of Elastigirl's reach, but unfortunately, even this page is out of her reach too. (It doesn't exist!) :( -->
         </p>
     </div>
-</div>
+{% endblock %}
+
+{% block deps %}
+    <link rel="stylesheet" href="{% static 'core/css/404.css ' %}" type="text/css"/>
 {% endblock %}

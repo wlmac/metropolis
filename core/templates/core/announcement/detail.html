@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
+{% load tagcolor_tags %}
 {% load martortags %}
 {% load static %}
 
@@ -30,6 +31,9 @@
     </div>
     <div class="card-container">
         <div class="tag-section">
+            {% if announcement.status != 'a' %}
+            <p class="tag" style="background-color:{% tag_color 0 %}">Unpublished</p>
+            {% endif %}
             {% for tag in announcement.tags.all %}
             <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
             {% endfor %}
@@ -44,11 +48,14 @@
                 {{announcement.author.username|user}}
                 <br>
                 <dot>•</dot> {{announcement.last_modified_date}}
-                {% if announcement.last_modified_date != announcement.created_date %}
+                <!--{% if announcement.last_modified_date != announcement.created_date %}
                 (Edited)
-                {% endif %}
+                {% endif %}-->
             </div>
         </div>
+        {% if announcement.status != 'a' %}
+        <p style="color: var(--mid-grey);">This post is not approved yet and is not visible to {% if announcement.is_public %}everyone else{% else %}club members{% endif %}</p>
+        {% endif %}
         <hr>
         <div class="card-body">
             {{announcement.body|safe_markdown}}
