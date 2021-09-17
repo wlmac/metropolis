@@ -81,12 +81,20 @@
                 {% for user in users %}
                 <a href="{{user.username|user_url}}">
                     <div class="member">
-                        <div class="member-image">
-                            <img class="circle" src="{{user.email|gravatar_url:100}}">
+                        <div class="member-name">
+                            <div class="member-image">
+                                <img class="circle" src="{{user.email|gravatar_url:100}}">
+                            </div>
+                            <div class="member-text">
+                                {{user.get_full_name}}
+                            </div>
                         </div>
-                        <div class="member-text">
-                            {{user.get_full_name}}
+                        {% if bio %}
+                        <hr>
+                        <div class="member-bio">
+                            {{bio}}
                         </div>
+                        {% endif %}
                     </div>
                 </a>
                 {% empty %}
