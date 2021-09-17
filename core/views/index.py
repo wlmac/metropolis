@@ -40,7 +40,7 @@ class AboutView(TemplateView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        members_config = settings.METROPOLIS_MEMBERS
+        members_config = settings.METROPOLIS_STAFFS
         context['members'] = {}
         members_pk_set = set()
         for position in members_config:

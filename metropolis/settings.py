@@ -391,6 +391,19 @@ PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'templates', 'serviceworker.js'
 
 MAPBOX_APIKEY = 'change me'
 
+# Metropolis settings
+
+METROPOLIS_STAFFS = {
+    "Project Manager": {},
+    "Frontend Developer": {},
+    "Backend Developer": {},
+    "App Developer": {},
+    "Graphic Designer": {},
+    "Content Creator": {},
+}
+
+METROPOLIS_STAFF_BIO = {}
+
 # Misc settings
 
 SITE_ID = 1
@@ -409,15 +422,6 @@ SILENCED_SYSTEM_CHECKS = ['urls.W002']
 API_VERSION = "2.0.0"
 
 DEFAULT_TIMEZONE = 'UTC'
-
-METROPOLIS_MEMBERS = {
-    "Project Manager": {},
-    "Frontend Developer": {},
-    "Backend Developer": {},
-    "App Developer": {},
-    "Graphic Designer": {},
-    "Content Creator": {},
-}
 
 
 try:

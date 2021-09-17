@@ -6,6 +6,7 @@ from .course import Term
 from .post import Announcement
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from metropolis import settings
 
 # Create your models here.
 
@@ -44,3 +45,10 @@ class User(AbstractUser):
 
     def get_feed(self):
         return Announcement.get_approved().filter(Q(is_public=True, tags__follower=self) | Q(organization__member=self)).distinct()
+
+    @property
+    def staff_bio(self):
+        if self.pk in settings.METROPOLIS_STAFF_BIO:
+            return settings.METROPOLIS_STAFF_BIO[self.pk]
+        else:
+            return None

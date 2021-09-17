@@ -77,7 +77,7 @@
             <hr>
             {% for position, users in members.items %}
             <div class="member-list">
-                <h2 class="subtitle">{{position}}{% if users|length > 1 %}s{% endif %}</h2>
+                <h2 class="subtitle">{{position}}{{ users|pluralize }}</h2>
                 {% for user in users %}
                 <a href="{{user.username|user_url}}">
                     <div class="member">
@@ -89,10 +89,10 @@
                                 {{user.get_full_name}}
                             </div>
                         </div>
-                        {% if bio %}
+                        {% if user.staff_bio %}
                         <hr>
                         <div class="member-bio">
-                            {{bio}}
+                            {{user.staff_bio}}
                         </div>
                         {% endif %}
                     </div>
