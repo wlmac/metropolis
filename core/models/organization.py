@@ -19,8 +19,8 @@ class Organization(models.Model):
     execs = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="organizations_leading")
 
     name = models.CharField(max_length=64)
-    bio = models.CharField(blank=True, max_length=512)
-    long_description = models.TextField(blank=True)
+    bio = models.TextField(blank=True)
+    extra_content = models.TextField(blank=True)
     slug = models.SlugField(unique=True)
 
     registered_date = models.DateTimeField(auto_now_add=True)
