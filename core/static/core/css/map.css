@@ -52,6 +52,9 @@
   .switch-container {
     padding: 20px;
   }
+  .switch > label {
+    font-size: 1.2rem !important;
+  }
 }
 
 input:not([type]),
