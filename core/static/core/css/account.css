@@ -29,6 +29,7 @@ select {
 .graphic {
     background-size: cover;
     background-position: center center;
+    object-fit: none;
 }
 
 .form-wrapper {
