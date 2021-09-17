@@ -40,12 +40,13 @@ class AboutView(TemplateView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        members_config = settings.METROPOLIS_MEMBERS
+        members_config = settings.METROPOLIS_STAFFS
         context['members'] = {}
-        context['member_count'] = 0
+        members_pk_set = set()
         for position in members_config:
             context['members'][position] = models.User.objects.filter(pk__in=members_config[position]).order_by('last_name', 'first_name')
-            context['member_count'] += len(members_config[position])
+            members_pk_set.update(members_config[position])
+        context['member_count'] = len(members_pk_set)
         return context
 
 class Teapot(View):

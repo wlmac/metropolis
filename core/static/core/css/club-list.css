@@ -93,7 +93,7 @@ hr {
     font-weight: bold;
     margin: 0;
     font-size: 2rem;
-    word-break: break-all;
+    overflow-wrap: anywhere;
 }
 .title > a {
     color: inherit
