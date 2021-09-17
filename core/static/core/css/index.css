@@ -83,7 +83,7 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    width: 100%;
+    width: calc(33.33% - 20px);
     margin: 10px;
 }
 
@@ -189,6 +189,9 @@ hr {
 }
 
 @media screen and (max-width: 992px) {
+    .event-card {
+        width: calc(50% - 20px);
+    }
     .announcement-card {
         width: calc(50% - 20px);
     }
@@ -221,6 +224,9 @@ hr {
         display: block !important;
         width: 100% !important;
         padding: 0 !important;
+    }
+    .event-card {
+        width: calc(100% - 20px);
     }
     .announcement-card {
         width: calc(100% - 20px);
