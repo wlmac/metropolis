@@ -62,7 +62,9 @@ hr {
     margin-bottom: 0;
 }
 .card-body .markdown-embed, .card-body img {
-    width: 100%;
+    width: 60%;
+    margin: auto;
+    display: block;
 }
 .zmdi {
     margin-left: 0.25rem;
@@ -111,5 +113,8 @@ hr {
     }
     .card-authors-text dot {
         display: none;
+    }
+    .card-body .markdown-embed, .card-body img {
+        width:  100%
     }
 }
