@@ -3,6 +3,7 @@ from allauth.account.forms import SignupForm
 from . import models
 from metropolis import settings
 from django_select2 import forms as s2forms
+from martor.widgets import AdminMartorWidget
 
 class MetropolisSignupForm(SignupForm):
     first_name = forms.CharField(max_length=30, label='First Name', widget=forms.TextInput(attrs={"type": "text", "autocomplete": "given-name"}))
@@ -112,6 +113,12 @@ class AddCourseForm(forms.ModelForm):
         if position not in self.position_set:
             raise forms.ValidationError('Must be one of ' + ', '.join([str(i) for i in self.position_set]) + '.')
         return position
+
+class OrganizationAdminForm(forms.ModelForm):
+    class Meta:
+        widgets = {
+            'extra_content': AdminMartorWidget,
+        }
 
 class TermAdminForm(forms.ModelForm):
     timetable_format = forms.ChoiceField(widget=forms.Select())

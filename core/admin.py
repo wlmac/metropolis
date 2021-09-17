@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.core.mail import send_mail
 from metropolis import settings
 from martor.widgets import AdminMartorWidget
-from .forms import TermAdminForm, EventAdminForm
+from .forms import OrganizationAdminForm, TermAdminForm, EventAdminForm
 
 User = get_user_model()
 
@@ -65,14 +65,12 @@ class OrganizationURLInline(admin.StackedInline):
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = ['name', 'is_open', 'owner']
     list_filter = ['is_open', 'tags']
-    fields = ['name', 'bio', 'long_description', 'slug', 'is_open', 'applications_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
+    fields = ['name', 'bio', 'extra_content', 'slug', 'is_open', 'applications_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
     inlines = [
         TagInline,
         OrganizationURLInline,
     ]
-    formfield_overrides = {
-        django.db.models.TextField: {'widget': AdminMartorWidget},
-    }
+    form = OrganizationAdminForm
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

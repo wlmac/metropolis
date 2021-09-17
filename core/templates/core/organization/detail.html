@@ -46,11 +46,11 @@
             <div class="row club-info">
                 <div class="col m8">
                     <p class="bio" >
-                    {{ organization.bio }}
+                    {{ organization.bio|linebreaksbr }}
                     </p>
                     <br><br>
                     <div class="description">
-                    {{ organization.long_description|safe_markdown }}
+                    {{ organization.extra_content|safe_markdown }}
                     </div>
                 </div>
                 <div class="col m4">
