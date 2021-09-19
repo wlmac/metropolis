@@ -89,6 +89,8 @@ class OrganizationAdmin(admin.ModelAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "supervisors":
             kwargs["queryset"] = models.User.objects.filter(is_teacher=True)
+        if db_field.name == 'execs':
+            kwargs["queryset"] = models.User.objects.all().order_by("username")
         if db_field.name == 'tags':
             kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
             if request.user.is_superuser:
