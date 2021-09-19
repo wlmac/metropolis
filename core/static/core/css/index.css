@@ -1,7 +1,7 @@
 .title {
     margin: 0;
     margin-bottom: 10px;
-    overflow-wrap: anywhere;
+    width: 100%;
 }
 .blog{
     display: -webkit-box;
@@ -84,17 +84,22 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    width: 100%;
+    width: calc(33.33% - 20px);
     margin: 10px;
+    -ms-flex-preferred-size: auto;
+        flex-basis: auto;
 }
 
 .event-card .event-time{
     padding: 20px;
     border-radius: 4px 0 0 4px;
+    white-space: nowrap;
+    min-width: 140px;
 }
 
 .event-card .event-description{
     padding: 20px;
+    width: calc(100% - 140px);
 }
 
 .event-description .title{
@@ -108,7 +113,7 @@
 
 .event-time .time{
     font-weight: bolder;
-    font-size: 1.2em;
+    font-size: 1.2rem;
 }
 
 .event-time .intermediate{
@@ -127,7 +132,7 @@
     border-left: solid 8px;
     padding: 20px;
     margin: 10px;
-    width: 100%;
+    width: calc(33.33% - 20px);
     -ms-flex-preferred-size: auto;
         flex-basis: auto;
 }
@@ -169,6 +174,11 @@ hr {
     height: 24px;
     margin-right: 5px;
 }
+.authors-text {
+    font-size: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .circle {
     -o-object-fit: cover;
        object-fit: cover;
@@ -189,13 +199,27 @@ hr {
     color: var(--mid-grey);
 }
 
+@media screen and (max-width: 992px) {
+    .event-card {
+        width: calc(50% - 20px);
+    }
+    .announcement-card {
+        width: calc(50% - 20px);
+    }
+}
+
 @media screen and (max-width: 600px){
     .cards-container{
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
     }
     #main-container {
         padding-bottom: 20px;
+    }
+    .title {
+        font-size: 1.4rem;
     }
     .blog-content {
         padding: 20px !important;
@@ -214,6 +238,26 @@ hr {
         display: block !important;
         width: 100% !important;
         padding: 0 !important;
+    }
+    .blog-body p {
+        font-size: 0.9rem;
+        line-height: 1.4rem;
+    }
+    .event-card {
+        width: calc(100% - 20px);
+    }
+    .event-time span {
+        font-size: 0.9rem;
+    }
+    .event-time .time{
+        font-size: 1rem;
+    }
+    .announcement-card {
+        width: calc(100% - 20px);
+    }
+    .announcement-description p {
+        font-size: 0.9rem;
+        line-height: 1.4rem;
     }
 }
 

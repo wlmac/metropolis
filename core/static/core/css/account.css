@@ -31,6 +31,10 @@ select {
     background-position: center center;
 }
 
+.account-art{
+    object-fit: none;
+}
+
 .form-wrapper {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -90,7 +94,7 @@ select {
 }
 
 .login-btn {
-    margin-top: 30px;
+    margin-top: 10px;
     width: 100%;
 }
 

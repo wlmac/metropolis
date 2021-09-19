@@ -10,7 +10,7 @@
 {% block content %}
 <div class="row wrapper">
     <div class="col m12 l6 hide-on-med-and-down">
-        <img class="responsive-img" src="{% static 'core/img/log-in.png' %}" />
+        <img class="responsive-img account-art" src="{% static 'core/img/log-in.png' %}" />
     </div>
     <div class="col m12 l6">
         <div class="form-wrapper">
@@ -50,12 +50,12 @@
                             {{ field }}
                             {{ field.errors }}
                         {% else %}
-                        <div class="col s12">
+<!--                         <div class="col s12">
                             <label for="id_remember" class="valign-wrapper">
                                 <input class="filled-in checkbox-blue" type="checkbox" name="remember" id="id_remember">
-                                <span>Remember Me</span>
-                                {{ field.errors }}
-                            </label>
+                                <span>Remember Me</span> -->
+                                {# {{ field.errors }} #}
+                            </label> 
                         {% endif %}
 
                         <script type="text/javascript">

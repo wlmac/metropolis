@@ -10,7 +10,7 @@
 
 {% block content %}
 <div class="row wrapper">
-    <div class="graphic col m12 l6 hide-on-med-and-down" style="background-image: url('{% static 'core/img/sign-up.png' %}')">
+    <div class="graphic col m12 l6 hide-on-med-and-down account-art" style="background-image: url('{% static 'core/img/sign-up.png' %}')">
     </div>
     <div class="col m12 l6">
         <div class="form-wrapper">
@@ -58,7 +58,9 @@
                     {% for field in form.visible_fields %}
                     <div class="row">
                         <div class="input-field col s12">
-                        {% if field.auto_id != "id_graduating_year" %}
+                        {% if field.auto_id == "id_email" %}
+                        <label for="id_email">TDSB Email:</label>
+                        {% elif field.auto_id != "id_graduating_year" %}
                         {{ field.label_tag }}
                         {{ field.errors }}
                         {% else %}

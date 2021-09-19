@@ -26,27 +26,28 @@
     </div>
     <hr>
     <div class="body">
+        {% if profile.graduating_year %}
         <div class="field">
-            {% if profile.graduating_year %}
                 <div class="label">Graduating</div><div>{{ profile.graduating_year }}</div>
-            {% endif %}
         </div>
+        {% endif %}
+        {% if profile.organizations_leading.all %}
         <div class="field">
-            {% if profile.organizations_leading %}
                 <div class="label">Executive of</div>
                 {% for organization in profile.organizations_leading.all %}
                 <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
                 {% endfor %}
-            {% endif %}
         </div>
+        {% endif %}
+        {% if profile.organizations.all %}
         <div class="field">
-            {% if profile.organizations %}
                 <div class="label">Following</div>
                 {% for organization in profile.organizations.all %}
                 <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
                 {% endfor %}
-            {% endif %}
         </div>
+        {% endif %}
+        <br>
         <div>
             {% if profile.bio == "" %}
             This user has not shared any information.

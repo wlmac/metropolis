@@ -105,17 +105,6 @@
     font-size: 2rem;
     overflow-wrap: anywhere;
 }
-.card-headers {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -webkit-box-pack: start;
-        -ms-flex-pack: start;
-            justify-content: flex-start;
-}
 .card-authors {
     display: -webkit-box;
     display: -ms-flexbox;

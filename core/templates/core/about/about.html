@@ -77,16 +77,24 @@
             <hr>
             {% for position, users in members.items %}
             <div class="member-list">
-                <h2 class="subtitle">{{position}}{% if users|length > 1 %}s{% endif %}</h2>
+                <h2 class="subtitle">{{position}}{{ users|pluralize }}</h2>
                 {% for user in users %}
                 <a href="{{user.username|user_url}}">
                     <div class="member">
-                        <div class="member-image">
-                            <img class="circle" src="{{user.email|gravatar_url:100}}">
+                        <div class="member-name">
+                            <div class="member-image">
+                                <img class="circle" src="{{user.email|gravatar_url:100}}">
+                            </div>
+                            <div class="member-text">
+                                {{user.get_full_name}}
+                            </div>
                         </div>
-                        <div class="member-text">
-                            {{user.username}}
+                        {% if user.staff_bio %}
+                        <hr>
+                        <div class="member-bio">
+                            {{user.staff_bio}}
                         </div>
+                        {% endif %}
                     </div>
                 </a>
                 {% empty %}
