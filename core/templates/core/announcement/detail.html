@@ -7,9 +7,9 @@
 {% block deps %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
 <link rel="stylesheet" href="{% static 'core/css/announcement-detail.css' %}">
-<meta property="og:title" content="{{announcement.title}}">
-<meta name="og:description" content="{{announcement.body|safe_markdown|striptags|linebreaksbr|truncatechars:150}}">
-<meta name="og:image" content="/static/core/img/logo/logo-any-192.png">
+<meta property="og:title" content="Announcement: {{announcement.title}}">
+<meta property="og:description" content="{{announcement.body|safe_markdown|striptags|linebreaksbr|truncatechars:150}}">
+<meta property="og:image" content="/static/core/img/logo/logo-any-192.png">
 <meta name="theme-color" content="#073763">
 {% endblock %}
 
