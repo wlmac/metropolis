@@ -6,7 +6,10 @@
 <script src="{% static 'js/mapbox-gl.js' %}"></script>
 <script src="{% static 'js/mapbox-gl-geocoder.min.js' %}"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+<meta property="og:title" content="Map">
+<meta property="og:description" content="An interactive map of the school">
+<meta property="og:image" content="/static/core/img/logo/logo-any-192.png">
+<meta name="theme-color" content="#073763">
 
 
 {{ mapbox_apikey|json_script:"mapbox-apikey" }} {% endblock %} {% block main %}
