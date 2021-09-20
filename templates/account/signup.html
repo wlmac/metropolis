@@ -62,10 +62,10 @@
                         <label for="id_email">TDSB Email:</label>
                         {% elif field.auto_id != "id_graduating_year" %}
                         {{ field.label_tag }}
-                        {{ field.errors }}
                         {% else %}
                         <span class="grad-year">Graduating Year:</span>
                         {% endif %}
+                        {{ field.errors }}
 
                         {{ field }}
                         </div>
