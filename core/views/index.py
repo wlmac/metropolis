@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from django.http import HttpResponse
 from django.views import View
 from metropolis import settings
+from django.utils import timezone
 from .. import models
 from . import mixins
 
@@ -15,7 +16,8 @@ class Index(TemplateView, mixins.TitleMixin):
         
         context['announcements'] = models.Announcement.get_all(user=self.request.user)[:3]
 
-        context['events'] = models.Event.get_events(user=self.request.user)[:3]
+        datetime_now = timezone.localtime()
+        context['events'] = models.Event.get_events(user=self.request.user).filter(start_date__lte=datetime_now, end_date__gte=datetime_now)[:3]
 
         context['blogpost'] = models.BlogPost.objects.filter(is_published=True).first()
 
