@@ -1,17 +1,74 @@
-d = open("data.txt", "r")
-data = d.read()
-data_list = data.split("\n")
-geojson = open("data.geojson", "w")
+import json
+import re
+from typing import Dict, Union
+import multiprocessing
 
-geojson.write("{\n 'features' : [\n")
-for i in data_list:
-    featuresList = {}
-    line = i[1:len(i)-1].split(",")
-    for x in line:
-        k,v = x.strip().split(":")
-        featuresList[k.strip()] = v.strip()
-        print("feature: "+k.strip()+" "+featuresList[k.strip()])
-    print(i)
-    geojson.write("{\n\t'type': 'Feature',\n\t'geometry':{\n\t\t'type':'Point',\n\t\t'coordinates': ["+featuresList['longitude'][0:-1]+", "+ featuresList['latitude']+"]\n\t},\n\t'properties':{\n\t\t'title':"+featuresList['room']+",\n\t\t'floor':"+featuresList['floor']+"\n\t}\n},\n")
 
-geojson.write("],\n'type': 'FeatureCollection'\n}")
+quote_keys_pattern = re.compile(r'([\{ ])([a-z]+):') # e.g. room: "Portable 1" → "room": "Portable 1"
+
+def fix_json_key(line: str) -> str:
+  """
+  Fix unquoted JSON-like keys in line.
+  :param line: single line from data.txt
+  :return: fixed line
+  """
+  return quote_keys_pattern.sub(r'\1"\2":', line)
+
+def strip(line: str) -> str:
+  """
+  Cleans up the line: remove any trailing commas and whitespace.
+  :param line: single line from data.txt
+  :return: cleaned line
+  """
+  return line.strip().strip(',')
+
+def to_feature(data: Dict[str, Union[float, str]]) -> Dict:
+  """
+  Converts the data from data.txt in dict format to geojson feature format (in a dict).
+  :param data: data from data.txt
+  :return: geojson feature
+  """
+  return {
+    'type': 'Feature',
+    'geometry': {
+      'type': 'Point',
+      'coordinates': [
+        data['longitude'],
+        data['latitude'],
+      ],
+    },
+    'properties': {
+      'title': data['room'],
+      'floor': data['floor'],
+    },
+  }
+
+def process_line(line: str) -> Dict:
+  # operations spread over muliple statements over nesting because makes it easier to add/remove steps
+  # clean input
+  line = strip(line)
+  line = fix_json_key(line)
+  
+  # read data
+  raw_data = json.loads(line)
+
+  # convert data
+  return to_feature(raw_data)
+
+def main(input_path: str = 'data.txt', output_path: str = 'data.geojson') -> None:
+  """
+  Runs the main program: use the data form input_path, convert it to a geojson format and save it to output_path
+  """
+  with multiprocessing.Pool() as p:
+    with open(input_path) as input_file:
+      # usually points to metropolis/core/static/core/js/map/data.txt
+      with open(output_path, 'w') as output_file:
+        # open both files at the same time to show that they are both being used
+        data = {
+          'type': 'FeatureCollection',
+          'features': p.map(process_line, input_file),
+        }
+        json.dump(data, output_file)
+
+if __name__ == '__main__':
+  main()
