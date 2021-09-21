@@ -5,6 +5,13 @@
 {% block head %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
 <link rel="stylesheet" href="{% static 'core/css/account.css' %}">
+<meta property="og:site_name" content="Mac Lyon's Den">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{{ request.get_full_path }}">
+<meta name="theme-color" content="#073763">
+<meta property="og:title" content="Login">
+<meta property="og:description" content="Log in to Mac Lyon's Den with your Project Metropolis account">
+<meta property="og:image" content="/static/core/img/logo/logo-any-192.png">
 {% endblock %}
 
 {% block content %}
