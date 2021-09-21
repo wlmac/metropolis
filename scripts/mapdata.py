@@ -1,3 +1,8 @@
+import sys
+
+if sys.version_info[0] < 3 or sys.version_info[1] < 5: # 3.5+
+  raise ImportError('Only Python 3.5+ is supported.')
+
 import json
 import re
 from typing import Dict, Union
