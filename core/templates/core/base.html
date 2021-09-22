@@ -120,7 +120,14 @@
         </ul>
     </div>
 </nav>
-
+<a id="back" onclick="goBack()">
+    <i class="zmdi zmdi-arrow-left"></i>
+</a>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 {% block main %}
 {% endblock %}
 
