@@ -6,6 +6,9 @@
 
 {% block hd %}
 <link rel="stylesheet" href="{% static 'core/css/profile/detail.css' %}">
+<meta property="og:title" content="User: {{ profile.username }}">
+<meta property="og:description" content="{{ profile.get_full_name }}. {% if profile.graduating_year %}Graduating in {{ profile.graduating_year }}. {% endif %}{% if profile.organizations_leading.all %}Executive of: {% for organization in profile.organizations_leading.all %}{{ organization }}{% if not forloop.last %}, {% endif %}{% endfor %}. {% endif %}{% if profile.organizations.all %}Following: {% for organization in profile.organizations.all %}{{ organization }}{% if not forloop.last %}, {% endif %}{% endfor %}. {% endif %}{% if profile.bio != '' %}Bio: {{ profile.bio|linebreaksbr|truncatechars:100}}{% endif %}">
+<meta property="og:image" content="{{ profile.email|gravatar_url:100 }}">
 {% endblock %}
 
 {% block content %}
