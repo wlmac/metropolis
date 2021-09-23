@@ -1,9 +1,106 @@
-.main-container{
-    width: 100%;
-    height: 100%;
+body{
     background-color: var(--bg-grey);
 }
 
-.description{
+.main-container {
+    width: 90%;
+    min-height: calc(100vh - 64px);
+    border-radius: 10px;
+    margin: auto auto 20px;
+}
+
+.description {
     color: var(--mid-grey);
+}
+
+.inline-logo {
+    width: 50px;
+    height: 50px;
+    margin: auto;
+}
+
+.display-metropolis {
+    width: 100px;
+    height: 100px;
+    background-color: var(--dark-blue);
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px var(--mid-blue);
+    margin-left: auto;
+    margin-right: auto;
+    transition-duration: 0.3s;
+}
+
+.display-metropolis:hover {
+    box-shadow: 3px 3px 5px var(--link-blue);
+}
+
+.control-button {
+    width: 40px;
+    height: 40px;
+    background-color: var(--link-blue);
+    color: var(--light-grey);
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    transition-duration: 0.1s;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px grey;
+}
+
+.control-button:active {
+    background-color: var(--dark-blue);
+}
+
+.game-mid {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.game-container {
+    text-align: center;
+    width: fit-content;
+    height: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.game-content {
+    position: relative;
+}
+
+.valign-wrapper {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.result-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.result-display {
+    width: 100px;
+    height: 100px;
+    background-color: var(--mid-blue);
+    margin: auto;
+    border-radius: 10px;
+}
+
+.result-display-text {
+    width: 100%;
+}
+
+#game-canvas{
+    box-shadow: 2px 2px 5px var(--dark-blue);
 }
