@@ -22,4 +22,5 @@ urlpatterns = [
     path('map', views.MapView.as_view(), name="map"),
     path('about', views.AboutView.as_view(), name="about"),
     path('teapot', views.Teapot.as_view(), name="teapot"),
+    path('justinian', views.Justinian.as_view(), name="justinian"),
 ]

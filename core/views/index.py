@@ -54,3 +54,7 @@ class AboutView(TemplateView, mixins.TitleMixin):
 class Teapot(View):
     def get(self, request):
         return HttpResponse('orz teapot', status=418)
+
+class Justinian(View):
+    def get(self, request):
+        return HttpResponse('orz our exalted leader justinian luxtel, waba skyflarus, as payment for his services', status=402)
