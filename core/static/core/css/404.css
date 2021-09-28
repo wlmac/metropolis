@@ -7,6 +7,7 @@ body{
     min-height: calc(100vh - 64px);
     border-radius: 10px;
     margin: auto auto 20px;
+    text-align: center;
 }
 
 .description {
@@ -103,4 +104,15 @@ body{
 
 #game-canvas{
     box-shadow: 2px 2px 5px var(--dark-blue);
+}
+
+.message{
+    font-weight: bolder;
+}
+
+.comic-img{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    max-height: 80vw;
 }
