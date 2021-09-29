@@ -1,17 +1,21 @@
 from django.db import models
 from django.urls import reverse
-from .user import User
-from .post import Announcement
-from ..utils.file_upload import file_upload_path_generator
+
 from metropolis import settings
+from .post import Announcement
+from .user import User
+from ..utils.file_upload import file_upload_path_generator
+
 
 # Create your models here.
 
 def banner_file_path_generator(instance, file_name):
     return file_upload_path_generator('banners')(instance, file_name)
 
+
 def icon_file_path_generator(instance, file_name):
     return file_upload_path_generator('icons')(instance, file_name)
+
 
 class Organization(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="organizations_owning")
@@ -24,6 +28,7 @@ class Organization(models.Model):
     slug = models.SlugField(unique=True)
 
     registered_date = models.DateTimeField(auto_now_add=True)
+    show_members = models.BooleanField(default=True)
     is_open = models.BooleanField(default=True)
     applications_open = models.BooleanField(default=False)
     tags = models.ManyToManyField("Tag", blank=True, related_name="organizations", related_query_name="org")
@@ -50,6 +55,7 @@ class Organization(models.Model):
 
     class Meta:
         verbose_name = 'club'
+
 
 class OrganizationURL(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name='links')

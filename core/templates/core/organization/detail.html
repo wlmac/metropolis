@@ -5,114 +5,125 @@
 {% load martortags %}
 
 {% block deps %}
-<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-<link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
 {% endblock %}
 
 {% block main %}
-<div class="club">
-    <div class="row">
-        <img class="club-banner responsive-img col s12" src="{{ organization.banner.url }}">
-    </div>
-    <div class="container">
-        <div class="club-detail">
-            <div class="row club-header">
-                <div class="col m3 s12">
-                    <div class="club-logo">
-                        <img class="circle" src="{{ organization.icon.url }}">
+    <div class="club">
+        <div class="row">
+            <img class="club-banner responsive-img col s12" src="{{ organization.banner.url }}"
+                 alt="banner of organization">
+        </div>
+        <div class="container">
+            <div class="club-detail">
+                <div class="row club-header">
+                    <div class="col m3 s12">
+                        <div class="club-logo">
+                            <img class="circle" src="{{ organization.icon.url }}" alt="icon of organization">
+                        </div>
                     </div>
-                </div>
-                <div class="col m5 s12">
-                    <h2 class="club-name">{{ organization.name }}</h2>
-                    <div class="tag-section">
-                        {% for tag in organization.tags.all %}
-                        <p class="tag" style="background-color: {{ tag.color }};">{{tag}}</p>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="col m4 s12">
-                    {% if user.is_authenticated and organization.is_open %}
-                    <form method="POST" class="member-button">
-                        {% csrf_token %}
-                        {% if organization not in request.user.organizations.all %}
-                        <button type="submit" class="btn join">+ Join</button>
-                        {% else %}
-                        <button type="submit" class="btn leave">- Leave</button>
-                        {% endif %}
-                    </form>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="row club-info">
-                <div class="col m8">
-                    <p class="bio" >
-                    {{ organization.bio|linebreaksbr }}
-                    </p>
-                    <br><br>
-                    <div class="description">
-                    {{ organization.extra_content|safe_markdown }}
-                    </div>
-                </div>
-                <div class="col m4">
-                    {# TODO: Add club links #}
-                    <ul class="link-section">
-                        <div>
-                            {% for i in organization.links.all %}
-                                <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a href="{{ i.url }}">{{ i.url }}</a></li>
+                    <div class="col m5 s12">
+                        <h2 class="club-name">{{ organization.name }}</h2>
+                        <div class="tag-section">
+                            {% for tag in organization.tags.all %}
+                                <p class="tag" style="background-color: {{ tag.color }};">{{ tag }}</p>
                             {% endfor %}
                         </div>
-                          
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col s12">
-                    <h4>
-                        Executives
-                    </h4>
-                    <hr>
-                    <div class="members-list">
-                            {% for i in organization.execs.all %}
-                            <a href="{{i.username|user_url}}">
-                                <div class="member">
-                                    <div class="member-image">
-                                        <img class="circle" src="{{i.email|gravatar_url:100}}">
-                                    </div>
-                                    <div class="member-text">
-                                        {{i.get_full_name}}
-                                    </div>
-                                </div>
-                            </a>
-                            {% empty %}
-                            <br>
-                            There are no executives right now.
-                            {% endfor %}
                     </div>
-                    <h4>
-                        Members
-                    </h4>
-                    <hr>
-                    <div class="members-list">
-                            {% for i in organization.members.all %}
-                            <a href="{{i.username|user_url}}">
-                                <div class="member">
-                                    <div class="member-image">
-                                        <img class="circle" src="{{i.email|gravatar_url:100}}">
-                                    </div>
-                                    <div class="member-text">
-                                        {{i.get_full_name}}
-                                    </div>
-                                </div>
-                            </a>
-                            {% empty %}
-                            <br>
-                            There are no members right now. {% if organization.is_open %}Join us!{% endif %}
-                            {% endfor %}
+                    <div class="col m4 s12">
+                        {% if user.is_authenticated and organization.is_open %}
+                            <form method="POST" class="member-button">
+                                {% csrf_token %}
+                                {% if organization not in request.user.organizations.all %}
+                                    <button type="submit" class="btn join">+ Join</button>
+                                {% else %}
+                                    <button type="submit" class="btn leave">- Leave</button>
+                                {% endif %}
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
+                <div class="row club-info">
+                    <div class="col m8">
+                        <p class="bio">
+                            {{ organization.bio|linebreaksbr }}
+                        </p>
+                        <br><br>
+                        <div class="description">
+                            {{ organization.extra_content|safe_markdown }}
+                        </div>
+                    </div>
+                    <div class="col m4">
+                        {# TODO: Add club links #}
+                        <ul class="link-section">
+                            {% for i in organization.links.all %}
+                                <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a
+                                        href="{{ i.url }}">{{ i.url }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12">
+                        <section id="executives">
+                            <h4>
+                                Executives
+                            </h4>
+                            <hr>
+                            <div class="members-list">
+                                {% for i in organization.execs.all %}
+                                    <a href="{{ i.username|user_url }}">
+                                        <div class="member">
+                                            <div class="member-image">
+                                                <img class="circle" src="{{ i.email|gravatar_url:100}}"
+                                                     alt="profile picture of executive">
+                                            </div>
+                                            <div class="member-text">
+                                                {{ i.get_full_name }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                    {% empty %}
+                                    <br>
+                                    There are no executives right now.
+                                {% endfor %}
+                            </div>
+                        </section>
+                        <section id="members">
+                            <h4>
+                                Members
+                            </h4>
+                            <hr>
+                            {% if organization.show_members %}
+                                <div class="members-list">
+                                    {% for i in organization.members.all %}
+                                        <a href="{{ i.username|user_url }}">
+                                            <div class="member">
+                                                <div class="member-image">
+                                                    <img class="circle" src="{{ i.email|gravatar_url:100}}"
+                                                         alt="profile picture of member">
+                                                </div>
+                                                <div class="member-text">
+                                                    {{ i.get_full_name }}
+                                                </div>
+                                            </div>
+                                        </a>
+                                        {% empty %}
+                                        <br>
+                                        There are no members right now. {% if organization.is_open %}Join us!{% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p>
+                                    This organisation's settings do not allow showing its member list.
+                                </p>
+                            {% endif %}
+                        </section>
+                    </div>
+                </div>
             </div>
-        </div> 
+        </div>
     </div>
-</div>
 {% endblock %}

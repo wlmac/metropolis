@@ -1,20 +1,22 @@
-from django.contrib import admin
-from . import models
-from django.contrib.auth import get_user_model
-from django import forms
 import django.db
-from django.db.models import Q
+from django import forms
+from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from django.utils.translation import gettext_lazy as _
+from django.core.mail import send_mail
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.core.mail import send_mail
-from metropolis import settings
+from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
+
+from metropolis import settings
+from . import models
 from .forms import OrganizationAdminForm, TermAdminForm, EventAdminForm
 
 User = get_user_model()
+
 
 # Register your models here.
 
@@ -27,12 +29,14 @@ class CourseInline(admin.TabularInline):
     model = models.Course
     extra = 0
 
+
 class TermAdmin(admin.ModelAdmin):
     inlines = [
         CourseInline,
     ]
     list_display = ['name', 'timetable_format', 'start_date', 'end_date']
     form = TermAdminForm
+
 
 class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['color']
@@ -47,8 +51,10 @@ class TagAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
-                kwargs["queryset"] = models.Organization.objects.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
+                kwargs["queryset"] = models.Organization.objects.filter(
+                    Q(owner=request.user) | Q(execs=request.user)).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 class TagInline(admin.StackedInline):
     formfield_overrides = {
@@ -57,15 +63,19 @@ class TagInline(admin.StackedInline):
     model = models.Tag
     extra = 0
 
+
 class OrganizationURLInline(admin.StackedInline):
     fields = ['url']
     model = models.OrganizationURL
     extra = 0
 
+
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'is_open', 'owner']
-    list_filter = ['is_open', 'tags']
-    fields = ['name', 'bio', 'extra_content', 'slug', 'is_open', 'applications_open', 'tags', 'owner', 'supervisors', 'execs', 'banner', 'icon']
+    list_display = ['name', 'show_members', 'is_open', 'owner']
+    list_filter = ['is_open', 'show_members', 'tags']
+    fields = ['name', 'bio', 'extra_content', 'slug', 'show_members', 'is_open', 'applications_open', 'tags', 'owner',
+              'supervisors',
+              'execs', 'banner', 'icon']
     inlines = [
         TagInline,
         OrganizationURLInline,
@@ -90,10 +100,13 @@ class OrganizationAdmin(admin.ModelAdmin):
         if db_field.name == 'execs':
             kwargs["queryset"] = models.User.objects.all().order_by("username")
         if db_field.name == 'tags':
-            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+            kwargs["queryset"] = models.Tag.objects.filter(
+                Q(organization=None) | Q(organization__owner=request.user) | Q(
+                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Tag.objects.all()
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
 
 class OrganizationListFilter(admin.SimpleListFilter):
     title = 'organization'
@@ -112,6 +125,7 @@ class OrganizationListFilter(admin.SimpleListFilter):
         else:
             return queryset.filter(organization__slug=self.value())
 
+
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'organization', 'status']
     list_filter = [OrganizationListFilter, 'status']
@@ -125,19 +139,25 @@ class AnnouncementAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+        return qs.filter(Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(
+            organization__execs=request.user)).distinct()
 
     def get_readonly_fields(self, request, obj=None):
         if obj == None or request.user.is_superuser:
             return []
 
-        all_fields = ['organization', 'author', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason', 'supervisor']
+        all_fields = ['organization', 'author', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason',
+                      'supervisor']
         status_idx = ['p', 'a', 'r'].index(obj.status)
 
         fields = set(all_fields)
         fields_matrix = [
-            [{'author', 'organization', 'title', 'tags', 'is_public'}, {'author', 'organization', 'title', 'body', 'tags', 'is_public', 'status', 'supervisor'}, {'author', 'organization', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason', 'supervisor'}],
-            [{'author', 'organization', 'status'}, {'author', 'organization', 'status', 'supervisor'}, {'author', 'organization', 'status', 'supervisor', 'rejection_reason'}],
+            [{'author', 'organization', 'title', 'tags', 'is_public'},
+             {'author', 'organization', 'title', 'body', 'tags', 'is_public', 'status', 'supervisor'},
+             {'author', 'organization', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason',
+              'supervisor'}],
+            [{'author', 'organization', 'status'}, {'author', 'organization', 'status', 'supervisor'},
+             {'author', 'organization', 'status', 'supervisor', 'rejection_reason'}],
         ]
 
         if request.user in obj.organization.supervisors.all():
@@ -146,18 +166,19 @@ class AnnouncementAdmin(admin.ModelAdmin):
             fields.intersection_update(fields_matrix[1][status_idx])
 
         fields = list(fields)
-        fields.sort(key=lambda x:all_fields.index(x))
+        fields.sort(key=lambda x: all_fields.index(x))
 
         return fields
 
     def get_fields(self, request, obj=None):
-        all_fields = ['organization', 'author', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason', 'supervisor']
+        all_fields = ['organization', 'author', 'title', 'body', 'tags', 'is_public', 'status', 'rejection_reason',
+                      'supervisor']
 
         fields = set(all_fields)
         fields.difference_update(self.get_exclude(request, obj))
 
         fields = list(fields)
-        fields.sort(key=lambda x:all_fields.index(x))
+        fields.sort(key=lambda x: all_fields.index(x))
 
         return fields
 
@@ -186,12 +207,15 @@ class AnnouncementAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
-                kwargs["queryset"] = models.Organization.objects.filter(Q(supervisors=request.user) | Q(execs=request.user)).distinct()
+                kwargs["queryset"] = models.Organization.objects.filter(
+                    Q(supervisors=request.user) | Q(execs=request.user)).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'tags':
-            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+            kwargs["queryset"] = models.Tag.objects.filter(
+                Q(organization=None) | Q(organization__owner=request.user) | Q(
+                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Tag.objects.all()
         return super().formfield_for_manytomany(db_field, request, **kwargs)
@@ -220,7 +244,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
                         email_template_context = {
                             'teacher': teacher,
                             'announcement': obj,
-                            'review_link': settings.SITE_URL + reverse('admin:core_announcement_change', args=(obj.pk,)),
+                            'review_link': settings.SITE_URL + reverse('admin:core_announcement_change',
+                                                                       args=(obj.pk,)),
                         }
 
                         send_mail(
@@ -235,6 +260,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                 obj.status = 'p'
 
         super().save_model(request, obj, form, change)
+
 
 class BlogPostAuthorListFilter(admin.SimpleListFilter):
     title = 'author'
@@ -251,6 +277,7 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
         else:
             return queryset.filter(author__pk=self.value())
 
+
 class BlogPostAdmin(admin.ModelAdmin):
     list_display = ['title', 'author', 'is_published']
     list_filter = [BlogPostAuthorListFilter, 'is_published']
@@ -265,10 +292,13 @@ class BlogPostAdmin(admin.ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'tags':
-            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+            kwargs["queryset"] = models.Tag.objects.filter(
+                Q(organization=None) | Q(organization__owner=request.user) | Q(
+                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Tag.objects.all()
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'organization', 'start_date', 'end_date']
@@ -280,7 +310,8 @@ class EventAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+        return qs.filter(Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(
+            organization__execs=request.user)).distinct()
 
     def get_exclude(self, request, obj=None):
         if not request.user.is_superuser:
@@ -293,7 +324,9 @@ class EventAdmin(admin.ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'tags':
-            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__owner=request.user) | Q(organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+            kwargs["queryset"] = models.Tag.objects.filter(
+                Q(organization=None) | Q(organization__owner=request.user) | Q(
+                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Tag.objects.all()
         return super().formfield_for_manytomany(db_field, request, **kwargs)
@@ -301,7 +334,8 @@ class EventAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
-                kwargs["queryset"] = models.Organization.objects.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
+                kwargs["queryset"] = models.Organization.objects.filter(
+                    Q(owner=request.user) | Q(execs=request.user)).distinct()
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def has_change_permission(self, request, obj=None):
@@ -309,14 +343,17 @@ class EventAdmin(admin.ModelAdmin):
             return False
         return super().has_change_permission(request, obj)
 
+
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'is_superuser', 'is_staff', 'is_teacher']
     list_filter = ['is_superuser', 'is_staff', 'is_teacher', 'groups', 'graduating_year']
     search_fields = ['username']
 
+
 class TimetableAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'term']
     list_filter = ['term']
+
 
 class FlatPageAdmin(FlatPageAdmin):
     formfield_overrides = {
@@ -332,6 +369,7 @@ class FlatPageAdmin(FlatPageAdmin):
             ),
         }),
     )
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(models.Timetable, TimetableAdmin)
