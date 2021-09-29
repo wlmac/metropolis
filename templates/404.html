@@ -2,8 +2,8 @@
 {% load static %}
 {% block main %}
     <div class="main-container card">
-        <h2 class="center-align">You're in the wrong class, buckaroo!</h2>
-        <h5 class="center-align description">404: Page Not Found</h5>
+        <h2 class="center-align message">404: Page Not Found</h2>
+        <img class="comic-img" style="max-width: 100%"/>
 
         <div class="display-metropolis valign-wrapper">
             <img class="inline-logo" src="{% static 'core/img/logo-dark-transparent.png' %}"/>
@@ -39,4 +39,11 @@
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/404.css ' %}" type="text/css"/>
     <script src="{% static 'core/js/404-snake.js' %}"></script>
+
+    <script>
+        $(function(){
+            let numImages = 3;
+            $(".comic-img").attr("src", "{% static 'core/img/404-comics' %}/404-" + Math.floor(Math.random() * numImages) + ".png");
+        })
+    </script>
 {% endblock %}
