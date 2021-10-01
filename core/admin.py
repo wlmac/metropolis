@@ -348,7 +348,7 @@ class EventAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'is_superuser', 'is_staff', 'is_teacher']
     list_filter = ['is_superuser', 'is_staff', 'is_teacher', 'groups', 'graduating_year']
-    search_fields = ['username']
+    search_fields = ['username', 'first_name', 'last_name']
 
 
 class TimetableAdmin(admin.ModelAdmin):
