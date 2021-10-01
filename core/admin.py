@@ -76,6 +76,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     fields = ['name', 'bio', 'extra_content', 'slug', 'show_members', 'is_open', 'applications_open', 'tags', 'owner',
               'supervisors',
               'execs', 'banner', 'icon']
+    autocomplete_fields = ['supervisors', 'execs']
     inlines = [
         TagInline,
         OrganizationURLInline,
