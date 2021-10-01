@@ -82,6 +82,30 @@ hr {
 .card-body p {
     line-height: 1.6rem;
 }
+.card-body > h1 {
+    font-size: 3rem;
+    margin: 2rem 0 1.2rem 0;
+}
+.card-body > h2 {
+    font-size: 2.66rem;
+    margin: 1.77rem 0 1rem 0;
+}
+.card-body > h3 {
+    font-size: 2.3rem;
+    margin: 1.55rem 0 0.93rem 0;
+}
+.card-body > h4 {
+    font-size: 2rem;
+    margin: 1.33rem 0 0.8rem 0;
+}
+.card-body > h5 {
+    font-size: 1.75rem;
+    margin: 1.16rem 0 0.7rem 0;
+}
+.card-body > h6 {
+    font-size: 1.5rem;
+    margin: 1rem 0 0.6rem 0;
+}
 .card-body > * {
     overflow-wrap: anywhere;
 }

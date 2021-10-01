@@ -35,7 +35,7 @@
         <div class="field">
                 <div class="label">Executive of</div>
                 {% for organization in profile.organizations_leading.all %}
-                <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
+                {{ organization }}{% if not forloop.last %},&nbsp{% endif %}
                 {% endfor %}
         </div>
         {% endif %}
@@ -43,7 +43,7 @@
         <div class="field">
                 <div class="label">Following</div>
                 {% for organization in profile.organizations.all %}
-                <span>{{ organization }}{% if not forloop.last %},&nbsp{% endif %}</span>
+                {{ organization }}{% if not forloop.last %},&nbsp{% endif %}
                 {% endfor %}
         </div>
         {% endif %}
