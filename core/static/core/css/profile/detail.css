@@ -64,7 +64,7 @@ hr {
 }
 
 .label { 
-    width: 6rem;
+    margin-right: 15px;
     font-weight: 600; 
     color: var(--mid-grey);
 }
