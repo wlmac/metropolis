@@ -116,3 +116,11 @@ body{
     max-width: 100%;
     max-height: 80vw;
 }
+
+.card{
+    padding: 1px;
+}
+
+a{
+    color: var(--link-blue);
+}
