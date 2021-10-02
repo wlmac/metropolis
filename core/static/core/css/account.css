@@ -32,7 +32,7 @@ select {
 }
 
 .account-art{
-    object-fit: none;
+    object-fit: cover;
 }
 
 .form-wrapper {
