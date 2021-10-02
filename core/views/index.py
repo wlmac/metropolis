@@ -57,4 +57,4 @@ class Teapot(View):
 
 class Justinian(View):
     def get(self, request):
-        return HttpResponse('orz our exalted leader justinian luxtel, waba skyflarus, as payment for his services\n'+gs.justinian_slam(), status=402)
+        return HttpResponse('orz our exalted leader justinian luxtel, waba skyflarus, as payment for his services<br>'+gs.justinian_slam(), status=402)
