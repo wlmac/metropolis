@@ -2,11 +2,11 @@ from django.views.generic import DetailView, ListView
 from django.views.generic import TemplateView
 from django.http import HttpResponse
 from django.views import View
+from core.utils import generate_slam as gs
 from metropolis import settings
 from django.utils import timezone
 from .. import models
 from . import mixins
-
 class Index(TemplateView, mixins.TitleMixin):
     template_name = 'core/index.html'
     title = 'Dashboard'
@@ -57,4 +57,4 @@ class Teapot(View):
 
 class Justinian(View):
     def get(self, request):
-        return HttpResponse('orz our exalted leader justinian luxtel, waba skyflarus, as payment for his services', status=402)
+        return HttpResponse('orz our exalted leader justinian luxtel, waba skyflarus, as payment for his services\n'+gs.justinian_slam(), status=402)
