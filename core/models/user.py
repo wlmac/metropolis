@@ -18,7 +18,7 @@ class User(AbstractUser):
     timezone = models.CharField(max_length=50, choices=timezone_choices, default=get_default_user_timezone)
     graduating_year = models.PositiveSmallIntegerField(blank=True, null=True, choices=graduating_year_choices)
     is_teacher = models.BooleanField(default=False)
-    organizations = models.ManyToManyField("Organization", blank=True, related_name="members", related_query_name="member")
+    # organizations = models.ManyToManyField("Organization", blank=True, related_name="members", related_query_name="member")
     tags_following = models.ManyToManyField("Tag", blank=True, related_name="followers", related_query_name="follower")
 
     def get_current_timetable(self):

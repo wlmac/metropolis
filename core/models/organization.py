@@ -21,6 +21,7 @@ class Organization(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="organizations_owning")
     supervisors = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="organizations_supervising")
     execs = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="organizations_leading")
+    members = models.ManyToManyField("User", blank=True, related_name="organizations", related_query_name="organization")
 
     name = models.CharField(max_length=64)
     bio = models.TextField(blank=True)
