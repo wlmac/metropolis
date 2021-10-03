@@ -22,8 +22,6 @@ def justinian_slam():
         a = randint(0, length-1)
         b = randint(0, length-1)
         out[a], out[b] = out[b], out[a]
-        if randint(0, 100) < 20:
-            out[a] = chr(randint(65, 90))
     out = ''.join(out)
     rand = randint(0, 98)
     if rand < 25:
