@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block main %}
+    <br>
     <div class="main-container card">
         <h2 class="center-align message">404: Page Not Found</h2>
         <img class="comic-img" style="max-width: 100%"/>
@@ -12,18 +13,20 @@
         <div class="game-container" hidden>
             <input type="button" class="control-button" id="up-button" value="W"/><br>
             <div class="row valign-wrapper game-mid">
-                <input type="button" class="col control-button" id="left-button" value="A"/>
-                <div class="game-content col">
-                    <canvas id="game-canvas" style="background-color: black"></canvas>
-                    <div class="result-container valign-wrapper">
-                        <div class="result-display valign-wrapper" hidden>
-                            <div class="result-display-text">
-                                <span class="result-display-message">Start Game</span><br>
+                <div style="margin-left: auto; margin-right: auto;">
+                    <input type="button" class="col control-button" id="left-button" value="A"/>
+                    <div class="game-content col">
+                        <canvas id="game-canvas" style="background-color: black"></canvas>
+                        <div class="result-container valign-wrapper">
+                            <div class="result-display valign-wrapper" hidden>
+                                <div class="result-display-text">
+                                    <span class="result-display-message">Start Game</span><br>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <input type="button" class="col control-button" id="right-button" value="D"/><br>
                 </div>
-                <input type="button" class="col control-button" id="right-button" value="D"/><br>
             </div>
             <input type="button" class="control-button" id="down-button" value="S"/>
         </div>
@@ -41,7 +44,7 @@
     <script src="{% static 'core/js/404-snake.js' %}"></script>
 
     <script>
-        $(function(){
+        $(function () {
             let numImages = 3;
             $(".comic-img").attr("src", "{% static 'core/img/404-comics' %}/404-" + Math.floor(Math.random() * numImages) + ".png");
         })

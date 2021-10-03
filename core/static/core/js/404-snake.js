@@ -27,17 +27,17 @@ window.onload = function () {
         $("#down-button").css("width", "" + (cellSide * cols))
         $("#left-button").css("height", "" + (cellSide * rows))
         $("#right-button").css("height", "" + (cellSide * rows))
-        
+
         $(".game-container").stop().fadeIn(300, function () {
             context = canvas.getContext("2d");
             $(".result-display-message").text("Start Game?");
             $(".result-display").click(restart);
             restart();
             $(document).keydown(function (e) {
-                if (e.key === 'w' && !crashes(-1, 0)) dir = "up";
-                else if (e.key === 'a' && !crashes(0, -1)) dir = "left";
-                else if (e.key === 's' && !crashes(1, 0)) dir = 'down';
-                else if (e.key === 'd' && !crashes(0, 1)) dir = 'right';
+                if ((e.key === 'w' || e.key === 'ArrowUp') && !crashes(-1, 0)) dir = "up";
+                else if ((e.key === 'a' || e.key === 'ArrowLeft') && !crashes(0, -1)) dir = "left";
+                else if ((e.key === 's' || e.key === 'ArrowDown') && !crashes(1, 0)) dir = 'down';
+                else if ((e.key === 'd' || e.key === 'ArrowRight') && !crashes(0, 1)) dir = 'right';
             })
             $("#up-button").click(function () {
                 if (!crashes(-1, 0)) {
