@@ -30,10 +30,10 @@ class Profile(DetailView, mixins.TitleMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if context['object'].organizations.count() > 0:
-            if context['object'] != self.request.user:
-                context['following'] = context['object'].organizations.filter(show_members=True)
-            else:
+            if context['object'] == self.request.user:
                 context['following'] = context['object'].organizations.all()
+            else:
+                context['following'] = context['object'].organizations.filter(show_members=True)
         return context
 
 class ProfileUpdate(UpdateView, mixins.TitleMixin):
