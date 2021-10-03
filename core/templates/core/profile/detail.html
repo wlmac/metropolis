@@ -39,10 +39,10 @@
                 {% endfor %}
         </div>
         {% endif %}
-        {% if profile.organizations.all %}
+        {% if following %}
         <div class="field">
                 <div class="label">Following</div>
-                {% for organization in profile.organizations.all %}
+                {% for organization in following %}
                 {{ organization }}{% if not forloop.last %},&nbsp{% endif %}
                 {% endfor %}
         </div>

@@ -26,7 +26,16 @@ class Profile(DetailView, mixins.TitleMixin):
 
     def get_title(self):
         return f'User {self.get_object().username}'
-    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if context['object'].organizations.count() > 0:
+            if context['object'] != self.request.user:
+                context['following'] = context['object'].organizations.filter(show_members=True)
+            else:
+                context['following'] = context['object'].organizations.all()
+        return context
+
 class ProfileUpdate(UpdateView, mixins.TitleMixin):
     model = models.User
     fields = ['bio', 'timezone', 'first_name', 'last_name']
