@@ -1,4 +1,3 @@
-from django.db.models import Count
 from django.http import HttpResponseForbidden, HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
@@ -12,7 +11,6 @@ class OrganizationList(ListView, mixins.TitleMixin):
     template_name = 'core/organization/list.html'
     title = 'Clubs'
     model = models.Organization
-    queryset = models.Organization.objects.annotate(members_num=Count('members'))
 
     def get_ordering(self):
         return "-members_num"
