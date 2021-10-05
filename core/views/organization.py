@@ -1,12 +1,9 @@
-from django.utils.decorators import method_decorator
-from django.views.decorators.http import require_POST
-from django.views.generic import DetailView, ListView
-from django.views.generic.base import RedirectView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
-from .. import models
+from django.views.generic import DetailView, ListView
+
 from . import mixins
+from .. import models
+
 
 class OrganizationList(ListView, mixins.TitleMixin):
     context_object_name = "organizations"
@@ -14,8 +11,14 @@ class OrganizationList(ListView, mixins.TitleMixin):
     title = 'Clubs'
     model = models.Organization
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['organizations'] = sorted(models.Organization.objects.all(), key=lambda org: org.members.count())[::-1]
+        return context
+
     def get_ordering(self):
         return "-name"
+
 
 class OrganizationDetail(DetailView, mixins.TitleMixin):
     model = models.Organization
