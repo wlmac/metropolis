@@ -419,7 +419,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 SILENCED_SYSTEM_CHECKS = ['urls.W002']
 
-API_VERSION = "2.0.0"
+API_VERSION = "3.0.0"
 
 DEFAULT_TIMEZONE = 'UTC'
 
