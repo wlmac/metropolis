@@ -1,10 +1,13 @@
 from rest_framework import serializers
-from ... import models
+
+from .custom import PrimaryKeyAndSlugRelatedField
 from .course import TermSerializer, CourseSerializer
+from ... import models
 
 
 class TimetableSerializer(serializers.ModelSerializer):
-    owner = serializers.SlugRelatedField(slug_field='username', queryset=models.User.objects.all())
+    id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
+    owner = PrimaryKeyAndSlugRelatedField(slug_field='username', queryset=models.User.objects.all())
     term = TermSerializer()
     courses = CourseSerializer(many=True)
 

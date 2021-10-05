@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('', views.Index.as_view(), name='index'),
     path('api/', include('core.api.urls')),
+    path('api/v2/', include('core.api_v2.urls')),
     path('timetable', views.TimetableList.as_view(), name='timetable_list'),
     path('timetable/add/term/<int:pk>', views.TimetableCreate.as_view(), name='timetable_create'),
     path('timetable/edit/<int:pk>', views.TimetableUpdate.as_view(), name='timetable_update'),
