@@ -7,95 +7,105 @@
 {% load i18n %}
 
 {% block deps %}
-<link rel="stylesheet" href="{% static 'core/css/secondary.css' %}">
-{% block hd %}
-{% endblock %}
+    <link rel="stylesheet" href="{% static 'core/css/secondary.css' %}">
+    {% block hd %}
+    {% endblock %}
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    <ul class="sidenav secondnav" id="secondary-out">
-        <li>
-            <a class="sidenav-close" href="{% url 'profile_redirect' %}">Profile</a>
-        </li>
-        <li>
-            <a class="sidenav-close" href="{% url 'timetable_list' %}">Timetable</a>
-        </li>
-        <li class="divider"></li>
-        {% if user.is_staff %}
-            {% if perms.core.announcement_add and perms.core.event_add %} 
-                {% if perms.core.announcement_add %}
-                    <li>
-                        <a class="link sidenav-close" href="{% url 'admin:core_announcement_add' %}">Add announcement</a>
-                    </li>
-                {% endif %}
-                {% if perms.core.event_add %}
-                    <li>
-                        <a class="link sidenav-close" href="{% url 'admin:core_event_add' %}">Add event</a>
-                    </li>
-                {% endif %}
-                    <li class="divider"></li>
-            {% endif %} 
-            {% if user.organizations_owning.all %} 
-                 {% for organization in user.organizations_owning.all %}
-                     <li>
-                         <a class="sidenav-close" href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
-                     </li>
-                 {% endfor %}
-                <li class="divider"></li>
-            {% endif %} 
-        {% endif %}
-        <li><a href="{% url 'account_logout' %}" class="sidenav-close">Logout</a></li>
-    </ul>
-
-    <a href="#" data-target="secondary-out" class="sidenav-trigger secondnav-trigger"><i class="zmdi zmdi-menu"></i></a>
-
-    <div class="secondary-nav-wrapper">
-        <ul class="secondary-nav">
+    <div class="container">
+        <ul class="sidenav secondnav" id="secondary-out">
             <li>
-            {% url 'profile_detail' slug=profile.username as profile_detail %}
-                <a class="link{% if request.path == profile_detail %} current{% endif %}" href="{% url 'profile_redirect' %}">Profile</a>
+                <a class="sidenav-close" href="{% url 'profile_redirect' %}">Profile</a>
             </li>
             <li>
-                {% url 'timetable_list' as timetable %}
-                <a class="link{% if request.path == timetable %} current{% endif %}" href="{% url 'timetable_list' %}">Timetable</a>
+                <a class="sidenav-close" href="{% url 'timetable_list' %}">Timetable</a>
             </li>
-            <hr>
-            {% if user.is_staff %}
-                 {% if perms.core.announcement_add and perms.core.event_add %} 
-                     {% if perms.core.announcement_add %}
-                         <li>
-                             <a class="link" href="{% url 'admin:core_announcement_add' %}">Announcements</a>
-                         </li>
-                     {% endif %} 
-                     {% if perms.core.event_add %} 
-                         <li>
-                             <a class="link" href="{% url 'admin:core_event_add' %}">Events</a>
-                         </li>
-                     {% endif %} 
-                     <hr>
+            <li class="divider"></li>
+            {% if request.user.is_authenticated %}
+                {% if user.is_staff %}
+                    {% if perms.core.announcement_add and perms.core.event_add %}
+                        {% if perms.core.announcement_add %}
+                            <li>
+                                <a class="link sidenav-close" href="{% url 'admin:core_announcement_add' %}">Add
+                                    announcement</a>
+                            </li>
+                        {% endif %}
+                        {% if perms.core.event_add %}
+                            <li>
+                                <a class="link sidenav-close" href="{% url 'admin:core_event_add' %}">Add event</a>
+                            </li>
+                        {% endif %}
+                        <li class="divider"></li>
+                    {% endif %}
+                    {% if user.organizations_owning.all %}
+                        {% for organization in user.organizations_owning.all %}
+                            <li>
+                                <a class="sidenav-close"
+                                   href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
+                            </li>
+                        {% endfor %}
+                        <li class="divider"></li>
+                    {% endif %}
                 {% endif %}
-                {% if user.organizations_owning.all %} 
-                {% for organization in user.organizations_owning.all %}
-                    <li>
-                        <a class="link" href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
-                    </li>
-                {% endfor %}
-                <hr>
-                {% endif %}
-            {% endif %} 
-            <li>
-                <a class="link" href="{% url 'account_logout' %}">Logout</a>
-            </li>
-<!--             <script>
-                $(document).ready(function(){
-                    $('.dropdown-trigger').dropdown();
-                    $('.sidenav').sidenav();
-                });
-            </script> -->
+                <li><a href="{% url 'account_logout' %}" class="sidenav-close">Logout</a></li>
+            {% else %}
+                <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
+                <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
+            {% endif %}
         </ul>
+
+        <a href="#" data-target="secondary-out" class="sidenav-trigger secondnav-trigger"><i class="zmdi zmdi-menu"></i></a>
+
+        <div class="secondary-nav-wrapper">
+            <ul class="secondary-nav">
+                <li>
+                    {% url 'profile_detail' slug=profile.username as profile_detail %}
+                    <a class="link{% if request.path == profile_detail %} current{% endif %}"
+                       href="{% url 'profile_redirect' %}">Profile</a>
+                </li>
+                <li>
+                    {% url 'timetable_list' as timetable %}
+                    <a class="link{% if request.path == timetable %} current{% endif %}"
+                       href="{% url 'timetable_list' %}">Timetable</a>
+                </li>
+                <hr>
+                {% if user.is_staff %}
+                    {% if perms.core.announcement_add and perms.core.event_add %}
+                        {% if perms.core.announcement_add %}
+                            <li>
+                                <a class="link" href="{% url 'admin:core_announcement_add' %}">Announcements</a>
+                            </li>
+                        {% endif %}
+                        {% if perms.core.event_add %}
+                            <li>
+                                <a class="link" href="{% url 'admin:core_event_add' %}">Events</a>
+                            </li>
+                        {% endif %}
+                        <hr>
+                    {% endif %}
+                    {% if user.organizations_owning.all %}
+                        {% for organization in user.organizations_owning.all %}
+                            <li>
+                                <a class="link"
+                                   href="{% url 'admin:core_organization_change' organization.pk %}">{{ organization.name }}</a>
+                            </li>
+                        {% endfor %}
+                        <hr>
+                    {% endif %}
+                {% endif %}
+                <li>
+                    <a class="link" href="{% url 'account_logout' %}">Logout</a>
+                </li>
+                <!--             <script>
+                                $(document).ready(function(){
+                                    $('.dropdown-trigger').dropdown();
+                                    $('.sidenav').sidenav();
+                                });
+                            </script> -->
+            </ul>
+        </div>
+        {% block content %}
+        {% endblock %}
     </div>
-    {% block content %}
-    {% endblock %}
-</div>
 {% endblock %}
