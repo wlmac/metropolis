@@ -1,13 +1,18 @@
+import operator
+
 from django.db import models
+from django.urls import reverse
+
+from metropolis import settings
 from .choices import announcement_status_choices
 from ..utils.file_upload import file_upload_path_generator
-from metropolis import settings
-from django.urls import reverse
+
 
 # Create your models here.
 
 class Post(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL, related_name="%(class)ss_authored")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL,
+                               related_name="%(class)ss_authored")
     created_date = models.DateTimeField(auto_now_add=True)
     last_modified_date = models.DateTimeField(auto_now=True)
 
@@ -22,13 +27,18 @@ class Post(models.Model):
         abstract = True
         ordering = ['-last_modified_date']
 
-class Announcement(Post):
-    organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="announcements", related_query_name="announcement")
 
-    is_public = models.BooleanField(default=True, help_text='Whether if this announcement pertains to the general school population, not just those in the organization.')
-    supervisor = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL, related_name="announcements_approved")
+class Announcement(Post):
+    organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="announcements",
+                                     related_query_name="announcement")
+
+    is_public = models.BooleanField(default=True,
+                                    help_text='Whether if this announcement pertains to the general school population, not just those in the organization.')
+    supervisor = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL,
+                                   related_name="announcements_approved")
     status = models.CharField(max_length=1, choices=announcement_status_choices, default='p')
-    rejection_reason = models.CharField(max_length=140, blank=True, verbose_name='reason for rejection', help_text='Only fill this field in if you are rejecting this announcement.')
+    rejection_reason = models.CharField(max_length=140, blank=True, verbose_name='reason for rejection',
+                                        help_text='Only fill this field in if you are rejecting this announcement.')
 
     def get_absolute_url(self):
         return reverse("announcement_detail", args=[self.pk])
@@ -45,14 +55,19 @@ class Announcement(Post):
         if user is not None and user.is_authenticated:
             feed_all = (feed_all | approved_announcements.filter(organization__member=user)).distinct()
 
+        feed_all = sorted(feed_all, key=operator.attrgetter('last_modified_date'))[::-1]
+
         return feed_all
+
 
 def featured_image_file_path_generator(instance, file_name):
     return file_upload_path_generator('featured_image')(instance, file_name)
 
+
 class BlogPost(Post):
     slug = models.SlugField(unique=True)
-    featured_image = models.ImageField(upload_to=featured_image_file_path_generator, default='featured_image/default.png')
+    featured_image = models.ImageField(upload_to=featured_image_file_path_generator,
+                                       default='featured_image/default.png')
     is_published = models.BooleanField(default=False)
 
     def get_absolute_url(self):
