@@ -20,9 +20,11 @@
                     {{blogpost.author.username|user}}
                     <br>
                     <dot>•</dot> posted {{ blogpost.created_date|date:"M. j, Y" }}{{ blogpost.created_date|date:", g:i A"|lower }}
+                    <!-- see https://github.com/wlmac/metropolis/pull/75#discussion_r721886692
                     {% if blogpost.last_modified_date != blogpost.created_date %}
-                    (Edited)
+                    (Edited on {{ blogpost.created_date|date:"M. j, Y" }}{{ blogpost.created_date|date:", g:i A"|lower }})
                     {% endif %}
+                    -->
                 </div>
             </div>
         </div>
