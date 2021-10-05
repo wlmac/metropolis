@@ -4,7 +4,7 @@ from ... import models
 
 
 class TermSerializer(serializers.ModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
+    id = serializers.PrimaryKeyRelatedField(queryset=models.Term.objects.all())
 
     class Meta:
         model = models.Term
