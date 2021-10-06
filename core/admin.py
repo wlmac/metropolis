@@ -4,7 +4,6 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from django.core.mail import send_mail
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -14,6 +13,7 @@ from martor.widgets import AdminMartorWidget
 from metropolis import settings
 from . import models
 from .forms import OrganizationAdminForm, TermAdminForm, EventAdminForm
+from .util import send_mail
 
 User = get_user_model()
 
@@ -257,6 +257,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                             render_to_string('core/email/verify_announcement.txt', email_template_context),
                             None,
                             [teacher.email],
+                            bcc=[settings.DEFAULT_FROM_EMAIL],
                             html_message=render_to_string('core/email/verify_announcement.html', email_template_context)
                         )
 
