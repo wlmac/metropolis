@@ -6,7 +6,7 @@ from ..utils.tag_color import get_tag_color
 # Create your models here.
 
 class Tag(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, unique=True)
     description = models.TextField(blank=True)
     organization = models.ForeignKey(Organization, blank=True, null=True, default=None, on_delete=models.CASCADE)
 
