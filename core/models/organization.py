@@ -55,6 +55,7 @@ class Organization(models.Model):
 
     class Meta:
         verbose_name = 'club'
+        verbose_name_plural = 'clubs'
 
 
 class OrganizationURL(models.Model):
@@ -63,3 +64,7 @@ class OrganizationURL(models.Model):
 
     def __str__(self):
         return self.url
+
+    class Meta:
+        verbose_name = 'Club URL'
+        verbose_name_plural = 'Club URLs'
