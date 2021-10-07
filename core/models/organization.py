@@ -67,4 +67,4 @@ class OrganizationURL(models.Model):
 
     class Meta:
         verbose_name = 'Club URL'
-        verbose_name_plural = 'Clubs URL'
+        verbose_name_plural = 'Club URLs'
