@@ -10,10 +10,10 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
+from core.utils.mail import send_mail
 from metropolis import settings
 from . import models
 from .forms import OrganizationAdminForm, TermAdminForm, EventAdminForm
-from .util import send_mail
 
 User = get_user_model()
 
