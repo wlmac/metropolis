@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
 
@@ -13,7 +14,9 @@ class OrganizationList(ListView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['organizations'] = sorted(models.Organization.objects.all(), key=lambda org: org.members.count())[::-1]
+        context['organizations'] = models.Organization.objects \
+            .annotate(num_member=Count('member')) \
+            .order_by('-num_member')
         return context
 
     def get_ordering(self):
