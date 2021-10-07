@@ -209,6 +209,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
         return fields
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "supervisor":
+            kwargs["queryset"] = models.User.objects.filter(is_teacher=True)
         if db_field.name == "organization":
             if not request.user.is_superuser:
                 kwargs["queryset"] = models.Organization.objects.filter(
