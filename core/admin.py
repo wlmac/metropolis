@@ -241,7 +241,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                     pass
                     self.message_user(request, f'Successfully marked announcement as {obj.get_status_display()}.')
             else:
-                if obj.status != 'p':
+                if (not change) or obj.status != 'p':
                     # Notify supervisors
 
                     for teacher in obj.organization.supervisors.all():
