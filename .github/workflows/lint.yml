@@ -16,7 +16,7 @@ jobs:
           git add *
           export CHANGES=$(git diff --cached | wc -l)
           echo $CHANGES
-      - name: Changes Require
+      - name: Changes Required
         if: env.CHANGES == 0
         run: |
           git diff --cached
