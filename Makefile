@@ -3,15 +3,15 @@ setup-git:
 	echo "make pre-commit" > .git/hooks/pre-commit
 	chmod +x .git/hooks/pre-commit
 
-pre-commit: check-fmt;
+pre-commit: fmt-check;
 
-fmt:
+fmt-check:
 	black --version
 	python3 -m black .
 	isort --version
 	python3 -m isort .
 
-check-fmt:
+fmt:
 	black --version
 	python3 -m black --check .
 	isort --version

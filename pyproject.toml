@@ -1,3 +1,4 @@
 [tool.isort]
-profile = "black"
+profile = "black" # we use check for make fmt*
+skip_gitignore = true # no need to fmt ignored
 
