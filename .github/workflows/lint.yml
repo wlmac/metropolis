@@ -1,13 +1,22 @@
-name: reviewdog
-on: [pull_request]
+name: lint
+on: [push]
 jobs:
   linter_name:
-    name: runner / black formatter
+    name: runner
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: reviewdog/action-black@v2
+      - name: lint using isort
+        uses: jamescurtin/isort-action@master
         with:
-          github_token: ${{ secrets.github_token }}
-          reporter: github-check
-          level: error
+            requirementsFiles: "requirements.txt requirements-test.txt"
+      - name: lint using black
+        uses: rickstaa/action-black@v2
+        id: action_black
+        with:
+          black_args: "."
+      - name: annotate
+        if: steps.action_black.outputs.is_formatted == 'true'
+        uses: reviewdog/action-suggester@v1
+        with:
+          tool_name: blackfmt
