@@ -14,6 +14,7 @@ jobs:
         id: diff
         run: |
           git add *
+          echo "$(git diff --cached | wc -l)"
           echo "::set-output name=changes::$(git diff --cached | wc -l)"
       - name: Suggest Changes
         if: ${{ steps.diff.changes != 0 }}
