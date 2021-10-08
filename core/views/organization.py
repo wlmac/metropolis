@@ -1,22 +1,22 @@
-from django.utils.decorators import method_decorator
-from django.views.decorators.http import require_POST
-from django.views.generic import DetailView, ListView
-from django.views.generic.base import RedirectView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseForbidden
+from django.db.models import Count
 from django.shortcuts import redirect
+from django.views.generic import DetailView, ListView
+
 from ...metropolis import settings
-from .. import models
 from . import mixins
+from .. import models
+
 
 class OrganizationList(ListView, mixins.TitleMixin):
     context_object_name = "organizations"
     template_name = 'core/organization/list.html'
     title = 'Clubs'
-    model = models.Organization
 
-    def get_ordering(self):
-        return "-name"
+    def get_queryset(self):
+        return models.Organization.objects \
+            .annotate(num_member=Count('member')) \
+            .order_by('-num_member')
+
 
 class OrganizationDetail(DetailView, mixins.TitleMixin):
     model = models.Organization
