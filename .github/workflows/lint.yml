@@ -6,16 +6,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: lint using isort
-        uses: jamescurtin/isort-action@master
-        with:
-            requirementsFiles: "requirements.txt requirements-test.txt"
-      - name: lint using black
-        uses: rickstaa/action-black@v1.1.7
-        id: action_black
-        with:
-          black_args: "."
-      - name: annotate # TODO(colourdelete): check if we need the `if:`
+      - name: fmt
+        run: make fmt
+      - name: diff
+        id: diff
+        run: echo "::set-output name=changes::$(git diff --stages | wc -l)"
+      - name: annotate
+        if: ${{ steps.diff.changes != 0 }}
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: blackfmt
