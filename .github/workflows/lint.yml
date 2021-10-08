@@ -14,7 +14,7 @@ jobs:
         id: diff
         run: |
           git add *
-          export CHANGES=$(git diff --cached | wc -l)"
+          export CHANGES=$(git diff --cached | wc -l)
           echo $CHANGES
       - name: Suggest Changes
         if: "env.CHANGES != 0"
