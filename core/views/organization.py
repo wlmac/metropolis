@@ -5,6 +5,7 @@ from django.views.generic.base import RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
+from ...metropolis import settings
 from .. import models
 from . import mixins
 
@@ -23,7 +24,7 @@ class OrganizationDetail(DetailView, mixins.TitleMixin):
     template_name = "core/organization/detail.html"
 
     def get_title(self):
-        return "Organization " + self.get_object().name
+        return f'{self.get_object().name} - {settings.PWA_APP_NAME}'
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not self.get_object().is_open:
