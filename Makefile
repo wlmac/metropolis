@@ -10,13 +10,13 @@ pre-commit: fmt-check;
 fmt-setup:
 	python3 -m pip install --upgrade black isort
 
-fmt-check:
+fmt:
 	python3 -m black --version
 	python3 -m black .
 	python3 -m isort --version
 	python3 -m isort .
 
-fmt:
+fmt-check:
 	python3 -m black --version
 	python3 -m black --check .
 	python3 -m isort --version
