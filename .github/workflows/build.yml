@@ -12,6 +12,8 @@ on:
       - 'Dockerfile'
       - '.dockerignore'
       - '.github/workflows/build.yml'
+permissions:
+  packages: write
 jobs:
   build:
     name: build
@@ -25,8 +27,9 @@ jobs:
       with:
         images: |
           ghcr.io/${{ github.repository }}
+        flavor: |
+          latest=auto
         tags: |
-          type=ref,event=branch
           type=sha
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1
