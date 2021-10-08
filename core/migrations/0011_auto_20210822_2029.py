@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0010_tag_color'),
+        ("core", "0010_tag_color"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='end_date',
+            model_name="event",
+            name="end_date",
             field=models.DateTimeField(),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='start_date',
+            model_name="event",
+            name="start_date",
             field=models.DateTimeField(),
         ),
     ]

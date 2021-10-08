@@ -1,20 +1,23 @@
-from .. import serializers
-from rest_framework import generics, permissions, status
-from rest_framework.views import APIView
-from ... import models
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from .. import utils
 import datetime
+
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from ... import models
+from .. import serializers, utils
 
 
 class TermList(generics.ListAPIView):
     queryset = models.Term.objects.all()
     serializer_class = serializers.TermSerializer
 
+
 class TermDetail(generics.RetrieveAPIView):
     queryset = models.Term.objects.all()
     serializer_class = serializers.TermSerializer
+
 
 class TermSchedule(APIView):
     def get(self, request, pk, format=None):
@@ -22,6 +25,7 @@ class TermSchedule(APIView):
         date = utils.parse_date_query_param(request)
 
         return Response(term.day_schedule(target_date=date))
+
 
 class TermScheduleWeek(APIView):
     def get(self, request, pk, format=None):
@@ -35,6 +39,7 @@ class TermScheduleWeek(APIView):
             date += datetime.timedelta(days=1)
 
         return Response(result)
+
 
 class TermCurrent(APIView):
     def get(self, request, format=None):

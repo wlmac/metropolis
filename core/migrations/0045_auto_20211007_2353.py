@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0044_organization_show_members'),
+        ("core", "0044_organization_show_members"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='organization',
-            options={'verbose_name': 'club', 'verbose_name_plural': 'clubs'},
+            name="organization",
+            options={"verbose_name": "club", "verbose_name_plural": "clubs"},
         ),
         migrations.AlterModelOptions(
-            name='organizationurl',
-            options={'verbose_name': 'Club URL', 'verbose_name_plural': 'Club URLs'},
+            name="organizationurl",
+            options={"verbose_name": "Club URL", "verbose_name_plural": "Club URLs"},
         ),
     ]

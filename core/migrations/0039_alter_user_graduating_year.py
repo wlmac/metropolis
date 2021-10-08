@@ -6,13 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0038_course_submitter'),
+        ("core", "0038_course_submitter"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='graduating_year',
-            field=models.PositiveSmallIntegerField(blank=True, choices=[(None, 'Does not apply'), (2022, 2022), (2023, 2023), (2024, 2024), (2025, 2025)], null=True),
+            model_name="user",
+            name="graduating_year",
+            field=models.PositiveSmallIntegerField(
+                blank=True,
+                choices=[
+                    (None, "Does not apply"),
+                    (2022, 2022),
+                    (2023, 2023),
+                    (2024, 2024),
+                    (2025, 2025),
+                ],
+                null=True,
+            ),
         ),
     ]

@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
     def __init__(self, **kwargs):
-        self.pk_field = kwargs.pop('pk_field', None)
+        self.pk_field = kwargs.pop("pk_field", None)
         super().__init__(**kwargs)
 
     def to_representation(self, obj):
@@ -12,6 +12,6 @@ class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
         else:
             pk = obj.pk
         return {
-            'id': pk,
-            'slug': getattr(obj, self.slug_field),
+            "id": pk,
+            "slug": getattr(obj, self.slug_field),
         }
