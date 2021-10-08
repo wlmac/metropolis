@@ -77,7 +77,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     fields = ['name', 'bio', 'extra_content', 'slug', 'show_members', 'is_open', 'applications_open', 'tags', 'owner',
               'supervisors',
               'execs', 'banner', 'icon']
-    autocomplete_fields = ['owner', 'supervisors', 'execs']
+    autocomplete_fields = ['owner', 'execs']
     search_fields = ['name']
     inlines = [
         TagInline,
@@ -134,7 +134,6 @@ class AnnouncementAdmin(admin.ModelAdmin):
     list_filter = [OrganizationListFilter, 'status']
     ordering = ['-created_date']
     empty_value_display = "Not specified."
-    autocomplete_fields = ['author', 'tags', 'organization']
     formfield_overrides = {
         django.db.models.TextField: {'widget': AdminMartorWidget},
     }
@@ -308,7 +307,6 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'organization', 'start_date', 'end_date']
     list_filter = [OrganizationListFilter]
     ordering = ['-start_date', '-end_date']
-    autocomplete_fields = ['organization', 'tags']
     search_fields = ['name']
 
     def get_queryset(self, request):
