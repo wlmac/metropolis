@@ -1,5 +1,5 @@
 name: lint
-on: [push]
+on: [ push ]
 jobs:
   linter_name:
     name: runner
@@ -14,10 +14,10 @@ jobs:
         id: diff
         run: |
           git add *
-          echo "$(git diff --cached | wc -l)"
-          echo "::set-output name=changes::$(git diff --cached | wc -l)"
+          export CHANGES=$(git diff --cached | wc -l)"
+          echo $CHANGES
       - name: Suggest Changes
-        if: ${{ steps.diff.changes != 0 }}
+        if: "env.CHANGES != 0"
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: blackfmt
