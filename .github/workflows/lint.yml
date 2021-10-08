@@ -19,5 +19,6 @@ jobs:
       - name: Changes Required
         if: env.CHANGES == 0
         run: |
+          echo ${{ toJSON(env) }}
           git diff --cached
           exit 1
