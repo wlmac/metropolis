@@ -12,7 +12,9 @@ jobs:
         run: make fmt-setup fmt
       - name: Diff
         id: diff
-        run: echo "::set-output name=changes::$(git diff --cached | wc -l)"
+        run: |
+        git add *
+        echo "::set-output name=changes::$(git diff --cached | wc -l)"
       - name: Suggest Changes
         if: ${{ steps.diff.changes != 0 }}
         uses: reviewdog/action-suggester@v1
