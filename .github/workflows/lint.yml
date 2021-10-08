@@ -13,8 +13,8 @@ jobs:
       - name: Diff
         id: diff
         run: |
-        git add *
-        echo "::set-output name=changes::$(git diff --cached | wc -l)"
+          git add *
+          echo "::set-output name=changes::$(git diff --cached | wc -l)"
       - name: Suggest Changes
         if: ${{ steps.diff.changes != 0 }}
         uses: reviewdog/action-suggester@v1
