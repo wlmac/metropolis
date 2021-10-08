@@ -10,17 +10,11 @@ class OrganizationList(ListView, mixins.TitleMixin):
     context_object_name = "organizations"
     template_name = 'core/organization/list.html'
     title = 'Clubs'
-    model = models.Organization
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['organizations'] = models.Organization.objects \
+    def get_queryset(self):
+        return models.Organization.objects \
             .annotate(num_member=Count('member')) \
             .order_by('-num_member')
-        return context
-
-    def get_ordering(self):
-        return "-name"
 
 
 class OrganizationDetail(DetailView, mixins.TitleMixin):
