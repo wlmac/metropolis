@@ -16,8 +16,8 @@ jobs:
           git add *
           export CHANGES=$(git diff --cached | wc -l)
           echo $CHANGES
-      - name: Suggest Changes
+      - name: Changes Require
         if: env.CHANGES == 0
-        uses: reviewdog/action-suggester@v1
-        with:
-          tool_name: blackfmt
+        run: |
+          git diff --cached
+          exit 1
