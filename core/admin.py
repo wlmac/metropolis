@@ -99,7 +99,7 @@ class OrganizationAdmin(admin.ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "supervisors":
-            kwargs["queryset"] = models.User.objects.filter(is_teacher=True)
+            kwargs["queryset"] = models.User.objects.filter(is_teacher=True).order_by("username")
         if db_field.name == 'execs':
             kwargs["queryset"] = models.User.objects.all().order_by("username")
         if db_field.name == 'tags':
@@ -211,16 +211,18 @@ class AnnouncementAdmin(admin.ModelAdmin):
         if db_field.name == "organization":
             if not request.user.is_superuser:
                 kwargs["queryset"] = models.Organization.objects.filter(
-                    Q(supervisors=request.user) | Q(execs=request.user)).distinct()
+                    Q(supervisors=request.user) | Q(execs=request.user)).distinct().order_by("name")
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Organization.objects.all().order_by("name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'tags':
             kwargs["queryset"] = models.Tag.objects.filter(
                 Q(organization=None) | Q(organization__owner=request.user) | Q(
-                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct().order_by("name")
             if request.user.is_superuser:
-                kwargs["queryset"] = models.Tag.objects.all()
+                kwargs["queryset"] = models.Tag.objects.all().order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     def has_change_permission(self, request, obj=None):
@@ -297,9 +299,9 @@ class BlogPostAdmin(admin.ModelAdmin):
         if db_field.name == 'tags':
             kwargs["queryset"] = models.Tag.objects.filter(
                 Q(organization=None) | Q(organization__owner=request.user) | Q(
-                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct().order_by("name")
             if request.user.is_superuser:
-                kwargs["queryset"] = models.Tag.objects.all()
+                kwargs["queryset"] = models.Tag.objects.all().order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
@@ -329,16 +331,18 @@ class EventAdmin(admin.ModelAdmin):
         if db_field.name == 'tags':
             kwargs["queryset"] = models.Tag.objects.filter(
                 Q(organization=None) | Q(organization__owner=request.user) | Q(
-                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct()
+                    organization__supervisors=request.user) | Q(organization__execs=request.user)).distinct().order_by("name")
             if request.user.is_superuser:
-                kwargs["queryset"] = models.Tag.objects.all()
+                kwargs["queryset"] = models.Tag.objects.all().order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
                 kwargs["queryset"] = models.Organization.objects.filter(
-                    Q(owner=request.user) | Q(execs=request.user)).distinct()
+                    Q(owner=request.user) | Q(execs=request.user)).distinct().order_by("name")
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Organization.objects.all().order_by("name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def has_change_permission(self, request, obj=None):
