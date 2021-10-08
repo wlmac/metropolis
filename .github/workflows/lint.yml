@@ -6,12 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: fmt
-        run: make fmt
-      - name: diff
+      - name: Setup Python
+        uses: actions/setup-python@v2.2.2
+      - name: Format
+        run: make fmt-setup fmt
+      - name: Diff
         id: diff
         run: echo "::set-output name=changes::$(git diff --stages | wc -l)"
-      - name: annotate
+      - name: Suggest Changes
         if: ${{ steps.diff.changes != 0 }}
         uses: reviewdog/action-suggester@v1
         with:
