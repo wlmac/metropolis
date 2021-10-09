@@ -232,7 +232,7 @@ function initializeCard(curEvent, date, working = null) {
     working.querySelector(".event_description").innerHTML = curEvent.description
     // the background color will be the same as the color of the first tag
     working.querySelector(".leftPanel").style = "background-color: " + (curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue")
-    working.querySelector(".event_host_name").innerHTML = curEvent.organization
+    working.querySelector(".event_host_name").innerHTML = curEvent.organization.name
     // since we cap the height of the event, which it's clicked, we can expand it
     $(working.querySelector(".event_description")).click(function () {
         $(this).toggleClass("truncate-100")

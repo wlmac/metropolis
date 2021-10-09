@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from core.api.serializers.custom import PrimaryKeyAndSlugRelatedField
-
-from ... import models
 from .tag import TagSerializer
+from .organization import OrganizationSerializer
+from ... import models
 
 
 class TermSerializer(serializers.ModelSerializer):
@@ -19,9 +19,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    organization = PrimaryKeyAndSlugRelatedField(
-        slug_field="name", queryset=models.Organization.objects.all()
-    )
+    organization = OrganizationSerializer()
     tags = TagSerializer(many=True)
 
     class Meta:
