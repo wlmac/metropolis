@@ -15,6 +15,9 @@ class MartorImageUpload(APIView):
     parser_classes = [parsers.MultiPartParser]
 
     def post(self, request):
+        if not request.user.is_staff:
+            return Response({'status': 400, 'error': 'You are currently unauthorized to upload images. Please contact an administrator.'})
+
         if 'markdown-image-upload' not in request.FILES:
             return Response({'status': 400, 'error': 'Missing image file.'})
 
