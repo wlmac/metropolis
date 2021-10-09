@@ -181,7 +181,8 @@ class OrganizationAdminForm(forms.ModelForm):
         execs = cleaned_data.get("execs")
 
         if owner not in execs:
-            raise forms.ValidationError({'execs': 'The owner must also be an exec.'})
+            raise forms.ValidationError({"execs": "The owner must also be an exec."})
+
 
 class TermAdminForm(forms.ModelForm):
     timetable_format = forms.ChoiceField(widget=forms.Select())

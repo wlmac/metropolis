@@ -18,10 +18,15 @@ class MartorImageUpload(APIView):
 
     def post(self, request):
         if not request.user.is_staff:
-            return Response({'status': 400, 'error': 'You are currently unauthorized to upload images. Please contact an administrator.'})
+            return Response(
+                {
+                    "status": 400,
+                    "error": "You are currently unauthorized to upload images. Please contact an administrator.",
+                }
+            )
 
-        if 'markdown-image-upload' not in request.FILES:
-            return Response({'status': 400, 'error': 'Missing image file.'})
+        if "markdown-image-upload" not in request.FILES:
+            return Response({"status": 400, "error": "Missing image file."})
 
         image = request.FILES["markdown-image-upload"]
 
