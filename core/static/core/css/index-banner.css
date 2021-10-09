@@ -1,6 +1,8 @@
 :root{
-    --banner-text-brown: #624018;
-    --darker-brown: #553311;
+    /*--banner-text-brown: #624018;
+    --darker-brown: #553311;*/
+    --banner-text-brown: #ffa31a;
+    --darker-brown: #ff9900;
 }
 
 .banner{
