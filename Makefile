@@ -1,6 +1,6 @@
-setup-git: # TODO(colourdelete): mv to git-setup
-	rm -f .git/hooks/pre-commit
-	echo "make pre-commit" > .git/hooks/pre-commit
+git-setup:
+	mv .git/hooks/pre-commit .git/hooks/pre-commit2
+	printf "#!/bin/sh\n\nmake pre-commit" > .git/hooks/pre-commit
 	chmod +x .git/hooks/pre-commit
 
 pre-commit: fmt-check;
