@@ -5,11 +5,6 @@ git-setup:
 
 pre-commit: fmt-check;
 
-# TODO(colourdelete): only run fmt on changed files
-
-fmt-setup:
-	python3 -m pip install --upgrade black isort
-
 fmt:
 	python3 -m black .
 	git diff --name-only --cached | xargs python3 -m isort .

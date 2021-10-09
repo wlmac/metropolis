@@ -9,4 +9,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2.2.2
       - name: Format Check
-        run: make fmt-setup fmt-check
+        run: |
+          python3 -m pip install --upgrade black isort
+          python3 -m black .
+          python3 -m isort .
