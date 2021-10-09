@@ -346,6 +346,15 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ['is_superuser', 'is_staff', 'is_teacher', 'groups', 'graduating_year']
     search_fields = ['username', 'first_name', 'last_name']
 
+    def has_view_permission(self, request, obj=None):
+        if obj == None and (request.user.organizations_owning.exists() or request.user.organizations_leading.exists()):
+            return True
+        
+        return super().has_view_permission(request, obj)
+
+    def has_module_permission(self, request):
+        return request.user.has_perm('core.view_user') or request.user.is_superuser
+
 
 class TimetableAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'term']
