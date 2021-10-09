@@ -20,7 +20,7 @@ class Post(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ['-last_modified_date']
+        ordering = ['-created_date']
 
 class Announcement(Post):
     organization = models.ForeignKey("Organization", on_delete=models.CASCADE, related_name="announcements", related_query_name="announcement")
@@ -57,6 +57,3 @@ class BlogPost(Post):
 
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
-
-    class Meta:
-        ordering = ['-created_date']
