@@ -266,9 +266,12 @@ label {
     height: 64px;
     margin: none;
     width: auto;
+    background-color: var(--dark-blue);
     border-radius: 5px;
-    -webkit-box-shadow: 2px 2px 5px 3px #ddddddaa;
-            box-shadow: 2px 2px 5px 3px #ddddddaa;
+    /*-webkit-box-shadow: 2px 2px 5px 3px #ddddddaa;
+            box-shadow: 2px 2px 5px 3px #ddddddaa;*/
+    -webkit-box-shadow: 2px 2px 5px 3px #505050aa;
+            box-shadow: 2px 2px 5px 3px #505050aa;
 }
 
 .install-popup > span{
@@ -300,7 +303,8 @@ label {
 }
 
 .install-popup > div > a:not(.btn){
-    color: var(--line-grey);
+    /*color: var(--line-grey);*/
+    color: var(--mid-grey);
     font-size: 12px;
 }
 
