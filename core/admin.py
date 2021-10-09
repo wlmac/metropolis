@@ -40,7 +40,21 @@ class TermAdmin(admin.ModelAdmin):
     form = TermAdminForm
 
 
+class TagAdminForm(forms.ModelForm):
+    model = models.Tag
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean_organization(self):
+        # TODO(colourdelete): cleanup
+        if self.cleaned_data["organization"] == None:
+            raise forms.ValidationError("Tags must have an organization.")
+        return self.cleaned_data["organization"]
+
+
 class TagAdmin(admin.ModelAdmin):
+    form = TagAdminForm
     readonly_fields = ["color"]
     list_display = ["name", "organization", "color"]
     search_fields = ["name"]
