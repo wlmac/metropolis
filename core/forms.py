@@ -125,7 +125,7 @@ class OrganizationAdminForm(forms.ModelForm):
         owner = cleaned_data.get("owner")
         execs = cleaned_data.get("execs")
 
-        if owner not in execs:
+        if owner is not None and execs is not None and owner not in execs:
             raise forms.ValidationError({'execs': 'The owner must also be an exec.'})
 
 class TermAdminForm(forms.ModelForm):
