@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'Change me'
 DEBUG = False
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -62,40 +60,39 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'core.middleware.TimezoneMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
 ]
 
 ROOT_URLCONF = 'metropolis.urls'
 
 TEMPLATES = [
-        {
-            'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': ['templates'],
-            'APP_DIRS': True,
-            'OPTIONS': {
-                'context_processors': [
-                    'django.template.context_processors.debug',
-                    'django.template.context_processors.request',
-                    'django.contrib.auth.context_processors.auth',
-                    'django.contrib.messages.context_processors.messages',
-                    'django.template.context_processors.request',
-                    ],
-                },
-            },
-        ]
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
+            ],
+        },
+    },
+]
 
 WSGI_APPLICATION = 'metropolis.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-            }
-        }
-
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 # Cache
 
@@ -105,25 +102,23 @@ CACHES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-        {
-            'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-            },
-        {
-            'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-            },
-        {
-            'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-            },
-        {
-            'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-            },
-        ]
-
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -137,7 +132,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -162,10 +156,14 @@ TIMETABLE_FORMATS = {
     'pre-2020': {
         'schedules': {
             'default': [
-                {'description': {'time': '08:45 AM - 10:05 AM', 'course': 'Period 1'}, 'time': [[8, 45], [10, 5]], 'position': [{1}, {1}]},
-                {'description': {'time': '10:15 AM - 11:30 AM', 'course': 'Period 2'}, 'time': [[10, 15], [11, 30]], 'position': [{2}, {2}]},
-                {'description': {'time': '12:30 PM - 01:45 PM', 'course': 'Period 3'}, 'time': [[12, 30], [13, 45]], 'position': [{3}, {4}]},
-                {'description': {'time': '01:50 PM - 03:05 PM', 'course': 'Period 4'}, 'time': [[13, 50], [15, 5]], 'position': [{4}, {3}]},
+                {'description': {'time': '08:45 AM - 10:05 AM', 'course': 'Period 1'}, 'time': [[8, 45], [10, 5]],
+                 'position': [{1}, {1}]},
+                {'description': {'time': '10:15 AM - 11:30 AM', 'course': 'Period 2'}, 'time': [[10, 15], [11, 30]],
+                 'position': [{2}, {2}]},
+                {'description': {'time': '12:30 PM - 01:45 PM', 'course': 'Period 3'}, 'time': [[12, 30], [13, 45]],
+                 'position': [{3}, {4}]},
+                {'description': {'time': '01:50 PM - 03:05 PM', 'course': 'Period 4'}, 'time': [[13, 50], [15, 5]],
+                 'position': [{4}, {3}]},
             ]
         },
         'courses': 4,
@@ -187,9 +185,12 @@ TIMETABLE_FORMATS = {
     'covid': {
         'schedules': {
             'default': [
-                {'description': {'time': '08:45 AM - 12:30 PM (In person)', 'course': 'Morning Class'}, 'time': [[8, 45], [12, 30]], 'position': [{1}, {2}, {3}, {4}]},
-                {'description': {'time': '08:45 AM - 12:30 PM (At home)', 'course': 'Morning Class'}, 'time': [[8, 45], [12, 30]], 'position': [{2}, {1}, {4}, {3}]},
-                {'description': {'time': '02:00 PM - 03:15 PM (At home)', 'course': 'Afternoon Class'}, 'time': [[14, 0], [15, 15]], 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
+                {'description': {'time': '08:45 AM - 12:30 PM (In person)', 'course': 'Morning Class'},
+                 'time': [[8, 45], [12, 30]], 'position': [{1}, {2}, {3}, {4}]},
+                {'description': {'time': '08:45 AM - 12:30 PM (At home)', 'course': 'Morning Class'},
+                 'time': [[8, 45], [12, 30]], 'position': [{2}, {1}, {4}, {3}]},
+                {'description': {'time': '02:00 PM - 03:15 PM (At home)', 'course': 'Afternoon Class'},
+                 'time': [[14, 0], [15, 15]], 'position': [{3, 4}, {3, 4}, {1, 2}, {1, 2}]},
             ],
         },
         'courses': 2,
@@ -211,16 +212,22 @@ TIMETABLE_FORMATS = {
     'week': {
         'schedules': {
             'default': [
-                {'description': {'time': '09:00 AM - 11:30 AM', 'course': 'Morning Class'}, 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
-                {'description': {'time': '12:15 PM - 02:45 PM', 'course': 'Afternoon Class'}, 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
+                {'description': {'time': '09:00 AM - 11:30 AM', 'course': 'Morning Class'}, 'time': [[9, 0], [11, 30]],
+                 'position': [{1, 5, 7}, {3, 6, 7}]},
+                {'description': {'time': '12:15 PM - 02:45 PM', 'course': 'Afternoon Class'},
+                 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
             ],
             'late-start': [
-                {'description': {'time': '10:00 AM - 12:00 PM', 'course': 'Morning Class'}, 'time': [[10, 0], [12, 0]], 'position': [{1, 5, 7}, {3, 6, 7}]},
-                {'description': {'time': '12:45 PM - 02:45 PM', 'course': 'Afternoon Class'}, 'time': [[12, 45], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
+                {'description': {'time': '10:00 AM - 12:00 PM', 'course': 'Morning Class'}, 'time': [[10, 0], [12, 0]],
+                 'position': [{1, 5, 7}, {3, 6, 7}]},
+                {'description': {'time': '12:45 PM - 02:45 PM', 'course': 'Afternoon Class'},
+                 'time': [[12, 45], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
             ],
             'early-dismissal': [
-                {'description': {'time': '09:00 AM - 11:30 AM', 'course': 'Morning Class'}, 'time': [[9, 0], [11, 30]], 'position': [{1, 5, 7}, {3, 6, 7}]},
-                {'description': {'time': '12:15 PM - 02:45 PM', 'course': 'Afternoon Class'}, 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
+                {'description': {'time': '09:00 AM - 11:30 AM', 'course': 'Morning Class'}, 'time': [[9, 0], [11, 30]],
+                 'position': [{1, 5, 7}, {3, 6, 7}]},
+                {'description': {'time': '12:15 PM - 02:45 PM', 'course': 'Afternoon Class'},
+                 'time': [[12, 15], [14, 45]], 'position': [{2, 5, 7}, {4, 6, 7}]},
             ],
         },
         'courses': 4,
@@ -289,9 +296,23 @@ ANNOUNCEMENTS_CUSTOM_FEEDS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+}
+
+# SSO (OAuth) Settings
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {
+        'me_meta': 'Read your account data',
+        'me_ann': 'Read your announcement feed',
+        'me_schedule': 'Read your schedules',
+        'me_timetable': 'Read your timetables',
+    },
+
+    'CLIENT_ID_GENERATOR_CLASS': 'oauth2_provider.generators.ClientIdGenerator',
 }
 
 # CORS settings
@@ -423,7 +444,6 @@ SILENCED_SYSTEM_CHECKS = ['urls.W002']
 API_VERSION = "3.1.0"
 
 DEFAULT_TIMEZONE = 'UTC'
-
 
 try:
     from metropolis.config import *

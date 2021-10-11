@@ -1,9 +1,11 @@
-from .. import serializers
-from rest_framework import generics, permissions
-from rest_framework.views import APIView
-from ... import models
-from django.db.models import Q
+from oauth2_provider.contrib.rest_framework import TokenHasScope
+from rest_framework import permissions
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .. import serializers
+from ... import models
+
 
 class AnnouncementListAll(APIView):
     permission_classes = [permissions.AllowAny]
@@ -13,8 +15,10 @@ class AnnouncementListAll(APIView):
         serializer = serializers.AnnouncementSerializer(announcements, many=True)
         return Response(serializer.data)
 
+
 class AnnouncementListMyFeed(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    required_scopes = ['me_ann']
 
     def get(self, request, format=None):
         announcements = request.user.get_feed()
