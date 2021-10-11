@@ -30,7 +30,7 @@ class Post(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ["-last_modified_date"]
+        ordering = ['-created_date']
 
 
 class Announcement(Post):

@@ -49,16 +49,12 @@ class TagAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(
-            Q(organization__owner=request.user) | Q(organization__execs=request.user)
-        ).distinct()
+        return qs.filter(organization__execs=request.user)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
-                kwargs["queryset"] = models.Organization.objects.filter(
-                    Q(owner=request.user) | Q(execs=request.user)
-                ).distinct()
+                kwargs["queryset"] = models.Organization.objects.filter(execs=request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -116,16 +112,11 @@ class OrganizationAdmin(admin.ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "supervisors":
-            kwargs["queryset"] = models.User.objects.filter(is_teacher=True)
-        if db_field.name == "execs":
+            kwargs["queryset"] = models.User.objects.filter(is_teacher=True).order_by("username")
+        if db_field.name == 'execs':
             kwargs["queryset"] = models.User.objects.all().order_by("username")
-        if db_field.name == "tags":
-            kwargs["queryset"] = models.Tag.objects.filter(
-                Q(organization=None)
-                | Q(organization__owner=request.user)
-                | Q(organization__supervisors=request.user)
-                | Q(organization__execs=request.user)
-            ).distinct()
+        if db_field.name == 'tags':
+            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__execs=request.user)).distinct()
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Tag.objects.all()
         return super().formfield_for_manytomany(db_field, request, **kwargs)
@@ -166,11 +157,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(
-            Q(organization__owner=request.user)
-            | Q(organization__supervisors=request.user)
-            | Q(organization__execs=request.user)
-        ).distinct()
+        return qs.filter(Q(organization__supervisors=request.user) | Q(
+            organization__execs=request.user)).distinct()
 
     def get_readonly_fields(self, request, obj=None):
         if obj == None or request.user.is_superuser:
@@ -286,22 +274,18 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
-            if not request.user.is_superuser:
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Organization.objects.all().order_by("name")
+            else:
                 kwargs["queryset"] = models.Organization.objects.filter(
-                    Q(supervisors=request.user) | Q(execs=request.user)
-                ).distinct()
+                    Q(supervisors=request.user) | Q(execs=request.user)).distinct().order_by("name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "tags":
-            kwargs["queryset"] = models.Tag.objects.filter(
-                Q(organization=None)
-                | Q(organization__owner=request.user)
-                | Q(organization__supervisors=request.user)
-                | Q(organization__execs=request.user)
-            ).distinct()
+        if db_field.name == 'tags':
+            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__execs=request.user)).distinct().order_by("name")
             if request.user.is_superuser:
-                kwargs["queryset"] = models.Tag.objects.all()
+                kwargs["queryset"] = models.Tag.objects.all().order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     def has_change_permission(self, request, obj=None):
@@ -402,13 +386,9 @@ class BlogPostAdmin(admin.ModelAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "tags":
             kwargs["queryset"] = models.Tag.objects.filter(
-                Q(organization=None)
-                | Q(organization__owner=request.user)
-                | Q(organization__supervisors=request.user)
-                | Q(organization__execs=request.user)
-            ).distinct()
+                Q(organization=None) | Q(organization__execs=request.user)).distinct().order_by("name")
             if request.user.is_superuser:
-                kwargs["queryset"] = models.Tag.objects.all()
+                kwargs["queryset"] = models.Tag.objects.all().order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
@@ -422,11 +402,7 @@ class EventAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(
-            Q(organization__owner=request.user)
-            | Q(organization__supervisors=request.user)
-            | Q(organization__execs=request.user)
-        ).distinct()
+        return qs.filter(organization__execs=request.user)
 
     def get_exclude(self, request, obj=None):
         if not request.user.is_superuser:
@@ -438,23 +414,18 @@ class EventAdmin(admin.ModelAdmin):
         return super().get_form(request, obj, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "tags":
-            kwargs["queryset"] = models.Tag.objects.filter(
-                Q(organization=None)
-                | Q(organization__owner=request.user)
-                | Q(organization__supervisors=request.user)
-                | Q(organization__execs=request.user)
-            ).distinct()
+        if db_field.name == 'tags':
+            kwargs["queryset"] = models.Tag.objects.filter(Q(organization=None) | Q(organization__execs=request.user)).distinct().order_by("name")
             if request.user.is_superuser:
-                kwargs["queryset"] = models.Tag.objects.all()
+                kwargs["queryset"] = models.Tag.objects.all().order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
-                kwargs["queryset"] = models.Organization.objects.filter(
-                    Q(owner=request.user) | Q(execs=request.user)
-                ).distinct()
+                kwargs["queryset"] = models.Organization.objects.filter(execs=request.user).order_by("name")
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Organization.objects.all().order_by("name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def has_change_permission(self, request, obj=None):
@@ -477,6 +448,15 @@ class UserAdmin(admin.ModelAdmin):
         "graduating_year",
     ]
     search_fields = ["username", "first_name", "last_name"]
+
+    def has_view_permission(self, request, obj=None):
+        if obj == None and (request.user.organizations_owning.exists() or request.user.organizations_leading.exists()):
+            return True
+        
+        return super().has_view_permission(request, obj)
+
+    def has_module_permission(self, request):
+        return request.user.has_perm('core.view_user') or request.user.is_superuser
 
 
 class TimetableAdmin(admin.ModelAdmin):
