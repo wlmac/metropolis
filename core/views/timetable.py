@@ -6,12 +6,6 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DetailView, ListView
-from django.views.generic.edit import (CreateView, FormMixin, FormView,
-                                       UpdateView)
-
-from .. import models
-from ..forms import (AddCourseForm, AddTimetableSelectTermForm,
-                     TimetableSelectCoursesForm)
 from django.views.generic.edit import CreateView, FormMixin, FormView, UpdateView
 
 from .. import models

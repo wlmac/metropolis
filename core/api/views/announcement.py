@@ -1,6 +1,5 @@
-from oauth2_provider.contrib.rest_framework import TokenHasScope
-from rest_framework import permissions
 from django.db.models import Q
+from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
