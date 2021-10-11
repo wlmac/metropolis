@@ -8,4 +8,4 @@ class TermSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Term
-        fields = '__all__'
+        fields = "__all__"

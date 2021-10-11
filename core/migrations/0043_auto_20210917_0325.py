@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0042_auto_20210916_0150'),
+        ("core", "0042_auto_20210916_0150"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='organization',
-            old_name='long_description',
-            new_name='extra_content',
+            model_name="organization",
+            old_name="long_description",
+            new_name="extra_content",
         ),
         migrations.AlterField(
-            model_name='organization',
-            name='bio',
+            model_name="organization",
+            name="bio",
             field=models.TextField(blank=True),
         ),
     ]

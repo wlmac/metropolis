@@ -7,13 +7,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0039_alter_user_graduating_year'),
+        ("core", "0039_alter_user_graduating_year"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='organization',
-            name='supervisors',
-            field=models.ManyToManyField(blank=True, related_name='organizations_supervising', to=settings.AUTH_USER_MODEL),
+            model_name="organization",
+            name="supervisors",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="organizations_supervising",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
