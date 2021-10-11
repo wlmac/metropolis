@@ -12,6 +12,14 @@ from django.views.generic.edit import (CreateView, FormMixin, FormView,
 from .. import models
 from ..forms import (AddCourseForm, AddTimetableSelectTermForm,
                      TimetableSelectCoursesForm)
+from django.views.generic.edit import CreateView, FormMixin, FormView, UpdateView
+
+from .. import models
+from ..forms import (
+    AddCourseForm,
+    AddTimetableSelectTermForm,
+    TimetableSelectCoursesForm,
+)
 from . import mixins
 
 

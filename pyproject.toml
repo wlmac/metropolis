@@ -1,0 +1,7 @@
+[tool.isort]
+profile = "black" # we use check for make fmt*
+skip_gitignore = true # no need to fmt ignored
+skip = "core/migrations" # no need to format migrations
+
+[tool.black]
+extend_exclude = "core/migrations/.*" # see tool.isort.skip

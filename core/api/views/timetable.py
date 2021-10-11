@@ -1,8 +1,14 @@
 from django.shortcuts import get_object_or_404
 from oauth2_provider.contrib.rest_framework import TokenHasScope
+import datetime
+
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from metropolis.settings import TIMETABLE_FORMATS
 
 from ... import models
 from .. import serializers, utils
