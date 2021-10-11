@@ -5,20 +5,19 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .. import serializers
-from .. import utils
 from ... import models
+from .. import serializers, utils
 
 
 class UserDetail(generics.RetrieveAPIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
-    lookup_field = 'username'
+    lookup_field = "username"
 
 
 class UserMe(APIView):
     permission_classes = [permissions.IsAuthenticated, TokenHasScope]
-    required_scopes = ['me_meta']
+    required_scopes = ["me_meta"]
 
     def get(self, request, format=None):
         serializer = serializers.UserSerializer(request.user)
@@ -27,7 +26,7 @@ class UserMe(APIView):
 
 class UserMeSchedule(APIView):
     permission_classes = [permissions.IsAuthenticated, TokenHasScope]
-    required_scopes = ['me_schedule']
+    required_scopes = ["me_schedule"]
 
     def get(self, request, format=None):
         date = utils.parse_date_query_param(request)
@@ -37,7 +36,7 @@ class UserMeSchedule(APIView):
 
 class UserMeScheduleWeek(APIView):
     permission_classes = [permissions.IsAuthenticated, TokenHasScope]
-    required_scopes = ['me_schedule']
+    required_scopes = ["me_schedule"]
 
     def get(self, request, format=None):
         date = utils.parse_date_query_param(request)
@@ -53,7 +52,7 @@ class UserMeScheduleWeek(APIView):
 
 class UserMeTimetable(APIView):
     permission_classes = [permissions.IsAuthenticated, TokenHasScope]
-    required_scopes = ['me_timetable']
+    required_scopes = ["me_timetable"]
 
     def get(self, request, format=None):
         current_timetable = request.user.get_current_timetable()

@@ -1,13 +1,11 @@
 from django.shortcuts import get_object_or_404
 from oauth2_provider.contrib.rest_framework import TokenHasScope
-from rest_framework import generics, permissions
-from rest_framework import status
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .. import serializers
-from .. import utils
 from ... import models
+from .. import serializers, utils
 
 
 class IsOwner(permissions.BasePermission):
@@ -17,7 +15,7 @@ class IsOwner(permissions.BasePermission):
 
 class TimetableList(APIView):
     permission_classes = [permissions.IsAuthenticated, TokenHasScope]
-    required_scopes = ['me_timetable']
+    required_scopes = ["me_timetable"]
 
     def get(self, request):
         timetables = models.Timetable.objects.filter(owner=request.user)
@@ -27,7 +25,7 @@ class TimetableList(APIView):
 
 class TimetableSchedule(APIView):
     permissions_classes = [permissions.IsAuthenticated, TokenHasScope]
-    required_scopes = ['me_timetable', 'me_schedule']
+    required_scopes = ["me_timetable", "me_schedule"]
 
     def get(self, request, pk):
         timetable = get_object_or_404(models.Timetable, pk=pk)

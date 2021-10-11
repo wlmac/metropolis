@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0018_auto_20210830_0926'),
+        ("core", "0018_auto_20210830_0926"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='organization',
-            name='banner',
-            field=models.ImageField(default='banners/default.png', upload_to='banners'),
+            model_name="organization",
+            name="banner",
+            field=models.ImageField(default="banners/default.png", upload_to="banners"),
         ),
         migrations.AlterField(
-            model_name='organization',
-            name='icon',
-            field=models.ImageField(default='icons/default.png', upload_to='icons'),
+            model_name="organization",
+            name="icon",
+            field=models.ImageField(default="icons/default.png", upload_to="icons"),
         ),
         migrations.AlterField(
-            model_name='organization',
-            name='slug',
+            model_name="organization",
+            name="slug",
             field=models.SlugField(unique=True),
         ),
     ]

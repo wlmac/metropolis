@@ -3,8 +3,8 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .. import serializers
 from ... import models
+from .. import serializers
 
 
 class AnnouncementListAll(APIView):
@@ -18,7 +18,7 @@ class AnnouncementListAll(APIView):
 
 class AnnouncementListMyFeed(APIView):
     permission_classes = [permissions.IsAuthenticated, TokenHasScope]
-    required_scopes = ['me_ann']
+    required_scopes = ["me_ann"]
 
     def get(self, request, format=None):
         announcements = request.user.get_feed()
