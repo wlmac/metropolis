@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'martor',
     'django_select2',
     'pwa',
+    'oauth2_provider',
 ]
 
 MIDDLEWARE = [
