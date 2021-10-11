@@ -29,8 +29,8 @@ workbox.precaching.precacheAndRoute([
     {url: '/static/css/material-design-iconic-font.min.css', revision: '2.2.0'},
     {url: '/static/fonts/Material-Design-Iconic-Font.woff2', revision: '2.2.0'},
     {url: '/static/core/img/logo-light-transparent.png', revision: '1'},
-    {url: '/static/core/img/logo-dark-transparent.png', revision: '1'},
-    {url: '/static/core/img/top-banner.jpeg', revision: '1'},
+    {url: '/static/core/img/logo-dark-transparent.png', revision: '2'},
+    {url: '/static/core/img/top-banner.png', revision: '1'},
 ], {
     directoryIndex: null,
     cleanUrls: false,
