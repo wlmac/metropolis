@@ -9,8 +9,8 @@ import "google/protobuf/timestamp.proto";
 message Nothing {}
 
 message Timeframe {
-	google.protobuf.Timestamp start = 0;
-	google.protobuf.Timestamp end = 1;
+  google.protobuf.Timestamp start = 0;
+  google.protobuf.Timestamp end = 1;
 }
 
 // User
@@ -28,18 +28,14 @@ message User {
 	string tz = 5;
 	uint32 graduates = 6;
 	repeated OrgId orgs = 7;
-	repeated TagId following = 8;
+	repeated Tag following = 8;
 }
 
 // Tag
 
-message TagId { int id = 0; }
-
-message TagSlug { string slug = 0; }
-
 message Tag {
-	TagId id = 0;
-	TagSlug slug = 1;
+	int id = 0;
+	string slug = 1;
 	string color = 2;
 }
 
@@ -51,7 +47,7 @@ message Ann {
 	AnnId id = 0;
 	UserId author = 1;
 	OrgId org = 2;
-	repeated TagId tags = 3;
+	repeated Tag tags = 3;
 	google.protobuf.Timestamp created = 4;
 	google.protobuf.Timestamp lastModified = 5;
 	string title = 6;
@@ -71,7 +67,7 @@ message Org {
 	UserId owner = 2;
 	repeated UserId supervisors = 3;
 	repeated UserId execs = 4;
-	repeated TagId tags = 5;
+	repeated Tag tags = 5;
 	string name = 6;
 	string bio = 7;
 	string extra = 8;
@@ -90,7 +86,7 @@ message Org {
 
 // Events
 
-message EvId { int id = 0; }
+message EventId { int id = 0; }
 
 message Event {
 	EventId id = 0;
@@ -120,5 +116,39 @@ message Term {
 		COVID = 1;
 		WEEK = 2;
 	}
+}
+
+// Lesson
+
+message Lesson {
+  CourseId type = 0;
+  Timeframe frame = 1;
+  repeated int pos = 2;
+  string cycle = 3; // TODO: see if CycleSlug or similar makes sense
+  CourseId course = 4;
+}
+
+// Table
+
+message TableId { int id = 0; }
+
+message Table {
+  TableId id = 0;
+  UserId owner = 1;
+  TermId type = 2;
+  repeated CourseId courses = 3;
+}
+
+// Course
+
+message CourseId { int id = 0; }
+
+message Course {
+  CourseId id = 0;
+  TermId type = 1;
+  string code = 2;
+  string desc = 3;
+  uint pos = 4;
+  UserId submitter = 5;
 }
 

@@ -1,4 +1,76 @@
 package metropolis;
 
+import 'types.proto';
 
+service API {
+  UserId(UserId) returns (User);
+  UserSlug(UserSlug) returns (User);
+  UserMe(Nothing) returns (User);
+  Users(Nothing) returns (UsersResp);
+
+  Tags(Nothing) returns (TagsResp);
+
+  AnnId(AnnId) returns (Ann);
+  AnnsMe(Nothing) returns (AnnsResp);
+  Anns(Nothing) returns (AnnsResp);
+
+  OrgId(OrgId) returns (Org);
+  OrgSlug(OrgSlug) returns (Org);
+  Orgs(Nothing) returns (OrgsResp);
+
+  EventId(EventId) returns (Event);
+  Events(Nothing) returns (EventsResp);
+
+  TermId(TermId) returns (Term);
+  Terms(Nothing) returns (TermsResp);
+
+  Timetables(Nothing) returns (TimetablesResp);
+
+  Meta(Nothing) returns (Meta);
+}
+
+message UsersResp {
+  // elements of ids and slugs at the same index refer to the same user
+  repeated UserId ids = 0;
+  repeated UserSlug slugs = 1;
+}
+
+message TagsResp {
+  repeated Tag tags = 0;
+}
+
+message AnnsResp {
+  repeated AnnId ids = 0;
+}
+
+message OrgsResp {
+  repeated OrgId ids = 0;
+  repeated OrgSlug slugs = 1;
+}
+
+message EventsResp {
+  repeated EventId ids = 0;
+}
+
+message TermsResp {
+  repeated TermId ids = 0;
+}
+
+message TimetablesResp {
+  repeated Timetable tables = 0;
+}
+
+message Meta {
+  string name = 0;
+  string srcURL = 1;
+  string license = 2;
+  string extra = 3;
+  Ver ver = 4;
+}
+
+message Ver {
+  uint major = 0;
+  uint minor = 1;
+  uint point = 2;
+}
 
