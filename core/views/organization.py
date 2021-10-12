@@ -24,7 +24,7 @@ class OrganizationDetail(DetailView, mixins.TitleMixin):
     template_name = "core/organization/detail.html"
 
     def get_title(self):
-        return f'{self.get_object().name} - {settings.PWA_APP_NAME}'
+        return self.get_object().name
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not self.get_object().is_open:
