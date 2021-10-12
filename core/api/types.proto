@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package metropolis;
+
+import "google/protobuf/timestamp.proto";
+
+// Convenience
+
+message Nothing {}
+
+message Timeframe {
+	google.protobuf.Timestamp start = 0;
+	google.protobuf.Timestamp end = 1;
+}
+
+// User
+
+message UserId { int id = 0; }
+
+message UserSlug { string slug = 0; }
+
+message User {
+	UserId id = 0;
+	UserSlug slug = 1; // username
+	string firstName = 2;
+	string lastName = 3;
+	string bio = 4;
+	string tz = 5;
+	uint32 graduates = 6;
+	repeated OrgId orgs = 7;
+	repeated TagId following = 8;
+}
+
+// Tag
+
+message TagId { int id = 0; }
+
+message TagSlug { string slug = 0; }
+
+message Tag {
+	TagId id = 0;
+	TagSlug slug = 1;
+	string color = 2;
+}
+
+// Ann
+
+message AnnId { int id = 0; }
+
+message Ann {
+	AnnId id = 0;
+	UserId author = 1;
+	OrgId org = 2;
+	repeated TagId tags = 3;
+	google.protobuf.Timestamp created = 4;
+	google.protobuf.Timestamp lastModified = 5;
+	string title = 6;
+	string body = 7;
+	bool public = 8;
+}
+
+// Org
+
+message OrgId { int id = 0; }
+
+message OrgSlug { string slug = 0; }
+
+message Org {
+	OrgId id = 0;
+	OrgSlug slug = 1;
+	UserId owner = 2;
+	repeated UserId supervisors = 3;
+	repeated UserId execs = 4;
+	repeated TagId tags = 5;
+	string name = 6;
+	string bio = 7;
+	string extra = 8;
+	google.protobuf.Timestamp created = 9;
+	bool membersPublic = 10;
+	Openness apply = 11;
+	string banner = 12;
+	string icon = 13;
+
+	enum Openness {
+		ANY = 0;
+		APPLY = 1;
+		NONE = 2;
+	}
+}
+
+// Events
+
+message EvId { int id = 0; }
+
+message Event {
+	EventId id = 0;
+	OrgId org = 1;
+	repeated TagId tags = 2;
+	string name = 4;
+	string desc = 5;
+	Timeframe frame = 6;
+	bool general = 7;
+	TermId term = 8
+}
+
+// Term
+
+message TermId { int id = 0; }
+
+message Term {
+	TermId id = 0;
+	string name = 1;
+	string desc = 2;
+	TermFmt fmt = 3;
+	Timeframe frame = 4;
+	bool frozen = 5;
+
+	enum TermFmt {
+		PRE_2020 = 0;
+		COVID = 1;
+		WEEK = 2;
+	}
+}
+
