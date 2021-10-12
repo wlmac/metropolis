@@ -10,27 +10,27 @@ from . import models
 
 class MetropolisSignupForm(SignupForm):
     first_name = forms.CharField(
-        max_length=30,
-        label="First Name",
-        widget=forms.TextInput(attrs={"type": "text", "autocomplete": "given-name"}),
-    )
+            max_length=30,
+            label="First Name",
+            widget=forms.TextInput(attrs={"type": "text", "autocomplete": "given-name"}),
+            )
     last_name = forms.CharField(
-        max_length=30,
-        label="Last Name",
-        widget=forms.TextInput(attrs={"type": "text", "autocomplete": "family-name"}),
-    )
+            max_length=30,
+            label="Last Name",
+            widget=forms.TextInput(attrs={"type": "text", "autocomplete": "family-name"}),
+            )
     graduating_year = forms.ChoiceField(
-        choices=models.graduating_year_choices, required=False
-    )
+            choices=models.graduating_year_choices, required=False
+            )
     field_order = [
-        "email",
-        "username",
-        "first_name",
-        "last_name",
-        "graduating_year",
-        "password1",
-        "password2",
-    ]
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "graduating_year",
+            "password1",
+            "password2",
+            ]
 
     def save(self, request):
         user = super(MetropolisSignupForm, self).save(request)
@@ -69,14 +69,14 @@ class AddTimetableSelectTermForm(forms.Form):
         user = kwargs.pop("user")
         super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
         self.fields["term"].queryset = models.Term.objects.exclude(
-            timetables__owner=user
-        )
+                timetables__owner=user
+                )
 
 
 class SelectCoursesWidget(s2forms.ModelSelect2MultipleWidget):
     search_fields = [
-        "code__icontains",
-    ]
+            "code__icontains",
+            ]
 
 
 class TimetableSelectCoursesForm(forms.ModelForm):
@@ -84,14 +84,14 @@ class TimetableSelectCoursesForm(forms.ModelForm):
         model = models.Timetable
         fields = ["courses"]
         widgets = {
-            "courses": SelectCoursesWidget(
-                attrs={
-                    "data-minimum-input-length": 0,
-                    "width": "100%",
-                    "data-placeholder": "Start typing course code...",
+                "courses": SelectCoursesWidget(
+                    attrs={
+                        "data-minimum-input-length": 0,
+                        "width": "100%",
+                        "data-placeholder": "Start typing course code...",
+                        }
+                    )
                 }
-            )
-        }
 
     def __init__(self, *args, **kwargs):
         if kwargs["instance"] is not None:
@@ -100,24 +100,24 @@ class TimetableSelectCoursesForm(forms.ModelForm):
             self.term = kwargs.pop("term")
         super(TimetableSelectCoursesForm, self).__init__(*args, **kwargs)
         self.fields["courses"].queryset = models.Course.objects.filter(
-            term=self.term
-        ).order_by("code")
+                term=self.term
+                ).order_by("code")
 
     def clean(self):
         courses = self.cleaned_data["courses"]
         if (
-            courses.count()
-            > settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]
-        ):
+                courses.count()
+                > settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]
+                ):
             raise forms.ValidationError(
-                f'There are only {settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]} courses in this term.'
-            )
+                    f'There are only {settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]} courses in this term.'
+                    )
         position_set = set()
         for i in courses:
             if i.position in position_set:
                 raise forms.ValidationError(
-                    f"There are two or more conflicting courses."
-                )
+                        f"There are two or more conflicting courses."
+                        )
             else:
                 position_set.add(i.position)
 
@@ -134,21 +134,21 @@ class AddCourseForm(forms.ModelForm):
         super(AddCourseForm, self).__init__(*args, **kwargs)
 
         self.fields["position"].label = settings.TIMETABLE_FORMATS[
-            self.term.timetable_format
-        ]["question"]["prompt"]
+                self.term.timetable_format
+                ]["question"]["prompt"]
         self.fields["position"].choices = settings.TIMETABLE_FORMATS[
-            self.term.timetable_format
-        ]["question"]["choices"]
+                self.term.timetable_format
+                ]["question"]["choices"]
 
         term_courses = self.term.courses.order_by("?")
         if term_courses:
             self.fields["code"].widget.attrs[
-                "placeholder"
-            ] = f"Ex. {term_courses[0].code}"
+                    "placeholder"
+                    ] = f"Ex. {term_courses[0].code}"
 
         self.position_set = list(
-            settings.TIMETABLE_FORMATS[self.term.timetable_format]["positions"]
-        )
+                settings.TIMETABLE_FORMATS[self.term.timetable_format]["positions"]
+                )
         self.position_set.sort()
 
     def clean_code(self):
@@ -156,24 +156,24 @@ class AddCourseForm(forms.ModelForm):
         courses = self.term.courses.filter(code=code)
         if courses:
             raise forms.ValidationError(
-                "A course with the same code exists for the selected term."
-            )
+                    "A course with the same code exists for the selected term."
+                    )
         return code
 
     def clean_position(self):
         position = int(self.cleaned_data["position"])
         if position not in self.position_set:
             raise forms.ValidationError(
-                "Must be one of " + ", ".join([str(i) for i in self.position_set]) + "."
-            )
+                    "Must be one of " + ", ".join([str(i) for i in self.position_set]) + "."
+                    )
         return position
 
 
 class OrganizationAdminForm(forms.ModelForm):
     class Meta:
         widgets = {
-            "extra_content": AdminMartorWidget,
-        }
+                "extra_content": AdminMartorWidget,
+                }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -190,9 +190,9 @@ class TermAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TermAdminForm, self).__init__(*args, **kwargs)
         self.fields["timetable_format"].choices = [
-            (timetable_format, timetable_format)
-            for timetable_format in settings.TIMETABLE_FORMATS
-        ]
+                (timetable_format, timetable_format)
+                for timetable_format in settings.TIMETABLE_FORMATS
+                ]
 
 
 class EventAdminForm(forms.ModelForm):
@@ -207,19 +207,19 @@ class EventAdminForm(forms.ModelForm):
         if "instance" in kwargs and kwargs["instance"] is not None:
             instance = kwargs["instance"]
             self.fields["schedule_format"].choices = [
-                (timetable_format, timetable_format)
-                for timetable_format in timetable_configs[
-                    instance.term.timetable_format
-                ]["schedules"]
-            ]
+                    (timetable_format, timetable_format)
+                    for timetable_format in timetable_configs[
+                        instance.term.timetable_format
+                        ]["schedules"]
+                    ]
         else:
             schedule_format_set = set()
             for timetable_config in timetable_configs.values():
                 schedule_format_set.update(set(timetable_config["schedules"].keys()))
             self.fields["schedule_format"].choices = [
-                (schedule_format, schedule_format)
-                for schedule_format in schedule_format_set
-            ]
+                    (schedule_format, schedule_format)
+                    for schedule_format in schedule_format_set
+                    ]
 
     def clean(self):
         cleaned_data = super().clean()
@@ -229,5 +229,25 @@ class EventAdminForm(forms.ModelForm):
         timetable_configs = settings.TIMETABLE_FORMATS
         if schedule_format not in timetable_configs[term.timetable_format]["schedules"]:
             raise forms.ValidationError(
-                f'Schedule format "{schedule_format}" is not a valid day schedule in Term {term.name}.'
-            )
+                    f'Schedule format "{schedule_format}" is not a valid day schedule in Term {term.name}.'
+                    )
+
+
+class TagSuperuserAdminForm(forms.ModelForm):
+    class Meta:
+        model = models.Tag
+        fields = '__all__'
+
+
+class TagAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean_organization(self):
+        if self.cleaned_data["organization"] == None:
+            raise forms.ValidationError("Tags must have an organization.")
+        return self.cleaned_data["organization"]
+
+    class Meta:
+        model = models.Tag
+        fields = '__all__'

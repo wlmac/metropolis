@@ -14,7 +14,7 @@ from martor.widgets import AdminMartorWidget
 from metropolis import settings
 
 from . import models
-from .forms import EventAdminForm, OrganizationAdminForm, TermAdminForm
+from .forms import EventAdminForm, OrganizationAdminForm, TagAdminForm, TagSuperuserAdminForm, TermAdminForm
 
 User = get_user_model()
 
@@ -41,9 +41,15 @@ class TermAdmin(admin.ModelAdmin):
 
 
 class TagAdmin(admin.ModelAdmin):
+    form = TagAdminForm
     readonly_fields = ["color"]
     list_display = ["name", "organization", "color"]
     search_fields = ["name"]
+
+    def get_form(self, request, obj=None, **kwargs):
+        if request.user.is_superuser:
+            return TagSuperuserAdminForm
+        return TagAdminForm
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
