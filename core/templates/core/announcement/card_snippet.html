@@ -17,7 +17,7 @@
                 {{announcement.organization.slug|organization}},
                 {{announcement.author.username|user}}
                 <br>
-                <dot>•</dot> {{ announcement.last_modified_date|date:"M. j, Y" }}{{ announcement.last_modified_date|date:", g:i A"|lower }}
+                <dot>•</dot> {{ announcement.created_date|date:"M. j, Y" }}{{ announcement.created_date|date:", g:i A"|lower }}
                 <!--{% if announcement.last_modified_date != announcement.created_date %}
                 (Edited)
                 {% endif %}-->
