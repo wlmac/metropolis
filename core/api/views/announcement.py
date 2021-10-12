@@ -1,9 +1,11 @@
-from .. import serializers
-from rest_framework import generics, permissions
-from rest_framework.views import APIView
-from ... import models
 from django.db.models import Q
+from rest_framework import generics, permissions
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from ... import models
+from .. import serializers
+
 
 class AnnouncementListAll(APIView):
     permission_classes = [permissions.AllowAny]
@@ -12,6 +14,7 @@ class AnnouncementListAll(APIView):
         announcements = models.Announcement.get_all(user=request.user)
         serializer = serializers.AnnouncementSerializer(announcements, many=True)
         return Response(serializer.data)
+
 
 class AnnouncementListMyFeed(APIView):
     permission_classes = [permissions.IsAuthenticated]

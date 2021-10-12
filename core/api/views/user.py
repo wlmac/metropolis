@@ -1,16 +1,18 @@
-from .. import serializers
-from .. import utils
-from rest_framework import generics, mixins, permissions, status
-from rest_framework.views import APIView
-from ... import models
-from rest_framework.response import Response
 import datetime
+
+from rest_framework import generics, mixins, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from ... import models
+from .. import serializers, utils
 
 
 class UserDetail(generics.RetrieveAPIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
-    lookup_field = 'username'
+    lookup_field = "username"
+
 
 class UserMe(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -19,6 +21,7 @@ class UserMe(APIView):
         serializer = serializers.UserSerializer(request.user)
         return Response(serializer.data)
 
+
 class UserMeSchedule(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -26,6 +29,7 @@ class UserMeSchedule(APIView):
         date = utils.parse_date_query_param(request)
 
         return Response(request.user.schedule(target_date=date))
+
 
 class UserMeScheduleWeek(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -40,6 +44,7 @@ class UserMeScheduleWeek(APIView):
             date += datetime.timedelta(days=1)
 
         return Response(result)
+
 
 class UserMeTimetable(APIView):
     permission_classes = [permissions.IsAuthenticated]
