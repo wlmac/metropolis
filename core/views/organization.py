@@ -2,6 +2,7 @@ from django.db.models import Count
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
 
+from ...metropolis import settings
 from .. import models
 from . import mixins
 
@@ -23,7 +24,7 @@ class OrganizationDetail(DetailView, mixins.TitleMixin):
     template_name = "core/organization/detail.html"
 
     def get_title(self):
-        return "Organization " + self.get_object().name
+        return self.get_object().name
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not self.get_object().is_open:
