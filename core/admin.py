@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
-from metropolis import settings
+from django.conf import settings
 
 from . import models
 from .forms import EventAdminForm, OrganizationAdminForm, TermAdminForm

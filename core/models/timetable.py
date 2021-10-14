@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
-from metropolis import settings
+from django.conf import settings
 
 from .. import utils
 from .choices import timezone_choices

@@ -2,7 +2,7 @@ from rest_framework import authentication, exceptions, parsers, permissions, sta
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from metropolis import settings
+from django.conf import settings
 
 
 class APIVersion(APIView):

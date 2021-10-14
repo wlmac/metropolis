@@ -3,7 +3,7 @@ from django import forms
 from django_select2 import forms as s2forms
 from martor.widgets import AdminMartorWidget
 
-from metropolis import settings
+from django.conf import settings
 
 from . import models
 
