@@ -4,7 +4,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
 from core.utils import generate_slam as gs
-from metropolis import settings
+from django.conf import settings
 
 from .. import models
 from . import mixins

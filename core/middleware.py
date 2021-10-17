@@ -1,7 +1,7 @@
 import pytz
 from django.utils import timezone
 
-from metropolis import settings
+from django.conf import settings
 
 
 class TimezoneMiddleware:

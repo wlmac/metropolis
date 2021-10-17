@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView, TemplateView
 
-from metropolis import settings
+from django.conf import settings
 
 from .. import models
 from . import mixins

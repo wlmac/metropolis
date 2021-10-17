@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.utils.file_upload import file_upload_path_generator
-from metropolis import settings
+from django.conf import settings
 
 
 class MartorImageUpload(APIView):
