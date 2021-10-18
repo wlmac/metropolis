@@ -1,6 +1,5 @@
 git-setup:
-	mv .git/hooks/pre-commit .git/hooks/pre-commit2
-	printf "#!/bin/sh\n\nmake pre-commit" > .git/hooks/pre-commit
+	cp -i scripts/pre-commit .git/hooks/pre-commit
 	chmod +x .git/hooks/pre-commit
 
 pre-commit: fmt-check;

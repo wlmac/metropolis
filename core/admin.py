@@ -1,5 +1,6 @@
 import django.db
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
@@ -11,10 +12,14 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
-from django.conf import settings
-
 from . import models
-from .forms import EventAdminForm, OrganizationAdminForm, TagAdminForm, TagSuperuserAdminForm, TermAdminForm
+from .forms import (
+    EventAdminForm,
+    OrganizationAdminForm,
+    TagAdminForm,
+    TagSuperuserAdminForm,
+    TermAdminForm,
+)
 
 User = get_user_model()
 

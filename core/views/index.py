@@ -1,10 +1,10 @@
+from django.conf import settings
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
 from core.utils import generate_slam as gs
-from django.conf import settings
 
 from .. import models
 from . import mixins

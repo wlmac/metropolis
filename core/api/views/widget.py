@@ -2,13 +2,13 @@ import os
 import uuid
 from urllib.parse import urljoin
 
+from django.conf import settings
 from django.core.files.storage import default_storage
 from rest_framework import authentication, exceptions, parsers, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.utils.file_upload import file_upload_path_generator
-from django.conf import settings
 
 
 class MartorImageUpload(APIView):
