@@ -1,8 +1,8 @@
+from django.conf import settings
 from django.db.models import Count
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView
 
-from django.conf import settings
 from .. import models
 from . import mixins
 
