@@ -4,11 +4,11 @@ mapboxgl.accessToken = JSON.parse(
 const map = new mapboxgl.Map({
   container: "map", // container ID
   style: "mapbox://styles/nikisu/cktk76xy90rgm17s7q7pg0g55", // style URL
-  center: [-79.46155348420591, 43.753374130758445], // starting position [lng, lat]
-  zoom: 19, // starting zoom
+  center: [-79.46118496290478, 43.75367336221862], // starting position [lng, lat]
+  zoom: 20, // starting zoom
 });
 const coordinates = document.getElementById("coordinates");
-
+//-79.46155348420591, 43.753374130758445
 const customData = {
   features: [
     {
@@ -1174,7 +1174,7 @@ const geocoder = new MapboxGeocoder({
   zoom: 19,
   placeholder: "Search School",
   marker: {
-    color: 'red'
+    color: "red",
   },
   mapboxgl: mapboxgl,
   render: function (item) {
@@ -1194,7 +1194,7 @@ map.addControl(geocoder);
 map.on("load", () => {
   map.addSource("floorOne", {
     type: "image",
-    url: "../static/core/img/FloorOne1.jpg",
+    url: "../static/core/img/FloorOne.jpg",
     coordinates: [
       [-79.46270547634776, 43.75413886166868], //TL
       [-79.46072668772469, 43.75413886166868], //TR
@@ -1205,7 +1205,7 @@ map.on("load", () => {
 
   map.addSource("floorTwo", {
     type: "image",
-    url: "../static/core/img/FloorTwo1.jpg",
+    url: "../static/core/img/FloorTwo.jpg",
     coordinates: [
       [-79.46270547634776, 43.75413886166868], //TL
       [-79.46072668772469, 43.75413886166868], //TR
@@ -1213,6 +1213,34 @@ map.on("load", () => {
       [-79.46270547634776, 43.75274955916902], //BL
     ],
   });
+
+  map.addSource("outline", {
+    type: "image",
+    url: "../static/core/img/booths/booths.jpg",
+    coordinates: [
+      [-79.46155542041252,43.7538999252219], //TL
+      [-79.46100243451043,43.75394902268886], //TR
+      [-79.46092763227323,43.7535715308978      ], //BR
+      [-79.46146639944199,43.75351043643877], //BL
+    ],
+  });
+
+  // const marker1 = new mapboxgl.Marker({})
+  //   .setLngLat([-79.46155542041252,43.7538999252219])
+  //   .addTo(map);
+
+  // const marker2 = new mapboxgl.Marker({})
+  //   .setLngLat([-79.46100243451043,43.75394902268886])
+  //   .addTo(map);
+
+  // const marker3 = new mapboxgl.Marker({})
+  // .setLngLat([-79.46092763227323,43.7535715308978
+  // ])
+  // .addTo(map);
+
+  // const marker4 = new mapboxgl.Marker({})
+  // .setLngLat([-79.46146639944199,43.75351043643877])
+  // .addTo(map);
 
   map.addControl(
     new mapboxgl.GeolocateControl({
@@ -1242,23 +1270,786 @@ map.on("load", () => {
     type: "raster",
     layout: {
       // Make the layer visible by default.
-      visibility: "none",
+      visibility: "visible",
     },
   });
 
-  // const marker = new mapboxgl.Marker({
-  //   draggable: true,
-  // })
-  //   .setLngLat([-79.46155348420591, 43.753374130758445])
+  map.addLayer({
+    id: "outline",
+    source: "outline",
+    type: "raster",
+    layout: {
+      // Make the layer visible by default.
+      visibility: "visible",
+    },
+  });
+
+  
+
+
+  map.addSource("booths", {
+    type: "geojson",
+    data: {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            id: 1,
+            description: "<strong>MSC</strong><p> Mackenzie Science Club</p>",
+            icon: "numbers-01",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46139104663334,43.75355029775528],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:2,
+            description: "<strong>ACED</strong><p>ACED Competitive Business Case Competition Team</p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46135299052472,43.75355435346984],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:3,
+            description: "<strong>MCPT</strong><p>Competative Case Competition Team</p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46140633146423,43.75361068280557],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:4,
+            description: "<strong>HOSA</strong><p>Competative Health Science Case Competition Team</p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4613670276142,43.75361473851564],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:5,
+            description: "<strong>Animanga Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46129996155962,43.753643128437574],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:6,
+            description: "<strong>Cubing Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46130245704249,43.75365484492664],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:7,
+            description: "<strong>Linguistics Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46131284434375,43.753675256273254
+            ],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:8,
+            description: "<strong>Chess Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46130994346608,43.753682784256455],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:9,
+            description: "<strong>Book Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4613133747549,43.7536996830265],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:10,
+            description: "<strong>3D Design Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46131587023714,43.753711399504084],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:11,
+            description: "<strong>History Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46132023733188,43.75372807294906],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:12,
+            description: "<strong>French Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4613295288922,43.75374470140514],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:13,
+            description: "<strong>The Lyon </strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4612594868843,43.75362152388968],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:14,
+            description: "<strong>Tree Huggers</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46124459518745,43.75362426423425],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:15,
+            description: "<strong>Mac Radio Announcers</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4612215119736,43.753626292088825],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:16,
+            description: "<strong>Let's Talk Now</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46120653907884,43.75362831994332],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:17,
+            description: "<strong>Unicef</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46118158425318,43.753631023749705],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:18,
+            description: "<strong>Rainbow Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46118158425318,43.753631023749705],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:19,
+            description: "<strong>UNI-talk</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46114320601062,43.75363531841228],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:20,
+            description: "<strong>Wellness @ Mac</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46112855524916,43.75363710731256],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:21,
+            description: "<strong>Gardening Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46110484816555,43.75363981111806],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:22,
+            description: "<strong>Key Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46108956394,43.75364138851637],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:23,
+            description: "<strong>Careers in Design</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4610658568558,43.75364499359026],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:24,
+            description: "<strong>The Flounder</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46105026013957,43.75364657084009],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:25,
+            description: "<strong>Cybersecurity Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46126130154995,43.75369496490765],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:26,
+            description: "<strong>Mackenzie Engineering Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46125836307769,43.75368385665968],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:27,
+            description: "<strong>MEDLIFE</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46124441016529,43.75366921436563],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:28,
+            description: "<strong>Baycrest-Mackenzie Partnership</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46122940420271,43.75367073564328],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:29,
+            description: "<strong>Women in STEM</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4612072901529,43.753673017559294],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:30,
+            description: "<strong>Math Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46119307397782,43.75367510931548],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:31,
+            description: "<strong>Physics Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46118543936576,43.75369241384283],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:32,
+            description: "<strong>Chemistry Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46118807199032,43.75370306277998],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:33,
+            description: "<strong>Muslim Culture Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46120334121555,43.75371827554389],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:34,
+            description: "<strong>Biology Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46121729412793,43.753717134586736],
+          },
+        }, 
+        {
+          type: "Feature",
+          properties: {
+            id:35,
+            description: "helk",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46121729412793,43.753717134586736],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:36,
+            description: "<strong>Jewish Culture Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46121729412793,43.753717134586736],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:37,
+            description: "<strong>Dance Team</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46114243759361,43.75370838709108],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:38,
+            description: "<strong>Central Arts Council</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46113955168924,43.75369793518965],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:39,
+            description: "<strong>Mackenzie Calligraphy Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46112637950988,43.75368290855562],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:40,
+            description: "<strong>Creator's Joy</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46111215219064,43.75368435623707],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:41,
+            description: "<strong>Creative Arts Alliance</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46108975491188,43.75368682998976],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:42,
+            description: "<strong>Creative Writing Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46107528243958,43.753688731082434],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:0,
+            description: "<strong>Creative Writing Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46107528243958,43.753688731082434],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:0,
+            description: "<strong>Creative Writing Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46107528243958,43.753688731082434],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:45,
+            description: "<strong>Visual Arts Council</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46108557150073,43.753732314346166],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:46,
+            description: "<strong>Drama Council</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46110005465303,43.753730562998385],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:47,
+            description: "<strong>Drama Council</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46112243893013,43.7537278999271],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:48,
+            description: "<strong>Music Council</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46113638441307,43.75372637965694],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:49,
+            description: "<strong>Model United Nations</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46129202108443,43.75376040150047],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:50,
+            description: "<strong>Mackenzie Athletic Council</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46127728470296,43.75376227341238],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:51,
+            description: "<strong>Mock Trials</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46125459716995,43.753765375457164],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:52,
+            description: "<strong>Business Council</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46123927418843,43.75376667480484],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:53,
+            description: "<strong>NBA Fan Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46121514474375,43.75376932842528
+            ],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:54,
+            description: "<strong>Debate Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46120000767044,43.75377131683837],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:55,
+            description: "<strong>Kinesiology and Fitness</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46117567584362,43.75377313994014],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:56,
+            description: "<strong>Esports Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46117567584362,43.75377313994014],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id:57,
+            description: "<strong>TED Club</strong><p> Description </p>",
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46116122798746,43.75377496318825],
+          },
+        },
+      ],
+    },
+  });
+
+  // Add a layer showing the places.
+  map.addLayer({
+    id: "booths",
+    type: "symbol",
+    source: "booths",
+    layout: {
+      "icon-image": "{icon}",
+      "icon-allow-overlap": true,
+      visibility: "visible",
+    },
+  });
+
+  // When a click event occurs on a feature in the places layer, open a popup at the
+  // location of the feature, with description HTML from its properties.
+  map.on("click", "booths", (e) => {
+    // Copy coordinates array.
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const description = e.features[0].properties.description;
+
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being pointed to.
+    // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    // }
+
+    new mapboxgl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
+  });
+
+  // Change the cursor to a pointer when the mouse is over the places layer.
+  map.on("mouseenter", "booths", () => {
+    map.getCanvas().style.cursor = "pointer";
+  });
+
+  // Change it back to a pointer when it leaves.
+  map.on("mouseleave", "booths", () => {
+    map.getCanvas().style.cursor = "";
+  });
+
+  const marker = new mapboxgl.Marker({
+    draggable: true,
+  })
+    .setLngLat([-79.46118496290478, 43.75367336221862])
+    .addTo(map);
+
+  function onDragEnd() {
+    const lngLat = marker.getLngLat();
+    coordinates.style.display = "block";
+    coordinates.innerHTML = `${lngLat.lng},${lngLat.lat}`;
+  }
+
+  marker.on("dragend", onDragEnd);
+
+  // const marker13 = new mapboxgl.Marker({})
+  //   .setLngLat([-79.46134268787472, 43.753754470296485])
   //   .addTo(map);
 
-  // function onDragEnd() {
-  //   const lngLat = marker.getLngLat();
-  //   coordinates.style.display = "block";
-  //   coordinates.innerHTML = `latitude: ${lngLat.lat}, longitude: ${lngLat.lng}`;
-  // }
+  // const marker14 = new mapboxgl.Marker({})
+  //   .setLngLat([-79.46131549845754, 43.75363584806391])
+  //   .addTo(map);
 
-  // marker.on("dragend", onDragEnd);
+  // const marker15 = new mapboxgl.Marker({})
+  //   .setLngLat([-79.46105121758568, 43.75381653094615])
+  //   .addTo(map);
+
+  // const marker16 = new mapboxgl.Marker({})
+  // .setLngLat([-79.46101097724825,43.75363977606122])
+  // .addTo(map);
 
   var checkbox = document.querySelector("input[name=checkbox]");
 
@@ -1267,10 +2058,12 @@ map.on("load", () => {
       console.log("Checkbox is checked..");
       map.setLayoutProperty("floorTwo", "visibility", "visible");
       map.setLayoutProperty("floorOne", "visibility", "none");
+      map.setLayoutProperty("booths", "visibility", "none");
     } else {
       console.log("Checkbox is not checked..");
       map.setLayoutProperty("floorOne", "visibility", "visible");
       map.setLayoutProperty("floorTwo", "visibility", "none");
+      map.setLayoutProperty("booths", "visibility", "visible");
     }
   });
 
@@ -1280,10 +2073,12 @@ map.on("load", () => {
       checkbox.checked = false;
       map.setLayoutProperty("floorOne", "visibility", "visible");
       map.setLayoutProperty("floorTwo", "visibility", "none");
+      map.setLayoutProperty("booths", "visibility", "visible");
     } else {
       checkbox.checked = true;
       map.setLayoutProperty("floorTwo", "visibility", "visible");
       map.setLayoutProperty("floorOne", "visibility", "none");
+      map.setLayoutProperty("booths", "visibility", "none");
     }
   });
 });
@@ -1347,3 +2142,5 @@ map.on("load", () => {
 // })
 //   .setLngLat([-79.46156040136074, 43.753388033218926])
 //   .addTo(map);
+
+
