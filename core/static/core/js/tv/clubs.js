@@ -41,6 +41,6 @@ function slides() {
     $.getJSON(window.location.origin + "/api/organizations", function (data) {
         clubs = data;
         setTimeout(setSlide, 100);
-        setInterval(setSlide, 120000);
+        setInterval(setSlide, 30000);
     });
 }
