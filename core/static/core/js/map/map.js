@@ -1723,7 +1723,7 @@ map.on("load", () => {
           properties: {
             id: 34,
             description:
-              '<b>Biology Club</b><p><a href=”https://maclyonsden.com/club/bio-club" target="_blank" title="Biology Club">Club Page</a></p>',
+              '<b>Biology Club</b><p><a href="https://maclyonsden.com/club/bio-club" target="_blank" title="Biology Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1748,7 +1748,7 @@ map.on("load", () => {
           properties: {
             id: 36,
             description:
-              '<b>Jewish Culture Club</b><p><a href=”https://maclyonsden.com/club/jewish-culture-club" target="_blank" title="Jewish Culture Club">Club Page</a></p>',
+              '<b>Jewish Culture Club</b><p><a href="https://maclyonsden.com/club/jewish-culture-club" target="_blank" title="Jewish Culture Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1761,7 +1761,7 @@ map.on("load", () => {
           properties: {
             id: 37,
             description:
-              '<b>Dance Team</b><p><a href=”https://www.instagram.com/wlmac.danceteam/" target="_blank" title=”Dance Teal">@wlmac.danceteam</a></p>',
+              '<b>Dance Team</b><p><a href="https://www.instagram.com/wlmac.danceteam/" target="_blank" title="Dance Teal">@wlmac.danceteam</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1774,7 +1774,7 @@ map.on("load", () => {
           properties: {
             id: 38,
             description:
-              '<b>Central Arts Council</b><p><a href=”https://maclyonsden.com/club/artscouncil" target="_blank" title="Central Arts Council">Club Page</a></p>',
+              '<b>Central Arts Council</b><p><a href="https://maclyonsden.com/club/artscouncil" target="_blank" title="Central Arts Council">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1787,7 +1787,7 @@ map.on("load", () => {
           properties: {
             id: 39,
             description:
-              '<b>Mackenzie Calligraphy Club</b><p><a href=”https://maclyonsden.com/club/mackenzie-calligraphy-club" target="_blank" title="Mackenzie Calligraphy Club">Club Page</a></p>',
+              '<b>Mackenzie Calligraphy Club</b><p><a href="https://maclyonsden.com/club/mackenzie-calligraphy-club" target="_blank" title="Mackenzie Calligraphy Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1800,7 +1800,7 @@ map.on("load", () => {
           properties: {
             id: 40,
             description:
-              '<b>Creator’s Joy</b><p><a href=”" target="_blank" title="Creator’s Joy">Club Page</a></p>',
+              '<b>Creator’s Joy</b><p><a href="https://maclyonsden.com/club/creators-joy" target="_blank" title="Creator’s Joy">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1813,7 +1813,7 @@ map.on("load", () => {
           properties: {
             id: 41,
             description:
-              '<b>Creative Arts Alliance</b><p><a href=”https://maclyonsden.com/club/creative-arts-alliance" target="_blank" title="Creative Arts Alliance">Club Page</a></p>',
+              '<b>Creative Arts Alliance</b><p><a href="https://maclyonsden.com/club/creative-arts-alliance" target="_blank" title="Creative Arts Alliance">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1826,7 +1826,7 @@ map.on("load", () => {
           properties: {
             id: 42,
             description:
-              '<b>Creative Writing Club</b><p><a href=”https://maclyonsden.com/club/mackenzie-creative-writing-club" target="_blank" title="Creative Writing Club">Club Page</a></p>',
+              '<b>Creative Writing Club</b><p><a href="https://maclyonsden.com/club/mackenzie-creative-writing-club" target="_blank" title="Creative Writing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1839,12 +1839,12 @@ map.on("load", () => {
           properties: {
             id: 43,
             description:
-              "<strong>Creative Writing Club</strong><p> Description </p>",
+              "kgjhy",
             icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46107528243958, 43.753688731082434],
+            coordinates: [79.46107528243958, 43.753688731082434],
           },
         },
         {
@@ -1852,12 +1852,12 @@ map.on("load", () => {
           properties: {
             id: 44,
             description:
-              "<strong>Creative Writing Club</strong><p> Description </p>",
+              "jhfjhg",
             icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46107528243958, 43.753688731082434],
+            coordinates: [79.46107528243958, 43.753688731082434],
           },
         },
         {
@@ -1865,7 +1865,7 @@ map.on("load", () => {
           properties: {
             id: 45,
             description:
-              '<b>Visual Arts Council</b><p><a href=”https://maclyonsden.com/club/visual-arts-council" target="_blank" title="Visual Arts Council">Club Page</a></p>',
+              '<b>Visual Arts Council</b><p><a href="https://maclyonsden.com/club/visual-arts-council" target="_blank" title="Visual Arts Council">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1878,7 +1878,7 @@ map.on("load", () => {
           properties: {
             id: 46,
             description:
-              '<b>Drama Council</b><p><a href=”https://maclyonsden.com/club/drama-concil" target="_blank" title="Drama Council">Club Page</a></p>',
+              '<b>Drama Council</b><p><a href="https://maclyonsden.com/club/drama-concil" target="_blank" title="Drama Council">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1891,7 +1891,7 @@ map.on("load", () => {
           properties: {
             id: 47,
             description:
-              '<b>Composing Club</b><p><a href=”https://maclyonsden.com/club/composing-club" target="_blank" title="Composing Club">Club Page</a></p>',
+              '<b>Composing Club</b><p><a href="https://maclyonsden.com/club/composing-club" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1903,7 +1903,7 @@ map.on("load", () => {
           type: "Feature",
           properties: {
             id: 48,
-            description: '<b>Music Council</b></b><p><a href=”https://maclyonsden.com/club/music-council" target="_blank" title="Composing Club">Club Page</a></p>',
+            description: '<b>Music Council</b></b><p><a href="https://maclyonsden.com/club/music-council" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1916,7 +1916,7 @@ map.on("load", () => {
           properties: {
             id: 49,
             description:
-            '<b>Model United Nations</b></b><p><a href=”https://maclyonsden.com/club/mun" target="_blank" title="Composing Club">Club Page</a></p>',
+            '<b>Model United Nations</b></b><p><a href="https://maclyonsden.com/club/mun" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1929,7 +1929,7 @@ map.on("load", () => {
           properties: {
             id: 50,
             description:
-            '<b>Mackenzie Athletic Council</b></b><p><a href=”https://maclyonsden.com/club/athletic-council" target="_blank" title="Composing Club">Club Page</a></p>',
+            '<b>Mackenzie Athletic Council</b></b><p><a href="https://maclyonsden.com/club/athletic-council" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1941,7 +1941,7 @@ map.on("load", () => {
           type: "Feature",
           properties: {
             id: 51,
-            description: '<b>Mock Trials</b></b><p><a href=”https://maclyonsden.com/club/mock-trials" target="_blank" title="Composing Club">Club Page</a></p>',
+            description: '<b>Mock Trials</b></b><p><a href="https://maclyonsden.com/club/mock-trials" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1954,7 +1954,7 @@ map.on("load", () => {
           properties: {
             id: 52,
             description:
-            '<b>Business Council</b></b><p><a href=”https://maclyonsden.com/club/business-council" target="_blank" title="Composing Club">Club Page</a></p>',
+            '<b>Business Council</b></b><p><a href="https://maclyonsden.com/club/business-council" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1966,7 +1966,7 @@ map.on("load", () => {
           type: "Feature",
           properties: {
             id: 53,
-            description: '<b>NBA Fan Club</b></b><p><a href=”https://maclyonsden.com/club/nba-fan-club" target="_blank" title="Composing Club">Club Page</a></p>',
+            description: '<b>NBA Fan Club</b></b><p><a href="https://maclyonsden.com/club/nba-fan-club" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1978,7 +1978,7 @@ map.on("load", () => {
           type: "Feature",
           properties: {
             id: 54,
-            description: '<b>Debate Club</b></b><p><a href=”https://maclyonsden.com/club/debate-club" target="_blank" title="Composing Club">Club Page</a></p>',
+            description: '<b>Debate Club</b></b><p><a href="https://maclyonsden.com/club/debate-club" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -1991,7 +1991,7 @@ map.on("load", () => {
           properties: {
             id: 55,
             description:
-            '<b>Kinesiology and Fitness</b></b><p><a href=”https://maclyonsden.com/club/kinesiology-and-fitness" target="_blank" title="Composing Club">Club Page</a></p>',
+            '<b>Kinesiology and Fitness</b></b><p><a href="https://maclyonsden.com/club/kinesiology-and-fitness" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -2003,7 +2003,7 @@ map.on("load", () => {
           type: "Feature",
           properties: {
             id: 56,
-            description: '<b>Esports Club</b></b><p><a href=”https://maclyonsden.com/club/esports-club" target="_blank" title="Composing Club">Club Page</a></p>',
+            description: '<b>Esports Club</b></b><p><a href="https://maclyonsden.com/club/esports-club" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
@@ -2015,7 +2015,7 @@ map.on("load", () => {
           type: "Feature",
           properties: {
             id: 57,
-            description: '<b>TED Club</b></b><p><a href=”https://maclyonsden.com/club/ted-club" target="_blank" title="Composing Club">Club Page</a></p>',
+            description: '<b>TED Club</b></b><p><a href="https://maclyonsden.com/club/ted-club" target="_blank" title="Composing Club">Club Page</a></p>',
             icon: "embassy",
           },
           geometry: {
