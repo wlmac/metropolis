@@ -34,14 +34,14 @@ function setSlide() {
         }
         $(".description").html(marked(club.extra_content));
         var elem = $("#scrollable1")
-        var time = Math.min(60000, elem.prop("scrollHeight") * 16);
+        var time = Math.min(13000, elem.prop("scrollHeight") * 16);
         elem.scrollTop(0);
-        setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 30000);
+        setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 8000);
         elem = $("#scrollable2")
-        time = Math.min(60000, elem.prop("scrollHeight") * 32);
+        time = 13000;
         elem.scrollTop(0);
-        setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 30000);
-        $("#fade").delay(119000).fadeTo(250, 1);
+        setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 8000);
+        $("#fade").delay(29000).fadeTo(250, 1);
         i++;
         i %= clubs.length;
     })
