@@ -1218,10 +1218,10 @@ map.on("load", () => {
     type: "image",
     url: "../static/core/img/booths/booths.jpg",
     coordinates: [
-      [-79.46155542041252,43.7538999252219], //TL
-      [-79.46100243451043,43.75394902268886], //TR
-      [-79.46092763227323,43.7535715308978      ], //BR
-      [-79.46146639944199,43.75351043643877], //BL
+      [-79.46155542041252, 43.7538999252219], //TL
+      [-79.46100243451043, 43.75394902268886], //TR
+      [-79.46092763227323, 43.7535715308978], //BR
+      [-79.46146639944199, 43.75351043643877], //BL
     ],
   });
 
@@ -1270,7 +1270,7 @@ map.on("load", () => {
     type: "raster",
     layout: {
       // Make the layer visible by default.
-      visibility: "visible",
+      visibility: "none",
     },
   });
 
@@ -1284,9 +1284,6 @@ map.on("load", () => {
     },
   });
 
-  
-
-
   map.addSource("booths", {
     type: "geojson",
     data: {
@@ -1296,686 +1293,758 @@ map.on("load", () => {
           type: "Feature",
           properties: {
             id: 1,
-            description: "<strong>MSC</strong><p> Mackenzie Science Club</p>",
-            icon: "numbers-01",
+            description:
+              ' <b> Mackenzie Science Club </b><p><a href="https://maclyonsden.com/club/msc" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46139104663334,43.75355029775528],
+            coordinates: [-79.4613942054596, 43.75355665507274],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:2,
-            description: "<strong>ACED</strong><p>ACED Competitive Business Case Competition Team</p>",
-            icon: "castle",
+            id: 2,
+            description:
+              '<b>ACED Team</b><p><a href="https://maclyonsden.com/club/aced" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46135299052472,43.75355435346984],
+            coordinates: [-79.46135445939534, 43.75356090732248],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:3,
-            description: "<strong>MCPT</strong><p>Competative Case Competition Team</p>",
-            icon: "castle",
+            id: 3,
+            description:
+              '<b>MCPT</b><p><a href="https://maclyonsden.com/club/mcpt" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46140633146423,43.75361068280557],
+            coordinates: [-79.46140496158867, 43.75360322941137],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:4,
-            description: "<strong>HOSA</strong><p>Competative Health Science Case Competition Team</p>",
-            icon: "castle",
+            id: 4,
+            description:
+              '<b>HOSA Team</b><p><a href="https://maclyonsden.com/club/hosa" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.4613670276142,43.75361473851564],
+            coordinates: [-79.46136381338786, 43.75360627182371],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:5,
-            description: "<strong>Animanga Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 5,
+            description:
+              '<b>Animanga Club</b><p><a href="https://maclyonsden.com/club/animanga-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46129996155962,43.753643128437574],
+            coordinates: [-79.46128489186641, 43.75364329694912],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:6,
-            description: "<strong>Cubing Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 6,
+            description:
+              '<b>Cubing Club</b><p><a href="https://maclyonsden.com/club/cubing-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46130245704249,43.75365484492664],
+            coordinates: [-79.46128608332647, 43.75365481503346],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:7,
-            description: "<strong>Linguistics Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 7,
+            description:
+              '<b>Linguistics Club</b><p><a href="https://maclyonsden.com/club/linguistics" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46131284434375,43.753675256273254
-            ],
+            coordinates: [-79.4612909873974, 43.75367164651922],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:8,
-            description: "<strong>Chess Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 8,
+            description:
+              '<b>Chess Club</b><p><a href="https://maclyonsden.com/club/chess-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46130994346608,43.753682784256455],
+            coordinates: [-79.46129246204951, 43.75368139874675],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:9,
-            description: "<strong>Book Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 9,
+            description:
+              '<b>Book Club</b><p><a href="https://maclyonsden.com/club/book-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.4613133747549,43.7536996830265],
+            coordinates: [-79.46129614052039, 43.75369893721205],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:10,
-            description: "<strong>3D Design Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 10,
+            description:
+              '<b>3D Design Club</b><p><a href="https://maclyonsden.com/club/3d-design-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46131587023714,43.753711399504084],
+            coordinates: [-79.46129823092178, 43.753710973343345],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:11,
-            description: "<strong>History Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 11,
+            description:
+              '<b>History Club</b><p><a href="https://maclyonsden.com/club/history-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46132023733188,43.75372807294906],
+            coordinates: [-79.46130174953414, 43.75372861925064],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:12,
-            description: "<strong>French Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 12,
+            description:
+              '<b>French Club</b><p><a href="https://maclyonsden.com/club/french-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.4613295288922,43.75374470140514],
+            coordinates: [-79.46130560495627, 43.75373952230913],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:13,
-            description: "<strong>The Lyon </strong><p> Description </p>",
-            icon: "castle",
+            id: 13,
+            description:
+              '<b>The Lyon</b><p><a href="https://maclyonsden.com/club/the-lyon" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.4612594868843,43.75362152388968],
+            coordinates: [-79.46125581707167, 43.75362888910291],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:14,
-            description: "<strong>Tree Huggers</strong><p> Description </p>",
-            icon: "castle",
+            id: 14,
+            description:
+              '<b>Tree Huggers</b><p><a href="https://maclyonsden.com/club/treehuggers" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46124459518745,43.75362426423425],
+            coordinates: [-79.46124157189129, 43.75363030445041],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:15,
-            description: "<strong>Mac Radio Announcers</strong><p> Description </p>",
-            icon: "castle",
+            id: 15,
+            description:
+              '<b>Mac Radio Annoucners</b><p><a href="https://maclyonsden.com/club/mac-radio-announcers" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.4612215119736,43.753626292088825],
+            coordinates: [-79.46121714530972, 43.753632722096654],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:16,
-            description: "<strong>Let's Talk Now</strong><p> Description </p>",
-            icon: "castle",
+            id: 16,
+            description:
+              '<b>Let\'s Talk Now Club</b><p><a href="https://maclyonsden.com/club/lets-talk-now" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46120653907884,43.75362831994332],
+            coordinates: [-79.46120288834399, 43.7536349018703],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:17,
-            description: "<strong>Unicef</strong><p> Description </p>",
-            icon: "castle",
+            id: 17,
+            description:
+              '<b>UNICEF</b><p><a href="https://maclyonsden.com/club/unicef" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46118158425318,43.753631023749705],
+            coordinates: [-79.46117691331494, 43.753637686444335],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:18,
-            description: "<strong>Rainbow Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 18,
+            description:
+              '<b>Rainbow Club</b><p><a href="https://maclyonsden.com/club/rainbow-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46118158425318,43.753631023749705],
+            coordinates: [-79.46116265520898, 43.75363938250496],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:19,
-            description: "<strong>UNI-talk</strong><p> Description </p>",
-            icon: "castle",
+            id: 19,
+            description:
+              '<b>UNI-talk</b><p><a href="https://maclyonsden.com/club/UNI-talk" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46114320601062,43.75363531841228],
+            coordinates: [-79.46113823553753, 43.75364216826375],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:20,
-            description: "<strong>Wellness @ Mac</strong><p> Description </p>",
-            icon: "castle",
+            id: 20,
+            description:
+              '<b>Wellness @ Mac</b><p><a href="https://maclyonsden.com/club/wellness-at-mac" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46112855524916,43.75363710731256],
+            coordinates: [-79.46112314101545, 43.75364398532042],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:21,
-            description: "<strong>Gardening Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 21,
+            description:
+              '<b>Gardening Club</b><p><a href="https://maclyonsden.com/club/gardening-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46110484816555,43.75363981111806],
+            coordinates: [-79.46109867295455, 43.75364676961962],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:22,
-            description: "<strong>Key Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 22,
+            description:
+              '<b>Key Club</b><p><a href="https://maclyonsden.com/club/key-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46108956394,43.75364138851637],
+            coordinates: [-79.46108357843245, 43.75364846567999],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:23,
-            description: "<strong>Careers in Design</strong><p> Description </p>",
-            icon: "castle",
+            id: 23,
+            description:
+              '<b>Careers in Design</b><p><a href="https://maclyonsden.com/club/careers-in-design" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.4610658568558,43.75364499359026],
+            coordinates: [-79.46105850701775, 43.753651482449214],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:24,
-            description: "<strong>The Flounder</strong><p> Description </p>",
-            icon: "castle",
+            id: 24,
+            description:
+              '<b>The Flounder</b><p><a href="https://maclyonsden.com/club/flounder" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46105026013957,43.75364657084009],
+            coordinates: [-79.46104391452232, 43.753652694705266],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:25,
-            description: "<strong>Cybersecurity Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 25,
+            description:
+              '<b>Cybersecurity Club</b><p><a href="https://maclyonsden.com/club/cybersecurity-club" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46126130154995,43.75369496490765],
+            coordinates: [-79.46126130154995, 43.75369496490765],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:26,
-            description: "<strong>Mackenzie Engineering Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 26,
+            description:
+              '<b>Mackenzie Engineeering Club</b><p><a href="https://maclyonsden.com/club/MEC" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46125836307769,43.75368385665968],
+            coordinates: [-79.46125836307769, 43.75368385665968],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:27,
-            description: "<strong>MEDLIFE</strong><p> Description </p>",
-            icon: "castle",
+            id: 27,
+            description:
+              '<b>MEDLIFE</b><p><a href="https://maclyonsden.com/club/medlife" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46124441016529,43.75366921436563],
+            coordinates: [-79.46123535767697, 43.7536597356675],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:28,
-            description: "<strong>Baycrest-Mackenzie Partnership</strong><p> Description </p>",
-            icon: "castle",
+            id: 28,
+            description:
+              '<b>Baycrest-Mackenzie Partnership</b><p><a href="https://maclyonsden.com/club/mackenzie-baycrest-partnership" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46122940420271,43.75367073564328],
+            coordinates: [-79.46121946489153, 43.75366139859827],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:29,
-            description: "<strong>Women in STEM</strong><p> Description </p>",
-            icon: "castle",
+            id: 29,
+            description:
+              '<b>Women in STEM</b><p><a href="https://maclyonsden.com/club/women-in-stem" target="_blank" title="Opens in a new window">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.4612072901529,43.753673017559294],
+            coordinates: [-79.46119664892562, 43.75366456109961],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:30,
-            description: "<strong>Math Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 30,
+            description:
+              '<b>Math Club</b><p><a href="https://maclyonsden.com/club/math-club" target="_blank" title="Math Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46119307397782,43.75367510931548],
+            coordinates: [-79.46118165938897, 43.7536663936842],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:31,
-            description: "<strong>Physics Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 31,
+            description:
+              '<b>Physics Club</b><p><a href="https://maclyonsden.com/club/physics-club" target="_blank" title="Physics Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46118543936576,43.75369241384283],
+            coordinates: [-79.46116413872673, 43.75369319879434],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:32,
-            description: "<strong>Chemistry Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 32,
+            description:
+              '<b>Chemistry Club</b><p><a href="https://maclyonsden.com/club/chemistry-club" target="_blank" title="Chemistry Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46118807199032,43.75370306277998],
+            coordinates: [-79.46116782229596, 43.75370450389764],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:33,
-            description: "<strong>Muslim Culture Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 33,
+            description:
+              '<b>Muslim Culture Club</b><p><a href="https://maclyonsden.com/club/muslim-culture-club" target="_blank" title="Muslim Culture Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46120334121555,43.75371827554389],
+            coordinates: [-79.46119500554012, 43.75372414542039],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:34,
-            description: "<strong>Biology Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 34,
+            description:
+              '<b>Biology Club</b><p><a href=”https://maclyonsden.com/club/bio-club" target="_blank" title="Biology Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46121729412793,43.753717134586736],
+            coordinates: [-79.46120953770222, 43.75372133179536],
           },
-        }, 
+        },
         {
           type: "Feature",
           properties: {
-            id:35,
+            id: 35,
             description: "helk",
-            icon: "castle",
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46121729412793,43.753717134586736],
+            coordinates: [-79.46123327399353, 43.75371816841607],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:36,
-            description: "<strong>Jewish Culture Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 36,
+            description:
+              '<b>Jewish Culture Club</b><p><a href=”https://maclyonsden.com/club/jewish-culture-club" target="_blank" title="Jewish Culture Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46121729412793,43.753717134586736],
+            coordinates: [-79.46124826422738, 43.75371650221419],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:37,
-            description: "<strong>Dance Team</strong><p> Description </p>",
-            icon: "castle",
+            id: 37,
+            description:
+              '<b>Dance Team</b><p><a href=”https://www.instagram.com/wlmac.danceteam/" target="_blank" title=”Dance Teal">@wlmac.danceteam</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46114243759361,43.75370838709108],
+            coordinates: [-79.46114243759361, 43.75370838709108],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:38,
-            description: "<strong>Central Arts Council</strong><p> Description </p>",
-            icon: "castle",
+            id: 38,
+            description:
+              '<b>Central Arts Council</b><p><a href=”https://maclyonsden.com/club/artscouncil" target="_blank" title="Central Arts Council">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46113955168924,43.75369793518965],
+            coordinates: [-79.46113955168924, 43.75369793518965],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:39,
-            description: "<strong>Mackenzie Calligraphy Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 39,
+            description:
+              '<b>Mackenzie Calligraphy Club</b><p><a href=”https://maclyonsden.com/club/mackenzie-calligraphy-club" target="_blank" title="Mackenzie Calligraphy Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46112637950988,43.75368290855562],
+            coordinates: [-79.46111398384248, 43.753675016730824],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:40,
-            description: "<strong>Creator's Joy</strong><p> Description </p>",
-            icon: "castle",
+            id: 40,
+            description:
+              '<b>Creator’s Joy</b><p><a href=”" target="_blank" title="Creator’s Joy">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46111215219064,43.75368435623707],
+            coordinates: [-79.46109894955666, 43.75367648606982],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:41,
-            description: "<strong>Creative Arts Alliance</strong><p> Description </p>",
-            icon: "castle",
+            id: 41,
+            description:
+              '<b>Creative Arts Alliance</b><p><a href=”https://maclyonsden.com/club/creative-arts-alliance" target="_blank" title="Creative Arts Alliance">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46108975491188,43.75368682998976],
+            coordinates: [-79.46107682531661, 43.75367831739524],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:42,
-            description: "<strong>Creative Writing Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 42,
+            description:
+              '<b>Creative Writing Club</b><p><a href=”https://maclyonsden.com/club/mackenzie-creative-writing-club" target="_blank" title="Creative Writing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46107528243958,43.753688731082434],
+            coordinates: [-79.4610616059595, 43.75367998259105],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:0,
-            description: "<strong>Creative Writing Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 43,
+            description:
+              "<strong>Creative Writing Club</strong><p> Description </p>",
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46107528243958,43.753688731082434],
+            coordinates: [-79.46107528243958, 43.753688731082434],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:0,
-            description: "<strong>Creative Writing Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 44,
+            description:
+              "<strong>Creative Writing Club</strong><p> Description </p>",
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46107528243958,43.753688731082434],
+            coordinates: [-79.46107528243958, 43.753688731082434],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:45,
-            description: "<strong>Visual Arts Council</strong><p> Description </p>",
-            icon: "castle",
+            id: 45,
+            description:
+              '<b>Visual Arts Council</b><p><a href=”https://maclyonsden.com/club/visual-arts-council" target="_blank" title="Visual Arts Council">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46108557150073,43.753732314346166],
+            coordinates: [-79.4610749649739, 43.75373709635679],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:46,
-            description: "<strong>Drama Council</strong><p> Description </p>",
-            icon: "castle",
+            id: 46,
+            description:
+              '<b>Drama Council</b><p><a href=”https://maclyonsden.com/club/drama-concil" target="_blank" title="Drama Council">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46110005465303,43.753730562998385],
+            coordinates: [-79.46108924570751, 43.753734932774734],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:47,
-            description: "<strong>Drama Council</strong><p> Description </p>",
-            icon: "castle",
+            id: 47,
+            description:
+              '<b>Composing Club</b><p><a href=”https://maclyonsden.com/club/composing-club" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46112243893013,43.7537278999271],
+            coordinates: [-79.46111252113948, 43.753732934566415],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:48,
-            description: "<strong>Music Council</strong><p> Description </p>",
-            icon: "castle",
+            id: 48,
+            description: '<b>Music Council</b></b><p><a href=”https://maclyonsden.com/club/music-council" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46113638441307,43.75372637965694],
+            coordinates: [-79.46112774136735, 43.753731102865345],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:49,
-            description: "<strong>Model United Nations</strong><p> Description </p>",
-            icon: "castle",
+            id: 49,
+            description:
+            '<b>Model United Nations</b></b><p><a href=”https://maclyonsden.com/club/mun" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46129202108443,43.75376040150047],
+            coordinates: [-79.46127993280194, 43.75374969548815],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:50,
-            description: "<strong>Mackenzie Athletic Council</strong><p> Description </p>",
-            icon: "castle",
+            id: 50,
+            description:
+            '<b>Mackenzie Athletic Council</b></b><p><a href=”https://maclyonsden.com/club/athletic-council" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46127728470296,43.75376227341238],
+            coordinates: [-79.46126622741446, 43.75375153977589],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:51,
-            description: "<strong>Mock Trials</strong><p> Description </p>",
-            icon: "castle",
+            id: 51,
+            description: '<b>Mock Trials</b></b><p><a href=”https://maclyonsden.com/club/mock-trials" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46125459716995,43.753765375457164],
+            coordinates: [-79.46124041855968, 43.75375353773157],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:52,
-            description: "<strong>Business Council</strong><p> Description </p>",
-            icon: "castle",
+            id: 52,
+            description:
+            '<b>Business Council</b></b><p><a href=”https://maclyonsden.com/club/business-council" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46123927418843,43.75376667480484],
+            coordinates: [-79.46122634812941, 43.7537552030515],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:53,
-            description: "<strong>NBA Fan Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 53,
+            description: '<b>NBA Fan Club</b></b><p><a href=”https://maclyonsden.com/club/nba-fan-club" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46121514474375,43.75376932842528
-            ],
+            coordinates: [-79.46119984807186, 43.7537563689765],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:54,
-            description: "<strong>Debate Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 54,
+            description: '<b>Debate Club</b></b><p><a href=”https://maclyonsden.com/club/debate-club" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46120000767044,43.75377131683837],
+            coordinates: [-79.46118508608991, 43.753758865571655],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:55,
-            description: "<strong>Kinesiology and Fitness</strong><p> Description </p>",
-            icon: "castle",
+            id: 55,
+            description:
+            '<b>Kinesiology and Fitness</b></b><p><a href=”https://maclyonsden.com/club/kinesiology-and-fitness" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46117567584362,43.75377313994014],
+            coordinates: [-79.46115973722371, 43.75376186231631],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:56,
-            description: "<strong>Esports Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 56,
+            description: '<b>Esports Club</b></b><p><a href=”https://maclyonsden.com/club/esports-club" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46117567584362,43.75377313994014],
+            coordinates: [-79.46114658851327, 43.753762862867404],
           },
         },
         {
           type: "Feature",
           properties: {
-            id:57,
-            description: "<strong>TED Club</strong><p> Description </p>",
-            icon: "castle",
+            id: 57,
+            description: '<b>TED Club</b></b><p><a href=”https://maclyonsden.com/club/ted-club" target="_blank" title="Composing Club">Club Page</a></p>',
+            icon: "embassy",
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46116122798746,43.75377496318825],
+            coordinates: [-79.46112131852031, 43.75376500594942],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 58,
+            description: "sdfsd",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46112131852031, 43.75376500594942],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 59,
+            description: "<b>BILT</b><p>No Information Avalible</p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46112131852031, 43.75376500594942],
           },
         },
       ],
@@ -2142,5 +2211,3 @@ map.on("load", () => {
 // })
 //   .setLngLat([-79.46156040136074, 43.753388033218926])
 //   .addTo(map);
-
-
