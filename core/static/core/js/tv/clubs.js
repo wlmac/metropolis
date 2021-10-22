@@ -35,9 +35,9 @@ var img = {
     17: 4,
     39: 4,
     12: 4,
-    //Dance Team?? (4)
+    //Dance Council (4)
     24: 4,
-    //Dance Team?? (5)
+    //Dance Team (5)
     3: 5,
     44: 5,
     46: 5,
@@ -59,7 +59,7 @@ var img = {
     58: 6,
     27: 6,
     //Business Council?? (6)
-    //BILT?? (6)
+    //BILT (6)
 }
 
 function setSlide() {
@@ -74,9 +74,11 @@ function setSlide() {
     $(".bio").text(club.bio);
     $(".description").html(marked(club.extra_content));
     if(img[club.id] == undefined) {
-        $(".location").children().attr("src", `/static/core/img/booths/0.png`)
+        $(".location").children().attr("src", "/static/core/img/booths/0.png");
+    } else if(club.id == 60) {
+        $(".location").children().attr("src", "");
     } else {
-        $(".location").children().attr("src", `/static/core/img/booths/${img[club.id]}.png`)
+        $(".location").children().attr("src", `/static/core/img/booths/${img[club.id]}.png`);
     }
     $(".club-execs").empty();
     var execlist = [];
