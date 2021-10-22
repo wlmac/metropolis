@@ -72,10 +72,10 @@ function setSlide() {
         $(".tag-section").append(`<p class="tag" style="background-color: ${tag.color};">${tag.name}</p>`);
     }
     $(".bio").text(club.bio);
-    if(img[club.id] == undefined) {
-        $(".location").children().attr("src", "/static/core/img/booths/0.png");
-    } else if(club.id == 60) {
+    if(club.id == 60) {
         $(".location").children().attr("src", "");
+    } else if(img[club.id] == undefined) {
+        $(".location").children().attr("src", "/static/core/img/booths/0.png");
     } else {
         $(".location").children().attr("src", `/static/core/img/booths/${img[club.id]}.png`);
     }
