@@ -106,6 +106,9 @@ h3 {
 .description > * {
     overflow-wrap: anywhere;
 }
+.description img {
+    width: 100%;
+}
 .location {
     width: 100%;
     display: flex;
