@@ -5,12 +5,14 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from django.core.mail import send_mail
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
+
+from core.utils.mail import send_mail
+from metropolis import settings
 
 from . import models
 from .forms import (
@@ -363,6 +365,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                             ),
                             None,
                             [teacher.email],
+                            bcc=settings.ANNOUNCEMENT_APPROVAL_BCC_LIST,
                             html_message=render_to_string(
                                 "core/email/verify_announcement.html",
                                 email_template_context,

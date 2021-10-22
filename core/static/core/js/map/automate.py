@@ -6,12 +6,16 @@ geojson = open("booths.txt", "w")
 # geojson.write("{\n 'features' : [\n")
 for i in data_list:
     print(i)
-    if i.find("description: ") > -1 :
-        clubname = i[i.find(">"):i.find("<", beg=i.find(">"))]
-        geojson.write("clubname: "+clubname)
-        geojson.write("description: \"<strong>"+clubname+"</strong><p><a href=\"https://maclyonsden.com/club/INSERT\" target=\"_blank\" title=\"Opens in a new window\">Club Page</a></p>\",")
-    elif i.find("icon:")>-1:
-        geojson.write("icon: \"embassy\",")
+    if i.find("description: ") > -1:
+        clubname = i[i.find(">") : i.find("<", beg=i.find(">"))]
+        geojson.write("clubname: " + clubname)
+        geojson.write(
+            'description: "<strong>'
+            + clubname
+            + '</strong><p><a href="https://maclyonsden.com/club/INSERT" target="_blank" title="Opens in a new window">Club Page</a></p>",'
+        )
+    elif i.find("icon:") > -1:
+        geojson.write('icon: "embassy",')
     else:
         geojson.write(i)
 
