@@ -7,40 +7,50 @@ function setSlide() {
     $(".club-logo").children().attr("src", club.icon);
     $(".club-name").text(club.name);
     $(".tag-section").empty();
-    for(var tag of club.tags) {
+    for (var tag of club.tags) {
         $(".tag-section").append(`<p class="tag" style="background-color: ${tag.color};">${tag.name}</p>`);
     }
     $(".bio").text(club.bio);
     $(".club-execs").empty();
-    for(var exec of club.execs) {
-        var name;
-        new Promise((resolve, reject) => {
-            $.getJSON(window.location.origin+"/api/user/"+exec.slug, function(data) {
-                name = data.first_name + " " + data.last_name;
+    var execlist = [];
+    var promiselist = [];
+    for (var exec of club.execs) {
+        var fname;
+        var lname;
+        promiselist.push(new Promise((resolve, reject) => {
+            $.getJSON(window.location.origin + "/api/user/" + exec.slug, function (data) {
+                fname = data.first_name;
+                lname = data.last_name;
                 resolve();
             });
         }).then(() => {
-            $(".club-execs").append(`<p>${name}</p>`);
-        });
+            execlist.push({ fname: fname, lname: lname });
+        }));
     }
-    $(".description").html(marked(club.extra_content));
-    var elem = $("#scrollable1")
-    var time = Math.min(60000, elem.prop("scrollHeight")*16);
-    elem.scrollTop(0);
-    setTimeout(function() {elem.animate({scrollTop: elem.prop("scrollHeight")}, time)}, 30000);
-    elem = $("#scrollable2")
-    time = Math.min(60000, elem.prop("scrollHeight")*32);
-    elem.scrollTop(0);
-    setTimeout(function() {elem.animate({scrollTop: elem.prop("scrollHeight")}, time)}, 30000);
-    $("#fade").delay(119000).fadeTo(250, 1);
-    i++;
-    i %= clubs.length;
+    Promise.all(promiselist).then(() => {
+        execlist.sort((a, b) => (a.fname > b.fname) ? 1 : (a.fname === b.fname) ? ((a.lname > b.lname) ? 1 : -1) : -1);
+        for (let k = 0; k < execlist.length; k++) {
+            $(".club-execs").append(`<p>${execlist[k].fname + " " + execlist[k].lname}</p>`);
+        }
+        $(".description").html(marked(club.extra_content));
+        var elem = $("#scrollable1")
+        var time = Math.min(13000, elem.prop("scrollHeight") * 16);
+        elem.scrollTop(0);
+        setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 8000);
+        elem = $("#scrollable2")
+        time = 13000;
+        elem.scrollTop(0);
+        setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 8000);
+        $("#fade").delay(29000).fadeTo(250, 1);
+        i++;
+        i %= clubs.length;
+    })
 }
 
 function slides() {
-    $.getJSON(window.location.origin+"/api/organizations", function(data) {
+    $.getJSON(window.location.origin + "/api/organizations", function (data) {
         clubs = data;
+        setTimeout(setSlide, 100);
+        setInterval(setSlide, 30000);
     });
-    setTimeout(setSlide, 100);
-    setInterval(setSlide, 120000);
 }
