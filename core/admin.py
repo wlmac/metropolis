@@ -257,7 +257,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                             render_to_string('core/email/verify_announcement.txt', email_template_context),
                             None,
                             [teacher.email],
-                            bcc=[settings.DEFAULT_FROM_EMAIL],
+                            bcc=settings.ANNOUNCEMENT_APPROVAL_BCC_LIST,
                             html_message=render_to_string('core/email/verify_announcement.html', email_template_context)
                         )
 

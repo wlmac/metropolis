@@ -423,6 +423,8 @@ API_VERSION = "3.0.0"
 
 DEFAULT_TIMEZONE = 'UTC'
 
+ANNOUNCEMENT_APPROVAL_BCC_LIST = []
+
 
 try:
     from metropolis.config import *
