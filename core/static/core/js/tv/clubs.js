@@ -101,14 +101,15 @@ function setSlide() {
         for (let k = 0; k < execlist.length; k++) {
             $(".club-execs").append(`<p>${execlist[k].fname + " " + execlist[k].lname}</p>`);
         }
-        var elem = $("#scrollable1")
+        var execs = $("#scrollable1")
+        var extra = $("#scrollable2")
         var time = 12000
-        elem.scrollTop(0);
-        setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 8000);
-        elem = $("#scrollable2")
-        time = 12000;
-        elem.scrollTop(0);
-        setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 8000);
+        execs.scrollTop(0);
+        extra.scrollTop(0);
+        setTimeout(function () {
+            execs.animate({scrollTop: execs.prop("scrollHeight") }, time);
+            extra.animate({scrollTop: extra.prop("scrollHeight") }, time);
+        }, 8000);
         //$("#fade").delay(29000).fadeTo(250, 1);
         i++;
         i %= clubs.length;
