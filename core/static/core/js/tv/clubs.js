@@ -1,8 +1,69 @@
 var clubs;
 var i = 0;
+var img = {
+    6: 1,
+    9: 1,
+    5: 1,
+    30: 1,
+    14: 2,
+    43: 2,
+    15: 2,
+    21: 2,
+    23: 2,
+    36: 2,
+    26: 2,
+    41: 2,
+    22: 3,
+    16: 3,
+    28: 3,
+    38: 3,
+    48: 3,
+    35: 3,
+    37: 3,
+    34: 3,
+    13: 3,
+    52: 3,
+    56: 3,
+    59: 3,
+    57: 4,
+    11: 4,
+    33: 4,
+    20: 4,
+    49: 4,
+    10: 4,
+    25: 4,
+    17: 4,
+    39: 4,
+    12: 4,
+    //Dance Council (4)
+    24: 4,
+    //Dance Team (5)
+    3: 5,
+    44: 5,
+    46: 5,
+    40: 5,
+    29: 5,
+    //blank
+    //blank
+    50: 5,
+    55: 5,
+    54: 5,
+    53: 5,
+    4: 6,
+    31: 6,
+    45: 6,
+    7: 6, //dupe
+    51: 6,
+    32: 6,
+    47: 6,
+    58: 6,
+    27: 6,
+    //Business Council?? (6)
+    //BILT (6)
+}
 
 function setSlide() {
-    $("#fade").delay(250).fadeTo(250, 0);
+    //$("#fade").delay(250).fadeTo(250, 0);
     club = clubs[i];
     $(".club-logo").children().attr("src", club.icon);
     $(".club-name").text(club.name);
@@ -11,6 +72,14 @@ function setSlide() {
         $(".tag-section").append(`<p class="tag" style="background-color: ${tag.color};">${tag.name}</p>`);
     }
     $(".bio").text(club.bio);
+    if(img[club.id] == undefined) {
+        $(".location").children().attr("src", "/static/core/img/booths/0.png");
+    } else if(club.id == 60) {
+        $(".location").children().attr("src", "");
+    } else {
+        $(".location").children().attr("src", `/static/core/img/booths/${img[club.id]}.png`);
+    }
+    $(".description").html(marked(club.extra_content));
     $(".club-execs").empty();
     var execlist = [];
     var promiselist = [];
@@ -32,16 +101,15 @@ function setSlide() {
         for (let k = 0; k < execlist.length; k++) {
             $(".club-execs").append(`<p>${execlist[k].fname + " " + execlist[k].lname}</p>`);
         }
-        $(".description").html(marked(club.extra_content));
         var elem = $("#scrollable1")
-        var time = Math.min(13000, elem.prop("scrollHeight") * 16);
+        var time = 12000
         elem.scrollTop(0);
         setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 8000);
         elem = $("#scrollable2")
-        time = 13000;
+        time = 12000;
         elem.scrollTop(0);
         setTimeout(function () { elem.animate({ scrollTop: elem.prop("scrollHeight") }, time) }, 8000);
-        $("#fade").delay(29000).fadeTo(250, 1);
+        //$("#fade").delay(29000).fadeTo(250, 1);
         i++;
         i %= clubs.length;
     })

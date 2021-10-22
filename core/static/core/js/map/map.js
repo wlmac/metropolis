@@ -1740,7 +1740,7 @@ map.on("load", () => {
           },
           geometry: {
             type: "Point",
-            coordinates: [-79.46123327399353, 43.75371816841607],
+            coordinates: [79.46123327399353, 43.75371816841607],
           },
         },
         {
@@ -2090,19 +2090,19 @@ map.on("load", () => {
     map.getCanvas().style.cursor = "";
   });
 
-  const marker = new mapboxgl.Marker({
-    draggable: true,
-  })
-    .setLngLat([-79.46118496290478, 43.75367336221862])
-    .addTo(map);
+  // const marker = new mapboxgl.Marker({
+  //   draggable: true,
+  // })
+  //   .setLngLat([-79.46118496290478, 43.75367336221862])
+  //   .addTo(map);
 
-  function onDragEnd() {
-    const lngLat = marker.getLngLat();
-    coordinates.style.display = "block";
-    coordinates.innerHTML = `${lngLat.lng},${lngLat.lat}`;
-  }
+  // function onDragEnd() {
+  //   const lngLat = marker.getLngLat();
+  //   coordinates.style.display = "block";
+  //   coordinates.innerHTML = `${lngLat.lng},${lngLat.lat}`;
+  // }
 
-  marker.on("dragend", onDragEnd);
+  // marker.on("dragend", onDragEnd);
 
   // const marker13 = new mapboxgl.Marker({})
   //   .setLngLat([-79.46134268787472, 43.753754470296485])
