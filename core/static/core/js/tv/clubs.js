@@ -72,7 +72,6 @@ function setSlide() {
         $(".tag-section").append(`<p class="tag" style="background-color: ${tag.color};">${tag.name}</p>`);
     }
     $(".bio").text(club.bio);
-    $(".description").html(marked(club.extra_content));
     if(img[club.id] == undefined) {
         $(".location").children().attr("src", "/static/core/img/booths/0.png");
     } else if(club.id == 60) {
@@ -80,6 +79,7 @@ function setSlide() {
     } else {
         $(".location").children().attr("src", `/static/core/img/booths/${img[club.id]}.png`);
     }
+    $(".description").html(marked(club.extra_content));
     $(".club-execs").empty();
     var execlist = [];
     var promiselist = [];
