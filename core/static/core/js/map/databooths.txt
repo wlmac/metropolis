@@ -1,0 +1,706 @@
+{
+          type: "Feature",
+          properties: {
+            id: 1,
+            description: "<strong>MSC</strong><p> Mackenzie Science Club</p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4613942054596, 43.75355665507274],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 2,
+            description:
+              "<strong>ACED</strong><p>ACED Competitive Business Case Competition Team</p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46135445939534, 43.75356090732248],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 3,
+            description:
+              "<strong>MCPT</strong><p>Competative Case Competition Team</p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46140496158867, 43.75360322941137],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 4,
+            description:
+              "<strong>HOSA</strong><p>Competative Health Science Case Competition Team</p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46136381338786, 43.75360627182371],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 5,
+            description: "<strong>Animanga Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46128489186641, 43.75364329694912],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 6,
+            description: "<strong>Cubing Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46128608332647, 43.75365481503346],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 7,
+            description:
+              "<strong>Linguistics Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4612909873974, 43.75367164651922],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 8,
+            description: "<strong>Chess Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46129246204951, 43.75368139874675],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 9,
+            description: "<strong>Book Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46129614052039, 43.75369893721205],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 10,
+            description: "<strong>3D Design Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46129823092178, 43.753710973343345],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 11,
+            description: "<strong>History Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46130174953414, 43.75372861925064],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 12,
+            description: "<strong>French Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46130560495627, 43.75373952230913],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 13,
+            description: "<strong>The Lyon </strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46125581707167, 43.75362888910291],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 14,
+            description: "<strong>Tree Huggers</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46124157189129, 43.75363030445041],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 15,
+            description:
+              "<strong>Mac Radio Announcers</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46121714530972, 43.753632722096654],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 16,
+            description: "<strong>Let's Talk Now</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46120288834399, 43.7536349018703],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 17,
+            description: "<strong>Unicef</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46117691331494, 43.753637686444335],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 18,
+            description: "<strong>Rainbow Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46116265520898, 43.75363938250496],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 19,
+            description: "<strong>UNI-talk</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46113823553753, 43.75364216826375],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 20,
+            description: "<strong>Wellness @ Mac</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46112314101545, 43.75364398532042],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 21,
+            description: "<strong>Gardening Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46109867295455, 43.75364676961962],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 22,
+            description: "<strong>Key Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46108357843245, 43.75364846567999],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 23,
+            description:
+              "<strong>Careers in Design</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46105850701775, 43.753651482449214],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 24,
+            description: "<strong>The Flounder</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46104391452232, 43.753652694705266],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 25,
+            description:
+              "<strong>Cybersecurity Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46126130154995, 43.75369496490765],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 26,
+            description:
+              "<strong>Mackenzie Engineering Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46125836307769, 43.75368385665968],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 27,
+            description: "<strong>MEDLIFE</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46123535767697, 43.7536597356675],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 28,
+            description:
+              "<strong>Baycrest-Mackenzie Partnership</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46121946489153, 43.75366139859827],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 29,
+            description: "<strong>Women in STEM</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46119664892562, 43.75366456109961],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 30,
+            description: "<strong>Math Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46118165938897, 43.7536663936842],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 31,
+            description: "<strong>Physics Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46116413872673, 43.75369319879434],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 32,
+            description: "<strong>Chemistry Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46116782229596, 43.75370450389764],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 33,
+            description:
+              "<strong>Muslim Culture Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46119500554012, 43.75372414542039],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 34,
+            description: "<strong>Biology Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46120953770222, 43.75372133179536],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 35,
+            description: "helk",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46123327399353, 43.75371816841607],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 36,
+            description:
+              "<strong>Jewish Culture Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46124826422738, 43.75371650221419],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 37,
+            description: "<strong>Dance Team</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46114243759361, 43.75370838709108],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 38,
+            description:
+              "<strong>Central Arts Council</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46113955168924, 43.75369793518965],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 39,
+            description:
+              "<strong>Mackenzie Calligraphy Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46111398384248, 43.753675016730824],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 40,
+            description: "<strong>Creator's Joy</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46109894955666, 43.75367648606982],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 41,
+            description:
+              "<strong>Creative Arts Alliance</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46107682531661, 43.75367831739524],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 42,
+            description:
+              "<strong>Creative Writing Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4610616059595, 43.75367998259105],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 0,
+            description:
+              "<strong>Creative Writing Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46107528243958, 43.753688731082434],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 0,
+            description:
+              "<strong>Creative Writing Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46107528243958, 43.753688731082434],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 45,
+            description:
+              "<strong>Visual Arts Council</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4610749649739, 43.75373709635679],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 46,
+            description: "<strong>Drama Council</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46108924570751, 43.753734932774734],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 47,
+            description: "<strong>Drama Council</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46111252113948, 43.753732934566415],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 48,
+            description: "<strong>Music Council</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46112774136735, 43.753731102865345],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 49,
+            description:
+              "<strong>Model United Nations</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46127993280194, 43.75374969548815],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 50,
+            description:
+              "<strong>Mackenzie Athletic Council</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46126622741446, 43.75375153977589],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 51,
+            description: "<strong>Mock Trials</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46124041855968, 43.75375353773157],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 52,
+            description:
+              "<strong>Business Council</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46122634812941, 43.7537552030515],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 53,
+            description: "<strong>NBA Fan Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46119984807186, 43.7537563689765],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 54,
+            description: "<strong>Debate Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46118508608991, 43.753758865571655],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 55,
+            description:
+              "<strong>Kinesiology and Fitness</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46115973722371, 43.75376186231631],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 56,
+            description: "<strong>Esports Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46114658851327, 43.753762862867404],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 57,
+            description: "<strong>TED Club</strong><p> Description </p>",
+            icon: "embassy",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46112131852031, 43.75376500594942],
+          },
+        },

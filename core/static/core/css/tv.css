@@ -1,0 +1,124 @@
+.wrapper {
+    padding: 25px;
+    height: 100vh;
+}
+#fade {
+    background-color: white;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    display: none;
+}
+.content {
+    display: flex;
+    height: calc(100vh - 50px);
+    background-color: white;
+}
+.scrollable::-webkit-scrollbar {
+    display: none;
+}
+.scrollable {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow: auto;
+    height: 100%;
+}
+.club-detail {
+    width: 50%;
+    margin: 50px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+.club-detail:nth-child(odd) {
+    margin-right: 25px;
+}
+.club-detail:nth-child(even) {
+    margin-left: 25px;
+}
+.club-header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    margin-bottom: 50px;
+}
+.club-header-img {
+    width: 160px;
+    height: 160px;
+    margin-right: 25px;
+}
+.club-logo {
+    overflow: visible; 
+    position: relative;
+    padding-bottom: 100%;
+}
+.club-logo img {
+    -o-object-fit: cover;
+       object-fit: cover;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    -webkit-box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+            box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
+}
+.club-name {
+    margin-bottom: 3%;
+    font-weight: bold;
+    font-size: calc(16px + 2vw);
+    overflow-wrap: anywhere;
+}
+.tag-section {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+    margin: 0;
+}
+
+.tag {
+    padding: 2px 7px !important;
+    margin: 3px !important;
+    background-color: lightblue;
+    border-radius: 0.25rem;
+    color: var(--dark-grey);
+    font-size: 0.8rem;
+    font-family: 'Roboto Mono', monospace;
+}
+.bio {
+    padding-left: 4%;
+    border-left: black 3px solid;
+    margin: 0;
+    margin-bottom: 25px;
+}
+h3 {
+    font-size: calc(16px + 0.8vw);
+}
+.description > * {
+    overflow-wrap: anywhere;
+}
+.description img {
+    width: 100%;
+}
+.location {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.location img {
+    width: 60%;
+}
+hr {
+    border: 0px solid var(--light-grey);
+    border-top-width: 2px;
+    width: 100%;
+}

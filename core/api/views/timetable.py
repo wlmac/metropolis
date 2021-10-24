@@ -1,14 +1,13 @@
-from .. import serializers
-from .. import utils
-from rest_framework import generics, permissions
-from rest_framework.views import APIView
-from ... import models
-from rest_framework.response import Response
-from metropolis.settings import TIMETABLE_FORMATS
-from rest_framework import status
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
 import datetime
+
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from ... import models
+from .. import serializers, utils
 
 
 class IsOwner(permissions.BasePermission):

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load link_tags %}
+{% load gravatar_tags %}
+{% load static %}
+{% load martortags %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/tv.css' %}">
+    <script src="{% static 'core/js/tv/clubs.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+{% endblock %}
+
+{% block body %}
+<script>
+    $(document).ready(function() {
+        slides();
+    });
+</script>
+<div id="fade"></div>
+<div class="wrapper">
+    <div class="content">
+        <div class="club-detail">
+            <div class="club-header">
+                <div class="club-header-img">
+                    <div class="club-logo">
+                        <img class="circle">
+                    </div>
+                </div>
+                <div class="club-header-text">
+                    <h2 class="club-name"></h2>
+                    <div class="tag-section">
+                    </div>
+                </div>
+            </div>
+            <p class="bio"></p>
+            <h3>Execs</h3>
+            <hr>
+            <div class="club-execs scrollable" id="scrollable1"></div>
+        </div>
+        <div class="club-detail">
+            <div class="description scrollable" id="scrollable2"></div>
+            <div class="location">
+                <img>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
