@@ -1280,7 +1280,7 @@ map.on("load", () => {
     type: "raster",
     layout: {
       // Make the layer visible by default.
-      visibility: "visible",
+      visibility: "none",
     },
   });
 
@@ -2059,7 +2059,7 @@ map.on("load", () => {
     layout: {
       "icon-image": "{icon}",
       "icon-allow-overlap": true,
-      visibility: "visible",
+      visibility: "none",
     },
   });
 
