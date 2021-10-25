@@ -11,7 +11,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         slug_field="username", queryset=models.User.objects.all()
     )
     organization = PrimaryKeyAndSlugRelatedField(
-        slug_field="name", queryset=models.Organization.objects.all()
+        slug_field="slug", queryset=models.Organization.objects.all()
     )
     tags = TagSerializer(many=True)
 
