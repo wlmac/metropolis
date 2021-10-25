@@ -8,21 +8,28 @@
     width: 100vw;
     height: 100vh;
     z-index: 100;
+    display: none;
 }
 .content {
     display: flex;
     height: calc(100vh - 50px);
     background-color: white;
 }
-.club-detail::-webkit-scrollbar {
+.scrollable::-webkit-scrollbar {
     display: none;
+}
+.scrollable {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overflow: auto;
+    height: 100%;
 }
 .club-detail {
     width: 50%;
     margin: 50px;
     overflow: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
 }
 .club-detail:nth-child(odd) {
     margin-right: 25px;
@@ -99,7 +106,19 @@ h3 {
 .description > * {
     overflow-wrap: anywhere;
 }
+.description img {
+    width: 100%;
+}
+.location {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.location img {
+    width: 60%;
+}
 hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
+    width: 100%;
 }

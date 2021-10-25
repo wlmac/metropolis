@@ -199,12 +199,19 @@ hr {
     color: var(--mid-grey);
 }
 
+.banner {
+    height: 500px;
+}
+
 @media screen and (max-width: 992px) {
     .event-card {
         width: calc(50% - 20px);
     }
     .announcement-card {
         width: calc(50% - 20px);
+    }
+    .banner {
+        height: 300px;
     }
 }
 
@@ -259,8 +266,4 @@ hr {
         font-size: 0.9rem;
         line-height: 1.4rem;
     }
-}
-
-.banner {
-    height: 300px;
 }
