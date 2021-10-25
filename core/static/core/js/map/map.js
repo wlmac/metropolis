@@ -4,11 +4,11 @@ mapboxgl.accessToken = JSON.parse(
 const map = new mapboxgl.Map({
   container: "map", // container ID
   style: "mapbox://styles/nikisu/cktk76xy90rgm17s7q7pg0g55", // style URL
-  center: [-79.46118496290478, 43.75367336221862], // starting position [lng, lat]
-  zoom: 20, // starting zoom
+  center: [-79.46155348420591, 43.753374130758445], // starting position [lng, lat]
+  zoom: 19, // starting zoom
 });
 const coordinates = document.getElementById("coordinates");
-//-79.46155348420591, 43.753374130758445
+//-79.46118496290478, 43.75367336221862
 const customData = {
   features: [
     {
