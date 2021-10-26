@@ -16,7 +16,8 @@
 {% block body %}
 
 <div class="install-popup" style="display:none">
-    <img src="{% static 'core/img/logo-light-transparent.png' %}">
+    <!--img src="{% static 'core/img/logo-dark-transparent.png' %}"-->
+    <img src="{% static 'core/img/logo-dark.png' %}">
     <span>Access info faster using our web app!</span>
     <div>
         <a id="install-popup-button" class="waves-effect waves-light btn">Install</a>
@@ -75,7 +76,7 @@
     <div class="nav-wrapper">
         <a href="{% url 'index' %}">
             <div class="brand-logo">
-                <img class="img-logo" src="{% static 'core/img/logo-dark-transparent.png' %}"></img>
+                <img class="img-logo" src="{% static 'core/img/logo-dark-transparent.png' %}">
                 <!-- <span>Metropolis</span> -->
             </div>
         </a>
