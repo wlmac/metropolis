@@ -61,7 +61,17 @@
             {{announcement.body|safe_markdown}}
         </div>
         <br>
-        <a class="link" href="{% url 'announcement_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Announcements</a>
+        <div class="bottom-line">
+            <a class="link" href="{% url 'announcement_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Announcements</a>
+            {% if announcement.status != 'a' %}
+            <div class="approval">
+                <form class="approve-form" method="POST" action="{% url '' %}">
+                    <button type="submit">Approve</button>
+                    <button type="submit">Reject</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
         <script>
             $(document).ready(function() {
                 $(".card-authors-text").find("a").addClass("link");
