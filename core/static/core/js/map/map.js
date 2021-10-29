@@ -4,11 +4,11 @@ mapboxgl.accessToken = JSON.parse(
 const map = new mapboxgl.Map({
   container: "map", // container ID
   style: "mapbox://styles/nikisu/cktk76xy90rgm17s7q7pg0g55", // style URL
-  center: [-79.46118496290478, 43.75367336221862], // starting position [lng, lat]
-  zoom: 20, // starting zoom
+  center: [-79.46155348420591, 43.753374130758445], // starting position [lng, lat]
+  zoom: 19, // starting zoom
 });
 const coordinates = document.getElementById("coordinates");
-//-79.46155348420591, 43.753374130758445
+//-79.46118496290478, 43.75367336221862
 const customData = {
   features: [
     {
@@ -1144,6 +1144,182 @@ const customData = {
         floor: 1,
       },
     },
+    {
+      type: "Feature",
+      properties: {
+        title:'Stage',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46198968848333,43.75325517632149],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 13',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46219738125589,43.75323295523572],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 12',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46207866115284,43.75318521982399],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 11',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46165706009798,43.75321935736699],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 10',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.4618750685682,43.75311118946689],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 14',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46209468956859,43.753125035135554],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 15',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46207501005615,43.753063291649454],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 08',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46204669592589,43.75298912538665],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 07',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46193911779909,43.75295355028311],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 06',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46181749497252,43.752941266286854],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 05',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46170511120118,43.75294733544803],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 04',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46146134490077,43.75285072422923],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 03',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46147604027834,43.75293562803412],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 02',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46150013755523,43.753062392390746],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 01',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46151085321212,43.753155288730596],
+      },
+    },
+    {
+      type: "Feature",
+      properties: {
+        title:'Booth 09',
+        floor: 1,
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46168273591726,43.7530478330533],
+      },
+    },
   ],
   type: "FeatureCollection",
 };
@@ -1280,7 +1456,7 @@ map.on("load", () => {
     type: "raster",
     layout: {
       // Make the layer visible by default.
-      visibility: "visible",
+      visibility: "none",
     },
   });
 
@@ -2051,44 +2227,303 @@ map.on("load", () => {
     },
   });
 
-  // Add a layer showing the places.
-  map.addLayer({
-    id: "booths",
-    type: "symbol",
-    source: "booths",
-    layout: {
-      "icon-image": "{icon}",
-      "icon-allow-overlap": true,
-      visibility: "visible",
+
+  map.addSource("mactoberfest", {
+    type: "geojson",
+    data: {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            id: 1,
+            description:
+              'Stage',
+            icon: "castle",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46198968848333,43.75325517632149],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 13,
+            description:
+              '<b>Booth 13</b><p>Drama Council (Goodie Bags + Rice Crispies + Improv Costume Contest)</p> ',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46219738125589,43.75323295523572],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 12,
+            description:
+              '<b>Booth 12</b> <p>Gardening Club (Cookies)</p>',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46207866115284,43.75318521982399],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 11,
+            description:
+              '<b>Booth 11</b> <p>Music Council (Musical Chairs)</p>',
+            icon: "bowling-alley",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46165706009798,43.75321935736699],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 10,
+            description:
+              '<b>Booth 10</b> <p>MCPT (Games)</p>',
+            icon: "bowling-alley",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.4618750685682,43.75311118946689],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 14,
+            description:
+              '<b>Booth 14</b> <p>Photo Booth</p>',
+            icon: "bowling-alley",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46209468956859,43.753125035135554],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 15,
+            description:
+              '<b>Booth 15</b> <p>DJ</p>',
+            icon: "music",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46207501005615,43.753063291649454],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 8,
+            description:
+              '<b>Booth 08</b> <p>Let\' Talk Now (Timbits)</p>',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46204669592589,43.75298912538665],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 7,
+            description:
+              '<b>Booth 07</b> <p>MSC (Chips, Cotton Candy, Tic Tac)</p>',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46193911779909,43.75295355028311],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 6,
+            description:
+              '<b>Booth 06</b> <p>UNICEF (Junior Chickens + Dounuts)</p>',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46181749497252,43.752941266286854],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 5,
+            description:
+              '<b>Booth 05 </b> <p>Creator\'s Joy (Juice Boxes)</p>',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46170511120118,43.75294733544803],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 4,
+            description:
+              '<b>Booth 04 </b> <p>Book Club (Bookmarks + Backed Goods)</p>',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46159780966113,43.7528969650275],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 3,
+            description:
+              '<b>Booth 03</b> <p>Key Club (Jamaican Patties)</p>',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46147604027834,43.75293562803412],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 2,
+            description:
+              '<b>Booth 02 </b> <p> Dance Team (Popcorn)</p>',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46150013755523,43.753062392390746],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 1,
+            description:
+              '<b>Booth 01 </b> <p>Athletic Council (Hot Chocolate)</p>',
+            icon: "fast-food",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46151085321212,43.753155288730596],
+          },
+        },
+        {
+          type: "Feature",
+          properties: {
+            id: 9,
+            description:
+              '<b>Booth 09 </b> <p>Dance Council (Instax Photo Booth)</p>',
+            icon: "bowling-alley",
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [-79.46168273591726,43.7530478330533],
+          },
+        },
+      ],
     },
   });
 
-  // When a click event occurs on a feature in the places layer, open a popup at the
-  // location of the feature, with description HTML from its properties.
-  map.on("click", "booths", (e) => {
-    // Copy coordinates array.
-    const coordinates = e.features[0].geometry.coordinates.slice();
-    const description = e.features[0].properties.description;
 
-    // Ensure that if the map is zoomed out such that multiple
-    // copies of the feature are visible, the popup appears
-    // over the copy being pointed to.
-    // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-    //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    // }
+// Add a layer showing the places.
+map.addLayer({
+  id: "mactoberfest",
+  type: "symbol",
+  source: "mactoberfest",
+  layout: {
+    "icon-image": "{icon}",
+    "icon-allow-overlap": true,
+    visibility: "visible",
+  },
+});
 
-    new mapboxgl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
-  });
+// When a click event occurs on a feature in the places layer, open a popup at the
+// location of the feature, with description HTML from its properties.
+map.on("click", "mactoberfest", (e) => {
+  // Copy coordinates array.
+  const coordinates = e.features[0].geometry.coordinates.slice();
+  const description = e.features[0].properties.description;
 
-  // Change the cursor to a pointer when the mouse is over the places layer.
-  map.on("mouseenter", "booths", () => {
-    map.getCanvas().style.cursor = "pointer";
-  });
+  // Ensure that if the map is zoomed out such that multiple
+  // copies of the feature are visible, the popup appears
+  // over the copy being pointed to.
+  // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+  //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  // }
 
-  // Change it back to a pointer when it leaves.
-  map.on("mouseleave", "booths", () => {
-    map.getCanvas().style.cursor = "";
-  });
+  new mapboxgl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
+});
+
+// Change the cursor to a pointer when the mouse is over the places layer.
+map.on("mouseenter", "mactoberfest", () => {
+  map.getCanvas().style.cursor = "pointer";
+});
+
+// Change it back to a pointer when it leaves.
+map.on("mouseleave", "mactoberfest", () => {
+  map.getCanvas().style.cursor = "";
+});
+
+
+  // // Add a layer showing the places.
+  // map.addLayer({
+  //   id: "booths",
+  //   type: "symbol",
+  //   source: "booths",
+  //   layout: {
+  //     "icon-image": "{icon}",
+  //     "icon-allow-overlap": true,
+  //     visibility: "none",
+  //   },
+  // });
+
+  // // When a click event occurs on a feature in the places layer, open a popup at the
+  // // location of the feature, with description HTML from its properties.
+  // map.on("click", "booths", (e) => {
+  //   // Copy coordinates array.
+  //   const coordinates = e.features[0].geometry.coordinates.slice();
+  //   const description = e.features[0].properties.description;
+
+  //   // Ensure that if the map is zoomed out such that multiple
+  //   // copies of the feature are visible, the popup appears
+  //   // over the copy being pointed to.
+  //   // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+  //   //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  //   // }
+
+  //   new mapboxgl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
+  // });
+
+  // // Change the cursor to a pointer when the mouse is over the places layer.
+  // map.on("mouseenter", "booths", () => {
+  //   map.getCanvas().style.cursor = "pointer";
+  // });
+
+  // // Change it back to a pointer when it leaves.
+  // map.on("mouseleave", "booths", () => {
+  //   map.getCanvas().style.cursor = "";
+  // });
 
   // const marker = new mapboxgl.Marker({
   //   draggable: true,

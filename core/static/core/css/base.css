@@ -196,11 +196,11 @@ select{
 }
 
 .btn{
-    background-color: var(--link-blue);
+    background-color: var(--link-blue) !important;
 }
 
 .btn:hover, .btn:active {
-    background-color: var(--dark-blue);
+    background-color: var(--dark-blue) !important;
 }
 
 .errorlist {
@@ -263,7 +263,8 @@ label {
 
 .install-popup > img{
     display: block;
-    height: 64px;
+    /*height: 64px;*/
+    height: 48px;
     margin: none;
     width: auto;
     background-color: var(--dark-blue);
