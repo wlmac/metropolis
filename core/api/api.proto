@@ -10,9 +10,9 @@ service API {
 
   Tags(Nothing) returns (TagsResp);
 
-  AnnId(AnnId) returns (Ann);
-  AnnsMe(Nothing) returns (AnnsResp);
-  Anns(Nothing) returns (AnnsResp);
+  AnnouncementId(AnnouncementId) returns (Announcement);
+  AnnouncementsMe(Nothing) returns (AnnouncementsResp);
+  Announcements(Nothing) returns (AnnouncementsResp);
 
   OrgId(OrgId) returns (Org);
   OrgSlug(OrgSlug) returns (Org);
@@ -39,8 +39,8 @@ message TagsResp {
   repeated Tag tags = 0;
 }
 
-message AnnsResp {
-  repeated AnnId ids = 0;
+message AnnouncementsResp {
+  repeated AnnouncementId ids = 0;
 }
 
 message OrgsResp {
