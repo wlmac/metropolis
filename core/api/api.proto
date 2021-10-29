@@ -3,7 +3,6 @@ package metropolis;
 import 'types.proto';
 
 service API {
-  UserId(UserId) returns (User);
   UserSlug(UserSlug) returns (User);
   UserMe(Nothing) returns (User);
   Users(Nothing) returns (UsersResp);
@@ -14,7 +13,6 @@ service API {
   AnnouncementsMe(Nothing) returns (AnnouncementsResp);
   Announcements(Nothing) returns (AnnouncementsResp);
 
-  OrgId(OrgId) returns (Org);
   OrgSlug(OrgSlug) returns (Org);
   Orgs(Nothing) returns (OrgsResp);
 
