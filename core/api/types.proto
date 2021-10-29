@@ -15,12 +15,10 @@ message Timeframe {
 
 // User
 
-message UserId { int id = 0; }
-
 message UserSlug { string slug = 0; }
 
 message User {
-	UserId id = 0;
+    // use slug for unique ids
 	UserSlug slug = 1; // username
 	string firstName = 2;
 	string lastName = 3;
@@ -57,12 +55,10 @@ message Ann {
 
 // Org
 
-message OrgId { int id = 0; }
-
 message OrgSlug { string slug = 0; }
 
 message Org {
-	OrgId id = 0;
+    // use slug for unique ids
 	OrgSlug slug = 1;
 	UserId owner = 2;
 	repeated UserId supervisors = 3;
