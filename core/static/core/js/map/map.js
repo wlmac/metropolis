@@ -2381,7 +2381,7 @@ map.on("load", () => {
           properties: {
             id: 4,
             description:
-              '<b>Booth 03 </b> <p>Book Club (Bookmarks + Backed Goods)</p>',
+              '<b>Booth 03 </b> <p>Book Club (Bookmarks + Baked Goods)</p>',
             icon: "fast-food",
           },
           geometry: {
