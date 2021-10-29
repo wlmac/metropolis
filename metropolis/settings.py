@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django_select2",
     "pwa",
     "oauth2_provider",
+    "django_grpc_framework",
 ]
 
 MIDDLEWARE = [
