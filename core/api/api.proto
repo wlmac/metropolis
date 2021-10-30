@@ -1,74 +1,229 @@
+syntax = "proto3";
+
 package metropolis;
 
-import 'types.proto';
+import "google/protobuf/timestamp.proto";
 
 service API {
-  UserSlug(UserSlug) returns (User);
-  UserMe(Nothing) returns (User);
-  Users(Nothing) returns (UsersResp);
+	rpc UserSlug(UserSlug) returns (User) {}
+	rpc UserMe(Nothing) returns (User) {}
+	rpc Users(Nothing) returns (UsersResp) {}
 
-  Tags(Nothing) returns (TagsResp);
+	rpc Tags(Nothing) returns (TagsResp) {}
 
-  AnnouncementId(AnnouncementId) returns (Announcement);
-  AnnouncementsMe(Nothing) returns (AnnouncementsResp);
-  Announcements(Nothing) returns (AnnouncementsResp);
+	rpc AnnouncementId(AnnouncementId) returns (Announcement) {}
+	rpc AnnouncementsMe(Nothing) returns (AnnouncementsResp) {}
+	rpc Announcements(Nothing) returns (AnnouncementsResp) {}
 
-  OrgSlug(OrgSlug) returns (Org);
-  Orgs(Nothing) returns (OrgsResp);
+	rpc OrgSlug(OrgSlug) returns (Org) {}
+	rpc Orgs(Nothing) returns (OrgsResp) {}
 
-  EventId(EventId) returns (Event);
-  Events(Nothing) returns (EventsResp);
+	rpc EventId(EventId) returns (Event) {}
+	rpc Events(Nothing) returns (EventsResp) {}
 
-  TermId(TermId) returns (Term);
-  Terms(Nothing) returns (TermsResp);
+	rpc TermId(TermId) returns (Term) {}
+	rpc Terms(Nothing) returns (TermsResp) {}
 
-  Timetables(Nothing) returns (TimetablesResp);
+	rpc Timetables(Nothing) returns (TimetablesResp) {}
 
-  Meta(Nothing) returns (Meta);
+	rpc Meta(Nothing) returns (Meta) {}
 }
 
 message UsersResp {
-  // elements of ids and slugs at the same index refer to the same user
-  repeated UserId ids = 0;
-  repeated UserSlug slugs = 1;
+	repeated UserSlug slugs = 1;
 }
 
 message TagsResp {
-  repeated Tag tags = 0;
+	repeated Tag tags = 1;
 }
 
 message AnnouncementsResp {
-  repeated AnnouncementId ids = 0;
+	repeated AnnouncementId ids = 1;
 }
 
 message OrgsResp {
-  repeated OrgId ids = 0;
-  repeated OrgSlug slugs = 1;
+	repeated OrgSlug slugs = 1;
 }
 
 message EventsResp {
-  repeated EventId ids = 0;
+	repeated EventId ids = 1;
 }
 
 message TermsResp {
-  repeated TermId ids = 0;
+	repeated TermId ids = 1;
 }
 
 message TimetablesResp {
-  repeated Timetable tables = 0;
+	repeated Timetable tables = 1;
 }
 
 message Meta {
-  string name = 0;
-  string srcURL = 1;
-  string license = 2;
-  string extra = 3;
-  Ver ver = 4;
+	string name = 1;
+	string srcURL = 2;
+	string license = 3;
+	string extra = 4;
+	Ver ver = 5;
 }
 
 message Ver {
-  uint major = 0;
-  uint minor = 1;
-  uint point = 2;
+	uint32 major = 1;
+	uint32 minor = 2;
+	uint32 point = 3;
 }
 
+// Types
+
+// Convenience
+
+message Nothing {}
+
+message Timeframe {
+	google.protobuf.Timestamp start = 1;
+	google.protobuf.Timestamp end = 2;
+}
+
+// User
+
+message UserSlug { string slug = 1; }
+
+message User {
+    // use slug for unique ids
+	UserSlug slug = 1; // username
+	string firstName = 2;
+	string lastName = 3;
+	string bio = 4;
+	string tz = 5;
+	uint32 graduates = 6;
+	repeated OrgSlug orgs = 7;
+	repeated Tag following = 8;
+}
+
+// Tag
+
+message TagId { int32 id = 1; }
+
+message Tag {
+	TagId id = 1;
+	string slug = 2;
+	string color = 3;
+}
+
+// Ann
+
+message AnnouncementId { int32 id = 1; }
+
+message Announcement {
+	AnnouncementId id = 1;
+	UserSlug author = 2;
+	OrgSlug org = 3;
+	repeated Tag tags = 4;
+	google.protobuf.Timestamp created = 5;
+	google.protobuf.Timestamp lastModified = 6;
+	string title = 7;
+	string body = 8;
+	bool public = 9;
+}
+
+// Org
+
+message OrgSlug { string slug = 1; }
+
+message Org {
+	// use slug for unique ids
+	OrgSlug slug = 1;
+	UserSlug owner = 2;
+	repeated UserSlug supervisors = 3;
+	repeated UserSlug execs = 4;
+	repeated Tag tags = 5;
+	string name = 6;
+	string bio = 7;
+	string extra = 8;
+	google.protobuf.Timestamp created = 9;
+	bool membersPublic = 10;
+	Openness apply = 11;
+	string banner = 12;
+	string icon = 13;
+
+	enum Openness {
+	ANY = 1;
+	APPLY = 2;
+	NONE = 3;
+	}
+}
+
+// Events
+
+message EventId { int32 id = 1; }
+
+message Event {
+	EventId id = 1;
+	OrgSlug org = 2;
+	repeated TagId tags = 3;
+	string name = 4;
+	string desc = 5;
+	Timeframe frame = 6;
+	bool general = 7;
+	TermId term = 8;
+}
+
+// Term
+
+message TermId { int32 id = 1; }
+
+message Term {
+	TermId id = 1;
+	string name = 2;
+	string desc = 3;
+	TermFmt fmt = 4;
+	Timeframe frame = 5;
+	bool frozen = 6;
+
+	enum TermFmt {
+	PRE_2020 = 1;
+	COVID = 2;
+	WEEK = 3;
+	}
+}
+
+// Lesson
+
+message Lesson {
+	CourseId type = 1;
+	Timeframe frame = 2;
+	repeated int32 pos = 3;
+	string cycle = 4; // TODO: see if CycleSlug or similar makes sense
+	CourseId course = 5;
+}
+
+// Table
+
+message TableId { int32 id = 1; }
+
+message Table {
+	TableId id = 1;
+	UserSlug owner = 2;
+	TermId type = 3;
+	repeated CourseId courses = 4;
+}
+
+// Course
+
+message CourseId { int32 id = 1; }
+
+message Course {
+	CourseId id = 1;
+	TermId type = 2;
+	string code = 3;
+	string desc = 4;
+	uint32 pos = 5;
+	UserSlug submitter = 6;
+}
+
+// Timetable
+
+message TimetableId { int32 id = 1; }
+
+message Timetable {
+	TimetableId id = 1;
+	// TODO: implement
+}
