@@ -6,6 +6,8 @@ import "google/protobuf/timestamp.proto";
 
 // *Id and *Slug cause compilation errors, so using *I and *S instead
 
+// TOOD: impl: term, course, event, timetable
+
 service API {
 	rpc UserSlug(UserS) returns (User);
 	rpc UserMe(Nothing) returns (User);
