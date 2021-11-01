@@ -2454,7 +2454,7 @@ map.addLayer({
   layout: {
     "icon-image": "{icon}",
     "icon-allow-overlap": true,
-    visibility: "visible",
+    visibility: "none",
   },
 });
 
