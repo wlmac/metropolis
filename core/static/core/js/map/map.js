@@ -2251,7 +2251,7 @@ map.on("load", () => {
           properties: {
             id: 13,
             description:
-              '<b>Booth 13</b><p>Drama Council (Goodie Bags + Rice Crispies + Improv Costume Contest)</p> ',
+              '<b>Booth 12</b><p>Drama Council (Goodie Bags + Rice Crispies + Improv Costume Contest)</p> ',
             icon: "fast-food",
           },
           geometry: {
@@ -2264,7 +2264,7 @@ map.on("load", () => {
           properties: {
             id: 12,
             description:
-              '<b>Booth 12</b> <p>Gardening Club (Cookies)</p>',
+              '<b>Booth 11</b> <p>Gardening Club (Cookies)</p>',
             icon: "fast-food",
           },
           geometry: {
@@ -2277,7 +2277,7 @@ map.on("load", () => {
           properties: {
             id: 11,
             description:
-              '<b>Booth 11</b> <p>Music Council (Musical Chairs)</p>',
+              '<b>Booth 10</b> <p>Music Council (Musical Chairs)</p>',
             icon: "bowling-alley",
           },
           geometry: {
@@ -2290,7 +2290,7 @@ map.on("load", () => {
           properties: {
             id: 10,
             description:
-              '<b>Booth 10</b> <p>MCPT (Games)</p>',
+              '<b>Booth 09</b> <p>MCPT (Games)</p>',
             icon: "bowling-alley",
           },
           geometry: {
@@ -2303,7 +2303,7 @@ map.on("load", () => {
           properties: {
             id: 14,
             description:
-              '<b>Booth 14</b> <p>Photo Booth</p>',
+              '<b>Booth 13</b> <p>Photo Booth</p>',
             icon: "bowling-alley",
           },
           geometry: {
@@ -2316,7 +2316,7 @@ map.on("load", () => {
           properties: {
             id: 15,
             description:
-              '<b>Booth 15</b> <p>DJ</p>',
+              '<b>Booth 14</b> <p>DJ</p>',
             icon: "music",
           },
           geometry: {
@@ -2329,20 +2329,7 @@ map.on("load", () => {
           properties: {
             id: 8,
             description:
-              '<b>Booth 08</b> <p>Let\' Talk Now (Timbits)</p>',
-            icon: "fast-food",
-          },
-          geometry: {
-            type: "Point",
-            coordinates: [-79.46204669592589,43.75298912538665],
-          },
-        },
-        {
-          type: "Feature",
-          properties: {
-            id: 7,
-            description:
-              '<b>Booth 07</b> <p>MSC (Chips, Cotton Candy, Tic Tac)</p>',
+              '<b>Booth 07</b> <p>Let\' Talk Now (Timbits)</p>',
             icon: "fast-food",
           },
           geometry: {
@@ -2353,9 +2340,9 @@ map.on("load", () => {
         {
           type: "Feature",
           properties: {
-            id: 6,
+            id: 7,
             description:
-              '<b>Booth 06</b> <p>UNICEF (Junior Chickens + Dounuts)</p>',
+              '<b>Booth 06</b> <p>MSC (Chips, Cotton Candy, Tic Tac)</p>',
             icon: "fast-food",
           },
           geometry: {
@@ -2366,9 +2353,9 @@ map.on("load", () => {
         {
           type: "Feature",
           properties: {
-            id: 5,
+            id: 6,
             description:
-              '<b>Booth 05 </b> <p>Creator\'s Joy (Juice Boxes)</p>',
+              '<b>Booth 05</b> <p>UNICEF (Junior Chickens + Dounuts)</p>',
             icon: "fast-food",
           },
           geometry: {
@@ -2379,9 +2366,9 @@ map.on("load", () => {
         {
           type: "Feature",
           properties: {
-            id: 4,
+            id: 5,
             description:
-              '<b>Booth 04 </b> <p>Book Club (Bookmarks + Backed Goods)</p>',
+              '<b>Booth 04 </b> <p>Creator\'s Joy (Juice Boxes)</p>',
             icon: "fast-food",
           },
           geometry: {
@@ -2392,9 +2379,9 @@ map.on("load", () => {
         {
           type: "Feature",
           properties: {
-            id: 3,
+            id: 4,
             description:
-              '<b>Booth 03</b> <p>Key Club (Jamaican Patties)</p>',
+              '<b>Booth 03 </b> <p>Book Club (Bookmarks + Baked Goods)</p>',
             icon: "fast-food",
           },
           geometry: {
@@ -2433,7 +2420,7 @@ map.on("load", () => {
           properties: {
             id: 9,
             description:
-              '<b>Booth 09 </b> <p>Dance Council (Instax Photo Booth)</p>',
+              '<b>Booth 08 </b> <p>Dance Council (Instax Photo Booth)</p>',
             icon: "bowling-alley",
           },
           geometry: {
