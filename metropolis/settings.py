@@ -384,7 +384,7 @@ REST_FRAMEWORK = {
 OAUTH2_PROVIDER = {
     "SCOPES": {
         "me_meta": "Read your account data",
-        "me_ann": "Read your announcement feed",
+        "me_announcement": "Read your announcement feed",
         "me_schedule": "Read your schedules",
         "me_timetable": "Read your timetables",
     },
