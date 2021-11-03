@@ -16,6 +16,8 @@ django-select2==7.7.3
 django-storages==1.12
 djangorestframework==3.12.4
 djangorestframework-simplejwt==4.8.0
+#PyJWT==2.1.0 # https://github.com/jazzband/djangorestframework-simplejwt/issues/467
+PyJWT==2.3.0
 gunicorn==20.1.0
 idna==3.2
 Markdown==3.3.4
@@ -24,7 +26,6 @@ oauthlib==3.1.1
 Pillow==8.3.2
 psycopg2==2.9.1
 pycparser==2.20
-PyJWT==2.2.0
 python3-openid==3.2.0
 pytz==2021.3
 redis==3.5.3
