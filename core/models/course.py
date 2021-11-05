@@ -1,11 +1,10 @@
 import datetime
 
+from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-
-from metropolis import settings
 
 from .. import utils
 

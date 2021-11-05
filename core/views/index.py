@@ -1,10 +1,10 @@
+from django.conf import settings
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
 from core.utils import generate_slam as gs
-from metropolis import settings
 
 from .. import models
 from . import mixins
@@ -12,7 +12,7 @@ from . import mixins
 
 class Index(TemplateView, mixins.TitleMixin):
     template_name = "core/index.html"
-    title = "Dashboard"
+    title = "Home"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

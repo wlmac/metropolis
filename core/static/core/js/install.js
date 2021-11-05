@@ -25,8 +25,8 @@ window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
     window.removeEventListener('beforeinstallprompt', displayInstallPrompt);
 });
-
 function dismissInstallPrompt() {
-    Cookies.set('hide_install_prompt', '1', {expires: 7})
+    //Cookies.set('hide_install_prompt', '1', {expires: 7});
+    Cookies.set('hide_install_prompt', '1', {expires: 1});
     $(installPopupClass).hide();
 }

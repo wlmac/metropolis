@@ -292,18 +292,18 @@ TIMETABLE_FORMATS = {
             "early-dismissal": [
                 {
                     "description": {
-                        "time": "09:00 AM - 11:30 AM",
+                        "time": "09:00 AM - 10:14 AM",
                         "course": "Morning Class",
                     },
-                    "time": [[9, 0], [11, 30]],
+                    "time": [[9, 0], [10, 14]],
                     "position": [{1, 5, 7}, {3, 6, 7}],
                 },
                 {
                     "description": {
-                        "time": "12:15 PM - 02:45 PM",
+                        "time": "10:16 AM - 11:30 AM",
                         "course": "Afternoon Class",
                     },
-                    "time": [[12, 15], [14, 45]],
+                    "time": [[10, 16], [11, 30]],
                     "position": [{2, 5, 7}, {4, 6, 7}],
                 },
             ],
@@ -520,6 +520,8 @@ SILENCED_SYSTEM_CHECKS = ["urls.W002"]
 API_VERSION = "3.2.0"
 
 DEFAULT_TIMEZONE = "UTC"
+
+ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
 
 try:
