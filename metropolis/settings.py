@@ -530,7 +530,7 @@ THEMES = {
     "remembrance": {
         "banner": "/static/core/img/themes/banners/winter.jpg",
         "banner_css": "/static/core/css/themes/banners/winter-banner.css",
-        "logo": "/static/core/img/themes/logos/1111-transparent.png",
+        "logo": "/static/core/img/themes/logos/remembrance-transparent.png",
         "theme": "/static/core/css/themes/base-theme.css"
     },
 }
