@@ -497,6 +497,18 @@ METROPOLIS_STAFF_BIO = {}
 # Theme Settings
 
 THEMES = {
+    "spring": {
+        "banner": "/static/core/img/themes/banners/spring.jpg",
+        "banner_css": "/static/core/css/themes/banners/spring-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css"
+    },
+    "summer": {
+        "banner": "/static/core/img/themes/banners/summer.jpg",
+        "banner_css": "/static/core/css/themes/banners/summer-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css"
+    },
     "autumn": {
         "banner": "/static/core/img/themes/banners/autumn.jpg",
         "banner_css": "/static/core/css/themes/banners/autumn-banner.css",
