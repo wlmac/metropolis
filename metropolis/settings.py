@@ -494,6 +494,33 @@ METROPOLIS_STAFFS = {
 
 METROPOLIS_STAFF_BIO = {}
 
+# Theme Settings
+
+THEMES = {
+    "autumn": {
+        "banner": "/static/core/img/themes/banners/autumn.jpg",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css"
+    },
+    "winter": {
+        "banner": "/static/core/img/themes/banners/winter.jpg",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css"
+    },
+    "halloween": {
+        "banner": "/static/core/img/themes/banners/halloween.jpg",
+        "logo": "/static/core/img/themes/logos/halloween-transparent.png",
+        "theme": "/static/core/css/themes/halloween-theme.css"
+    },
+    "remembrance": {
+        "banner": "/static/core/img/themes/banners/winter.jpg",
+        "logo": "/static/core/img/themes/logos/1111-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css"
+    },
+}
+
+CURRENT_THEME = "winter"
+
 # Misc settings
 
 SITE_ID = 1
@@ -520,3 +547,7 @@ try:
     from metropolis.config import *
 except ImportError:
     print("Please create a config file to override values in settings.py")
+
+THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
+THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
+THEME_CSS = THEMES[CURRENT_THEME]["theme"]
