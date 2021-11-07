@@ -15,18 +15,14 @@
 
 {% block body %}
 
-<div class="install-popup" style="display:flex">
-<!--div class="install-popup" style="display:none"-->
-    <!--img src="{% static 'core/img/logo-dark-transparent.png' %}"-->
+<!--div class="install-popup" style="display:none">
     <img src="{% static 'core/img/logo-dark.png' %}">
-    <!--span>Access info faster using our web app!</span-->
     <span>Ghost what it takes? Try our Halloween doodle!</span>
     <div>
-        <!--a id="install-popup-button" class="waves-effect waves-light btn">Install</a-->
         <a id="install-popup-button" class="waves-effect waves-light btn" href="https://doodle.maclyonsden.com/" target="_blank">Play</a>
-        <!--a onclick="dismissInstallPrompt()">Not now</a-->
+        //<a onclick="dismissInstallPrompt()">Not now</a>
     </div>
-</div>
+</div-->
 
 <ul id="dropdownAcc" class="dropdown-content">
     {% if request.user.is_authenticated %}
