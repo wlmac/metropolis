@@ -2,6 +2,7 @@
 {% load link_tags %}
 {% load martortags %}
 {% load static %}
+{% load settings_tags %}
 {% load timetable_tags %}
 
 {% block main %}
@@ -102,6 +103,7 @@
 
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/index.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% settings_value 'THEME_BANNER_CSS' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'core/css/index-banner.css' %}" type="text/css">
     <script src="{% static 'js/luxon.min.js' %}"></script>
     <script src="{% static 'core/js/schedule.js' %}"></script>

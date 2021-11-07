@@ -54,12 +54,12 @@
 }
 
 .dropdown-content > li > a, .secondnav > li > a{
-    color: var(--link-blue);
+    color: var(--link-colour);
     width: 100%;
 }
 
 .dropdown-content> li > a:hover, .secondnav > li > a:hover{
-    color: var(--dark-blue);
+    color: var(--dark-colour);
     -webkit-transition: color linear 0.15s;
     -o-transition: color linear 0.15s;
     transition: color linear 0.15s;
