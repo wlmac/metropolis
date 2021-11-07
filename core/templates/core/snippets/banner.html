@@ -1,6 +1,7 @@
 {% load static %}
+{% load settings_tags %}
 <div class="banner">
-    <div class="background"><img src="{% static 'core/img/top-banner.png' %}"/></div>
+    <div class="background"><img src="{% settings_value 'THEME_BANNER' %}"/></div>
     {% if banner_message %}
         <div class="overlay-container">
             <div class="banner-message center-align">
