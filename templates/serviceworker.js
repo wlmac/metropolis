@@ -32,6 +32,8 @@ workbox.precaching.precacheAndRoute([
     {url: '/static/fonts/Material-Design-Iconic-Font.woff2', revision: '2.2.0'},
     {url: '{% settings_value "THEME_LOGO" %}', revision: '{% settings_value "THEME_VERSION" %}'},
     {url: '{% settings_value "THEME_BANNER" %}', revision: '{% settings_value "THEME_VERSION" %}'},
+    {url: '{% settings_value "THEME_BANNER_CSS" %}', revision: '{% settings_value "THEME_VERSION" %}'},
+    {url: '{% settings_value "THEME_CSS" %}', revision: '{% settings_value "THEME_VERSION" %}'},
 ], {
     directoryIndex: null,
     cleanUrls: false,
