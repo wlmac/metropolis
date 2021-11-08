@@ -1,20 +1,27 @@
 import django.db
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from django.core.mail import send_mail
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
+from core.utils.mail import send_mail
 from metropolis import settings
 
 from . import models
-from .forms import EventAdminForm, OrganizationAdminForm, TermAdminForm
+from .forms import (
+    EventAdminForm,
+    OrganizationAdminForm,
+    TagAdminForm,
+    TagSuperuserAdminForm,
+    TermAdminForm,
+)
 
 User = get_user_model()
 
@@ -41,9 +48,15 @@ class TermAdmin(admin.ModelAdmin):
 
 
 class TagAdmin(admin.ModelAdmin):
+    form = TagAdminForm
     readonly_fields = ["color"]
     list_display = ["name", "organization", "color"]
     search_fields = ["name"]
+
+    def get_form(self, request, obj=None, **kwargs):
+        if request.user.is_superuser:
+            return TagSuperuserAdminForm
+        return TagAdminForm
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -352,6 +365,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                             ),
                             None,
                             [teacher.email],
+                            bcc=settings.ANNOUNCEMENT_APPROVAL_BCC_LIST,
                             html_message=render_to_string(
                                 "core/email/verify_announcement.html",
                                 email_template_context,

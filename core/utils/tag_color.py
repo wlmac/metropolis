@@ -1,6 +1,6 @@
 import colorsys
 
-from metropolis import settings
+from django.conf import settings
 
 
 def get_tag_color(hue):

@@ -1,5 +1,6 @@
 :root{
-    --white: #ffffff;
+    /*--white: #ffffff;*/
+    --white: #ffa500;
     --text-grey: #fafafa;
     --bg-grey: #f3f3f3;
     --light-grey: #efefef;
@@ -9,10 +10,14 @@
     --near-black: #0b0b0b;
     --black: #000000;
 
-    --dark-blue: #073763;
+    /*--dark-blue: #073763;
     --link-blue: #3a6a96;
     --mid-blue: #6e9bc4;
-    --highlight-blue: #e7f2fb;
+    --highlight-blue: #e7f2fb;*/
+    --dark-blue: #262626;
+    --link-blue: #ff901a;
+    --mid-blue: #ffa94d;
+    --highlight-blue: #ffce99;
     /*--gold: ;*/
     --status-red: #e85856;
     --status-yellow: #ebc942;
@@ -78,6 +83,10 @@ select{
     padding-top: 20px;
 }
 
+.nav-link {
+    color: var(--white);
+}
+
 .brand-logo{
     display: -webkit-box;
     display: -ms-flexbox;
@@ -110,6 +119,7 @@ select{
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    color: var(--white);
 }
 
 .dropdown-trigger > i{
@@ -186,11 +196,11 @@ select{
 }
 
 .btn{
-    background-color: var(--link-blue);
+    background-color: var(--link-blue) !important;
 }
 
 .btn:hover, .btn:active {
-    background-color: var(--dark-blue);
+    background-color: var(--dark-blue) !important;
 }
 
 .errorlist {
@@ -253,12 +263,16 @@ label {
 
 .install-popup > img{
     display: block;
-    height: 64px;
+    /*height: 64px;*/
+    height: 48px;
     margin: none;
     width: auto;
+    background-color: var(--dark-blue);
     border-radius: 5px;
-    -webkit-box-shadow: 2px 2px 5px 3px #ddddddaa;
-            box-shadow: 2px 2px 5px 3px #ddddddaa;
+    /*-webkit-box-shadow: 2px 2px 5px 3px #ddddddaa;
+            box-shadow: 2px 2px 5px 3px #ddddddaa;*/
+    -webkit-box-shadow: 2px 2px 5px 3px #505050aa;
+            box-shadow: 2px 2px 5px 3px #505050aa;
 }
 
 .install-popup > span{
@@ -290,7 +304,8 @@ label {
 }
 
 .install-popup > div > a:not(.btn){
-    color: var(--line-grey);
+    /*color: var(--line-grey);*/
+    color: var(--mid-grey);
     font-size: 12px;
 }
 

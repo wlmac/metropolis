@@ -1,9 +1,8 @@
 from allauth.account.forms import SignupForm
 from django import forms
+from django.conf import settings
 from django_select2 import forms as s2forms
 from martor.widgets import AdminMartorWidget
-
-from metropolis import settings
 
 from . import models
 
@@ -231,3 +230,23 @@ class EventAdminForm(forms.ModelForm):
             raise forms.ValidationError(
                 f'Schedule format "{schedule_format}" is not a valid day schedule in Term {term.name}.'
             )
+
+
+class TagSuperuserAdminForm(forms.ModelForm):
+    class Meta:
+        model = models.Tag
+        fields = "__all__"
+
+
+class TagAdminForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean_organization(self):
+        if self.cleaned_data["organization"] == None:
+            raise forms.ValidationError("Tags must have an organization.")
+        return self.cleaned_data["organization"]
+
+    class Meta:
+        model = models.Tag
+        fields = "__all__"

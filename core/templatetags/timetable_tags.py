@@ -1,7 +1,6 @@
 from django import template
+from django.conf import settings
 from django.utils.html import format_html, format_html_join
-
-from metropolis.settings import TIMETABLE_FORMATS
 
 register = template.Library()
 
@@ -9,7 +8,7 @@ register = template.Library()
 @register.filter
 def render_timetable(timetable):
     timetable_format = timetable.term.timetable_format
-    timetable_config = TIMETABLE_FORMATS[timetable_format]
+    timetable_config = settings.TIMETABLE_FORMATS[timetable_format]
 
     courses = {}
     for i in timetable.courses.all():
