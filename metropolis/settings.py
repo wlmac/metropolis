@@ -501,37 +501,43 @@ THEMES = {
         "banner": "/static/core/img/themes/banners/spring.jpg",
         "banner_css": "/static/core/css/themes/banners/spring-banner.css",
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "theme": "/static/core/css/themes/base-theme.css",
+        "version": "1",
     },
     "summer": {
         "banner": "/static/core/img/themes/banners/summer.jpg",
         "banner_css": "/static/core/css/themes/banners/summer-banner.css",
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "theme": "/static/core/css/themes/base-theme.css",
+        "version": "1",
     },
     "autumn": {
         "banner": "/static/core/img/themes/banners/autumn.jpg",
         "banner_css": "/static/core/css/themes/banners/autumn-banner.css",
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "theme": "/static/core/css/themes/base-theme.css",
+        "version": "2",
     },
     "winter": {
         "banner": "/static/core/img/themes/banners/winter.jpg",
         "banner_css": "/static/core/css/themes/banners/winter-banner.css",
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "theme": "/static/core/css/themes/base-theme.css",
+        "version": "1",
     },
     "halloween": {
         "banner": "/static/core/img/themes/banners/halloween.jpg",
         "banner_css": "/static/core/css/themes/banners/halloween-banner.css",
         "logo": "/static/core/img/themes/logos/halloween-transparent.png",
-        "theme": "/static/core/css/themes/halloween-theme.css"
+        "theme": "/static/core/css/themes/halloween-theme.css",
+        "version": "1",
     },
     "remembrance": {
         "banner": "/static/core/img/themes/banners/winter.jpg",
         "banner_css": "/static/core/css/themes/banners/winter-banner.css",
         "logo": "/static/core/img/themes/logos/remembrance-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "theme": "/static/core/css/themes/base-theme.css",
+        "version": "1",
     },
 }
 
@@ -568,3 +574,4 @@ THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
 THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
 THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
 THEME_CSS = THEMES[CURRENT_THEME]["theme"]
+THEME_VERSION = THEMES[CURRENT_THEME]["version"]
