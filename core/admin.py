@@ -355,7 +355,6 @@ class AnnouncementAdmin(admin.ModelAdmin):
                     )
                 obj.status = "p"
 
-
         super().save_model(request, obj, form, change)
 
         if notify_supervisors:

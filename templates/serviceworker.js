@@ -1,5 +1,3 @@
-{% load settings_tags %}
-
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js');
 
 workbox.core.setCacheNameDetails({
@@ -30,10 +28,6 @@ workbox.precaching.precacheAndRoute([
     {url: '/static/core/js/schedule.js', revision: '3'},
     {url: '/static/css/material-design-iconic-font.min.css', revision: '2.2.0'},
     {url: '/static/fonts/Material-Design-Iconic-Font.woff2', revision: '2.2.0'},
-    {url: '{% settings_value "THEME_LOGO" %}', revision: '{% settings_value "THEME_VERSION" %}'},
-    {url: '{% settings_value "THEME_BANNER" %}', revision: '{% settings_value "THEME_VERSION" %}'},
-    {url: '{% settings_value "THEME_BANNER_CSS" %}', revision: '{% settings_value "THEME_VERSION" %}'},
-    {url: '{% settings_value "THEME_CSS" %}', revision: '{% settings_value "THEME_VERSION" %}'},
 ], {
     directoryIndex: null,
     cleanUrls: false,
