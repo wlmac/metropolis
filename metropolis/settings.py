@@ -501,37 +501,37 @@ THEMES = {
         "banner": "/static/core/img/themes/banners/spring.jpg",
         "banner_css": "/static/core/css/themes/banners/spring-banner.css",
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "theme": "/static/core/css/themes/base-theme.css",
     },
     "summer": {
         "banner": "/static/core/img/themes/banners/summer.jpg",
         "banner_css": "/static/core/css/themes/banners/summer-banner.css",
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "theme": "/static/core/css/themes/base-theme.css",
     },
     "autumn": {
         "banner": "/static/core/img/themes/banners/autumn.jpg",
         "banner_css": "/static/core/css/themes/banners/autumn-banner.css",
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "theme": "/static/core/css/themes/base-theme.css",
     },
     "winter": {
         "banner": "/static/core/img/themes/banners/winter.jpg",
         "banner_css": "/static/core/css/themes/banners/winter-banner.css",
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "theme": "/static/core/css/themes/base-theme.css",
     },
     "halloween": {
         "banner": "/static/core/img/themes/banners/halloween.jpg",
         "banner_css": "/static/core/css/themes/banners/halloween-banner.css",
         "logo": "/static/core/img/themes/logos/halloween-transparent.png",
-        "theme": "/static/core/css/themes/halloween-theme.css"
+        "theme": "/static/core/css/themes/halloween-theme.css",
     },
     "remembrance": {
         "banner": "/static/core/img/themes/banners/winter.jpg",
         "banner_css": "/static/core/css/themes/banners/winter-banner.css",
-        "logo": "/static/core/img/themes/logos/1111-transparent.png",
-        "theme": "/static/core/css/themes/base-theme.css"
+        "logo": "/static/core/img/themes/logos/remembrance-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
     },
 }
 
