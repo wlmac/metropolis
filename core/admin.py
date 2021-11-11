@@ -335,49 +335,52 @@ class AnnouncementAdmin(admin.ModelAdmin):
         if not change:
             obj.author = request.user
 
+        notify_supervisors = False
+
         if not request.user.is_superuser:
             if request.user in obj.organization.supervisors.all():
                 obj.supervisor = request.user
                 if obj.status != "p" and request.user != obj.author:
-                    # Notify user
-                    pass
+                    # Notify author
                     self.message_user(
                         request,
                         f"Successfully marked announcement as {obj.get_status_display()}.",
                     )
             else:
                 if (not change) or obj.status != "p":
-                    # Notify supervisors
-
-                    for teacher in obj.organization.supervisors.all():
-                        email_template_context = {
-                            "teacher": teacher,
-                            "announcement": obj,
-                            "review_link": settings.SITE_URL
-                            + reverse("admin:core_announcement_change", args=(obj.pk,)),
-                        }
-
-                        send_mail(
-                            f"[ACTION REQUIRED] An announcement for {obj.organization.name} needs your approval.",
-                            render_to_string(
-                                "core/email/verify_announcement.txt",
-                                email_template_context,
-                            ),
-                            None,
-                            [teacher.email],
-                            bcc=settings.ANNOUNCEMENT_APPROVAL_BCC_LIST,
-                            html_message=render_to_string(
-                                "core/email/verify_announcement.html",
-                                email_template_context,
-                            ),
-                        )
+                    notify_supervisors = True
 
                     self.message_user(
                         request, f"Successfully sent announcement for review."
                     )
                 obj.status = "p"
 
+
         super().save_model(request, obj, form, change)
+
+        if notify_supervisors:
+            for teacher in obj.organization.supervisors.all():
+                email_template_context = {
+                    "teacher": teacher,
+                    "announcement": obj,
+                    "review_link": settings.SITE_URL
+                    + reverse("admin:core_announcement_change", args=(obj.pk,)),
+                }
+
+                send_mail(
+                    f"[ACTION REQUIRED] An announcement for {obj.organization.name} needs your approval.",
+                    render_to_string(
+                        "core/email/verify_announcement.txt",
+                        email_template_context,
+                    ),
+                    None,
+                    [teacher.email],
+                    bcc=settings.ANNOUNCEMENT_APPROVAL_BCC_LIST,
+                    html_message=render_to_string(
+                        "core/email/verify_announcement.html",
+                        email_template_context,
+                    ),
+                )
 
 
 class BlogPostAuthorListFilter(admin.SimpleListFilter):
