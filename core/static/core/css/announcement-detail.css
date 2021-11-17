@@ -1,6 +1,6 @@
 .headers {
     overflow: hidden;
-    background-color: var(--dark-blue);
+    background-color: var(--dark-colour);
     padding: 20px;
     padding-left: 40px;
 }
@@ -19,20 +19,20 @@
     padding: 0 30px;
     padding-bottom: 5px;
     font-weight: bold;
-    color: var(--link-blue);
-    border-bottom: 2px solid var(--link-blue);
+    color: var(--link-colour);
+    border-bottom: 2px solid var(--link-colour);
     display: inline;
 }
 .header:hover {
-    color: var(--mid-blue);
-    border-color: var(--mid-blue);
+    color: var(--mid-colour);
+    border-color: var(--mid-colour);
     -webkit-transition: color 0.1s linear, border-color 0.1s linear;
     -o-transition: color 0.1s linear, border-color 0.1s linear;
     transition: color 0.1s linear, border-color 0.1s linear;
 }
 .active {
-    color: var(--highlight-blue) !important;
-    border-color: var(--highlight-blue) !important;
+    color: var(--highlight-colour) !important;
+    border-color: var(--highlight-colour) !important;
 }
 .card-container {
     background-color: white;

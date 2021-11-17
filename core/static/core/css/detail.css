@@ -86,7 +86,7 @@
 }
 
 .member-button > .join{
-    background-color: var(--link-blue) !important;
+    background-color: var(--link-colour) !important;
 }
 
 .member-button > .leave{
@@ -118,12 +118,12 @@
 
 .link-section > div > li > i{
     margin-right: 6px;
-    color: var(--link-blue);
+    color: var(--link-colour);
     line-height: inherit;
 }
 
 .link-section > div > li > a {
-    color: var(--link-blue);
+    color: var(--link-colour);
 }
 
 .circle-icon {

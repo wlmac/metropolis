@@ -6,12 +6,18 @@
 {% endblock %}
 
 {% block head %}
+<link rel="stylesheet" href="{% static 'core/css/themes/banners/offline-banner.css' %}" type="text/css">
 <link rel="stylesheet" href="{% static 'core/css/index-banner.css' %}" type="text/css">
 <script src="{% static 'js/luxon.min.js' %}"></script>
 <script src="{% static 'core/js/schedule.js' %}"></script>
 <style>
     .banner {
         height: 100vh;
+        background-image: linear-gradient(to right, rgb(110, 250, 210), rgb(110, 170, 250));
+    }
+
+    .banner .background img {
+        display: none;
     }
     
     html, body {

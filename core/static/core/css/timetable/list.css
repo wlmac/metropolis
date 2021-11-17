@@ -24,7 +24,7 @@ details > summary::marker {
 
 .table thead th {
     border-bottom: 3px solid var(--line-grey);
-    color: var(--dark-blue);
+    color: var(--dark-colour);
 }
 
 .table tbody td, .table tbody th {
@@ -32,7 +32,7 @@ details > summary::marker {
 }
 
 .card-body label {
-    color: var(--link-blue) !important;
+    color: var(--link-colour) !important;
     font-size: 110%;
     font-weight: 500;
 }

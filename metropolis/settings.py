@@ -297,18 +297,18 @@ TIMETABLE_FORMATS = {
             "early-dismissal": [
                 {
                     "description": {
-                        "time": "09:00 AM - 11:30 AM",
+                        "time": "09:00 AM - 10:14 AM",
                         "course": "Morning Class",
                     },
-                    "time": [[9, 0], [11, 30]],
+                    "time": [[9, 0], [10, 14]],
                     "position": [{1, 5, 7}, {3, 6, 7}],
                 },
                 {
                     "description": {
-                        "time": "12:15 PM - 02:45 PM",
+                        "time": "10:16 AM - 11:30 AM",
                         "course": "Afternoon Class",
                     },
-                    "time": [[12, 15], [14, 45]],
+                    "time": [[10, 16], [11, 30]],
                     "position": [{2, 5, 7}, {4, 6, 7}],
                 },
             ],
@@ -494,6 +494,49 @@ METROPOLIS_STAFFS = {
 
 METROPOLIS_STAFF_BIO = {}
 
+# Theme Settings
+
+THEMES = {
+    "spring": {
+        "banner": "/static/core/img/themes/banners/spring.jpg",
+        "banner_css": "/static/core/css/themes/banners/spring-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+    "summer": {
+        "banner": "/static/core/img/themes/banners/summer.jpg",
+        "banner_css": "/static/core/css/themes/banners/summer-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+    "autumn": {
+        "banner": "/static/core/img/themes/banners/autumn.jpg",
+        "banner_css": "/static/core/css/themes/banners/autumn-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+    "winter": {
+        "banner": "/static/core/img/themes/banners/winter.jpg",
+        "banner_css": "/static/core/css/themes/banners/winter-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+    "halloween": {
+        "banner": "/static/core/img/themes/banners/halloween.jpg",
+        "banner_css": "/static/core/css/themes/banners/halloween-banner.css",
+        "logo": "/static/core/img/themes/logos/halloween-transparent.png",
+        "theme": "/static/core/css/themes/halloween-theme.css",
+    },
+    "remembrance": {
+        "banner": "/static/core/img/themes/banners/winter.jpg",
+        "banner_css": "/static/core/css/themes/banners/winter-banner.css",
+        "logo": "/static/core/img/themes/logos/remembrance-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+}
+
+CURRENT_THEME = "winter"
+
 # Misc settings
 
 SITE_ID = 1
@@ -520,3 +563,8 @@ try:
     from metropolis.config import *
 except ImportError:
     print("Please create a config file to override values in settings.py")
+
+THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
+THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
+THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
+THEME_CSS = THEMES[CURRENT_THEME]["theme"]

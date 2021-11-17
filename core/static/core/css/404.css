@@ -23,22 +23,22 @@ body{
 .display-metropolis {
     width: 100px;
     height: 100px;
-    background-color: var(--dark-blue);
+    background-color: var(--dark-colour);
     border-radius: 10px;
-    box-shadow: 2px 2px 5px var(--mid-blue);
+    box-shadow: 2px 2px 5px var(--mid-colour);
     margin-left: auto;
     margin-right: auto;
     transition-duration: 0.3s;
 }
 
 .display-metropolis:hover {
-    box-shadow: 3px 3px 5px var(--link-blue);
+    box-shadow: 3px 3px 5px var(--link-colour);
 }
 
 .control-button {
     width: 40px;
     height: 40px;
-    background-color: var(--link-blue);
+    background-color: var(--link-colour);
     color: var(--light-grey);
     text-align: center;
     font-size: 1.5em;
@@ -50,7 +50,7 @@ body{
 }
 
 .control-button:active {
-    background-color: var(--dark-blue);
+    background-color: var(--dark-colour);
 }
 
 .game-mid {
@@ -93,7 +93,7 @@ body{
 .result-display {
     width: 100px;
     height: 100px;
-    background-color: var(--mid-blue);
+    background-color: var(--mid-colour);
     margin: auto;
     border-radius: 10px;
 }
@@ -103,7 +103,7 @@ body{
 }
 
 #game-canvas{
-    box-shadow: 2px 2px 5px var(--dark-blue);
+    box-shadow: 2px 2px 5px var(--dark-colour);
 }
 
 .message{
@@ -122,5 +122,5 @@ body{
 }
 
 a{
-    color: var(--link-blue);
+    color: var(--link-colour);
 }
