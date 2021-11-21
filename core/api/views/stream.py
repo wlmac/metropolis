@@ -15,24 +15,24 @@ class SignalStream:
         signal,
         serializer,
     ):
-        self.__model = model
-        self.__signal = signal
-        self.__serializer = serializer
-        self.__q = LifoQueue()
+        self.model = model
+        self.signal = signal
+        self.serializer = serializer
+        self.q = LifoQueue()
         self.__setup()
 
     def __setup(self):
-        self.__signal.connect(self.__receive, sender=self.__model)
+        self.signal.connect(self.__receive, sender=self.model)
 
     def __del__(self):
-        self.__signal.disconnect(self.__receive, sender=self.__model)
+        self.signal.disconnect(self.__receive, sender=self.model)
 
     def __receive(self, instance, **_):
-        self.__q.put(instance)
+        self.q.put(instance)
 
     def __iter__(self):
         return self
 
     def __next__(self):
-        instance = self.__q.get()
-        return json.dumps(self.__serializer(instance).data) + "\n"
+        instance = self.q.get()
+        return json.dumps(self.serializer(instance).data) + "\n"

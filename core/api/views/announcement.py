@@ -1,4 +1,5 @@
 from typing import List
+import json
 from weakref import WeakValueDictionary
 
 from django.db.models import Q, signals
@@ -30,12 +31,20 @@ class AnnouncementListMyFeed(APIView):
         return Response(serializer.data)
 
 
+class AnnouncementStream(SignalStream):
+    def __next__(self):
+        instance = self.q.get()
+        if instance.status != "a":
+            # not approved ⇒ don't send
+            return self.__next__()
+        return json.dumps(self.serializer(instance).data) + "\n"
+
 class AnnouncementChangeStream(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
         return StreamingHttpResponse(
-            SignalStream(
+            AnnouncementStream(
                 signal=signals.post_save,
                 model=models.Announcement,
                 serializer=serializers.AnnouncementSerializer,
