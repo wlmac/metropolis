@@ -35,4 +35,4 @@ class SignalStream:
 
     def __next__(self):
         instance = self.q.get()
-        return json.dumps(self.serializer(instance).data) + "\n"
+        return f"data: {json.dumps(self.serializer(instance).data)}\n"

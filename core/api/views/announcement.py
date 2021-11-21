@@ -1,5 +1,5 @@
-from typing import List
 import json
+from typing import List
 from weakref import WeakValueDictionary
 
 from django.db.models import Q, signals
@@ -35,18 +35,22 @@ class AnnouncementStream(SignalStream):
     def __next__(self):
         instance = self.q.get()
         if instance.status != "a":
-            # not approved ⇒ don't send
+            # because Announcement is not approved, don't send
             return self.__next__()
-        return json.dumps(self.serializer(instance).data) + "\n"
+        return f"data: {json.dumps(self.serializer(instance).data)}\n"
+
 
 class AnnouncementChangeStream(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        return StreamingHttpResponse(
+        response = StreamingHttpResponse(
             AnnouncementStream(
                 signal=signals.post_save,
                 model=models.Announcement,
                 serializer=serializers.AnnouncementSerializer,
-            )
+            ),
+            content_type="text/event-stream",
         )
+        response["Cache-Control"] = "no-cache"
+        return response
