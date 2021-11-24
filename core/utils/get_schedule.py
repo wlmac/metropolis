@@ -71,9 +71,7 @@ def get_week_schedule(user) -> dict:
             models.Term.get_current(target_date=target_date),
             target_date,
         )
-        for target_date in [
-            date + datetime.timedelta(days=days) for days in range(7)
-        ]
+        for target_date in [date + datetime.timedelta(days=days) for days in range(7)]
     }
 
 
@@ -87,5 +85,3 @@ def get_week_schedule_info(user) -> WeekScheduleInfo:
         ),
         logged_in=user.is_authenticated,
     )
-
-
