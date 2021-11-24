@@ -32,10 +32,14 @@ class TermScheduleWeek(APIView):
         term = get_object_or_404(models.Term, pk=pk)
         date = utils.parse_date_query_param(request)
 
-        return Response({
-            target_date.isoformat(): term.day_schedule(target_date=target_date)
-            for target_date in [date + datetime.timedelta(days=days) for days in range(7)]
-        })
+        return Response(
+            {
+                target_date.isoformat(): term.day_schedule(target_date=target_date)
+                for target_date in [
+                    date + datetime.timedelta(days=days) for days in range(7)
+                ]
+            }
+        )
 
 
 class TermCurrent(APIView):
