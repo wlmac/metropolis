@@ -15,10 +15,16 @@
             </div>
         </div>
     </div>
-    {% if banner_message %}
+    {% if banner_data %}
         <div class="overlay-container">
             <div class="banner-message center-align">
-                <span>{{ banner_message }}</span>
+		<span>
+		    {% if not banner_data.logged_in %}
+			<a href="{{ url("account_signup") }}">Sign up</a> and add your timetable to see a personalized schedule here.
+		    {% elif banner_data.nudge_add_timetable %}
+			<a href="{{ url("timetable_create", args=[current_term      .id]) }}">Add your timetable</a> to see a personalized schedule here.
+		    {% endif %}
+		</span>
             </div>
         </div>
     {% endif %}

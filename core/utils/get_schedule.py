@@ -14,6 +14,13 @@ class DaySchedule:
     schedule: dict
     is_personal: bool
 
+    def get_schedule_nudge_message(info: WeekScheduleInfo) -> str:
+        date = timezone.localdate()
+        current_term = models.Term.get_current(target_date=date)
+        if current_term is None:
+            return None
+        return info
+
 
 @dataclass
 class WeekScheduleInfo:
@@ -40,31 +47,34 @@ def generic_day_schedule(term, date) -> DaySchedule:
     return DaySchedule(schedule, is_personal)
 
 
+def get_day_schedule(user, target_date: datetime.datetime) -> DaySchedule:
+    term = models.Term.get_current(target_date=target_date)
+    personal_sch = DaySchedule(user.schedule(target_date=target_date), True)
+    if not personal_sch.schedule:
+        # generic schedule is more useful than an empty personal one
+        return generic_day_schedule(term, target_date)
+    return personal_sch
+
+
 def get_week_schedule(user) -> dict:
     date = timezone.localdate()
 
     if user.is_authenticated:
-        result = {}  # TODO: use a dictionary comprehension
-
-        for day in range(7):
-            term = models.Term.get_current(target_date=date)
-            # first try using personal day schedule
-            day_schedule = DaySchedule(user.schedule(target_date=date), True)
-            # switch to generic day schedule if personal day schedule is empty
-            if len(day_schedule.schedule) == 0:
-                day_schedule = generic_day_schedule(term, date)
-            result[date.isoformat()] = day_schedule
-            date += datetime.timedelta(days=1)
-
-        return result
-    else:
-        result = {}  # TODO: use a dictionary comprehension
-
-        for day in range(7):
-            term = models.Term.get_current(target_date=date)
-            result[date.isoformat()] = generic_day_schedule(term, date)
-            date += datetime.timedelta(days=1)
-        return result
+        return {
+            target_date.isoformat(): get_day_schedule(user, target_date)
+            for target_date in [
+                date + datetime.timedelta(days=days) for days in range(7)
+            ]
+        }
+    return {
+        target_date.isoformat(): generic_day_schedule(
+            models.Term.get_current(target_date=target_date),
+            target_date,
+        )
+        for target_date in [
+            date + datetime.timedelta(days=days) for days in range(7)
+        ]
+    }
 
 
 def get_week_schedule_info(user) -> WeekScheduleInfo:
@@ -79,16 +89,3 @@ def get_week_schedule_info(user) -> WeekScheduleInfo:
     )
 
 
-def get_schedule_nudge_message(info: WeekScheduleInfo) -> str:
-    date = timezone.localdate()
-    current_term = models.Term.get_current(target_date=date)
-    if current_term is None:
-        return ""
-    elif not info.logged_in:
-        sign_up_url = reverse("account_signup")
-        return f"<a href='{sign_up_url}'>Sign up</a> and add your timetable to see a personalized schedule here."
-    elif info.nudge_add_timetable:
-        add_timetable_url = reverse("timetable_create", args=[current_term.id])
-        return f"<a href='{add_timetable_url}'>Add your timetable</a> to see a personalized schedule here."
-    else:
-        return ""

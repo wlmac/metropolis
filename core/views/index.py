@@ -34,10 +34,7 @@ class Index(TemplateView, mixins.TitleMixin):
         context["schedule_data_js"] = mark_safe(
             f"let index_page_data = {week_schedule_info.json_data}"
         )
-        context["banner_message"] = mark_safe(
-            get_schedule_nudge_message(week_schedule_info)
-        )
-
+        context["banner_data"] = get_schedule_nudge_message(week_schedule_info)
         return context
 
 
