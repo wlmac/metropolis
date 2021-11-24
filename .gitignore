@@ -1,3 +1,4 @@
 metropolis/config.py
+metropolis
 db.sqlite3
 *.pyc
