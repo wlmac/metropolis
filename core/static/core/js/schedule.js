@@ -1,7 +1,6 @@
 const DateTime = luxon.DateTime;
 const Duration = luxon.Duration;
 let scheduleData = [];
-let scheduleIsPersonal = false;
 
 function formatHours(hours) {
     return `${hours} ${hours == 1 ? "hour" : "hours"}`;
@@ -38,45 +37,35 @@ function getDateTimeNow() {
 }
 
 function setup() {
-    fetch('/api/term/current')
-        .then(response => response.json())
-        .then(data => {
-            fetch(`/api/term/${data.id}/schedule/week`)
-                .then(response => response.json())
-                .then(data => {
-                    scheduleData = data;
-                    fetch(`/api/me/schedule/week`)
-                        .then(response => {
-                            if (!response.ok) throw new Error(`Status ${response.status} received`);
-                            return response.json();
-                        })
-                        .then(data => {
-                            const todayDate = getDateTimeNow().toISODate();
-                            if (todayDate in data && data[todayDate].length > 0) {
-                                scheduleData = data;
-                                scheduleIsPersonal = true;
-                            }
-                            update();
-                        })
-                        .catch(err => {
-                            console.error('Fetch me_schedule_week request failed', err);
-                        });
-                })
-        })
-        .catch(err => {
-            console.error('Fetch term_current request failed', err);
-        });
+    // load schedule data differently depending on whether the user is offline
+    if (typeof index_page_data !== 'undefined') {
+        // not offline: load data from index page
+        scheduleData = index_page_data;
+        localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+    }
+    else {
+        // offline: load data from localStorage
+        let localScheduleData = localStorage.getItem('scheduleData');
+        if (localScheduleData) {
+            scheduleData = JSON.parse(localScheduleData);
+        }
+    }
+    update();
 }
 
 function update() {
     let currentCourse;
     let description;
     let todayData;
+    let todayScheduleIsPersonal = false;
 
     const now = getDateTimeNow();
 
     if (now.toISODate() in scheduleData) {
-        todayData = scheduleData[now.toISODate()];
+        let todayScheduleData = scheduleData[now.toISODate()];
+        todayData = todayScheduleData.schedule;
+        todayScheduleIsPersonal = todayScheduleData.is_personal;
+
         let courseData;
 
         for (const course of todayData) {
@@ -112,12 +101,16 @@ function update() {
     $(".schedule-description").text(description);
 
     if (todayData) {
-        if (todayData.length > 0) $(".schedule-cycle").text(todayData[0].cycle);
+        if (todayData.length > 0) {
+            $(".schedule-cycle").text(todayData[0].cycle);
+        } else {
+            $(".schedule-cycle").empty()
+        }
         let todayCoursesEl = $(".schedule-today-courses").empty();
         for (let i = 0; i < todayData.length; i++) {
             if (todayData[i].course) {
                 let courseDescription;
-                if (scheduleIsPersonal) courseDescription = `${todayData[i].description.course} - ${todayData[i].course}`;
+                if (todayScheduleIsPersonal) courseDescription = `${todayData[i].description.course} - ${todayData[i].course}`;
                 else courseDescription = `${todayData[i].description.course}`;
 
                 let courseEl = $("<span class='schedule-today-course'></span>").text(courseDescription);

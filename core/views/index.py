@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
 from core.utils import generate_slam as gs
+from core.utils import get_schedule_nudge_message, get_week_schedule_info
 
 from .. import models
 from . import mixins
@@ -27,6 +29,14 @@ class Index(TemplateView, mixins.TitleMixin):
         )[:3]
 
         context["blogpost"] = models.BlogPost.objects.filter(is_published=True).first()
+
+        week_schedule_info = get_week_schedule_info(self.request.user)
+        context["schedule_data_js"] = mark_safe(
+            f"let index_page_data = {week_schedule_info.json_data}"
+        )
+        context["banner_message"] = mark_safe(
+            get_schedule_nudge_message(week_schedule_info)
+        )
 
         return context
 

@@ -32,7 +32,7 @@ class TermScheduleWeek(APIView):
         term = get_object_or_404(models.Term, pk=pk)
         date = utils.parse_date_query_param(request)
 
-        result = {}
+        result = {}  # TODO: use a dictionary comprehension
 
         for day in range(7):
             result[date.isoformat()] = term.day_schedule(target_date=date)

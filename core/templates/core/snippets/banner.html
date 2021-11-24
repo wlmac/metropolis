@@ -2,17 +2,10 @@
 {% load settings_tags %}
 <div class="banner">
     <div class="background"><img src="{% settings_value 'THEME_BANNER' %}"/></div>
-    {% if banner_message %}
-        <div class="overlay-container">
-            <div class="banner-message center-align">
-                <span>{{ banner_message }}</span>
-            </div>
-        </div>
-    {% endif %}
     <div class="overlay-container valign-wrapper">
         <div class="next-class center-align">
-            <h4 class="schedule-course">Loading...</h4>
-            <span class="schedule-description">Please wait a sec.</span>
+            <h4 class="schedule-course"></h4>
+            <span class="schedule-description"></span>
         </div>
     </div>
     <div class="schedule-today-overlay hide-on-small-and-down">
@@ -22,4 +15,11 @@
             </div>
         </div>
     </div>
+    {% if banner_message %}
+        <div class="overlay-container">
+            <div class="banner-message center-align">
+                <span>{{ banner_message }}</span>
+            </div>
+        </div>
+    {% endif %}
 </div>
