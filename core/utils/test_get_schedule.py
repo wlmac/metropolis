@@ -82,26 +82,3 @@ class GetWeekScheduleInfoTests(TestCase):
         info = get_week_schedule_info(user)
         self.assertFalse(info.nudge_add_timetable)
         self.assertTrue(info.logged_in)
-
-
-class GetScheduleNudgeMessageTests(TestCase):
-    def test_current_term_logged_in_personalized(self):
-        create_current_term()
-        info = WeekScheduleInfo(
-            json_data="{}", logged_in=True, nudge_add_timetable=False
-        )
-        self.assertEqual(get_schedule_nudge_message(info), "")
-
-    def test_current_term_logged_in_not_personalized(self):
-        create_current_term()
-        info = WeekScheduleInfo(
-            json_data="{}", logged_in=True, nudge_add_timetable=True
-        )
-        self.assertTrue("Add your timetable" in get_schedule_nudge_message(info))
-
-    def test_current_term_not_logged_in(self):
-        create_current_term()
-        info = WeekScheduleInfo(
-            json_data="{}", logged_in=False, nudge_add_timetable=True
-        )
-        self.assertTrue("Sign up" in get_schedule_nudge_message(info))

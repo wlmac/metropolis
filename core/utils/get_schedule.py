@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import rest_framework.utils.encoders
 from django.shortcuts import reverse
 from django.utils import timezone
+from django.utils.safestring import SafeString, mark_safe
 
 from .. import models
 
@@ -14,19 +15,13 @@ class DaySchedule:
     schedule: dict
     is_personal: bool
 
-    def get_schedule_nudge_message(info: WeekScheduleInfo) -> str:
-        date = timezone.localdate()
-        current_term = models.Term.get_current(target_date=date)
-        if current_term is None:
-            return None
-        return info
-
 
 @dataclass
 class WeekScheduleInfo:
-    json_data: str
+    json_data: SafeString
     logged_in: bool
     nudge_add_timetable: bool
+    current_term_id: int
 
 
 class JSONEncoder(rest_framework.utils.encoders.JSONEncoder):
@@ -77,11 +72,12 @@ def get_week_schedule(user) -> dict:
 
 def get_week_schedule_info(user) -> WeekScheduleInfo:
     data = get_week_schedule(user)
-
+    current_term = models.Term.get_current()
     return WeekScheduleInfo(
-        json_data=json.dumps(data, cls=JSONEncoder),
+        json_data=mark_safe(json.dumps(data, cls=JSONEncoder)),
         nudge_add_timetable=not all(
             day_schedule.is_personal for day_schedule in data.values()
         ),
         logged_in=user.is_authenticated,
+        current_term_id=current_term.id if current_term else None,
     )
