@@ -385,7 +385,7 @@ REST_FRAMEWORK = {
 
 # CORS settings
 
-CORS_URLS_REGEX = r"^.*/data/?$"
+CORS_URLS_REGEX = r"^.*/api/?$"
 
 CORS_ALLOW_METHODS = [
     "GET",
