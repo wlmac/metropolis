@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Authorize" %} {{ application.name }}{% endblock %}
+
+{% block deps %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/oauth2_provider/authorize.css' %}">
+{% endblock %}
+
+{% block main %}
+    <div class="block-center">
+    </div>
+<div class="container">
+    <div class="card-container">
+        <h1 class="title">Your Applications</h1>
+        {% if applications %}
+            <ul>
+                {% for application in applications %}
+                    <li><a href="{{ application.get_absolute_url }}">{{ application.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+	    <p>
+	    	You have no applications.
+		<br/>
+	    </p>
+        {% endif %}
+        <a href="{% url 'oauth2_provider:register' %}" class="btn">
+	    New Application
+        </a>
+    </div>
+</div>
+{% endblock %}
