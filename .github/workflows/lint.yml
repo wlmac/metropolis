@@ -10,6 +10,4 @@ jobs:
         uses: actions/setup-python@v2.2.2
       - name: Format Check
         run: |
-          python3 -m pip install --upgrade black isort
-          python3 -m black --check .
-          python3 -m isort --check .
+          make fmt-setup fmt-check

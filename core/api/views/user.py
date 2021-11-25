@@ -1,5 +1,6 @@
 import datetime
 
+from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import generics, mixins, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,7 +16,8 @@ class UserDetail(generics.RetrieveAPIView):
 
 
 class UserMe(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    required_scopes = ["me_meta"]
 
     def get(self, request, format=None):
         serializer = serializers.UserSerializer(request.user)
@@ -23,7 +25,8 @@ class UserMe(APIView):
 
 
 class UserMeSchedule(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    required_scopes = ["me_schedule"]
 
     def get(self, request, format=None):
         date = utils.parse_date_query_param(request)
@@ -32,7 +35,8 @@ class UserMeSchedule(APIView):
 
 
 class UserMeScheduleWeek(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    required_scopes = ["me_schedule"]
 
     def get(self, request, format=None):
         date = utils.parse_date_query_param(request)
@@ -47,7 +51,8 @@ class UserMeScheduleWeek(APIView):
 
 
 class UserMeTimetable(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    required_scopes = ["me_timetable"]
 
     def get(self, request, format=None):
         current_timetable = request.user.get_current_timetable()

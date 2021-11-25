@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = "Change me"
 DEBUG = False
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -48,6 +46,7 @@ INSTALLED_APPS = [
     "martor",
     "django_select2",
     "pwa",
+    "oauth2_provider",
 ]
 
 MIDDLEWARE = [
@@ -61,6 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "core.middleware.TimezoneMiddleware",
+    "oauth2_provider.middleware.OAuth2TokenMiddleware",
 ]
 
 ROOT_URLCONF = "metropolis.urls"
@@ -84,7 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "metropolis.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -95,7 +94,6 @@ DATABASES = {
     }
 }
 
-
 # Cache
 
 CACHES = {
@@ -103,7 +101,6 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -123,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -136,7 +132,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -378,9 +373,22 @@ ANNOUNCEMENTS_CUSTOM_FEEDS = []
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+}
+
+# SSO (OAuth) Settings
+
+OAUTH2_PROVIDER = {
+    "SCOPES": {
+        "me_meta": "Read your account data",
+        "me_announcement": "Read your announcement feed",
+        "me_schedule": "Read your schedules",
+        "me_timetable": "Read your timetables",
+    },
+    "CLIENT_ID_GENERATOR_CLASS": "oauth2_provider.generators.ClientIdGenerator",
 }
 
 # CORS settings
@@ -552,7 +560,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 SILENCED_SYSTEM_CHECKS = ["urls.W002"]
 
-API_VERSION = "3.1.0"
+API_VERSION = "3.2.0"
 
 DEFAULT_TIMEZONE = "UTC"
 
