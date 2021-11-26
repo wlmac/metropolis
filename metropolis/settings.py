@@ -402,7 +402,7 @@ CORS_ALLOW_METHODS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://maclyonsden.com',
+    "https://maclyonsden.com",
 ]
 
 # Color settings
