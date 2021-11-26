@@ -393,7 +393,7 @@ OAUTH2_PROVIDER = {
 
 # CORS settings
 
-CORS_URLS_REGEX = r"^.*/api/?$"
+CORS_URLS_REGEX = r"^/api/.*$"
 
 CORS_ALLOW_METHODS = [
     "GET",
