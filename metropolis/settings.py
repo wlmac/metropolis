@@ -543,6 +543,12 @@ THEMES = {
         "logo": "/static/core/img/themes/logos/remembrance-transparent.png",
         "theme": "/static/core/css/themes/base-theme.css",
     },
+    "christmas": {
+        "banner": "/static/core/img/themes/banners/christmas.jpg",
+        "banner_css": "/static/core/css/themes/banners/christmas-banner.css",
+        "logo": "/static/core/img/themes/logos/christmas-transparent.png",
+        "theme": "/static/core/css/themes/christmas-theme.css",
+    },
 }
 
 CURRENT_THEME = "winter"
