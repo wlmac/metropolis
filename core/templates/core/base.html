@@ -3,7 +3,7 @@
 {% load settings_tags %}
 {% load static %}
 
-{% block title %}{{ title }} | Metropolis{% endblock %}
+{% block title %}{% block head_title %}{{ title }}{% endblock %} | Metropolis{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="{% settings_value 'THEME_CSS' %}">
