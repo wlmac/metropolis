@@ -38,10 +38,11 @@ function getDateTimeNow() {
 
 function setup() {
     // load schedule data differently depending on whether the user is offline
-    if (typeof index_page_data !== 'undefined') {
+    indexPageData = $("#index-page-data").text()
+    if (indexPageData) {
         // not offline: load data from index page
-        scheduleData = index_page_data;
-        localStorage.setItem('scheduleData', JSON.stringify(scheduleData));
+        scheduleData = JSON.parse(indexPageData);
+        localStorage.setItem('scheduleData', indexPageData);
     }
     else {
         // offline: load data from localStorage
