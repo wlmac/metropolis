@@ -1,0 +1,25 @@
+.btn.cancel {
+	color: var(--link-blue) !important;
+	background-color: #fff !important;
+	box-shadow: none;
+	border-radius: 2px;
+	border: 1px solid var(--mid-grey);
+}
+
+.permissions > li {
+	list-style-type: initial !important;
+}
+
+.card-container {
+    padding: 40px;
+    padding-bottom: 20px;
+    background-color: white;
+    min-height: calc(100vh - 164px);
+    text-align: center;
+}
+
+ul {
+	display: table !important;
+	margin: 0 auto !important;
+	padding-bottom: 2em;
+}

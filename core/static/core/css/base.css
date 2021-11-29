@@ -74,6 +74,7 @@ select{
 
 .nav-link {
     color: var(--contrast-colour);
+    font-weight: 500;
 }
 
 .brand-logo{
@@ -109,6 +110,7 @@ select{
     display: -ms-flexbox;
     display: flex;
     color: var(--contrast-colour);
+    font-weight: 500;
 }
 
 .dropdown-trigger > i{
@@ -141,6 +143,7 @@ select{
 
 .dropdown-content > li > a, .sidenav > li > a{
     color: var(--mid-colour);
+    font-weight: 500;
     /*width: 100%;*/
 }
 
@@ -155,6 +158,10 @@ select{
     background-color: var(--link-colour);
     margin: 10px 15px;
     width: calc(100% - 30px);
+}
+
+.sidenav-trigger{
+    color: var(--contrast-colour);
 }
 
 .link{
@@ -327,7 +334,7 @@ label {
 .footer-title {
     margin-top: 25px;
     font-size: 18;
-    color: var(--light-grey);
+    color: var(--contrast-colour);
     text-align: center;
     padding: 0px 60px;
 }
@@ -376,7 +383,7 @@ label {
     display: inline-block;
     font-size: 15px;
     text-decoration: none;
-    color: var(--light-grey);
+    color: var(--contrast-colour);
     margin: 0px 20px;
 }
 

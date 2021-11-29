@@ -1,4 +1,5 @@
 from django.db.models import Q
+from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,7 +18,8 @@ class AnnouncementListAll(APIView):
 
 
 class AnnouncementListMyFeed(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    required_scopes = ["me_ann"]
 
     def get(self, request, format=None):
         announcements = request.user.get_feed()
