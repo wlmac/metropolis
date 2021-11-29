@@ -15,7 +15,7 @@
             </div>
         </div>
     </div>
-    {% if banner_data or offline %}
+    {% if offline or not banner_data.logged_in or banner_data.nudge_add_timetable %}
         <div class="overlay-container">
             <div class="banner-message center-align">
 		<span>
