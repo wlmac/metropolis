@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+{% load martortags %}
+{% load static %}
+{% load common_tags %}
+{% load settings_tags %}
+
+{% block deps %}
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/flatpage.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/scavengerhunt.css' %}">
+<script src="{% static 'core/js/scavengerhunt.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+<div class="container">
+    <div class="content">
+        <h1 class="title">{{ flatpage.title }}</h1>
+        <hr>
+        <div class="content-body">{{ flatpage.content|safe_markdown }}</div>
+        {% if user.is_authenticated %}
+        <p id="found"></p>
+        <p>Your found message fragments are:</p>
+        <p id="message"></p>
+        {% settings_value "QR_ID_CODES" as codes %}
+        <script>setMsg("{{codes}}");</script>
+        {% else %}
+        <br>
+        <p>To ensure fair scoring, we require you to be signed into your account.</p>
+        <div class="btn-wrapper">
+            <a class="btn" href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a>
+            <a class="btn" href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
