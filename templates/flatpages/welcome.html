@@ -18,11 +18,11 @@
         <hr>
         <div class="content-body">{{ flatpage.content|safe_markdown }}</div>
         {% if user.is_authenticated %}
-        <p id="found"></p>
+        <!--p id="found"></p>
         <p>Your found message fragments are:</p>
         <p id="message"></p>
         {% settings_value "QR_ID_CODES" as codes %}
-        <script>setMsg("{{codes}}");</script>
+        <script>setMsg("{{codes}}");</script-->
         {% else %}
         <br>
         <p>To ensure fair scoring, we require you to be signed into your account.</p>
