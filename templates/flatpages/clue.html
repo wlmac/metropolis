@@ -4,12 +4,11 @@
 {% load settings_tags %}
 
 {% block deps %}
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, nofollow"/>
+<!--meta http-equiv="refresh" content="0; url=/sacmas2021/scavenger/welcome"/>
 <script>
-    if(new Date().getTime() < Date.parse("December 13, 2021")) {
-        window.location.href = location.origin+"/sacmas2021/scavenger/welcome";
-    }
-</script>
+    window.location.href = location.origin+"/sacmas2021/scavenger/welcome";
+</script-->
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
 <link rel="stylesheet" href="{% static 'core/css/flatpage.css' %}">
 <link rel="stylesheet" href="{% static 'core/css/scavengerhunt.css' %}">
@@ -23,9 +22,7 @@
         <hr>
         <div class="content-body">{{ flatpage.content|safe_markdown }}</div>
     </div>
-    {% if user.is_authenticated %}
-    <script>addQR("{{flatpage.url}}");</script>
-    {% endif %}
+    <script>addQR("{{ flatpage.url }}");</script>
     <div class="btn-wrapper">
         <a class="btn" href="/sacmas2021/scavenger/welcome">Home</a>
     </div>
