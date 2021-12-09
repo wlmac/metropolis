@@ -333,10 +333,14 @@ label {
 
 .footer-title {
     margin-top: 25px;
-    font-size: 18;
+    font-size: 16px;
     color: var(--contrast-colour);
     text-align: center;
     padding: 0px 60px;
+}
+
+.footer-title a {
+    color: var(--link-colour);
 }
 
 .footer-title-par {
