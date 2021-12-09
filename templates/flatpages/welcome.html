@@ -17,7 +17,6 @@
         <h1 class="title">{{ flatpage.title }}</h1>
         <hr>
         <div class="content-body">{{ flatpage.content|safe_markdown }}</div>
-        {% if not request.user.is_authenticated %}
         <!--p id="found"></p>
         <p>Your found message fragments are:</p>
         <p id="message"></p>
@@ -25,11 +24,10 @@
         <script>setMsg("{{codes}}");</script-->
         <br>
         <p>To ensure fair scoring, we require you to be signed into your account.</p>
-        <div class="btn-wrapper" style="padding-bottom: 0;">
+        <!--div class="btn-wrapper" style="padding-bottom: 0;">
             <a class="btn" href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a>
             <a class="btn" href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a>
-        </div>
-        {% endif %}
+        </div-->
     </div>
 </div>
 {% endblock %}
