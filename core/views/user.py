@@ -18,7 +18,7 @@ class ProfileRedirect(LoginRequiredMixin, RedirectView):
         return reverse(self.pattern_name, args=[user.username])
 
 
-class Profile(DetailView, mixins.TitleMixin):
+class Profile(LoginRequiredMixin, DetailView, mixins.TitleMixin):
     model = models.User
     context_object_name = "profile"
     template_name = "core/profile/detail.html"
