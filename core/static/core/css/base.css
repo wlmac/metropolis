@@ -318,6 +318,10 @@ label {
     height:25rem;
 }
 
+blockquote {
+    border-color: var(--dark-colour);
+}
+
 .footer {
     /*height: 230px;*/
     width: 100%;

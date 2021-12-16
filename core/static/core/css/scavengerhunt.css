@@ -8,9 +8,9 @@
 }
 .btn-wrapper {
     background-color: white;
-    padding-bottom: 20px;
     display: flex;
     justify-content: center;
+    padding-bottom: 20px;
 }
 .btn {
     margin: 0 5px;
