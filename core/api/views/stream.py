@@ -13,11 +13,13 @@ class SignalStream:
         model,
         signal,
         serializer,
+        event_name,
     ):
         self.model = model
         self.signal = signal
         self.serializer = serializer
         self.q = LifoQueue()
+        self.event_name = event_name
         self.__setup()
 
     def __setup(self):
@@ -34,4 +36,5 @@ class SignalStream:
 
     def __next__(self):
         instance = self.q.get()
-        return f"data: {json.dumps(self.serializer(instance).data)}\n"
+        return f"event: {self.event_name}\n"\
+               f"data: {json.dumps(self.serializer(instance).data)}\n"

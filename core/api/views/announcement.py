@@ -49,6 +49,7 @@ class AnnouncementChangeStream(APIView):
                 signal=signals.post_save,
                 model=models.Announcement,
                 serializer=serializers.AnnouncementSerializer,
+                event_name="announcement_change",
             ),
             content_type="text/event-stream",
         )
