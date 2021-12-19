@@ -1,11 +1,6 @@
 import json
 from queue import LifoQueue
 
-from django.db.models import signals
-
-from ... import models
-from .. import serializers
-
 
 class SignalStream:
     def __init__(
@@ -36,5 +31,7 @@ class SignalStream:
 
     def __next__(self):
         instance = self.q.get()
-        return f"event: {self.event_name}\n"\
-               f"data: {json.dumps(self.serializer(instance).data)}\n"
+        return (
+            f"event: {self.event_name}\n"
+            f"data: {json.dumps(self.serializer(instance).data)}\n"
+        )

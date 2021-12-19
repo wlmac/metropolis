@@ -1,10 +1,9 @@
 from django.db.models import Q
 from django.utils import timezone
-from rest_framework import authentication, permissions
+from rest_framework import permissions
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt import authentication as jwt_auth
 
 from ... import models
 from .. import serializers

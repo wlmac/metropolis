@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
 from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
