@@ -1,6 +1,4 @@
 import json
-from typing import List
-from weakref import WeakValueDictionary
 
 from django.db.models import Q, signals
 from django.http import StreamingHttpResponse

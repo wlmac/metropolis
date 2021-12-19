@@ -1,6 +1,5 @@
 import json
-import time
-from queue import Empty, LifoQueue
+from queue import LifoQueue
 
 from django.db.models import signals
 
