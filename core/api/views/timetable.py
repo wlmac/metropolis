@@ -17,7 +17,7 @@ class IsOwner(permissions.BasePermission):
 
 
 class TimetableList(APIView):
-    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable"]
 
     def get(self, request):
@@ -27,7 +27,7 @@ class TimetableList(APIView):
 
 
 class TimetableSchedule(APIView):
-    permissions_classes = [permissions.IsAuthenticated, TokenHasScope]
+    permissions_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable", "me_schedule"]
 
     def get(self, request, pk):

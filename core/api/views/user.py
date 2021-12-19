@@ -16,7 +16,7 @@ class UserDetail(generics.RetrieveAPIView):
 
 
 class UserMe(APIView):
-    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_meta"]
 
     def get(self, request, format=None):
@@ -25,7 +25,7 @@ class UserMe(APIView):
 
 
 class UserMeSchedule(APIView):
-    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_schedule"]
 
     def get(self, request, format=None):
@@ -35,7 +35,7 @@ class UserMeSchedule(APIView):
 
 
 class UserMeScheduleWeek(APIView):
-    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_schedule"]
 
     def get(self, request, format=None):
@@ -51,7 +51,7 @@ class UserMeScheduleWeek(APIView):
 
 
 class UserMeTimetable(APIView):
-    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable"]
 
     def get(self, request, format=None):
