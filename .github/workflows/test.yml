@@ -1,4 +1,4 @@
-name: lint
+name: test
 on: [ push ]
 jobs:
   linter_name:
@@ -8,6 +8,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v2.2.2
-      - name: Format Check
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run Unit Tests
         run: |
-          make fmt-setup fmt-check
+          python3 manage.py test

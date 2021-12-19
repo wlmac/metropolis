@@ -47,7 +47,7 @@
 
 .next-class .schedule-description{
     font-size: 1.5em;
-    color: var(--banner-text);
+    color: var(--banner-darker);
 }
 
 .schedule-today-overlay{
