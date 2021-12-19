@@ -1,7 +1,7 @@
 import datetime
 
 from oauth2_provider.contrib.rest_framework import TokenHasScope
-from rest_framework import generics, mixins, permissions, status
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
