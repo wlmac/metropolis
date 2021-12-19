@@ -18,7 +18,7 @@ class AnnouncementListAll(APIView):
 
 
 class AnnouncementListMyFeed(APIView):
-    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_ann"]
 
     def get(self, request, format=None):
