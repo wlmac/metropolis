@@ -1,0 +1,192 @@
+diff --git a/core/templates/core/announcement/card_snippet.html b/core/templates/core/announcement/card_snippet.html
+index 2cd8690..32a4b9d 100644
+--- a/core/templates/core/announcement/card_snippet.html
++++ b/core/templates/core/announcement/card_snippet.html
+@@ -1,5 +1,5 @@
+ {% load link_tags %}
+-{% load martortags %}
++{% load markdown_tags %}
+ 
+ <div class="card">
+     <div class="card-headers">
+@@ -26,7 +26,7 @@
+     </div>
+     <hr>
+     <div class="card-body">
+-        <p>{{announcement.body|safe_markdown|striptags|linebreaksbr}}</p>
++        <p>{{announcement.body|markdown|striptags|linebreaksbr}}</p>
+     </div>
+     <br>
+     <a class="link" href="{{announcement.pk|announcement_url}}">See announcement <i class='zmdi zmdi-chevron-right'></i></a>
+diff --git a/core/templates/core/announcement/detail.html b/core/templates/core/announcement/detail.html
+index 35affe9..21745bd 100644
+--- a/core/templates/core/announcement/detail.html
++++ b/core/templates/core/announcement/detail.html
+@@ -1,7 +1,7 @@
+ {% extends 'core/base.html' %}
++{% load markdown_tags %}
+ {% load link_tags %}
+ {% load tagcolor_tags %}
+-{% load martortags %}
+ {% load static %}
+ 
+ {% block deps %}
+@@ -57,7 +57,7 @@
+         {% endif %}
+         <hr>
+         <div class="card-body">
+-            {{announcement.body|safe_markdown}}
++            {{announcement.body|markdown}}
+         </div>
+         <br>
+         <a class="link" href="{% url 'announcement_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Announcements</a>
+diff --git a/core/templates/core/blogpost/card_snippet.html b/core/templates/core/blogpost/card_snippet.html
+index 9f5f8d5..687137f 100644
+--- a/core/templates/core/blogpost/card_snippet.html
++++ b/core/templates/core/blogpost/card_snippet.html
+@@ -1,5 +1,5 @@
+ {% load link_tags %}
+-{% load martortags %}
++{% load markdown_tags %}
+ {% load gravatar_tags %}
+ 
+ <div class="card">
+@@ -31,7 +31,7 @@
+     </div>
+     <hr>
+     <div class="card-body">
+-        <p>{{blogpost.body|safe_markdown|striptags|linebreaksbr}}</p>
++        <p>{{blogpost.body|markdown|striptags|linebreaksbr}}</p>
+     </div>
+     <br>
+     <a class="link" href="{{blogpost.slug|blogpost_url}}">Read full blog post <i class='zmdi zmdi-chevron-right'></i></a>
+diff --git a/core/templates/core/blogpost/detail.html b/core/templates/core/blogpost/detail.html
+index 1c358c6..7a83fd7 100644
+--- a/core/templates/core/blogpost/detail.html
++++ b/core/templates/core/blogpost/detail.html
+@@ -1,6 +1,6 @@
+ {% extends 'core/base.html' %}
++{% load markdown_tags %}
+ {% load link_tags %}
+-{% load martortags %}
+ {% load gravatar_tags %}
+ {% load static %}
+ 
+@@ -33,7 +33,7 @@
+         </div>
+         <hr>
+         <div class="card-body">
+-            {{blogpost.body|safe_markdown}}
++            {{blogpost.body|markdown}}
+         </div>
+         <br>
+         <a class="link" href="{% url 'blogpost_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Blog Posts</a>
+diff --git a/core/templates/core/index.html b/core/templates/core/index.html
+index 306b79a..9282cc3 100644
+--- a/core/templates/core/index.html
++++ b/core/templates/core/index.html
+@@ -1,6 +1,6 @@
+ {% extends 'core/base.html' %}
+ {% load link_tags %}
+-{% load martortags %}
++{% load markdown_tags %}
+ {% load static %}
+ {% load settings_tags %}
+ {% load timetable_tags %}
+@@ -17,7 +17,7 @@
+                             <h4 class="title">{{ blogpost.title }}</h4>
+                             <hr>
+                             <div class="blog-body markdown-container">
+-                                <p>{{ blogpost.body|safe_markdown|striptags|linebreaksbr}}</p>
++                                <p>{{ blogpost.body|markdown|striptags|linebreaksbr}}</p>
+                                 <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read full blog
+                                     post <i
+                                             class='zmdi zmdi-chevron-right'></i></a>
+@@ -85,7 +85,7 @@
+                             </div>
+                             <hr>
+                             <div class="announcement-description markdown-container">
+-                                <p>{{ announcement.body|safe_markdown|striptags|linebreaksbr}}</p>
++                                <p>{{ announcement.body|markdown|striptags|linebreaksbr}}</p>
+                                 <a class="link" href="{{ announcement.pk|announcement_url }}">See announcement <i
+                                         class='zmdi zmdi-chevron-right'></i></a>
+                             </div>
+diff --git a/core/templates/core/organization/detail.html b/core/templates/core/organization/detail.html
+index f082941..8db189e 100644
+--- a/core/templates/core/organization/detail.html
++++ b/core/templates/core/organization/detail.html
+@@ -1,8 +1,8 @@
+ {% extends 'core/base.html' %}
++{% load markdown_tags %}
+ {% load link_tags %}
+ {% load gravatar_tags %}
+ {% load static %}
+-{% load martortags %}
+ 
+ {% block deps %}
+     <link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
+@@ -50,7 +50,7 @@
+                         </p>
+                         <br><br>
+                         <div class="description">
+-                            {{ organization.extra_content|safe_markdown }}
++                            {{ organization.extra_content|markdown }}
+                         </div>
+                     </div>
+                     <div class="col m4">
+diff --git a/core/templates/core/organization/list.html b/core/templates/core/organization/list.html
+index 4a81fde..9d9063d 100644
+--- a/core/templates/core/organization/list.html
++++ b/core/templates/core/organization/list.html
+@@ -1,6 +1,5 @@
+ {% extends 'core/base.html' %}
+ {% load link_tags %}
+-{% load martortags %}
+ {% load static %}
+ 
+ {% block deps %}
+diff --git a/core/templatetags/common_tags.py b/core/templatetags/common_tags.py
+index 70dcb82..98d248b 100644
+--- a/core/templatetags/common_tags.py
++++ b/core/templatetags/common_tags.py
+@@ -1,6 +1,5 @@
+ from django import template
+ from django.shortcuts import reverse
+-from django.utils.safestring import mark_safe
+ 
+ register = template.Library()
+ 
+diff --git a/core/templatetags/markdown_tags.py b/core/templatetags/markdown_tags.py
+new file mode 100644
+index 0000000..da99e27
+--- /dev/null
++++ b/core/templatetags/markdown_tags.py
+@@ -0,0 +1,17 @@
++import bleach.sanitizer as sanitizer
++from django import template
++from django.utils.safestring import mark_safe
++from martor.utils import markdownify
++
++register = template.Library()
++
++cleaner = sanitizer.Cleaner(
++    tags=[*sanitizer.ALLOWED_TAGS, "p"],
++)
++
++
++@register.filter
++def markdown(field_name):
++    print(markdownify(field_name))
++    print(cleaner.clean(markdownify(field_name)))
++    return mark_safe(cleaner.clean(markdownify(field_name)))
+diff --git a/requirements.txt b/requirements.txt
+index 4df2b9f..e2afb0f 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -35,3 +35,6 @@ urllib3==1.26.7
+ 
+ # for SSO (#62)
+ django-oauth-toolkit==1.5.0
++
++# for sanitization
++bleach==4.1.0

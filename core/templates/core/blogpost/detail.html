@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
+{% load markdown_tags %}
 {% load link_tags %}
-{% load martortags %}
 {% load gravatar_tags %}
 {% load static %}
 
@@ -33,7 +33,7 @@
         </div>
         <hr>
         <div class="card-body">
-            {{blogpost.body|safe_markdown}}
+            {{blogpost.body|markdown}}
         </div>
         <br>
         <a class="link" href="{% url 'blogpost_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Blog Posts</a>
