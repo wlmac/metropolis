@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
+{% load markdown_tags %}
 {% load link_tags %}
 {% load tagcolor_tags %}
-{% load martortags %}
 {% load static %}
 
 {% block deps %}
@@ -57,7 +57,7 @@
         {% endif %}
         <hr>
         <div class="card-body">
-            {{announcement.body|safe_markdown}}
+            {{announcement.body|markdown}}
         </div>
         <br>
         <a class="link" href="{% url 'announcement_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Announcements</a>

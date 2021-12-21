@@ -1,5 +1,5 @@
 {% load link_tags %}
-{% load martortags %}
+{% load markdown_tags %}
 
 <div class="card">
     <div class="card-headers">
@@ -26,7 +26,7 @@
     </div>
     <hr>
     <div class="card-body">
-        <p>{{announcement.body|safe_markdown|striptags|linebreaksbr}}</p>
+        <p>{{announcement.body|markdown|striptags|linebreaksbr}}</p>
     </div>
     <br>
     <a class="link" href="{{announcement.pk|announcement_url}}">See announcement <i class='zmdi zmdi-chevron-right'></i></a>

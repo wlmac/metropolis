@@ -1,5 +1,5 @@
 {% load link_tags %}
-{% load martortags %}
+{% load markdown_tags %}
 {% load gravatar_tags %}
 
 <div class="card">
@@ -31,7 +31,7 @@
     </div>
     <hr>
     <div class="card-body">
-        <p>{{blogpost.body|safe_markdown|striptags|linebreaksbr}}</p>
+        <p>{{blogpost.body|markdown|striptags|linebreaksbr}}</p>
     </div>
     <br>
     <a class="link" href="{{blogpost.slug|blogpost_url}}">Read full blog post <i class='zmdi zmdi-chevron-right'></i></a>

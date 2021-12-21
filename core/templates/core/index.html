@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
-{% load martortags %}
+{% load markdown_tags %}
 {% load static %}
 {% load settings_tags %}
 {% load timetable_tags %}
@@ -17,7 +17,7 @@
                             <h4 class="title">{{ blogpost.title }}</h4>
                             <hr>
                             <div class="blog-body markdown-container">
-                                <p>{{ blogpost.body|safe_markdown|striptags|linebreaksbr}}</p>
+                                <p>{{ blogpost.body|markdown|striptags|linebreaksbr}}</p>
                                 <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read full blog
                                     post <i
                                             class='zmdi zmdi-chevron-right'></i></a>
@@ -85,7 +85,7 @@
                             </div>
                             <hr>
                             <div class="announcement-description markdown-container">
-                                <p>{{ announcement.body|safe_markdown|striptags|linebreaksbr}}</p>
+                                <p>{{ announcement.body|markdown|striptags|linebreaksbr}}</p>
                                 <a class="link" href="{{ announcement.pk|announcement_url }}">See announcement <i
                                         class='zmdi zmdi-chevron-right'></i></a>
                             </div>
