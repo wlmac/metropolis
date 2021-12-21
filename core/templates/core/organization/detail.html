@@ -1,8 +1,8 @@
 {% extends 'core/base.html' %}
+{% load markdown_tags %}
 {% load link_tags %}
 {% load gravatar_tags %}
 {% load static %}
-{% load martortags %}
 
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
@@ -50,7 +50,7 @@
                         </p>
                         <br><br>
                         <div class="description">
-                            {{ organization.extra_content|safe_markdown }}
+                            {{ organization.extra_content|markdown }}
                         </div>
                     </div>
                     <div class="col m4">
