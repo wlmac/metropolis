@@ -37,7 +37,10 @@ class AnnouncementStream(SignalStream):
         if instance.status != "a":
             # because Announcement is not approved, don't send
             return self.__next__()
-        return f"data: {json.dumps(self.serializer(instance).data)}\n"
+        return (
+            f"event: announcement-changes\n"
+            f"data: {json.dumps(self.serializer(instance).data)}\n"
+        )
 
 
 class AnnouncementChangeStream(APIView):
