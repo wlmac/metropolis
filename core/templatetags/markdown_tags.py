@@ -32,5 +32,4 @@ cleaner = sanitizer.Cleaner(
 
 @register.filter
 def markdown(field_name):
-    # return mark_safe(cleaner.clean(markdownify(field_name)))
-    return mark_safe(markdownify(field_name))
+    return mark_safe(cleaner.clean(markdownify(field_name)))
