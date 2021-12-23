@@ -16,10 +16,16 @@ cleaner = sanitizer.Cleaner(
         *["h{}".format(i) for i in range(1, 7)],
         "iframe",
     ],
+    attributes={
+        **sanitizer.ALLOWED_ATTRIBUTES,
+        "iframe": ["src", "frameborder", "class"],
+    },
+    styles=["markdown-embed"],
     protocols=[
         "https",
         "mailto",
     ],
+    strip=True,
 )
 
 
