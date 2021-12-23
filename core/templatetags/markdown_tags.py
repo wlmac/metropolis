@@ -14,6 +14,7 @@ cleaner = sanitizer.Cleaner(
         "p",
         "img",
         *["h{}".format(i) for i in range(1, 7)],
+        "hr",
         "iframe",
     ],
     attributes={
@@ -31,4 +32,5 @@ cleaner = sanitizer.Cleaner(
 
 @register.filter
 def markdown(field_name):
-    return mark_safe(cleaner.clean(markdownify(field_name)))
+    # return mark_safe(cleaner.clean(markdownify(field_name)))
+    return mark_safe(markdownify(field_name))
