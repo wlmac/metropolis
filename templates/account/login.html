@@ -1,9 +1,13 @@
 {% extends 'account/base.html' %}
 {% load i18n %}
 {% load static %}
+{% load settings_tags %}
+
+{% block head_title %}{% trans "Login" %}{% endblock %}
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% settings_value 'THEME_CSS' %}">
 <link rel="stylesheet" href="{% static 'core/css/account.css' %}">
 {% endblock %}
 
@@ -50,11 +54,11 @@
                             {{ field }}
                             {{ field.errors }}
                         {% else %}
-<!--                         <div class="col s12">
+                        <div class="col s12">
                             <label for="id_remember" class="valign-wrapper">
                                 <input class="filled-in checkbox-blue" type="checkbox" name="remember" id="id_remember">
-                                <span>Remember Me</span> -->
-                                {# {{ field.errors }} #}
+                                <span>Remember Me</span>
+                                {{ field.errors }}
                             </label> 
                         {% endif %}
 

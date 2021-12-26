@@ -1,10 +1,15 @@
-from django.db.models import Q
-from rest_framework import generics, permissions
+import json
+
+from django.db.models import signals
+from django.http import StreamingHttpResponse
+from oauth2_provider.contrib.rest_framework import TokenHasScope
+from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ... import models
 from .. import serializers
+from .stream import SignalStream
 
 
 class AnnouncementListAll(APIView):
@@ -17,9 +22,39 @@ class AnnouncementListAll(APIView):
 
 
 class AnnouncementListMyFeed(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
+    required_scopes = ["me_ann"]
 
     def get(self, request, format=None):
         announcements = request.user.get_feed()
         serializer = serializers.AnnouncementSerializer(announcements, many=True)
         return Response(serializer.data)
+
+
+class AnnouncementStream(SignalStream):
+    def __next__(self):
+        instance = self.q.get()
+        if instance.status != "a":
+            # because Announcement is not approved, don't send
+            return self.__next__()
+        return (
+            f"event: announcement-changes\n"
+            f"data: {json.dumps(self.serializer(instance).data)}\n"
+        )
+
+
+class AnnouncementChangeStream(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, format=None):
+        response = StreamingHttpResponse(
+            AnnouncementStream(
+                signal=signals.post_save,
+                model=models.Announcement,
+                serializer=serializers.AnnouncementSerializer,
+                event_name="announcement_change",
+            ),
+            content_type="text/event-stream",
+        )
+        response["Cache-Control"] = "no-cache"
+        return response

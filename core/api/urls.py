@@ -1,3 +1,4 @@
+from allauth.socialaccount.providers.oauth.views import OAuthView
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -16,6 +17,11 @@ urlpatterns = [
         name="api_announcement_feed",
     ),
     path("announcements", AnnouncementListAll.as_view(), name="api_all_announcements"),
+    path(
+        "announcements/changes",
+        AnnouncementChangeStream.as_view(),
+        name="api_announcement_changes",
+    ),
     path("organizations", OrganizationList.as_view(), name="api_organization_list"),
     path(
         "organization/<int:pk>",

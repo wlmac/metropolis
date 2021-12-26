@@ -1,5 +1,7 @@
 {% extends 'core/base.html' %}
+{% load settings_tags %}
 {% load static %}
+{% block title %}Page Not Found{% endblock %}
 {% block main %}
     <br>
     <div class="main-container card">
@@ -7,7 +9,7 @@
         <img class="comic-img" style="max-width: 100%"/>
 
         <div class="display-metropolis valign-wrapper">
-            <img class="inline-logo" src="{% static 'core/img/logo-dark-transparent.png' %}"/>
+            <img class="inline-logo" src="{% settings_value 'THEME_LOGO' %}"/>
         </div>
 
         <div class="game-container" hidden>

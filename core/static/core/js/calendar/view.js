@@ -1,6 +1,6 @@
 let calendarElement;
 let calendar;
-let selectedNumberColor = "var(--dark-blue)"
+let selectedNumberColor = "var(--dark-colour)"
 let selectedDate = null
 let maxAspectRatio = 1.7
 

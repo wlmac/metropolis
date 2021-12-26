@@ -1,7 +1,8 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
-{% load martortags %}
+{% load markdown_tags %}
 {% load static %}
+{% load settings_tags %}
 {% load timetable_tags %}
 
 {% block main %}
@@ -16,7 +17,7 @@
                             <h4 class="title">{{ blogpost.title }}</h4>
                             <hr>
                             <div class="blog-body markdown-container">
-                                <p>{{ blogpost.body|safe_markdown|striptags|linebreaksbr}}</p>
+                                <p>{{ blogpost.body|markdown|striptags|linebreaksbr}}</p>
                                 <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read full blog
                                     post <i
                                             class='zmdi zmdi-chevron-right'></i></a>
@@ -84,7 +85,7 @@
                             </div>
                             <hr>
                             <div class="announcement-description markdown-container">
-                                <p>{{ announcement.body|safe_markdown|striptags|linebreaksbr}}</p>
+                                <p>{{ announcement.body|markdown|striptags|linebreaksbr}}</p>
                                 <a class="link" href="{{ announcement.pk|announcement_url }}">See announcement <i
                                         class='zmdi zmdi-chevron-right'></i></a>
                             </div>
@@ -102,6 +103,7 @@
 
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/index.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% settings_value 'THEME_BANNER_CSS' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'core/css/index-banner.css' %}" type="text/css">
     <script src="{% static 'js/luxon.min.js' %}"></script>
     <script src="{% static 'core/js/schedule.js' %}"></script>

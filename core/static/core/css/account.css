@@ -81,20 +81,20 @@ select {
 }
 
 .tab:hover {
-    border-bottom: 2px solid var(--mid-blue);
-    color: var(--mid-blue);
+    border-bottom: 2px solid var(--mid-colour);
+    color: var(--mid-colour);
     -webkit-transition: border 0.1s linear, color 0.1s linear;
     -o-transition: border 0.1s linear, color 0.1s linear;
     transition: border 0.1s linear, color 0.1s linear;
 }
 
 .current {
-    border-bottom: 2px solid var(--link-blue) !important;
-    color: var(--link-blue) !important;
+    border-bottom: 2px solid var(--link-colour) !important;
+    color: var(--link-colour) !important;
 }
 
 .login-btn {
-    margin-top: 10px;
+    margin-top: 30px;
     width: 100%;
 }
 

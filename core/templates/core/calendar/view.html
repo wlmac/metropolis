@@ -1,10 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}
-    Calendar
-{% endblock %}
-
 {% block deps %}
     <link rel="stylesheet" href="{% static 'css/fullcalendar.min.css' %}" type="text/css"/>
     <script src="{% static 'js/fullcalendar.min.js' %}"></script>
@@ -20,6 +16,7 @@
     </div>
     <div id="details">
         <div class="container">
+            <a href="https://sisikyo.herokuapp.com/events/public.ics">URL to iCalendar (use this to add to Google Calendar)</a>
             <h3 id="detailsCurrentDay"></h3>
             <p id="detailsCurrentWeek"></p>
             <hr>

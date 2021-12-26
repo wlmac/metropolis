@@ -1,9 +1,9 @@
 @import url(fonts.css);
 
 :root{
-  --primary: var(--link-blue);
-  --default-button-bg: var(--link-blue);
-  --button-bg: var(--mid-blue);
+  --primary: var(--link-colour);
+  --default-button-bg: var(--link-colour);
+  --button-bg: var(--mid-colour);
   --link-fg: var(--primary);
 }
 
@@ -149,7 +149,7 @@ td, th {
 
 .module > table > tbody > tr > th > a{
   font-weight: 500 !important;
-  color: var(--link-blue);
+  color: var(--link-colour);
 }
 
 .module > table > tbody > tr > td > a{

@@ -3,9 +3,10 @@
 {% load settings_tags %}
 {% load static %}
 
-{% block title %}{{ title }} | Metropolis{% endblock %}
+{% block title %}{% block head_title %}{{ title }}{% endblock %} | Metropolis{% endblock %}
 
 {% block head %}
+<link rel="stylesheet" href="{% settings_value 'THEME_CSS' %}">
 <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 <!--script src="{% static 'core/js/install.js' %}" type="text/javascript"></script-->
@@ -15,16 +16,12 @@
 
 {% block body %}
 
-<div class="install-popup" style="display:flex">
-<!--div class="install-popup" style="display:none"-->
-    <!--img src="{% static 'core/img/logo-dark-transparent.png' %}"-->
+<div class="install-popup">
     <img src="{% static 'core/img/logo-dark.png' %}">
-    <!--span>Access info faster using our web app!</span-->
-    <span>Ghost what it takes? Try our Halloween doodle!</span>
+    <span>Ho ho hop on the Lyons' Den doodle game!</span>
     <div>
-        <!--a id="install-popup-button" class="waves-effect waves-light btn">Install</a-->
         <a id="install-popup-button" class="waves-effect waves-light btn" href="https://doodle.maclyonsden.com/" target="_blank">Play</a>
-        <!--a onclick="dismissInstallPrompt()">Not now</a-->
+        //<a onclick="dismissInstallPrompt()">Not now</a>
     </div>
 </div>
 
@@ -79,7 +76,7 @@
     <div class="nav-wrapper">
         <a href="{% url 'index' %}">
             <div class="brand-logo">
-                <img class="img-logo" src="{% static 'core/img/logo-dark-transparent.png' %}">
+                <img class="img-logo" src="{% settings_value 'THEME_LOGO' %}">
                 <!-- <span>Metropolis</span> -->
             </div>
         </a>
@@ -138,6 +135,7 @@
 <div class="footer">
     <div class="footer-title-par">
         <p class="footer-title">William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables.</p>
+        <p class="footer-title"><a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></p>
     </div>
     <hr class="footer-bar">
     <div class="foooter-icon-par">

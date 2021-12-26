@@ -1,6 +1,4 @@
 :root{
-    /*--white: #ffffff;*/
-    --white: #ffa500;
     --text-grey: #fafafa;
     --bg-grey: #f3f3f3;
     --light-grey: #efefef;
@@ -10,15 +8,6 @@
     --near-black: #0b0b0b;
     --black: #000000;
 
-    /*--dark-blue: #073763;
-    --link-blue: #3a6a96;
-    --mid-blue: #6e9bc4;
-    --highlight-blue: #e7f2fb;*/
-    --dark-blue: #262626;
-    --link-blue: #ff901a;
-    --mid-blue: #ffa94d;
-    --highlight-blue: #ffce99;
-    /*--gold: ;*/
     --status-red: #e85856;
     --status-yellow: #ebc942;
     --status-green: #5cc478;
@@ -30,7 +19,7 @@
 
 /*@media (prefers-color-scheme: dark) {
     :root{
-        --white: #000000;
+        --contrast-colour: #000000;
         --text-grey: #0b0b0b;
         --bg-grey: #434343;
         --light-grey: #939393;
@@ -42,8 +31,8 @@
 
         --dark-blue: #073763;
         --link-blue: #3a6a96;
-        --mid-blue: #6e9bc4;
-        --highlight-blue: #e7f2fb;
+        --mid-colour: #6e9bc4;
+        --highlight-colour: #e7f2fb;
         --status-red: #e85856;
         --status-yellow: #ebc942;
         --status-green: #5cc478;
@@ -74,7 +63,7 @@ select{
 }
 
 .nav-wrapper{
-    background-color: var(--dark-blue);
+    background-color: var(--dark-colour);
     font-family: "Poppins", sans-serif;
     font-weight: 300;
 }
@@ -84,7 +73,8 @@ select{
 }
 
 .nav-link {
-    color: var(--white);
+    color: var(--contrast-colour);
+    font-weight: 500;
 }
 
 .brand-logo{
@@ -119,7 +109,8 @@ select{
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    color: var(--white);
+    color: var(--contrast-colour);
+    font-weight: 500;
 }
 
 .dropdown-trigger > i{
@@ -136,7 +127,7 @@ select{
 }
 
 .dropdown-content, .sidenav{
-    background-color: var(--dark-blue);
+    background-color: var(--dark-colour);
     width: -webkit-max-content !important;
     width: -moz-max-content !important;
     width: max-content !important;
@@ -145,62 +136,67 @@ select{
 }
 
 .dropdown-content > li:not(.divider):hover, .sidenav > li:not(.divider):hover{
-    background-color: var(--dark-blue);
+    background-color: var(--dark-colour);
     -webkit-filter: brightness(0.9);
             filter: brightness(0.9);
 }
 
 .dropdown-content > li > a, .sidenav > li > a{
-    color: var(--mid-blue);
+    color: var(--mid-colour);
+    font-weight: 500;
     /*width: 100%;*/
 }
 
 .dropdown-content> li > a:hover, .sidenav > li > a:hover{
-    color: var(--white);
+    color: var(--contrast-colour);
     -webkit-transition: color linear 0.15s;
     -o-transition: color linear 0.15s;
     transition: color linear 0.15s;
 }
 
 .dropdown-content > .divider, .sidenav > .divider{
-    background-color: var(--link-blue);
+    background-color: var(--link-colour);
     margin: 10px 15px;
     width: calc(100% - 30px);
 }
 
+.sidenav-trigger{
+    color: var(--contrast-colour);
+}
+
 .link{
-    color: var(--link-blue);
+    color: var(--link-colour);
     -webkit-transition: color 0.15s linear;
     -o-transition: color 0.15s linear;
     transition: color 0.15s linear;
 }
 
 .link:hover {
-    color: var(--dark-blue);
+    color: var(--dark-colour);
 }
 
 .link-light{
-    color: var(--white);
+    color: var(--contrast-colour);
     -webkit-transition: color 0.15s linear;
     -o-transition: color 0.15s linear;
     transition: color 0.15s linear;
 }
 
 .link-light:hover {
-    color: var(--highlight-blue);
+    color: var(--highlight-colour);
 }
 
 .checkbox-blue[type="checkbox"].filled-in:checked+span:not(.lever):after {
-    border: 2px solid var(--link-blue);
-    background-color: var(--link-blue);
+    border: 2px solid var(--link-colour);
+    background-color: var(--link-colour);
 }
 
 .btn{
-    background-color: var(--link-blue) !important;
+    background-color: var(--link-colour) !important;
 }
 
 .btn:hover, .btn:active {
-    background-color: var(--dark-blue) !important;
+    background-color: var(--dark-colour) !important;
 }
 
 .errorlist {
@@ -222,10 +218,10 @@ input {
 }
 
 .input-field input:focus {
-    color: var(--dark-blue);
-    border-bottom: 1px solid var(--link-blue) !important;
-    -webkit-box-shadow: 0 1px 0 0 var(--link-blue) !important;
-            box-shadow: 0 1px 0 0 var(--link-blue) !important;
+    color: var(--dark-colour);
+    border-bottom: 1px solid var(--link-colour) !important;
+    -webkit-box-shadow: 0 1px 0 0 var(--link-colour) !important;
+            box-shadow: 0 1px 0 0 var(--link-colour) !important;
 }
 
 label {
@@ -233,7 +229,7 @@ label {
 }
 
 .white-bg{
-    background-color: var(--white);
+    background-color: #ffffff;
     padding: 30px;
     border-radius: 3px;
     width: 75%;
@@ -254,7 +250,7 @@ label {
         -ms-flex-align: center;
             align-items: center;
     padding: 20px;
-    background-color: var(--white);
+    background-color: var(--contrast-colour);
 }
 
 .install-popup > *{
@@ -267,7 +263,7 @@ label {
     height: 48px;
     margin: none;
     width: auto;
-    background-color: var(--dark-blue);
+    background-color: var(--dark-colour);
     border-radius: 5px;
     /*-webkit-box-shadow: 2px 2px 5px 3px #ddddddaa;
             box-shadow: 2px 2px 5px 3px #ddddddaa;*/
@@ -322,10 +318,14 @@ label {
     height:25rem;
 }
 
+blockquote {
+    border-color: var(--dark-colour);
+}
+
 .footer {
     /*height: 230px;*/
     width: 100%;
-    background-color: var(--dark-blue);
+    background-color: var(--dark-colour);
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -337,10 +337,14 @@ label {
 
 .footer-title {
     margin-top: 25px;
-    font-size: 18;
-    color: var(--light-grey);
+    font-size: 16px;
+    color: var(--contrast-colour);
     text-align: center;
     padding: 0px 60px;
+}
+
+.footer-title a {
+    color: var(--link-colour);
 }
 
 .footer-title-par {
@@ -349,7 +353,7 @@ label {
 }
 
 .footer-bar {
-    background-color: var(--mid-blue);
+    background-color: var(--mid-colour);
     height: 0;
     padding-top: .2vh;
     width: 10vw;
@@ -387,7 +391,7 @@ label {
     display: inline-block;
     font-size: 15px;
     text-decoration: none;
-    color: var(--light-grey);
+    color: var(--contrast-colour);
     margin: 0px 20px;
 }
 
@@ -409,7 +413,7 @@ label {
     height: 60px;
     bottom: 40px;
     right: 40px;
-    background-color: var(--dark-blue);
+    background-color: var(--dark-colour);
     color: white;
     border-radius: 10px;
     display: none;

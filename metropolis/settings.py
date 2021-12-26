@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = "Change me"
 DEBUG = False
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -48,6 +46,7 @@ INSTALLED_APPS = [
     "martor",
     "django_select2",
     "pwa",
+    "oauth2_provider",
 ]
 
 MIDDLEWARE = [
@@ -61,6 +60,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "core.middleware.TimezoneMiddleware",
+    "oauth2_provider.middleware.OAuth2TokenMiddleware",
 ]
 
 ROOT_URLCONF = "metropolis.urls"
@@ -84,7 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "metropolis.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -95,7 +94,6 @@ DATABASES = {
     }
 }
 
-
 # Cache
 
 CACHES = {
@@ -103,7 +101,6 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -123,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -136,7 +132,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -297,18 +292,18 @@ TIMETABLE_FORMATS = {
             "early-dismissal": [
                 {
                     "description": {
-                        "time": "09:00 AM - 11:30 AM",
+                        "time": "09:00 AM - 10:14 AM",
                         "course": "Morning Class",
                     },
-                    "time": [[9, 0], [11, 30]],
+                    "time": [[9, 0], [10, 14]],
                     "position": [{1, 5, 7}, {3, 6, 7}],
                 },
                 {
                     "description": {
-                        "time": "12:15 PM - 02:45 PM",
+                        "time": "10:16 AM - 11:30 AM",
                         "course": "Afternoon Class",
                     },
-                    "time": [[12, 15], [14, 45]],
+                    "time": [[10, 16], [11, 30]],
                     "position": [{2, 5, 7}, {4, 6, 7}],
                 },
             ],
@@ -378,14 +373,28 @@ ANNOUNCEMENTS_CUSTOM_FEEDS = []
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
 }
 
+# SSO (OAuth) Settings
+
+OAUTH2_PROVIDER = {
+    "SCOPES": {
+        "user": "Read other users' data",
+        "me_meta": "Read your account data",
+        "me_announcement": "Read your announcement feed",
+        "me_schedule": "Read your schedules",
+        "me_timetable": "Read your timetables",
+    },
+    "CLIENT_ID_GENERATOR_CLASS": "oauth2_provider.generators.ClientIdGenerator",
+}
+
 # CORS settings
 
-CORS_URLS_REGEX = r"^.*/data/?$"
+CORS_URLS_REGEX = r"^/api/.*$"
 
 CORS_ALLOW_METHODS = [
     "GET",
@@ -393,7 +402,9 @@ CORS_ALLOW_METHODS = [
     "OPTIONS",
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://maclyonsden.com",
+]
 
 # Color settings
 
@@ -494,6 +505,55 @@ METROPOLIS_STAFFS = {
 
 METROPOLIS_STAFF_BIO = {}
 
+# Theme Settings
+
+THEMES = {
+    "spring": {
+        "banner": "/static/core/img/themes/banners/spring.jpg",
+        "banner_css": "/static/core/css/themes/banners/spring-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+    "summer": {
+        "banner": "/static/core/img/themes/banners/summer.jpg",
+        "banner_css": "/static/core/css/themes/banners/summer-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+    "autumn": {
+        "banner": "/static/core/img/themes/banners/autumn.jpg",
+        "banner_css": "/static/core/css/themes/banners/autumn-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+    "winter": {
+        "banner": "/static/core/img/themes/banners/winter.jpg",
+        "banner_css": "/static/core/css/themes/banners/winter-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+    "halloween": {
+        "banner": "/static/core/img/themes/banners/halloween.jpg",
+        "banner_css": "/static/core/css/themes/banners/halloween-banner.css",
+        "logo": "/static/core/img/themes/logos/halloween-transparent.png",
+        "theme": "/static/core/css/themes/halloween-theme.css",
+    },
+    "remembrance": {
+        "banner": "/static/core/img/themes/banners/winter.jpg",
+        "banner_css": "/static/core/css/themes/banners/winter-banner.css",
+        "logo": "/static/core/img/themes/logos/remembrance-transparent.png",
+        "theme": "/static/core/css/themes/base-theme.css",
+    },
+    "christmas": {
+        "banner": "/static/core/img/themes/banners/christmas.jpg",
+        "banner_css": "/static/core/css/themes/banners/christmas-banner.css",
+        "logo": "/static/core/img/themes/logos/christmas-transparent.png",
+        "theme": "/static/core/css/themes/christmas-theme.css",
+    },
+}
+
+CURRENT_THEME = "winter"
+
 # Misc settings
 
 SITE_ID = 1
@@ -509,7 +569,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 SILENCED_SYSTEM_CHECKS = ["urls.W002"]
 
-API_VERSION = "3.1.0"
+API_VERSION = "3.2.0"
 
 DEFAULT_TIMEZONE = "UTC"
 
@@ -520,3 +580,8 @@ try:
     from metropolis.config import *
 except ImportError:
     print("Please create a config file to override values in settings.py")
+
+THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
+THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
+THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
+THEME_CSS = THEMES[CURRENT_THEME]["theme"]
