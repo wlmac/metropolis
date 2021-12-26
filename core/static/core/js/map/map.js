@@ -2434,16 +2434,16 @@ map.on("load", () => {
 
 
 // Add a layer showing the places.
-map.addLayer({
-  id: "mactoberfest",
-  type: "symbol",
-  source: "mactoberfest",
-  layout: {
-    "icon-image": "{icon}",
-    "icon-allow-overlap": true,
-    visibility: "none",
-  },
-});
+// map.addLayer({
+//   id: "mactoberfest",
+//   type: "symbol",
+//   source: "mactoberfest",
+//   layout: {
+//     "icon-image": "{icon}",
+//     "icon-allow-overlap": true,
+//     visibility: "none",
+//   },
+// });
 
 // When a click event occurs on a feature in the places layer, open a popup at the
 // location of the feature, with description HTML from its properties.
