@@ -11,6 +11,7 @@ urlpatterns = [
     path("", include(router.urls)),
     path("auth/token", TokenObtainPairView.as_view(), name="api_token_obtain_pair"),
     path("auth/token/refresh", TokenRefreshView.as_view(), name="api_token_refresh"),
+    path("notifications/new", NotificationsNew.as_view(), name="api_notification_new"),
     path(
         "announcements/feed",
         AnnouncementListMyFeed.as_view(),
