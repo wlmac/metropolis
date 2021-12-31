@@ -46,12 +46,10 @@ INSTALLED_APPS = [
     "martor",
     "django_select2",
     "pwa",
-
     # SSO (OAuth)
     "oauth2_provider",
-
     # GraphQL
-    "graphene_django"
+    "graphene_django",
 ]
 
 MIDDLEWARE = [
@@ -398,9 +396,7 @@ OAUTH2_PROVIDER = {
 }
 
 # GraphQL Settings
-GRAPHENE = {
-    "SCHEMA": "core.api2.schema"
-}
+GRAPHENE = {"SCHEMA": "core.api2.schema"}
 
 # CORS settings
 
