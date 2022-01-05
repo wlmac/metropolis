@@ -575,6 +575,8 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
+BANNER_TEXT = ""
+
 
 try:
     from metropolis.config import *
