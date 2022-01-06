@@ -20,7 +20,7 @@ cleaner = sanitizer.Cleaner(
     attributes={
         **sanitizer.ALLOWED_ATTRIBUTES,
         "iframe": ["src", "frameborder", "class"],
-        "img": ["src"],
+        "img": ["alt", "src"],
     },
     styles=["markdown-embed"],
     protocols=[
