@@ -24,6 +24,7 @@ cleaner = sanitizer.Cleaner(
     },
     styles=["markdown-embed"],
     protocols=[
+        "",
         "https",
         "mailto",
     ],
