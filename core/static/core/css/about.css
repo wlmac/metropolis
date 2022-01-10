@@ -121,7 +121,8 @@
     width: 100%;
 }
 .member hr {
-    margin-top: 10px;}
+    margin-top: 10px;
+}
 .link-section {
     margin: 0;
     margin-bottom: 40px;
@@ -141,9 +142,6 @@
 .link-section li {
     margin: 4px 0;
 }
-.link-section .zmdi {
-    margin-right: 8px;
-}
 .link-section li a {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -155,6 +153,29 @@
 .link-section li a p {
     margin: 0;
     color: inherit;
+}
+.link .zmdi {
+    margin: 0;
+    margin-right: 8px;
+}
+.teacher {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.teacher .link {
+    display: flex;
+}
+.teacher .dept {
+    display: flex;
+}
+.teacher .link .zmdi {
+    margin: 0;
+    margin-right: 8px;
+}
+.teacher .dept .zmdi {
+    margin: 0;
+    margin-left: 8px;
 }
 hr {
     border: 0px solid var(--light-grey);
@@ -188,5 +209,17 @@ hr {
     }
     .subtitle {
         font-size: 1.25rem;
+    }
+    .teacher {
+        flex-direction: column;
+        align-items: start;
+        margin: 8px 0 !important;
+    }
+    .teacher .dept {
+        flex-direction: row-reverse;
+    }
+    .teacher .dept .zmdi {
+        margin: 0;
+        margin-right: 8px;
     }
 }
