@@ -39,6 +39,7 @@ class NotificationStream:
 
     def __setup(self):
         self.signal.connect(self.__receive)
+        self.q.put(("init", {}))
 
     def __del__(self):
         self.signal.disconnect(self.__receive)
@@ -52,7 +53,7 @@ class NotificationStream:
     def __next__(self):
         sender, kwargs = self.q.get()
         event_name, data = self.serializer(sender, **kwargs)
-        return f"event: {event_name}\n" f"data: {data}\n"
+        return f"event: {event_name}\n" f"data: {json.dumps(data)}\n"
 
 
 def serializer(sender, signal=None, orig_sender=None, kwargs={}):
@@ -66,6 +67,8 @@ def serializer(sender, signal=None, orig_sender=None, kwargs={}):
             sender,
             serializers.BlogPostSerializer(kwargs["instance"]).data,
         )
+    else:
+        return (sender, kwargs)
 
 
 class NotificationsNew(APIView):
