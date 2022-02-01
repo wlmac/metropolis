@@ -118,6 +118,13 @@ hr {
 .card-body .markdown-embed, .card-body img {
     width: 100%;
 }
+.card-body li {
+    list-style-type: disc !important;
+}
+.card-body ul, .card-body ol {
+    padding-left: 40px !important;
+    list-style-type: disc !important;
+}
 .tag-section {
     display: -webkit-box;
     display: -ms-flexbox;
