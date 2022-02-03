@@ -9,11 +9,11 @@ from martor.utils import markdownify
 
 register = template.Library()
 
-current_site = Site.objects.get_current()
 bodge_pattern = re.compile(f"\[([^\]]*)\]\(/")
 
 
 def bodge_replace(match):
+    current_site = Site.objects.get_current()
     return f"[{match.group(1)}](https://{current_site.domain}/"
 
 
