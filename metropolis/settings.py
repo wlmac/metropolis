@@ -158,7 +158,7 @@ TIMETABLE_FORMATS = {
             "default": [
                 {
                     "description": {
-                        "time": "08:45 AM - 10:05 AM",
+                        "time": "08:45 am - 10:05 am",
                         "course": "Period 1",
                     },
                     "time": [[8, 45], [10, 5]],
@@ -166,7 +166,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "10:15 AM - 11:30 AM",
+                        "time": "10:15 am - 11:30 am",
                         "course": "Period 2",
                     },
                     "time": [[10, 15], [11, 30]],
@@ -174,7 +174,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "12:30 PM - 01:45 PM",
+                        "time": "12:30 pm - 01:45 pm",
                         "course": "Period 3",
                     },
                     "time": [[12, 30], [13, 45]],
@@ -182,7 +182,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "01:50 PM - 03:05 PM",
+                        "time": "01:50 pm - 03:05 pm",
                         "course": "Period 4",
                     },
                     "time": [[13, 50], [15, 5]],
@@ -211,7 +211,7 @@ TIMETABLE_FORMATS = {
             "default": [
                 {
                     "description": {
-                        "time": "08:45 AM - 12:30 PM (In person)",
+                        "time": "08:45 am - 12:30 pm (In person)",
                         "course": "Morning Class",
                     },
                     "time": [[8, 45], [12, 30]],
@@ -219,7 +219,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "08:45 AM - 12:30 PM (At home)",
+                        "time": "08:45 am - 12:30 pm (At home)",
                         "course": "Morning Class",
                     },
                     "time": [[8, 45], [12, 30]],
@@ -227,7 +227,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "02:00 PM - 03:15 PM (At home)",
+                        "time": "02:00 pm - 03:15 pm (At home)",
                         "course": "Afternoon Class",
                     },
                     "time": [[14, 0], [15, 15]],
@@ -256,7 +256,7 @@ TIMETABLE_FORMATS = {
             "default": [
                 {
                     "description": {
-                        "time": "09:00 AM - 11:30 AM",
+                        "time": "09:00 am - 11:30 am",
                         "course": "Morning Class",
                     },
                     "time": [[9, 0], [11, 30]],
@@ -264,7 +264,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "12:15 PM - 02:45 PM",
+                        "time": "12:15 pm - 02:45 pm",
                         "course": "Afternoon Class",
                     },
                     "time": [[12, 15], [14, 45]],
@@ -274,7 +274,7 @@ TIMETABLE_FORMATS = {
             "late-start": [
                 {
                     "description": {
-                        "time": "10:00 AM - 12:00 PM",
+                        "time": "10:00 am - 12:00 pm",
                         "course": "Morning Class",
                     },
                     "time": [[10, 0], [12, 0]],
@@ -282,7 +282,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "12:45 PM - 02:45 PM",
+                        "time": "12:45 pm - 02:45 pm",
                         "course": "Afternoon Class",
                     },
                     "time": [[12, 45], [14, 45]],
@@ -292,7 +292,7 @@ TIMETABLE_FORMATS = {
             "early-dismissal": [
                 {
                     "description": {
-                        "time": "09:00 AM - 10:14 AM",
+                        "time": "09:00 am - 10:14 am",
                         "course": "Morning Class",
                     },
                     "time": [[9, 0], [10, 14]],
@@ -300,7 +300,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "10:16 AM - 11:30 AM",
+                        "time": "10:16 am - 11:30 am",
                         "course": "Afternoon Class",
                     },
                     "time": [[10, 16], [11, 30]],
@@ -324,6 +324,127 @@ TIMETABLE_FORMATS = {
                 (5, "This course is a 2-credit Co-op in Week 1."),
                 (6, "This course is a 2-credit Co-op in Week 2."),
                 (7, "This course is a 4-credit Co-op."),
+            ],
+        },
+    },
+    "post-covid": {
+        "schedules": {
+            "default": [
+                {
+                    "description": {
+                        "time": "09:00 am - 10:15 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[9, 00], [10, 15]],
+                    "position": [{1}, {1}],
+                },
+                {
+                    "description": {
+                        "time": "10:20 am - 11:35 am",
+                        "course": "Period 2",
+                    },
+                    "time": [[10, 20], [11, 35]],
+                    "position": [{2}, {2}],
+                },
+                {
+                    "description": {
+                        "time": "12:20 pm - 01:35 pm",
+                        "course": "Period 3",
+                    },
+                    "time": [[12, 20], [13, 35]],
+                    "position": [{3}, {4}],
+                },
+                {
+                    "description": {
+                        "time": "01:40 pm - 02:55 pm",
+                        "course": "Period 4",
+                    },
+                    "time": [[13, 40], [14, 55]],
+                    "position": [{4}, {3}],
+                },
+            ],
+            "late-start": [
+                {
+                    "description": {
+                        "time": "10:00 am - 11:00 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[10, 0], [11, 0]],
+                    "position": [{1}, {1}],
+                },
+                {
+                    "description": {
+                        "time": "11:05 am - 12:05 am",
+                        "course": "Period 2",
+                    },
+                    "time": [[11, 5], [12, 5]],
+                    "position": [{2}, {2}],
+                },
+                {
+                    "description": {
+                        "time": "12:50 pm - 01:50 pm",
+                        "course": "Period 3",
+                    },
+                    "time": [[12, 50], [13, 50]],
+                    "position": [{3}, {4}],
+                },
+                {
+                    "description": {
+                        "time": "01:55 pm - 02:55 pm",
+                        "course": "Period 4",
+                    },
+                    "time": [[13, 55], [14, 55]],
+                    "position": [{4}, {3}],
+                },
+            ],
+            "early-dismissal": [
+                {
+                    "description": {
+                        "time": "09:00 am - 9:35 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[9, 0], [9, 35]],
+                    "position": [{1}, {1}],
+                },
+                {
+                    "description": {
+                        "time": "9:40 am - 10:15 am",
+                        "course": "Period 2",
+                    },
+                    "time": [[9, 40], [10, 15]],
+                    "position": [{2}, {2}],
+                },
+                {
+                    "description": {
+                        "time": "10:20 pm - 10:55 pm",
+                        "course": "Period 3",
+                    },
+                    "time": [[10, 20], [10, 55]],
+                    "position": [{3}, {4}],
+                },
+                {
+                    "description": {
+                        "time": "11:00 pm - 11:35 pm",
+                        "course": "Period 4",
+                    },
+                    "time": [[11, 0], [11, 35]],
+                    "position": [{4}, {3}],
+                },
+            ],
+        },
+        "courses": 4,
+        "positions": {1, 2, 3, 4},
+        "cycle": {
+            "length": 2,
+            "duration": "day",
+        },
+        "question": {
+            "prompt": "On Day 1, which period is this course in?",
+            "choices": [
+                (1, "Period 1"),
+                (2, "Period 2"),
+                (3, "Period 3"),
+                (4, "Period 4"),
             ],
         },
     },
