@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
 {% load gravatar_tags %}
+{% load settings_tags %}
 {% load static %}
 
 {% block deps %}
@@ -202,13 +203,23 @@
             {% if user.is_authenticated %}
             <h2 class="subtitle">Staff</h2>
             <hr>
-	    <p>Coming Soon!</p>
-	    <!--
             <ul class="link-section">
-		<div>
-                    <h3 class="section-title">Arts</h3>
+                <div style="flex: 1;">
+                    {% settings_value "TEACHER_EMAILS" as teachers %}
+                    {% for teacher in teachers %}
+                    <li class="teacher">
+                        <a class="link" href="{{teacher.mailto}}" target="_blank">
+                            <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>{{teacher.name}} ({{teacher.email|safe}})</p>
+                        </a>
+                        <a class="dept" style="color: var(--near-black);">
+                            <p>{{teacher.dept}}</p>
+                            <i class="zmdi zmdi-group-work zmdi-hc-lg" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    {% endfor %}
                 </div>
-	    </ul> -->
+            </ul>
             {% endif %}
         </div>
         <script>
