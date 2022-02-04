@@ -82,6 +82,13 @@
             
         <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
         <ul class="right hide-on-med-and-down">
+            <li>
+                <a class="dropdown-trigger" href="#!" data-target="dropdown2">Announcements<i class="zmdi zmdi-caret-down"></i></a>
+                <ul id="dropdown2" class="dropdown-content">
+                    <li><a href="/announcements?feed=all">All</a></li>
+                    <li><a href="/announcements?feed=school">School</a></li>
+                </ul>
+            </li>
             {% settings_value "NAVBAR" as navbar %}
             {% for heading, items in navbar.items %}
             {% if items|gettype == 'str' %}
