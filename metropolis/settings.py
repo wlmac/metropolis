@@ -699,6 +699,7 @@ ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
 BANNER_TEXT = ""
 
+ROOT = "http://localhost"
 
 try:
     from metropolis.config import *
