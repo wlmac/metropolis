@@ -677,7 +677,7 @@ CURRENT_THEME = "winter"
 
 # Lazy Loading
 
-LAZY_LOADING = { # set to False to disable
+LAZY_LOADING = {  # set to False to disable
     "per_page": 1,
     "initial_limit": 1,
 }

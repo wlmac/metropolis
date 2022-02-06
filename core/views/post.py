@@ -1,14 +1,13 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
-from django.http import HttpResponseForbidden, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView, TemplateView
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
 
 from .. import models
 from . import mixins
@@ -18,9 +17,7 @@ def custom_feed(request, pk: int):
     assert models.Organization.objects.filter(
         pk=pk
     ).exists(), "pk for feed doesn't exist"
-    custom_feed_organization = models.Organization.objects.get(
-        pk=pk
-    )
+    custom_feed_organization = models.Organization.objects.get(pk=pk)
     return (
         custom_feed_organization,
         custom_feed_organization.get_feed(user=request.user),
@@ -62,8 +59,8 @@ class AnnouncementCards(TemplateView):
             self.posts = paginator.page(self.page)
         except EmptyPage:
             self.posts = paginator.page(paginator.num_pages)
-        context['feed'] = self.posts
-        context['has_next'] = self.posts.has_next()
+        context["feed"] = self.posts
+        context["has_next"] = self.posts.has_next()
         return context
 
 
@@ -79,14 +76,21 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
 
         context["feed_all"] = models.Announcement.get_all(user=self.request.user)
         if settings.LAZY_LOADING:
-            context["feed_all"] = context["feed_all"][:settings.LAZY_LOADING["initial_limit"]]
+            context["feed_all"] = context["feed_all"][
+                : settings.LAZY_LOADING["initial_limit"]
+            ]
 
         if self.request.user.is_authenticated:
             context["feed_my"] = self.request.user.get_feed()
             if settings.LAZY_LOADING:
-                context["feed_my"] = context["feed_my"][:settings.LAZY_LOADING["initial_limit"]]
+                context["feed_my"] = context["feed_my"][
+                    : settings.LAZY_LOADING["initial_limit"]
+                ]
 
-        context["feeds_custom"] = [custom_feed(self.request, pk)[:settings.LAZY_LOADING["initial_limit"]] for pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS]
+        context["feeds_custom"] = [
+            custom_feed(self.request, pk)[: settings.LAZY_LOADING["initial_limit"]]
+            for pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS
+        ]
 
         """ to-do: search bar, DNR
         query = self.request.GET.get('q' ,'')
