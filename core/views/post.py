@@ -1,15 +1,55 @@
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Q
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView, TemplateView
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 from .. import models
 from . import mixins
+
+
+class AnnouncementCards(TemplateView):
+    template_name = "core/announcement/cards.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.count = request.GET.get("count", '1')
+        if not isinstance(self.count, str):
+            return HttpResponseBadRequest("invalid count")
+        if not self.count.isnumeric():
+            return HttpResponseBadRequest("invalid count (non-numeric)")
+        self.page = request.GET.get("page", '1')
+        if not isinstance(self.page, str):
+            return HttpResponseBadRequest("invalid page")
+        if not self.page.isnumeric():
+            return HttpResponseBadRequest("invalid page (non-numeric)")
+        self.feed = request.GET.get("feed", "all")
+        if self.feed not in ("all", "my"):
+            return HttpResponseBadRequest("invalid feed")
+        if self.feed == "my":
+            if not self.request.user.is_authenticated:
+                return HttpResponseForbidden("not authenticated")
+        response = super().dispatch(request, *args, **kwargs)
+        response['X-Has-Next'] = "true" if self.posts.has_next() else "false"
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        feed = self.request.user.get_feed() if self.feed == "my" \
+            else models.Announcement.get_all(user=self.request.user)
+        paginator = Paginator(feed, self.count)
+        try:
+            self.posts = paginator.page(self.page)
+        except EmptyPage:
+            self.posts = paginator.page(paginator.num_pages)
+        context['feed'] = self.posts
+        context['has_next'] = self.posts.has_next()
+        return context
 
 
 class AnnouncementList(TemplateView, mixins.TitleMixin):

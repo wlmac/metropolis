@@ -1,0 +1,5 @@
+{% load link_tags %}
+{% load static %}
+{% for announcement in feed %}
+{% include "./card_snippet.html" %}
+{% endfor %}
