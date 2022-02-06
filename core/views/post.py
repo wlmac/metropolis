@@ -73,6 +73,8 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
 
         if settings.LAZY_LOADING:
             context["lazy_loading"] = True
+            context["initial_limit"] = settings.LAZY_LOADING["initial_limit"]
+            context["per_page"] = settings.LAZY_LOADING["per_page"]
 
         context["feed_all"] = models.Announcement.get_all(user=self.request.user)
         if settings.LAZY_LOADING:

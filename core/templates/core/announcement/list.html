@@ -26,33 +26,24 @@
             import { setup } from "{% static 'core/js/announcement/lazy.js' %}";
 
             const feeds = new Map();
-            feeds.set("all", setup("all"));
+            feeds.set("all", setup("all", {{ initial_limit }}));
             {% comment %}
             {% if user.is_authenticated %}
             feeds.set("my", setup("my"));
             {% endif %}
             {% endcomment %}
             {% for feed_custom in feeds_custom %}
-            feeds.set("{{feed_custom.0.pk}}", setup("{{feed_custom.0.pk}}"));
+            feeds.set("{{feed_custom.0.pk}}", setup("{{feed_custom.0.pk}}", {{ initial_limit }}));
             {% endfor %}
 
             const urlParams = new URLSearchParams(window.location.search);
 
-            let pageLen = 2;
+            let pageLen = {{per_page}};
             let margin = 300;
-            let page = 1;
 
-            function update(){
-                for(let i = 0; i < pageLen; i++){
-                    feeds.get(urlParams.get("feed"))(page);
-                    page += 1;
-                }
-            }
-
-            update()
             window.addEventListener("scroll", () => {
                 if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - margin) {
-                    update()
+                    feeds.get(urlParams.get("feed"))(pageLen)
                 }
             });
         </script>
