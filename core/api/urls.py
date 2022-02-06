@@ -4,7 +4,6 @@ from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .views import *
-from ..views import AnnouncementCards
 
 router = SimpleRouter()
 
@@ -19,7 +18,6 @@ urlpatterns = [
         name="api_announcement_feed",
     ),
     path("announcements", AnnouncementListAll.as_view(), name="api_all_announcements"),
-    path("announcements/cards", AnnouncementCards.as_view(), name="api_announcements_card"),
     path(
         "announcements/changes",
         AnnouncementChangeStream.as_view(),

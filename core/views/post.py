@@ -14,35 +14,50 @@ from .. import models
 from . import mixins
 
 
+def custom_feed(request, pk: int):
+    assert models.Organization.objects.filter(
+        pk=pk
+    ).exists(), "pk for feed doesn't exist"
+    custom_feed_organization = models.Organization.objects.get(
+        pk=pk
+    )
+    return (
+        custom_feed_organization,
+        custom_feed_organization.get_feed(user=request.user),
+    )
+
+
 class AnnouncementCards(TemplateView):
     template_name = "core/announcement/cards.html"
 
     def dispatch(self, request, *args, **kwargs):
-        self.count = request.GET.get("count", '1')
-        if not isinstance(self.count, str):
-            return HttpResponseBadRequest("invalid count")
-        if not self.count.isnumeric():
-            return HttpResponseBadRequest("invalid count (non-numeric)")
-        self.page = request.GET.get("page", '1')
+        self.page = request.GET.get("page", None)
         if not isinstance(self.page, str):
             return HttpResponseBadRequest("invalid page")
         if not self.page.isnumeric():
             return HttpResponseBadRequest("invalid page (non-numeric)")
-        self.feed = request.GET.get("feed", "all")
-        if self.feed not in ("all", "my"):
-            return HttpResponseBadRequest("invalid feed")
+        self.feed = request.GET.get("feed", None)
         if self.feed == "my":
             if not self.request.user.is_authenticated:
                 return HttpResponseForbidden("not authenticated")
-        response = super().dispatch(request, *args, **kwargs)
-        response['X-Has-Next'] = "true" if self.posts.has_next() else "false"
-        return response
+        elif self.feed == "all":
+            pass
+        else:
+            if not isinstance(self.feed, str):
+                return HttpResponseBadRequest("invalid feed")
+            if not self.feed.isnumeric():
+                return HttpResponseBadRequest("invalid feed (non-numeric)")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        feed = self.request.user.get_feed() if self.feed == "my" \
-            else models.Announcement.get_all(user=self.request.user)
-        paginator = Paginator(feed, self.count)
+        if self.feed == "my":
+            feed = self.request.user.get_feed()
+        elif self.feed == "all":
+            feed = models.Announcement.get_all(user=self.request.user)
+        else:
+            feed = custom_feed(self.request, int(self.feed))[1]
+        paginator = Paginator(feed, settings.LAZY_LOADING["per_page"])
         try:
             self.posts = paginator.page(self.page)
         except EmptyPage:
@@ -59,25 +74,19 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        if settings.LAZY_LOADING:
+            context["lazy_loading"] = True
+
         context["feed_all"] = models.Announcement.get_all(user=self.request.user)
+        if settings.LAZY_LOADING:
+            context["feed_all"] = context["feed_all"][:settings.LAZY_LOADING["initial_limit"]]
 
         if self.request.user.is_authenticated:
             context["feed_my"] = self.request.user.get_feed()
+            if settings.LAZY_LOADING:
+                context["feed_my"] = context["feed_my"][:settings.LAZY_LOADING["initial_limit"]]
 
-        context["feeds_custom"] = []
-        for custom_feed_organization_pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS:
-            assert models.Organization.objects.filter(
-                pk=custom_feed_organization_pk
-            ).exists(), "pk for feed doesn't exist"
-            custom_feed_organization = models.Organization.objects.get(
-                pk=custom_feed_organization_pk
-            )
-            context["feeds_custom"].append(
-                (
-                    custom_feed_organization,
-                    custom_feed_organization.get_feed(user=self.request.user),
-                )
-            )
+        context["feeds_custom"] = [custom_feed(self.request, pk)[:settings.LAZY_LOADING["initial_limit"]] for pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS]
 
         """ to-do: search bar, DNR
         query = self.request.GET.get('q' ,'')

@@ -4,6 +4,7 @@
 
 {% block deps %}
 <link rel="stylesheet" href="{% static 'core/css/announcement-list.css' %}">
+<link rel="modulepreload" href="{% static 'core/js/announcement/lazy.js' %}" as="script">
 {% endblock %}
 
 {% block main %}
@@ -17,9 +18,32 @@
             {% endif %}
             {% endcomment %}
             {% for feed_custom in feeds_custom %}
-            <li class="header" id="{{feed_custom.0.name|lower}}">{{feed_custom.0.name|upper}}</li>
+            <li class="header" id="{{feed_custom.0.pk}}">{{feed_custom.0.name|upper}}</li>
             {% endfor %}
         </ul>
+        {% if lazy_loading %}
+        <script type="module">
+            import { setup } from "{% static 'core/js/announcement/lazy.js' %}";
+
+            const feeds = new Map();
+            feeds.set("all", setup("all"));
+            {% comment %}
+            {% if user.is_authenticated %}
+            feeds.set("my", setup("my"));
+            {% endif %}
+            {% endcomment %}
+            {% for feed_custom in feeds_custom %}
+            feeds.set("{{feed_custom.0.pk}}", setup("{{feed_custom.0.pk}}"));
+            {% endfor %}
+
+            const urlParams = new URLSearchParams(window.location.search);
+            window.addEventListener("scroll", () => {
+                if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                    feeds.get(urlParams.get("feed"))();
+                }
+            });
+        </script>
+        {% endif %}
         <script>
             $(document).ready(function() {
                 var urlParams = new URLSearchParams(window.location.search);
@@ -80,7 +104,7 @@
         {% endif %}
         {% endcomment %}
         {% for feed_custom in feeds_custom %}
-        <div class="cards" id="cards-{{feed_custom.0.name|lower}}">
+        <div class="cards" id="cards-{{feed_custom.0.pk}}">
             {% for announcement in feed_custom.1 %}
             {% include "./card_snippet.html" %}
             {% empty %}
