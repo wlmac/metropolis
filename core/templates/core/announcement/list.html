@@ -99,6 +99,11 @@
         </div>
         -->
         <div class="cards" id="cards-all">
+            {% for announcement in feed_all %}
+            {% include "./card_snippet.html" %}
+            {% empty %}
+            <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
+            {% endfor %}
         </div>
         {% comment %}
         {% if user.is_authenticated %}
