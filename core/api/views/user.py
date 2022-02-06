@@ -43,13 +43,14 @@ class UserMeScheduleWeek(APIView):
     def get(self, request, format=None):
         date = utils.parse_date_query_param(request)
 
-        result = {}
-
-        for day in range(7):
-            result[date.isoformat()] = request.user.schedule(target_date=date)
-            date += datetime.timedelta(days=1)
-
-        return Response(result)
+        return Response(
+            {
+                target_date.isoformat(): request.user.schedule(target_date=target_date)
+                for target_date in [
+                    date + datetime.timedelta(days=days) for days in range(7)
+                ]
+            }
+        )
 
 
 class UserMeTimetable(APIView):

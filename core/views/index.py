@@ -5,6 +5,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 
 from core.utils import generate_slam as gs
+from core.utils import get_week_schedule_info
 
 from .. import models
 from . import mixins
@@ -28,6 +29,7 @@ class Index(TemplateView, mixins.TitleMixin):
 
         context["blogpost"] = models.BlogPost.objects.filter(is_published=True).first()
 
+        context["banner_data"] = get_week_schedule_info(self.request.user)
         return context
 
 

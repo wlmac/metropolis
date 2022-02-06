@@ -2,17 +2,10 @@
 {% load settings_tags %}
 <div class="banner">
     <div class="background"><img src="{% settings_value 'THEME_BANNER' %}"/></div>
-    {% if banner_message %}
-        <div class="overlay-container">
-            <div class="banner-message center-align">
-                <span>{{ banner_message }}</span>
-            </div>
-        </div>
-    {% endif %}
     <div class="overlay-container valign-wrapper">
         <div class="next-class center-align">
-            <h4 class="schedule-course">Loading...</h4>
-            <span class="schedule-description">Please wait a sec.</span>
+            <h4 class="schedule-course"></h4>
+            <span class="schedule-description"></span>
         </div>
     </div>
     <div class="schedule-today-overlay hide-on-small-and-down">
@@ -22,4 +15,19 @@
             </div>
         </div>
     </div>
+    {% if offline or not banner_data.logged_in or banner_data.nudge_add_timetable %}
+        <div class="overlay-container">
+            <div class="banner-message center-align">
+		<span>
+            {% if offline %}
+            You are currently offline
+		    {% elif not banner_data.logged_in %}
+			<a href="{% url 'account_signup' %}">Sign up</a> and add your timetable to see a personalized schedule here.
+		    {% elif banner_data.nudge_add_timetable %}
+			<a href="{% url 'timetable_create' banner_data.current_term_id %}">Add your timetable</a> to see a personalized schedule here.
+		    {% endif %}
+		</span>
+            </div>
+        </div>
+    {% endif %}
 </div>
