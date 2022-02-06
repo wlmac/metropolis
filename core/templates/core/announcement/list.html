@@ -37,9 +37,22 @@
             {% endfor %}
 
             const urlParams = new URLSearchParams(window.location.search);
+
+            let pageLen = 2;
+            let margin = 300;
+            let page = 1;
+
+            function update(){
+                for(let i = 0; i < pageLen; i++){
+                    feeds.get(urlParams.get("feed"))(page);
+                    page += 1;
+                }
+            }
+
+            update()
             window.addEventListener("scroll", () => {
-                if((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    feeds.get(urlParams.get("feed"))();
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - margin) {
+                    update()
                 }
             });
         </script>
@@ -86,11 +99,6 @@
         </div>
         -->
         <div class="cards" id="cards-all">
-            {% for announcement in feed_all %}
-            {% include "./card_snippet.html" %}
-            {% empty %}
-            <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
-            {% endfor %}
         </div>
         {% comment %}
         {% if user.is_authenticated %}
