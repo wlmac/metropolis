@@ -338,7 +338,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 1",
                     },
                     "time": [[9, 00], [10, 15]],
-                    "position": [{1}, {1}],
+                    "position": [{1, 5}, {1, 5}],
                 },
                 {
                     "description": {
@@ -346,7 +346,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 2",
                     },
                     "time": [[10, 20], [11, 35]],
-                    "position": [{2}, {2}],
+                    "position": [{2, 5}, {2, 5}],
                 },
                 {
                     "description": {
@@ -354,7 +354,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 3",
                     },
                     "time": [[12, 20], [13, 35]],
-                    "position": [{3}, {4}],
+                    "position": [{3, 6}, {4, 6}],
                 },
                 {
                     "description": {
@@ -362,7 +362,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 4",
                     },
                     "time": [[13, 40], [14, 55]],
-                    "position": [{4}, {3}],
+                    "position": [{4, 6}, {3, 6}],
                 },
             ],
             "late-start": [
@@ -372,7 +372,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 1",
                     },
                     "time": [[10, 0], [11, 0]],
-                    "position": [{1}, {1}],
+                    "position": [{1, 5}, {1, 5}],
                 },
                 {
                     "description": {
@@ -380,7 +380,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 2",
                     },
                     "time": [[11, 5], [12, 5]],
-                    "position": [{2}, {2}],
+                    "position": [{2, 5}, {2, 5}],
                 },
                 {
                     "description": {
@@ -388,7 +388,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 3",
                     },
                     "time": [[12, 50], [13, 50]],
-                    "position": [{3}, {4}],
+                    "position": [{3, 6}, {4, 6}],
                 },
                 {
                     "description": {
@@ -396,7 +396,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 4",
                     },
                     "time": [[13, 55], [14, 55]],
-                    "position": [{4}, {3}],
+                    "position": [{4, 6}, {3, 6}],
                 },
             ],
             "early-dismissal": [
@@ -406,7 +406,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 1",
                     },
                     "time": [[9, 0], [9, 35]],
-                    "position": [{1}, {1}],
+                    "position": [{1, 5}, {1, 5}],
                 },
                 {
                     "description": {
@@ -414,7 +414,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 2",
                     },
                     "time": [[9, 40], [10, 15]],
-                    "position": [{2}, {2}],
+                    "position": [{2, 5}, {2, 5}],
                 },
                 {
                     "description": {
@@ -422,7 +422,7 @@ TIMETABLE_FORMATS = {
                         "course": "Period 3",
                     },
                     "time": [[10, 20], [10, 55]],
-                    "position": [{3}, {4}],
+                    "position": [{3, 6}, {4, 6}],
                 },
                 {
                     "description": {
@@ -430,12 +430,12 @@ TIMETABLE_FORMATS = {
                         "course": "Period 4",
                     },
                     "time": [[11, 0], [11, 35]],
-                    "position": [{4}, {3}],
+                    "position": [{4, 6}, {3, 6}],
                 },
             ],
         },
         "courses": 4,
-        "positions": {1, 2, 3, 4},
+        "positions": {1, 2, 3, 4, 5, 6},
         "cycle": {
             "length": 2,
             "duration": "day",
@@ -447,6 +447,8 @@ TIMETABLE_FORMATS = {
                 (2, "Period 2"),
                 (3, "Period 3"),
                 (4, "Period 4"),
+                (5, "This course is a 2-credit Co-op in the morning."),
+                (6, "This course is a 2-credit Co-op in the afternoon."),
             ],
         },
     },
