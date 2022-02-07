@@ -718,12 +718,10 @@ body.keyboard-focused .dropdown-content li:focus {
   left: 0;
   height: 18px;
   -webkit-transform: none;
-          -ms-transform: none;
-      transform: none;
+  -ms-transform: none;
+  transform: none;
 }
 
 .dropdown-trigger {
   cursor: pointer;
-}
-;
 }
