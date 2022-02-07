@@ -488,8 +488,7 @@ NAVBAR = {
     },
     "Calendar": "/calendar",
     "Clubs": "/clubs",
-    "Blog": "/blog",
-    "Map": "/map",
+    "Content": "/blog",
     "Resources": "/resources",
     "About": "/about",
 }
