@@ -478,6 +478,10 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 # NavBar settings
 
 NAVBAR = {
+    "Announcements": {
+        "All": "/announcements?feed=all",
+        "School": "/announcements?feed=school",
+    },
     "Calendar": "/calendar",
     "Clubs": "/clubs",
     "Blog": "/blog",
