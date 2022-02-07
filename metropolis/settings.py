@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.flatpages",
+    "django.contrib.redirects",
     "core",
     "allauth",
     "allauth.account",
@@ -60,6 +61,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "core.middleware.TimezoneMiddleware",
+    "core.middleware.RedirectFallbackTemporaryMiddleware",
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
 ]
 
@@ -559,7 +561,9 @@ SELECT2_CSS = "css/select2.min.css"
 # PWA settings
 
 PWA_APP_NAME = "Metropolis"
-PWA_APP_DESCRIPTION = "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
+PWA_APP_DESCRIPTION = (
+    "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
+)
 PWA_APP_THEME_COLOR = "#073763"
 PWA_APP_BACKGROUND_COLOR = "#1c233f"
 PWA_APP_DISPLAY = "standalone"
