@@ -290,3 +290,8 @@ textarea {
     display: none;
   }
 }
+
+[type="radio"]:not(:checked), [type="radio"]:checked{
+  position: inherit;
+  opacity: 1;
+}

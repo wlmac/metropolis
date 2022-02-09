@@ -75,4 +75,6 @@ cleaner = sanitizer.Cleaner(
 @register.filter
 @stringfilter
 def markdown(field_name):
-    return mark_safe(cleaner.clean(render(re.sub(bodge_pattern, bodge_replace, field_name))))
+    return mark_safe(
+        cleaner.clean(render(re.sub(bodge_pattern, bodge_replace, field_name)))
+    )
