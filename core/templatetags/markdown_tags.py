@@ -38,7 +38,7 @@ cleaner = sanitizer.Cleaner(
     ],
     attributes={
         **sanitizer.ALLOWED_ATTRIBUTES,
-        "iframe": ["src", "frameborder", "class"],
+        "iframe": ["src", "frameborder", "class", "title", "allow", "allowfullscreen", "width", "height"],
         "img": ["alt", "src"],
     },
     styles=["markdown-embed"],
