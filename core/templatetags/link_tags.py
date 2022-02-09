@@ -30,7 +30,7 @@ def users(usernames, postfix=""):
     users_string = ""
     for username in usernames:
         users_string += user(username, postfix) + ", "
-    return users_string[:-2]
+    return mark_safe(users_string[:-2])
 
 
 @register.filter
@@ -66,6 +66,21 @@ def organization(organization, postfix=""):
         str(organization_obj),
     )
 
+
+@register.filter
+def pubreq_url(pubreq):
+    return reverse("pubreq_detail", args=[pubreq])
+
+@register.filter
+def pubreq(pubreq, postfix=""):
+    url = pubreq_url(pubreq)
+    pubreq_obj = models.PubReq.objects.get(pk=pubreq)
+    return format_html(
+        '<a href="{0}{1}">{2}</a>',
+        mark_safe(url),
+        mark_safe(postfix),
+        pubreq_obj.title,
+    )
 
 @register.filter
 def announcement_url(announcement):
