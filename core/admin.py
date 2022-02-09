@@ -534,6 +534,11 @@ class FlatPageAdmin(FlatPageAdmin):
     )
 
 
+class PubReqAdmin(admin.ModelAdmin):
+    list_display = ["title", "request_date", "status"]
+    list_filter = ["status"]
+    ordering = ["-request_date"]
+
 admin.site.register(User, UserAdmin)
 admin.site.register(models.Timetable, TimetableAdmin)
 admin.site.register(models.Term, TermAdmin)
@@ -542,6 +547,7 @@ admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
+admin.site.register(models.PubReq, PubReqAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)

@@ -1,4 +1,6 @@
 import pytz
+from enum import Enum
+from ..utils.tag_color import get_tag_color
 
 timezone_choices = [(i, i) for i in pytz.common_timezones]
 
@@ -15,3 +17,25 @@ announcement_status_choices = [
     ("a", "Approved"),
     ("r", "Rejected"),
 ]
+
+class PubReqStatus(Enum):
+    APPROVED = "a"
+    PENDING = "p"
+    REJECTED = "r"
+
+PUBREQ_STATUS_NAMES = {
+    "a": "Approved",
+    "p": "Pending Approval",
+    "r": "Rejected",
+}
+
+PUBREQ_COLOURS = {
+    "a": get_tag_color(0.4),
+    "p": get_tag_color(0.2),
+    "r": get_tag_color(0),
+}
+
+REQUEST_STATUS_CHOICES = [
+    (a.value, a.name) for a in PubReqStatus
+]
+
