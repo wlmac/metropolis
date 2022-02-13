@@ -662,6 +662,12 @@ THEMES = {
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
         "theme": "/static/core/css/themes/base-theme.css",
     },
+    "valentines": {
+        "banner": "/static/core/img/themes/banners/valentines.jpg",
+        "banner_css": "/static/core/css/themes/banners/valentines-banner.css",
+        "logo": "/static/core/img/themes/logos/valentines-transparent.png",
+        "theme": "/static/core/css/themes/valentines-theme.css",
+    },
     "halloween": {
         "banner": "/static/core/img/themes/banners/halloween.jpg",
         "banner_css": "/static/core/css/themes/banners/halloween-banner.css",

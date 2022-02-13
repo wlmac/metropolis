@@ -1,0 +1,7 @@
+:root {
+    --banner-text: #945d1e;
+    --banner-darker: #5c3a13;
+}
+.overlay-container {
+    background-color: rgba(255, 255, 255, 0.25);
+}
