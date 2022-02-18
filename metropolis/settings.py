@@ -565,9 +565,7 @@ SELECT2_CSS = "css/select2.min.css"
 # PWA settings
 
 PWA_APP_NAME = "Metropolis"
-PWA_APP_DESCRIPTION = (
-    "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
-)
+PWA_APP_DESCRIPTION = "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
 PWA_APP_THEME_COLOR = "#073763"
 PWA_APP_BACKGROUND_COLOR = "#1c233f"
 PWA_APP_DISPLAY = "standalone"
@@ -711,7 +709,7 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-BANNER_TEXT = ""
+BANNER_TEXT = "Play your lovesickness away with AMORIS"
 
 ROOT = "http://localhost"
 
