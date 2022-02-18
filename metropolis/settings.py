@@ -565,9 +565,7 @@ SELECT2_CSS = "css/select2.min.css"
 # PWA settings
 
 PWA_APP_NAME = "Metropolis"
-PWA_APP_DESCRIPTION = (
-    "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
-)
+PWA_APP_DESCRIPTION = "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
 PWA_APP_THEME_COLOR = "#073763"
 PWA_APP_BACKGROUND_COLOR = "#1c233f"
 PWA_APP_DISPLAY = "standalone"
@@ -662,6 +660,12 @@ THEMES = {
         "logo": "/static/core/img/themes/logos/dark-transparent.png",
         "theme": "/static/core/css/themes/base-theme.css",
     },
+    "valentines": {
+        "banner": "/static/core/img/themes/banners/valentines.jpg",
+        "banner_css": "/static/core/css/themes/banners/valentines-banner.css",
+        "logo": "/static/core/img/themes/logos/valentines-transparent.png",
+        "theme": "/static/core/css/themes/valentines-theme.css",
+    },
     "halloween": {
         "banner": "/static/core/img/themes/banners/halloween.jpg",
         "banner_css": "/static/core/css/themes/banners/halloween-banner.css",
@@ -705,7 +709,7 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-BANNER_TEXT = ""
+BANNER_TEXT = "Play your lovesickness away with AMORIS"
 
 ROOT = "http://localhost"
 

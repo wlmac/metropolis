@@ -267,13 +267,14 @@ label {
     border-radius: 5px;
     /*-webkit-box-shadow: 2px 2px 5px 3px #ddddddaa;
             box-shadow: 2px 2px 5px 3px #ddddddaa;*/
-    -webkit-box-shadow: 2px 2px 5px 3px #505050aa;
-            box-shadow: 2px 2px 5px 3px #505050aa;
+    -webkit-box-shadow: 2px 2px 5px 3px #171717aa;
+            box-shadow: 2px 2px 5px 3px #171717aa;
 }
 
 .install-popup > span{
     margin: 0px 15px;
     font-size: 16px;
+    color: var(--dark-colour);
 }
 
 .install-popup > div{
