@@ -274,7 +274,7 @@ label {
 .install-popup > span{
     margin: 0px 15px;
     font-size: 16px;
-    color: var(--dark-color);
+    color: var(--dark-colour);
 }
 
 .install-popup > div{
