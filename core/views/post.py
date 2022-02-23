@@ -9,18 +9,21 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView, TemplateView
 
+from typing import Optional
+
 from .. import models
 from . import mixins
 
 
-def custom_feed(request, pk: int):
+def custom_feed(request, pk: int, limit: Optional[int]=None):
     assert models.Organization.objects.filter(
         pk=pk
     ).exists(), "pk for feed doesn't exist"
     custom_feed_organization = models.Organization.objects.get(pk=pk)
+    feed = custom_feed_organization.get_feed(user=request.user)
     return (
         custom_feed_organization,
-        custom_feed_organization.get_feed(user=request.user),
+        feed if limit is None else feed[:limit],
     )
 
 
@@ -90,7 +93,7 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
                 ]
 
         context["feeds_custom"] = [
-            custom_feed(self.request, pk)[: settings.LAZY_LOADING["initial_limit"]]
+            custom_feed(self.request, pk, limit=settings.LAZY_LOADING["initial_limit"] if settings.LAZY_LOADING else None)
             for pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS
         ]
 
