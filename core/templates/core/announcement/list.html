@@ -23,29 +23,35 @@
         </ul>
         {% if lazy_loading %}
         <script type="module">
-            import { setup } from "{% static 'core/js/announcement/lazy.js' %}";
+            import { loadCheck, mapSetup } from "{% static 'core/js/announcement/lazy.js' %}";
+        
+            const feeds = mapSetup(
+                [
+                    "all",
+                    {% comment %}
+                    "my",
+                    {% endcomment %}
+                    {% for feed_custom in feeds_custom %}
+                    {{feed_custom.0.pk}},
+                    {% endfor %}
+                ],
+                {{per_page}},
+                {{initial_limit}},
+            );
 
-            const feeds = new Map();
-            feeds.set("all", setup("all", {{initial_limit}}));
-            {% comment %}
-            {% if user.is_authenticated %}
-            feeds.set("my", setup("my"));
-            {% endif %}
-            {% endcomment %}
-            {% for feed_custom in feeds_custom %}
-            feeds.set("{{feed_custom.0.pk}}", setup("{{feed_custom.0.pk}}", {{initial_limit}}));
-            {% endfor %}
-
-            const urlParams = new URLSearchParams(window.location.search);
-
-            const pageLen = {{per_page}};
             const margin = 300;
+            let dontLoad = false;
 
-            window.addEventListener("scroll", () => {
-                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - margin) {
-                    feeds.get(urlParams.get("feed"))(pageLen)
-                }
-            });
+            async function listen() {
+                if (!dontLoad)
+                    if (loadCheck(margin)) {
+                        dontLoad = true;
+                        const urlParams = new URLSearchParams(window.location.search);
+                        await feeds.get(urlParams.get("feed"))()
+                        dontLoad = false;
+                    }
+            }
+            window.addEventListener("scroll", listen);
         </script>
         {% endif %}
         <script>

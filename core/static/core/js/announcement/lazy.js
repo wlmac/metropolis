@@ -10,19 +10,19 @@ async function loadPage(page, feed) {
     return response.text();
 }
 
-function setup(feedSlug, initial_cards) {
-    let page = 1
+function setup(feedSlug, initialLimit, perPage) {
+    let page = 2
 
     // temporary buffer of cards
-    let loadIn = new Map();
-    let pagesLoaded = initial_cards;
-    let loadedLast = false;
-    let loading = false;
-    let cardsElem = document.getElementById(`cards-${feedSlug}`);
+    let loadIn = new Map()
+    let pagesLoaded = initialLimit
+    let loadedLast = false
+    let loading = false
+    let cardsElem = document.getElementById(`cards-${feedSlug}`)
 
     // loads the buffer into the webpage
     function loadBuffer(){
-        // guarantee that only one thread is running (don't want announcements to be added in a different order)
+        // guarantee that only one instance is running (don't want announcements to be added in a different order)
         if(!loading){
             loading = true;
             // add the next card if we haven't loaded the last card yet
@@ -41,22 +41,34 @@ function setup(feedSlug, initial_cards) {
 
     // adds the card to the buffer
     async function insertPage(page, feed) {
-        console.log(`loading page ${page} for feed ${feed}`);
-        const cards = await loadPage(page, feed);
-        loadIn.set(page, cards);
-        loadBuffer();
+        console.debug(`loading page ${page} for feed ${feed}`)
+        const cards = await loadPage(page, feed)
+        loadIn.set(page, cards)
+        loadBuffer()
     }
 
+
     // called when we want to add more cards - asynchronously called, updates page at the start
-    return async (pageLen) => {
+    return async () => {
         let start = page
-        page += pageLen
-        for(let i = start; i < start + pageLen; i++){
-            if (!loadedLast) {
-                await insertPage(i, feedSlug);
-            }
-        }
+        page += perPage
+        for(let i = start; i < start + perPage; i++)
+            if (!loadedLast)
+                await insertPage(i, feedSlug)
     }
 }
 
-export { setup };
+function mapSetup(ks, initialLimit, perPage) {
+    const m = new Map();
+    for (let i in ks) {
+        const k = ks[i];
+        m.set(k, setup(k, initialLimit, perPage));
+    }
+    return m;
+}
+
+function loadCheck(margin) {
+    return window.innerHeight + window.scrollY >= document.body.offsetHeight - margin
+}
+
+export { loadCheck, mapSetup };
