@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import include, path
 
 from . import views
@@ -44,3 +45,12 @@ urlpatterns = [
     path("teapot", views.Teapot.as_view(), name="teapot"),
     path("justinian", views.Justinian.as_view(), name="justinian"),
 ]
+
+if settings.LAZY_LOADING:
+    urlpatterns.append(
+        path(
+            "announcements/cards",
+            views.AnnouncementCards.as_view(),
+            name="api_announcements_card",
+        ),
+    )

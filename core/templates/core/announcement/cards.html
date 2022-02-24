@@ -1,0 +1,10 @@
+{% load link_tags %}
+{% load static %}
+{% for announcement in feed %}
+{% include "./card_snippet.html" %}
+{% endfor %}
+{% if feed.has_next %}
+<span class="has-next">Loading more…</span>
+{% else %}
+<span class="has-next no-more">That's all the announcements you have for now!</span>
+{% endif %}
