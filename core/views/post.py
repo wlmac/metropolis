@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
@@ -9,13 +11,11 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView, TemplateView
 
-from typing import Optional
-
 from .. import models
 from . import mixins
 
 
-def custom_feed(request, pk: int, limit: Optional[int]=None):
+def custom_feed(request, pk: int, limit: Optional[int] = None):
     assert models.Organization.objects.filter(
         pk=pk
     ).exists(), "pk for feed doesn't exist"
@@ -93,7 +93,13 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
                 ]
 
         context["feeds_custom"] = [
-            custom_feed(self.request, pk, limit=settings.LAZY_LOADING["initial_limit"] if settings.LAZY_LOADING else None)
+            custom_feed(
+                self.request,
+                pk,
+                limit=settings.LAZY_LOADING["initial_limit"]
+                if settings.LAZY_LOADING
+                else None,
+            )
             for pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS
         ]
 

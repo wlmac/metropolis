@@ -4,7 +4,6 @@ from django.urls import reverse
 
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
-from .pubreq import PubReq
 
 # Create your models here.
 
@@ -65,15 +64,9 @@ class Announcement(Post):
     def get_absolute_url(self):
         return reverse("announcement_detail", args=[self.pk])
 
-    @property
-    def pubreq(self):
-        return PubReq.objects.get(target=self)
-
     @classmethod
     def get_approved(cls):
-        return cls.objects.filter(
-
-        )
+        return cls.objects.filter()
         return cls.objects.filter(status="a")
 
     @classmethod

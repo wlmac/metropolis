@@ -31,12 +31,6 @@ urlpatterns = [
         views.OrganizationDetail.as_view(),
         name="organization_detail",
     ),
-    path("pubreqs", views.PubReqList.as_view(), name="pubreq_list"),
-    path(
-        "pubreq/<int:pk>",
-        views.PubReqDetail.as_view(),
-        name="pubreq_detail",
-    ),
     path("announcements", views.AnnouncementList.as_view(), name="announcement_list"),
     path(
         "announcement/<int:pk>",
