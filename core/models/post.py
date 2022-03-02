@@ -66,7 +66,6 @@ class Announcement(Post):
 
     @classmethod
     def get_approved(cls):
-        return cls.objects.filter()
         return cls.objects.filter(status="a")
 
     @classmethod
