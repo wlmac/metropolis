@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 
 from ... import models
 from .. import serializers, utils
+from ... import utils as utils2
 
 
 class TermList(generics.ListAPIView):
@@ -60,4 +61,4 @@ class TermCurrentSchedule(APIView):
         if term is None:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
 
-        return Response(term.day_schedule(target_date=date))
+        return Response(term.day_schedule(target_date=utils2.get_localdate()))
