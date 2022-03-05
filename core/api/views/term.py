@@ -51,3 +51,13 @@ class TermCurrent(APIView):
 
         serializer = serializers.TermSerializer(term)
         return Response(serializer.data)
+
+
+class TermCurrentSchedule(APIView):
+    def get(self, request, format=None):
+        term = models.Term.get_current()
+
+        if term is None:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(term.day_schedule(target_date=date))
