@@ -13,6 +13,7 @@ class EventsList(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser]
     serializer_class = serializers.EventSerializer
+    pagination_class = None
 
     def get_queryset(self):
         start = timezone.now()
