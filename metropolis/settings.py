@@ -486,12 +486,19 @@ NAVBAR = {
     "Announcements": {
         "All": "/announcements?feed=all",
         "School": "/announcements?feed=school",
+        "Student Council": "/announcements?feed=studentcouncil",
     },
     "Calendar": "/calendar",
     "Clubs": "/clubs",
     "Content": "/blog",
     "Resources": "/resources",
-    "About": "/about",
+    "About": {
+        "WLMCI": "/about?tab=history",
+        "About": "/about?tab=about",
+        "Team": "/about?tab=team",
+        "Contact WLMCI": "/about?tab=school",
+        "Contact Us": "/about?tab=contact",
+    },
 }
 
 # Announcements settings
@@ -717,7 +724,7 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-BANNER_TEXT = "Play your lovesickness away with AMORIS"
+BANNER_TEXT = ""
 
 ROOT = "http://localhost"
 

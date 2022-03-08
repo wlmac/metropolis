@@ -52,7 +52,7 @@
     <li>
         {% for item, path in items.items %}
             <li>
-                <a href="#!">{{ item }}</a>
+                <a href="{{ path }}">{{ item }}</a>
             </li>
         {% endfor %}
     </li>
@@ -93,8 +93,8 @@
             </li>
             {% elif items|gettype == 'dict' %}
             <li>
-                <a class="dropdown-trigger" href="#!" data-target="dropdown1">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
-                <ul id="dropdown1" class="dropdown-content">
+                <a class="dropdown-trigger" href="#!" data-target="dropdown{{ heading }}">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
+                <ul id="dropdown{{ heading }}" class="dropdown-content">
                     {% for item, path in items.items %}
                         <li>
                             <a href="{{ path }}">{{ item }}</a>

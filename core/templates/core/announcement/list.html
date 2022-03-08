@@ -18,7 +18,7 @@
             {% endif %}
             {% endcomment %}
             {% for feed_custom in feeds_custom %}
-            <li class="header" id="{{feed_custom.0.pk}}">{{feed_custom.0.name|upper}}</li>
+            <li class="header" id="{{feed_custom.0.name|lower|cut:" "}}">{{feed_custom.0.name|upper}}</li>
             {% endfor %}
         </ul>
         {% if lazy_loading %}
@@ -114,7 +114,7 @@
         {% endif %}
         {% endcomment %}
         {% for feed_custom in feeds_custom %}
-        <div class="cards" id="cards-{{feed_custom.0.pk}}">
+        <div class="cards" id="cards-{{feed_custom.0.name|lower|cut:" "}}">
             {% for announcement in feed_custom.1 %}
             {% include "./card_snippet.html" %}
             {% empty %}
