@@ -716,7 +716,7 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-BANNER_TEXT = "Play your lovesickness away with AMORIS"
+BANNER_TEXT = ""
 
 ROOT = "http://localhost"
 
