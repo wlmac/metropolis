@@ -21,6 +21,9 @@ function setup(feedSlug, initialLimit, perPage) {
     let cardsElem = document.getElementById(`cards-${feedSlug}`)
     let pk = ["all", "my"].includes(feedSlug) ? feedSlug : cardsElem.dataset.pk;
 
+    console.log("feedSlug", feedSlug);
+    console.log('pk', pk);
+
     // loads the buffer into the webpage
     function loadBuffer(){
         // guarantee that only one instance is running (don't want announcements to be added in a different order)
