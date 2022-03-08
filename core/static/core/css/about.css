@@ -183,19 +183,16 @@ hr {
 }
 @media screen and (max-width: 600px) {
     .headers {
-        padding: 20px;
+        padding: 10px;
     }
     .headers ul {
-        -webkit-box-pack: center;
-            -ms-flex-pack: center;
-                justify-content: center;
+        flex-direction: column;
     }
     .headers li {
-        font-size: 0.75rem;
+        border: none;
     }
     .header {
-        padding: 0 10px;
-        padding-bottom: 5px;
+        padding: 2px;
     }
     .content-container {
         padding: 20px;

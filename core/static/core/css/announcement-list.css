@@ -188,19 +188,16 @@
 }
 @media screen and (max-width: 600px) {
     .headers {
-        padding: 20px;
+        padding: 10px;
     }
     .headers ul {
-        -webkit-box-pack: center;
-            -ms-flex-pack: center;
-                justify-content: center;
+        flex-direction: column;
     }
     .headers li {
-        font-size: 0.9rem;
+        border: none;
     }
     .header {
-        padding: 0 20px;
-        padding-bottom: 5px;
+        padding: 2px;
     }
     .card-container {
         padding: 5px 20px;

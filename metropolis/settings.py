@@ -485,12 +485,19 @@ NAVBAR = {
     "Announcements": {
         "All": "/announcements?feed=all",
         "School": "/announcements?feed=school",
+        "Student Council": "/announcements?feed=studentcouncil",
     },
     "Calendar": "/calendar",
     "Clubs": "/clubs",
     "Content": "/blog",
     "Resources": "/resources",
-    "About": "/about",
+    "About": {
+        "WLMCI": "/about?tab=history",
+        "About": "/about?tab=about",
+        "Team": "/about?tab=team",
+        "Contact WLMCI": "/about?tab=school",
+        "Contact Us": "/about?tab=contact",
+    },
 }
 
 # Announcements settings
