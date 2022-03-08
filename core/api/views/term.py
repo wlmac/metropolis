@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ... import models
-from .. import serializers, utils
 from ... import utils as utils2
+from .. import serializers, utils
 
 
 class TermList(generics.ListAPIView):

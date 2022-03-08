@@ -13,14 +13,13 @@ class IsOwner(permissions.BasePermission):
         return obj.owner == request.user
 
 
-class TimetableList(APIView):
+class TimetableList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable"]
+    serializer_class = serializers.TimetableSerializer
 
-    def get(self, request):
-        timetables = models.Timetable.objects.filter(owner=request.user)
-        serializer = serializers.TimetableSerializer(timetables, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return models.Timetable.objects.filter(owner=request.user)
 
 
 class TimetableSchedule(APIView):
