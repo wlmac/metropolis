@@ -181,7 +181,7 @@ hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
     .headers {
         padding: 10px;
     }

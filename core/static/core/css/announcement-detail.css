@@ -144,7 +144,7 @@ hr {
     font-size: 0.8rem;
     font-family: 'Roboto Mono', monospace;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 768px) {
     .headers {
         padding: 10px;
     }
