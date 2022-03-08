@@ -496,6 +496,7 @@ NAVBAR = {
         "WLMCI": "/about?tab=history",
         "About": "/about?tab=about",
         "Team": "/about?tab=team",
+        "Map": "/map",
         "Contact WLMCI": "/about?tab=school",
         "Contact Us": "/about?tab=contact",
     },
