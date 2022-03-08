@@ -19,6 +19,7 @@ function setup(feedSlug, initialLimit, perPage) {
     let loadedLast = false
     let loading = false
     let cardsElem = document.getElementById(`cards-${feedSlug}`)
+    let pk = ["all", "my"].includes(feedSlug) ? feedSlug : cardsElem.dataset.pk;
 
     // loads the buffer into the webpage
     function loadBuffer(){
@@ -40,9 +41,9 @@ function setup(feedSlug, initialLimit, perPage) {
     }
 
     // adds the card to the buffer
-    async function insertPage(page, feed) {
-        console.debug(`loading page ${page} for feed ${feed}`)
-        const cards = await loadPage(page, feed)
+    async function insertPage(page, feed, pk) {
+        console.debug(`loading page ${page} for feed ${feed} or ${pk}`)
+        const cards = await loadPage(page, pk)
         loadIn.set(page, cards)
         loadBuffer()
     }
@@ -54,7 +55,7 @@ function setup(feedSlug, initialLimit, perPage) {
         page += perPage
         for(let i = start; i < start + perPage; i++)
             if (!loadedLast)
-                await insertPage(i, feedSlug)
+                await insertPage(i, feedSlug, pk)
     }
 }
 
