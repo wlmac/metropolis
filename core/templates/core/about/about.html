@@ -15,6 +15,7 @@
             <li class="header" id="history">WLMCI</li>
             <li class="header" id="about">ABOUT</li>
             <li class="header" id="team">TEAM</li>
+            <li class="header" id="map">MAP</li>
             <li class="header" id="school">CONTACT WLMCI</li>
             <li class="header" id="contact">CONTACT US</li>
         </ul>
@@ -27,12 +28,16 @@
                 }
                 history.replaceState(null, null, "?"+urlParams.toString());
                 $(".header").click(function() {
-                    $(".header").removeClass("active");
-                    $(this).addClass("active");
-                    $(".content").hide();
-                    $("#content-"+this.id).show();
-                    urlParams.set("tab", this.id);
-                    history.replaceState(null, null, "?"+urlParams.toString());
+                    if (this.id == "map") {
+                        window.open("/map", "_self")
+                    } else {
+                        $(".header").removeClass("active");
+                        $(this).addClass("active");
+                        $(".content").hide();
+                        $("#content-"+this.id).show();
+                        urlParams.set("tab", this.id);
+                        history.replaceState(null, null, "?"+urlParams.toString());
+                    }
                 });
             });
         </script>
@@ -244,7 +249,7 @@
                 var urlParams = new URLSearchParams(window.location.search);
                 $(".content").hide();
                 if(!$("#content-"+urlParams.get("tab")).length) {
-                    urlParams.set("tab", "about");
+                    urlParams.set("tab", "history");
                     history.replaceState(null, null, "?"+urlParams.toString());
                 }
                 $("#content-"+urlParams.get("tab")).show();
