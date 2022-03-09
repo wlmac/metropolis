@@ -2,9 +2,10 @@ from rest_framework import generics
 
 from ... import models
 from .. import serializers
+from .fallback import ListAPIViewWithFallback
 
 
-class OrganizationList(generics.ListAPIView):
+class OrganizationList(ListAPIViewWithFallback):
     queryset = models.Organization.objects.all()
     serializer_class = serializers.OrganizationSerializer
 

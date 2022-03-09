@@ -8,9 +8,10 @@ from rest_framework.views import APIView
 from ... import models
 from ... import utils as utils2
 from .. import serializers, utils
+from .fallback import ListAPIViewWithFallback
 
 
-class TermList(generics.ListAPIView):
+class TermList(ListAPIViewWithFallback):
     queryset = models.Term.objects.all()
     serializer_class = serializers.TermSerializer
 

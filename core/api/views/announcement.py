@@ -10,9 +10,10 @@ from rest_framework.views import APIView
 from ... import models
 from .. import serializers
 from .stream import SignalStream
+from .fallback import ListAPIViewWithFallback
 
 
-class AnnouncementListAll(generics.ListAPIView):
+class AnnouncementListAll(ListAPIViewWithFallback):
     permission_classes = [permissions.AllowAny]
     serializer_class = serializers.AnnouncementSerializer
 

@@ -7,9 +7,10 @@ from rest_framework.views import APIView
 
 from ... import models
 from .. import serializers
+from .fallback import ListAPIViewWithFallback
 
 
-class EventsList(generics.ListAPIView):
+class EventsList(ListAPIViewWithFallback):
     permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser]
     serializer_class = serializers.EventSerializer
