@@ -21,7 +21,7 @@ class AnnouncementListAll(ListAPIViewWithFallback):
         return models.Announcement.get_all(user=self.request.user)
 
 
-class AnnouncementListMyFeed(APIView):
+class AnnouncementListMyFeed(ListAPIViewWithFallback):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_ann"]
     serializer_class = serializers.AnnouncementSerializer
