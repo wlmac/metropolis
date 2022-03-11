@@ -48,7 +48,10 @@ INSTALLED_APPS = [
     "martor",
     "django_select2",
     "pwa",
+    # SSO (OAuth)
     "oauth2_provider",
+    # GraphQL
+    "graphene_django",
 ]
 
 MIDDLEWARE = [
@@ -531,6 +534,9 @@ OAUTH2_PROVIDER = {
     "CLIENT_ID_GENERATOR_CLASS": "oauth2_provider.generators.ClientIdGenerator",
 }
 
+# GraphQL Settings
+GRAPHENE = {"SCHEMA": "core.api2.schema"}
+
 # CORS settings
 
 CORS_URLS_REGEX = r"^/api/.*$"
@@ -722,6 +728,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 SILENCED_SYSTEM_CHECKS = ["urls.W002"]
 
 API_VERSION = "3.2.0"
+API2_VERSION = "0.1.0"
 
 DEFAULT_TIMEZONE = "UTC"
 

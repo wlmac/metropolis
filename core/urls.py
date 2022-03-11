@@ -1,10 +1,13 @@
 from django.conf import settings
 from django.urls import include, path
+from django.views.decorators.csrf import csrf_exempt
+from graphene_django.views import GraphQLView
 
 from . import views
 
 urlpatterns = [
     path("", views.Index.as_view(), name="index"),
+    path("api2/", csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path("api/", include("core.api.urls")),
     path("timetable", views.TimetableList.as_view(), name="timetable_list"),
     path(

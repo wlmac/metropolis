@@ -42,3 +42,6 @@ sqlparse==0.4.2
 urllib3==1.26.7
 webencodings==0.5.1
 wrapt==1.13.3
+django-oauth-toolkit==1.5.0 # SSO (#62)
+graphene-django==2.15.0 # GraphQL
+bleach==4.1.0 # sanitization
