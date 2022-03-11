@@ -35,9 +35,6 @@ class Schema:
         info,
         status: Optional[StatusType] = None,
     ):
-        q = RfP.objects.filter(
+        return RfP.accessible_by(info.context.user).filter(
             **({"status": StatusType.db_status(status)} if status is not None else {}),
-        )
-        if status is not StatusType.APPROVED:
-            q = q.union(RfP.accessible_by(info.context.user))
-        return q.distinct().all()
+        ).distinct().all()
