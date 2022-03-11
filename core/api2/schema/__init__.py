@@ -5,7 +5,7 @@ from graphene_django import DjangoObjectType
 
 from ... import utils
 from ...models import Term
-from . import course, notification, organization, post, tag, user
+from . import course, notification, organization, post, tag, user, rfp
 
 
 class Query(
@@ -16,6 +16,7 @@ class Query(
     user.Schema,
     notification.Schema,
     graphene.ObjectType,
+    rfp.Schema,
 ):
     version = graphene.String(
         description="The version of the API",
