@@ -35,7 +35,7 @@ class Schema:
         info,
         status: Optional[StatusType] = None,
     ):
-        q = Announcement.objects.filter(
+        q = RfP.objects.filter(
             **({"status": StatusType.db_status(status)} if status is not None else {}),
         )
         if status is not StatusType.APPROVED:
