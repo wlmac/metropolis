@@ -1,9 +1,11 @@
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.urls import reverse
 
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
+from .rfp import RfP
 
 # Create your models here.
 
@@ -23,6 +25,7 @@ class Post(models.Model):
     tags = models.ManyToManyField(
         "Tag", blank=True, related_name="%(class)ss", related_query_name="%(class)s"
     )
+    rfp = GenericRelation(RfP)
 
     def __str__(self):
         return self.title

@@ -9,8 +9,8 @@ from rest_framework.views import APIView
 
 from ... import models
 from .. import serializers
-from .stream import SignalStream
 from .fallback import ListAPIViewWithFallback
+from .stream import SignalStream
 
 
 class AnnouncementListAll(ListAPIViewWithFallback):

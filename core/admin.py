@@ -382,7 +382,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                 )
 
 
-class BlogPostAuthorListFilter(admin.SimpleListFilter):
+class AuthorListFilter(admin.SimpleListFilter):
     title = "author"
     parameter_name = "author"
 
@@ -400,7 +400,7 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
 
 class BlogPostAdmin(admin.ModelAdmin):
     list_display = ["title", "author", "is_published"]
-    list_filter = [BlogPostAuthorListFilter, "is_published"]
+    list_filter = [AuthorListFilter, "is_published"]
     ordering = ["-created_date"]
     fields = [
         "author",
@@ -515,6 +515,20 @@ class TimetableAdmin(admin.ModelAdmin):
     list_filter = ["term"]
 
 
+class RfPAdmin(admin.ModelAdmin):
+    list_display = ["target", "author", "status"]
+    list_filter = [AuthorListFilter, "status"]
+    ordering = ["-created_date"]
+    fields = [
+        "target",
+        "supervisor",
+        "status",
+    ]
+
+    def get_changeform_initial_data(self, request):
+        return {"author": request.user.pk}
+
+
 class FlatPageAdmin(FlatPageAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
@@ -542,6 +556,7 @@ admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
+admin.site.register(models.RfP, RfPAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)

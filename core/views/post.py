@@ -163,7 +163,7 @@ class BlogPostList(ListView, mixins.TitleMixin):
         return "-last_modified_date"
 
     def get_queryset(self):
-        return models.BlogPost.objects.filter(is_published=True)
+        return models.BlogPost.objects.filter(rfp__status="a")
 
 
 class BlogPostDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
@@ -175,4 +175,4 @@ class BlogPostDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
         return self.get_object().title
 
     def test_func(self):
-        return self.get_object().is_published
+        return self.get_object().rfp.status == "a"
