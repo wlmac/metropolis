@@ -28,9 +28,7 @@
             const feeds = mapSetup(
                 [
                     "all",
-                    {% comment %}
                     "my",
-                    {% endcomment %}
                     {% for feed_custom in feeds_custom %}
                     "{{feed_custom.0.name|lower|cut:" "}}",
                     {% endfor %}
