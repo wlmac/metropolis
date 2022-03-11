@@ -12,11 +12,9 @@
     <div class="headers">
         <ul>
             <li class="header" id="all">ALL</li>
-            {% comment %}
             {% if user.is_authenticated %}
-            <li class="header" id="my-feed">MY FEED</li>
+            <li class="header" id="my">MY FEED</li>
             {% endif %}
-            {% endcomment %}
             {% for feed_custom in feeds_custom %}
             <li class="header" id="{{feed_custom.0.name|lower|cut:" "}}">{{feed_custom.0.name|upper}}</li>
             {% endfor %}
@@ -100,9 +98,8 @@
             <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
             {% endfor %}
         </div>
-        {% comment %}
         {% if user.is_authenticated %}
-        <div class="cards" id="cards-my-feed">
+        <div class="cards" id="cards-my">
             {% for announcement in feed_my %}
             {% include "./card_snippet.html" %}
             {% empty %}
@@ -110,7 +107,6 @@
             {% endfor %}
         </div>
         {% endif %}
-        {% endcomment %}
         {% for feed_custom in feeds_custom %}
         <div data-pk="{{feed_custom.0.pk}}" class="cards" id="cards-{{feed_custom.0.name|lower|cut:" "}}">
             {% for announcement in feed_custom.1 %}
