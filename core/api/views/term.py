@@ -58,8 +58,9 @@ class TermCurrent(APIView):
 class TermCurrentSchedule(APIView):
     def get(self, request, format=None):
         term = models.Term.get_current()
+        date = utils.parse_date_query_param(request)
 
         if term is None:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
 
-        return Response(term.day_schedule(target_date=utils2.get_localdate()))
+        return Response(term.day_schedule(target_date=date))
