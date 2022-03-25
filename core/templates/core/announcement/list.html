@@ -5,6 +5,7 @@
 {% block deps %}
 <link rel="stylesheet" href="{% static 'core/css/announcement-list.css' %}">
 <link rel="modulepreload" href="{% static 'core/js/announcement/lazy.js' %}" as="script">
+<link rel="alternate" type="application/rss+xml" href="{% url 'announcement_feed'%}" title="Announcement RSS Feed">
 {% endblock %}
 
 {% block main %}
