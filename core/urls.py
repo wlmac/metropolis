@@ -32,6 +32,7 @@ urlpatterns = [
         name="organization_detail",
     ),
     path("announcements", views.AnnouncementList.as_view(), name="announcement_list"),
+    path("announcements/feed", views.AnnouncementFeed(), name="announcement_feed"),
     path(
         "announcement/<int:pk>",
         views.AnnouncementDetail.as_view(),
