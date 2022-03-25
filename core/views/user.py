@@ -41,7 +41,7 @@ class Profile(LoginRequiredMixin, DetailView, mixins.TitleMixin):
         return context
 
 
-class ProfileUpdate(UpdateView, mixins.TitleMixin):
+class ProfileUpdate(LoginRequiredMixin, UpdateView, mixins.TitleMixin):
     model = models.User
     fields = ["bio", "timezone", "first_name", "last_name", "graduating_year"]
     template_name = "core/profile/update.html"
