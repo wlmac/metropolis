@@ -130,6 +130,18 @@ class AnnouncementFeed(Feed):
     def item_description(self, item):
         return markdown(item.body)
 
+    def item_title(self, item):
+        return item.title
+
+    def item_pubdate(self, item):
+        return item.created_at
+
+    def item_updateddate(self, item):
+        return item.last_modified_date
+
+    def item_category(self, item):
+        return [item.organization.name] + item.tags.values_list("name", flat=True)
+
 
 class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
     model = models.Announcement
