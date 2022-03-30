@@ -17,7 +17,8 @@
 {% block body %}
 
 {% settings_value "BANNER_TEXT" as banner_text %}
-{% if banner_text %}
+{% settings_value "BANNER_SHOW" as banner_show %}
+{% if banner_text and banner_show %}
 <div class="install-popup">
     <img src="{% settings_value 'THEME_LOGO' %}">
     <span>{{ banner_text }}</span>

@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
+import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -727,7 +728,11 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-BANNER_TEXT = ""
+tz = pytz.timezone('America/Toronto')
+BANNER_TEXT       = "Why is there a new \"play\" button here? There shouldn't be a new game… "
+BANNER_SHOW_START = datetime(2022, 3, 1, 0, 0, 0, tzinfo=tz)
+BANNER_SHOW_END = datetime(2022, 4, 2, 0, 0, 0, tzinfo=tz)
+BANNER_SHOW = BANNER_SHOW_START < datetime.now(tz) < BANNER_SHOW_END
 
 ROOT = "http://localhost"
 
