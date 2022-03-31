@@ -404,7 +404,7 @@ TIMETABLE_FORMATS = {
             "early-dismissal": [
                 {
                     "description": {
-                        "time": "09:00 am - 9:35 am",
+                        "time": "09:00 am - 09:35 am",
                         "course": "Period 1",
                     },
                     "time": [[9, 0], [9, 35]],
