@@ -404,34 +404,34 @@ TIMETABLE_FORMATS = {
             "early-dismissal": [
                 {
                     "description": {
-                        "time": "09:00 am - 9:35 am",
+                        "time": "09:00 am - 9:45 am",
                         "course": "Period 1",
                     },
-                    "time": [[9, 0], [9, 35]],
+                    "time": [[9, 0], [9, 45]],
                     "position": [{1, 5}, {1, 5}],
                 },
                 {
                     "description": {
-                        "time": "9:40 am - 10:15 am",
+                        "time": "9:50 am - 10:30 am",
                         "course": "Period 2",
                     },
-                    "time": [[9, 40], [10, 15]],
+                    "time": [[9, 50], [10, 30]],
                     "position": [{2, 5}, {2, 5}],
                 },
                 {
                     "description": {
-                        "time": "10:20 pm - 10:55 pm",
+                        "time": "10:35 pm - 11:15 pm",
                         "course": "Period 3",
                     },
-                    "time": [[10, 20], [10, 55]],
+                    "time": [[10, 35], [11, 15]],
                     "position": [{3, 6}, {4, 6}],
                 },
                 {
                     "description": {
-                        "time": "11:00 pm - 11:35 pm",
+                        "time": "11:20 pm - 12:00 pm",
                         "course": "Period 4",
                     },
-                    "time": [[11, 0], [11, 35]],
+                    "time": [[11, 20], [12, 0]],
                     "position": [{4, 6}, {3, 6}],
                 },
             ],
