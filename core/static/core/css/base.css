@@ -1,3 +1,4 @@
+@import url(https://allfont.net/allfont.css?fonts=comic-sans-ms);
 :root{
     --text-grey: #fafafa;
     --bg-grey: #f3f3f3;
@@ -12,7 +13,8 @@
     --status-yellow: #ebc942;
     --status-green: #5cc478;
     
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
+    font-family: 'Comic Sans MS', sans-serif;
     letter-spacing: 0.15px;
     background-color: var(--bg-grey);
 }
@@ -76,7 +78,7 @@ select{
 
 .nav-wrapper{
     background-color: var(--dark-colour);
-    font-family: "Poppins", sans-serif;
+    /*font-family: "Poppins", sans-serif;*/
     font-weight: 300;
 }
 
