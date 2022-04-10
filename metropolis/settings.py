@@ -733,6 +733,8 @@ BANNER_TEXT       = "Why is there a new \"play\" button here? There shouldn't be
 BANNER_SHOW_START = datetime(2022, 4, 1, 0, 0, 0, tzinfo=tz)
 BANNER_SHOW_END = datetime(2022, 4, 2, 0, 0, 0, tzinfo=tz)
 BANNER_SHOW = BANNER_SHOW_START < datetime.now(tz) < BANNER_SHOW_END
+BANNER_URL = "/"
+BANNER_URL_TEXT = "Play"
 
 ROOT = "http://localhost"
 

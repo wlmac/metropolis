@@ -23,7 +23,9 @@
     <img src="{% settings_value 'THEME_LOGO' %}">
     <span>{{ banner_text }}</span>
     <div>
-        <a id="install-popup-button" class="waves-effect waves-light btn" href="https://doodle.maclyonsden.com/" target="_blank">Play</a>
+        <a id="install-popup-button" class="waves-effect waves-light btn" href="{% settings_value 'BANNER_URL' %}" target="_blank">
+            {% settings_value 'BANNER_URL_TEXT' %}
+        </a>
     </div>
 </div>
 {% endif %}
