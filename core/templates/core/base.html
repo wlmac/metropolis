@@ -21,7 +21,7 @@
 {% if banner_text and banner_show %}
 <div class="install-popup">
     <img src="{% settings_value 'THEME_LOGO' %}">
-    <span>{{ banner_text }}</span>
+    <span>{{ banner_text | safe }}</span>
     <div>
         <a id="install-popup-button" class="waves-effect waves-light btn" href="{% settings_value 'BANNER_URL' %}" target="_blank">
             {% settings_value 'BANNER_URL_TEXT' %}
