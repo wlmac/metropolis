@@ -440,6 +440,17 @@ blockquote {
     font-size: 30px;
     font-weight: bold;
 }
+
+.content-body > ul:not(.browser-default) {
+    list-style-type: inherit;
+    padding-left: inherit;
+    padding-inline-start: 30px;
+}
+
+.content-body > ul:not(.browser-default) > li {
+    list-style-type: inherit;
+}
+
 @media screen and (display-mode: standalone) {
     #back {
         display: flex;
