@@ -333,7 +333,7 @@ label {
 }
 
 blockquote {
-    border-color: var(--dark-colour);
+    border-color: var(--highlight-colour);
 }
 
 .footer {
