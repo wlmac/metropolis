@@ -13,8 +13,7 @@
     --status-yellow: #ebc942;
     --status-green: #5cc478;
     
-    /*font-family: 'Roboto', sans-serif;*/
-    font-family: 'Comic Sans MS', sans-serif;
+    font-family: 'Roboto', sans-serif;
     letter-spacing: 0.15px;
     background-color: var(--bg-grey);
 }
@@ -78,7 +77,7 @@ select{
 
 .nav-wrapper{
     background-color: var(--dark-colour);
-    /*font-family: "Poppins", sans-serif;*/
+    font-family: "Poppins", sans-serif;
     font-weight: 300;
 }
 
