@@ -79,17 +79,17 @@ class Term(models.Model):
         ]["cycle"]["length"] + 1
 
     def day_schedule_format(self, target_date=None):
-        target_date = utils.get_localdate(date=target_date, time=[11, 0, 0])
+        tds = utils.get_localdate(date=target_date, time=[0, 0, 0]) # target date start
+        tde = utils.get_localdate(date=target_date, time=[23, 59, 59]) # target date end
 
         schedule_formats = settings.TIMETABLE_FORMATS[self.timetable_format][
             "schedules"
         ]
         schedule_format_set = set(
             self.events.filter(
-                start_date__lte=target_date, end_date__gte=target_date
+                start_date__lte=tde, end_date__gte=tds
             ).values_list("schedule_format", flat=True)
         ).intersection(set(schedule_formats.keys()))
-
         for schedule_format in list(schedule_formats.keys())[::-1]:
             if schedule_format in schedule_format_set:
                 return schedule_format
