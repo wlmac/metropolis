@@ -435,6 +435,40 @@ TIMETABLE_FORMATS = {
                     "position": [{4, 6}, {3, 6}],
                 },
             ],
+            "one-hour-lunch": [
+                {
+                    "description": {
+                        "time": "09:00 am - 10:15 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[9, 00], [10, 15]],
+                    "position": [{1, 5}, {1, 5}],
+                },
+                {
+                    "description": {
+                        "time": "10:20 am - 11:30 am",
+                        "course": "Period 2",
+                    },
+                    "time": [[10, 20], [11, 30]],
+                    "position": [{2, 5}, {2, 5}],
+                },
+                {
+                    "description": {
+                        "time": "12:30 pm - 01:40 pm",
+                        "course": "Period 3",
+                    },
+                    "time": [[12, 30], [13, 40]],
+                    "position": [{3, 6}, {4, 6}],
+                },
+                {
+                    "description": {
+                        "time": "01:45 pm - 02:55 pm",
+                        "course": "Period 4",
+                    },
+                    "time": [[13, 45], [14, 55]],
+                    "position": [{4, 6}, {3, 6}],
+                },
+            ],
         },
         "courses": 4,
         "positions": {1, 2, 3, 4, 5, 6},
