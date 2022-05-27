@@ -41,6 +41,7 @@ urlpatterns = [
     path("blog", views.BlogPostList.as_view(), name="blogpost_list"),
     path("blog/<str:slug>", views.BlogPostDetail.as_view(), name="blogpost_detail"),
     path("calendar", views.CalendarView.as_view(), name="calendar"),
+    path("calendar.ics", views.CalendarFeed(), name="calendar_ical"),
     path("map", views.MapView.as_view(), name="map"),
     path("about", views.AboutView.as_view(), name="about"),
     path("teapot", views.Teapot.as_view(), name="teapot"),

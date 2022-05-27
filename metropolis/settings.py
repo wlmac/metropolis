@@ -777,6 +777,9 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
 }
 
+# iCalendar Feed
+ICAL_PADDING = timedelta(days=4*7)
+
 try:
     from metropolis.config import *
 except ImportError:
