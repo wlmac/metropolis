@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.urls import reverse
+from django_ical.views import ICalFeed
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
@@ -36,6 +38,40 @@ class Index(TemplateView, mixins.TitleMixin):
 class CalendarView(TemplateView, mixins.TitleMixin):
     template_name = "core/calendar/view.html"
     title = "Calendar"
+
+
+class CalendarFeed(ICalFeed):
+    product_id = "-//maclyonsden.com//calendar//EN"
+    timezone = "UTC"
+    file_name = "public_calendar.ics"
+
+    def items(self):
+        return models.Event.get_events(user=None).order_by('-start_date')
+
+    def item_title(self, item):
+        return item.name
+
+    def item_description(self, item):
+        return item.description
+
+    def item_start_datetime(self, item):
+        return item.start_date
+
+    def item_end_datetime(self, item):
+        return item.end_date
+
+    def item_link(self, item):
+        # TODO: implement by-pk link
+        return reverse("calendar")
+
+    def item_categories(self, item):
+        return [tag.name for tag in item.tags.all()] \
+            + (["public"] if item.is_public else []) \
+            + (["instructional"] if item.is_instructional else [])
+
+    def item_author_name(self, item):
+        return item.organization.name
+
 
 
 class MapView(TemplateView, mixins.TitleMixin):
