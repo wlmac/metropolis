@@ -46,7 +46,11 @@ class CalendarFeed(ICalFeed):
     file_name = "public_calendar.ics"
 
     def items(self):
-        return models.Event.get_events(user=None).order_by('-start_date')
+        now = timezone.now()
+        padding = settings.ICAL_PADDING
+        return models.Event.get_events(user=None).filter(
+            end_date__gte=now - padding, start_date__lte=now + padding,
+        ).order_by('-start_date')
 
     def item_title(self, item):
         return item.name
