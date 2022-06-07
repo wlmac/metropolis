@@ -43,7 +43,7 @@ class CalendarView(TemplateView, mixins.TitleMixin):
 class CalendarFeed(ICalFeed):
     product_id = "-//maclyonsden.com//calendar//EN"
     timezone = "UTC"
-    file_name = "public_calendar.ics"
+    file_name = "metropolis_school-wide.ics"
 
     def items(self):
         now = timezone.now()
@@ -58,11 +58,14 @@ class CalendarFeed(ICalFeed):
     def item_description(self, item):
         return item.description
 
+    def _is_hms(self, dt, hour, minute, second):
+        return dt.hour == hour and dt.minute == minute and dt.second == second
+
     def item_start_datetime(self, item):
-        return item.start_date
+        return item.start_date if self._is_hms(item.start_date, 0, 0, 0) else item.start_date.date()
 
     def item_end_datetime(self, item):
-        return item.end_date
+        return item.end_date if self._is_hms(item.end_date, 23, 59, 0) else item.end_date.date()
 
     def item_link(self, item):
         # TODO: implement by-pk link
