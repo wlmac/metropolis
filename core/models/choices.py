@@ -15,6 +15,7 @@ graduating_year_choices = [
 ]
 
 announcement_status_choices = [
+    ("d", "Draft"),
     ("p", "Pending Approval"),
     ("a", "Approved"),
     ("r", "Rejected"),
