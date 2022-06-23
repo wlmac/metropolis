@@ -60,4 +60,5 @@ urlpatterns = [
         name="api_martor_image_upload",
     ),
     path("version", APIVersion.as_view(), name="api_version"),
+    path("v3/feeds", feeds, name="api_v3_feeds"),
 ]
