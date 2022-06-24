@@ -61,4 +61,5 @@ urlpatterns = [
     ),
     path("version", APIVersion.as_view(), name="api_version"),
     path("v3/feeds", feeds, name="api_v3_feeds"),
+    path("v3/staff", staff, name="api_v3_staff"),
 ]

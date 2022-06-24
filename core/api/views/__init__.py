@@ -1,5 +1,5 @@
 from .announcement import *
-from .feeds import *
+from .etc import *
 from .events import *
 from .meta import *
 from .notifs import *
