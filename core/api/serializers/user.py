@@ -24,3 +24,21 @@ class UserSerializer(serializers.ModelSerializer):
             "organizations",
             "tags_following",
         ]
+
+
+class UserSerializer3(serializers.ModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
+
+    class Meta:
+        model = models.User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "bio",
+            "timezone",
+            "graduating_year",
+            "organizations",
+            "tags_following",
+        ]

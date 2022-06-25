@@ -17,6 +17,11 @@ class UserDetail(generics.RetrieveAPIView):
     required_scopes = ["user"]
 
 
+class UserDetail3(UserDetail):
+    serializer_class = serializers.UserSerializer3
+    lookup_field = "username"
+
+
 class UserMe(APIView):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_meta"]
