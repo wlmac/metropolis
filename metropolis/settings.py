@@ -311,6 +311,24 @@ TIMETABLE_FORMATS = {
                     "position": [{2, 5, 7}, {4, 6, 7}],
                 },
             ],
+            "early-early-dismissal": [
+                {
+                    "description": {
+                        "time": "09:00 am - 9:55 am",
+                        "course": "1st Classes",
+                    },
+                    "time": [[9, 0], [9, 55]],
+                    "position": [{1, 5, 7}, {3, 6, 7}],
+                },
+                {
+                    "description": {
+                        "time": "10:00 am - 11:00 am",
+                        "course": "2nd Classes",
+                    },
+                    "time": [[10, 0], [11, 0]],
+                    "position": [{2, 5, 7}, {4, 6, 7}],
+                },
+            ],
         },
         "courses": 4,
         "positions": {1, 2, 3, 4, 5, 6, 7},
@@ -466,6 +484,40 @@ TIMETABLE_FORMATS = {
                         "course": "Period 4",
                     },
                     "time": [[13, 45], [14, 55]],
+                    "position": [{4, 6}, {3, 6}],
+                },
+            ],
+            "early-early-dismissal": [
+                {
+                    "description": {
+                        "time": "09:00 am - 09:25 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[9, 0], [9, 25]],
+                    "position": [{1, 5}, {1, 5}],
+                },
+                {
+                    "description": {
+                        "time": "09:30 am - 9:55 am",
+                        "course": "Period 2",
+                    },
+                    "time": [[9, 30], [9, 55]],
+                    "position": [{2, 5}, {2, 5}],
+                },
+                {
+                    "description": {
+                        "time": "10:00 am - 10:25 am",
+                        "course": "Period 3",
+                    },
+                    "time": [[10, 0], [10, 25]],
+                    "position": [{3, 6}, {4, 6}],
+                },
+                {
+                    "description": {
+                        "time": "10:30 am - 11:00 am",
+                        "course": "Period 4",
+                    },
+                    "time": [[10, 30], [11, 0]],
                     "position": [{4, 6}, {3, 6}],
                 },
             ],
