@@ -1,4 +1,6 @@
 from django.conf import settings
+from django.urls import reverse
+from django_ical.views import ICalFeed
 from django.http import HttpResponse
 from django.utils import timezone
 from django.views import View
@@ -36,6 +38,47 @@ class Index(TemplateView, mixins.TitleMixin):
 class CalendarView(TemplateView, mixins.TitleMixin):
     template_name = "core/calendar/view.html"
     title = "Calendar"
+
+
+class CalendarFeed(ICalFeed):
+    product_id = "-//maclyonsden.com//calendar//EN"
+    timezone = "UTC"
+    file_name = "metropolis_school-wide.ics"
+
+    def items(self):
+        now = timezone.now()
+        padding = settings.ICAL_PADDING
+        return models.Event.get_events(user=None).filter(
+            end_date__gte=now - padding, start_date__lte=now + padding,
+        ).order_by('-start_date')
+
+    def item_title(self, item):
+        return item.name
+
+    def item_description(self, item):
+        return item.description
+
+    def _is_hms(self, dt, hour, minute, second):
+        return dt.hour == hour and dt.minute == minute and dt.second == second
+
+    def item_start_datetime(self, item):
+        return item.start_date if self._is_hms(item.start_date, 0, 0, 0) else item.start_date.date()
+
+    def item_end_datetime(self, item):
+        return item.end_date if self._is_hms(item.end_date, 23, 59, 0) else item.end_date.date()
+
+    def item_link(self, item):
+        # TODO: implement by-pk link
+        return reverse("calendar") + f"?pk={item.pk}"  # NOTE: workaround for UID
+
+    def item_categories(self, item):
+        return [tag.name for tag in item.tags.all()] \
+            + (["public"] if item.is_public else []) \
+            + (["instructional"] if item.is_instructional else [])
+
+    def item_author_name(self, item):
+        return item.organization.name
+
 
 
 class MapView(TemplateView, mixins.TitleMixin):

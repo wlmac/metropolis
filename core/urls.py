@@ -31,13 +31,8 @@ urlpatterns = [
         views.OrganizationDetail.as_view(),
         name="organization_detail",
     ),
-    path("pubreqs", views.PubReqList.as_view(), name="pubreq_list"),
-    path(
-        "pubreq/<int:pk>",
-        views.PubReqDetail.as_view(),
-        name="pubreq_detail",
-    ),
     path("announcements", views.AnnouncementList.as_view(), name="announcement_list"),
+    path("announcements/feed", views.AnnouncementFeed(), name="announcement_feed"),
     path(
         "announcement/<int:pk>",
         views.AnnouncementDetail.as_view(),
@@ -46,6 +41,7 @@ urlpatterns = [
     path("blog", views.BlogPostList.as_view(), name="blogpost_list"),
     path("blog/<str:slug>", views.BlogPostDetail.as_view(), name="blogpost_detail"),
     path("calendar", views.CalendarView.as_view(), name="calendar"),
+    path("calendar.ics", views.CalendarFeed(), name="calendar_ical"),
     path("map", views.MapView.as_view(), name="map"),
     path("about", views.AboutView.as_view(), name="about"),
     path("teapot", views.Teapot.as_view(), name="teapot"),

@@ -196,7 +196,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
             "rejection_reason",
             "supervisor",
         ]
-        status_idx = ["p", "a", "r"].index(obj.status)
+        status_idx = ["d", "p", "a", "r"].index(obj.status)
 
         fields = set(all_fields)
         fields_matrix = [
@@ -269,7 +269,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         if obj == None:
             return {"author", "supervisor", "status", "rejection_reason"}
 
-        status_idx = ["p", "a", "r"].index(obj.status)
+        status_idx = ["d", "p", "a", "r"].index(obj.status)
 
         fields = {
             "title",
@@ -323,7 +323,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         if (
             obj != None
-            and obj.status != "p"
+            and obj.status not in ("d", "p")
             and not request.user.is_superuser
             and request.user in obj.organization.supervisors.all()
             and request.user not in obj.organization.execs.all()
@@ -340,20 +340,20 @@ class AnnouncementAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             if request.user in obj.organization.supervisors.all():
                 obj.supervisor = request.user
-                if obj.status != "p" and request.user != obj.author:
+                if obj.status not in ("d", "p") and request.user != obj.author:
                     # Notify author
                     self.message_user(
                         request,
                         f"Successfully marked announcement as {obj.get_status_display()}.",
                     )
             else:
-                if (not change) or obj.status != "p":
+                if (not change) or obj.status not in ("d", "p"):
                     notify_supervisors = True
 
                     self.message_user(
                         request, f"Successfully sent announcement for review."
                     )
-                obj.status = "p"
+                obj.status = "p" if obj.status != "d" else "d"
 
         super().save_model(request, obj, form, change)
 
@@ -534,11 +534,6 @@ class FlatPageAdmin(FlatPageAdmin):
     )
 
 
-class PubReqAdmin(admin.ModelAdmin):
-    list_display = ["title", "request_date", "status"]
-    list_filter = ["status"]
-    ordering = ["-request_date"]
-
 admin.site.register(User, UserAdmin)
 admin.site.register(models.Timetable, TimetableAdmin)
 admin.site.register(models.Term, TermAdmin)
@@ -547,7 +542,6 @@ admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
-admin.site.register(models.PubReq, PubReqAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)

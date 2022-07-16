@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 
 from ... import models
 from .. import serializers, utils
+from .fallback import ListAPIViewWithFallback
 
 
 class IsOwner(permissions.BasePermission):
@@ -13,14 +14,13 @@ class IsOwner(permissions.BasePermission):
         return obj.owner == request.user
 
 
-class TimetableList(APIView):
+class TimetableList(ListAPIViewWithFallback):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable"]
+    serializer_class = serializers.TimetableSerializer
 
-    def get(self, request):
-        timetables = models.Timetable.objects.filter(owner=request.user)
-        serializer = serializers.TimetableSerializer(timetables, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return models.Timetable.objects.filter(owner=request.user)
 
 
 class TimetableSchedule(APIView):

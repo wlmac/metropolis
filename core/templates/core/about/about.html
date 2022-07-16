@@ -12,31 +12,57 @@
 <div class="container">
     <div class="headers">
         <ul>
+            <li class="header" id="history">WLMCI</li>
             <li class="header" id="about">ABOUT</li>
-            <li class="header" id="members">MEMBERS</li>
-            <li class="header" id="contact">CONTACT</li>
-            <li class="header" id="school">SCHOOL</li>
+            <li class="header" id="team">TEAM</li>
+            <li class="header" id="map">MAP</li>
+            <li class="header" id="school">CONTACT WLMCI</li>
+            <li class="header" id="contact">CONTACT US</li>
         </ul>
         <script>
             $(document).ready(function() {
                 var urlParams = new URLSearchParams(window.location.search);
                 if(!urlParams.get("tab")) {
-                    $("#about").addClass("active");
-                    urlParams.set("tab", "about");
+                    $("#history").addClass("active");
+                    urlParams.set("tab", "history");
                 }
                 history.replaceState(null, null, "?"+urlParams.toString());
                 $(".header").click(function() {
-                    $(".header").removeClass("active");
-                    $(this).addClass("active");
-                    $(".content").hide();
-                    $("#content-"+this.id).show();
-                    urlParams.set("tab", this.id);
-                    history.replaceState(null, null, "?"+urlParams.toString());
+                    if (this.id == "map") {
+                        window.open("/map", "_self")
+                    } else {
+                        $(".header").removeClass("active");
+                        $(this).addClass("active");
+                        $(".content").hide();
+                        $("#content-"+this.id).show();
+                        urlParams.set("tab", this.id);
+                        history.replaceState(null, null, "?"+urlParams.toString());
+                    }
                 });
             });
         </script>
     </div>
     <div class="content-container">
+        <div class="content" id="content-history">
+            <h1 class="title">Welcome to the Lyon's Den</h1>
+            <hr>
+            <h2 class="subtitle">Home and Pride of the Mackenzie Lyons circa 1960</h2>
+            <p class="text">
+                William Lyon Mackenzie C. I. is a Toronto District Secondary School opened in 1960 and located in North York.
+                Mackenzie was named after the historical prowess William Lyon Mackenzie, the political agitator who led the
+                government revolt in Toronto in 1837. In its years of establishing a home of blue and gold, William Lyon Mackenzie
+                Collegiate not only built an incredible student body of 1500 strong, but also a strong, tight knit community that
+                prides itself on multicultural diversity, inclusion, creativity and academic innovation. And, here is where the
+                heart and soul of the Lyon Pride resound.
+            </p>
+            <p class="text">
+                William Lyon Mackenzie Collegiate boasts scholastic excellence in its academic programing: the MaCS enrichment
+                program, the Gifted Program, the ELL program, the Advanced Placement Program, and the FIT program. Collectively,
+                these programs have helped nurture student voice and advocacy and inspire a variety of extracurricular
+                opportunities from clubs and councils to intramurals and athletics, to school-wide events and initiatives, all
+                of which beautifully reflect the spirit of membership - the roar of the Lyon Pride.
+            </p>
+        </div>
         <div class="content" id="content-about">
             <h1 class="title">Our Vision</h1>
             <hr>
@@ -49,24 +75,18 @@
             <h1 class="title">About the Site</h1>
             <hr>
             <p class="text">
-                Originally inspired by the previous Student Council information site and MAC Radio,
-                Project Metropolis aims to combines several previous platforms into one.
-            </p>
-            <p class="text">
-                With the shift towards increasing online connectivity,
-                we've worked on digitizing resources like announcements and club information
-                so that even students attending virtual school can easily have access.
-                The club system allows users to personalize their experience through "opt-in" memberships and tags.
-                Over the coming while, users can expect regular digital content via the blog,
-                such as "Humans of WLMAC" (a spontaneous photojournalism series),
-                or "Make or Break" (a series on setting habits).
+                The Mackenzie Lyon's Den (Project Metropolis) is a student-driven website that showcases the best of Mackenzie's pride;
+                a central microcosm and communication hub, rich in representing the diverse facets of student life.
+                Welcome to the Lyon's Den, the first stop to find out more about Mackenzie, its school-wide activities, events,
+                initiatives, clubs and councils, Student Council offerings, creative student voice and essential resources to enrich
+                Mackenzie student life!
             </p>
             <p class="text">
                 Our site will continue to roll out new features and updates in the coming months.
-                Users can look forward to a notification system, searching system, and possibly a mobile app.
+                Users can look forward to a notification system, searching system, and a mobile app.
             </p>
         </div>
-        <div class="content" id="content-members">
+        <div class="content" id="content-team">
             <h1 class="title">Our Team</h1>
             <hr>
             <p class="text">
@@ -150,7 +170,7 @@
             <hr>
             <p class="text">
                 Project Metropolis is a site affiliated with William Lyon Mackenzie Collegiate Institute.
-                To contact the school or faculty, please refer to the channels of communication listed below.
+                To contact the school, please refer to the channels of communication listed below.
             </p>
             <ul class="link-section">
                 <div>
@@ -167,7 +187,7 @@
                         </a>
                     </li>
                     <li>
-                        <a style="color: var(--near-black);">
+                        <a class="link" href="tel:4163953330">
                             <i class="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
                             <p>(416) 395-3330</p>
                         </a>
@@ -229,7 +249,7 @@
                 var urlParams = new URLSearchParams(window.location.search);
                 $(".content").hide();
                 if(!$("#content-"+urlParams.get("tab")).length) {
-                    urlParams.set("tab", "about");
+                    urlParams.set("tab", "history");
                     history.replaceState(null, null, "?"+urlParams.toString());
                 }
                 $("#content-"+urlParams.get("tab")).show();

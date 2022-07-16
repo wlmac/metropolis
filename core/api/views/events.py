@@ -1,61 +1,70 @@
 from django.db.models import Q
 from django.utils import timezone
-from rest_framework import permissions
+from rest_framework import generics, permissions
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ... import models
 from .. import serializers
+from .fallback import ListAPIViewWithFallback
 
 
-class EventsList(APIView):
+class EventsList(ListAPIViewWithFallback):
     permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser]
+    serializer_class = serializers.EventSerializer
+    pagination_class = None
 
-    def get(self, request):
+    def get_queryset(self):
         start = timezone.now()
-        if request.data.get("start"):
-            start = request.data.get("start")
-        elif request.query_params.get("start"):
-            start = request.query_params.get("start")
+        if self.request.data.get("start"):
+            start = self.request.data.get("start")
+        elif self.request.query_params.get("start"):
+            start = self.request.query_params.get("start")
 
-        if not request.user.is_anonymous:
-            if request.data.get("end"):
-                end = request.data.get("end")
+        if not self.request.user.is_anonymous:
+            if self.request.data.get("end"):
+                end = self.request.data.get("end")
                 events = (
                     models.Event.objects.filter(
                         end_date__gte=start, start_date__lte=end
                     )
-                    .filter(Q(is_public=True) | Q(organization__member=request.user.id))
+                    .filter(
+                        Q(is_public=True) | Q(organization__member=self.request.user.id)
+                    )
                     .distinct()
                     .order_by("start_date")
                 )
-            elif request.query_params.get("end"):
-                end = request.query_params.get("end")
+            elif self.request.query_params.get("end"):
+                end = self.request.query_params.get("end")
                 events = (
                     models.Event.objects.filter(
                         end_date__gte=start, start_date__lte=end
                     )
-                    .filter(Q(is_public=True) | Q(organization__member=request.user.id))
+                    .filter(
+                        Q(is_public=True) | Q(organization__member=self.request.user.id)
+                    )
                     .distinct()
                     .order_by("start_date")
                 )
             else:
                 events = (
                     models.Event.objects.filter(end_date__gte=start)
-                    .filter(Q(is_public=True) | Q(organization__member=request.user.id))
+                    .filter(
+                        Q(is_public=True) | Q(organization__member=self.request.user.id)
+                    )
                     .distinct()
                     .order_by("start_date")
                 )
         else:
-            if request.data.get("end"):
-                end = request.data.get("end")
+            if self.request.data.get("end"):
+                end = self.request.data.get("end")
                 events = models.Event.objects.filter(
                     end_date__gte=start, start_date__lte=end, is_public=True
                 ).order_by("start_date")
-            elif request.query_params.get("end"):
-                end = request.query_params.get("end")
+            elif self.request.query_params.get("end"):
+                end = self.request.query_params.get("end")
                 events = models.Event.objects.filter(
                     end_date__gte=start, start_date__lte=end, is_public=True
                 ).order_by("start_date")
@@ -64,5 +73,4 @@ class EventsList(APIView):
                     end_date__gte=start, is_public=True
                 ).order_by("start_date")
 
-        serializer = serializers.EventSerializer(events, many=True)
-        return Response(serializer.data)
+        return events

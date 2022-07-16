@@ -6,10 +6,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ... import models
+from ... import utils as utils2
 from .. import serializers, utils
+from .fallback import ListAPIViewWithFallback
 
 
-class TermList(generics.ListAPIView):
+class TermList(ListAPIViewWithFallback):
     queryset = models.Term.objects.all()
     serializer_class = serializers.TermSerializer
 
@@ -51,3 +53,14 @@ class TermCurrent(APIView):
 
         serializer = serializers.TermSerializer(term)
         return Response(serializer.data)
+
+
+class TermCurrentSchedule(APIView):
+    def get(self, request, format=None):
+        term = models.Term.get_current()
+        date = utils.parse_date_query_param(request)
+
+        if term is None:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(term.day_schedule(target_date=date))

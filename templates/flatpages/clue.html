@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% load martortags %}
+{% load markdown_tags %}
 {% load static %}
 {% load settings_tags %}
 
@@ -20,7 +20,7 @@
     <div class="content">
         <h1 class="title">{{ flatpage.title }}</h1>
         <hr>
-        <div class="content-body">{{ flatpage.content|safe_markdown }}</div>
+        <div class="content-body">{{ flatpage.content|markdown }}</div>
     </div>
     <script>addQR("{{ flatpage.url }}");</script>
     <div class="btn-wrapper">

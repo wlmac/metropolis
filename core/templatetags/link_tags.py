@@ -68,21 +68,6 @@ def organization(organization, postfix=""):
 
 
 @register.filter
-def pubreq_url(pubreq):
-    return reverse("pubreq_detail", args=[pubreq])
-
-@register.filter
-def pubreq(pubreq, postfix=""):
-    url = pubreq_url(pubreq)
-    pubreq_obj = models.PubReq.objects.get(pk=pubreq)
-    return format_html(
-        '<a href="{0}{1}">{2}</a>',
-        mark_safe(url),
-        mark_safe(postfix),
-        pubreq_obj.title,
-    )
-
-@register.filter
 def announcement_url(announcement):
     return reverse("announcement_detail", args=[announcement])
 

@@ -1,21 +1,25 @@
+from typing import Optional
+
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.syndication.views import Feed
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView, TemplateView
 
-from typing import Optional
+from core.templatetags.markdown_tags import markdown
 
 from .. import models
 from . import mixins
 
 
-def custom_feed(request, pk: int, limit: Optional[int]=None):
+def custom_feed(request, pk: int, limit: Optional[int] = None):
     assert models.Organization.objects.filter(
         pk=pk
     ).exists(), "pk for feed doesn't exist"
@@ -35,7 +39,7 @@ class AnnouncementCards(TemplateView):
         if not isinstance(self.page, str):
             return HttpResponseBadRequest("invalid page")
         if not self.page.isnumeric():
-            return HttpResponseBadRequest("invalid page (non-numeric)")
+            return HttpResponseBadRequest(f"invalid page (non-numeric)")
         self.feed = request.GET.get("feed", None)
         if self.feed == "my":
             if not self.request.user.is_authenticated:
@@ -93,7 +97,13 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
                 ]
 
         context["feeds_custom"] = [
-            custom_feed(self.request, pk, limit=settings.LAZY_LOADING["initial_limit"] if settings.LAZY_LOADING else None)
+            custom_feed(
+                self.request,
+                pk,
+                limit=settings.LAZY_LOADING["initial_limit"]
+                if settings.LAZY_LOADING
+                else None,
+            )
             for pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS
         ]
 
@@ -108,6 +118,29 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
                 context['search'] = context['feed_all'].filter(Q(body__icontains=query) | Q(title__icontains=query))
         """
         return context
+
+
+class AnnouncementFeed(Feed):
+    title = "Metropolis Announcements"
+    link = reverse_lazy("announcement_list")
+
+    def items(self):
+        return models.Announcement.get_all()
+
+    def item_description(self, item):
+        return markdown(item.body)
+
+    def item_title(self, item):
+        return item.title
+
+    def item_pubdate(self, item):
+        return item.created_date
+
+    def item_updateddate(self, item):
+        return item.last_modified_date
+
+    def item_category(self, item):
+        return [item.organization.name] + item.tags.values_list("name", flat=True)
 
 
 class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):

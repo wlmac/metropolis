@@ -5,6 +5,7 @@
 {% block deps %}
 <link rel="stylesheet" href="{% static 'core/css/announcement-list.css' %}">
 <link rel="modulepreload" href="{% static 'core/js/announcement/lazy.js' %}" as="script">
+<link rel="alternate" type="application/rss+xml" href="{% url 'announcement_feed'%}" title="Announcement RSS Feed">
 {% endblock %}
 
 {% block main %}
@@ -18,34 +19,40 @@
             {% endif %}
             {% endcomment %}
             {% for feed_custom in feeds_custom %}
-            <li class="header" id="{{feed_custom.0.pk}}">{{feed_custom.0.name|upper}}</li>
+            <li class="header" id="{{feed_custom.0.name|lower|cut:" "}}">{{feed_custom.0.name|upper}}</li>
             {% endfor %}
         </ul>
         {% if lazy_loading %}
         <script type="module">
-            import { setup } from "{% static 'core/js/announcement/lazy.js' %}";
+            import { loadCheck, mapSetup } from "{% static 'core/js/announcement/lazy.js' %}";
+        
+            const feeds = mapSetup(
+                [
+                    "all",
+                    {% comment %}
+                    "my",
+                    {% endcomment %}
+                    {% for feed_custom in feeds_custom %}
+                    "{{feed_custom.0.name|lower|cut:" "}}",
+                    {% endfor %}
+                ],
+                {{initial_limit}},
+                {{per_page}},
+            );
 
-            const feeds = new Map();
-            feeds.set("all", setup("all", {{initial_limit}}));
-            {% comment %}
-            {% if user.is_authenticated %}
-            feeds.set("my", setup("my"));
-            {% endif %}
-            {% endcomment %}
-            {% for feed_custom in feeds_custom %}
-            feeds.set("{{feed_custom.0.pk}}", setup("{{feed_custom.0.pk}}", {{initial_limit}}));
-            {% endfor %}
-
-            const urlParams = new URLSearchParams(window.location.search);
-
-            const pageLen = {{per_page}};
             const margin = 300;
+            let dontLoad = false;
 
-            window.addEventListener("scroll", () => {
-                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - margin) {
-                    feeds.get(urlParams.get("feed"))(pageLen)
-                }
-            });
+            async function listen() {
+                if (!dontLoad)
+                    if (loadCheck(margin)) {
+                        dontLoad = true;
+                        const urlParams = new URLSearchParams(window.location.search);
+                        await feeds.get(urlParams.get("feed"))()
+                        dontLoad = false;
+                    }
+            }
+            window.addEventListener("scroll", listen);
         </script>
         {% endif %}
         <script>
@@ -108,7 +115,7 @@
         {% endif %}
         {% endcomment %}
         {% for feed_custom in feeds_custom %}
-        <div class="cards" id="cards-{{feed_custom.0.pk}}">
+        <div data-pk="{{feed_custom.0.pk}}" class="cards" id="cards-{{feed_custom.0.name|lower|cut:" "}}">
             {% for announcement in feed_custom.1 %}
             {% include "./card_snippet.html" %}
             {% empty %}

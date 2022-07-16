@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from datetime import timedelta, datetime
+import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -309,6 +311,24 @@ TIMETABLE_FORMATS = {
                     "position": [{2, 5, 7}, {4, 6, 7}],
                 },
             ],
+            "early-early-dismissal": [
+                {
+                    "description": {
+                        "time": "09:00 am - 9:55 am",
+                        "course": "1st Classes",
+                    },
+                    "time": [[9, 0], [9, 55]],
+                    "position": [{1, 5, 7}, {3, 6, 7}],
+                },
+                {
+                    "description": {
+                        "time": "10:00 am - 11:00 am",
+                        "course": "2nd Classes",
+                    },
+                    "time": [[10, 0], [11, 0]],
+                    "position": [{2, 5, 7}, {4, 6, 7}],
+                },
+            ],
         },
         "courses": 4,
         "positions": {1, 2, 3, 4, 5, 6, 7},
@@ -402,34 +422,102 @@ TIMETABLE_FORMATS = {
             "early-dismissal": [
                 {
                     "description": {
-                        "time": "09:00 am - 9:35 am",
+                        "time": "09:00 am - 09:45 am",
                         "course": "Period 1",
                     },
-                    "time": [[9, 0], [9, 35]],
+                    "time": [[9, 0], [9, 45]],
                     "position": [{1, 5}, {1, 5}],
                 },
                 {
                     "description": {
-                        "time": "9:40 am - 10:15 am",
+                        "time": "09:50 am - 10:30 am",
                         "course": "Period 2",
                     },
-                    "time": [[9, 40], [10, 15]],
+                    "time": [[9, 50], [10, 30]],
                     "position": [{2, 5}, {2, 5}],
                 },
                 {
                     "description": {
-                        "time": "10:20 pm - 10:55 pm",
+                        "time": "10:35 am - 11:15 am",
                         "course": "Period 3",
                     },
-                    "time": [[10, 20], [10, 55]],
+                    "time": [[10, 35], [11, 15]],
                     "position": [{3, 6}, {4, 6}],
                 },
                 {
                     "description": {
-                        "time": "11:00 pm - 11:35 pm",
+                        "time": "11:20 am - 12:00 pm",
                         "course": "Period 4",
                     },
-                    "time": [[11, 0], [11, 35]],
+                    "time": [[11, 20], [12, 0]],
+                    "position": [{4, 6}, {3, 6}],
+                },
+            ],
+            "one-hour-lunch": [
+                {
+                    "description": {
+                        "time": "09:00 am - 10:15 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[9, 00], [10, 15]],
+                    "position": [{1, 5}, {1, 5}],
+                },
+                {
+                    "description": {
+                        "time": "10:20 am - 11:30 am",
+                        "course": "Period 2",
+                    },
+                    "time": [[10, 20], [11, 30]],
+                    "position": [{2, 5}, {2, 5}],
+                },
+                {
+                    "description": {
+                        "time": "12:30 pm - 01:40 pm",
+                        "course": "Period 3",
+                    },
+                    "time": [[12, 30], [13, 40]],
+                    "position": [{3, 6}, {4, 6}],
+                },
+                {
+                    "description": {
+                        "time": "01:45 pm - 02:55 pm",
+                        "course": "Period 4",
+                    },
+                    "time": [[13, 45], [14, 55]],
+                    "position": [{4, 6}, {3, 6}],
+                },
+            ],
+            "early-early-dismissal": [
+                {
+                    "description": {
+                        "time": "09:00 am - 09:25 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[9, 0], [9, 25]],
+                    "position": [{1, 5}, {1, 5}],
+                },
+                {
+                    "description": {
+                        "time": "09:30 am - 9:55 am",
+                        "course": "Period 2",
+                    },
+                    "time": [[9, 30], [9, 55]],
+                    "position": [{2, 5}, {2, 5}],
+                },
+                {
+                    "description": {
+                        "time": "10:00 am - 10:25 am",
+                        "course": "Period 3",
+                    },
+                    "time": [[10, 0], [10, 25]],
+                    "position": [{3, 6}, {4, 6}],
+                },
+                {
+                    "description": {
+                        "time": "10:30 am - 11:00 am",
+                        "course": "Period 4",
+                    },
+                    "time": [[10, 30], [11, 0]],
                     "position": [{4, 6}, {3, 6}],
                 },
             ],
@@ -490,12 +578,20 @@ NAVBAR = {
     "Announcements": {
         "All": "/announcements?feed=all",
         "School": "/announcements?feed=school",
+        "Student Council": "/announcements?feed=studentcouncil",
     },
     "Calendar": "/calendar",
     "Clubs": "/clubs",
     "Content": "/blog",
     "Resources": "/resources",
-    "About": "/about",
+    "About": {
+        "WLMCI": "/about?tab=history",
+        "About": "/about?tab=about",
+        "Team": "/about?tab=team",
+        "Map": "/map",
+        "Contact WLMCI": "/about?tab=school",
+        "Contact Us": "/about?tab=contact",
+    },
 }
 
 # Announcements settings
@@ -510,6 +606,8 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 50,
 }
 
 # SSO (OAuth) Settings
@@ -721,9 +819,23 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-BANNER_TEXT = "Play your lovesickness away with AMORIS"
+tz = pytz.timezone('America/Toronto')
+BANNER_TEXT       = "Why is there a new \"play\" button here? There shouldn't be a new game… "
+BANNER_SHOW_START = datetime(2022, 4, 1, 0, 0, 0, tzinfo=tz)
+BANNER_SHOW_END = datetime(2022, 4, 2, 0, 0, 0, tzinfo=tz)
+BANNER_SHOW = BANNER_SHOW_START < datetime.now(tz) < BANNER_SHOW_END
+BANNER_URL = "/"
+BANNER_URL_TEXT = "Play"
 
 ROOT = "http://localhost"
+
+SIMPLE_JWT = {
+    "ROTATE_REFRESH_TOKENS": True,
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
+}
+
+# iCalendar Feed
+ICAL_PADDING = timedelta(days=4*7)
 
 try:
     from metropolis.config import *

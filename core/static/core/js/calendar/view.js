@@ -214,10 +214,10 @@ function initializeCard(curEvent, date, working = null) {
 
     // get the start and end dates for the current event
     let eventStart = new Date(curEvent.start_date);
-    let eventEnd = new Date(curEvent.end_date)
+    let eventEnd = new Date(curEvent.end_date);
 
     // if the start date is different from the current date, then we must also add the date information
-    let [startTime, startAMPM] = eventStart < date ? dateTimeRepresentation(eventStart) : timeRepresentation(eventStart)
+    let [startTime, startAMPM] = eventStart < date ? dateTimeRepresentation(eventStart) : timeRepresentation(eventStart);
 
     // if the end date is different from the current date, then we must also add the date instead of just the time
     let [endTime, endAMPM] = eventEnd >= new Date(date.getTime() + 24 * 60 * 60 * 1000) ?
@@ -226,29 +226,29 @@ function initializeCard(curEvent, date, working = null) {
     // insert stuff
     working.querySelector("#event_start").innerHTML = startTime;
     working.querySelector("#event_end").innerHTML = endTime;
-    working.querySelector("#event_start_ampm").innerHTML = startAMPM
-    working.querySelector("#event_end_ampm").innerHTML = endAMPM
-    working.querySelector(".event_title").innerHTML = curEvent.name
-    working.querySelector(".event_description").innerHTML = curEvent.description
+    working.querySelector("#event_start_ampm").innerHTML = startAMPM;
+    working.querySelector("#event_end_ampm").innerHTML = endAMPM;
+    working.querySelector(".event_title").innerHTML = curEvent.name;
+    working.querySelector(".event_description").innerHTML = curEvent.description.replace(/(?:\r\n|\r|\n)/g, '<br>');
     // the background color will be the same as the color of the first tag
-    working.querySelector(".leftPanel").style = "background-color: " + (curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue")
-    working.querySelector(".event_host_name").innerHTML = curEvent.organization.name
+    working.querySelector(".leftPanel").style = "background-color: " + (curEvent.tags.length > 0 ? curEvent.tags[0].color : "lightblue");
+    working.querySelector(".event_host_name").innerHTML = curEvent.organization.name;
     // since we cap the height of the event, which it's clicked, we can expand it
     $(working.querySelector(".event_description")).click(function () {
-        $(this).toggleClass("truncate-100")
-    })
+        $(this).toggleClass("truncate-100");
+    });
 
     for (let tag of curEvent.tags) {
         // for each tag in the event, we create a corresponding p and add it to the card
-        let tagEl = document.createElement("p")
-        tagEl.classList.add("tag")
-        tagEl.innerHTML = tag.name
-        tagEl.style.backgroundColor = tag.color
-        working.querySelector(".tag-section").appendChild(tagEl)
+        let tagEl = document.createElement("p");
+        tagEl.classList.add("tag");
+        tagEl.innerHTML = tag.name;
+        tagEl.style.backgroundColor = tag.color;
+        working.querySelector(".tag-section").appendChild(tagEl);
     }
 
     // return the card
-    return working
+    return working;
 }
 
 // format the time of the date
