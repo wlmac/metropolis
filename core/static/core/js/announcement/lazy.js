@@ -10,19 +10,18 @@ async function loadPage(page, feed) {
     return response.text();
 }
 
-function setup(feedSlug, initialLimit, perPage) {
-    let page = 2
-
+function setup(feed, initialLimit, perPage) {
     // temporary buffer of cards
     let loadIn = new Map()
-    let pagesLoaded = initialLimit
+    // initialLimit is a multiple of perPage
+    let nextPage = initialLimit / perPage + 1
     let loadedLast = false
     let loading = false
-    let cardsElem = document.getElementById(`cards-${feedSlug}`)
-    let pk = ["all", "my"].includes(feedSlug) ? feedSlug : cardsElem.dataset.pk;
+    let cardsElem = document.getElementById(`cards-${feed}`)
+    let pk = ["all", "my"].includes(feed) ? feed : cardsElem.dataset.pk;
 
-    console.log("feedSlug", feedSlug);
-    console.log('pk', pk);
+    console.log("lazy: feed", feed);
+    console.log('lazy: k', pk);
 
     // loads the buffer into the webpage
     function loadBuffer(){
@@ -30,35 +29,50 @@ function setup(feedSlug, initialLimit, perPage) {
         if(!loading){
             loading = true;
             // add the next card if we haven't loaded the last card yet
-            while(!loadedLast && loadIn.has(pagesLoaded + 1)){
-                cardsElem.insertAdjacentHTML('beforeend', loadIn.get(pagesLoaded + 1));
+            while(!loadedLast && loadIn.has(nextPage + 1)){
+                cardsElem.insertAdjacentHTML('beforeend', loadIn.get(nextPage + 1));
                 const nexts = cardsElem.getElementsByClassName('has-next');
                 for (let i = nexts.length - 2; i >= 0; i--) {
                     nexts[i].remove();
                 }
                 if(nexts[nexts.length - 1].classList.contains("no-more")) loadedLast = true;
-                pagesLoaded += 1;
+                nextPage += 1;
             }
             loading = false;
         }
     }
 
-    // adds the card to the buffer
-    async function insertPage(page, feed, pk) {
-        console.debug(`loading page ${page} for feed ${feed} or ${pk}`)
-        const cards = await loadPage(page, pk)
-        loadIn.set(page, cards)
-        loadBuffer()
+    function insert(cards) {
+        cardsElem.insertAdjacentHTML('beforeend', cards)
+        const nexts = cardsElem.getElementsByClassName('has-next')
+        for (let i = nexts.length - 2; i >= 0; i--)
+            nexts[i].remove()
+        loadedLast = nexts[nexts.length - 1].classList.contains("no-more")
     }
 
+    // adds the card to the buffer
+    async function loadNextPage() {
+        if (loadedLast) {
+            // no more to load
+            return
+        }
+        console.debug(`lazy: [${feed} / ${pk}]: loading next page (${nextPage})`)
+        const cards = await loadPage(nextPage, pk)
+        insert(cards)
+        console.debug(`lazy: [${feed} / ${pk}]: ${nextPage} ${loadedLast ? "yes last" : "no last"}`)
+        nextPage ++
+    }
+
+    let locked = false
 
     // called when we want to add more cards - asynchronously called, updates page at the start
     return async () => {
-        let start = page
-        page += perPage
-        for(let i = start; i < start + perPage; i++)
-            if (!loadedLast)
-                await insertPage(i, feedSlug, pk)
+        if (!locked) {
+            // NOTE: not the best, but should be good enough
+            locked = true
+            await loadNextPage()
+            locked = false
+        }
     }
 }
 
