@@ -457,7 +457,7 @@ TIMETABLE_FORMATS = {
 # Authentication settings
 
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_FORMS = {
     "login": "allauth.account.forms.LoginForm",
@@ -472,6 +472,11 @@ ACCOUNT_FORMS = {
 LOGIN_URL = "/accounts/login"
 LOGIN_REDIRECT_URL = "/accounts/profile"
 LOGOUT_REDIRECT_URL = "/"
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend"
+]
 
 # ReCaptcha settings
 
