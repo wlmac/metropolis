@@ -96,7 +96,11 @@
             <hr>
             {% for position, users in members.items %}
             <div class="member-list">
+                {% if position == "Alumnus" %}
+                <h2 class="subtitle">Alumn{{ users|pluralize:"us,i" }}</h2>
+                {% else %}
                 <h2 class="subtitle">{{position}}{{ users|pluralize }}</h2>
+                {% endif %}
                 {% for user in users %}
                 <a href="{{user.username|user_url}}">
                     <div class="member">
