@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from ... import models
 from .. import serializers
-from .fallback import ListAPIViewWithFallback
+from ..utils import ListAPIViewWithFallback
 from .stream import SignalStream
 
 

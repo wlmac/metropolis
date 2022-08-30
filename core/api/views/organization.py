@@ -2,7 +2,7 @@ from rest_framework import generics
 
 from ... import models
 from .. import serializers
-from .fallback import ListAPIViewWithFallback
+from ..utils import ListAPIViewWithFallback
 
 
 class OrganizationList(ListAPIViewWithFallback):

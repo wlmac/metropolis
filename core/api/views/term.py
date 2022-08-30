@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from ... import models
 from ... import utils as utils2
 from .. import serializers, utils
-from .fallback import ListAPIViewWithFallback
+from ..utils import ListAPIViewWithFallback
 
 
 class TermList(ListAPIViewWithFallback):

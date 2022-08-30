@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 from ... import models
 from .. import serializers, utils
-from .fallback import ListAPIViewWithFallback
+from ..utils import ListAPIViewWithFallback
 
 
 class IsOwner(permissions.BasePermission):
