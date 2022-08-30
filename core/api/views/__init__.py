@@ -3,6 +3,7 @@ from .events import *
 from .meta import *
 from .notifs import *
 from .organization import *
+from .staff import *
 from .term import *
 from .timetable import *
 from .user import *

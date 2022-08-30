@@ -60,5 +60,6 @@ urlpatterns = [
         MartorImageUpload.as_view(),
         name="api_martor_image_upload",
     ),
+    path("v3/staff", staff, name="api_staff3"),
     path("version", APIVersion.as_view(), name="api_version"),
 ]
