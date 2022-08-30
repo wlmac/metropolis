@@ -1,5 +1,7 @@
 import datetime
 
+from django.contrib.admin.models import LogEntry
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -8,12 +10,19 @@ from rest_framework.views import APIView
 from ... import models
 from ... import utils as utils2
 from .. import serializers, utils
-from ..utils import ListAPIViewWithFallback
+from ..utils import ListAPIViewWithFallback, GenericAPIViewWithLastModified
 
 
-class TermList(ListAPIViewWithFallback):
+class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
     queryset = models.Term.objects.all()
     serializer_class = serializers.TermSerializer
+
+    def get_last_modified(self):
+        # see https://docs.djangoproject.com/en/3.2/ref/contrib/admin/
+        return LogEntry.objects \
+            .filter(content_type=ContentType.objects.get(app_label='core', model='term')) \
+            .latest('action_time') \
+            .action_time
 
 
 class TermDetail(generics.RetrieveAPIView):
