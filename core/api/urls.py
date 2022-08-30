@@ -30,7 +30,7 @@ urlpatterns = [
         name="api_organization_detail",
     ),
     path("user/<str:username>", UserDetail.as_view(), name="api_user_detail"),
-    path("v3/user/<str:username>", UserDetail3.as_view(), name="api_user_detail3"),
+    path("v3/user/<int:id>", UserDetail3.as_view(), name="api_user_detail3"),
     path("me", UserMe.as_view(), name="api_me"),
     path("me/schedule", UserMeSchedule.as_view(), name="api_me_schedule"),
     path("me/schedule/week", UserMeScheduleWeek.as_view(), name="api_me_schedule_week"),

@@ -18,8 +18,13 @@ class UserDetail(generics.RetrieveAPIView):
 
 
 class UserDetail3(UserDetail):
+    """
+    Implements Get User endpoint.
+
+    https://noi.nyiyui.ca/k/1063/5041#Get_User
+    """
     serializer_class = serializers.UserSerializer3
-    lookup_field = "username"
+    lookup_field = "id"
 
 
 class UserMe(APIView):
