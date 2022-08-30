@@ -4,6 +4,7 @@ from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .views import *
+from .views.objects import *
 
 router = SimpleRouter()
 
@@ -62,5 +63,9 @@ urlpatterns = [
     ),
     path("v3/staff", staff, name="api_staff3"),
     path("v3/feeds", feeds, name="api_feeds3"),
+    path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),
+    path("v3/obj/<str:type>/new", ObjectNew.as_view(), name="api_object_new3"),
+    path("v3/obj/<str:type>/<int:pk>", ObjectSingle.as_view(), name="api_object_single3"),
+    path("v3/obj/<str:type>/<int:pk>/retrieve", ObjectRetrieve.as_view(), name="api_object_single3"),
     path("version", APIVersion.as_view(), name="api_version"),
 ]
