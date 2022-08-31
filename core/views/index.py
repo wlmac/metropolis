@@ -26,7 +26,7 @@ class Index(TemplateView, mixins.TitleMixin):
 
         datetime_now = timezone.localtime()
         context["events"] = models.Event.get_events(user=self.request.user).filter(
-            start_date__lte=datetime_now, end_date__gte=datetime_now
+            end_date__gte=datetime_now
         )[:3]
 
         context["blogpost"] = models.BlogPost.objects.filter(is_published=True).first()

@@ -44,6 +44,14 @@
                                         <span class="date">{{ event.end_date|date }}</span><br>
                                     {% endif %}
                                     <span class="time">{{ event.end_date|time:"g:i A"|lower }}</span>
+
+                                    {% if event.is_current %}
+                                        <div style="margin-top: 1rem;">
+                                            <span class="chip">
+                                                current
+                                            </span>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="event-description left-align">
