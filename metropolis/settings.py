@@ -540,6 +540,95 @@ TIMETABLE_FORMATS = {
             ],
         },
     },
+    "2022-2023": {
+        "schedules": {
+            "default": [
+                {
+                    "description": {
+                        "time": "09:00 am - 10:20 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[ 9,  0], [10, 20]],
+                    "position": [{1, 5}, {1, 5}],
+                },
+                {
+                    "description": {
+                        "time": "10:25 am - 11:40 am",
+                        "course": "Period 2",
+                    },
+                    "time": [[10, 25], [11, 40]],
+                    "position": [{2, 5}, {2, 5}],
+                },
+                {
+                    "description": {
+                        "time": "12:40 pm - 01:55 pm",
+                        "course": "Period 3",
+                    },
+                    "time": [[12, 40], [13, 55]],
+                    "position": [{3, 6}, {4, 6}],
+                },
+                {
+                    "description": {
+                        "time": "02:00 pm - 03:15 pm",
+                        "course": "Period 4",
+                    },
+                    "time": [[14,  0], [15, 15]],
+                    "position": [{4, 6}, {3, 6}],
+                },
+            ],
+            "late-start": [
+                {
+                    "description": {
+                        "time": "10:00 am - 11:00 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[10, 0], [11, 5]],
+                    "position": [{1, 5}, {1, 5}],
+                },
+                {
+                    "description": {
+                        "time": "10:00 am - 11:05 am",
+                        "course": "Period 2",
+                    },
+                    "time": [[11, 10], [12, 10]],
+                    "position": [{2, 5}, {2, 5}],
+                },
+                {
+                    "description": {
+                        "time": "11:10 pm - 12:10 pm",
+                        "course": "Period 3",
+                    },
+                    "time": [[13, 10], [14, 10]],
+                    "position": [{3, 6}, {4, 6}],
+                },
+                {
+                    "description": {
+                        "time": "02:15 pm - 03:15 pm",
+                        "course": "Period 4",
+                    },
+                    "time": [[14, 15], [15, 15]],
+                    "position": [{4, 6}, {3, 6}],
+                },
+            ],
+        },
+        "courses": 4,
+        "positions": {1, 2, 3, 4, 5, 6},
+        "cycle": {
+            "length": 2,
+            "duration": "day",
+        },
+        "question": {
+            "prompt": "On Day 1, which period is this course in?",
+            "choices": [
+                (1, "Period 1"),
+                (2, "Period 2"),
+                (3, "Period 3"),
+                (4, "Period 4"),
+                (5, "This course is a 2-credit Co-op in the morning."),
+                (6, "This course is a 2-credit Co-op in the afternoon."),
+            ],
+        },
+    },
 }
 
 # Authentication settings
