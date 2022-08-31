@@ -541,6 +541,7 @@ TIMETABLE_FORMATS = {
         },
     },
     "2022-2023": {
+        "day_num_method": "calendar_days",
         "schedules": {
             "default": [
                 {

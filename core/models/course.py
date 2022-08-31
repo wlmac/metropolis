@@ -50,11 +50,28 @@ class Term(models.Model):
         )
 
     def day_num(self, target_date=None):
-        cycle_duration = settings.TIMETABLE_FORMATS[self.timetable_format]["cycle"][
-            "duration"
-        ]
-
+        tf = settings.TIMETABLE_FORMATS[self.timetable_format]
+        methods = {
+            "consecutive": self.__day_num_consecutive,
+            "calendar_days": self.__day_num_calendar_days,
+        }
         target_date = utils.get_localdate(date=target_date, time=[23, 59, 59])
+        return methods[tf.get("day_num_method")](tf, target_date)
+
+    def __day_num_calendar_days(self, tf, target_date):
+        """
+        Gets the day number from if the calendar day is even (day 2) or odd (day 1).
+        """
+        if tf["cycle"]["length"] != 2:
+            raise TypeError("calendar_days cannot be used in formats where cycle length != 2")
+        even, odd = 0, 1
+        return {even: 2, odd: 1}[target_date.day % 2]
+
+    def __day_num_consecutive(self, tf, target_date):
+        """
+        Gets the day number by counting consecutive days.
+        """
+        cycle_duration = tf["cycle"]["duration"]
 
         cur_iter_day = self.start_datetime().replace(hour=11, minute=0, second=0)
         cycle_day_type_set = set()
@@ -74,9 +91,7 @@ class Term(models.Model):
                     raise NotImplementedError
             cur_iter_day += datetime.timedelta(1)
 
-        return (len(cycle_day_type_set) - 1) % settings.TIMETABLE_FORMATS[
-            self.timetable_format
-        ]["cycle"]["length"] + 1
+        return (len(cycle_day_type_set) - 1) % tf["cycle"]["length"] + 1
 
     def day_schedule_format(self, target_date=None):
         tds = utils.get_localdate(date=target_date, time=[0, 0, 0]) # target date start
