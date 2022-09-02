@@ -56,7 +56,7 @@ class Term(models.Model):
             "calendar_days": self.__day_num_calendar_days,
         }
         target_date = utils.get_localdate(date=target_date, time=[23, 59, 59])
-        return methods[tf.get("day_num_method")](tf, target_date)
+        return methods[tf.get("day_num_method", "consecutive")](tf, target_date)
 
     def __day_num_calendar_days(self, tf, target_date):
         """
