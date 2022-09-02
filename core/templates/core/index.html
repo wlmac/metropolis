@@ -34,7 +34,7 @@
                             <div class="event-time right-align valign-wrapper"
                                  style="background-color: {{ event.tags.first.color }}">
                                 <div class="time-container">
-                                    {% now "Y-M-D" as today %}
+                                    {% now "Y-M-d" as today %}
                                     {% if event.start_date|date:"Y-M-D" != today %}
                                         <span class="date">{{ event.start_date|date }}</span><br>
                                     {% endif %}
