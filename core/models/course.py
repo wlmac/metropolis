@@ -56,6 +56,9 @@ class Term(models.Model):
             "calendar_days": self.__day_num_calendar_days,
         }
         target_date = utils.get_localdate(date=target_date, time=[23, 59, 59])
+        if not self.is_current(target_date.date()) \
+                or not self.day_is_instructional(target_date):
+            return None
         return methods[tf.get("day_num_method", "consecutive")](tf, target_date)
 
     def __day_num_calendar_days(self, tf, target_date):
@@ -75,11 +78,6 @@ class Term(models.Model):
 
         cur_iter_day = self.start_datetime().replace(hour=11, minute=0, second=0)
         cycle_day_type_set = set()
-
-        if not self.is_current(target_date.date()) or not self.day_is_instructional(
-            target_date
-        ):
-            return None
 
         while cur_iter_day <= target_date:
             if self.day_is_instructional(cur_iter_day):
