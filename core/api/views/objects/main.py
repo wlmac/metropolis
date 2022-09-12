@@ -24,7 +24,7 @@ def gen_get_provider(mapping):
 get_provider = gen_get_provider({
     "announcement": "announcement",
     "blog-post": "blog_post",
-    #"event": "event",
+    "event": "event",
     #"flatpage": "flatpage",
     #"user": "user",
     #"tag": "tag",
