@@ -34,6 +34,7 @@ class ObjectAPIView(generics.GenericAPIView):
     def initial(self, *args, **kwargs):
         super().initial(*args, **kwargs)
         self.request.mutate = self.mutate
+        self.request.detail = self.detail
         self.provider = provider = get_provider(kwargs.pop("type"))(self.request)
         self.permission_classes = provider.permission_classes
         self.serializer_class = provider.serializer_class
@@ -109,8 +110,9 @@ class ObjectAPIView(generics.GenericAPIView):
         print("proxied", self.__object_method_proxy)
         return self.__object_method_proxy(request, *args, **kwargs)
 
-class ObjectList(ObjectAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified, ListAPIViewWithFallback):
+class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
     mutate = False
+    detail = False
 
     def get_last_modified(self):
         return self.provider.get_last_modified_queryset()
@@ -124,12 +126,14 @@ class ObjectList(ObjectAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithL
 
 class ObjectNew(ObjectAPIView, generics.CreateAPIView):
     mutate = True
+    detail = None
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
-class ObjectRetrieve(ObjectAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified, generics.RetrieveAPIView):
+class ObjectRetrieve(ObjectAPIView, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
     mutate = False
+    detail = True
 
     def get_admin_url(self):
         model = self.provider.model
@@ -141,8 +145,9 @@ class ObjectRetrieve(ObjectAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewW
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
-class ObjectSingle(ObjectAPIView, GenericAPIViewWithDebugInfo, generics.DestroyAPIView, generics.UpdateAPIView):
+class ObjectSingle(ObjectAPIView, generics.DestroyAPIView, generics.UpdateAPIView):
     mutate = True
+    detail = None
 
     def get_admin_url(self):
         model = self.provider.model
