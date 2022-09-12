@@ -1,8 +1,9 @@
 import importlib
 
+from django.urls import reverse
 from rest_framework import generics, permissions
 
-from ...utils import ListAPIViewWithFallback, GenericAPIViewWithLastModified
+from ...utils import ListAPIViewWithFallback, GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo
 
 
 __ALL__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
@@ -108,11 +109,15 @@ class ObjectAPIView(generics.GenericAPIView):
         print("proxied", self.__object_method_proxy)
         return self.__object_method_proxy(request, *args, **kwargs)
 
-class ObjectList(ObjectAPIView, GenericAPIViewWithLastModified, ListAPIViewWithFallback):
+class ObjectList(ObjectAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified, ListAPIViewWithFallback):
     mutate = False
 
     def get_last_modified(self):
         return self.provider.get_last_modified_queryset()
+
+    def get_admin_url(self):
+        model = self.provider.model
+        return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist")
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
@@ -123,8 +128,12 @@ class ObjectNew(ObjectAPIView, generics.CreateAPIView):
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
-class ObjectRetrieve(ObjectAPIView, GenericAPIViewWithLastModified, generics.RetrieveAPIView):
+class ObjectRetrieve(ObjectAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified, generics.RetrieveAPIView):
     mutate = False
+
+    def get_admin_url(self):
+        model = self.provider.model
+        return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_change", args=[self.get_object().id])
 
     def get_last_modified(self):
         return self.provider.get_last_modified(self)
@@ -132,8 +141,12 @@ class ObjectRetrieve(ObjectAPIView, GenericAPIViewWithLastModified, generics.Ret
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
-class ObjectSingle(ObjectAPIView, generics.DestroyAPIView, generics.UpdateAPIView):
+class ObjectSingle(ObjectAPIView, GenericAPIViewWithDebugInfo, generics.DestroyAPIView, generics.UpdateAPIView):
     mutate = True
+
+    def get_admin_url(self):
+        model = self.provider.model
+        return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_change", args=[self.get_object().id])
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)

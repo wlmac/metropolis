@@ -15,6 +15,7 @@ class Serializer(serializers.ModelSerializer):
 
 class Provider(BaseProvider):
     serializer_class = Serializer
+    model = Announcement
 
     @property
     def permission_classes(self):

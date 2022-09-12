@@ -11,3 +11,14 @@ class GenericAPIViewWithLastModified(generics.GenericAPIView):
         resp = super().get(*args, **kwargs)
         resp["Last-Modified"] = format_date_time(mktime(self.get_last_modified().timetuple()))
         return resp
+
+
+class GenericAPIViewWithDebugInfo(generics.GenericAPIView):
+    def get_admin_url(self):
+        return None
+
+    def get(self, *args, **kwargs):
+        resp = super().get(*args, **kwargs)
+        if admin_url := self.get_admin_url():
+            resp["X-Admin-URL"] = admin_url
+        return resp
