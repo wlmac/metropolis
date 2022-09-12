@@ -16,6 +16,7 @@ class Serializer(serializers.ModelSerializer):
 
 class Provider(BaseProvider):
     serializer_class = Serializer
+    model = BlogPost
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
