@@ -2,6 +2,7 @@ import importlib
 
 from django.urls import reverse
 from rest_framework import generics, permissions
+from rest_framework.response import Response
 
 from ...utils import ListAPIViewWithFallback, GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo
 
@@ -123,6 +124,11 @@ class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithDebug
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
+
+    def get(self, *args, **kwargs):
+        if not self.provider.allow_list:
+            return Response({'detail': 'listing not allowed'}, status=422)
+        return super().get(*args, **kwargs)
 
 class ObjectNew(ObjectAPIView, generics.CreateAPIView):
     mutate = True
