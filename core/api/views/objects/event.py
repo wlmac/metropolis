@@ -10,15 +10,24 @@ from .... import models
 from .base import BaseProvider
 
 
-class Serializer(serializers.ModelSerializer):
+class SuperficialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ['id', 'name', 'start_date', 'end_date', 'organization']
+
+
+class DetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
 
 
 class Provider(BaseProvider):
-    serializer_class = Serializer
     model = Event
+
+    @property
+    def serializer_class(self):
+        return DetailSerializer if self.request.detail else SuperficialSerializer
 
     @property
     def permission_classes(self):
