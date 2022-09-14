@@ -196,7 +196,10 @@ class Event(models.Model):
     end_date = models.DateTimeField()
 
     schedule_format = models.CharField(max_length=64, default="default")
-    is_instructional = models.BooleanField(default=True)
+    is_instructional = models.BooleanField(
+        default=True,
+        help_text='Whather school instruction is taking place during this event. Leave checked if not direct cause.',
+    )
     is_public = models.BooleanField(
         default=True,
         help_text="Whether if this event pertains to the general school population, not just those in the organization.",
