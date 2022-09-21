@@ -580,7 +580,7 @@ TIMETABLE_FORMATS = {
             "late-start": [
                 {
                     "description": {
-                        "time": "10:00 am - 11:00 am",
+                        "time": "10:00 am - 11:05 am",
                         "course": "Period 1",
                     },
                     "time": [[10, 0], [11, 5]],
@@ -588,7 +588,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "10:00 am - 11:05 am",
+                        "time": "11:10 am - 12:10 am",
                         "course": "Period 2",
                     },
                     "time": [[11, 10], [12, 10]],
@@ -596,7 +596,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "11:10 pm - 12:10 pm",
+                        "time": "01:10 pm - 02:10 pm",
                         "course": "Period 3",
                     },
                     "time": [[13, 10], [14, 10]],
