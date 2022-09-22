@@ -166,7 +166,7 @@ class OrganizationListFilter(admin.SimpleListFilter):
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ["__str__", "organization", "status"]
     list_filter = [OrganizationListFilter, "status"]
-    ordering = ["-created_date"]
+    ordering = ["-show_after"]
     empty_value_display = "Not specified."
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
@@ -209,6 +209,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                     "title",
                     "body",
                     "tags",
+                    "show_after",
                     "is_public",
                     "status",
                     "supervisor",
@@ -228,7 +229,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
             [
                 {"author", "organization", "status"},
                 {"author", "organization", "status"},
-                {"author", "organization", "status", "supervisor"},
+                {"author", "organization", "status", "show_after", "supervisor"},
                 {"author", "organization", "status", "supervisor", "rejection_reason"},
             ],
         ]
@@ -250,6 +251,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
             "title",
             "body",
             "tags",
+            "show_after",
             "is_public",
             "status",
             "rejection_reason",
@@ -403,13 +405,14 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
 class BlogPostAdmin(admin.ModelAdmin):
     list_display = ["title", "author", "is_published"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
-    ordering = ["-created_date"]
+    ordering = ["-show_after"]
     fields = [
         "author",
         "title",
         "slug",
         "body",
         "featured_image",
+        "show_after",
         "tags",
         "is_published",
     ]

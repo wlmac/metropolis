@@ -134,7 +134,7 @@ class AnnouncementFeed(Feed):
         return item.title
 
     def item_pubdate(self, item):
-        return item.created_date
+        return item.show_after
 
     def item_updateddate(self, item):
         return item.last_modified_date

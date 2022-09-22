@@ -17,6 +17,10 @@ class Post(models.Model):
     )
     created_date = models.DateTimeField(auto_now_add=True)
     last_modified_date = models.DateTimeField(auto_now=True)
+    show_after = models.DateTimeField(
+        verbose_name="Automatically post on",
+        help_text="Show this announcement after this time.",
+    )
 
     title = models.CharField(max_length=64)
     body = models.TextField()
@@ -29,7 +33,7 @@ class Post(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ["-created_date"]
+        ordering = ["-show_after"]
 
 
 class Announcement(Post):
