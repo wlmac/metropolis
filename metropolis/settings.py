@@ -588,7 +588,7 @@ TIMETABLE_FORMATS = {
                 },
                 {
                     "description": {
-                        "time": "11:10 am - 12:10 am",
+                        "time": "11:10 am - 12:10 pm",
                         "course": "Period 2",
                     },
                     "time": [[11, 10], [12, 10]],
