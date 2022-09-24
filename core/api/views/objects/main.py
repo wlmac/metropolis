@@ -1,5 +1,6 @@
 import importlib
 
+from django.http import Http404
 from django.urls import reverse
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -19,6 +20,8 @@ def gen_get_provider(mapping):
         Gets a provider by type name.
         """
         # TODO; return an exception to automatically return 400
+        if provider_name not in providers:
+            raise Http404("確り取説読んだ？")
         return providers[provider_name]
     return get_provider
 
@@ -26,9 +29,10 @@ get_provider = gen_get_provider({
     "announcement": "announcement",
     "blog-post": "blog_post",
     "event": "event",
-    #"flatpage": "flatpage",
-    #"user": "user",
-    #"tag": "tag",
+    "organization": "organization",
+    "flatpage": "flatpage",
+    "user": "user",
+    "tag": "tag",
 })
 
 class ObjectAPIView(generics.GenericAPIView):
@@ -130,14 +134,26 @@ class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithDebug
             return Response({'detail': 'listing not allowed'}, status=422)
         return super().get(*args, **kwargs)
 
-class ObjectNew(ObjectAPIView, generics.CreateAPIView):
+
+class LookupField():
+    @property
+    def lookup_field(self):
+        if hasattr(self.provider, 'lookup_field'):
+            return self.provider.lookup_field
+        return 'id'
+
+    lookup_url_kwarg = "id"
+
+
+class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
     mutate = True
     detail = None
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
-class ObjectRetrieve(ObjectAPIView, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
+
+class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
     mutate = False
     detail = True
 
@@ -151,7 +167,8 @@ class ObjectRetrieve(ObjectAPIView, generics.RetrieveAPIView, GenericAPIViewWith
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
-class ObjectSingle(ObjectAPIView, generics.DestroyAPIView, generics.UpdateAPIView):
+
+class ObjectSingle(ObjectAPIView, LookupField, generics.DestroyAPIView, generics.UpdateAPIView):
     mutate = True
     detail = None
 
