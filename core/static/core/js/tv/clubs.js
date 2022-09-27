@@ -27,6 +27,7 @@ function setSlide() {
         console.log(`skip ${club.id} ${club.slug}`)
         i ++
         setSlide()
+        return
     }
     document.getElementById("club-logo").src = club.icon
     document.getElementById("club-name").textContent = club.name
