@@ -22,6 +22,11 @@ const userCache = {}
 function setSlide() {
     //$("#fade").delay(250).fadeTo(250, 0);
     const club = clubs[i]
+    const clubSta = clubStas[club.id]
+    if (!clubSta) {
+        i ++
+        setSlide()
+    }
     document.getElementById("club-logo").src = club.icon
     document.getElementById("club-name").textContent = club.name
     document.getElementById("tag-section").textContent = ""
@@ -36,14 +41,13 @@ function setSlide() {
     document.getElementById("scrollable2").innerHTML = DOMPurify.sanitize(marked.parse(club.extra_content));
     document.getElementById("scrollable1").textContent = ''
     QRCode.toCanvas(document.getElementById("qrcode"), new URL(`/club/${club.slug}`, window.location.origin).href)
-    let clubSta = clubStas[club.id]
     const map = document.getElementById("location").getSVGDocument();
     for (let elem of map.getElementsByClassName(`desk-${clubSta.group}-${clubSta.station}`)) {
         elem.classList.add("selected")
     }
     if (prevClub) {
-        clubSta = clubStas[prevClub.id]
-        for (let elem of map.getElementsByClassName(`desk-${clubSta.group}-${clubSta.station}`)) {
+        const clubSta2 = clubStas[prevClub.id]
+        for (let elem of map.getElementsByClassName(`desk-${clubSta2.group}-${clubSta2.station}`)) {
             elem.classList.remove("selected")
         }
     }
