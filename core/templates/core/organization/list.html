@@ -26,29 +26,33 @@
         </div>
         <div class="cards">
             {% for organization in organizations %}
-            <div class="card {% if not organization.is_open %} red-status {% elif organization.applications_open %} yellow-status {% else %} green-status {% endif %}">
-                <div class="valign-wrapper">
-                    <div class="club-logo">
-                        {% if organization.icon %}
-                            <img class="circle" src="{{ organization.icon.url }}">
-                        {% else %}
-                            <img class="circle" src="https://via.placeholder.com/100">
-                        {% endif %}
+                {% if organization.is_active %}
+                <div class="card {% if not organization.is_open %} red-status {% elif organization.applications_open %} yellow-status {% else %} green-status {% endif %}">
+                    <div class="valign-wrapper">
+                        <div class="club-logo">
+                            {% if organization.icon %}
+                                <img class="circle" src="{{ organization.icon.url }}">
+                            {% else %}
+                                <img class="circle" src="https://via.placeholder.com/100">
+                            {% endif %}
+                        </div>
+                        <h1 class="title link">
+                            {{ organization.slug|organization }}
+                        </h1>
                     </div>
-                    <h1 class="title link">
-                        {{ organization.slug|organization }}
-                    </h1>
+
+                    <hr>
+                    <div class="club-description">
+                        <p>{{ organization.bio }}</p>
+                    </div>
+                    <div class="tag-section">
+                        {% for tag in organization.tags.all %}
+                        <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+                        {% endfor %}
+
                 </div>
-                
-                <hr>
-                <div class="club-description">
-                    <p>{{ organization.bio }}</p>
-                </div>
-                <div class="tag-section">
-                    {% for tag in organization.tags.all %}
-                    <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
-                    {% endfor %}
-                </div>
+                            {% endif %}
+
             </div>
             {% empty %}
                 <div class="message">There are no clubs open at this time. Check back in a bit!</div>
