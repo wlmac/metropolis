@@ -1,0 +1,66 @@
+<svg version="1.1" viewBox="0.0 0.0 1020 750" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+<style>
+	text.desk:not(.selected) {
+		font-weight: 500;
+	}
+	text.desk.selected {
+		font-size: 36px;
+	}
+	circle.desk:not(.selected) {
+		opacity: 80%;
+	}
+	circle.desk.selected {
+		r: 30px;
+	}
+	path.desk:not(.selected) {
+		fill: #ddd;
+	}
+</style>
+<clipPath id="p.0">
+<path d="m0 0l1051.7218 0l0 745.48816l-1051.7218 0l0 -745.48816z" clip-rule="nonzero"/>
+</clipPath>
+<g clip-path="url(#p.0)">
+<path fill="#f3f3f3" d="m0 0l1051.7218 0l0 745.48816l-1051.7218 0z" fill-rule="evenodd"/>
+<path fill="#efefef" d="m139.16536 603.36743l0 81.102356l22.582672 0l0 -81.102356z" fill-rule="evenodd"/>
+<g id="struct">
+	<path stroke="#666666" stroke-width="12.0" stroke-linejoin="round" stroke-linecap="butt" d="m146.50096 22.475069l872.9764 0l0 661.98425l-872.9764 0z" fill-rule="evenodd"/>
+	<path fill="#666666" d="m0 126.14173l193.35432 0l0 453.44885l-193.35432 0z" fill-rule="evenodd"/>
+	<path stroke="#666666" stroke-width="1.0" stroke-linejoin="round" stroke-linecap="butt" d="m0 126.14173l193.35432 0l0 453.44885l-193.35432 0z" fill-rule="evenodd"/>
+	<path fill="#666666" d="m0 -0.9527559l153.19685 0l0 31.874016l-153.19685 0z" fill-rule="evenodd"/>
+	<path stroke="#666666" stroke-width="1.0" stroke-linejoin="round" stroke-linecap="butt" d="m0 -0.9527559l153.19685 0l0 31.874016l-153.19685 0z" fill-rule="evenodd"/>
+	<path fill="#666666" d="m153.16798 678.4304l0 67.968506l-13.039368 0l0 -67.968506z" fill-rule="evenodd"/>
+	<path fill="#666666" d="m153.16728 407.2021l0 201.51184l-13.039368 0l0 -201.51184z" fill-rule="evenodd"/>
+	<path fill="#666666" d="m153.16728 109.88714l0 201.51181l-13.039368 0l0 -201.51181z" fill-rule="evenodd"/>
+	<path fill="#666666" d="m153.16798 -0.9527559l0 41.66929l-13.039368 0l0 -41.66929z" fill-rule="evenodd"/>
+	<path fill="#f3f3f3" d="m140 589 l0 90 l14 0 l0 -90z" />
+	<path fill="#f3f3f3" d="m883 30 l41 0 l0 -20 l-41 0z" />
+	<path fill="#f3f3f3" d="m140 40 l0 69 l13 0 l0 -69z" />
+</g>
+<text fill="#fff" font-family="monospace" font-size="26" font-weight="600" x="80" y="540">stage</text>
+{{ range .Groups }}
+<g id="group-{{ .Name }}">
+	{{ $g := . }}
+	{{ range .Desks }}
+	<g id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
+		{{ $stats := stats .Name }}
+		<path class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="{{ $g.Colour }}" cx="24" cy="29" r="15" />
+		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="{{ $g.Colour }}" cx="64" cy="29" r="15" />
+		{{ $rot := add $g.Rotate .Rotate }}
+		{{ if eq $rot 0 }}
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">{{ index $stats 0 }}</text>
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">{{ index $stats 1 }}</text>
+		{{ else if eq $rot 90 }}
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="30" transform="rotate(-90)">{{ index $stats 0 }}</text>
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="70" transform="rotate(-90)">{{ index $stats 1 }}</text>
+		{{ else if eq $rot -90 }}
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-18" transform="rotate(90)">{{ index $stats 0 }}</text>
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-58" transform="rotate(90)">{{ index $stats 1 }}</text>
+		{{ end }}
+		<!--<g rotate="{{ $rot }}">-->
+	</g>
+	{{ end }}
+</g>
+{{ end }}
+</g>
+</svg>
