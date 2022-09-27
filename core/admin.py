@@ -97,6 +97,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         "slug",
         "show_members",
         "is_open",
+        "is_active",
         "applications_open",
         "tags",
         "owner",
