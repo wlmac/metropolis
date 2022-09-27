@@ -88,8 +88,8 @@ class OrganizationURLInline(admin.StackedInline):
 
 
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ["name", "show_members", "is_open", "owner"]
-    list_filter = ["is_open", "show_members", "tags"]
+    list_display = ["name", "show_members", "is_open", "is_active", "owner"]
+    list_filter = ["is_open", "show_members", "tags", "is_active"]
     fields = [
         "name",
         "bio",
