@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load link_tags %}
+{% load gravatar_tags %}
+{% load static %}
+{% load martortags %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'core/css/tv.css' %}">
+    <script type="module" src="{% static 'core/js/tv/clubs.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.1.0/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js"></script>
+{% endblock %}
+
+{% block body %}
+<div id="fade"></div>
+<div class="wrapper">
+    <div class="content">
+        <div class="club-detail">
+            <div class="club-header">
+                <div class="club-header-img">
+                    <div class="club-logo">
+                        <img class="circle" id="club-logo">
+                    </div>
+                </div>
+                <div class="club-header-text">
+                    <h2 id="club-name"></h2>
+                    <div id="tag-section">
+                    </div>
+                </div>
+            </div>
+            <p id="bio"></p>
+            <h3>Execs</h3>
+            <hr>
+            <div class="club-execs scrollable" id="scrollable1"></div>
+            <canvas id="qrcode"></canvas>
+        </div>
+        <div class="club-detail">
+            <div class="description scrollable" id="scrollable2"></div>
+            <div class="location">
+                <object id="location" type="image/svg+xml" data="/static/core/img/tv/gen-map.svg">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
