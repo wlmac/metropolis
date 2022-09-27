@@ -23,7 +23,8 @@ function setSlide() {
     //$("#fade").delay(250).fadeTo(250, 0);
     const club = clubs[i]
     const clubSta = clubStas[club.id]
-    if (!clubSta) {
+    if (!clubSta || !(clubSta.group)) {
+        console.log(`skip ${club.id} ${club.slug}`)
         i ++
         setSlide()
     }
