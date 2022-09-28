@@ -58,7 +58,7 @@ function setSlide() {
     for (let elem of map.getElementsByClassName(`desk-${clubSta.group}-${clubSta.station}`)) {
         elem.classList.add("selected")
     }
-    if (prevClub) {
+    if (prevClub && prevClub.id !== club.id) {
         const clubSta2 = clubStas[prevClub.id]
         for (let elem of map.getElementsByClassName(`desk-${clubSta2.group}-${clubSta2.station}`)) {
             elem.classList.remove("selected")

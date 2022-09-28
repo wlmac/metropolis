@@ -5,12 +5,14 @@
 	}
 	text.desk.selected {
 		font-size: 36px;
+		fill: #fff;
 	}
 	circle.desk:not(.selected) {
 		opacity: 80%;
 	}
 	circle.desk.selected {
 		r: 30px;
+		fill: #000;
 	}
 	rect.desk:not(.selected) {
 	}
@@ -60,7 +62,7 @@
 	{{ $class := printf "desk-%s-%s desk-%s-%s" $g.Name (index $stats 0) $g.Name (index $stats 1) }}
 	<g class="desk {{ $class }}" id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
 		<rect class="desk {{ $class }}" fill="#ccc" x="0" y="0" width="90" height="56" />
-		<rect class="desk larger {{ $class }}" fill="#ccc" x="-45" y="-28" width="180" height="112" />
+		<!-- .larger needs to appear above all .group:not(.larger) *, so render them later; see g#larger -->
 		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="{{ $g.Colour }}" cx="24" cy="29" r="15" />
 		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="{{ $g.Colour }}" cx="64" cy="29" r="15" />
 		{{ $rot := add $g.Rotate .Rotate }}
@@ -79,5 +81,18 @@
 	<!--<rect fill="#000" opacity="40%" id="group-{{ $g.Name }}-dimmer" class="group-dimmer" x="{{ $g.X }}" y="{{ $g.Y }}" width="100" height="100" />-->
 </g>
 {{ end }}
+<g id="larger" style="visibility: hidden;">
+	<!-- see .desk .larger -->
+	{{ range .Groups }}
+		{{ $g := . }}
+		{{ range .Desks }}
+			{{ $stats := stats .Name }}
+			{{ $class := printf "desk-%s-%s desk-%s-%s" $g.Name (index $stats 0) $g.Name (index $stats 1) }}
+			<g class="desk {{ $class }}" id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
+				<rect id="desk-larger-{{ $g.Name }}" class="desk larger {{ $class }}" fill="#ccc" x="-45" y="-28" width="180" height="112" />
+			</g>
+		{{ end }}
+	{{ end }}
+</g>
 </g>
 </svg>
