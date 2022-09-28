@@ -28,6 +28,9 @@
 	.floor {
 		fill: #a7a7a7;
 	}
+	.desk.selected {
+		z-index: 2;
+	}
 </style>
 <clipPath id="p.0">
 <path d="m0 0l1051.7218 0l0 745.48816l-1051.7218 0l0 -745.48816z" clip-rule="nonzero"/>
@@ -53,10 +56,9 @@
 <g id="group-{{ .Name }}" class="group">
 	{{ $g := . }}
 	{{ range .Desks }}
-	<g id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
-		{{ $stats := stats .Name }}
-		<!--<path class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>-->
-		{{ $class := printf "desk-%s-%s desk-%s-%s" $g.Name (index $stats 0) $g.Name (index $stats 1) }}
+	{{ $stats := stats .Name }}
+	{{ $class := printf "desk-%s-%s desk-%s-%s" $g.Name (index $stats 0) $g.Name (index $stats 1) }}
+	<g class="desk {{ $class }}" id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
 		<rect class="desk {{ $class }}" fill="#ccc" x="0" y="0" width="90" height="56" />
 		<rect class="desk larger {{ $class }}" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="{{ $g.Colour }}" cx="24" cy="29" r="15" />
