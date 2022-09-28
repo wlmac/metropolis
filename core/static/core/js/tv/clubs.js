@@ -44,7 +44,7 @@ function setSlide() {
     let bio = club.bio
         .replace(new RegExp(`^([Tt]he )?${club.name}`), "We")
     document.getElementById("bio").textContent = bio
-    document.getElementById("scrollable2").innerHTML = DOMPurify.sanitize(marked.parse(club.extra_content));
+    // document.getElementById("scrollable2").innerHTML = DOMPurify.sanitize(marked.parse(club.extra_content));
     document.getElementById("scrollable1").textContent = ''
     QRCode.toCanvas(
         document.getElementById("qrcode"),
