@@ -95,29 +95,29 @@ group "D" {
   #colour = "#35ac62"
   colour = "#9de1b7"
 
-  desk "21-22" {
+  desk "33-34" {
     x = 20
     y = 70
     rotate = 90
   }
-  desk "23-24" {
+  desk "35-36" {
     x = 105 * 0
     y = 105 + 70
   }
-  desk "25-26" {
+  desk "37-38" {
     x = 105 * 1
     y = 105 + 70
   }
-  desk "27-28" {
+  desk "33-34" {
     x = 170
     y = 160
     rotate = -90
   }
-  desk "30-29" {
+  desk "42-41" {
     x = 105 * 1
     y = 0
   }
-  desk "32-31" {
+  desk "44-43" {
     x = 105 * 0
     y = 0
   }
