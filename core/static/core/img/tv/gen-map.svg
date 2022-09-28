@@ -11,9 +11,6 @@
 	}
 	circle.desk.selected {
 		r: 30px;
-		border-radius: 50%;
-		border-width: 0.5em;
-		border-color: #fff;
 	}
 	 
 	 
