@@ -48,7 +48,7 @@ function setSlide() {
     document.getElementById("scrollable1").textContent = ''
     QRCode.toCanvas(
         document.getElementById("qrcode"),
-        new URL(`/club/${club.slug}`, window.location.origin).href,
+        new URL(`/c/${club.id}`, window.location.origin).href,
         {
             errorCorrectionLevel: 'H',
             scale: 6,
