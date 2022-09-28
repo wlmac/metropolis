@@ -31,6 +31,7 @@
 }
 .club-detail {
     width: 50%;
+    margin-top: 20px;
     margin: 50px;
     overflow: auto;
     display: flex;
@@ -90,7 +91,7 @@
     margin: 0;
 }
 #tag-section .tag {
-    font-size: 2em;
+    font-size: 1em;
 }
 
 .tag {
@@ -107,12 +108,14 @@
     border-left: black 3px solid;
     margin: 0;
     margin-bottom: 25px;
+    font-size: 1.5em;
 }
 h3 {
     font-size: calc(16px + 0.8vw);
 }
 .description > * {
     overflow-wrap: anywhere;
+    font-size: 1.5em;
 }
 .description img {
     width: 100%;
@@ -129,4 +132,7 @@ hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
     width: 100%;
+}
+.club-execs p {
+    font-size: 1.5em;
 }

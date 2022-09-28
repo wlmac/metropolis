@@ -12,9 +12,16 @@
 	circle.desk.selected {
 		r: 30px;
 	}
+	/*
 	path.desk:not(.selected) {
 		fill: #ddd;
 	}
+	*/
+	/*
+	.group:not(.selected) {
+	  filter: brightness(85%);
+	}
+	*/
 </style>
 <clipPath id="p.0">
 <path d="m0 0l1051.7218 0l0 745.48816l-1051.7218 0l0 -745.48816z" clip-rule="nonzero"/>
@@ -32,13 +39,13 @@
 	<path fill="#666666" d="m153.16728 407.2021l0 201.51184l-13.039368 0l0 -201.51184z" fill-rule="evenodd"/>
 	<path fill="#666666" d="m153.16728 109.88714l0 201.51181l-13.039368 0l0 -201.51181z" fill-rule="evenodd"/>
 	<path fill="#666666" d="m153.16798 -0.9527559l0 41.66929l-13.039368 0l0 -41.66929z" fill-rule="evenodd"/>
-	<path fill="#f3f3f3" d="m140 589 l0 90 l14 0 l0 -90z" />
-	<path fill="#f3f3f3" d="m883 30 l41 0 l0 -20 l-41 0z" />
-	<path fill="#f3f3f3" d="m140 40 l0 69 l13 0 l0 -69z" />
+	<path fill="#efefef" d="m140 589 l0 90 l14 0 l0 -90z" />
+	<path fill="#efefef" d="m883 30 l41 0 l0 -20 l-41 0z" />
+	<path fill="#efefef" d="m140 40 l0 69 l13 0 l0 -69z" />
 </g>
 <text fill="#fff" font-family="monospace" font-size="26" font-weight="600" x="80" y="540">stage</text>
 {{ range .Groups }}
-<g id="group-{{ .Name }}">
+<g id="group-{{ .Name }}" class="group">
 	{{ $g := . }}
 	{{ range .Desks }}
 	<g id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
@@ -60,6 +67,7 @@
 		<!--<g rotate="{{ $rot }}">-->
 	</g>
 	{{ end }}
+	<!--<rect fill="#000" opacity="40%" id="group-{{ $g.Name }}-dimmer" class="group-dimmer" x="{{ $g.X }}" y="{{ $g.Y }}" width="100" height="100" />-->
 </g>
 {{ end }}
 </g>
