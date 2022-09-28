@@ -48,6 +48,7 @@ urlpatterns = [
     path("justinian", views.Justinian.as_view(), name="justinian"),
     path("tv", views.TVView.as_view(), name="tv"),
     path("tv/clubs", views.TVClubView.as_view(), name="tvclub"),
+    path("c/<int:pk>", views.OrganizationShort.as_view(), name="organization_short"),
 ]
 
 if settings.LAZY_LOADING:
