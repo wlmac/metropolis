@@ -1,5 +1,8 @@
 <svg version="1.1" viewBox="0.0 0.0 1020 750" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 <style>
+	text.desk {
+		dominant-baseline: middle;
+	}
 	text.desk:not(.selected) {
 		font-weight: 500;
 	}
@@ -63,18 +66,25 @@
 	<g class="desk {{ $class }}" id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
 		<rect class="desk {{ $class }}" fill="#ccc" x="0" y="0" width="90" height="56" />
 		<!-- .larger needs to appear above all .group:not(.larger) *, so render them later; see g#larger -->
-		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="{{ $g.Colour }}" cx="24" cy="29" r="15" />
-		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="{{ $g.Colour }}" cx="64" cy="29" r="15" />
+		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="{{ $g.Colour }}" cx="24" cy="29" r="15">
+	    <animate
+	      attributeName="r"
+	      values="20;25;20"
+	      dur="1s"
+	      repeatCount="indefinite" />
+		</circle>
+		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="{{ $g.Colour }}" cx="64" cy="29" r="15">
+		</circle>
 		{{ $rot := add $g.Rotate .Rotate }}
 		{{ if eq $rot 0 }}
-			<text class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">{{ index $stats 0 }}</text>
-			<text class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">{{ index $stats 1 }}</text>
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="30">{{ index $stats 0 }}</text>
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="30">{{ index $stats 1 }}</text>
 		{{ else if eq $rot 90 }}
-			<text class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="30" transform="rotate(-90)">{{ index $stats 0 }}</text>
-			<text class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="70" transform="rotate(-90)">{{ index $stats 1 }}</text>
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="24" transform="rotate(-90)">{{ index $stats 0 }}</text>
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="64" transform="rotate(-90)">{{ index $stats 1 }}</text>
 		{{ else if eq $rot -90 }}
-			<text class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-18" transform="rotate(90)">{{ index $stats 0 }}</text>
-			<text class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-58" transform="rotate(90)">{{ index $stats 1 }}</text>
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-24" transform="rotate(90)">{{ index $stats 0 }}</text>
+			<text class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-64" transform="rotate(90)">{{ index $stats 1 }}</text>
 		{{ end }}
 	</g>
 	{{ end }}
