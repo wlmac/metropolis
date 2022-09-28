@@ -14,7 +14,7 @@
 		opacity: 80%;
 	}
 	@keyframes desk-selected {
-		0%   { r: 20px; }
+		0%   { r: 25px; }
 		100% { r: 30px; }
 	}
 	circle.desk.selected {
