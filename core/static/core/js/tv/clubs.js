@@ -21,7 +21,9 @@ const userCache = {}
 
 function setSlide() {
     //$("#fade").delay(250).fadeTo(250, 0);
+    i %= clubs.length;
     const club = clubs[i]
+    console.log(club)
     const clubSta = clubStas[club.id]
     if (!clubSta || !(clubSta.group)) {
         console.log(`skip ${club.id} ${club.slug}`)
@@ -39,10 +41,19 @@ function setSlide() {
         elem.textContent = tag.name
         document.getElementById("tag-section").appendChild(elem)
     }
-    document.getElementById("bio").textContent = club.bio
+    let bio = club.bio
+        .replace(new RegExp(`^([Tt]he )?${club.name}`), "We")
+    document.getElementById("bio").textContent = bio
     document.getElementById("scrollable2").innerHTML = DOMPurify.sanitize(marked.parse(club.extra_content));
     document.getElementById("scrollable1").textContent = ''
-    QRCode.toCanvas(document.getElementById("qrcode"), new URL(`/club/${club.slug}`, window.location.origin).href)
+    QRCode.toCanvas(
+        document.getElementById("qrcode"),
+        new URL(`/club/${club.slug}`, window.location.origin).href,
+        {
+            errorCorrectionLevel: 'H',
+            scale: 6,
+        },
+    )
     const map = document.getElementById("location").getSVGDocument();
     for (let elem of map.getElementsByClassName(`desk-${clubSta.group}-${clubSta.station}`)) {
         elem.classList.add("selected")
@@ -93,7 +104,6 @@ function setSlide() {
         }, 7000);
         //$("#fade").delay(29000).fadeTo(250, 1);
         i++;
-        i %= clubs.length;
     })
     prevClub = club
 }

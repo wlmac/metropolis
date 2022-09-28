@@ -11,10 +11,12 @@
 	}
 	circle.desk.selected {
 		r: 30px;
+		border-radius: 50%;
+		border-width: 0.5em;
+		border-color: #fff;
 	}
-	path.desk:not(.selected) {
-		fill: #ddd;
-	}
+	 
+	 
 </style>
 <clipPath id="p.0">
 <path d="m0 0l1051.7218 0l0 745.48816l-1051.7218 0l0 -745.48816z" clip-rule="nonzero"/>
@@ -32,13 +34,13 @@
 	<path fill="#666666" d="m153.16728 407.2021l0 201.51184l-13.039368 0l0 -201.51184z" fill-rule="evenodd"/>
 	<path fill="#666666" d="m153.16728 109.88714l0 201.51181l-13.039368 0l0 -201.51181z" fill-rule="evenodd"/>
 	<path fill="#666666" d="m153.16798 -0.9527559l0 41.66929l-13.039368 0l0 -41.66929z" fill-rule="evenodd"/>
-	<path fill="#f3f3f3" d="m140 589 l0 90 l14 0 l0 -90z" />
-	<path fill="#f3f3f3" d="m883 30 l41 0 l0 -20 l-41 0z" />
-	<path fill="#f3f3f3" d="m140 40 l0 69 l13 0 l0 -69z" />
+	<path fill="#efefef" d="m140 589 l0 90 l14 0 l0 -90z" />
+	<path fill="#efefef" d="m883 30 l41 0 l0 -20 l-41 0z" />
+	<path fill="#efefef" d="m140 40 l0 69 l13 0 l0 -69z" />
 </g>
 <text fill="#fff" font-family="monospace" font-size="26" font-weight="600" x="80" y="540">stage</text>
 
-<g id="group-A">
+<g id="group-A" class="group">
 	
 	
 	<g id="desk-A-1-2" transform="translate(220, 550) rotate(-90)">
@@ -93,9 +95,10 @@
 		
 	</g>
 	
+	
 </g>
 
-<g id="group-B">
+<g id="group-B" class="group">
 	
 	
 	<g id="desk-B-9-10" transform="translate(313, 600) rotate(0)">
@@ -176,9 +179,10 @@
 		
 	</g>
 	
+	
 </g>
 
-<g id="group-C">
+<g id="group-C" class="group">
 	
 	
 	<g id="desk-C-21-22" transform="translate(430, 310) rotate(90)">
@@ -259,9 +263,10 @@
 		
 	</g>
 	
+	
 </g>
 
-<g id="group-D">
+<g id="group-D" class="group">
 	
 	
 	<g id="desk-D-21-22" transform="translate(770, 310) rotate(90)">
@@ -342,9 +347,10 @@
 		
 	</g>
 	
+	
 </g>
 
-<g id="group-E">
+<g id="group-E" class="group">
 	
 	
 	<g id="desk-E-45-46" transform="translate(313, 50) rotate(0)">
@@ -424,6 +430,7 @@
 		
 		
 	</g>
+	
 	
 </g>
 
