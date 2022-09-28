@@ -12,17 +12,27 @@
 	circle.desk.selected {
 		r: 30px;
 	}
+	rect.desk:not(.selected) {
+	}
+	rect.desk.selected {
+		stroke-width: 20px;
+		fill: #eee;
+	}
+	.larger.desk:not(.selected) {
+		visibility: hidden;
+	}
 	 
-	 
+	.floor {
+		fill: #a7a7a7;
+	}
 </style>
 <clipPath id="p.0">
 <path d="m0 0l1051.7218 0l0 745.48816l-1051.7218 0l0 -745.48816z" clip-rule="nonzero"/>
 </clipPath>
 <g clip-path="url(#p.0)">
-<path fill="#f3f3f3" d="m0 0l1051.7218 0l0 745.48816l-1051.7218 0z" fill-rule="evenodd"/>
-<path fill="#efefef" d="m139.16536 603.36743l0 81.102356l22.582672 0l0 -81.102356z" fill-rule="evenodd"/>
+<path class="floor" fill="#f3f3f3" d="m0 0l1051.7218 0l0 745.48816l-1051.7218 0z" fill-rule="evenodd"/>
 <g id="struct">
-	<path stroke="#666666" stroke-width="12.0" stroke-linejoin="round" stroke-linecap="butt" d="m146.50096 22.475069l872.9764 0l0 661.98425l-872.9764 0z" fill-rule="evenodd"/>
+	<path class="floor" stroke="#666666" stroke-width="12.0" stroke-linejoin="round" stroke-linecap="butt" d="m146.50096 22.475069l872.9764 0l0 661.98425l-872.9764 0z" fill-rule="evenodd"/>
 	<path fill="#666666" d="m0 126.14173l193.35432 0l0 453.44885l-193.35432 0z" fill-rule="evenodd"/>
 	<path stroke="#666666" stroke-width="1.0" stroke-linejoin="round" stroke-linecap="butt" d="m0 126.14173l193.35432 0l0 453.44885l-193.35432 0z" fill-rule="evenodd"/>
 	<path fill="#666666" d="m0 -0.9527559l153.19685 0l0 31.874016l-153.19685 0z" fill-rule="evenodd"/>
@@ -31,9 +41,9 @@
 	<path fill="#666666" d="m153.16728 407.2021l0 201.51184l-13.039368 0l0 -201.51184z" fill-rule="evenodd"/>
 	<path fill="#666666" d="m153.16728 109.88714l0 201.51181l-13.039368 0l0 -201.51181z" fill-rule="evenodd"/>
 	<path fill="#666666" d="m153.16798 -0.9527559l0 41.66929l-13.039368 0l0 -41.66929z" fill-rule="evenodd"/>
-	<path fill="#efefef" d="m140 589 l0 90 l14 0 l0 -90z" />
-	<path fill="#efefef" d="m883 30 l41 0 l0 -20 l-41 0z" />
-	<path fill="#efefef" d="m140 40 l0 69 l13 0 l0 -69z" />
+	<path class="floor" fill="#efefef" d="m140 589 l0 90 l14 0 l0 -90z" />
+	<path class="floor" fill="#efefef" d="m883 30 l41 0 l0 -20 l-41 0z" />
+	<path class="floor" fill="#efefef" d="m140 40 l0 69 l13 0 l0 -69z" />
 </g>
 <text fill="#fff" font-family="monospace" font-size="26" font-weight="600" x="80" y="540">stage</text>
 
@@ -42,7 +52,10 @@
 	
 	<g id="desk-A-1-2" transform="translate(220, 550) rotate(-90)">
 		
-		<path class="desk desk-A-1" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-A-1 desk-A-1" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-A-1 desk-A-1" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-A-1" fill="#decaa1" cx="24" cy="29" r="15" />
 		<circle class="desk desk-A-2" fill="#decaa1" cx="64" cy="29" r="15" />
 		
@@ -50,12 +63,14 @@
 			<text class="desk desk-A-1" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-18" transform="rotate(90)">1</text>
 			<text class="desk desk-A-2" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-58" transform="rotate(90)">2</text>
 		
-		
 	</g>
 	
 	<g id="desk-A-3-4" transform="translate(220, 445) rotate(-90)">
 		
-		<path class="desk desk-A-3" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-A-3 desk-A-3" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-A-3 desk-A-3" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-A-3" fill="#decaa1" cx="24" cy="29" r="15" />
 		<circle class="desk desk-A-4" fill="#decaa1" cx="64" cy="29" r="15" />
 		
@@ -63,12 +78,14 @@
 			<text class="desk desk-A-3" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-18" transform="rotate(90)">3</text>
 			<text class="desk desk-A-4" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-58" transform="rotate(90)">4</text>
 		
-		
 	</g>
 	
 	<g id="desk-A-5-6" transform="translate(220, 340) rotate(-90)">
 		
-		<path class="desk desk-A-5" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-A-5 desk-A-5" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-A-5 desk-A-5" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-A-5" fill="#decaa1" cx="24" cy="29" r="15" />
 		<circle class="desk desk-A-6" fill="#decaa1" cx="64" cy="29" r="15" />
 		
@@ -76,19 +93,20 @@
 			<text class="desk desk-A-5" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-18" transform="rotate(90)">5</text>
 			<text class="desk desk-A-6" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-58" transform="rotate(90)">6</text>
 		
-		
 	</g>
 	
 	<g id="desk-A-7-8" transform="translate(220, 235) rotate(-90)">
 		
-		<path class="desk desk-A-7" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-A-7 desk-A-7" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-A-7 desk-A-7" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-A-7" fill="#decaa1" cx="24" cy="29" r="15" />
 		<circle class="desk desk-A-8" fill="#decaa1" cx="64" cy="29" r="15" />
 		
 		
 			<text class="desk desk-A-7" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-18" transform="rotate(90)">7</text>
 			<text class="desk desk-A-8" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-58" transform="rotate(90)">8</text>
-		
 		
 	</g>
 	
@@ -100,7 +118,10 @@
 	
 	<g id="desk-B-9-10" transform="translate(313, 600) rotate(0)">
 		
-		<path class="desk desk-B-9" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-B-9 desk-B-9" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-B-9 desk-B-9" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-B-9" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-10" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -108,12 +129,14 @@
 			<text class="desk desk-B-9" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">9</text>
 			<text class="desk desk-B-10" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">10</text>
 		
-		
 	</g>
 	
 	<g id="desk-B-11-12" transform="translate(418, 600) rotate(0)">
 		
-		<path class="desk desk-B-11" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-B-11 desk-B-11" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-B-11 desk-B-11" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-B-11" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-12" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -121,12 +144,14 @@
 			<text class="desk desk-B-11" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">11</text>
 			<text class="desk desk-B-12" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">12</text>
 		
-		
 	</g>
 	
 	<g id="desk-B-13-14" transform="translate(523, 600) rotate(0)">
 		
-		<path class="desk desk-B-13" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-B-13 desk-B-13" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-B-13 desk-B-13" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-B-13" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-14" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -134,12 +159,14 @@
 			<text class="desk desk-B-13" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">13</text>
 			<text class="desk desk-B-14" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">14</text>
 		
-		
 	</g>
 	
 	<g id="desk-B-15-16" transform="translate(628, 600) rotate(0)">
 		
-		<path class="desk desk-B-15" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-B-15 desk-B-15" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-B-15 desk-B-15" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-B-15" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-16" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -147,12 +174,14 @@
 			<text class="desk desk-B-15" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">15</text>
 			<text class="desk desk-B-16" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">16</text>
 		
-		
 	</g>
 	
 	<g id="desk-B-17-18" transform="translate(733, 600) rotate(0)">
 		
-		<path class="desk desk-B-17" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-B-17 desk-B-17" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-B-17 desk-B-17" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-B-17" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-18" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -160,19 +189,20 @@
 			<text class="desk desk-B-17" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">17</text>
 			<text class="desk desk-B-18" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">18</text>
 		
-		
 	</g>
 	
 	<g id="desk-B-19-20" transform="translate(838, 600) rotate(0)">
 		
-		<path class="desk desk-B-19" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-B-19 desk-B-19" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-B-19 desk-B-19" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-B-19" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-20" fill="#93ead8" cx="64" cy="29" r="15" />
 		
 		
 			<text class="desk desk-B-19" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">19</text>
 			<text class="desk desk-B-20" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">20</text>
-		
 		
 	</g>
 	
@@ -184,7 +214,10 @@
 	
 	<g id="desk-C-21-22" transform="translate(430, 310) rotate(90)">
 		
-		<path class="desk desk-C-21" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-C-21 desk-C-21" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-C-21 desk-C-21" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-C-21" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-22" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -192,12 +225,14 @@
 			<text class="desk desk-C-21" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="30" transform="rotate(-90)">21</text>
 			<text class="desk desk-C-22" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="70" transform="rotate(-90)">22</text>
 		
-		
 	</g>
 	
 	<g id="desk-C-23-24" transform="translate(410, 415) rotate(0)">
 		
-		<path class="desk desk-C-23" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-C-23 desk-C-23" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-C-23 desk-C-23" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-C-23" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-24" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -205,12 +240,14 @@
 			<text class="desk desk-C-23" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">23</text>
 			<text class="desk desk-C-24" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">24</text>
 		
-		
 	</g>
 	
 	<g id="desk-C-25-26" transform="translate(515, 415) rotate(0)">
 		
-		<path class="desk desk-C-25" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-C-25 desk-C-25" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-C-25 desk-C-25" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-C-25" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-26" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -218,12 +255,14 @@
 			<text class="desk desk-C-25" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">25</text>
 			<text class="desk desk-C-26" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">26</text>
 		
-		
 	</g>
 	
 	<g id="desk-C-27-28" transform="translate(580, 400) rotate(-90)">
 		
-		<path class="desk desk-C-27" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-C-27 desk-C-27" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-C-27 desk-C-27" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-C-27" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-28" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -231,12 +270,14 @@
 			<text class="desk desk-C-27" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-18" transform="rotate(90)">27</text>
 			<text class="desk desk-C-28" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-58" transform="rotate(90)">28</text>
 		
-		
 	</g>
 	
 	<g id="desk-C-30-29" transform="translate(515, 240) rotate(0)">
 		
-		<path class="desk desk-C-30" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-C-30 desk-C-30" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-C-30 desk-C-30" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-C-30" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-29" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -244,19 +285,20 @@
 			<text class="desk desk-C-30" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">30</text>
 			<text class="desk desk-C-29" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">29</text>
 		
-		
 	</g>
 	
 	<g id="desk-C-32-31" transform="translate(410, 240) rotate(0)">
 		
-		<path class="desk desk-C-32" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-C-32 desk-C-32" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-C-32 desk-C-32" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-C-32" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-31" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
 		
 			<text class="desk desk-C-32" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">32</text>
 			<text class="desk desk-C-31" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">31</text>
-		
 		
 	</g>
 	
@@ -268,7 +310,10 @@
 	
 	<g id="desk-D-21-22" transform="translate(770, 310) rotate(90)">
 		
-		<path class="desk desk-D-21" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-D-21 desk-D-21" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-D-21 desk-D-21" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-D-21" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-22" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -276,12 +321,14 @@
 			<text class="desk desk-D-21" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="30" transform="rotate(-90)">21</text>
 			<text class="desk desk-D-22" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="-30" y="70" transform="rotate(-90)">22</text>
 		
-		
 	</g>
 	
 	<g id="desk-D-23-24" transform="translate(750, 415) rotate(0)">
 		
-		<path class="desk desk-D-23" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-D-23 desk-D-23" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-D-23 desk-D-23" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-D-23" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-24" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -289,12 +336,14 @@
 			<text class="desk desk-D-23" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">23</text>
 			<text class="desk desk-D-24" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">24</text>
 		
-		
 	</g>
 	
 	<g id="desk-D-25-26" transform="translate(855, 415) rotate(0)">
 		
-		<path class="desk desk-D-25" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-D-25 desk-D-25" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-D-25 desk-D-25" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-D-25" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-26" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -302,12 +351,14 @@
 			<text class="desk desk-D-25" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">25</text>
 			<text class="desk desk-D-26" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">26</text>
 		
-		
 	</g>
 	
 	<g id="desk-D-27-28" transform="translate(920, 400) rotate(-90)">
 		
-		<path class="desk desk-D-27" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-D-27 desk-D-27" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-D-27 desk-D-27" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-D-27" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-28" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -315,12 +366,14 @@
 			<text class="desk desk-D-27" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-18" transform="rotate(90)">27</text>
 			<text class="desk desk-D-28" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-58" transform="rotate(90)">28</text>
 		
-		
 	</g>
 	
 	<g id="desk-D-30-29" transform="translate(855, 240) rotate(0)">
 		
-		<path class="desk desk-D-30" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-D-30 desk-D-30" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-D-30 desk-D-30" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-D-30" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-29" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -328,19 +381,20 @@
 			<text class="desk desk-D-30" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">30</text>
 			<text class="desk desk-D-29" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">29</text>
 		
-		
 	</g>
 	
 	<g id="desk-D-32-31" transform="translate(750, 240) rotate(0)">
 		
-		<path class="desk desk-D-32" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-D-32 desk-D-32" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-D-32 desk-D-32" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-D-32" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-31" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
 		
 			<text class="desk desk-D-32" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">32</text>
 			<text class="desk desk-D-31" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">31</text>
-		
 		
 	</g>
 	
@@ -352,7 +406,10 @@
 	
 	<g id="desk-E-45-46" transform="translate(313, 50) rotate(0)">
 		
-		<path class="desk desk-E-45" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-E-45 desk-E-45" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-E-45 desk-E-45" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-E-45" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-46" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -360,12 +417,14 @@
 			<text class="desk desk-E-45" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">45</text>
 			<text class="desk desk-E-46" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">46</text>
 		
-		
 	</g>
 	
 	<g id="desk-E-47-48" transform="translate(418, 50) rotate(0)">
 		
-		<path class="desk desk-E-47" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-E-47 desk-E-47" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-E-47 desk-E-47" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-E-47" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-48" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -373,12 +432,14 @@
 			<text class="desk desk-E-47" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">47</text>
 			<text class="desk desk-E-48" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">48</text>
 		
-		
 	</g>
 	
 	<g id="desk-E-49-50" transform="translate(523, 50) rotate(0)">
 		
-		<path class="desk desk-E-49" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-E-49 desk-E-49" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-E-49 desk-E-49" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-E-49" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-50" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -386,12 +447,14 @@
 			<text class="desk desk-E-49" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">49</text>
 			<text class="desk desk-E-50" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">50</text>
 		
-		
 	</g>
 	
 	<g id="desk-E-51-52" transform="translate(628, 50) rotate(0)">
 		
-		<path class="desk desk-E-51" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-E-51 desk-E-51" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-E-51 desk-E-51" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-E-51" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-52" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -399,12 +462,14 @@
 			<text class="desk desk-E-51" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">51</text>
 			<text class="desk desk-E-52" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">52</text>
 		
-		
 	</g>
 	
 	<g id="desk-E-53-54" transform="translate(733, 50) rotate(0)">
 		
-		<path class="desk desk-E-53" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-E-53 desk-E-53" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-E-53 desk-E-53" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-E-53" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-54" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -412,19 +477,20 @@
 			<text class="desk desk-E-53" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">53</text>
 			<text class="desk desk-E-54" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">54</text>
 		
-		
 	</g>
 	
 	<g id="desk-E-55-56" transform="translate(838, 50) rotate(0)">
 		
-		<path class="desk desk-E-55" fill="#ccc" d="m90 0 l0 56 l-90 0 l0 -56z" fill-rule="evenodd"/>
+		
+		
+		<rect class="desk desk-E-55 desk-E-55" fill="#ccc" x="0" y="0" width="90" height="56" />
+		<rect class="desk larger desk-E-55 desk-E-55" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 		<circle class="desk desk-E-55" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-56" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
 		
 			<text class="desk desk-E-55" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="24" y="36">55</text>
 			<text class="desk desk-E-56" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="64" y="36">56</text>
-		
 		
 	</g>
 	
