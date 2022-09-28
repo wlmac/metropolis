@@ -89,6 +89,7 @@
         -ms-flex-flow: row wrap;
             flex-flow: row wrap;
     margin: 0;
+    max-height: 2em;
 }
 #tag-section .tag {
     font-size: 1em;
