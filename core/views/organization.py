@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.db.models import Count
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import DetailView, ListView
+from django.views.generic.base import RedirectView
 
 from .. import models
 from . import mixins
@@ -34,3 +35,11 @@ class OrganizationDetail(DetailView, mixins.TitleMixin):
         else:
             request.user.organizations.add(self.get_object())
         return redirect(self.get_object())
+
+
+class OrganizationShort(RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        org = get_object_or_404(models.Organization, pk=kwargs['pk'])
+        return org.get_absolute_url()
