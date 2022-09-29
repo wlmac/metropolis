@@ -47,6 +47,7 @@ let clubs
 let i = 0
 let prevClub
 const userCache = {}
+let timeout;
 
 function setSlide() {
     //$("#fade").delay(250).fadeTo(250, 0);
@@ -131,6 +132,7 @@ function setSlide() {
         }, 5000);
         //$("#fade").delay(29000).fadeTo(250, 1);
         i++;
+        timeout = setTimeout(setSlide, 10000);
     })
     prevClub = club
 }
@@ -138,9 +140,16 @@ function setSlide() {
 function slides() {
     $.getJSON(window.location.origin + "/api/organizations", function (data) {
         clubs = data;
-        setTimeout(setSlide, 100);
-        setInterval(setSlide, 10000);
+        timeout = setTimeout(setSlide, 100);
+        //note: changed to recursive setTimeout in setSlide
     });
 }
 
 window.onload = slides;
+
+document.body.onkeyup = function(e) {
+    if(e.key == " " || e.code == "Space") {
+        clearTimeout(timeout);
+        setSlide();
+    }
+}
