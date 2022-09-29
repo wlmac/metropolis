@@ -145,3 +145,9 @@ hr {
 #exec-title {
     font-weight: 600;
 }
+#made-by {
+    object-fit: contain;
+    width: 20em;
+    margin-top: auto;
+    margin-left: auto;
+}
