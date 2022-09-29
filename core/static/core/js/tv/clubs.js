@@ -51,6 +51,7 @@ let i = 0
 let prevClub
 const userCache = {}
 let timeout;
+let timeout2;
 
 function setSlide() {
     //$("#fade").delay(250).fadeTo(250, 0);
@@ -90,7 +91,7 @@ function setSlide() {
             elem.classList.remove("selected")
         }
     }
-    var execlist = [];
+    var execlist = [{fname: "your", lname: "mom"}, {fname: "your", lname: "mom2"}, {fname: "your", lname: "mom3"}, {fname: "your", lname: "mom4"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}];
     var promiselist = [];
     for (var exec of club.execs) {
         var fname;
@@ -125,14 +126,14 @@ function setSlide() {
             document.getElementById("scrollable1").appendChild(elem)
         }
         var execs = $("#scrollable1")
-        var extra = $("#scrollable2")
-        var time = 1000
+        //var extra = $("#scrollable2")
+        var time = 6000;
         execs.scrollTop(0);
-        extra.scrollTop(0);
-        setTimeout(function () {
+        //extra.scrollTop(0);
+        timeout2 = setTimeout(function () {
             execs.animate({ scrollTop: execs.prop("scrollHeight") }, time);
-            extra.animate({ scrollTop: extra.prop("scrollHeight") }, time);
-        }, 5000);
+            //extra.animate({ scrollTop: extra.prop("scrollHeight") }, time);
+        }, 3000);
         //$("#fade").delay(29000).fadeTo(250, 1);
         i++;
         timeout = setTimeout(setSlide, 10000);
@@ -152,6 +153,7 @@ window.onload = slides;
 
 document.body.onkeyup = function(e) {
     if(e.key == " " || e.code == "Space") {
+        clearTimeout(timeout2);
         clearTimeout(timeout);
         setSlide();
     }
