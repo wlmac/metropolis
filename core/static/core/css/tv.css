@@ -137,4 +137,11 @@ hr {
 }
 .club-execs p {
     font-size: 1.5em;
+    background-color: #F5F5F5;
+    padding: 0.75rem;
+    border-radius: 8px;
+}
+
+#exec-title {
+    font-weight: 600;
 }
