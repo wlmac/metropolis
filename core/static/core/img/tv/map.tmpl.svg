@@ -19,8 +19,8 @@
 	}
 	@keyframes ripple {
 		0%   { r: 25px; }
-		90%  {          opacity: 100%; }
-		100% { r: 70px; opacity: 0; }
+		90%  {           opacity: 100%; }
+		100% { r: 100px; opacity: 0; }
 	}
 	circle.desk:not(.selected) {
 		opacity: 80%;
@@ -110,8 +110,6 @@
 	<g class="desk {{ $class }}" id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
 		<rect class="desk {{ $class }}" fill="#ccc" x="0" y="0" width="90" height="56" />
 		<!-- .larger needs to appear above all .group:not(.larger) *, so render them later; see g#larger -->
-		<circle class="ripple desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="ripple desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="station-shadow desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
 		<circle class="station-shadow desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="{{ $g.Colour }}" cx="24" cy="29" r="15" />
@@ -141,6 +139,8 @@
 			{{ $class := printf "desk-%s-%s desk-%s-%s" $g.Name (index $stats 0) $g.Name (index $stats 1) }}
 			<g class="desk {{ $class }}" id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
 				<rect id="desk-larger-{{ $g.Name }}" class="desk larger {{ $class }}" fill="#ccc" x="-45" y="-28" width="180" height="112" />
+				<circle class="ripple desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+				<circle class="ripple desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 			</g>
 		{{ end }}
 	{{ end }}
