@@ -1,5 +1,32 @@
 import clubStasRaw from "./club-data.json" assert { type: "json" };
-
+function setQR(uri) {
+    const qrCode = new QRCodeStyling({
+       width: 246,
+        height: 246,
+        type: "png",
+        data: uri,
+        image: `${document.location.origin}/static/core/img/logo/logo-transparent-192.png`,
+        dotsOptions: {
+            color: "#161723",
+            type: "rounded"
+        },
+        backgroundOptions: {
+            color: "#FFFFFF",
+        },
+        cornersSquareOptions: {
+          color: "#A97E2F",
+        },
+        cornersDotOptions: {color: "#161723"},
+        imageOptions: {
+            crossOrigin: "anonymous",
+            hideBackgroundDots: true,
+        }
+});
+    qrCode.getRawData().then((data) => {
+        console.log(data)
+        document.getElementById("qrcode").src = URL.createObjectURL(data);
+    });
+}
 function flattenClubStasRaw(clubStasRaw) {
     const res = {}
     for (let groupName in clubStasRaw.groups) {
@@ -46,14 +73,7 @@ function setSlide() {
     document.getElementById("bio").textContent = bio
     // document.getElementById("scrollable2").innerHTML = DOMPurify.sanitize(marked.parse(club.extra_content));
     document.getElementById("scrollable1").textContent = ''
-    QRCode.toCanvas(
-        document.getElementById("qrcode"),
-        new URL(`/c/${club.id}`, window.location.origin).href,
-        {
-            errorCorrectionLevel: 'H',
-            scale: 6,
-        },
-    )
+    setQR(`https://maclyonsden.com/c/${club.id}`)
     const map = document.getElementById("location").getSVGDocument();
     for (let elem of map.getElementsByClassName(`desk-${clubSta.group}-${clubSta.station}`)) {
         elem.classList.add("selected")
