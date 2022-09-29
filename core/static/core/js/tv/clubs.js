@@ -76,7 +76,8 @@ function setSlide() {
         document.getElementById("tag-section").appendChild(elem)
     }
     let bio = club.bio
-        .replace(new RegExp(`^([Tt]he )?${club.name}`), "We")
+        .replace(/(.{299})..+/, "$1…"); //truncate to 300 chars
+        //.replace(new RegExp(`^([Tt]he )?${club.name}`), "We") // whats this
     document.getElementById("bio").textContent = bio
     // document.getElementById("scrollable2").innerHTML = DOMPurify.sanitize(marked.parse(club.extra_content));
     document.getElementById("scrollable1").textContent = ''
