@@ -3,15 +3,12 @@ import clubStasRaw from "./club-data.json" assert { type: "json" };
 const qrCodeObjects = {}
 
 function setQR(clubId) {
-    if (clubId in qrCodeObjects) {
-        document.getElementById("qrcode").src = qrCodeObjects[clubId]
-        return
-    }
+    $('#qrcode').empty();
     const qrCode = new QRCodeStyling({
         width: 246,
         height: 246,
         type: "png",
-        data: new URL(`/c/${clubId}`, window.location.origin),
+        data: new URL(`/c/${clubId}`, window.location.origin).toString(),
         image: `${window.location.origin}/static/core/img/logo/logo-transparent-192.png`,
         dotsOptions: {
             color: "#161723",
@@ -21,18 +18,15 @@ function setQR(clubId) {
             color: "#ffffff",
         },
         cornersSquareOptions: {
-          color: "#a97e2f",
+            color: "#a97e2f",
         },
-        cornersDotOptions: {color: "#161723"},
+        cornersDotOptions: { color: "#161723" },
         imageOptions: {
             crossOrigin: "anonymous",
             hideBackgroundDots: true,
         }
     })
-    qrCode.getRawData().then((data) => {
-        console.log(data)
-        document.getElementById("qrcode").src = qrCodeObjects[clubId] = URL.createObjectURL(data)
-    })
+    qrCode.append(document.getElementById("qrcode"));
 }
 
 function flattenClubStasRaw(clubStasRaw) {
@@ -62,7 +56,7 @@ function setSlide() {
     console.log(club, clubSta)
     if (!clubSta || !(clubSta.group)) {
         console.log(`skip ${club.id} ${club.slug}`)
-        i ++
+        i++
         setSlide()
         return
     }
@@ -100,21 +94,26 @@ function setSlide() {
         if (exec.slug in userCache) {
             const user = userCache[exec.slug]
             execlist.push({ fname: user.first_name, lname: user.last_name })
+            //console.log(`pushed ${user.first_name} to exec list 1 from ${exec.slug}`);
         } else {
             promiselist.push(new Promise((resolve, reject) => {
-                console.log(`requesting ${exec.slug}`)
-                $.getJSON(window.location.origin + "/api/user/" + exec.slug, function (data) {
+                let tmpslug = exec.slug;
+                console.log(`requesting ${tmpslug}`)
+                $.getJSON(window.location.origin + "/api/user/" + tmpslug, function (data) {
                     fname = data.first_name
                     lname = data.last_name
-                    userCache[exec.slug] = data
+                    userCache[tmpslug] = data
                     resolve()
                 });
             }).then(() => {
                 execlist.push({ fname: fname, lname: lname })
+                //console.log(`pushed ${fname} to exec list 2`);
             }));
         }
     }
     Promise.all(promiselist).then(() => {
+        //console.log("Execlist");
+        //console.log(execlist);
         execlist.sort((a, b) => (a.fname > b.fname) ? 1 : (a.fname === b.fname) ? ((a.lname > b.lname) ? 1 : -1) : -1);
         for (let exec of execlist) {
             const elem = document.createElement("p")
@@ -127,9 +126,9 @@ function setSlide() {
         execs.scrollTop(0);
         extra.scrollTop(0);
         setTimeout(function () {
-            execs.animate({scrollTop: execs.prop("scrollHeight") }, time);
-            extra.animate({scrollTop: extra.prop("scrollHeight") }, time);
-        }, 7000);
+            execs.animate({ scrollTop: execs.prop("scrollHeight") }, time);
+            extra.animate({ scrollTop: extra.prop("scrollHeight") }, time);
+        }, 5000);
         //$("#fade").delay(29000).fadeTo(250, 1);
         i++;
     })
