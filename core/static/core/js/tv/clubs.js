@@ -91,7 +91,7 @@ function setSlide() {
             elem.classList.remove("selected")
         }
     }
-    var execlist = [{fname: "your", lname: "mom"}, {fname: "your", lname: "mom2"}, {fname: "your", lname: "mom3"}, {fname: "your", lname: "mom4"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}, {fname: "your", lname: "mom5"}];
+    var execlist = [];
     var promiselist = [];
     for (var exec of club.execs) {
         var fname;
