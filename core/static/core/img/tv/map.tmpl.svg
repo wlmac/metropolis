@@ -25,6 +25,11 @@
 	  animation-iteration-count: infinite;
 		animation-direction: alternate;
 	}
+	.station-shadow.selected {
+		filter: url(#selected-shadow);
+		visibility: visible;
+		fill: #fff !important;
+	}
 	rect.desk:not(.selected) {
 	}
 	rect.desk.selected {
@@ -45,6 +50,18 @@
 		z-index: 2;
 	}
 </style>
+<!-- from https://stackoverflow.com/a/6094674/12070265 -->
+<filter id="selected-shadow" height="130%">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="10"/> <!-- how much to blur -->
+  <feOffset dx="0" dy="0" result="offsetblur"/>
+  <feComponentTransfer>
+		<feFuncA type="linear" slope="0.5"/> <!-- shadow opacity -->
+  </feComponentTransfer>
+  <feMerge> 
+    <feMergeNode/> <!-- this contains the offset blurred image -->
+    <feMergeNode in="SourceGraphic"/> <!-- this contains the element that the filter is applied to -->
+  </feMerge>
+</filter>
 <clipPath id="p.0">
 <path d="m0 0l1051.7218 0l0 745.48816l-1051.7218 0l0 -745.48816z" clip-rule="nonzero"/>
 </clipPath>
@@ -74,6 +91,8 @@
 	<g class="desk {{ $class }}" id="desk-{{ $g.Name }}-{{ .Name }}" transform="translate({{ add $g.X .X }}, {{ add $g.Y .Y }}) rotate({{ add $g.Rotate .Rotate }})">
 		<rect class="desk {{ $class }}" fill="#ccc" x="0" y="0" width="90" height="56" />
 		<!-- .larger needs to appear above all .group:not(.larger) *, so render them later; see g#larger -->
+		<circle class="station-shadow desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 0 }}" fill="{{ $g.Colour }}" cx="24" cy="29" r="15" />
 		<circle class="desk desk-{{ $g.Name }}-{{ index $stats 1 }}" fill="{{ $g.Colour }}" cx="64" cy="29" r="15" />
 		{{ $rot := add $g.Rotate .Rotate }}
