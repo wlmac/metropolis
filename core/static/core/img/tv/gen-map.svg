@@ -14,7 +14,7 @@
 		opacity: 80%;
 	}
 	@keyframes desk-selected {
-		0%   { r: 20px; }
+		0%   { r: 25px; }
 		100% { r: 30px; }
 	}
 	circle.desk.selected {
@@ -352,15 +352,15 @@
 	
 	
 	
-	<g class="desk desk-D-33 desk-D-34" id="desk-D-33-34" transform="translate(920, 400) rotate(-90)">
-		<rect class="desk desk-D-33 desk-D-34" fill="#ccc" x="0" y="0" width="90" height="56" />
+	<g class="desk desk-D-39 desk-D-40" id="desk-D-39-40" transform="translate(920, 400) rotate(-90)">
+		<rect class="desk desk-D-39 desk-D-40" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="desk desk-D-33" fill="#9de1b7" cx="24" cy="29" r="15" />
-		<circle class="desk desk-D-34" fill="#9de1b7" cx="64" cy="29" r="15" />
+		<circle class="desk desk-D-39" fill="#9de1b7" cx="24" cy="29" r="15" />
+		<circle class="desk desk-D-40" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
 		
-			<text class="desk desk-D-33" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-24" transform="rotate(90)">33</text>
-			<text class="desk desk-D-34" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-64" transform="rotate(90)">34</text>
+			<text class="desk desk-D-39" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-24" transform="rotate(90)">39</text>
+			<text class="desk desk-D-40" fill="#000" text-anchor="middle" font-family="monospace" font-size="18" font-weight="400" x="30" y="-64" transform="rotate(90)">40</text>
 		
 	</g>
 	
@@ -615,8 +615,8 @@
 		
 			
 			
-			<g class="desk desk-D-33 desk-D-34" id="desk-D-33-34" transform="translate(920, 400) rotate(-90)">
-				<rect id="desk-larger-D" class="desk larger desk-D-33 desk-D-34" fill="#ccc" x="-45" y="-28" width="180" height="112" />
+			<g class="desk desk-D-39 desk-D-40" id="desk-D-39-40" transform="translate(920, 400) rotate(-90)">
+				<rect id="desk-larger-D" class="desk larger desk-D-39 desk-D-40" fill="#ccc" x="-45" y="-28" width="180" height="112" />
 			</g>
 		
 			
