@@ -1,4 +1,11 @@
 <svg version="1.1" viewBox="0.0 0.0 1020 750" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <radialGradient id="ripple-gradient">
+    <stop offset="0%" stop-color="#0000" />
+    <stop offset="90%" stop-color="#0000" />
+    <stop offset="100%" stop-color="#00f" />
+  </radialGradient>
+</defs>
 <style>
 	text.desk {
 		dominant-baseline: middle;
@@ -9,6 +16,11 @@
 	text.desk.selected {
 		font-size: 40px;
 		fill: #fff;
+	}
+	@keyframes ripple {
+		0%   { r: 25px; }
+		90%  {          opacity: 100%; }
+		100% { r: 70px; opacity: 0; }
 	}
 	circle.desk:not(.selected) {
 		opacity: 80%;
@@ -24,6 +36,13 @@
 	  animation-duration: 1s;
 	  animation-iteration-count: infinite;
 		animation-direction: alternate;
+	}
+	.ripple.selected {
+		visibility: visible;
+		fill: url(#ripple-gradient);
+	  animation-name: ripple;
+	  animation-duration: 2s;
+	  animation-iteration-count: infinite;
 	}
 	.station-shadow.selected {
 		filter: url(#selected-shadow);
@@ -88,8 +107,10 @@
 	<g class="desk desk-A-1 desk-A-2" id="desk-A-1-2" transform="translate(220, 550) rotate(-90)">
 		<rect class="desk desk-A-1 desk-A-2" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-A-1" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-A-2" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-A-1" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-A-2" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-A-1" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-A-2" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-A-1" fill="#decaa1" cx="24" cy="29" r="15" />
 		<circle class="desk desk-A-2" fill="#decaa1" cx="64" cy="29" r="15" />
 		
@@ -104,8 +125,10 @@
 	<g class="desk desk-A-3 desk-A-4" id="desk-A-3-4" transform="translate(220, 445) rotate(-90)">
 		<rect class="desk desk-A-3 desk-A-4" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-A-3" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-A-4" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-A-3" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-A-4" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-A-3" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-A-4" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-A-3" fill="#decaa1" cx="24" cy="29" r="15" />
 		<circle class="desk desk-A-4" fill="#decaa1" cx="64" cy="29" r="15" />
 		
@@ -120,8 +143,10 @@
 	<g class="desk desk-A-5 desk-A-6" id="desk-A-5-6" transform="translate(220, 340) rotate(-90)">
 		<rect class="desk desk-A-5 desk-A-6" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-A-5" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-A-6" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-A-5" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-A-6" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-A-5" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-A-6" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-A-5" fill="#decaa1" cx="24" cy="29" r="15" />
 		<circle class="desk desk-A-6" fill="#decaa1" cx="64" cy="29" r="15" />
 		
@@ -136,8 +161,10 @@
 	<g class="desk desk-A-7 desk-A-8" id="desk-A-7-8" transform="translate(220, 235) rotate(-90)">
 		<rect class="desk desk-A-7 desk-A-8" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-A-7" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-A-8" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-A-7" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-A-8" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-A-7" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-A-8" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-A-7" fill="#decaa1" cx="24" cy="29" r="15" />
 		<circle class="desk desk-A-8" fill="#decaa1" cx="64" cy="29" r="15" />
 		
@@ -158,8 +185,10 @@
 	<g class="desk desk-B-9 desk-B-10" id="desk-B-9-10" transform="translate(313, 600) rotate(0)">
 		<rect class="desk desk-B-9 desk-B-10" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-B-9" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-B-10" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-B-9" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-B-10" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-B-9" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-B-10" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-B-9" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-10" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -174,8 +203,10 @@
 	<g class="desk desk-B-11 desk-B-12" id="desk-B-11-12" transform="translate(418, 600) rotate(0)">
 		<rect class="desk desk-B-11 desk-B-12" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-B-11" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-B-12" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-B-11" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-B-12" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-B-11" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-B-12" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-B-11" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-12" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -190,8 +221,10 @@
 	<g class="desk desk-B-13 desk-B-14" id="desk-B-13-14" transform="translate(523, 600) rotate(0)">
 		<rect class="desk desk-B-13 desk-B-14" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-B-13" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-B-14" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-B-13" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-B-14" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-B-13" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-B-14" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-B-13" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-14" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -206,8 +239,10 @@
 	<g class="desk desk-B-15 desk-B-16" id="desk-B-15-16" transform="translate(628, 600) rotate(0)">
 		<rect class="desk desk-B-15 desk-B-16" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-B-15" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-B-16" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-B-15" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-B-16" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-B-15" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-B-16" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-B-15" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-16" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -222,8 +257,10 @@
 	<g class="desk desk-B-17 desk-B-18" id="desk-B-17-18" transform="translate(733, 600) rotate(0)">
 		<rect class="desk desk-B-17 desk-B-18" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-B-17" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-B-18" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-B-17" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-B-18" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-B-17" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-B-18" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-B-17" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-18" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -238,8 +275,10 @@
 	<g class="desk desk-B-19 desk-B-20" id="desk-B-19-20" transform="translate(838, 600) rotate(0)">
 		<rect class="desk desk-B-19 desk-B-20" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-B-19" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-B-20" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-B-19" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-B-20" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-B-19" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-B-20" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-B-19" fill="#93ead8" cx="24" cy="29" r="15" />
 		<circle class="desk desk-B-20" fill="#93ead8" cx="64" cy="29" r="15" />
 		
@@ -260,8 +299,10 @@
 	<g class="desk desk-C-21 desk-C-22" id="desk-C-21-22" transform="translate(430, 310) rotate(90)">
 		<rect class="desk desk-C-21 desk-C-22" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-C-21" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-C-22" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-C-21" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-C-22" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-C-21" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-C-22" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-C-21" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-22" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -276,8 +317,10 @@
 	<g class="desk desk-C-23 desk-C-24" id="desk-C-23-24" transform="translate(410, 415) rotate(0)">
 		<rect class="desk desk-C-23 desk-C-24" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-C-23" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-C-24" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-C-23" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-C-24" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-C-23" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-C-24" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-C-23" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-24" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -292,8 +335,10 @@
 	<g class="desk desk-C-25 desk-C-26" id="desk-C-25-26" transform="translate(515, 415) rotate(0)">
 		<rect class="desk desk-C-25 desk-C-26" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-C-25" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-C-26" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-C-25" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-C-26" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-C-25" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-C-26" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-C-25" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-26" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -308,8 +353,10 @@
 	<g class="desk desk-C-27 desk-C-28" id="desk-C-27-28" transform="translate(580, 400) rotate(-90)">
 		<rect class="desk desk-C-27 desk-C-28" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-C-27" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-C-28" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-C-27" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-C-28" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-C-27" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-C-28" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-C-27" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-28" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -324,8 +371,10 @@
 	<g class="desk desk-C-30 desk-C-29" id="desk-C-30-29" transform="translate(515, 240) rotate(0)">
 		<rect class="desk desk-C-30 desk-C-29" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-C-30" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-C-29" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-C-30" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-C-29" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-C-30" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-C-29" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-C-30" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-29" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -340,8 +389,10 @@
 	<g class="desk desk-C-32 desk-C-31" id="desk-C-32-31" transform="translate(410, 240) rotate(0)">
 		<rect class="desk desk-C-32 desk-C-31" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-C-32" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-C-31" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-C-32" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-C-31" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-C-32" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-C-31" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-C-32" fill="#f1ee84" cx="24" cy="29" r="15" />
 		<circle class="desk desk-C-31" fill="#f1ee84" cx="64" cy="29" r="15" />
 		
@@ -362,8 +413,10 @@
 	<g class="desk desk-D-33 desk-D-34" id="desk-D-33-34" transform="translate(770, 310) rotate(90)">
 		<rect class="desk desk-D-33 desk-D-34" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-D-33" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-D-34" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-D-33" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-D-34" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-D-33" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-D-34" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-D-33" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-34" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -378,8 +431,10 @@
 	<g class="desk desk-D-35 desk-D-36" id="desk-D-35-36" transform="translate(750, 415) rotate(0)">
 		<rect class="desk desk-D-35 desk-D-36" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-D-35" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-D-36" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-D-35" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-D-36" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-D-35" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-D-36" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-D-35" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-36" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -394,8 +449,10 @@
 	<g class="desk desk-D-37 desk-D-38" id="desk-D-37-38" transform="translate(855, 415) rotate(0)">
 		<rect class="desk desk-D-37 desk-D-38" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-D-37" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-D-38" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-D-37" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-D-38" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-D-37" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-D-38" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-D-37" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-38" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -410,8 +467,10 @@
 	<g class="desk desk-D-39 desk-D-40" id="desk-D-39-40" transform="translate(920, 400) rotate(-90)">
 		<rect class="desk desk-D-39 desk-D-40" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-D-39" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-D-40" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-D-39" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-D-40" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-D-39" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-D-40" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-D-39" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-40" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -426,8 +485,10 @@
 	<g class="desk desk-D-42 desk-D-41" id="desk-D-42-41" transform="translate(855, 240) rotate(0)">
 		<rect class="desk desk-D-42 desk-D-41" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-D-42" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-D-41" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-D-42" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-D-41" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-D-42" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-D-41" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-D-42" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-41" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -442,8 +503,10 @@
 	<g class="desk desk-D-44 desk-D-43" id="desk-D-44-43" transform="translate(750, 240) rotate(0)">
 		<rect class="desk desk-D-44 desk-D-43" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-D-44" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-D-43" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-D-44" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-D-43" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-D-44" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-D-43" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-D-44" fill="#9de1b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-D-43" fill="#9de1b7" cx="64" cy="29" r="15" />
 		
@@ -464,8 +527,10 @@
 	<g class="desk desk-E-45 desk-E-46" id="desk-E-45-46" transform="translate(313, 50) rotate(0)">
 		<rect class="desk desk-E-45 desk-E-46" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-E-45" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-E-46" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-E-45" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-E-46" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-E-45" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-E-46" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-E-45" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-46" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -480,8 +545,10 @@
 	<g class="desk desk-E-47 desk-E-48" id="desk-E-47-48" transform="translate(418, 50) rotate(0)">
 		<rect class="desk desk-E-47 desk-E-48" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-E-47" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-E-48" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-E-47" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-E-48" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-E-47" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-E-48" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-E-47" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-48" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -496,8 +563,10 @@
 	<g class="desk desk-E-49 desk-E-50" id="desk-E-49-50" transform="translate(523, 50) rotate(0)">
 		<rect class="desk desk-E-49 desk-E-50" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-E-49" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-E-50" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-E-49" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-E-50" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-E-49" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-E-50" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-E-49" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-50" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -512,8 +581,10 @@
 	<g class="desk desk-E-51 desk-E-52" id="desk-E-51-52" transform="translate(628, 50) rotate(0)">
 		<rect class="desk desk-E-51 desk-E-52" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-E-51" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-E-52" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-E-51" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-E-52" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-E-51" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-E-52" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-E-51" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-52" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -528,8 +599,10 @@
 	<g class="desk desk-E-53 desk-E-54" id="desk-E-53-54" transform="translate(733, 50) rotate(0)">
 		<rect class="desk desk-E-53 desk-E-54" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-E-53" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-E-54" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-E-53" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-E-54" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-E-53" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-E-54" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-E-53" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-54" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
@@ -544,8 +617,10 @@
 	<g class="desk desk-E-55 desk-E-56" id="desk-E-55-56" transform="translate(838, 50) rotate(0)">
 		<rect class="desk desk-E-55 desk-E-56" fill="#ccc" x="0" y="0" width="90" height="56" />
 		
-		<circle class="station-shadow desk desk-E-55" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
-		<circle class="station-shadow desk desk-E-56" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="ripple desk-E-55" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="ripple desk-E-56" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
+		<circle class="station-shadow desk-E-55" fill="#fff" visibility="hidden" cx="24" cy="29" r="15" />
+		<circle class="station-shadow desk-E-56" fill="#fff" visibility="hidden" cx="64" cy="29" r="15" />
 		<circle class="desk desk-E-55" fill="#cab5b7" cx="24" cy="29" r="15" />
 		<circle class="desk desk-E-56" fill="#cab5b7" cx="64" cy="29" r="15" />
 		
