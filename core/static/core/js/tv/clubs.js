@@ -18,7 +18,7 @@ function setQR(clubId) {
             color: "#ffffff",
         },
         cornersSquareOptions: {
-            color: "#a97e2f",
+            color: "#161723",
         },
         cornersDotOptions: { color: "#161723" },
         imageOptions: {
