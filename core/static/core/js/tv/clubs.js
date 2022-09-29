@@ -1,11 +1,18 @@
 import clubStasRaw from "./club-data.json" assert { type: "json" };
-function setQR(uri) {
+
+const qrCodeObjects = {}
+
+function setQR(clubId) {
+    if (clubId in qrCodeObjects) {
+        document.getElementById("qrcode").src = qrCodeObjects[clubId]
+        return
+    }
     const qrCode = new QRCodeStyling({
-       width: 246,
+        width: 246,
         height: 246,
         type: "png",
-        data: uri,
-        image: `${document.location.origin}/static/core/img/logo/logo-transparent-192.png`,
+        data: new URL(`/c/${clubId}`, window.location.origin),
+        image: `${window.location.origin}/static/core/img/logo/logo-transparent-192.png`,
         dotsOptions: {
             color: "#161723",
             type: "rounded"
@@ -21,12 +28,13 @@ function setQR(uri) {
             crossOrigin: "anonymous",
             hideBackgroundDots: true,
         }
-});
+    })
     qrCode.getRawData().then((data) => {
         console.log(data)
-        document.getElementById("qrcode").src = URL.createObjectURL(data);
-    });
+        document.getElementById("qrcode").src = qrCodeObjects[clubId] = URL.createObjectURL(data)
+    })
 }
+
 function flattenClubStasRaw(clubStasRaw) {
     const res = {}
     for (let groupName in clubStasRaw.groups) {
@@ -73,7 +81,7 @@ function setSlide() {
     document.getElementById("bio").textContent = bio
     // document.getElementById("scrollable2").innerHTML = DOMPurify.sanitize(marked.parse(club.extra_content));
     document.getElementById("scrollable1").textContent = ''
-    setQR(`https://maclyonsden.com/c/${club.id}`)
+    setQR(club.id)
     const map = document.getElementById("location").getSVGDocument();
     for (let elem of map.getElementsByClassName(`desk-${clubSta.group}-${clubSta.station}`)) {
         elem.classList.add("selected")
