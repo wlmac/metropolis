@@ -5,8 +5,8 @@ const qrCodeObjects = {}
 function setQR(clubId) {
     $('#qrcode').empty();
     const qrCode = new QRCodeStyling({
-        width: 246,
-        height: 246,
+        width: 270,
+        height: 270,
         type: "png",
         data: new URL(`/c/${clubId}`, window.location.origin).toString(),
         image: `${window.location.origin}/static/core/img/logo/logo-transparent-192.png`,
@@ -24,6 +24,9 @@ function setQR(clubId) {
         imageOptions: {
             crossOrigin: "anonymous",
             hideBackgroundDots: true,
+        },
+        qrOptions: {
+            errorCorrectionLevel: 'H'
         }
     })
     qrCode.append(document.getElementById("qrcode"));
