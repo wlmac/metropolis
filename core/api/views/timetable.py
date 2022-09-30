@@ -20,7 +20,7 @@ class TimetableList(ListAPIViewWithFallback):
     serializer_class = serializers.TimetableSerializer
 
     def get_queryset(self):
-        return models.Timetable.objects.filter(owner=request.user)
+        return models.Timetable.objects.filter(owner=self.request.user)
 
 
 class TimetableSchedule(APIView):
