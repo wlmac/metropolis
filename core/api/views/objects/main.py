@@ -115,14 +115,7 @@ class ObjectAPIView(GenericAPIViewWithDebugInfo):
         self.response = self.finalize_response(request, response, *args, **kwargs)
         return self.response
 
-
-    def __shim(self, request, *args, **kwargs):
-        raise RuntimeError
-        kwargs.pop("type")
-        print("proxied", self.__object_method_proxy)
-        return self.__object_method_proxy(request, *args, **kwargs)
-
-class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithLastModified):
+class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
     mutate = False
     detail = False
 
