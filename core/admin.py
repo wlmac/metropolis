@@ -120,7 +120,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         return qs.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
 
     def get_readonly_fields(self, request, obj=None):
-        if obj == None or request.user.is_superuser or request.user == obj.owner:
+        if obj is None or request.user.is_superuser or request.user == obj.owner:
             return []
         else:
             return ["owner", "supervisors", "execs"]
@@ -154,10 +154,10 @@ class OrganizationListFilter(admin.SimpleListFilter):
                 | Q(execs=request.user)
             ).distinct()
         for org in qs:
-            yield (org.slug, org.name)
+            yield org.slug, org.name
 
     def queryset(self, request, queryset):
-        if self.value() == None:
+        if self.value() is None:
             return queryset
         else:
             return queryset.filter(organization__slug=self.value())
@@ -182,7 +182,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         ).distinct()
 
     def get_readonly_fields(self, request, obj=None):
-        if obj == None or request.user.is_superuser:
+        if obj is None or request.user.is_superuser:
             return []
 
         all_fields = [
@@ -266,7 +266,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return {}
 
-        if obj == None:
+        if obj is None:
             return {"author", "supervisor", "status", "rejection_reason"}
 
         status_idx = ["d", "p", "a", "r"].index(obj.status)
@@ -322,11 +322,11 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         if (
-            obj != None
-            and obj.status not in ("d", "p")
-            and not request.user.is_superuser
-            and request.user in obj.organization.supervisors.all()
-            and request.user not in obj.organization.execs.all()
+                obj is not None
+                and obj.status not in ("d", "p")
+                and not request.user.is_superuser
+                and request.user in obj.organization.supervisors.all()
+                and request.user not in obj.organization.execs.all()
         ):
             return False
         return super().has_change_permission(request, obj)
@@ -363,7 +363,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                     "teacher": teacher,
                     "announcement": obj,
                     "review_link": settings.SITE_URL
-                    + reverse("admin:core_announcement_change", args=(obj.pk,)),
+                                   + reverse("admin:core_announcement_change", args=(obj.pk,)),
                 }
 
                 send_mail(
@@ -389,10 +389,10 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         qs = User.objects.filter(blogposts_authored__isnull=False).distinct()
         for author in qs:
-            yield (author.pk, author.username)
+            yield author.pk, author.username
 
     def queryset(self, request, queryset):
-        if self.value() == None:
+        if self.value() is None:
             return queryset
         else:
             return queryset.filter(author__pk=self.value())
@@ -478,9 +478,9 @@ class EventAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         if (
-            obj != None
-            and (not request.user.is_superuser)
-            and (request.user not in obj.organization.execs.all())
+                obj is not None
+                and (not request.user.is_superuser)
+                and (request.user not in obj.organization.execs.all())
         ):
             return False
         return super().has_change_permission(request, obj)
@@ -498,9 +498,9 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ["username", "first_name", "last_name"]
 
     def has_view_permission(self, request, obj=None):
-        if obj == None and (
-            request.user.organizations_owning.exists()
-            or request.user.organizations_leading.exists()
+        if obj is None and (
+                request.user.organizations_owning.exists()
+                or request.user.organizations_leading.exists()
         ):
             return True
 
@@ -515,7 +515,7 @@ class TimetableAdmin(admin.ModelAdmin):
     list_filter = ["term"]
 
 
-class FlatPageAdmin(FlatPageAdmin):
+class FlatPageAdmin(FlatPageAdmin): # fixme Redeclared 'FlatPageAdmin' defined above without usage
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }

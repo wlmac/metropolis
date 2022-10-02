@@ -7,7 +7,7 @@ geojson = open("booths.txt", "w")
 for i in data_list:
     print(i)
     if i.find("description: ") > -1:
-        clubname = i[i.find(">") : i.find("<", beg=i.find(">"))]
+        clubname = i[i.find(">"): i.find("<", beg=i.find(">"))] # fixme beg is a Unexpected argument though is this even used anymore
         geojson.write("clubname: " + clubname)
         geojson.write(
             'description: "<strong>'

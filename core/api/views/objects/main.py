@@ -2,19 +2,20 @@ import importlib
 
 from django.http import Http404
 from django.urls import reverse
-from rest_framework import generics, permissions
+from rest_framework import generics
 from rest_framework.response import Response
 
 from ...utils import ListAPIViewWithFallback, GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo
 
-
 __ALL__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
+
 
 def gen_get_provider(mapping):
     providers = {
         key: importlib.import_module(f".{value}", "core.api.views.objects").Provider
         for key, value in mapping.items()
     }
+
     def get_provider(provider_name: str):
         """
         Gets a provider by type name.
@@ -23,7 +24,9 @@ def gen_get_provider(mapping):
         if provider_name not in providers:
             raise Http404("確り取説読んだ？")
         return providers[provider_name]
+
     return get_provider
+
 
 get_provider = gen_get_provider({
     "announcement": "announcement",
@@ -35,15 +38,16 @@ get_provider = gen_get_provider({
     "tag": "tag",
 })
 
+
 class ObjectAPIView(generics.GenericAPIView):
     def initial(self, *args, **kwargs):
         super().initial(*args, **kwargs)
-        self.request.mutate = self.mutate
+        self.request.mutate = self.mutate  # fixme self.mutate and self.detail do not exist
         self.request.detail = self.detail
         self.provider = provider = get_provider(kwargs.pop("type"))(self.request)
         self.permission_classes = provider.permission_classes
         self.serializer_class = provider.serializer_class
-        # NOTE: better to have following if after intiial, but this is easier
+        # NOTE: better to have the following if after initial, but this is easier
 
     # NOTE: dispatch() is copied from https://github.com/encode/django-rest-framework/blob/de7468d0b4c48007aed734fee22db0b79b22e70b/rest_framework/views.py
     # License for this function:
@@ -108,6 +112,7 @@ class ObjectAPIView(generics.GenericAPIView):
         self.response = self.finalize_response(request, response, *args, **kwargs)
         return self.response
 
+
 class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
     mutate = False
     detail = False
@@ -128,10 +133,11 @@ class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithDebug
         return super().get(*args, **kwargs)
 
 
-class LookupField():
+class LookupField:
     @property
     def lookup_field(self):
-        if hasattr(self.provider, 'lookup_field'):
+        if hasattr(self.provider,
+                   'lookup_field'):  # fixme self.provider does not exist here you might have intended to subclass ObjectAPIView
             return self.provider.lookup_field
         return 'id'
 
@@ -146,7 +152,8 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
         return self.provider.get_queryset(self.request)
 
 
-class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
+class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo,
+                     GenericAPIViewWithLastModified):
     mutate = False
     detail = True
 

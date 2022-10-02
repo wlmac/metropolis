@@ -101,11 +101,11 @@
     <div class="nav-wrapper">
         <a href="{% url 'index' %}">
             <div class="brand-logo">
-                <img class="img-logo" src="{% settings_value 'THEME_LOGO' %}"></img>
+                <img class="img-logo" src="{% settings_value 'THEME_LOGO' %}" alt="theme logo">
                 <!-- <span>Metropolis</span> -->
             </div>
         </a>
-            
+
         <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
         <ul class="right hide-on-med-and-down">
             {% settings_value "NAVBAR" as navbar %}

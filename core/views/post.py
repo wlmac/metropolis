@@ -1,22 +1,17 @@
 from typing import Optional
 
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.syndication.views import Feed
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.db.models import Q
+from django.core.paginator import EmptyPage, Paginator
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
-from django.views.generic.base import RedirectView, TemplateView
+from django.views.generic.base import TemplateView
 
 from core.templatetags.markdown_tags import markdown
-
-from .. import models
 from . import mixins
+from .. import models
 
 
 def custom_feed(request, pk: int, limit: Optional[int] = None):
@@ -56,7 +51,7 @@ class AnnouncementCards(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.feed == "my":
-            feed = self.request.user.get_feed()
+            feed = self.request.user.get_feed() #fixme get_feed()
         elif self.feed == "all":
             feed = models.Announcement.get_all(user=self.request.user)
         else:
@@ -90,7 +85,7 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
             ]
 
         if self.request.user.is_authenticated:
-            context["feed_my"] = self.request.user.get_feed()
+            context["feed_my"] = self.request.user.get_feed() #fixme get_feed()
             if settings.LAZY_LOADING:
                 context["feed_my"] = context["feed_my"][
                     : settings.LAZY_LOADING["initial_limit"]

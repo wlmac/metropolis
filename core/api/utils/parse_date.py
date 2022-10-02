@@ -6,7 +6,7 @@ from django.utils import timezone
 def parse_date_query_param(request):
     date_query_param = request.query_params.get("date")
 
-    if date_query_param == None:
+    if date_query_param is None:
         return timezone.localdate()
     else:
         try:

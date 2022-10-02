@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "Change me"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django_select2",
     "pwa",
     "oauth2_provider",
+    "crispy_forms"
 ]
 
 MIDDLEWARE = [
@@ -549,7 +550,7 @@ TIMETABLE_FORMATS = {
                         "time": "09:00 am - 10:20 am",
                         "course": "Period 1",
                     },
-                    "time": [[ 9,  0], [10, 20]],
+                    "time": [[9, 0], [10, 20]],
                     "position": [{1, 5}, {1, 5}],
                 },
                 {
@@ -573,7 +574,7 @@ TIMETABLE_FORMATS = {
                         "time": "02:00 pm - 03:15 pm",
                         "course": "Period 4",
                     },
-                    "time": [[14,  0], [15, 15]],
+                    "time": [[14, 0], [15, 15]],
                     "position": [{4, 6}, {3, 6}],
                 },
             ],
@@ -910,7 +911,7 @@ DEFAULT_TIMEZONE = "UTC"
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
 tz = pytz.timezone('America/Toronto')
-BANNER_TEXT       = "Why is there a new \"play\" button here? There shouldn't be a new game… "
+BANNER_TEXT = "Why is there a new \"play\" button here? There shouldn't be a new game… "
 BANNER_SHOW_START = datetime(2022, 4, 1, 0, 0, 0, tzinfo=tz)
 BANNER_SHOW_END = datetime(2022, 4, 2, 0, 0, 0, tzinfo=tz)
 BANNER_SHOW = BANNER_SHOW_START < datetime.now(tz) < BANNER_SHOW_END
@@ -925,7 +926,7 @@ SIMPLE_JWT = {
 }
 
 # iCalendar Feed
-ICAL_PADDING = timedelta(days=4*7)
+ICAL_PADDING = timedelta(days=4 * 7)
 
 try:
     from metropolis.config import *

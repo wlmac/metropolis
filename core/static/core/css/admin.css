@@ -4,11 +4,11 @@ html {
     -webkit-text-size-adjust: 100%;
 }
 
-@media only screen and (min-width: 0)
-html {
+@media only screen and (min-width: 0) {
+  html {
     font-size: 14px;
+  }
 }
-
 .divider {
   height: 1px;
   overflow: hidden;
@@ -53,10 +53,6 @@ nav {
   left: 0;
   top: 0;
   margin: 0;
-  -webkit-transform: translateX(-100%);
-          -ms-transform: translateX(-100%);
-      transform: translateX(-100%);
-  height: 100%;
   height: calc(100% + 60px);
   height: -moz-calc(100%);
   padding-bottom: 60px;
@@ -65,21 +61,18 @@ nav {
   overflow-y: auto;
   will-change: transform;
   -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   -webkit-transform: translateX(-105%);
-          -ms-transform: translateX(-105%);
-      transform: translateX(-105%);
+  -ms-transform: translateX(-105%);
+  transform: translateX(-105%);
 }
 
 .sidenav.right-aligned {
   right: 0;
-  -webkit-transform: translateX(105%);
-          -ms-transform: translateX(105%);
-      transform: translateX(105%);
   left: auto;
   -webkit-transform: translateX(100%);
-          -ms-transform: translateX(100%);
-      transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  transform: translateX(100%);
 }
 
 .sidenav .collapsible {
@@ -547,7 +540,7 @@ nav ul a span.badge {
   margin-left: 4px;
   line-height: 22px;
   height: 22px;
-  -webkit-font-smoothing: auto;
+  -webkit-font-smoothing: auto; /* fixme Mismatched property value (none | antialiased | subpixel-antialiased | [initial | inherit | unset | revert])  */
 }
 
 nav ul a.btn, nav ul a.btn-large, nav ul a.btn-small, nav ul a.btn-large, nav ul a.btn-flat, nav ul a.btn-floating {

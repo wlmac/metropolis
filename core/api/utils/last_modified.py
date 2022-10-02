@@ -8,7 +8,7 @@ class GenericAPIViewWithLastModified(generics.GenericAPIView):
         raise NotImplemented()
 
     def get(self, *args, **kwargs):
-        resp = super().get(*args, **kwargs)
+        resp = super().get(*args, **kwargs)  # fixme .get is not a method of GenericAPIView
         resp["Last-Modified"] = format_date_time(mktime(self.get_last_modified().timetuple()))
         return resp
 
@@ -18,7 +18,7 @@ class GenericAPIViewWithDebugInfo(generics.GenericAPIView):
         return None
 
     def get(self, *args, **kwargs):
-        resp = super().get(*args, **kwargs)
+        resp = super().get(*args, **kwargs) # fixme .get is not a method of GenericAPIView
         if admin_url := self.get_admin_url():
             resp["X-Admin-URL"] = admin_url
         return resp

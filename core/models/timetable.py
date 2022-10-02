@@ -1,9 +1,7 @@
 from django.conf import settings
 from django.db import models
-from django.urls import reverse
 
 from .. import utils
-from .choices import timezone_choices
 from .course import Course, Term
 
 # Create your models here.
@@ -22,7 +20,7 @@ class Timetable(models.Model):
 
     def __str__(self):
         return (
-            f"{self.owner.get_full_name()} ({self.owner})'s Timetable for {self.term}"
+            f"{self.owner.get_full_name()} ({self.owner})'s Timetable for {self.term}" # fixme get_full_name() doesn't exist for this field
         )
 
     def day_schedule(self, target_date=None):

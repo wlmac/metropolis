@@ -37,17 +37,17 @@ class User(AbstractUser):
             return None
 
         try:
-            return self.timetables.get(term=current_term)
+            return self.timetables.get(term=current_term) # fixme Unresolved attribute reference 'timetables' for class 'User'
         except ObjectDoesNotExist:
             return None
 
     def schedule(self, target_date=None):
-        if target_date == None:
-            target_date = timezone.localdate()
+        if target_date is None:
+            target_date = timezone.localdate() # fixme timezone is not defined
 
         result = []
 
-        for timetable in self.timetables.all():
+        for timetable in self.timetables.all(): # fixme Unresolved attribute reference 'timetables' for class 'User'
             result.extend(timetable.day_schedule(target_date=target_date))
 
         result.sort(key=lambda x: (x["time"]["start"], x["time"]["end"]))

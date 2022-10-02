@@ -4,14 +4,11 @@ from queue import LifoQueue
 from django.db.models import signals
 from django.dispatch import Signal, receiver
 from django.http import StreamingHttpResponse
-from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import permissions
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ... import models
 from .. import serializers
-from .stream import SignalStream
+from ... import models
 
 global_notifs = Signal()
 
@@ -30,7 +27,7 @@ class NotificationStream:
     def __init__(
         self,
         signal,
-        serializer,
+        erializer,
     ):
         self.signal = signal
         self.serializer = serializer
@@ -56,7 +53,9 @@ class NotificationStream:
         return f"event: {event_name}\n" f"data: {json.dumps(data)}\n"
 
 
-def serializer(sender, signal=None, orig_sender=None, kwargs={}):
+def serializer(sender, signal=None, orig_sender=None, kwargs=None):
+    if kwargs is None:
+        kwargs = {}
     if sender == "announcement_change":
         return (
             sender,
@@ -68,7 +67,7 @@ def serializer(sender, signal=None, orig_sender=None, kwargs={}):
             serializers.BlogPostSerializer(kwargs["instance"]).data,
         )
     else:
-        return (sender, kwargs)
+        return sender, kwargs
 
 
 class NotificationsNew(APIView):

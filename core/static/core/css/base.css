@@ -11,7 +11,7 @@
     --status-red: #e85856;
     --status-yellow: #ebc942;
     --status-green: #5cc478;
-    
+
     font-family: 'Roboto', sans-serif;
     letter-spacing: 0.15px;
     background-color: var(--bg-grey);
@@ -36,7 +36,7 @@
         --status-red: #e85856;
         --status-yellow: #ebc942;
         --status-green: #5cc478;
-        
+
         font-family: 'Roboto', sans-serif;
         letter-spacing: 0.15px;
         background-color: var(--dark-grey);
@@ -50,7 +50,7 @@ body {
     min-height: 100%;
 }
 .container {
-    padding: 50px 0px;
+    padding: 50px 0;
     min-height: calc(100vh - 64px);
 }
 
@@ -103,7 +103,7 @@ select{
 
     width: auto;
     height: 80%;
-    padding: 0px 15px !important;
+    padding: 0 15px !important;
     margin-top: 8px;
 
     font-size: 1.25rem !important;
@@ -213,7 +213,7 @@ select{
 
 .errorlist {
     color: var(--status-red);
-    margin: 0.5em 0px 1em;
+    margin: 0.5em 0 1em;
 }
 
 .messages {
@@ -222,7 +222,7 @@ select{
 }
 
 .messages > li {
-    margin: 5px 0px;
+    margin: 5px 0;
 }
 
 input {
@@ -273,7 +273,7 @@ label {
     display: block;
     /*height: 64px;*/
     height: 48px;
-    margin: none;
+    margin: 0;
     width: auto;
     background-color: var(--dark-colour);
     border-radius: 5px;
@@ -284,7 +284,7 @@ label {
 }
 
 .install-popup > span{
-    margin: 0px 15px;
+    margin: 0 15px;
     font-size: 16px;
     color: var(--dark-colour);
 }
@@ -353,7 +353,7 @@ blockquote {
     font-size: 16px;
     color: var(--contrast-colour);
     text-align: center;
-    padding: 0px 60px;
+    padding: 0 60px;
 }
 
 .footer-title a {
@@ -361,8 +361,8 @@ blockquote {
 }
 
 .footer-title-par {
-    margin: 0px auto;
-    padding: 40px 0px 10px;
+    margin: 0 auto;
+    padding: 40px 0 10px;
 }
 
 .footer-bar {
@@ -370,8 +370,8 @@ blockquote {
     height: 0;
     padding-top: .2vh;
     width: 10vw;
-    margin: 15px auto 0px;
-    border-top-width: 0px !important;
+    margin: 15px auto 0;
+    border-top-width: 0 !important;
 }
 
 .foooter-icon-par {
@@ -405,7 +405,7 @@ blockquote {
     font-size: 15px;
     text-decoration: none;
     color: var(--contrast-colour);
-    margin: 0px 20px;
+    margin: 0 20px;
 }
 
 /* .footer-name:hover {

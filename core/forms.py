@@ -105,8 +105,8 @@ class TimetableSelectCoursesForm(forms.ModelForm):
     def clean(self):
         courses = self.cleaned_data["courses"]
         if (
-            courses.count()
-            > settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]
+                courses.count()
+                > settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]
         ):
             raise forms.ValidationError(
                 f'There are only {settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]} courses in this term.'
@@ -243,7 +243,7 @@ class TagAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
     def clean_organization(self):
-        if self.cleaned_data["organization"] == None:
+        if self.cleaned_data["organization"] is None:
             raise forms.ValidationError("Tags must have an organization.")
         return self.cleaned_data["organization"]
 

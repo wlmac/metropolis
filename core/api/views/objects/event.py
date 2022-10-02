@@ -1,13 +1,13 @@
-from django.db.models import Q
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 from django.utils import timezone
-from rest_framework import generics, permissions
+from rest_framework import permissions
 from rest_framework import serializers
 
-from ....models import Event
-from .... import models
 from .base import BaseProvider
+from .... import models
+from ....models import Event
 
 
 class SuperficialSerializer(serializers.ModelSerializer):

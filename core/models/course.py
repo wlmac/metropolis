@@ -3,10 +3,10 @@ import datetime
 from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
-from django.urls import reverse
 from django.utils import timezone
 
 from .. import utils
+
 
 # Create your models here.
 
@@ -36,17 +36,17 @@ class Term(models.Model):
 
     def is_current(self, target_date=None):
         target_date = utils.get_localdate(date=target_date)
-        return target_date >= self.start_date and target_date < self.end_date
+        return self.start_date <= target_date < self.end_date
 
     def day_is_instructional(self, target_date=None):
         target_date = utils.get_localdate(date=target_date, time=[11, 0, 0])
         return (
-            target_date.weekday() < 5
-            and not self.events.filter(
-                is_instructional=False,
-                start_date__lte=target_date,
-                end_date__gte=target_date,
-            ).exists()
+                target_date.weekday() < 5
+                and not self.events.filter(
+            is_instructional=False,
+            start_date__lte=target_date,
+            end_date__gte=target_date,
+        ).exists()
         )
 
     def day_num(self, target_date=None):
@@ -92,8 +92,8 @@ class Term(models.Model):
         return (len(cycle_day_type_set) - 1) % tf["cycle"]["length"] + 1
 
     def day_schedule_format(self, target_date=None):
-        tds = utils.get_localdate(date=target_date, time=[0, 0, 0]) # target date start
-        tde = utils.get_localdate(date=target_date, time=[23, 59, 59]) # target date end
+        tds = utils.get_localdate(date=target_date, time=[0, 0, 0])  # target date start
+        tde = utils.get_localdate(date=target_date, time=[23, 59, 59])  # target date end
 
         schedule_formats = settings.TIMETABLE_FORMATS[self.timetable_format][
             "schedules"
@@ -211,7 +211,7 @@ class Event(models.Model):
 
     def is_current(self):
         today = timezone.localtime()
-        return today >= self.start_date and today < self.end_date
+        return self.start_date <= today < self.end_date
 
     @classmethod
     def get_events(cls, user=None):

@@ -1,10 +1,10 @@
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from rest_framework import generics, permissions
+from rest_framework import permissions
 from rest_framework import serializers
 
-from ....models import BlogPost
 from .base import BaseProvider
+from ....models import BlogPost
 
 
 class Serializer(serializers.ModelSerializer):
@@ -26,7 +26,7 @@ class Provider(BaseProvider):
         return [permissions.DjangoModelPermissions] if self.request.mutate else [permissions.AllowAny]
 
     def get_queryset(self, request):
-        return BlogPost.objects.filter(is_published=True) # TODO: allow viewing is_published=False for those with permissions
+        return BlogPost.objects.filter(is_published=True)  # TODO: allow viewing is_published=False for those with permissions
 
     def get_last_modified(self, view):
         return view.get_object().last_modified_date

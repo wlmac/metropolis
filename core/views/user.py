@@ -49,5 +49,5 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView, mixins.TitleMixin):
     title = "Update Profile"
     context_object_name = "profile"
 
-    def get_object(self):
+    def get_object(self): #fixme Signature of method 'ProfileUpdate.get_object()' does not match signature of the base method in class 'SingleObjectMixin'
         return self.request.user

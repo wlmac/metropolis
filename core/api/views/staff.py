@@ -1,5 +1,4 @@
 from collections import defaultdict
-from typing import List
 
 from django.conf import settings
 from rest_framework.decorators import api_view

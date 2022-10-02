@@ -1,16 +1,15 @@
 from django.conf import settings
-from django.urls import reverse
-from django_ical.views import ICalFeed
 from django.http import HttpResponse
+from django.urls import reverse
 from django.utils import timezone
 from django.views import View
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import TemplateView
+from django_ical.views import ICalFeed
 
 from core.utils import generate_slam as gs
 from core.utils import get_week_schedule_info
-
-from .. import models
 from . import mixins
+from .. import models
 
 
 class Index(TemplateView, mixins.TitleMixin):
@@ -21,8 +20,8 @@ class Index(TemplateView, mixins.TitleMixin):
         context = super().get_context_data(**kwargs)
 
         context["announcements"] = models.Announcement.get_all(user=self.request.user)[
-            :3
-        ]
+                                   :3
+                                   ]
 
         datetime_now = timezone.localtime()
         context["events"] = models.Event.get_events(user=self.request.user).filter(
@@ -73,12 +72,11 @@ class CalendarFeed(ICalFeed):
 
     def item_categories(self, item):
         return [tag.name for tag in item.tags.all()] \
-            + (["public"] if item.is_public else []) \
-            + (["instructional"] if item.is_instructional else [])
+               + (["public"] if item.is_public else []) \
+               + (["instructional"] if item.is_instructional else [])
 
     def item_author_name(self, item):
         return item.organization.name
-
 
 
 class MapView(TemplateView, mixins.TitleMixin):
