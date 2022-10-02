@@ -27,7 +27,7 @@ class NotificationStream:
     def __init__(
         self,
         signal,
-        erializer,
+        serializer,
     ):
         self.signal = signal
         self.serializer = serializer
