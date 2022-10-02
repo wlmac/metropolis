@@ -515,7 +515,7 @@ class TimetableAdmin(admin.ModelAdmin):
     list_filter = ["term"]
 
 
-class FlatPageAdmin(FlatPageAdmin): # fixme Redeclared 'FlatPageAdmin' defined above without usage
+class FlatPageAdmin(FlatPageAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
