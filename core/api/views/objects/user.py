@@ -24,6 +24,15 @@ class Serializer(serializers.ModelSerializer):
         ]
 
 
+class Identity(permissions.BasePermission):
+    def has_object_permission(self, request, view, user):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.user == user:
+            return True
+        return False
+
+
 class Provider(BaseProvider):
     serializer_class = Serializer
     model = models.User
@@ -31,7 +40,7 @@ class Provider(BaseProvider):
 
     @property
     def permission_classes(self):
-        return [permissions.DjangoModelPermissions] if self.request.mutate else [permissions.IsAuthenticated]
+        return [Identity] if self.request.mutate else [permissions.IsAuthenticated]
 
     def get_queryset(self, request):
         return models.User.objects.all()

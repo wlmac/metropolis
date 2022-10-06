@@ -35,13 +35,20 @@ get_provider = gen_get_provider({
     "tag": "tag",
 })
 
-class ObjectAPIView(generics.GenericAPIView):
+class ObjectAPIView(GenericAPIViewWithDebugInfo):
+    def get_as_su(self):
+        return self.as_su
+
     def initial(self, *args, **kwargs):
         super().initial(*args, **kwargs)
         self.request.mutate = self.mutate
         self.request.detail = self.detail
         self.provider = provider = get_provider(kwargs.pop("type"))(self.request)
-        self.permission_classes = provider.permission_classes
+        if as_su := (self.request.GET.get('as-su') == 'true'):
+            self.permission_classes = [permissions.AllowAny]
+        else:
+            self.permission_classes = provider.permission_classes
+        self.as_su = as_su
         self.serializer_class = provider.serializer_class
         # NOTE: better to have following if after intiial, but this is easier
 
@@ -115,7 +122,7 @@ class ObjectAPIView(generics.GenericAPIView):
         print("proxied", self.__object_method_proxy)
         return self.__object_method_proxy(request, *args, **kwargs)
 
-class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
+class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithLastModified):
     mutate = False
     detail = False
 
@@ -153,7 +160,7 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
         return self.provider.get_queryset(self.request)
 
 
-class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
+class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithLastModified):
     mutate = False
     detail = True
 
