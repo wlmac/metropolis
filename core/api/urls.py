@@ -66,6 +66,6 @@ urlpatterns = [
     path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),
     path("v3/obj/<str:type>/new", ObjectNew.as_view(), name="api_object_new3"),
     path("v3/obj/<str:type>/single/<path:id>", ObjectSingle.as_view(), name="api_object_single3"),
-    path("v3/obj/<str:type>/retrieve/<path:id>", ObjectRetrieve.as_view(), name="api_object_single3"),
+    path("v3/obj/<str:type>/retrieve/<path:id>", ObjectRetrieve.as_view(), name="api_object_retrieve3"),
     path("version", APIVersion.as_view(), name="api_version"),
 ]
