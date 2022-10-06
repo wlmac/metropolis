@@ -922,6 +922,7 @@ ROOT = "http://localhost"
 SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
+    "UPDATE_LAST_LOGIN": True,
 }
 
 # iCalendar Feed
