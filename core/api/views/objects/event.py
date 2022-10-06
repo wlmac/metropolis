@@ -8,6 +8,7 @@ from rest_framework import serializers
 from ....models import Event
 from .... import models
 from .base import BaseProvider
+from .announcement import SupervisorOrExec
 
 
 class SuperficialSerializer(serializers.ModelSerializer):
@@ -31,7 +32,7 @@ class Provider(BaseProvider):
 
     @property
     def permission_classes(self):
-        return [permissions.DjangoModelPermissions] if self.request.mutate else [permissions.AllowAny]
+        return [permissions.DjangoModelPermissions, SupervisorOrExec] if self.request.mutate else [permissions.AllowAny]
 
     def get_queryset(self, request):
         start = timezone.now()

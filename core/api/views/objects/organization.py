@@ -13,13 +13,22 @@ class Serializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class SupervisorOrExec(permissions.BasePermission):
+    def has_object_permission(self, request, view, organization):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if request.user in {*organization.supervisors} | {*org.execs}:
+            return True
+        return False
+
+
 class Provider(BaseProvider):
     serializer_class = Serializer
     model = models.Organization
 
     @property
     def permission_classes(self):
-        return [permissions.DjangoModelPermissions] if self.request.mutate else [permissions.AllowAny]
+        return [permissions.DjangoModelPermissions, SupervisorOrExec] if self.request.mutate else [permissions.AllowAny]
 
     def get_queryset(self, request):
         return models.Organization.objects.all()

@@ -17,8 +17,14 @@ class GenericAPIViewWithDebugInfo(generics.GenericAPIView):
     def get_admin_url(self):
         return None
 
+    def get_as_su(self):
+        return False
+
     def get(self, *args, **kwargs):
         resp = super().get(*args, **kwargs)
         if admin_url := self.get_admin_url():
             resp["X-Admin-URL"] = admin_url
+        if self.get_as_su():
+            resp["X-As-SU"] = 'true'
+
         return resp
