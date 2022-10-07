@@ -322,7 +322,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                 kwargs["queryset"] = models.User.objects.filter(
                     organizations_supervising__in=orgs,
                 )
-            kwargs["queryset"] = kwargs["queryset"].distinct().order_by("name")
+            kwargs["queryset"] = kwargs["queryset"].distinct().order_by("username")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
