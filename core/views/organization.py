@@ -14,7 +14,7 @@ class OrganizationList(ListView, mixins.TitleMixin):
     title = "Clubs"
 
     def get_queryset(self):
-        return models.Organization.objects.annotate(
+        return models.Organization.objects.filter(is_active=True).annotate(
             num_member=Count("member")
         ).order_by("-num_member")
 
