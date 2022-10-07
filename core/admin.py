@@ -124,7 +124,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         if obj == None or request.user.is_superuser or request.user == obj.owner:
             return []
         else:
-            return ["owner", "supervisors", "execs"]
+            return ["owner", "supervisors", "execs", "is_active"]
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "supervisors":
