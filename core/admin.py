@@ -314,15 +314,19 @@ class AnnouncementAdmin(admin.ModelAdmin):
             orgs = models.Organization.objects.filter(
                 Q(supervisors=request.user) | Q(execs=request.user)
             )
+            qs_set = True
             if db_field.name == "author":
                 kwargs["queryset"] = models.User.objects.filter(
                     organizations_leading__in=orgs,
                 )
-            elif db_field.name == "author":
+            elif db_field.name == "supervisor":
                 kwargs["queryset"] = models.User.objects.filter(
                     organizations_supervising__in=orgs,
                 )
-            kwargs["queryset"] = kwargs["queryset"].distinct().order_by("username")
+            else:
+                qs_set = False
+            if qs_set:
+                kwargs["queryset"] = kwargs["queryset"].distinct().order_by("username")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
