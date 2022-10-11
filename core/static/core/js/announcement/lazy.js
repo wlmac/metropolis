@@ -3,14 +3,14 @@
  * @description : lazy loading of annoucements
  */
 
-async function loadPage(page, feed) {
+async function loadPage(page, feed, base) {
     const response = await fetch(
-        `/announcements/cards?page=${page}&feed=${feed}`,
+        `${base}?page=${page}&feed=${feed}`,
     );
     return response.text();
 }
 
-function setup(feed, initialLimit, perPage) {
+function setup(feed, initialLimit, perPage, base) {
     // temporary buffer of cards
     let loadIn = new Map()
     // initialLimit is a multiple of perPage
@@ -57,7 +57,7 @@ function setup(feed, initialLimit, perPage) {
             return
         }
         console.debug(`lazy: [${feed} / ${pk}]: loading next page (${nextPage})`)
-        const cards = await loadPage(nextPage, pk)
+        const cards = await loadPage(nextPage, pk, base)
         insert(cards)
         console.debug(`lazy: [${feed} / ${pk}]: ${nextPage} ${loadedLast ? "yes last" : "no last"}`)
         nextPage ++
@@ -76,11 +76,11 @@ function setup(feed, initialLimit, perPage) {
     }
 }
 
-function mapSetup(ks, initialLimit, perPage) {
+function mapSetup(ks, initialLimit, perPage, base) {
     const m = new Map();
     for (let i in ks) {
         const k = ks[i];
-        m.set(k, setup(k, initialLimit, perPage));
+        m.set(k, setup(k, initialLimit, perPage, base));
     }
     return m;
 }

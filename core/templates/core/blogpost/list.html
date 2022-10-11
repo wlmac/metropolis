@@ -9,11 +9,41 @@
 {% block main %}
 <div class="container">
     <div class="card-container">
-        {% for blogpost in blogposts %}
-        {% include "./card_snippet.html" %}
-        {% empty %}
-        <div class="message">There are no blog articles posted at this time. Check back in a bit!</div>
-        {% endfor %}
+        <div class="cards" id="cards-all" />
+            {% for blogpost in feed_all %}
+                {% include "./card_snippet.html" %}
+            {% empty %}
+                <div class="message">There are no blog articles posted at this time. Check back in a bit!</div>
+            {% endfor %}
+        </div>
+        {% if lazy_loading %}
+        <script type="module">
+            import { loadCheck, mapSetup } from "{% static 'core/js/announcement/lazy.js' %}";
+        
+            const feeds = mapSetup(
+                [
+                    "all",
+                ],
+                {{initial_limit}},
+                {{per_page}},
+                "/blogs/cards",
+            );
+
+            const margin = 300;
+            let dontLoad = false;
+
+            async function listen() {
+                if (!dontLoad)
+                    if (loadCheck(margin)) {
+                        dontLoad = true;
+                        const urlParams = new URLSearchParams(window.location.search);
+                        await feeds.get(urlParams.get("feed") || "all")()
+                        dontLoad = false;
+                    }
+            }
+            window.addEventListener("scroll", listen);
+        </script>
+        {% endif %}
         <script>
             $(".card-authors-text").find("a").addClass("link");
         </script>

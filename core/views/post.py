@@ -181,8 +181,45 @@ class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
         return context
 
 
-class BlogPostList(ListView, mixins.TitleMixin):
-    context_object_name = "blogposts"
+class BlogPostCards(TemplateView):
+    template_name = "core/blogpost/cards.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.page = request.GET.get("page", None)
+        if not isinstance(self.page, str):
+            return HttpResponseBadRequest("invalid page")
+        if not self.page.isnumeric():
+            return HttpResponseBadRequest(f"invalid page (non-numeric)")
+        self.feed = request.GET.get("feed", None)
+        if self.feed == "my":
+            if not self.request.user.is_authenticated:
+                return HttpResponseForbidden("not authenticated")
+        elif self.feed == "all":
+            pass
+        else:
+            if not isinstance(self.feed, str):
+                return HttpResponseBadRequest("invalid feed")
+            if not self.feed.isnumeric():
+                return HttpResponseBadRequest("invalid feed (non-numeric)")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.feed == "all":
+            feed = models.BlogPost.objects.filter(is_published=True)
+        else:
+            raise HttpResponseBadRequest("feed must be all")
+        paginator = Paginator(feed, settings.LAZY_LOADING["per_page"])
+        try:
+            self.posts = paginator.page(self.page)
+        except EmptyPage:
+            self.posts = paginator.page(paginator.num_pages)
+        context["feed"] = self.posts
+        context["has_next"] = self.posts.has_next()
+        return context
+
+
+class BlogPostList(TemplateView, mixins.TitleMixin):
     template_name = "core/blogpost/list.html"
     title = "Blog Posts"
 
@@ -191,6 +228,21 @@ class BlogPostList(ListView, mixins.TitleMixin):
 
     def get_queryset(self):
         return models.BlogPost.objects.filter(is_published=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if settings.LAZY_LOADING:
+            context["lazy_loading"] = True
+            context["initial_limit"] = settings.LAZY_LOADING["initial_limit"]
+            context["per_page"] = settings.LAZY_LOADING["per_page"]
+
+        context["feed_all"] = models.BlogPost.objects.filter(is_published=True)
+        if settings.LAZY_LOADING:
+            context["feed_all"] = context["feed_all"][
+                : settings.LAZY_LOADING["initial_limit"]
+            ]
+        return context
 
 
 class BlogPostDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):

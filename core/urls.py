@@ -52,10 +52,15 @@ urlpatterns = [
 ]
 
 if settings.LAZY_LOADING:
-    urlpatterns.append(
+    urlpatterns += [
         path(
             "announcements/cards",
             views.AnnouncementCards.as_view(),
             name="api_announcements_card",
         ),
-    )
+        path(
+            "blogs/cards",
+            views.BlogPostCards.as_view(),
+            name="api_blog_card",
+        ),
+    ]
