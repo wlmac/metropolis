@@ -37,6 +37,7 @@ class Provider(BaseProvider):
     serializer_class = Serializer
     model = models.User
     allow_list = False
+    allow_new = False
 
     @property
     def permission_classes(self):
