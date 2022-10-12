@@ -24,6 +24,9 @@ class OrganizationDetail(DetailView, mixins.TitleMixin):
     context_object_name = "organization"
     template_name = "core/organization/detail.html"
 
+    def get_queryset(self):
+        return models.Organization.objects.filter(is_active=True)
+
     def get_title(self):
         return self.get_object().name
 
