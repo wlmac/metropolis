@@ -101,13 +101,13 @@ Example:
 ```
 
 ## Create Object
-`POST /`
+`POST new`
 
 ## (Single) Object
-`GET <id>/retrieve`
-`PUT <id>`
-`PATCH <id>`
-`DELETE <id>`
+`GET retrieve/<id>`
+`PUT single/<id>`
+`PATCH single/<id>`
+`DELETE single/<id>`
 **Note** has `Last-Modified` header.
 
 For `flatpage`:
