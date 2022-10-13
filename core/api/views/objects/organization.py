@@ -31,7 +31,7 @@ class Provider(BaseProvider):
         return [permissions.DjangoModelPermissions, SupervisorOrExec] if self.request.mutate else [permissions.AllowAny]
 
     def get_queryset(self, request):
-        return models.Organization.objects.all()
+        return models.Organization.objects.filter(is_active=True)
 
     def get_last_modified(self, view):
         return LogEntry.objects \

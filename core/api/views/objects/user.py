@@ -44,7 +44,7 @@ class Provider(BaseProvider):
         return [Identity] if self.request.mutate else [permissions.IsAuthenticated]
 
     def get_queryset(self, request):
-        return models.User.objects.all()
+        return models.User.objects.filter(is_active=True)
 
     def get_last_modified(self, view):
         return timezone.now()
