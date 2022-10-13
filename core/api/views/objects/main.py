@@ -115,6 +115,7 @@ class ObjectAPIView(GenericAPIViewWithDebugInfo):
         self.response = self.finalize_response(request, response, *args, **kwargs)
         return self.response
 
+
 class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
     mutate = False
     detail = False
