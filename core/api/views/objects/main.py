@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
-from ...utils import ListAPIViewWithFallback, GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo
+from ...utils import GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo
 
 
 __ALL__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
@@ -116,7 +116,7 @@ class ObjectAPIView(GenericAPIViewWithDebugInfo):
         return self.response
 
 
-class ObjectList(ObjectAPIView, ListAPIViewWithFallback, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
+class ObjectList(ObjectAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
     mutate = False
     detail = False
 
