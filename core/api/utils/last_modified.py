@@ -1,9 +1,9 @@
-from rest_framework import generics
+from rest_framework import generics, serializers
 from wsgiref.handlers import format_date_time
 from time import mktime
 
 
-class GenericAPIViewWithLastModified(generics.GenericAPIView):
+class GenericAPIViewWithLastModified():
     def get_last_modified(self):
         raise NotImplemented()
 
@@ -28,3 +28,39 @@ class GenericAPIViewWithDebugInfo(generics.GenericAPIView):
             resp["X-As-SU"] = 'true'
 
         return resp
+
+
+class ModelAbilityField(serializers.ModelField):
+    def __init__(self, ability, *args, **kwargs):
+        self.ability = ability
+        super().__init__(*args, **kwargs)
+
+    def get_attribute(self, instance):
+        return super().get_attribute(instance) if self.check(instance) else None
+
+    def check(self, instance):
+        user = self.context['request'].user
+        key = f'can_{self.ability}'
+        if not hasattr(user, key):
+            return False
+        if getattr(user, key)(instance) or user.is_superuser:
+            return True
+        return False
+
+
+class PrimaryKeyRelatedAbilityField(serializers.PrimaryKeyRelatedField):
+    def __init__(self, ability, *args, **kwargs):
+        self.ability = ability
+        super().__init__(*args, **kwargs)
+
+    def get_attribute(self, instance):
+        return super().get_attribute(instance) if self.check(instance) else None
+
+    def check(self, instance):
+        user = self.context['request'].user
+        key = f'can_{self.ability}'
+        if not hasattr(user, key):
+            return False
+        if getattr(user, key)(instance) or user.is_superuser:
+            return True
+        return False

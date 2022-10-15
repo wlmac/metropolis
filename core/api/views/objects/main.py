@@ -35,7 +35,7 @@ get_provider = gen_get_provider({
     "tag": "tag",
 })
 
-class ObjectAPIView(GenericAPIViewWithDebugInfo):
+class ObjectAPIView(generics.GenericAPIView):
     def get_as_su(self):
         return self.as_su
 
@@ -116,7 +116,7 @@ class ObjectAPIView(GenericAPIViewWithDebugInfo):
         return self.response
 
 
-class ObjectList(ObjectAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
+class ObjectList(GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo, ObjectAPIView, generics.ListAPIView):
     mutate = False
     detail = False
 
@@ -159,7 +159,7 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
         return super().get(*args, **kwargs)
 
 
-class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithLastModified):
+class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
     mutate = False
     detail = True
 

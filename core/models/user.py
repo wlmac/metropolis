@@ -69,3 +69,13 @@ class User(AbstractUser):
             return settings.METROPOLIS_STAFF_BIO[self.pk]
         else:
             return None
+
+    def can_edit(self, obj):
+        return obj.editable(user=self)
+
+    def can_approve(self, obj):
+        return obj.approvable(user=self)
+
+    @classmethod
+    def all(cls):
+        return cls.objects.filter(is_active=True)
