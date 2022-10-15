@@ -12,14 +12,15 @@ from .base import BaseProvider
 class Serializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tag
-        fields = ["id", "name", "color"]
+        fields = ("id", "name", "color")
+        read_only_fields = ("color",)
 
 
-class SupervisorOrExec(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
+class Inner(permissions.BasePermission):
+    def has_object_permission(self, request, view, tag):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user in {*(org := obj.organization).supervisors} | {*org.execs}:
+        if request.user.can_edit(tag):
             return True
         return False
 
@@ -30,7 +31,7 @@ class Provider(BaseProvider):
 
     @property
     def permission_classes(self):
-        return [permissions.DjangoModelPermissions | SupervisorOrExec] if self.request.mutate else [permissions.AllowAny]
+        return [permissions.DjangoModelPermissions | Inner] if self.request.mutate else [permissions.AllowAny]
 
     def get_queryset(self, request):
         return models.Tag.objects.all()
