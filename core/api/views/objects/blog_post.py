@@ -26,7 +26,10 @@ class Provider(BaseProvider):
         return [permissions.DjangoModelPermissions] if self.request.mutate else [permissions.AllowAny]
 
     def get_queryset(self, request):
-        return BlogPost.objects.filter(is_published=True) # TODO: allow viewing is_published=False for those with permissions
+        if request.user.has_perm('core.blog_post.view') or request.user.is_superuser:
+            return BlogPost.objects.all()
+        else:
+            return BlogPost.objects.filter(is_published=True)
 
     def get_last_modified(self, view):
         return view.get_object().last_modified_date
