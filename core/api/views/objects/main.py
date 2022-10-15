@@ -42,6 +42,7 @@ class ObjectAPIView(generics.GenericAPIView):
     def initial(self, *args, **kwargs):
         super().initial(*args, **kwargs)
         self.request.mutate = self.mutate
+        self.request.kind = self.kind
         self.request.detail = self.detail
         self.provider = provider = get_provider(kwargs.pop("type"))(self.request)
         if as_su := (self.request.GET.get('as-su') == 'true'):
@@ -149,6 +150,7 @@ class LookupField():
 class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
     mutate = True
     detail = None
+    kind = 'new'
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)

@@ -1,3 +1,6 @@
+from typing import List
+
+from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
@@ -24,6 +27,36 @@ class Serializer(serializers.ModelSerializer):
         ]
 
 
+def tdsb_email(value):
+    if not (validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX) and validated_data["email"].endswith(settings.STUDENT_EMAIL_SUFFIX)):
+        raise serializers.ValidationError('Must be an allowed email.')
+
+
+
+class NewSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(max_length=30, required=True)
+    last_name = serializers.CharField(max_length=30, required=True)
+    graduating_year = serializers.ChoiceField(choices=models.graduating_year_choices, required=True)
+    email = serializers.EmailField(validators=[tdsb_email, serializers.UniqueValidator(queryset=models.User.objects.all())], required=True)
+    username = serializers.RegexField('^[\w.@+-]+$', validators=[serializers.UniqueValidator(queryset=models.User.objects.all())], max_length=30, required=True)
+    password = serializers.CharField(required=True)
+
+    # Default `create` and `update` behavior...
+    def create(self, validated_data):
+        user = User()
+        keys = ('first_name', 'last_name', 'graduating_year', 'email', 'username', 'password')
+        for key in keys:
+            setattr(user, key, validated_data[key])
+        if validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
+            user.is_teacher = True
+        user.save()
+        return instance
+
+    class Meta:
+        model = models.User
+        fields: List[str] = []
+
+
 class Identity(permissions.BasePermission):
     def has_object_permission(self, request, view, user):
         if request.method in permissions.SAFE_METHODS:
@@ -34,14 +67,19 @@ class Identity(permissions.BasePermission):
 
 
 class Provider(BaseProvider):
-    serializer_class = Serializer
     model = models.User
     allow_list = False
-    allow_new = False
 
     @property
     def permission_classes(self):
         return [Identity] if self.request.mutate else [permissions.IsAuthenticated]
+
+    @property
+    def serializer_class(self):
+        if self.request.kind == 'new':
+            return NewSerializer
+        else:
+            return Serializer
 
     def get_queryset(self, request):
         return models.User.objects.filter(is_active=True)
