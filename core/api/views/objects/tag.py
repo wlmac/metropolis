@@ -12,8 +12,8 @@ from .base import BaseProvider
 class Serializer(serializers.ModelSerializer):
     class Meta:
         model = models.Tag
-        fields = ("id", "name", "color")
-        read_only_fields = ("color",)
+        fields = ["id", "name", "color"]
+        read_only_fields = ["color"]
 
 
 class Inner(permissions.BasePermission):

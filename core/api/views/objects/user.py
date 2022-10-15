@@ -44,7 +44,7 @@ class NewSerializer(serializers.ModelSerializer):
     # Default `create` and `update` behavior...
     def create(self, validated_data):
         user = User()
-        keys = ('first_name', 'last_name', 'graduating_year', 'email', 'username', 'password')
+        keys = ['first_name', 'last_name', 'graduating_year', 'email', 'username', 'password']
         for key in keys:
             setattr(user, key, validated_data[key])
         if validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
@@ -54,7 +54,7 @@ class NewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields: List[str] = []
+        fields = ["bio", "timezone", "organizations", "tags_following"]
 
 
 class Identity(permissions.BasePermission):

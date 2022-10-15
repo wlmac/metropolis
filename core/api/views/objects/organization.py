@@ -25,6 +25,7 @@ class SupervisorOrExec(permissions.BasePermission):
 class Provider(BaseProvider):
     serializer_class = Serializer
     model = models.Organization
+    allow_new = False
 
     @property
     def permission_classes(self):
