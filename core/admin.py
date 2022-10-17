@@ -106,7 +106,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         "banner",
         "icon",
     ]
-    autocomplete_fields = ["owner", "execs"]
+    autocomplete_fields = ["owner", "supervisors", "execs"]
     search_fields = ["name"]
     inlines = [
         TagInline,
