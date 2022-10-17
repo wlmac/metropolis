@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db.models import Q
 from django.urls import reverse
 from django_ical.views import ICalFeed
 from django.http import HttpResponse
@@ -25,9 +26,22 @@ class Index(TemplateView, mixins.TitleMixin):
         ]
 
         datetime_now = timezone.localtime()
-        context["events"] = models.Event.get_events(user=self.request.user).filter(
-            end_date__gte=datetime_now
-        ).order_by("start_date")[:3]
+        events1 = lambda: models.Event.get_events(user=self.request.user).filter(
+            end_date__gte=datetime_now,
+        ).order_by("start_date")
+        events = list(events1().filter(
+            ~Q(schedule_format="default"),
+        )[:1])
+        print('events', events)
+        print('default_events', events1())
+        print('default_events', events1().filter(
+            Q(schedule_format="default"),
+        )[:3-len(events)])
+        events += events1().filter(
+            Q(schedule_format="default"),
+        )[:3-len(events)]
+        print('events', events)
+        context["events"] = events
 
         context["blogpost"] = models.BlogPost.objects.filter(is_published=True).first()
 
