@@ -185,10 +185,11 @@ class AnnouncementAdmin(admin.ModelAdmin):
         ).distinct()
 
     def get_form(self, request, obj=None, **kwargs):
-        self.message_user(
-            request,
-            "The default status is now \'Draft\' as a trial. Please send feedback if applicable.",
-        )
+        if request.user.in_qltr('ann-draft'):
+            self.message_user(
+                request,
+                "The default status is now \'Draft\' as a trial. Please send feedback if applicable.",
+            )
         class Injector(AnnouncementForm):
             def __new__(cls, *args, **kwargs):
                 return AnnouncementForm(*args, request=request, **kwargs)
