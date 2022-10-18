@@ -120,11 +120,6 @@
                 <a class="full-content-page link" href="{% url 'announcement_list' %}">View all announcements <i
                         class='zmdi zmdi-chevron-right'></i></a>
             </div>
-            {% if 'ia' in request.user.qltrs2 %}
-                <p>
-                    The layout of this page has been changed. Please send feedback if applicable.
-                </p>
-            {% endif %}
         </div>
     </div>
 {% endblock %}
