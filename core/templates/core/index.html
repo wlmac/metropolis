@@ -30,20 +30,25 @@
             <div id="recent-events" class="card-list center-align">
                 <div class="cards-container">
                     {% for event in events %}
-                        <div class="event-card card {% if forloop.counter == 3 %} hide-on-med-and-down {% endif %}">
+                        <div class="event-card card {% if forloop.counter == 3 and 'ia' not in request.user.qltrs2 %} hide-on-med-and-down {% endif %}">
                             <div class="event-time right-align valign-wrapper"
                                  style="background-color: {{ event.tags.first.color }}">
                                 <div class="time-container">
                                     {% now "Y-M-d" as today %}
+                                    {% set normal = 'ia' in request.user.qltrs2 %}
                                     {% if event.start_date|date:"Y-M-D" != today %}
                                         <span class="date">{{ event.start_date|date }}</span><br>
                                     {% endif %}
-                                    <span class="time">{{ event.start_date|time:"g:i A"|lower }}</span><br>
+                                    {% if normal or event.start_date|time:"G:i:s" != "0:00:00" %}
+                                        <span class="time">{{ event.start_date|time:"g:i A"|lower }}</span><br>
+                                    {% endif %}
                                     <span class="intermediate">to</span><br>
                                     {% if event.end_date|date:"Y-M-D" != today %}
                                         <span class="date">{{ event.end_date|date }}</span><br>
                                     {% endif %}
-                                    <span class="time">{{ event.end_date|time:"g:i A"|lower }}</span>
+                                    {% if normal or event.end_date|time:"G:i" != "23:59" %}
+                                        <span class="time">{{ event.end_date|time:"g:i A"|lower }}</span><br>
+                                    {% endif %}
 
                                     {% if event.is_current %}
                                         <div style="margin-top: 1rem;">
@@ -79,7 +84,7 @@
             <div id="recent-announcements" class="center-align">
                 <div id="announcements" class="cards-container">
                     {% for announcement in announcements %}
-                        <div class="announcement-card card {% if forloop.counter == 3 %} hide-on-med-and-down {% endif %} left-align"
+                        <div class="announcement-card card {% if forloop.counter == 3 and 'ia' not in request.user.qltrs2 %} hide-on-med-and-down {% endif %} left-align"
                              style="border-color: {{ announcement.tags.first.color }}">
                             <a class="link" href="{{ announcement.pk|announcement_url }}">
                                 <h5 class="title truncate">{{ announcement.title }}</h5>
@@ -93,11 +98,13 @@
                                     {{ announcement.organization.slug|organization }}
                                 </div>
                             </div>
-                            <hr>
-                            <div class="announcement-description markdown-container">
-                                <a class="link" href="{{ announcement.pk|announcement_url }}">See announcement <i
-                                        class='zmdi zmdi-chevron-right'></i></a>
-                            </div>
+                            {% if 'ia' not in request.user.qltrs2 %}
+                                <hr>
+                                <div class="announcement-description markdown-container">
+                                    <a class="link" href="{{ announcement.pk|announcement_url }}">See announcement <i
+                                            class='zmdi zmdi-chevron-right'></i></a>
+                                </div>
+                            {% endif %}
                         </div>
                     {% empty %}
                         There are no announcements at this time.
@@ -106,6 +113,11 @@
                 <a class="full-content-page link" href="{% url 'announcement_list' %}">View all announcements <i
                         class='zmdi zmdi-chevron-right'></i></a>
             </div>
+            {% if 'ia' in request.user.qltrs2 %}
+                <p>
+                    The layout of this page has been changed. Please send feedback if applicable.
+                </p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

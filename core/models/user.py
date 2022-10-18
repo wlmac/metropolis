@@ -35,6 +35,10 @@ class User(AbstractUser):
         "Qualified Trials", null=True
     )
 
+    @property
+    def qltrs2(self):
+        return set(self.qltrs.split(' '))
+
     def in_qltr(self, name: str):
         if self.qltrs:
             return name in self.qltrs
