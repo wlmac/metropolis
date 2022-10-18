@@ -46,14 +46,17 @@
                                         <span class="time">{{ event.start_date|time:"g:i A"|lower }}</span><br>
                                     {% endif %}
                                     <span class="intermediate">to</span><br>
-                                    {% if event.end_date|date:"Y-M-D" != today %}
-                                        <span class="date">{{ event.end_date|date }}</span><br>
-                                    {% endif %}
                                     {% if 'ia' in request.user.qltrs2 %}
+                                        {% if event.end_date|date:"Y-M-D" != event.start_date %}
+                                            <span class="date">{{ event.end_date|date }}</span><br>
+                                        {% endif %}
                                         {% if normal or event.end_date|time:"G:i" != "23:59" %}
                                             <span class="time">{{ event.end_date|time:"g:i A"|lower }}</span><br>
                                         {% endif %}
                                     {% else %}
+                                        {% if event.end_date|date:"Y-M-D" != today %}
+                                            <span class="date">{{ event.end_date|date }}</span><br>
+                                        {% endif %}
                                         <span class="time">{{ event.end_date|time:"g:i A"|lower }}</span><br>
                                     {% endif %}
 
@@ -105,12 +108,15 @@
                                     {{ announcement.organization.slug|organization }}
                                 </div>
                             </div>
+                            {% if 'ia' in request.user.qltrs2 %}
+                                <div class="announcement-description markdown-container hide-on-med-and-down">
+                                    <p>{{ announcement.body|markdown|striptags|linebreaksbr }}</p>
+                                </div>
+                            {% endif %}
                             {% if 'ia' not in request.user.qltrs2 %}
                                 <hr>
-                                <div class="announcement-description markdown-container">
-                                    <a class="link" href="{{ announcement.pk|announcement_url }}">See announcement <i
-                                            class='zmdi zmdi-chevron-right'></i></a>
-                                </div>
+                                <a class="link" href="{{ announcement.pk|announcement_url }}">See announcement <i
+                                    class='zmdi zmdi-chevron-right'></i></a>
                             {% endif %}
                         </div>
                     {% empty %}
