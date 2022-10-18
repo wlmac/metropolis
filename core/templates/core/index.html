@@ -47,7 +47,7 @@
                                     {% endif %}
                                     <span class="intermediate">to</span><br>
                                     {% if 'ia' in request.user.qltrs2 %}
-                                        {% if event.end_date|date:"Y-M-D" != event.start_date %}
+                                        {% if event.end_date|date:"Y-M-D" != event.start_date|date:"Y-M-D" %}
                                             <span class="date">{{ event.end_date|date }}</span><br>
                                         {% endif %}
                                         {% if normal or event.end_date|time:"G:i" != "23:59" %}
