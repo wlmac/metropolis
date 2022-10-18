@@ -24,6 +24,11 @@ class Command(BaseCommand):
             action="store_true",
             help="Just show what courses will be updated or skipped; don't actually write them.",
         )
+        parser.add_argument(
+            "--jsonl",
+            action="store_true",
+            help="Read a single JSON object per line.",
+        )
 
     def handle(self, *args, **options):
         dry_run = options["dry_run"]
@@ -37,22 +42,22 @@ class Command(BaseCommand):
 
         try:
             with open(options["json_file"], "r") as f:
-                dirty_data = json.load(f)
+                dirty_data = map(json.loads, f) if options["jsonl"] else json.load(f)
 
-                if not isinstance(dirty_data, list):
-                    raise InvalidCourseJSONFileError
+                if (not options["jsonl"]) and not isinstance(dirty_data, list):
+                    raise InvalidCourseJSONFileError("not a list")
 
                 for course_json in dirty_data:
                     if not isinstance(course_json, dict):
-                        raise InvalidCourseJSONFileError
+                        raise InvalidCourseJSONFileError("not an object")
 
                     if "code" not in course_json or "position" not in course_json:
-                        raise InvalidCourseJSONFileError
+                        raise InvalidCourseJSONFileError("code and position required")
 
                     if not isinstance(course_json["code"], str) or not isinstance(
                         course_json["position"], int
                     ):
-                        raise InvalidCourseJSONFileError
+                        raise InvalidCourseJSONFileError("code and/or position wrong type")
 
                     data.append(
                         {
@@ -64,8 +69,8 @@ class Command(BaseCommand):
             raise CommandError("Specified file does not exist")
         except json.decoder.JSONDecodeError:
             raise CommandError("Specified file is not a valid JSON file")
-        except InvalidCourseJSONFileError:
-            raise CommandError("Invalid JSON format")
+        except InvalidCourseJSONFileError as e:
+            raise CommandError(f"Invalid JSON format: {e}")
 
         num_courses_added = 0
         num_courses_updated = 0
