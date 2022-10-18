@@ -32,8 +32,13 @@ class User(AbstractUser):
         "Tag", blank=True, related_name="followers", related_query_name="follower"
     )
     qltrs = SetField(
-        "Qualified Trials", blank=True
+        "Qualified Trials", null=True
     )
+
+    def in_qltr(self, name: str):
+        if self.qltrs:
+            return name in self.qltrs
+        return False
 
     def get_current_timetable(self):
         current_term = Term.get_current()

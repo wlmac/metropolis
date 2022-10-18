@@ -250,3 +250,15 @@ class TagAdminForm(forms.ModelForm):
     class Meta:
         model = models.Tag
         fields = "__all__"
+
+
+class AnnouncementForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+        if request.user.in_qltr('ann-draft'):
+            self.fields['status'].initial = 'd'
+
+    class Meta:
+        model = models.Announcement
+        fields = "__all__"

@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
+from django.contrib import messages
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -16,6 +17,7 @@ from metropolis import settings
 
 from . import models
 from .forms import (
+    AnnouncementForm,
     EventAdminForm,
     OrganizationAdminForm,
     TagAdminForm,
@@ -181,6 +183,16 @@ class AnnouncementAdmin(admin.ModelAdmin):
             Q(organization__supervisors=request.user)
             | Q(organization__execs=request.user)
         ).distinct()
+
+    def get_form(self, request, obj=None, **kwargs):
+        self.message_user(
+            request,
+            "The default status is now \'Draft\' as a trial. Please send feedback if applicable.",
+        )
+        class Injector(AnnouncementForm):
+            def __new__(cls, *args, **kwargs):
+                return AnnouncementForm(*args, request=request, **kwargs)
+        return Injector
 
     def get_readonly_fields(self, request, obj=None):
         if obj == None or request.user.is_superuser:

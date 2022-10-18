@@ -963,7 +963,11 @@ SIMPLE_JWT = {
 ICAL_PADDING = timedelta(days=4*7)
 
 # Qualified Trials
-QLTR: Dict[str, Dict] = {}
+QLTR: Dict[str, Dict] = {
+    "ann-draft": dict(
+        title="Announcement Status Default as Draft",
+    ),
+}
 
 THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
 THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
