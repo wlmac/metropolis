@@ -190,10 +190,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
                 request,
                 "The default status is now \'Draft\' as a trial. Please send feedback if applicable.",
             )
-        class Injector(AnnouncementForm):
-            def __new__(cls, *args, **kwargs):
-                return AnnouncementForm(*args, request=request, **kwargs)
-        return Injector
+            kwargs["form"] = AnnouncementForm
+        return super().get_form(request, obj, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):
         if obj == None or request.user.is_superuser:
