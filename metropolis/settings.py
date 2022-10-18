@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from datetime import timedelta, datetime
+from typing import Dict
 import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -961,12 +962,15 @@ SIMPLE_JWT = {
 # iCalendar Feed
 ICAL_PADDING = timedelta(days=4*7)
 
-try:
-    from metropolis.config import *
-except ImportError:
-    print("Please create a config file to override values in settings.py")
+# Qualified Trials
+QLTR: Dict[str, Dict] = {}
 
 THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
 THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
 THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
 THEME_CSS = THEMES[CURRENT_THEME]["theme"]
+
+try:
+    from metropolis.config import *
+except ImportError:
+    print("Please create a config file to override values in settings.py")

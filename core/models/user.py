@@ -7,6 +7,7 @@ from django.db.models import Q
 from .choices import graduating_year_choices, timezone_choices
 from .course import Term
 from .post import Announcement
+from .util import SetField
 
 # Create your models here.
 
@@ -29,6 +30,9 @@ class User(AbstractUser):
     )
     tags_following = models.ManyToManyField(
         "Tag", blank=True, related_name="followers", related_query_name="follower"
+    )
+    qltrs = SetField(
+        "Qualified Trials", blank=True
     )
 
     def get_current_timetable(self):
