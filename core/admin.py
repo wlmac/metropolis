@@ -283,7 +283,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
             return {}
 
         if obj == None:
-            return {"author", "supervisor", "status", "rejection_reason"}
+            return {"author", "supervisor", "rejection_reason"}
 
         status_idx = ["d", "p", "a", "r"].index(obj.status)
 
