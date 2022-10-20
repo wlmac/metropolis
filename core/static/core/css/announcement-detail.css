@@ -180,3 +180,7 @@ hr {
                 transform: scale(0.8);
     }
 }
+
+.admin {
+    text-align: right;
+}

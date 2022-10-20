@@ -26,6 +26,9 @@
         </script>
     </div>
     <div class="card-container">
+  			<div class="admin">
+  			    <a class="link" href="{% url 'admin:core_announcement_change' object_id=announcement.id %}">Edit</a>
+  			</div>
         <div class="tag-section">
             {% if announcement.status != 'a' %}
             <p class="tag" style="background-color:{% tag_color 0 %}">Unpublished</p>
