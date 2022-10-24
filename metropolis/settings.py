@@ -914,7 +914,7 @@ THEMES = {
     },
 }
 
-CURRENT_THEME = "winter"
+CURRENT_THEME = "autumn"
 
 # Lazy Loading
 
