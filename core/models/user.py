@@ -32,7 +32,7 @@ class User(AbstractUser):
         "Tag", blank=True, related_name="followers", related_query_name="follower"
     )
     qltrs = SetField(
-        "Qualified Trials", null=True
+        "Qualified Trials", null=True, blank=True
     )
 
     @property
