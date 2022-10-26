@@ -17,7 +17,8 @@ from metropolis import settings
 
 from . import models
 from .forms import (
-    AnnouncementForm,
+    AnnouncementAdminForm,
+    AnnouncementSupervisorAdminForm,
     EventAdminForm,
     OrganizationAdminForm,
     TagAdminForm,
@@ -188,9 +189,9 @@ class AnnouncementAdmin(admin.ModelAdmin):
         if request.user.in_qltr('ann-draft'):
             self.message_user(
                 request,
-                "The default status is now \'Draft\' as a trial. Please send feedback if applicable.",
+                "The default status is now \'Draft\' as a trial. Set it to \'Pending Approval\' to send to supervisor(s) for approval. Please send feedback if applicable.",
             )
-            kwargs["form"] = AnnouncementForm
+            kwargs["form"] = AnnouncementSupervisorAdminForm if request.user.is_superuser or request.user.is_teacher else AnnouncementAdminForm
         return super().get_form(request, obj, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):

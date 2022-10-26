@@ -20,3 +20,8 @@ announcement_status_choices = [
     ("a", "Approved"),
     ("r", "Rejected"),
 ]
+
+announcement_status_initial_choices = [
+    ("d", "Draft (don't send)"),
+    ("p", "Send to supervisor for review"),
+]

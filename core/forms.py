@@ -252,7 +252,18 @@ class TagAdminForm(forms.ModelForm):
         fields = "__all__"
 
 
-class AnnouncementForm(forms.ModelForm):
+class AnnouncementAdminForm(forms.ModelForm):
+    status = forms.ChoiceField(
+        widget=forms.Select(),
+        choices=models.announcement_status_initial_choices,
+    )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'status' in self.fields:
+            self.fields['status'].initial = 'd'
+
+
+class AnnouncementSupervisorAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if 'status' in self.fields:
