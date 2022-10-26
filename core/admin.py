@@ -183,6 +183,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         return qs.filter(
             Q(organization__supervisors=request.user)
             | Q(organization__execs=request.user)
+            | Q(organization__is_active=True)
         ).distinct()
 
     def get_form(self, request, obj=None, **kwargs):
