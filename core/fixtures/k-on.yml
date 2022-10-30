@@ -1,0 +1,411 @@
+---
+- model: core.tag
+  pk: 1
+  fields:
+    name: religious holiday
+    description: Some religions may observe this occasion and students may be absent,
+      but does not mean there is no school.
+    organization: 2
+- model: core.tag
+  pk: 2
+  fields:
+    name: holiday
+    description: Canadian statutory holiday, no school!
+    organization: 2
+- model: core.tag
+  pk: 4
+  fields:
+    name: schedule change
+    description: The school schedule is not following regular schedule today.
+    organization: 2
+- model: core.tag
+  pk: 5
+  fields:
+    name: science
+    description: ''
+    organization:
+- model: core.tag
+  pk: 6
+  fields:
+    name: math
+    description: ''
+    organization:
+- model: core.tag
+  pk: 7
+  fields:
+    name: business
+    description: ''
+    organization:
+- model: core.tag
+  pk: 8
+  fields:
+    name: athletics
+    description: ''
+    organization:
+- model: core.tag
+  pk: 9
+  fields:
+    name: technology
+    description: ''
+    organization:
+- model: core.tag
+  pk: 10
+  fields:
+    name: visual art & photography
+    description: ''
+    organization:
+- model: core.tag
+  pk: 11
+  fields:
+    name: dance
+    description: ''
+    organization:
+- model: core.tag
+  pk: 12
+  fields:
+    name: music
+    description: ''
+    organization:
+- model: core.tag
+  pk: 13
+  fields:
+    name: drama
+    description: ''
+    organization:
+- model: core.tag
+  pk: 14
+  fields:
+    name: languages & writing
+    description: ''
+    organization:
+- model: core.tag
+  pk: 15
+  fields:
+    name: cultural & community
+    description: ''
+    organization:
+- model: core.tag
+  pk: 16
+  fields:
+    name: awareness
+    description: ''
+    organization:
+- model: core.tag
+  pk: 17
+  fields:
+    name: environment
+    description: ''
+    organization:
+- model: core.tag
+  pk: 18
+  fields:
+    name: councils
+    description: ''
+    organization:
+- model: core.tag
+  pk: 19
+  fields:
+    name: health
+    description: ''
+    organization:
+- model: core.tag
+  pk: 20
+  fields:
+    name: prizes
+    description: ''
+    organization:
+- model: core.tag
+  pk: 21
+  fields:
+    name: news
+    description: ''
+    organization:
+- model: core.tag
+  pk: 22
+  fields:
+    name: spirit
+    description: ''
+    organization:
+- model: core.tag
+  pk: 23
+  fields:
+    name: gaming
+    description: ''
+    organization:
+- model: core.tag
+  pk: 24
+  fields:
+    name: social
+    description: ''
+    organization:
+- model: core.tag
+  pk: 25
+  fields:
+    name: competition
+    description: ''
+    organization:
+- model: core.tag
+  pk: 26
+  fields:
+    name: post-secondary
+    description: ''
+    organization:
+- model: core.tag
+  pk: 27
+  fields:
+    name: seminars, workshops & speakers
+    description: ''
+    organization:
+- model: core.tag
+  pk: 28
+  fields:
+    name: fundraisers
+    description: ''
+    organization:
+- model: core.tag
+  pk: 29
+  fields:
+    name: club events
+    description: ''
+    organization:
+- model: core.tag
+  pk: 30
+  fields:
+    name: club applications
+    description: ''
+    organization:
+- model: core.tag
+  pk: 31
+  fields:
+    name: open membership
+    description: ''
+    organization:
+- model: core.tag
+  pk: 32
+  fields:
+    name: accepting applications
+    description: ''
+    organization:
+- model: core.tag
+  pk: 33
+  fields:
+    name: closed application
+    description: ''
+    organization:
+- model: core.tag
+  pk: 34
+  fields:
+    name: guide
+    description: ''
+    organization: 1
+- model: core.tag
+  pk: 35
+  fields:
+    name: dev diary
+    description: ''
+    organization: 1
+- model: core.tag
+  pk: 37
+  fields:
+    name: gardening
+    description: ''
+    organization:
+- model: core.tag
+  pk: 38
+  fields:
+    name: fundraiser
+    description: ''
+    organization:
+- model: core.tag
+  pk: 41
+  fields:
+    name: current events
+    description: ''
+    organization: 38
+- model: core.tag
+  pk: 42
+  fields:
+    name: social discourse
+    description: ''
+    organization: 38
+- model: core.tag
+  pk: 43
+  fields:
+    name: in-person
+    description: ''
+    organization:
+- model: core.tag
+  pk: 45
+  fields:
+    name: 3d design
+    description: ''
+    organization: 36
+- model: core.tag
+  pk: 46
+  fields:
+    name: make or break
+    description: 6-week series where participants attempt to (and reflect upon their
+      attempts to) form typical good habits or dispose of infamous bad ones.
+    organization: 1
+- model: core.tag
+  pk: 47
+  fields:
+    name: year by year
+    description: The mini-society that is high school typically houses a myriad of
+      personalities, issues, rivalries, and friendships. While diversity is prevalent,
+      there tend to be stereotypical classifications between the four grades. WLMAC
+      is no exception. Year to Year features the perspectives between different grades.
+    organization: 1
+- model: core.tag
+  pk: 50
+  fields:
+    name: humans of wlmac
+    description: A photojournalism project, started by Bernie C. and Justin L.
+    organization: 1
+- model: core.tag
+  pk: 51
+  fields:
+    name: mactoberfest
+    description: Special features to celebrate Halloween at Mac
+    organization: 1
+- model: core.tag
+  pk: 52
+  fields:
+    name: fundraising
+    description: ''
+    organization: 33
+- model: core.tag
+  pk: 53
+  fields:
+    name: medicine
+    description: ''
+    organization: 33
+- model: core.tag
+  pk: 54
+  fields:
+    name: education
+    description: ''
+    organization: 33
+- model: core.tag
+  pk: 55
+  fields:
+    name: week in review
+    description: ''
+    organization: 1
+- model: core.tag
+  pk: 57
+  fields:
+    name: school
+    description: Important dates pertaining to the entire school, such as exam dates
+    organization: 2
+- model: core.tag
+  pk: 58
+  fields:
+    name: Life
+    description: Posts just because someone felt like it:)
+    organization: 1
+- model: core.tag
+  pk: 59
+  fields:
+    name: graduates
+    description: Anything pertaining to the graduating class of this year
+    organization: 2
+- model: core.tag
+  pk: 61
+  fields:
+    name: resources
+    description: ''
+    organization:
+- model: core.tag
+  pk: 62
+  fields:
+    name: computer science
+    description: ''
+    organization: 5
+- model: core.tag
+  pk: 63
+  fields:
+    name: cybersecurity
+    description: ''
+    organization: 5
+- model: core.tag
+  pk: 64
+  fields:
+    name: in a day in the life of
+    description: Ever wondered what your teachers are up to when you aren't around?
+      Ever contemplated what it's like when you *are* around? Or would you simply
+      like to hear them be put on the spot, just once? “A Day in the Life of” is a
+      podcast series by Project Metropolis, featuring the most famous and infamous
+      staff at WLMAC. Listen to find out all about what it’s like dealing with teenagers
+      for a living, and what else needs to be dealt with that lies behind closed doors
+      finally opened.
+    organization: 1
+
+- model: core.user
+  pk: 1
+  fields:
+    last_login: '2022-01-01T00:00:00.000Z'
+    is_superuser: false
+    username: yhirasawa
+    first_name: Yui
+    last_name: Hirasawa
+    email: yui.hirasawa@student.tdsb.on.ca
+    is_staff: false
+    is_active: true
+    date_joined: '2022-01-01T00:00:00.000Z'
+    bio: ''
+    timezone: America/Toronto
+    graduating_year: 2024
+    is_teacher: false
+    groups: []
+    user_permissions: []
+    organizations: []
+    tags_following: []
+- model: core.user
+  pk: 2
+  fields:
+    last_login: '2022-01-01T00:00:00.000Z'
+    is_superuser: false
+    username: syamanaka
+    first_name: Sawako
+    last_name: Yamanaka
+    email: sawako.yamanaka@tdsb.on.ca
+    is_staff: true
+    is_active: true
+    date_joined: '2022-01-01T00:00:00.000Z'
+    bio: ''
+    timezone: America/Toronto
+    is_teacher: true
+    groups: []
+    user_permissions: []
+    organizations: []
+    tags_following: []
+
+
+- model: core.tag
+  pk: 61
+  fields:
+    name: performance
+    description: Usually happens twice a year, at major events such as the culture festival.
+    organization: 3
+- model: core.organization
+  pk: 3
+  fields:
+    owner: 1
+    name: Light Music Club
+    bio: ''
+    extra_content: ''
+    slug: k-on
+    registered_date: '2022-01-01T00:00:00.000Z'
+    show_members: true
+    is_active: true
+    is_open: true
+    applications_open: false
+    banner: banners/default.png
+    icon: icons/default.png
+    supervisors:
+    - 2
+    execs:
+    - 1
+    tags:
+    - 12

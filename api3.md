@@ -71,14 +71,14 @@ Cannot be used.
 
 `shrink_last_modified_before`ts modified before supplied time will just have a pk in place of the object.
 
-Pagination (`limit` and `offset`): control what data to return.
+Pagination (`limit` and `offset`; both **mandatory**): control what data to return.
 **Note** using one of `limit` and `offset` causes undefined behaviour.
 **Note**
 `limit` is the maximum number of items to return.
 `offset` is the starting position of the items to return.
 See [https://www.django-rest-framework.org/api-guide/pagination/#limitoffsetpagination] for details.
 
-If pagination is used, the result will be this format:
+the result will be this format:
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/objects.json
@@ -87,7 +87,7 @@ properties:
   count: { type: integer }
   next: { type: string, format: url }
   previous: { type: string, format: url }
-  results: { type: array, items: object_type }
+  results: { type: array, items: object_specific_type }
 ```
 
 Example:
