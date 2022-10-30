@@ -571,7 +571,7 @@ class FlatPageAdmin(FlatPageAdmin):
 
 
 class RaffleAdmin(admin.ModelAdmin):
-    pass
+    list_dispaly = ["__str__", "open_start", "open_end"]
 
 
 admin.site.register(User, UserAdmin)

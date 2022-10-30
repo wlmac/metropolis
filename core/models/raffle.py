@@ -11,3 +11,6 @@ class Raffle(models.Model):
     page_win = models.CharField(max_length=128)
     page_lose = models.CharField(max_length=128)
     codes_win = SetField("Winning Codes", null=True, blank=True)
+
+    def __str__(self):
+        return self.name
