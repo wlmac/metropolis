@@ -49,6 +49,7 @@ urlpatterns = [
     path("tv", views.TVView.as_view(), name="tv"),
     path("tv/clubs", views.TVClubView.as_view(), name="tvclub"),
     path("c/<int:pk>", views.OrganizationShort.as_view(), name="organization_short"),
+    path("raffle", views.RaffleRedirect.as_view(), name="raffle"),
 ]
 
 if settings.LAZY_LOADING:

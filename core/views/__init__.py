@@ -4,3 +4,4 @@ from .post import *
 from .timetable import *
 from .tv import *
 from .user import *
+from .raffle import *
