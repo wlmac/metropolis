@@ -120,6 +120,7 @@ class ObjectAPIView(generics.GenericAPIView):
 class ObjectList(GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo, ObjectAPIView, generics.ListAPIView):
     mutate = False
     detail = False
+    kind = 'list'
 
     def get_last_modified(self):
         return self.provider.get_last_modified_queryset()
@@ -164,6 +165,7 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
 class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
     mutate = False
     detail = True
+    kind = 'retrieve'
 
     def get_admin_url(self):
         model = self.provider.model
@@ -179,6 +181,7 @@ class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, Gener
 class ObjectSingle(ObjectAPIView, LookupField, generics.DestroyAPIView, generics.UpdateAPIView):
     mutate = True
     detail = None
+    kind = 'single'
 
     def get_admin_url(self):
         model = self.provider.model
