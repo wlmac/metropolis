@@ -28,7 +28,8 @@ hr {
     margin-bottom: 0;
 }
 .content-body .markdown-embed, .content-body img {
-    width: 100%;
+    max-width: 100%;
+    width: auto;
 }
 @media screen and (max-width: 600px) {
     .content {
