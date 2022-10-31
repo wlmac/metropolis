@@ -30,6 +30,21 @@
 </div>
 {% endif %}
 
+{% settings_value "BANNER2" as banner2 %}
+{% for value in banner2 %}
+    <div class="install-popup">
+        {% if value.logo %}
+            <img src="{% settings_value 'THEME_LOGO' %}">
+        {% endif %}
+        <span>{{ value.text | safe }}</span>
+        <div>
+            <a id="install-popup-button" class="waves-effect waves-light btn" href="{{ value.url }}" target="_blank">
+                {{ value.url_text }}
+            </a>
+        </div>
+    </div>
+{% endfor %}
+
 <ul id="dropdownAcc" class="dropdown-content">
     {% if request.user.is_authenticated %}
     <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
