@@ -21,3 +21,8 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+    def editable(self, user=None):
+        if user is None:
+            return False
+        return user in (org := self.organization).supervisors.all() | org.execs.all()

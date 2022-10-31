@@ -84,6 +84,16 @@ class Announcement(Post):
 
         return feed_all
 
+    def editable(self, user=None):
+        if user is None:
+            return False
+        return user in (org := self.organization).supervisors.all() | org.execs.all()
+
+    def approvable(self, user=None):
+        if user is None:
+            return False
+        return user in (org := self.organization).supervisors.all()
+
 
 def featured_image_file_path_generator(instance, file_name):
     return file_upload_path_generator("featured_image")(instance, file_name)

@@ -570,6 +570,10 @@ class FlatPageAdmin(FlatPageAdmin):
     )
 
 
+class RaffleAdmin(admin.ModelAdmin):
+    list_dispaly = ["__str__", "open_start", "open_end"]
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(models.Timetable, TimetableAdmin)
 admin.site.register(models.Term, TermAdmin)
@@ -578,6 +582,7 @@ admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
+admin.site.register(models.Raffle, RaffleAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, FlatPageAdmin)

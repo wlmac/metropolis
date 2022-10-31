@@ -957,6 +957,7 @@ ROOT = "http://localhost"
 SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
+    "UPDATE_LAST_LOGIN": True,
 }
 
 # iCalendar Feed
@@ -976,6 +977,9 @@ THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
 THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
 THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
 THEME_CSS = THEMES[CURRENT_THEME]["theme"]
+
+TEACHER_EMAIL_SUFFIX = '@tdsb.on.ca'
+STUDENT_EMAIL_SUFFIX = '@student.tdsb.on.ca'
 
 try:
     from metropolis.config import *
