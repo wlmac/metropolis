@@ -27,9 +27,12 @@ hr {
 .content-body > *:last-child {
     margin-bottom: 0;
 }
-.content-body .markdown-embed, .content-body img {
+.content-body img {
     max-width: 100%;
     width: auto;
+}
+.content-body .markdown-embed {
+    width: 100%;
 }
 @media screen and (max-width: 600px) {
     .content {
