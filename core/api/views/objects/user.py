@@ -35,6 +35,18 @@ class Serializer(serializers.ModelSerializer):
         ]
 
 
+class ListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = [
+            "id",
+            "username",
+            "first_name",
+            "last_name",
+            "graduating_year",
+        ]
+
+
 def tdsb_email(value):
     if not (validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX) and validated_data["email"].endswith(settings.STUDENT_EMAIL_SUFFIX)):
         raise serializers.ValidationError('Must be an allowed email.')
@@ -83,10 +95,10 @@ class Provider(BaseProvider):
 
     @property
     def serializer_class(self):
-        if self.request.kind == 'new':
-            return NewSerializer
-        else:
-            return Serializer
+        return dict(
+            new=NewSerializer,
+            list=ListSerializer,
+        ).get(self.request.kind, Serializer)
 
     def get_queryset(self, request):
         return models.User.objects.filter(is_active=True)
