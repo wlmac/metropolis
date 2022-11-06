@@ -1,3 +1,5 @@
+import base64
+import hashlib
 from typing import List
 
 from django.conf import settings
@@ -12,11 +14,17 @@ from .base import BaseProvider
 
 
 class Serializer(serializers.ModelSerializer):
+    email_hash = serializers.SerializerMethodField(read_only=True)
+
+    def get_email_hash(self, obj):
+        return base64.standard_b64encode(hashlib.md5(obj.email.encode('utf-8')).digest())
+
     class Meta:
         model = models.User
         fields = [
             "id",
             "username",
+            "email_hash",
             "first_name",
             "last_name",
             "bio",
