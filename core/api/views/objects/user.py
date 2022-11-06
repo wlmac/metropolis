@@ -76,7 +76,6 @@ class Identity(permissions.BasePermission):
 
 class Provider(BaseProvider):
     model = models.User
-    allow_list = False
 
     @property
     def permission_classes(self):
