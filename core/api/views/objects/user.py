@@ -48,9 +48,8 @@ class ListSerializer(serializers.ModelSerializer):
 
 
 def tdsb_email(value):
-    if not (validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX) and validated_data["email"].endswith(settings.STUDENT_EMAIL_SUFFIX)):
-        raise serializers.ValidationError('Must be an allowed email.')
-
+    if not (value.endswith(settings.TEACHER_EMAIL_SUFFIX) and value.endswith(settings.STUDENT_EMAIL_SUFFIX)):
+        raise serializers.ValidationError('Must be either a teacher or student email.')
 
 
 class NewSerializer(serializers.ModelSerializer):
@@ -74,7 +73,7 @@ class NewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields = ["bio", "timezone", "organizations", "tags_following"]
+        fields = ["first_name", "last_name", "graduating_year", "email", "username", "password", "bio", "timezone", "organizations", "tags_following"]
 
 
 class Identity(permissions.BasePermission):

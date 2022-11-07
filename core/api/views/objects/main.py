@@ -156,10 +156,10 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
-    def get(self, *args, **kwargs):
+    def post(self, *args, **kwargs):
         if not self.provider.allow_new:
             return Response({'detail': 'creating not allowed'}, status=422)
-        return super().get(*args, **kwargs)
+        return super().post(*args, **kwargs)
 
 
 class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
