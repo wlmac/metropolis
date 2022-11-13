@@ -8,6 +8,7 @@ from .base import BaseProvider
 
 
 class Serializer(serializers.ModelSerializer):
+    links = serializers.SlugRelatedField(slug_field="url", many=True, queryset=models.OrganizationURL.objects.all())
     class Meta:
         model = models.Organization
         fields = "__all__"
