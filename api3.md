@@ -216,11 +216,38 @@ type: object
 properties:
   id: { type: integer }
   slug: { type: string }
-  name: { type: array, minLen: 2, maxLen: 2, items: { type: string } }
+  name: { type: string }
   bio: { type: string }
   timezone: { type: string }
   graduatingYear: { type: integer }
   organizations: { type: array, items: { type: integer } }
   following: { type: array, items: { type: integer } }
+```
+
+
+## Organization
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/organization.json
+type: object
+properties:
+  id: { type: integer }
+  owner: { type: integer }
+  supervisors: { type: array, items: { type: integer } }
+  execs: { type: array, items: { type: integer } }
+  members: { type: array, items: { type: integer } }
+  name: { type: string }
+  bio: { type: string }
+  extra_content: { type: string }
+  slug: { type: string }
+  registered_date: { type: string, format: date-time }
+  show_members: { type: boolean }
+  is_active: { type: boolean }
+  is_open: { type: boolean }
+  applications_open: { type: boolean }
+  tags: { type: array, items: { type: integer } }
+  banner: { type: string }
+  icon: { type: string }
+  links: { type: array, items: { type: string } }
 ```
 
