@@ -1,5 +1,5 @@
 
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+name: Jekyll
 
 on:
   push:
