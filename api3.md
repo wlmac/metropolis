@@ -1,7 +1,9 @@
 # API v3
 
 **Note** All endpoints return JSON notwithstanding exceptions.
+
 **Note** use the Last-Modified header to determine if you should receive content. (conditional requests will not be implemented)
+
 **Base URL**: `https://maclyonsden.com/api`
 
 ## Get Feeds
