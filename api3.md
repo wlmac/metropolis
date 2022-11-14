@@ -28,7 +28,7 @@
 
 ## Get User
 
-= `GET v3/user/<id>`
+- `GET v3/user/<id>`
 
 **Cache Until**: 24 hours after last fetch
 
