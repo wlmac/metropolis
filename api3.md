@@ -18,15 +18,17 @@
 [1, 8]
 ```
 
-**Get Staff**
-`GET v3/staff`
+## Get Staff
+
+- `GET v3/staff`
 
 **Cache Until**: 24 hours after the last fetch
 
 **Returns** a list of all `Staff`.
 
 ## Get User
-`GET v3/user/<id>`
+
+= `GET v3/user/<id>`
 
 **Cache Until**: 24 hours after last fetch
 
@@ -48,7 +50,8 @@ properties:
 ```
 
 ## Get Terms
-`GET terms`
+
+- `GET terms`
 
 **Cache Until**: 24 hours after last fetch
 **Note** has `Last-Modified` header.
@@ -56,12 +59,15 @@ properties:
 **Returns** a list of all `Term`s.
 
 ## Objects
+
 **Base URL**: `v3/obj/<type>`
 
 **Cache Until**: changes are detected (via the changes endpoint, which should be fetched when data is requested from the user of the library)
 
 ## Get Objects
-`GET /`
+
+- `GET /`
+
 **Note** has `Last-Modified` header.
 
 For `event`:
@@ -108,14 +114,18 @@ Example:
 `POST new`
 
 ## (Single) Object
-`GET retrieve/<id>`
-`PUT single/<id>`
-`PATCH single/<id>`
-`DELETE single/<id>`
+
+- `GET retrieve/<id>`
+- `PUT single/<id>`
+- `PATCH single/<id>`
+- `DELETE single/<id>`
+
 **Note** has `Last-Modified` header.
 
-For `flatpage`:
+### For `flatpage`
+
 **Note** `id` is the slug.
+
 **Returns** title then content separated by `\n`, such as:
 ```
 This is the title blah in plain text
