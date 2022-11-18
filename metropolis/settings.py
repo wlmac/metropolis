@@ -747,7 +747,6 @@ OAUTH2_PROVIDER = dict(
     },
     CLIENT_ID_GENERATOR_CLASS="oauth2_provider.generators.ClientIdGenerator",
     OIDC_ENABLED=True,
-    OIDC_TOKEN_ENDPOINT_AUTH_METHODS_SUPPORTED=('client_secret_post',),
 )
 with open(os.path.join(os.path.dirname(__file__), 'local_rsa_privkey.pem')) as f:
     OAUTH2_PROVIDER.update(dict(
