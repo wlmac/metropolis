@@ -737,16 +737,22 @@ REST_FRAMEWORK = {
 
 # SSO (OAuth) Settings
 
-OAUTH2_PROVIDER = {
-    "SCOPES": {
+OAUTH2_PROVIDER = dict(
+    SCOPES={
         "user": "Read other users' data",
         "me_meta": "Read your account data",
         "me_announcement": "Read your announcement feed",
         "me_schedule": "Read your schedules",
         "me_timetable": "Read your timetables",
     },
-    "CLIENT_ID_GENERATOR_CLASS": "oauth2_provider.generators.ClientIdGenerator",
-}
+    CLIENT_ID_GENERATOR_CLASS="oauth2_provider.generators.ClientIdGenerator",
+    OIDC_ENABLED=True,
+    OIDC_TOKEN_ENDPOINT_AUTH_METHODS_SUPPORTED=('client_secret_post',),
+)
+with open(os.path.join(os.path.dirname(__file__), 'local_rsa_privkey.pem')) as f:
+    OAUTH2_PROVIDER.update(dict(
+        OIDC_RSA_PRIVATE_KEY=f.read(),
+    ))
 
 # CORS settings
 

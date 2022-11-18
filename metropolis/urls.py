@@ -61,6 +61,17 @@ oauth2_endpoint_views += [
     ),
 ]
 
+# OIDC endpoints
+oidc_views = [
+    path(
+        r".well-known/openid-configuration/",
+        oauth2_views.ConnectDiscoveryInfoView.as_view(),
+        name="oidc-connect-discovery-info",
+    ),
+    path(r".well-known/jwks.json", oauth2_views.JwksInfoView.as_view(), name="jwks-info"),
+    path(r"userinfo/", oauth2_views.UserInfoView.as_view(), name="user-info"),
+]
+
 urlpatterns = [
     path("", include("core.urls")),
     path(
@@ -75,6 +86,7 @@ urlpatterns = [
     path("select2/", include("django_select2.urls")),
     path("", include("pwa.urls")),
     path("/<path:url>", include("django.contrib.flatpages.urls")),
+    *oidc_views,
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
