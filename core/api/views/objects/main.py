@@ -1,5 +1,6 @@
 import importlib
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.urls import reverse
 from rest_framework import generics, permissions
@@ -123,7 +124,10 @@ class ObjectList(GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo, Ob
     kind = 'list'
 
     def get_last_modified(self):
-        return self.provider.get_last_modified_queryset()
+        try:
+            return self.provider.get_last_modified_queryset()
+        except ObjectDoesNotExist:
+            return None
 
     def get_admin_url(self):
         model = self.provider.model
@@ -172,7 +176,10 @@ class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, Gener
         return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_change", args=[self.get_object().id])
 
     def get_last_modified(self):
-        return self.provider.get_last_modified(self)
+        try:
+            return self.provider.get_last_modified(self)
+        except ObjectDoesNotExist:
+            return None
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
