@@ -739,6 +739,8 @@ REST_FRAMEWORK = {
 
 OAUTH2_PROVIDER = dict(
     SCOPES={
+        "openid": "OpenID Connect",
+        "email": "Read your email address",
         "user": "Read other users' data",
         "me_meta": "Read your account data",
         "me_announcement": "Read your announcement feed",
