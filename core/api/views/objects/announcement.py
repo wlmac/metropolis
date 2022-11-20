@@ -18,6 +18,8 @@ from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
 class SupervisorField(PrimaryKeyRelatedAbilityField):
     def get_queryset(self):
         request = self.context.get('request', None)
+        if not request.user.is_authenticated:
+            return User.objects.none()
         orgs = Organization.objects.filter(
             Q(supervisors=request.user) | Q(execs=request.user)
         )
