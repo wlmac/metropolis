@@ -6,18 +6,18 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
-from rest_framework import generics, permissions
-from rest_framework import serializers
+from rest_framework import generics, permissions, serializers
 
 from core.utils.mail import send_mail
-from ....models import Announcement, User, Organization
-from .base import BaseProvider
+
+from ....models import Announcement, Organization, User
 from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
+from .base import BaseProvider
 
 
 class SupervisorField(PrimaryKeyRelatedAbilityField):
     def get_queryset(self):
-        request = self.context.get('request', None)
+        request = self.context.get("request", None)
         if not request.user.is_authenticated:
             return User.objects.none()
         orgs = Organization.objects.filter(
@@ -27,7 +27,7 @@ class SupervisorField(PrimaryKeyRelatedAbilityField):
 
 
 class ExecEtcSerializer(serializers.ModelSerializer):
-    supervisor = SupervisorField('edit', queryset=User.all())
+    supervisor = SupervisorField("edit", queryset=User.all())
     message = serializers.CharField(read_only=True)
 
     def save(self, *args, **kwargs):
@@ -35,8 +35,8 @@ class ExecEtcSerializer(serializers.ModelSerializer):
 
         obj = super().save(*args, **kwargs)
 
-        user = self.context['request'].user
-        #if not user.is_superuser:
+        user = self.context["request"].user
+        # if not user.is_superuser:
         if True:
             if user in obj.organization.supervisors.all():
                 obj.supervisor = user
@@ -77,18 +77,22 @@ class ExecEtcSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Announcement
-        fields = '__all__'
-        read_only_fields = ['status', 'rejection_reason']
+        fields = "__all__"
+        read_only_fields = ["status", "rejection_reason"]
 
 
 class SupervisorSerializer(serializers.ModelSerializer):
-    supervisor = SupervisorField('edit', queryset=User.all())
-    status = ModelAbilityField('approve', model_field=Announcement()._meta.get_field('status'))
-    rejection_reason = ModelAbilityField('approve', model_field=Announcement()._meta.get_field('rejection_reason'))
+    supervisor = SupervisorField("edit", queryset=User.all())
+    status = ModelAbilityField(
+        "approve", model_field=Announcement()._meta.get_field("status")
+    )
+    rejection_reason = ModelAbilityField(
+        "approve", model_field=Announcement()._meta.get_field("rejection_reason")
+    )
 
     class Meta:
         model = Announcement
-        fields = '__all__'
+        fields = "__all__"
 
 
 class Inner(permissions.BasePermission):
@@ -105,7 +109,11 @@ class Provider(BaseProvider):
 
     @property
     def permission_classes(self):
-        return [permissions.DjangoModelPermissions, Inner] if self.request.mutate else [permissions.AllowAny]
+        return (
+            [permissions.DjangoModelPermissions, Inner]
+            if self.request.mutate
+            else [permissions.AllowAny]
+        )
 
     @property
     def serializer_class(self):
@@ -122,7 +130,12 @@ class Provider(BaseProvider):
         return view.get_object().last_modified_date
 
     def get_last_modified_queryset(self):
-        return LogEntry.objects \
-            .filter(content_type=ContentType.objects.get(app_label='core', model='announcement')) \
-            .latest('action_time') \
+        return (
+            LogEntry.objects.filter(
+                content_type=ContentType.objects.get(
+                    app_label="core", model="announcement"
+                )
+            )
+            .latest("action_time")
             .action_time
+        )

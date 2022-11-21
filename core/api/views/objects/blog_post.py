@@ -1,7 +1,6 @@
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from rest_framework import generics, permissions
-from rest_framework import serializers
+from rest_framework import generics, permissions, serializers
 
 from ....models import BlogPost
 from .base import BaseProvider
@@ -23,10 +22,14 @@ class Provider(BaseProvider):
 
     @property
     def permission_classes(self):
-        return [permissions.DjangoModelPermissions] if self.request.mutate else [permissions.AllowAny]
+        return (
+            [permissions.DjangoModelPermissions]
+            if self.request.mutate
+            else [permissions.AllowAny]
+        )
 
     def get_queryset(self, request):
-        if request.user.has_perm('core.blog_post.view') or request.user.is_superuser:
+        if request.user.has_perm("core.blog_post.view") or request.user.is_superuser:
             return BlogPost.objects.all()
         else:
             return BlogPost.objects.filter(is_published=True)
@@ -35,7 +38,10 @@ class Provider(BaseProvider):
         return view.get_object().last_modified_date
 
     def get_last_modified_queryset(self):
-        return LogEntry.objects \
-            .filter(content_type=ContentType.objects.get(app_label='core', model='blogpost')) \
-            .latest('action_time') \
+        return (
+            LogEntry.objects.filter(
+                content_type=ContentType.objects.get(app_label="core", model="blogpost")
+            )
+            .latest("action_time")
             .action_time
+        )

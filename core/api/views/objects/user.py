@@ -6,8 +6,7 @@ from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
-from rest_framework import generics, permissions, validators
-from rest_framework import serializers
+from rest_framework import generics, permissions, serializers, validators
 
 from .... import models
 from .base import BaseProvider
@@ -17,7 +16,9 @@ class Serializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
 
     def get_email_hash(self, obj):
-        return base64.standard_b64encode(hashlib.md5(obj.email.encode('utf-8')).digest())
+        return base64.standard_b64encode(
+            hashlib.md5(obj.email.encode("utf-8")).digest()
+        )
 
     class Meta:
         model = models.User
@@ -48,22 +49,45 @@ class ListSerializer(serializers.ModelSerializer):
 
 
 def tdsb_email(value):
-    if not (value.endswith(settings.TEACHER_EMAIL_SUFFIX) and value.endswith(settings.STUDENT_EMAIL_SUFFIX)):
-        raise serializers.ValidationError('Must be either a teacher or student email.')
+    if not (
+        value.endswith(settings.TEACHER_EMAIL_SUFFIX)
+        and value.endswith(settings.STUDENT_EMAIL_SUFFIX)
+    ):
+        raise serializers.ValidationError("Must be either a teacher or student email.")
 
 
 class NewSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=30, required=True)
     last_name = serializers.CharField(max_length=30, required=True)
-    graduating_year = serializers.ChoiceField(choices=models.graduating_year_choices, required=True)
-    email = serializers.EmailField(validators=[tdsb_email, validators.UniqueValidator(queryset=models.User.objects.all())], required=True)
-    username = serializers.RegexField('^[\w.@+-]+$', validators=[validators.UniqueValidator(queryset=models.User.objects.all())], max_length=30, required=True)
+    graduating_year = serializers.ChoiceField(
+        choices=models.graduating_year_choices, required=True
+    )
+    email = serializers.EmailField(
+        validators=[
+            tdsb_email,
+            validators.UniqueValidator(queryset=models.User.objects.all()),
+        ],
+        required=True,
+    )
+    username = serializers.RegexField(
+        "^[\w.@+-]+$",
+        validators=[validators.UniqueValidator(queryset=models.User.objects.all())],
+        max_length=30,
+        required=True,
+    )
     password = serializers.CharField(required=True)
 
     # Default `create` and `update` behavior...
     def create(self, validated_data):
         user = User()
-        keys = ['first_name', 'last_name', 'graduating_year', 'email', 'username', 'password']
+        keys = [
+            "first_name",
+            "last_name",
+            "graduating_year",
+            "email",
+            "username",
+            "password",
+        ]
         for key in keys:
             setattr(user, key, validated_data[key])
         if validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
@@ -73,7 +97,18 @@ class NewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields = ["first_name", "last_name", "graduating_year", "email", "username", "password", "bio", "timezone", "organizations", "tags_following"]
+        fields = [
+            "first_name",
+            "last_name",
+            "graduating_year",
+            "email",
+            "username",
+            "password",
+            "bio",
+            "timezone",
+            "organizations",
+            "tags_following",
+        ]
 
 
 class Identity(permissions.BasePermission):

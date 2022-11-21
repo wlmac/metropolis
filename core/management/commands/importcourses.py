@@ -57,7 +57,9 @@ class Command(BaseCommand):
                     if not isinstance(course_json["code"], str) or not isinstance(
                         course_json["position"], int
                     ):
-                        raise InvalidCourseJSONFileError("code and/or position wrong type")
+                        raise InvalidCourseJSONFileError(
+                            "code and/or position wrong type"
+                        )
 
                     data.append(
                         {
