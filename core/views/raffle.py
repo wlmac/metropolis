@@ -7,21 +7,35 @@ from django.views.generic.base import RedirectView
 from .. import models
 from . import mixins
 
+import json
+
 
 class RaffleRedirect(LoginRequiredMixin, RedirectView):
     permanent = False
     query_string = False
 
     def get_redirect_url(self, *args, **kwargs):
-        rid = self.request.GET['r']
-        raffle = get_object_or_404(models.Raffle, pk=rid)
+
+        rid = self.request.GET['r']  # get id (db row) of raffle
+        raffle = get_object_or_404(models.Raffle, pk=rid)  # get raffle  data from database
+
+        # keep track of users that scan raffle
+        temp_users = [self.request.user.username]
+        if raffle.users_log is not None and raffle.users_log:
+            temp_users = list(set(json.loads(raffle.users_log) + temp_users))
+
+        raffle.users_log = json.dumps(temp_users, indent=4)
+        raffle.codes_win = [raffle.codes_win]
+        raffle.save()  # update the list of users
+        
+        # make sure raffle isnt expired
         now = timezone.now()
         if raffle.open_start > now:
             raise Http404('s')
         if raffle.open_end < now:
             raise Http404('e')
-        code = self.request.GET['c']
-        if code in raffle.codes_win:
-            return raffle.page_win
-        else:
-            return raffle.page_lose
+
+        # check if user won and redirect them to proper page
+        code = self.request.GET['c']  # get code of raffle
+        return raffle.page_win if code in raffle.codes_win else raffle.page_lose  # return proper page
+
