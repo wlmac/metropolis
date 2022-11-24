@@ -257,14 +257,15 @@ class AnnouncementAdminForm(forms.ModelForm):
         widget=forms.Select(),
         choices=models.announcement_status_initial_choices,
     )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'status' in self.fields:
-            self.fields['status'].initial = 'd'
+        if "status" in self.fields:
+            self.fields["status"].initial = "d"
 
 
 class AnnouncementSupervisorAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'status' in self.fields:
-            self.fields['status'].initial = 'd'
+        if "status" in self.fields:
+            self.fields["status"].initial = "d"

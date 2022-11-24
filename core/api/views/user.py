@@ -23,6 +23,7 @@ class UserDetail3(UserDetail):
 
     https://noi.nyiyui.ca/k/1063/5041#Get_User
     """
+
     serializer_class = serializers.UserSerializer3
     lookup_field = "id"
 

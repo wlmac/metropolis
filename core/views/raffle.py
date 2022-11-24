@@ -15,7 +15,6 @@ class RaffleRedirect(LoginRequiredMixin, RedirectView):
     query_string = False
 
     def get_redirect_url(self, *args, **kwargs):
-
         rid = self.request.GET['r']  # get id (db row) of raffle
         raffle = get_object_or_404(models.Raffle, pk=rid)  # get raffle  data from database
 
@@ -31,11 +30,13 @@ class RaffleRedirect(LoginRequiredMixin, RedirectView):
         # make sure raffle isnt expired
         now = timezone.now()
         if raffle.open_start > now:
-            raise Http404('s')
+            raise Http404("s")
         if raffle.open_end < now:
-            raise Http404('e')
+            raise Http404("e")
 
-        # check if user won and redirect them to proper page
-        code = self.request.GET['c']  # get code of raffle
-        return raffle.page_win if code in raffle.codes_win else raffle.page_lose  # return proper page
-
+        # check if user won
+        code = self.request.GET["c"]
+        if code in raffle.codes_win:
+            return raffle.page_win
+        else:
+            return raffle.page_lose

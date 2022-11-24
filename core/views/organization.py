@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db.models import Count
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView
 
@@ -14,9 +14,11 @@ class OrganizationList(ListView, mixins.TitleMixin):
     title = "Clubs"
 
     def get_queryset(self):
-        return models.Organization.objects.filter(is_active=True).annotate(
-            num_member=Count("member")
-        ).order_by("-num_member")
+        return (
+            models.Organization.objects.filter(is_active=True)
+            .annotate(num_member=Count("member"))
+            .order_by("-num_member")
+        )
 
 
 class OrganizationDetail(DetailView, mixins.TitleMixin):
@@ -44,5 +46,5 @@ class OrganizationShort(RedirectView):
     permanent = False
 
     def get_redirect_url(self, *args, **kwargs):
-        org = get_object_or_404(models.Organization, pk=kwargs['pk'])
+        org = get_object_or_404(models.Organization, pk=kwargs["pk"])
         return org.get_absolute_url()

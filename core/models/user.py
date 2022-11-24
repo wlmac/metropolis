@@ -31,13 +31,11 @@ class User(AbstractUser):
     tags_following = models.ManyToManyField(
         "Tag", blank=True, related_name="followers", related_query_name="follower"
     )
-    qltrs = SetField(
-        "Qualified Trials", null=True, blank=True
-    )
+    qltrs = SetField("Qualified Trials", null=True, blank=True)
 
     @property
     def qltrs2(self):
-        return set(self.qltrs.split(' '))
+        return set(self.qltrs.split(" "))
 
     def in_qltr(self, name: str):
         if self.qltrs:

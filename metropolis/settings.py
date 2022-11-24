@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 from typing import Dict
+
 import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -552,7 +553,7 @@ TIMETABLE_FORMATS = {
                         "time": "09:00 am - 10:20 am",
                         "course": "Period 1",
                     },
-                    "time": [[ 9,  0], [10, 20]],
+                    "time": [[9, 0], [10, 20]],
                     "position": [{1, 5}, {1, 5}],
                 },
                 {
@@ -576,7 +577,7 @@ TIMETABLE_FORMATS = {
                         "time": "02:00 pm - 03:15 pm",
                         "course": "Period 4",
                     },
-                    "time": [[14,  0], [15, 15]],
+                    "time": [[14, 0], [15, 15]],
                     "position": [{4, 6}, {3, 6}],
                 },
             ],
@@ -690,7 +691,7 @@ LOGOUT_REDIRECT_URL = "/"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend"
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # ReCaptcha settings
@@ -741,6 +742,8 @@ REST_FRAMEWORK = {
 
 OAUTH2_PROVIDER = dict(
     SCOPES={
+        "openid": "OpenID Connect",
+        "email": "Read your email address",
         "user": "Read other users' data",
         "me_meta": "Read your account data",
         "me_announcement": "Read your announcement feed",
@@ -751,11 +754,12 @@ OAUTH2_PROVIDER = dict(
     OIDC_ENABLED=True,
 )
 
-
-with open(os.path.join(os.path.dirname(__file__), 'local_rsa_privkey.pem')) as f:
-    OAUTH2_PROVIDER.update(dict(
-        OIDC_RSA_PRIVATE_KEY=f.read(),
-    ))
+with open(os.path.join(os.path.dirname(__file__), "local_rsa_privkey.pem")) as f:
+    OAUTH2_PROVIDER.update(
+        dict(
+            OIDC_RSA_PRIVATE_KEY=f.read(),
+        )
+    )
 
 # CORS settings
 
@@ -953,8 +957,8 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-tz = pytz.timezone('America/Toronto')
-BANNER_TEXT       = "Why is there a new \"play\" button here? There shouldn't be a new game… "
+tz = pytz.timezone("America/Toronto")
+BANNER_TEXT = 'Why is there a new "play" button here? There shouldn\'t be a new game… '
 BANNER_SHOW_START = datetime(2022, 4, 1, 0, 0, 0, tzinfo=tz)
 BANNER_SHOW_END = datetime(2022, 4, 2, 0, 0, 0, tzinfo=tz)
 BANNER_SHOW = BANNER_SHOW_START < datetime.now(tz) < BANNER_SHOW_END
@@ -971,7 +975,7 @@ SIMPLE_JWT = {
 }
 
 # iCalendar Feed
-ICAL_PADDING = timedelta(days=4*7)
+ICAL_PADDING = timedelta(days=4 * 7)
 
 # Qualified Trials
 QLTR: Dict[str, Dict] = {
@@ -988,8 +992,8 @@ THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
 THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
 THEME_CSS = THEMES[CURRENT_THEME]["theme"]
 
-TEACHER_EMAIL_SUFFIX = '@tdsb.on.ca'
-STUDENT_EMAIL_SUFFIX = '@student.tdsb.on.ca'
+TEACHER_EMAIL_SUFFIX = "@tdsb.on.ca"
+STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 
 try:
     from metropolis.config import *
@@ -997,7 +1001,7 @@ except ImportError:
     print("Please create a config file to override values in settings.py")
 
 try:
-    with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
+    with open(os.path.join(os.path.dirname(__file__), "local_settings.py")) as f:
         exec(f.read(), globals())
 except IOError:
     pass

@@ -1,11 +1,10 @@
 import django.db
 from django import forms
 from django.conf import settings
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from django.contrib import messages
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -187,12 +186,16 @@ class AnnouncementAdmin(admin.ModelAdmin):
         ).distinct()
 
     def get_form(self, request, obj=None, **kwargs):
-        if request.user.in_qltr('ann-draft'):
+        if request.user.in_qltr("ann-draft"):
             self.message_user(
                 request,
-                "The default status is now \'Draft\' as a trial. Set it to \'Pending Approval\' to send to supervisor(s) for approval. Please send feedback if applicable.",
+                "The default status is now 'Draft' as a trial. Set it to 'Pending Approval' to send to supervisor(s) for approval. Please send feedback if applicable.",
             )
-            kwargs["form"] = AnnouncementSupervisorAdminForm if request.user.is_superuser or request.user.is_teacher else AnnouncementAdminForm
+            kwargs["form"] = (
+                AnnouncementSupervisorAdminForm
+                if request.user.is_superuser or request.user.is_teacher
+                else AnnouncementAdminForm
+            )
         return super().get_form(request, obj, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):
