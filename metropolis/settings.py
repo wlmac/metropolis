@@ -29,6 +29,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = []
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -748,6 +750,8 @@ OAUTH2_PROVIDER = dict(
     CLIENT_ID_GENERATOR_CLASS="oauth2_provider.generators.ClientIdGenerator",
     OIDC_ENABLED=True,
 )
+
+
 with open(os.path.join(os.path.dirname(__file__), 'local_rsa_privkey.pem')) as f:
     OAUTH2_PROVIDER.update(dict(
         OIDC_RSA_PRIVATE_KEY=f.read(),
@@ -956,6 +960,7 @@ BANNER_SHOW_END = datetime(2022, 4, 2, 0, 0, 0, tzinfo=tz)
 BANNER_SHOW = BANNER_SHOW_START < datetime.now(tz) < BANNER_SHOW_END
 BANNER_URL = "/"
 BANNER_URL_TEXT = "Play"
+BANNER2 = ""
 
 ROOT = "http://localhost"
 
