@@ -28,8 +28,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = []
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -996,3 +994,6 @@ try:
         exec(f.read(), globals())
 except IOError:
     pass
+
+if SECRET_KEY == "Change me":
+    raise TypeError("override SECRET_KEY")

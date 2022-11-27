@@ -15,14 +15,14 @@ class RaffleRedirect(LoginRequiredMixin, RedirectView):
     query_string = False
 
     def get_redirect_url(self, *args, **kwargs):
-        rid = self.request.GET['r']
+        rid = self.request.GET["r"]
         code = self.request.GET["c"]
 
         raffle = get_object_or_404(models.Raffle, pk=rid)
         uid = self.request.user.id
-        raffle.log = raffle.log or '' + json.dumps([uid, code])
-        raffle.save(
-        
+        raffle.log = raffle.log or "" + json.dumps([uid, code])
+        raffle.save()
+
         # check openness
         now = timezone.now()
         if raffle.open_start > now:

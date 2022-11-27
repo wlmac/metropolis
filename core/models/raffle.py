@@ -4,9 +4,9 @@ from .util import SetField
 
 
 class Raffle(models.Model):
-    '''
+    """
     log is JSONL of [user id, attempted code]
-    '''
+    """
 
     name = models.CharField(max_length=64, unique=True)
     description = models.TextField(blank=True)
