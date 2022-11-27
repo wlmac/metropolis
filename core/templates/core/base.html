@@ -16,20 +16,6 @@
 
 {% block body %}
 
-{% settings_value "BANNER_TEXT" as banner_text %}
-{% settings_value "BANNER_SHOW" as banner_show %}
-{% if banner_text and banner_show %}
-<div class="install-popup">
-    <img src="{% settings_value 'THEME_LOGO' %}">
-    <span>{{ banner_text | safe }}</span>
-    <div>
-        <a id="install-popup-button" class="waves-effect waves-light btn" href="{% settings_value 'BANNER_URL' %}" target="_blank">
-            {% settings_value 'BANNER_URL_TEXT' %}
-        </a>
-    </div>
-</div>
-{% endif %}
-
 {% settings_value "BANNER2" as banner2 %}
 {% for value in banner2 %}
     <div class="install-popup">
