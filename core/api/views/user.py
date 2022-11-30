@@ -38,7 +38,7 @@ class UserMe(APIView):
 
 
 class UserMeInternal(APIView):
-    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
+    permission_classes = [TokenHasScope]
     required_scopes = ["me_meta", "internal"]
 
     def get(self, request, format=None):
