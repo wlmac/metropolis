@@ -37,6 +37,15 @@ class UserMe(APIView):
         return Response(serializer.data)
 
 
+class UserMeInternal(APIView):
+    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
+    required_scopes = ["me_meta", "internal"]
+
+    def get(self, request, format=None):
+        serializer = serializers.UserSerializerInternal(request.user)
+        return Response(serializer.data)
+
+
 class UserMeSchedule(APIView):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_schedule"]

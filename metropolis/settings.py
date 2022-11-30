@@ -741,6 +741,7 @@ OAUTH2_PROVIDER = dict(
         "openid": "OpenID Connect",
         "email": "Read your email address",
         "user": "Read other users' data",
+        "internal": "Internal Application",
         "me_meta": "Read your account data",
         "me_announcement": "Read your announcement feed",
         "me_schedule": "Read your schedules",
