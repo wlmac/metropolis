@@ -16,6 +16,8 @@
 
 {% block body %}
 
+{% settings_value "PRE" as pre %}
+{% if pre %}{{ pre | safe }}{% endif %}
 {% settings_value "BANNER2" as banner2 %}
 {% for value in banner2 %}
     <div class="install-popup">
