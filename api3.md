@@ -1,8 +1,12 @@
+# API v3
+
 **Note** All endpoints return JSON notwithstanding exceptions.
+
 **Note** use the Last-Modified header to determine if you should receive content. (conditional requests will not be implemented)
+
 **Base URL**: `https://maclyonsden.com/api`
 
-# Get Feeds
+## Get Feeds
 `GET v3/feeds`
 
 **Cache Until**: 24 hours after last fetch
@@ -14,15 +18,17 @@
 [1, 8]
 ```
 
-**Get Staff**
-`GET v3/staff`
+## Get Staff
+
+- `GET v3/staff`
 
 **Cache Until**: 24 hours after the last fetch
 
 **Returns** a list of all `Staff`.
 
 ## Get User
-`GET v3/user/<id>`
+
+- `GET v3/user/<id>`
 
 **Cache Until**: 24 hours after last fetch
 
@@ -44,7 +50,8 @@ properties:
 ```
 
 ## Get Terms
-`GET terms`
+
+- `GET terms`
 
 **Cache Until**: 24 hours after last fetch
 **Note** has `Last-Modified` header.
@@ -52,12 +59,15 @@ properties:
 **Returns** a list of all `Term`s.
 
 ## Objects
+
 **Base URL**: `v3/obj/<type>`
 
 **Cache Until**: changes are detected (via the changes endpoint, which should be fetched when data is requested from the user of the library)
 
 ## Get Objects
-`GET /`
+
+- `GET /`
+
 **Note** has `Last-Modified` header.
 
 For `event`:
@@ -104,14 +114,18 @@ Example:
 `POST new`
 
 ## (Single) Object
-`GET retrieve/<id>`
-`PUT single/<id>`
-`PATCH single/<id>`
-`DELETE single/<id>`
+
+- `GET retrieve/<id>`
+- `PUT single/<id>`
+- `PATCH single/<id>`
+- `DELETE single/<id>`
+
 **Note** has `Last-Modified` header.
 
-For `flatpage`:
+### For `flatpage`
+
 **Note** `id` is the slug.
+
 **Returns** title then content separated by `\n`, such as:
 ```
 This is the title blah in plain text
@@ -216,11 +230,38 @@ type: object
 properties:
   id: { type: integer }
   slug: { type: string }
-  name: { type: array, minLen: 2, maxLen: 2, items: { type: string } }
+  name: { type: string }
   bio: { type: string }
   timezone: { type: string }
   graduatingYear: { type: integer }
   organizations: { type: array, items: { type: integer } }
   following: { type: array, items: { type: integer } }
+```
+
+
+## Organization
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/organization.json
+type: object
+properties:
+  id: { type: integer }
+  owner: { type: integer }
+  supervisors: { type: array, items: { type: integer } }
+  execs: { type: array, items: { type: integer } }
+  members: { type: array, items: { type: integer } }
+  name: { type: string }
+  bio: { type: string }
+  extra_content: { type: string }
+  slug: { type: string }
+  registered_date: { type: string, format: date-time }
+  show_members: { type: boolean }
+  is_active: { type: boolean }
+  is_open: { type: boolean }
+  applications_open: { type: boolean }
+  tags: { type: array, items: { type: integer } }
+  banner: { type: string }
+  icon: { type: string }
+  links: { type: array, items: { type: string } }
 ```
 

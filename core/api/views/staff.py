@@ -5,7 +5,7 @@ from django.conf import settings
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-__ALL__ = ['staff']
+__ALL__ = ["staff"]
 
 
 staff_roles = defaultdict(list)
@@ -21,7 +21,9 @@ def staff(request):
 
     https://noi.nyiyui.ca/k/1063/5041#Get Staff
     """
-    return Response([
-        dict(user=user, bio=bio, roles=staff_roles[user])
-        for user, bio in settings.METROPOLIS_STAFF_BIO.items()
-    ])
+    return Response(
+        [
+            dict(user=user, bio=bio, roles=staff_roles[user])
+            for user, bio in settings.METROPOLIS_STAFF_BIO.items()
+        ]
+    )

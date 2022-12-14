@@ -56,8 +56,9 @@ class Term(models.Model):
             "calendar_days": self.__day_num_calendar_days,
         }
         target_date = utils.get_localdate(date=target_date, time=[23, 59, 59])
-        if not self.is_current(target_date.date()) \
-                or not self.day_is_instructional(target_date):
+        if not self.is_current(target_date.date()) or not self.day_is_instructional(
+            target_date
+        ):
             return None
         return methods[tf.get("day_num_method", "consecutive")](tf, target_date)
 
@@ -66,7 +67,9 @@ class Term(models.Model):
         Gets the day number from if the calendar day is even (day 2) or odd (day 1).
         """
         if tf["cycle"]["length"] != 2:
-            raise TypeError("calendar_days cannot be used in formats where cycle length != 2")
+            raise TypeError(
+                "calendar_days cannot be used in formats where cycle length != 2"
+            )
         even, odd = 0, 1
         return {even: 2, odd: 1}[target_date.day % 2]
 
@@ -92,16 +95,18 @@ class Term(models.Model):
         return (len(cycle_day_type_set) - 1) % tf["cycle"]["length"] + 1
 
     def day_schedule_format(self, target_date=None):
-        tds = utils.get_localdate(date=target_date, time=[0, 0, 0]) # target date start
-        tde = utils.get_localdate(date=target_date, time=[23, 59, 59]) # target date end
+        tds = utils.get_localdate(date=target_date, time=[0, 0, 0])  # target date start
+        tde = utils.get_localdate(
+            date=target_date, time=[23, 59, 59]
+        )  # target date end
 
         schedule_formats = settings.TIMETABLE_FORMATS[self.timetable_format][
             "schedules"
         ]
         schedule_format_set = set(
-            self.events.filter(
-                start_date__lte=tde, end_date__gte=tds
-            ).values_list("schedule_format", flat=True)
+            self.events.filter(start_date__lte=tde, end_date__gte=tds).values_list(
+                "schedule_format", flat=True
+            )
         ).intersection(set(schedule_formats.keys()))
         for schedule_format in list(schedule_formats.keys())[::-1]:
             if schedule_format in schedule_format_set:
@@ -198,7 +203,7 @@ class Event(models.Model):
     schedule_format = models.CharField(max_length=64, default="default")
     is_instructional = models.BooleanField(
         default=True,
-        help_text='Whether school instruction is taking place during this event. Leave checked if not direct cause.',
+        help_text="Whether school instruction is taking place during this event. Leave checked if not direct cause.",
     )
     is_public = models.BooleanField(
         default=True,

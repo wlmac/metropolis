@@ -11,9 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from datetime import timedelta, datetime
+from datetime import timedelta
 from typing import Dict
-import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -737,16 +736,27 @@ REST_FRAMEWORK = {
 
 # SSO (OAuth) Settings
 
-OAUTH2_PROVIDER = {
-    "SCOPES": {
+OAUTH2_PROVIDER = dict(
+    SCOPES={
+        "openid": "OpenID Connect",
+        "email": "Read your email address",
         "user": "Read other users' data",
+        "internal": "Internal Application",
         "me_meta": "Read your account data",
         "me_announcement": "Read your announcement feed",
         "me_schedule": "Read your schedules",
         "me_timetable": "Read your timetables",
     },
-    "CLIENT_ID_GENERATOR_CLASS": "oauth2_provider.generators.ClientIdGenerator",
-}
+    CLIENT_ID_GENERATOR_CLASS="oauth2_provider.generators.ClientIdGenerator",
+    OIDC_ENABLED=True,
+)
+
+with open(os.path.join(os.path.dirname(__file__), "local_rsa_privkey.pem")) as f:
+    OAUTH2_PROVIDER.update(
+        dict(
+            OIDC_RSA_PRIVATE_KEY=f.read(),
+        )
+    )
 
 # CORS settings
 
@@ -944,13 +954,11 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-tz = pytz.timezone("America/Toronto")
-BANNER_TEXT = 'Why is there a new "play" button here? There shouldn\'t be a new game… '
-BANNER_SHOW_START = datetime(2022, 4, 1, 0, 0, 0, tzinfo=tz)
-BANNER_SHOW_END = datetime(2022, 4, 2, 0, 0, 0, tzinfo=tz)
-BANNER_SHOW = BANNER_SHOW_START < datetime.now(tz) < BANNER_SHOW_END
-BANNER_URL = "/"
-BANNER_URL_TEXT = "Play"
+
+
+
+BANNER2 = []
+
 
 ROOT = "http://localhost"
 
@@ -991,3 +999,6 @@ try:
         exec(f.read(), globals())
 except IOError:
     pass
+
+if SECRET_KEY == "Change me":
+    raise TypeError("override SECRET_KEY")

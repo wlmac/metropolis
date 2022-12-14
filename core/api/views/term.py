@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from ... import models
 from ... import utils as utils2
 from .. import serializers, utils
-from ..utils import ListAPIViewWithFallback, GenericAPIViewWithLastModified
+from ..utils import GenericAPIViewWithLastModified, ListAPIViewWithFallback
 
 
 class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
@@ -19,10 +19,13 @@ class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
 
     def get_last_modified(self):
         # see https://docs.djangoproject.com/en/3.2/ref/contrib/admin/
-        return LogEntry.objects \
-            .filter(content_type=ContentType.objects.get(app_label='core', model='term')) \
-            .latest('action_time') \
+        return (
+            LogEntry.objects.filter(
+                content_type=ContentType.objects.get(app_label="core", model="term")
+            )
+            .latest("action_time")
             .action_time
+        )
 
 
 class TermDetail(generics.RetrieveAPIView):

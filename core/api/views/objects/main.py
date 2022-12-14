@@ -1,20 +1,22 @@
 import importlib
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.urls import reverse
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
-from ...utils import GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo
-
+from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
 
 __ALL__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
+
 
 def gen_get_provider(mapping):
     providers = {
         key: importlib.import_module(f".{value}", "core.api.views.objects").Provider
         for key, value in mapping.items()
     }
+
     def get_provider(provider_name: str):
         """
         Gets a provider by type name.
@@ -23,17 +25,22 @@ def gen_get_provider(mapping):
         if provider_name not in providers:
             raise Http404("確り取説読んだ？")
         return providers[provider_name]
+
     return get_provider
 
-get_provider = gen_get_provider({
-    "announcement": "announcement",
-    "blog-post": "blog_post",
-    "event": "event",
-    "organization": "organization",
-    "flatpage": "flatpage",
-    "user": "user",
-    "tag": "tag",
-})
+
+get_provider = gen_get_provider(
+    {
+        "announcement": "announcement",
+        "blog-post": "blog_post",
+        "event": "event",
+        "organization": "organization",
+        "flatpage": "flatpage",
+        "user": "user",
+        "tag": "tag",
+    }
+)
+
 
 class ObjectAPIView(generics.GenericAPIView):
     def get_as_su(self):
@@ -45,7 +52,7 @@ class ObjectAPIView(generics.GenericAPIView):
         self.request.kind = self.kind
         self.request.detail = self.detail
         self.provider = provider = get_provider(kwargs.pop("type"))(self.request)
-        if as_su := (self.request.GET.get('as-su') == 'true'):
+        if as_su := (self.request.GET.get("as-su") == "true"):
             self.permission_classes = [permissions.AllowAny]
         else:
             self.permission_classes = provider.permission_classes
@@ -102,8 +109,9 @@ class ObjectAPIView(generics.GenericAPIView):
 
             # Get the appropriate handler method
             if request.method.lower() in self.http_method_names:
-                handler = getattr(self, request.method.lower(),
-                                  self.http_method_not_allowed)
+                handler = getattr(
+                    self, request.method.lower(), self.http_method_not_allowed
+                )
             else:
                 handler = self.http_method_not_allowed
 
@@ -117,33 +125,43 @@ class ObjectAPIView(generics.GenericAPIView):
         return self.response
 
 
-class ObjectList(GenericAPIViewWithLastModified, GenericAPIViewWithDebugInfo, ObjectAPIView, generics.ListAPIView):
+class ObjectList(
+    GenericAPIViewWithLastModified,
+    GenericAPIViewWithDebugInfo,
+    ObjectAPIView,
+    generics.ListAPIView,
+):
     mutate = False
     detail = False
-    kind = 'list'
+    kind = "list"
 
     def get_last_modified(self):
-        return self.provider.get_last_modified_queryset()
+        try:
+            return self.provider.get_last_modified_queryset()
+        except ObjectDoesNotExist:
+            return None
 
     def get_admin_url(self):
         model = self.provider.model
-        return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist")
+        return reverse(
+            f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+        )
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
     def get(self, *args, **kwargs):
         if not self.provider.allow_list:
-            return Response({'detail': 'listing not allowed'}, status=422)
+            return Response({"detail": "listing not allowed"}, status=422)
         return super().get(*args, **kwargs)
 
 
-class LookupField():
+class LookupField:
     @property
     def lookup_field(self):
-        if hasattr(self.provider, 'lookup_field'):
+        if hasattr(self.provider, "lookup_field"):
             return self.provider.lookup_field
-        return 'id'
+        return "id"
 
     lookup_url_kwarg = "id"
 
@@ -151,41 +169,58 @@ class LookupField():
 class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
     mutate = True
     detail = None
-    kind = 'new'
+    kind = "new"
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
     def post(self, *args, **kwargs):
         if not self.provider.allow_new:
-            return Response({'detail': 'creating not allowed'}, status=422)
+            return Response({"detail": "creating not allowed"}, status=422)
         return super().post(*args, **kwargs)
 
 
-class ObjectRetrieve(ObjectAPIView, LookupField, generics.RetrieveAPIView, GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified):
+class ObjectRetrieve(
+    ObjectAPIView,
+    LookupField,
+    generics.RetrieveAPIView,
+    GenericAPIViewWithDebugInfo,
+    GenericAPIViewWithLastModified,
+):
     mutate = False
     detail = True
-    kind = 'retrieve'
+    kind = "retrieve"
 
     def get_admin_url(self):
         model = self.provider.model
-        return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_change", args=[self.get_object().id])
+        return reverse(
+            f"admin:{model._meta.app_label}_{model._meta.model_name}_change",
+            args=[self.get_object().id],
+        )
 
     def get_last_modified(self):
-        return self.provider.get_last_modified(self)
+        try:
+            return self.provider.get_last_modified(self)
+        except ObjectDoesNotExist:
+            return None
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
 
-class ObjectSingle(ObjectAPIView, LookupField, generics.DestroyAPIView, generics.UpdateAPIView):
+class ObjectSingle(
+    ObjectAPIView, LookupField, generics.DestroyAPIView, generics.UpdateAPIView
+):
     mutate = True
     detail = None
-    kind = 'single'
+    kind = "single"
 
     def get_admin_url(self):
         model = self.provider.model
-        return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_change", args=[self.get_object().id])
+        return reverse(
+            f"admin:{model._meta.app_label}_{model._meta.model_name}_change",
+            args=[self.get_object().id],
+        )
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)

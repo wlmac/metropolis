@@ -23,6 +23,7 @@ class UserDetail3(UserDetail):
 
     https://noi.nyiyui.ca/k/1063/5041#Get_User
     """
+
     serializer_class = serializers.UserSerializer3
     lookup_field = "id"
 
@@ -33,6 +34,15 @@ class UserMe(APIView):
 
     def get(self, request, format=None):
         serializer = serializers.UserSerializer(request.user)
+        return Response(serializer.data)
+
+
+class UserMeInternal(APIView):
+    permission_classes = [TokenHasScope]
+    required_scopes = ["me_meta", "internal"]
+
+    def get(self, request, format=None):
+        serializer = serializers.UserSerializerInternal(request.user)
         return Response(serializer.data)
 
 

@@ -33,6 +33,7 @@ urlpatterns = [
     path("user/<str:username>", UserDetail.as_view(), name="api_user_detail"),
     path("v3/user/<int:id>", UserDetail3.as_view(), name="api_user_detail3"),
     path("me", UserMe.as_view(), name="api_me"),
+    path("me/internal", UserMeInternal.as_view(), name="api_me_internal"),
     path("me/schedule", UserMeSchedule.as_view(), name="api_me_schedule"),
     path("me/schedule/week", UserMeScheduleWeek.as_view(), name="api_me_schedule_week"),
     path("me/timetable", UserMeTimetable.as_view(), name="api_me_timetable"),
@@ -65,7 +66,15 @@ urlpatterns = [
     path("v3/feeds", feeds, name="api_feeds3"),
     path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),
     path("v3/obj/<str:type>/new", ObjectNew.as_view(), name="api_object_new3"),
-    path("v3/obj/<str:type>/single/<path:id>", ObjectSingle.as_view(), name="api_object_single3"),
-    path("v3/obj/<str:type>/retrieve/<path:id>", ObjectRetrieve.as_view(), name="api_object_retrieve3"),
+    path(
+        "v3/obj/<str:type>/single/<path:id>",
+        ObjectSingle.as_view(),
+        name="api_object_single3",
+    ),
+    path(
+        "v3/obj/<str:type>/retrieve/<path:id>",
+        ObjectRetrieve.as_view(),
+        name="api_object_retrieve3",
+    ),
     path("version", APIVersion.as_view(), name="api_version"),
 ]
