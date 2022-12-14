@@ -64,7 +64,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "core.middleware.TimezoneMiddleware",
-    "core.middleware.RedirectFallbackTemporaryMiddleware",
+    "core.middleware.CustomRedirectFallbackTemporaryMiddleware",
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
 ]
 
@@ -550,7 +550,7 @@ TIMETABLE_FORMATS = {
                         "time": "09:00 am - 10:20 am",
                         "course": "Period 1",
                     },
-                    "time": [[ 9,  0], [10, 20]],
+                    "time": [[9, 0], [10, 20]],
                     "position": [{1, 5}, {1, 5}],
                 },
                 {
@@ -574,7 +574,7 @@ TIMETABLE_FORMATS = {
                         "time": "02:00 pm - 03:15 pm",
                         "course": "Period 4",
                     },
-                    "time": [[14,  0], [15, 15]],
+                    "time": [[14, 0], [15, 15]],
                     "position": [{4, 6}, {3, 6}],
                 },
             ],
@@ -688,7 +688,7 @@ LOGOUT_REDIRECT_URL = "/"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend"
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # ReCaptcha settings
@@ -944,8 +944,8 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-tz = pytz.timezone('America/Toronto')
-BANNER_TEXT       = "Why is there a new \"play\" button here? There shouldn't be a new game… "
+tz = pytz.timezone("America/Toronto")
+BANNER_TEXT = 'Why is there a new "play" button here? There shouldn\'t be a new game… '
 BANNER_SHOW_START = datetime(2022, 4, 1, 0, 0, 0, tzinfo=tz)
 BANNER_SHOW_END = datetime(2022, 4, 2, 0, 0, 0, tzinfo=tz)
 BANNER_SHOW = BANNER_SHOW_START < datetime.now(tz) < BANNER_SHOW_END
@@ -961,7 +961,7 @@ SIMPLE_JWT = {
 }
 
 # iCalendar Feed
-ICAL_PADDING = timedelta(days=4*7)
+ICAL_PADDING = timedelta(days=4 * 7)
 
 # Qualified Trials
 QLTR: Dict[str, Dict] = {
@@ -978,8 +978,8 @@ THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
 THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
 THEME_CSS = THEMES[CURRENT_THEME]["theme"]
 
-TEACHER_EMAIL_SUFFIX = '@tdsb.on.ca'
-STUDENT_EMAIL_SUFFIX = '@student.tdsb.on.ca'
+TEACHER_EMAIL_SUFFIX = "@tdsb.on.ca"
+STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 
 try:
     from metropolis.config import *
@@ -987,7 +987,7 @@ except ImportError:
     print("Please create a config file to override values in settings.py")
 
 try:
-    with open(os.path.join(os.path.dirname(__file__), 'local_settings.py')) as f:
+    with open(os.path.join(os.path.dirname(__file__), "local_settings.py")) as f:
         exec(f.read(), globals())
 except IOError:
     pass
