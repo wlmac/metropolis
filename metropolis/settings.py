@@ -63,7 +63,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
     "core.middleware.TimezoneMiddleware",
-    "core.middleware.RedirectFallbackTemporaryMiddleware",
+    "core.middleware.CustomRedirectFallbackTemporaryMiddleware",
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
 ]
 
