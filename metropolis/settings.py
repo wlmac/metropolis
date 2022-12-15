@@ -954,11 +954,7 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-
-
-
 BANNER2 = []
-
 
 ROOT = "http://localhost"
 
