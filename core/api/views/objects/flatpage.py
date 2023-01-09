@@ -1,7 +1,7 @@
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.flatpages.models import FlatPage
-from rest_framework import generics, permissions, serializers
+from rest_framework import permissions, serializers
 
 from .base import BaseProvider
 

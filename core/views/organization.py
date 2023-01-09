@@ -1,11 +1,10 @@
-from django.conf import settings
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView
 
-from .. import models
 from . import mixins
+from .. import models
 
 
 class OrganizationList(ListView, mixins.TitleMixin):

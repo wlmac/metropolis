@@ -2,8 +2,9 @@ import random
 
 from django.db import models
 
-from ..utils.tag_color import get_tag_color
 from .organization import Organization
+from ..utils.tag_color import get_tag_color
+
 
 # Create your models here.
 

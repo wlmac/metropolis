@@ -4,14 +4,13 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.views import View
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import TemplateView
 from django_ical.views import ICalFeed
 
 from core.utils import generate_slam as gs
 from core.utils import get_week_schedule_info
-
-from .. import models
 from . import mixins
+from .. import models
 
 
 class Index(TemplateView, mixins.TitleMixin):

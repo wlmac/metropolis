@@ -3,10 +3,10 @@ import datetime
 from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
-from django.urls import reverse
 from django.utils import timezone
 
 from .. import utils
+
 
 # Create your models here.
 

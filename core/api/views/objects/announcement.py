@@ -1,18 +1,15 @@
-from typing import List
-
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
-from rest_framework import generics, permissions, serializers
+from rest_framework import permissions, serializers
 
 from core.utils.mail import send_mail
-
-from ....models import Announcement, Organization, User
-from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
 from .base import BaseProvider
+from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
+from ....models import Announcement, Organization, User
 
 
 class SupervisorField(PrimaryKeyRelatedAbilityField):

@@ -13,7 +13,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-import oauth2_provider.views as oauth2_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin

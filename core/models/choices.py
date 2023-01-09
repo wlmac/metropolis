@@ -1,8 +1,4 @@
-from enum import Enum
-
 import pytz
-
-from ..utils.tag_color import get_tag_color
 
 timezone_choices = [(i, i) for i in pytz.common_timezones]
 

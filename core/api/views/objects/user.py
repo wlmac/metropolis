@@ -1,15 +1,12 @@
 import base64
 import hashlib
-from typing import List
 
 from django.conf import settings
-from django.contrib.admin.models import LogEntry
-from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
-from rest_framework import generics, permissions, serializers, validators
+from rest_framework import permissions, serializers, validators
 
-from .... import models
 from .base import BaseProvider
+from .... import models
 
 
 class Serializer(serializers.ModelSerializer):

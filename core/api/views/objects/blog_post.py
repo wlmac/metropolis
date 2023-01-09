@@ -1,9 +1,9 @@
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from rest_framework import generics, permissions, serializers
+from rest_framework import permissions, serializers
 
-from ....models import BlogPost
 from .base import BaseProvider
+from ....models import BlogPost
 
 
 class Serializer(serializers.ModelSerializer):

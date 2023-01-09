@@ -4,14 +4,11 @@ from queue import LifoQueue
 from django.db.models import signals
 from django.dispatch import Signal, receiver
 from django.http import StreamingHttpResponse
-from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import permissions
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ... import models
 from .. import serializers
-from .stream import SignalStream
+from ... import models
 
 global_notifs = Signal()
 

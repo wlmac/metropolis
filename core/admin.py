@@ -1,7 +1,7 @@
 import django.db
 from django import forms
 from django.conf import settings
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
@@ -13,7 +13,6 @@ from martor.widgets import AdminMartorWidget
 
 from core.utils.mail import send_mail
 from metropolis import settings
-
 from . import models
 from .forms import (
     AnnouncementAdminForm,

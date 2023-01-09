@@ -1,9 +1,8 @@
 from rest_framework import serializers
 
 from core.api.serializers.custom import PrimaryKeyAndSlugRelatedField
-
-from ... import models
 from .course import CourseSerializer, TermSerializer
+from ... import models
 
 
 class TimetableSerializer(serializers.ModelSerializer):

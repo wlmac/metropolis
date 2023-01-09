@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from ... import models
 from .tag import TagSerializer
+from ... import models
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserSerializerInternal(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
+
     class Meta:
         model = models.User
         fields = [

@@ -1,8 +1,8 @@
 from rest_framework import generics
 
-from ... import models
 from .. import serializers
 from ..utils import ListAPIViewWithFallback
+from ... import models
 
 
 class OrganizationList(ListAPIViewWithFallback):
