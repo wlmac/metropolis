@@ -985,6 +985,8 @@ THEME_CSS = THEMES[CURRENT_THEME]["theme"]
 TEACHER_EMAIL_SUFFIX = "@tdsb.on.ca"
 STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 
+PRE = ""
+
 try:
     from metropolis.config import *
 except ImportError:

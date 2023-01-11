@@ -1,6 +1,4 @@
 {
-  description = "Application packaged using poetry2nix";
-
   inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.poetry2nix = {
@@ -14,7 +12,6 @@
       overlay = nixpkgs.lib.composeManyExtensions [
         poetry2nix.overlay
         (final: prev: {
-          # The application
           myapp = prev.poetry2nix.mkPoetryApplication {
             projectDir = ./.;
           };
