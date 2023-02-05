@@ -7,6 +7,7 @@ from rest_framework import permissions, serializers, validators
 
 from .base import BaseProvider
 from .... import models
+from ....models import User
 
 
 class Serializer(serializers.ModelSerializer):
@@ -90,7 +91,7 @@ class NewSerializer(serializers.ModelSerializer):
         if validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
             user.is_teacher = True
         user.save()
-        return instance
+        return instance #fixme instance is not defined
 
     class Meta:
         model = models.User

@@ -122,7 +122,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         return qs.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
 
     def get_readonly_fields(self, request, obj=None):
-        if obj == None or request.user.is_superuser or request.user == obj.owner:
+        if obj is None or request.user.is_superuser or request.user == obj.owner:
             return []
         else:
             return ["owner", "supervisors", "execs", "is_active"]
@@ -159,7 +159,7 @@ class OrganizationListFilter(admin.SimpleListFilter):
             yield (org.slug, org.name)
 
     def queryset(self, request, queryset):
-        if self.value() == None:
+        if self.value() is None:
             return queryset
         else:
             return queryset.filter(organization__slug=self.value())
@@ -198,7 +198,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         return super().get_form(request, obj, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):
-        if obj == None or request.user.is_superuser:
+        if obj is None or request.user.is_superuser:
             return []
 
         all_fields = [
@@ -286,7 +286,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return {}
 
-        if obj == None:
+        if obj is None:
             return {"author", "supervisor", "rejection_reason"}
 
         status_idx = ["d", "p", "a", "r"].index(obj.status)
@@ -359,8 +359,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         if (
-            obj != None
-            and obj.status not in ("d", "p")
+            obj is not None
+                and obj.status not in ("d", "p")
             and not request.user.is_superuser
             and request.user in obj.organization.supervisors.all()
             and request.user not in obj.organization.execs.all()
@@ -429,7 +429,7 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
             yield (author.pk, author.username)
 
     def queryset(self, request, queryset):
-        if self.value() == None:
+        if self.value() is None:
             return queryset
         else:
             return queryset.filter(author__pk=self.value())
@@ -516,8 +516,8 @@ class EventAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         if (
-            obj != None
-            and (not request.user.is_superuser)
+            obj is not None
+                and (not request.user.is_superuser)
             and (request.user not in obj.organization.execs.all())
         ):
             return False
@@ -536,7 +536,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ["username", "first_name", "last_name"]
 
     def has_view_permission(self, request, obj=None):
-        if obj == None and (
+        if obj is None and (
             request.user.organizations_owning.exists()
             or request.user.organizations_leading.exists()
         ):

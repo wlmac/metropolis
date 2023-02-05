@@ -19,7 +19,7 @@
         {% if lazy_loading %}
         <script type="module">
             import { loadCheck, mapSetup } from "{% static 'core/js/announcement/lazy.js' %}";
-        
+
             const feeds = mapSetup(
                 [
                     "all",
@@ -48,5 +48,4 @@
             $(".card-authors-text").find("a").addClass("link");
         </script>
     </div>
-</div>
 {% endblock %}

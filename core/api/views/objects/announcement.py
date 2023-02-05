@@ -115,10 +115,6 @@ class Provider(BaseProvider):
     @property
     def serializer_class(self):
         return ExecEtcSerializer
-        if self.request.user.is_teacher or self.request.user.is_superuser:
-            return SupervisorSerializer
-        else:
-            return ExecEtcSerializer
 
     def get_queryset(self, request):
         return Announcement.get_all(request.user)

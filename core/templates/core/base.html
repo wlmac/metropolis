@@ -63,7 +63,6 @@
                 <a href="{{ path }}">{{ item }}</a>
             </li>
         {% endfor %}
-    </li>
     {% else %}
     {{ items|gettype }}
     {% endif %}
@@ -90,7 +89,7 @@
                 <!-- <span>Metropolis</span> -->
             </div>
         </a>
-            
+
         <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
         <ul class="right hide-on-med-and-down">
             {% settings_value "NAVBAR" as navbar %}

@@ -58,7 +58,7 @@ class ObjectAPIView(generics.GenericAPIView):
             self.permission_classes = provider.permission_classes
         self.as_su = as_su
         self.serializer_class = provider.serializer_class
-        # NOTE: better to have following if after intiial, but this is easier
+        # NOTE: better to have following if after initial, but this is easier
 
     # NOTE: dispatch() is copied from https://github.com/encode/django-rest-framework/blob/de7468d0b4c48007aed734fee22db0b79b22e70b/rest_framework/views.py
     # License for this function:

@@ -163,7 +163,7 @@ function eventsOnDay(day) {
     return eventsOnDay;
 }
 
-// place all of the relevant cards at the bottom
+// place all the relevant cards at the bottom
 function placeCards(eventsToday, date) {
     let cards = document.querySelector("#eventDetails").querySelectorAll(".dayEvent")
 
