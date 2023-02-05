@@ -21,7 +21,9 @@ class TimetableList(ListAPIViewWithFallback):
     serializer_class = serializers.TimetableSerializer
 
     def get_queryset(self):
-        return models.Timetable.objects.filter(owner=self.request.user, term__end_date__gte=timezone.now().date())
+        return models.Timetable.objects.filter(
+            owner=self.request.user, term__end_date__gte=timezone.now().date()
+        )
 
 
 class TimetableSchedule(APIView):

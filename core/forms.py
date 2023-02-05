@@ -68,9 +68,11 @@ class AddTimetableSelectTermForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user")
         super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
-        self.fields["term"].queryset = models.Term.objects.exclude(
-            end_date__lt=timezone.now().date()
-        ).exclude(timetables__owner=user).order_by("-start_date")
+        self.fields["term"].queryset = (
+            models.Term.objects.exclude(end_date__lt=timezone.now().date())
+            .exclude(timetables__owner=user)
+            .order_by("-start_date")
+        )
 
 
 class SelectCoursesWidget(s2forms.ModelSelect2MultipleWidget):

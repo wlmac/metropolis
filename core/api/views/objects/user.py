@@ -91,7 +91,7 @@ class NewSerializer(serializers.ModelSerializer):
         if validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
             user.is_teacher = True
         user.save()
-        return instance #fixme instance is not defined
+        return instance  # fixme instance is not defined
 
     class Meta:
         model = models.User

@@ -360,7 +360,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         if (
             obj is not None
-                and obj.status not in ("d", "p")
+            and obj.status not in ("d", "p")
             and not request.user.is_superuser
             and request.user in obj.organization.supervisors.all()
             and request.user not in obj.organization.execs.all()
@@ -517,7 +517,7 @@ class EventAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         if (
             obj is not None
-                and (not request.user.is_superuser)
+            and (not request.user.is_superuser)
             and (request.user not in obj.organization.execs.all())
         ):
             return False
