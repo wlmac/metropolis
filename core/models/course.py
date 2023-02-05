@@ -36,7 +36,7 @@ class Term(models.Model):
 
     def is_current(self, target_date=None):
         target_date = utils.get_localdate(date=target_date)
-        return target_date >= self.start_date and target_date < self.end_date
+        return self.start_date <= target_date < self.end_date
 
     def day_is_instructional(self, target_date=None):
         target_date = utils.get_localdate(date=target_date, time=[11, 0, 0])
@@ -62,7 +62,8 @@ class Term(models.Model):
             return None
         return methods[tf.get("day_num_method", "consecutive")](tf, target_date)
 
-    def __day_num_calendar_days(self, tf, target_date):
+    @staticmethod
+    def __day_num_calendar_days(tf, target_date):
         """
         Gets the day number from if the calendar day is even (day 2) or odd (day 1).
         """
@@ -219,7 +220,7 @@ class Event(models.Model):
 
     def is_current(self):
         today = timezone.localtime()
-        return today >= self.start_date and today < self.end_date
+        return self.start_date <= today < self.end_date
 
     @classmethod
     def get_events(cls, user=None):
