@@ -1,5 +1,6 @@
 import datetime
 
+from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
@@ -14,7 +15,9 @@ from ... import models
 
 
 class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
-    queryset = models.Term.objects.filter(end_date__gte=timezone.now().date())
+    queryset = models.Term.objects.filter(
+        end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
+    )
     serializer_class = serializers.TermSerializer
 
     def get_last_modified(self):
@@ -29,7 +32,9 @@ class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
 
 
 class TermDetail(generics.RetrieveAPIView):
-    queryset = models.Term.objects.filter(end_date__gte=timezone.now().date())
+    queryset = models.Term.objects.filter(
+        end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
+    )
     serializer_class = serializers.TermSerializer
 
 

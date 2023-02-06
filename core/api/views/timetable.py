@@ -1,3 +1,6 @@
+import datetime
+
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from oauth2_provider.contrib.rest_framework import TokenHasScope
@@ -22,7 +25,8 @@ class TimetableList(ListAPIViewWithFallback):
 
     def get_queryset(self):
         return models.Timetable.objects.filter(
-            owner=self.request.user, term__end_date__gte=timezone.now().date()
+            owner=self.request.user,
+            term__end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD),
         )
 
 
@@ -44,6 +48,6 @@ class TimetableSchedule(APIView):
 class TimetableDetails(generics.RetrieveAPIView):
     permission_classes = [IsOwner]
     queryset = models.Timetable.objects.filter(
-        term__end_date__gte=timezone.now().date()
+        term__end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
     )
     serializer_class = serializers.TimetableSerializer

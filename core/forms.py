@@ -69,7 +69,9 @@ class AddTimetableSelectTermForm(forms.Form):
         user = kwargs.pop("user")
         super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
         self.fields["term"].queryset = (
-            models.Term.objects.exclude(end_date__lt=timezone.now().date())
+            models.Term.objects.filter(
+                end_date__gte=timezone.now() - settings.TERM_GRACE_PERIOD
+            )
             .exclude(timetables__owner=user)
             .order_by("-start_date")
         )

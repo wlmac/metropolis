@@ -156,6 +156,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 # Timetable settings
 
+TERM_GRACE_PERIOD = timedelta(weeks=2)
+
 TIMETABLE_FORMATS = {
     "pre-2020": {
         "schedules": {
