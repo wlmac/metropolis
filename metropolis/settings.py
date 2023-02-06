@@ -993,8 +993,11 @@ PRE = ""
 
 try:
     from metropolis.config import *
-except ImportError:
-    print("Please create a config file to override values in settings.py")
+except ImportError as err:
+    pass
+else:
+    import warnings
+    warnings.warn(DeprecationWarning("use local_settings.py instead of config.py"))
 
 try:
     with open(os.path.join(os.path.dirname(__file__), "local_settings.py")) as f:
