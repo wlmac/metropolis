@@ -581,7 +581,7 @@ def archive_page(modeladmin, request, queryset):
     return response
 
 
-class FlatPageAdmin(FlatPageAdmin):
+class CustomFlatPageAdmin(FlatPageAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
@@ -616,7 +616,7 @@ admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)
 
 admin.site.unregister(FlatPage)
-admin.site.register(FlatPage, FlatPageAdmin)
+admin.site.register(FlatPage, CustomFlatPageAdmin)
 
 admin.site.site_header = "Metropolis administration"
 admin.site.site_title = "Metropolis admin"
