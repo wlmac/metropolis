@@ -1,3 +1,5 @@
+import json
+
 import django.db
 from django import forms
 from django.conf import settings
@@ -5,7 +7,9 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -553,10 +557,35 @@ class TimetableAdmin(admin.ModelAdmin):
     list_filter = ["term"]
 
 
+@admin.action(description="Archive selected flatpages and download them as a JSON file")
+def archive_page(modeladmin, request, queryset):
+    if not request.user.has_perm("flatpages.change_flatpage"):
+        raise PermissionDenied
+
+    response = HttpResponse(
+        content_type="application/json"
+    )  # write a json file with all the page date and then download it
+    response["Content-Disposition"] = 'attachment; filename="pages.json"'
+    data = []
+    for page in queryset:
+        data.append(
+            {
+                "url": page.url,
+                "title": page.title,
+                "content": page.content,
+                "registration_required": page.registration_required,
+                "template_name": page.template_name,
+            }
+        )
+    response.write(json.dumps(data))
+    return response
+
+
 class FlatPageAdmin(FlatPageAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
+    actions = [archive_page]
     fieldsets = (
         (None, {"fields": ("url", "title", "content", "sites")}),
         (
