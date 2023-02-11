@@ -1,12 +1,12 @@
 ISORT_ARGS="--line-length 79"
 
-all: fmt
+all: fmt-setup lint fmt
 
 lint:
 	isort ${ISORT_ARGS} .
 	black --diff .
 
-fmt:
+fmt-setup:
 	isort ${ISORT_ARGS} .
 	black --safe .
 
