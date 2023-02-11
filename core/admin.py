@@ -463,7 +463,6 @@ class BlogPostAdmin(admin.ModelAdmin):
     def views(self, post):
         return post.views()
 
-
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}
 
