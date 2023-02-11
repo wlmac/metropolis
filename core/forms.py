@@ -1,4 +1,5 @@
-from allauth.account.forms import SignupForm
+from allauth.account.forms import SignupForm, LoginForm
+from allauth.account.utils import perform_login
 from django import forms
 from django.conf import settings
 from django.utils import timezone
@@ -6,6 +7,24 @@ from django_select2 import forms as s2forms
 from martor.widgets import AdminMartorWidget
 
 from . import models
+
+
+class MetropolisLoginForm(LoginForm):
+    def login(self, request, redirect_url=None):
+        email = self.user_credentials().get("email")
+        ret = perform_login(
+            request,
+            self.user,
+            email_verification=settings.ACCOUNT_EMAIL_VERIFICATION,
+            redirect_url=redirect_url,
+            email=email,
+        )
+        remember = self.cleaned_data["remember"]
+        if remember:
+            request.session.set_expiry(0)
+        else:
+            request.session.set_expiry(settings.SESSION_EXPIRY)  # 15 days
+        return ret
 
 
 class MetropolisSignupForm(SignupForm):

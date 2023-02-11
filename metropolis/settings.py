@@ -670,11 +670,15 @@ TIMETABLE_FORMATS = {
 
 # Authentication settings
 
+SESSION_SAVE_EVERY_REQUEST = True  # Refreshes session expiry  session on every request
+SESSION_COOKIE_SECURE = True  # Only send session cookie over HTTPS
+SESSION_EXPIRY = 15 * 86400  # 15 days
+
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_FORMS = {
-    "login": "allauth.account.forms.LoginForm",
+    "login": "core.forms.MetropolisLoginForm",
     "signup": "core.forms.MetropolisSignupForm",
     "add_email": "allauth.account.forms.AddEmailForm",
     "change_password": "allauth.account.forms.ChangePasswordForm",
