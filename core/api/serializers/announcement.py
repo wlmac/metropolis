@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
 from core.api.serializers.custom import PrimaryKeyAndSlugRelatedField
-from .tag import TagSerializer
+
 from ... import models
+from .tag import TagSerializer
 
 
 class AnnouncementSerializer(serializers.ModelSerializer):

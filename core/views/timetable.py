@@ -5,13 +5,13 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, FormMixin, UpdateView
 
-from . import mixins
 from .. import models
 from ..forms import (
     AddCourseForm,
     AddTimetableSelectTermForm,
     TimetableSelectCoursesForm,
 )
+from . import mixins
 
 
 class TimetableList(LoginRequiredMixin, ListView, FormMixin, mixins.TitleMixin):

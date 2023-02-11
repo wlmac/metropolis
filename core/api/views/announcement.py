@@ -6,10 +6,10 @@ from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import permissions
 from rest_framework.views import APIView
 
-from .stream import SignalStream
+from ... import models
 from .. import serializers
 from ..utils import ListAPIViewWithFallback
-from ... import models
+from .stream import SignalStream
 
 
 class AnnouncementListAll(ListAPIViewWithFallback):

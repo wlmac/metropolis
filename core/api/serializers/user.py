@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from .tag import TagSerializer
 from ... import models
+from .tag import TagSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):

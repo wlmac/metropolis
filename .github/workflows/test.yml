@@ -12,4 +12,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run Unit Tests
         run: |
+          make metropolis/local_rsa_privkey.pem
+          cat metropolis/local_rsa_privkey.pem
+          make metropolis/local_settings.py
           python3 manage.py test

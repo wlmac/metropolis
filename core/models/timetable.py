@@ -1,9 +1,8 @@
 from django.conf import settings
 from django.db import models
 
-from .course import Course, Term
 from .. import utils
-
+from .course import Course, Term
 
 # Create your models here.
 
