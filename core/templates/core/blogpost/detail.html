@@ -30,14 +30,17 @@
                 (Edited)
                 {% endif %}-->
             </div>
+        <span class="view-counter">Views: <b>{{ blogpost.get_views }}</b> </span>
         </div>
         <hr>
         <div class="card-body">
             {{blogpost.body|markdown}}
         </div>
         <br>
+        <div>
         <a class="link" href="{% url 'blogpost_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Blog Posts</a>
-        <script>
+        </div>
+            <script>
             $(".card-authors-text").find("a").addClass("link");
         </script>
     </div>

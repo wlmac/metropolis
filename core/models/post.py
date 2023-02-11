@@ -1,3 +1,4 @@
+import requests
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -110,6 +111,15 @@ class BlogPost(Post):
 
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
+
+    def get_tracker_url(self):
+        return "https://api.countapi.xyz/hit/metropolis/blog-" + self.slug
+
+    def get_views(self):
+        try:
+            return requests.get(self.get_tracker_url()).json()["value"]
+        except:
+            return "unknown"
 
     class Meta:
         ordering = ["-created_date"]
