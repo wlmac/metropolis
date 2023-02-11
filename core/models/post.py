@@ -115,7 +115,7 @@ class BlogPost(Post):
     def get_tracker_url(self):
         return "https://api.countapi.xyz/hit/metropolis/blog-" + self.slug
 
-    def get_views(self):
+    def views(self):
         try:
             return requests.get(self.get_tracker_url()).json()["value"]
         except:

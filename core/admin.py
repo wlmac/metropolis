@@ -440,13 +440,15 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
 
 
 class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ["title", "author", "is_published"]
+    readonly_fields = ["views"]
+    list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
     ordering = ["-show_after"]
     fields = [
         "author",
         "title",
         "slug",
+        "views",
         "body",
         "featured_image",
         "show_after",
@@ -456,6 +458,11 @@ class BlogPostAdmin(admin.ModelAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
+
+    @admin.display(description="Views")
+    def views(self, post):
+        return post.views()
+
 
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}
