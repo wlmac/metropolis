@@ -20,8 +20,8 @@ class MetropolisLoginForm(LoginForm):
             email=email,
         )
         remember = self.cleaned_data["remember"]
-        if remember:
-            request.session.set_expiry(0)
+        if not remember:
+            request.session.set_expiry(0) # close session on browser close
         else:
             request.session.set_expiry(settings.SESSION_EXPIRY)  # 15 days
         return ret
