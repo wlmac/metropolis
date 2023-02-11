@@ -16,9 +16,10 @@ def create_user() -> User:
     return user
 
 
-def create_announcement(org: Organization, status: str, title: str) -> Announcement:
+def create_announcement(org: Organization, status: str, title: str) -> None:
     ann = Announcement(organization=org, status=status, title=title)
     ann.save()
+
 
 
 class AnnouncementTests(TestCase):
