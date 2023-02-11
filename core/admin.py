@@ -17,6 +17,7 @@ from martor.widgets import AdminMartorWidget
 
 from core.utils.mail import send_mail
 from metropolis import settings
+
 from . import models
 from .forms import (
     AnnouncementAdminForm,

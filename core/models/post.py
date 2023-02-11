@@ -3,9 +3,8 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
-from .choices import announcement_status_choices
 from ..utils.file_upload import file_upload_path_generator
-
+from .choices import announcement_status_choices
 
 # Create your models here.
 

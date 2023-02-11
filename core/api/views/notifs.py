@@ -7,8 +7,8 @@ from django.http import StreamingHttpResponse
 from rest_framework import permissions
 from rest_framework.views import APIView
 
-from .. import serializers
 from ... import models
+from .. import serializers
 
 global_notifs = Signal()
 

@@ -35,6 +35,8 @@
         python310
         poetry
         openssl
+        black
+        isort
       ];
     });
   });

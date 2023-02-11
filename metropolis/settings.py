@@ -997,6 +997,7 @@ except ImportError as err:
     pass
 else:
     import warnings
+
     warnings.warn(DeprecationWarning("use local_settings.py instead of config.py"))
 
 try:
