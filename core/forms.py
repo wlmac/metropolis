@@ -23,7 +23,7 @@ class MetropolisLoginForm(LoginForm):
         if not remember:
             request.session.set_expiry(0)  # close session on browser close
         else:
-            request.session.set_expiry(settings.SESSION_EXPIRY)  # 15 days
+            request.session.set_expiry(settings.SESSION_EXPIRY)
         return ret
 
 
