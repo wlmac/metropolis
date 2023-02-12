@@ -3,9 +3,9 @@ from urllib.parse import urlparse
 import pytz
 from django import http
 from django.conf import settings
+from django.contrib.redirects.middleware import RedirectFallbackMiddleware
 from django.contrib.redirects.models import Redirect
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.redirects.middleware import RedirectFallbackMiddleware
 from django.utils import timezone
 
 
