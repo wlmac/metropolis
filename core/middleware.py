@@ -33,7 +33,6 @@ class CustomRedirectFallbackTemporaryMiddleware(RedirectFallbackMiddleware):
         """
             Seperate query parameters and url if full absolute path contains
             query parameters using python urlparse library
-
         """
         parsed_url = None
         if "?" in full_path:
