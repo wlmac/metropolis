@@ -451,6 +451,7 @@ class BlogPostAdmin(admin.ModelAdmin):
         "views",
         "body",
         "featured_image",
+        "featured_image_description",
         "show_after",
         "tags",
         "is_published",

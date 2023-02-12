@@ -11,7 +11,7 @@
 {% block main %}
 <div class="container">
     <div class="card-container">
-        <img class="card-image" src="{{ blogpost.featured_image.url }}" alt="header image">
+        <img class="card-image" src="{{ blogpost.featured_image.url }}" alt={{ blogpost.featured_image_description }}>
         <div class="tag-section">
             {% for tag in blogpost.tags.all %}
             <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
@@ -20,7 +20,7 @@
         <h1 class="title">{{blogpost.title}}</h1>
         <div class="card-authors">
             <div class="card-authors-image">
-                <a href="{{blogpost.author.username|user_url}}"><img class="circle" src="{{blogpost.author.email|gravatar_url:100}}"></a>
+                <a href="{{blogpost.author.username|user_url}}"><img class="circle" src="{{blogpost.author.email|gravatar_url:100}}" alt="the author's profile picture"></a>
             </div>
             <div class="card-authors-text">
                 {{blogpost.author.username|user}}

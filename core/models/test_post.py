@@ -21,7 +21,6 @@ def create_announcement(org: Organization, status: str, title: str) -> None:
     ann.save()
 
 
-
 class AnnouncementTests(TestCase):
     def test_get_approved(self):
         org = create_school_org(create_user())

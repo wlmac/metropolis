@@ -110,7 +110,7 @@ class BlogPost(Post):
     featured_image_description = models.CharField(
         help_text="Alt text for the featured image I.E. The description of the image",
         max_length=140,
-        default="" ,
+        default="This image has no description.",
         blank=True
     )
     is_published = models.BooleanField(default=False)
@@ -131,10 +131,6 @@ class BlogPost(Post):
 @receiver(pre_save, sender=BlogPost)
 def my_handler(sender, instance: BlogPost, **kwargs):
     default = "A blue background with a bunch of different types of notes in it."
-    if instance._meta.get_field("featured_image").default in [instance.featured_image.path, instance.featured_image.path.replace('/', '\\')]:
+    if 'default.png' in instance.featured_image.path:
         instance.featured_image_description = default
-
-    else:
-        if instance.featured_image_description == "":
-            instance.featured_image_description = 'This image has no description.'
 
