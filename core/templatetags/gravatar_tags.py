@@ -6,6 +6,7 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+
 # return only the URL of the gravatar
 # TEMPLATE USE:  {{ email|gravatar_url:150 }}
 @register.filter

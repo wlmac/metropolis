@@ -111,7 +111,7 @@ class BlogPost(Post):
         help_text="Alt text for the featured image I.E. The description of the image",
         max_length=140,
         default="This image has no description.",
-        blank=True
+        blank=True,
     )
     is_published = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
@@ -131,6 +131,5 @@ class BlogPost(Post):
 @receiver(pre_save, sender=BlogPost)
 def my_handler(sender, instance: BlogPost, **kwargs):
     default = "A blue background with a bunch of different types of notes in it."
-    if 'default.png' in instance.featured_image.path:
+    if "default.png" in instance.featured_image.path:
         instance.featured_image_description = default
-
