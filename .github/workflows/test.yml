@@ -1,5 +1,5 @@
 name: test
-on: [ push ]
+on: [ push, workflow_dispatch ]
 jobs:
   linter_name:
     name: runner
