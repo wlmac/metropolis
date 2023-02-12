@@ -107,18 +107,15 @@ class BlogPost(Post):
         default="featured_image/default.png",
     )
     is_published = models.BooleanField(default=False)
+    views = models.PositiveIntegerField(default=0)
 
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
 
-    def get_tracker_url(self):
-        return "https://api.countapi.xyz/hit/metropolis/blog-" + self.slug
-
-    def views(self):
-        try:
-            return requests.get(self.get_tracker_url()).json()["value"]
-        except:
-            return "unknown"
+    def get_views(self) -> int:
+        self.views += 1
+        self.save()
+        return self.views
 
     class Meta:
         ordering = ["-created_date"]
