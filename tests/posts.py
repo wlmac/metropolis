@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from . import Organization, User
-from .post import *
+from core.models import Organization, User
+from core.models.post import *
 
 
 def create_school_org(user: User) -> Organization:
