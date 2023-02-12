@@ -1,6 +1,7 @@
-import requests
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.urls import reverse
 
 from ..utils.file_upload import file_upload_path_generator
@@ -106,6 +107,12 @@ class BlogPost(Post):
         upload_to=featured_image_file_path_generator,
         default="featured_image/default.png",
     )
+    featured_image_description = models.CharField(
+        help_text="Alt text for the featured image I.E. The description of the image",
+        max_length=140,
+        default="" ,
+        blank=True
+    )
     is_published = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
 
@@ -119,3 +126,15 @@ class BlogPost(Post):
 
     class Meta:
         ordering = ["-created_date"]
+
+
+@receiver(pre_save, sender=BlogPost)
+def my_handler(sender, instance: BlogPost, **kwargs):
+    default = "A blue background with a bunch of different types of notes in it."
+    if instance._meta.get_field("featured_image").default in [instance.featured_image.path, instance.featured_image.path.replace('/', '\\')]:
+        instance.featured_image_description = default
+
+    else:
+        if instance.featured_image_description == "":
+            instance.featured_image_description = 'This image has no description.'
+
