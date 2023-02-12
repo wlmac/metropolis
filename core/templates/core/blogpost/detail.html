@@ -11,7 +11,7 @@
 {% block main %}
 <div class="container">
     <div class="card-container">
-        <img class="card-image" src="{{ blogpost.featured_image.url }}">
+        <img class="card-image" src="{{ blogpost.featured_image.url }}" alt="header image">
         <div class="tag-section">
             {% for tag in blogpost.tags.all %}
             <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
@@ -30,8 +30,9 @@
                 (Edited)
                 {% endif %}-->
             </div>
-
-        <span class="view-counter"><b>{{ blogpost.get_views }}</b> view{{ blogpost.views|pluralize:",s" }}</span>
+        {% if perms.blog.view_blogpost %}
+            <span class="view-counter"><b>{{ blogpost.get_views }}</b> view{{ blogpost.views|pluralize:",s" }}</span>
+        {% endif %}
         </div>
         <hr>
         <div class="card-body">
