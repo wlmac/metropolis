@@ -31,7 +31,7 @@
                 {% endif %}-->
             </div>
         {% if perms.blog.view_blogpost %}
-            <span class="view-counter"><b>{{ blogpost.get_views }}</b> view{{ blogpost.views|pluralize:",s" }}</span>
+            <span class="view-counter"><b>{{ blogpost.views }}</b> view{{ blogpost.views|pluralize:",s" }}</span>
         {% endif %}
         </div>
         <hr>

@@ -246,6 +246,11 @@ class BlogPostDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
     context_object_name = "blogpost"
     template_name = "core/blogpost/detail.html"
 
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.increment_views()
+        return super().get(self, request, *args, **kwargs)
+
     def get_title(self):
         return self.get_object().title
 

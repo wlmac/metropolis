@@ -119,10 +119,9 @@ class BlogPost(Post):
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
 
-    def get_views(self) -> int:
+    def increment_views(self) -> str:
         self.views += 1
         self.save()
-        return self.views
 
     class Meta:
         ordering = ["-created_date"]
