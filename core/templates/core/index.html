@@ -73,8 +73,9 @@
                                 <hr>
                                 <div class="authors">
                                     <div class="authors-image">
-                                        <a href="{{ event.organization.slug|organization_url }}"><img class="circle"
-                                                                                                      src="{{ event.organization.icon.url }}"></a>
+                                        <a href="{{ event.organization.slug|organization_url }}">
+						<img class="circle" src="{{ event.organization.icon.url }}" alt="{{ event.organization.name }} logo">
+					</a>
                                     </div>
                                     <div class="authors-text">
                                         {{ event.organization.slug|organization }}
