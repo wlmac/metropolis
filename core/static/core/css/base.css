@@ -357,7 +357,8 @@ blockquote {
 }
 
 .footer-title a {
-    color: var(--link-colour);
+    text-decoration: underline;
+    color: var(--contrast-colour);
 }
 
 .footer-title-par {
@@ -374,7 +375,7 @@ blockquote {
     border-top-width: 0px !important;
 }
 
-.foooter-icon-par {
+.footer-icon-par {
     margin-top: 10px;
     padding-bottom: 40px;
     display: -webkit-box;
