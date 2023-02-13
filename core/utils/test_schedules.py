@@ -1,8 +1,8 @@
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase
 
-from ..models import Event, Organization, Term, Timetable, User
-from .get_schedule import *
+from core.models import Event, Organization, Term, Timetable, User
+from core.utils.get_schedule import *
 
 
 def create_current_term():
@@ -45,7 +45,7 @@ def create_winter_break(school_org: Organization, term: Term):
     event.save()
 
 
-class GetWeekScheduleInfoTests(TestCase):
+class TestGetWeekScheduleInfo(TestCase):
     def test_no_current_term_logged_in(self):
         user = create_user()
         info = get_week_schedule_info(user)
