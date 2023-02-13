@@ -16,4 +16,5 @@ jobs:
       with:
         name: qrystal
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - run: nix build check
+    - run: nix flake check
+    - run: nix flake show
