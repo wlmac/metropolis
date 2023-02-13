@@ -108,9 +108,9 @@ class BlogPost(Post):
         default="featured_image/default.png",
     )
     featured_image_description = models.CharField(
-        help_text="Alt text for the featured image I.E. The description of the image",
+        help_text="Alt text for the featured image e.g. what screen readers tell users",
         max_length=140,
-        default="This image has no description.",
+        default="",
         blank=True,
     )
     is_published = models.BooleanField(default=False)
@@ -125,10 +125,3 @@ class BlogPost(Post):
 
     class Meta:
         ordering = ["-created_date"]
-
-
-@receiver(pre_save, sender=BlogPost)
-def my_handler(sender, instance: BlogPost, **kwargs):
-    default = "A blue background with a bunch of different types of notes in it."
-    if "default.png" in instance.featured_image.path:
-        instance.featured_image_description = default
