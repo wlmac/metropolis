@@ -38,18 +38,9 @@ class Index(TemplateView, mixins.TitleMixin):
                 ~Q(schedule_format="default"),
             )[:1]
         )
-        print("events", events)
-        print("default_events", events1())
-        print(
-            "default_events",
-            events1().filter(
-                Q(schedule_format="default"),
-            )[: 3 - len(events)],
-        )
         events += events1().filter(
             Q(schedule_format="default"),
         )[: 3 - len(events)]
-        print("events", events)
         context["events"] = events
 
         context["blogpost"] = models.BlogPost.objects.filter(is_published=True).first()
