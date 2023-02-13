@@ -11,7 +11,7 @@ from .choices import announcement_status_choices
 class PostInteraction(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL, # todo check if user is deleted and if so set body to "deleted" and remove author from comment
     )
     created_date = models.DateTimeField(auto_now_add=True)
 
