@@ -1,13 +1,44 @@
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.urls import reverse
 
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
 
 # Create your models here.
+
+
+class PostInteraction(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+
+
+class Like(PostInteraction):
+    pass
+
+
+class Comment(PostInteraction):
+    body = models.TextField(max_length=512)
+    parent = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,  # todo check if modal is deleted and if so, just set comment body to "deleted" and remove author
+        blank=True,
+        null=True,
+        related_name="replies",
+    )
+    likes = models.ManyToManyField(Like, blank=True)
+
+    def __str__(self):
+        return self.body
+
+    class Meta:
+        ordering = ["created_date"]
 
 
 class Post(models.Model):
@@ -29,6 +60,8 @@ class Post(models.Model):
     tags = models.ManyToManyField(
         "Tag", blank=True, related_name="%(class)ss", related_query_name="%(class)s"
     )
+    likes = models.ManyToManyField(Like, blank=True)
+    comments = models.ManyToManyField(Comment, blank=True)
 
     def __str__(self):
         return self.title
