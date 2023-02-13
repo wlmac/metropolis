@@ -11,7 +11,7 @@ from .choices import announcement_status_choices
 class PostInteraction(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL, # todo check if user is deleted and if so set body to "deleted" and remove author from comment
+        on_delete=models.SET_NULL,  # todo check if user is deleted and if so set body to "deleted" and remove author from comment
     )
     created_date = models.DateTimeField(auto_now_add=True)
 
@@ -20,6 +20,11 @@ class PostInteraction(models.Model):
 
 
 class Like(PostInteraction):
+    pass
+
+
+class Save(PostInteraction):
+    # todo maybe also add collections to save to (like on something like pinterest) though it's probably unnecessary
     pass
 
 
@@ -61,6 +66,7 @@ class Post(models.Model):
         "Tag", blank=True, related_name="%(class)ss", related_query_name="%(class)s"
     )
     likes = models.ManyToManyField(Like, blank=True)
+    saves = models.ManyToManyField(Save, blank=True)
     comments = models.ManyToManyField(Comment, blank=True)
 
     def __str__(self):
