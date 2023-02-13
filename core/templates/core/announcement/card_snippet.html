@@ -5,7 +5,7 @@
     <div class="card-headers">
         <div class="tag-section">
             {% for tag in announcement.tags.all %}
-            <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+                <a href="/announcements/tag/{{tag.id}}"><p class="tag" style="background-color:{{tag.color}}">{{tag}}</p></a>
             {% endfor %}
         </div>
         <h1 class="title">{{announcement.title}}</h1>

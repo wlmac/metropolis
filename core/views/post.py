@@ -139,6 +139,21 @@ class AnnouncementFeed(Feed):
         return [item.organization.name] + item.tags.values_list("name", flat=True)
 
 
+class AnnouncementTagList(TemplateView, mixins.TitleMixin):
+    template_name = "core/announcement/tag_list.html"
+
+    def get_title(self):
+        return "Announcements: " + models.Tag.objects.get(id=self.kwargs["tag"]).name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["feed_tag"] = models.Announcement.get_all(
+            user=self.request.user
+        ).filter(tags=context["tag"])
+        context["tag"] = models.Tag.objects.get(id=context["tag"])
+        return context
+
+
 class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
     model = models.Announcement
     context_object_name = "announcement"
@@ -256,3 +271,18 @@ class BlogPostDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
 
     def test_func(self):
         return self.get_object().is_published
+
+
+class BlogPostTagList(TemplateView, mixins.TitleMixin):
+    template_name = "core/blogpost/tag_list.html"
+
+    def get_title(self):
+        return "Blogposts: " + models.Tag.objects.get(id=self.kwargs["tag"]).name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["feed_tag"] = models.BlogPost.objects.filter(is_published=True).filter(
+            tags=context["tag"]
+        )
+        context["tag"] = models.Tag.objects.get(id=context["tag"])
+        return context

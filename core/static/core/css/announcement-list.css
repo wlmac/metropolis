@@ -181,6 +181,9 @@
     font-size: 0.8rem;
     font-family: 'Roboto Mono', monospace;
 }
+.tag:hover {
+    text-decoration: underline;
+}
 .message {
     width: 100%;
     margin-top: 30px;
