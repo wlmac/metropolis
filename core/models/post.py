@@ -29,6 +29,14 @@ class Save(PostInteraction):
 
 
 class Comment(PostInteraction):
+    """
+    todo:
+    - simplify the parental situation
+    - add a unique id per comment so that it can be referenced in the url
+    - add a simple deletion system for staff and such
+    - make sure body content is quickly checked for anything too bad (like profanity) and if so, set it to hidden and require approval from staff
+
+    """
     body = models.TextField(max_length=512)
     parent = models.ForeignKey(
         "self",
