@@ -1,5 +1,5 @@
 name: test
-on: [ push ]
+on: [ push, workflow_dispatch ]
 jobs:
   linter_name:
     name: runner
@@ -8,8 +8,13 @@ jobs:
       - uses: actions/checkout@v2
       - name: Setup Python
         uses: actions/setup-python@v2.2.2
+        with:
+          python-version: '3.9'
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run Unit Tests
         run: |
+          make metropolis/local_rsa_privkey.pem
+          cat metropolis/local_rsa_privkey.pem
+          make metropolis/local_settings.py
           python3 manage.py test

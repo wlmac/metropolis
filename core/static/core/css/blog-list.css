@@ -100,10 +100,62 @@ hr {
     font-size: 0.8rem;
     font-family: 'Roboto Mono', monospace;
 }
+.tag:hover {
+    text-decoration: underline;
+}
 .message {
     width: 100%;
     margin-top: 30px;
     text-align: center;
+}
+.headers {
+    overflow: hidden;
+    background-color: var(--dark-colour);
+    padding: 20px;
+    padding-left: 40px;
+}
+.headers ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 0;
+}
+.headers li {
+    font-size: 1rem;
+}
+.header {
+    cursor: pointer;
+    text-align: center;
+    padding: 0 30px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    color: var(--link-colour);
+    border-bottom: 2px solid var(--link-colour);
+    display: inline;
+}
+.header:hover {
+    color: var(--mid-colour);
+    border-color: var(--mid-colour);
+    -webkit-transition: color 0.1s linear, border-color 0.1s linear;
+    -o-transition: color 0.1s linear, border-color 0.1s linear;
+    transition: color 0.1s linear, border-color 0.1s linear;
+}
+@media screen and (max-width: 768px) {
+    .headers {
+        padding: 10px;
+    }
+
+    .headers ul {
+        flex-direction: column;
+    }
+
+    .headers li {
+        border: none;
+    }
+
+    .header {
+        padding: 2px;
+    }
 }
 @media screen and (max-width: 600px) {
     .card-container {

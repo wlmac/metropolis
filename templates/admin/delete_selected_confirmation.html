@@ -25,7 +25,7 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>{% blocktranslate %}Are you sure you want to delete the selected {{ objects_name }}? All of the following objects and their related items will be deleted:{% endblocktranslate %}</p>
+    <p>{% blocktranslate %}Are you sure you want to delete the selected {{ objects_name }}? All the following objects and their related items will be deleted:{% endblocktranslate %}</p>
     {% include "admin/includes/object_delete_summary.html" %}
     <h2>{% translate "Objects" %}</h2>
     {% for deletable_object in deletable_objects %}

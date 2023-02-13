@@ -1,13 +1,11 @@
 name: lint
-on: [ push ]
+on: [push, pull_request]
 jobs:
-  linter_name:
-    name: runner
+  format-code:
+    name: runner / black formatter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Python
-        uses: actions/setup-python@v2.2.2
-      - name: Format Check
-        run: |
-          make fmt-setup fmt-check
+      - uses: rickstaa/action-black@v1
+        with:
+          black_args: ". --safe"

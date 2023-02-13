@@ -32,14 +32,22 @@ urlpatterns = [
         name="organization_detail",
     ),
     path("announcements", views.AnnouncementList.as_view(), name="announcement_list"),
-    path("announcements/feed", views.AnnouncementFeed(), name="announcement_feed"),
     path(
         "announcement/<int:pk>",
         views.AnnouncementDetail.as_view(),
         name="announcement_detail",
     ),
+    path(
+        "announcements/tag/<int:tag>",
+        views.AnnouncementTagList.as_view(),
+        name="announcement_tag_list",
+    ),
+    path("announcements/feed", views.AnnouncementFeed(), name="announcement_feed"),
     path("blog", views.BlogPostList.as_view(), name="blogpost_list"),
     path("blog/<str:slug>", views.BlogPostDetail.as_view(), name="blogpost_detail"),
+    path(
+        "blog/tag/<int:tag>", views.BlogPostTagList.as_view(), name="blogpost_tag_list"
+    ),
     path("calendar", views.CalendarView.as_view(), name="calendar"),
     path("calendar.ics", views.CalendarFeed(), name="calendar_ical"),
     path("map", views.MapView.as_view(), name="map"),

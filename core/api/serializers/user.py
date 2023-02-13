@@ -28,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserSerializerInternal(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
+
     class Meta:
         model = models.User
         fields = [

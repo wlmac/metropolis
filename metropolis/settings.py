@@ -156,6 +156,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 # Timetable settings
 
+TERM_GRACE_PERIOD = timedelta(weeks=2)
+
 TIMETABLE_FORMATS = {
     "pre-2020": {
         "schedules": {
@@ -667,7 +669,9 @@ TIMETABLE_FORMATS = {
 }
 
 # Authentication settings
-
+SESSION_SAVE_EVERY_REQUEST = True  # Refreshes session expiry  session on every request
+SESSION_COOKIE_SECURE = True  # Only send session cookie over HTTPS
+SESSION_COOKIE_AGE = 15 * 86400  # 15 days
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
@@ -985,10 +989,16 @@ THEME_CSS = THEMES[CURRENT_THEME]["theme"]
 TEACHER_EMAIL_SUFFIX = "@tdsb.on.ca"
 STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 
+PRE = ""
+
 try:
     from metropolis.config import *
-except ImportError:
-    print("Please create a config file to override values in settings.py")
+except ImportError as err:
+    pass
+else:
+    import warnings
+
+    warnings.warn(DeprecationWarning("use local_settings.py instead of config.py"))
 
 try:
     with open(os.path.join(os.path.dirname(__file__), "local_settings.py")) as f:

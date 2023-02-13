@@ -1,13 +1,12 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.views.generic.base import RedirectView
 
 from .. import models
-from . import mixins
-
-import json
 
 
 class RaffleRedirect(LoginRequiredMixin, RedirectView):

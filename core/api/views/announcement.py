@@ -3,8 +3,7 @@ import json
 from django.db.models import signals
 from django.http import StreamingHttpResponse
 from oauth2_provider.contrib.rest_framework import TokenHasScope
-from rest_framework import generics, permissions
-from rest_framework.response import Response
+from rest_framework import permissions
 from rest_framework.views import APIView
 
 from ... import models

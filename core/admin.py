@@ -1,11 +1,15 @@
+import json
+
 import django.db
 from django import forms
 from django.conf import settings
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -123,7 +127,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         return qs.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
 
     def get_readonly_fields(self, request, obj=None):
-        if obj == None or request.user.is_superuser or request.user == obj.owner:
+        if obj is None or request.user.is_superuser or request.user == obj.owner:
             return []
         else:
             return ["owner", "supervisors", "execs", "is_active"]
@@ -160,7 +164,7 @@ class OrganizationListFilter(admin.SimpleListFilter):
             yield (org.slug, org.name)
 
     def queryset(self, request, queryset):
-        if self.value() == None:
+        if self.value() is None:
             return queryset
         else:
             return queryset.filter(organization__slug=self.value())
@@ -199,7 +203,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         return super().get_form(request, obj, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):
-        if obj == None or request.user.is_superuser:
+        if obj is None or request.user.is_superuser:
             return []
 
         all_fields = [
@@ -287,7 +291,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return {}
 
-        if obj == None:
+        if obj is None:
             return {"author", "supervisor", "rejection_reason"}
 
         status_idx = ["d", "p", "a", "r"].index(obj.status)
@@ -360,7 +364,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         if (
-            obj != None
+            obj is not None
             and obj.status not in ("d", "p")
             and not request.user.is_superuser
             and request.user in obj.organization.supervisors.all()
@@ -430,22 +434,24 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
             yield (author.pk, author.username)
 
     def queryset(self, request, queryset):
-        if self.value() == None:
+        if self.value() is None:
             return queryset
         else:
             return queryset.filter(author__pk=self.value())
 
 
 class BlogPostAdmin(admin.ModelAdmin):
-    list_display = ["title", "author", "is_published"]
+    list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
-    ordering = ["-show_after"]
+    ordering = ["-show_after", "views"]
     fields = [
         "author",
         "title",
         "slug",
+        "views",
         "body",
         "featured_image",
+        "featured_image_description",
         "show_after",
         "tags",
         "is_published",
@@ -517,7 +523,7 @@ class EventAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         if (
-            obj != None
+            obj is not None
             and (not request.user.is_superuser)
             and (request.user not in obj.organization.execs.all())
         ):
@@ -537,7 +543,7 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ["username", "first_name", "last_name"]
 
     def has_view_permission(self, request, obj=None):
-        if obj == None and (
+        if obj is None and (
             request.user.organizations_owning.exists()
             or request.user.organizations_leading.exists()
         ):
@@ -554,10 +560,35 @@ class TimetableAdmin(admin.ModelAdmin):
     list_filter = ["term"]
 
 
-class FlatPageAdmin(FlatPageAdmin):
+@admin.action(description="Archive selected flatpages and download them as a JSON file")
+def archive_page(modeladmin, request, queryset):
+    if not request.user.has_perm("flatpages.change_flatpage"):
+        raise PermissionDenied
+
+    response = HttpResponse(
+        content_type="application/json"
+    )  # write a json file with all the page date and then download it
+    response["Content-Disposition"] = 'attachment; filename="pages.json"'
+    data = []
+    for page in queryset:
+        data.append(
+            {
+                "url": page.url,
+                "title": page.title,
+                "content": page.content,
+                "registration_required": page.registration_required,
+                "template_name": page.template_name,
+            }
+        )
+    response.write(json.dumps(data))
+    return response
+
+
+class CustomFlatPageAdmin(FlatPageAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
+    actions = [archive_page]
     fieldsets = (
         (None, {"fields": ("url", "title", "content", "sites")}),
         (
@@ -588,7 +619,7 @@ admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)
 
 admin.site.unregister(FlatPage)
-admin.site.register(FlatPage, FlatPageAdmin)
+admin.site.register(FlatPage, CustomFlatPageAdmin)
 
 admin.site.site_header = "Metropolis administration"
 admin.site.site_title = "Metropolis admin"

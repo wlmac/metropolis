@@ -1,9 +1,5 @@
 from django import template
 from django.conf import settings
-from django.shortcuts import reverse
-from django.utils.safestring import mark_safe
-
-from .. import models
 
 register = template.Library()
 

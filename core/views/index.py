@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from django.views import View
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import TemplateView
 from django_ical.views import ICalFeed
 
 from core.utils import generate_slam as gs
@@ -38,18 +38,9 @@ class Index(TemplateView, mixins.TitleMixin):
                 ~Q(schedule_format="default"),
             )[:1]
         )
-        print("events", events)
-        print("default_events", events1())
-        print(
-            "default_events",
-            events1().filter(
-                Q(schedule_format="default"),
-            )[: 3 - len(events)],
-        )
         events += events1().filter(
             Q(schedule_format="default"),
         )[: 3 - len(events)]
-        print("events", events)
         context["events"] = events
 
         context["blogpost"] = models.BlogPost.objects.filter(is_published=True).first()

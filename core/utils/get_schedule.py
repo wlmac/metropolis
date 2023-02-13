@@ -3,7 +3,6 @@ import json
 from dataclasses import dataclass
 
 import rest_framework.utils.encoders
-from django.shortcuts import reverse
 from django.utils import timezone
 from django.utils.safestring import SafeString, mark_safe
 

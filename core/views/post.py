@@ -1,17 +1,13 @@
 from typing import Optional
 
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.syndication.views import Feed
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.db.models import Q
+from django.core.paginator import EmptyPage, Paginator
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.decorators.http import require_POST
-from django.views.generic import DetailView, ListView
-from django.views.generic.base import RedirectView, TemplateView
+from django.views.generic import DetailView
+from django.views.generic.base import TemplateView
 
 from core.templatetags.markdown_tags import markdown
 
@@ -143,6 +139,21 @@ class AnnouncementFeed(Feed):
         return [item.organization.name] + item.tags.values_list("name", flat=True)
 
 
+class AnnouncementTagList(TemplateView, mixins.TitleMixin):
+    template_name = "core/announcement/tag_list.html"
+
+    def get_title(self):
+        return "Announcements: " + models.Tag.objects.get(id=self.kwargs["tag"]).name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["feed_tag"] = models.Announcement.get_all(
+            user=self.request.user
+        ).filter(tags=context["tag"])
+        context["tag"] = models.Tag.objects.get(id=context["tag"])
+        return context
+
+
 class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
     model = models.Announcement
     context_object_name = "announcement"
@@ -250,8 +261,28 @@ class BlogPostDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
     context_object_name = "blogpost"
     template_name = "core/blogpost/detail.html"
 
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        obj.increment_views()
+        return super().get(self, request, *args, **kwargs)
+
     def get_title(self):
         return self.get_object().title
 
     def test_func(self):
         return self.get_object().is_published
+
+
+class BlogPostTagList(TemplateView, mixins.TitleMixin):
+    template_name = "core/blogpost/tag_list.html"
+
+    def get_title(self):
+        return "Blogposts: " + models.Tag.objects.get(id=self.kwargs["tag"]).name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["feed_tag"] = models.BlogPost.objects.filter(is_published=True).filter(
+            tags=context["tag"]
+        )
+        context["tag"] = models.Tag.objects.get(id=context["tag"])
+        return context

@@ -1,13 +1,5 @@
-ISORT_ARGS="--line-length 79"
+metropolis/local_rsa_privkey.pem:
+	openssl genrsa -out $@ 4096
 
-all: fmt
-
-lint:
-	isort ${ISORT_ARGS} .
-	black --diff .
-
-fmt:
-	isort ${ISORT_ARGS} .
-	black --safe .
-
-.PHONY: lint fmt
+metropolis/local_settings.py:
+	cp metropolis/local_settings_sample.py metropolis/local_settings.py

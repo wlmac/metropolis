@@ -28,7 +28,7 @@
                 }
                 history.replaceState(null, null, "?"+urlParams.toString());
                 $(".header").click(function() {
-                    if (this.id == "map") {
+                    if (this.id === "map") {
                         window.open("/map", "_self")
                     } else {
                         $(".header").removeClass("active");
@@ -51,7 +51,7 @@
                 William Lyon Mackenzie C. I. is a Toronto District Secondary School opened in 1960 and located in North York.
                 Mackenzie was named after the historical prowess William Lyon Mackenzie, the political agitator who led the
                 government revolt in Toronto in 1837. In its years of establishing a home of blue and gold, William Lyon Mackenzie
-                Collegiate not only built an incredible student body of 1500 strong, but also a strong, tight knit community that
+                Collegiate not only built an incredible student body of 1500 strong, but also a strong, tight-knit community that
                 prides itself on multicultural diversity, inclusion, creativity and academic innovation. And, here is where the
                 heart and soul of the Lyon Pride resound.
             </p>
@@ -90,7 +90,7 @@
             <h1 class="title">Our Team</h1>
             <hr>
             <p class="text">
-                A diverse group of {{ member_count }} developers, artists, and creators worked in tandem to build this site.
+                A diverse group of {{ member_count }} developers, artists, and creators worked in tandem to build this site. Our applications are open to all students, so if you're interested in joining our team, please apply <a href="https://forms.gle/MLrFckYTyYJ3R5KdA">here</a>
             </p>
             <h1 class="title">Members</h1>
             <hr>
@@ -191,9 +191,15 @@
                         </a>
                     </li>
                     <li>
-                        <a class="link" href="tel:4163953330">
+                        <a class="link" href="tel:+1-416-395-3330">
                             <i class="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
-                            <p>(416) 395-3330</p>
+                            <p>416-395-3330</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="tel:+1-416-395-4453">
+                            <i class="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
+                            <p>416-395-4453 (fax)</p>
                         </a>
                     </li>
                 </div>
@@ -211,9 +217,9 @@
                     </li>
                     <h3 class="section-title">Vice Principals</h3>
                     <li>
-                        <a class="link" href="mailto:joanne.d'addio@tdsb.on.ca" target="_blank">
+                        <a class="link" href="mailto:jyoti.khona@tdsb.on.ca" target="_blank">
                             <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
-                            <p>Joanne D'Addio (joanne.d'addio@tdsb.on.ca)</p>
+                            <p>Jyoti Khona (jyoti.khona@tdsb.on.ca)</p>
                         </a>
                     </li>
                     <li>

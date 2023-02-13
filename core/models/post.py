@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.urls import reverse
 
 from ..utils.file_upload import file_upload_path_generator
@@ -105,10 +107,21 @@ class BlogPost(Post):
         upload_to=featured_image_file_path_generator,
         default="featured_image/default.png",
     )
+    featured_image_description = models.CharField(
+        help_text="Alt text for the featured image e.g. what screen readers tell users",
+        max_length=140,
+        default="",
+        blank=True,
+    )
     is_published = models.BooleanField(default=False)
+    views = models.PositiveIntegerField(default=0)
 
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
+
+    def increment_views(self) -> str:
+        self.views += 1
+        self.save()
 
     class Meta:
         ordering = ["-created_date"]

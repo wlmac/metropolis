@@ -1,6 +1,7 @@
 from allauth.account.forms import SignupForm
 from django import forms
 from django.conf import settings
+from django.utils import timezone
 from django_select2 import forms as s2forms
 from martor.widgets import AdminMartorWidget
 
@@ -67,8 +68,12 @@ class AddTimetableSelectTermForm(forms.Form):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user")
         super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
-        self.fields["term"].queryset = models.Term.objects.exclude(
-            timetables__owner=user
+        self.fields["term"].queryset = (
+            models.Term.objects.filter(
+                end_date__gte=timezone.now() - settings.TERM_GRACE_PERIOD
+            )
+            .exclude(timetables__owner=user)
+            .order_by("-start_date")
         )
 
 

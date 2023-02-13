@@ -1,12 +1,10 @@
-from typing import List
-
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
-from rest_framework import generics, permissions, serializers
+from rest_framework import permissions, serializers
 
 from core.utils.mail import send_mail
 
@@ -118,10 +116,6 @@ class Provider(BaseProvider):
     @property
     def serializer_class(self):
         return ExecEtcSerializer
-        if self.request.user.is_teacher or self.request.user.is_superuser:
-            return SupervisorSerializer
-        else:
-            return ExecEtcSerializer
 
     def get_queryset(self, request):
         return Announcement.get_all(request.user)

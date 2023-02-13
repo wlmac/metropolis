@@ -2,7 +2,7 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.utils import timezone
-from rest_framework import generics, permissions, serializers
+from rest_framework import permissions, serializers
 
 from .... import models
 from ....models import Event

@@ -1,12 +1,9 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views import View
-from django.views.generic import DetailView, ListView
-from django.views.generic.edit import CreateView, FormMixin, FormView, UpdateView
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, FormMixin, UpdateView
 
 from .. import models
 from ..forms import (

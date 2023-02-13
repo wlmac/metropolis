@@ -1,4 +1,3 @@
-from allauth.socialaccount.providers.oauth.views import OAuthView
 from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView

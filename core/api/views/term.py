@@ -1,20 +1,23 @@
 import datetime
 
+from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ... import models
-from ... import utils as utils2
 from .. import serializers, utils
 from ..utils import GenericAPIViewWithLastModified, ListAPIViewWithFallback
 
 
 class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
-    queryset = models.Term.objects.all()
+    queryset = models.Term.objects.filter(
+        end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
+    )
     serializer_class = serializers.TermSerializer
 
     def get_last_modified(self):
@@ -29,7 +32,9 @@ class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
 
 
 class TermDetail(generics.RetrieveAPIView):
-    queryset = models.Term.objects.all()
+    queryset = models.Term.objects.filter(
+        end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
+    )
     serializer_class = serializers.TermSerializer
 
 

@@ -1,6 +1,6 @@
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from rest_framework import generics, permissions, serializers
+from rest_framework import permissions, serializers
 
 from .... import models
 from .base import BaseProvider
@@ -23,7 +23,7 @@ class SupervisorOrExec(permissions.BasePermission):
     def has_object_permission(self, request, view, organization):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user in {*organization.supervisors} | {*org.execs}:
+        if request.user in {*organization.supervisors} | {*organization.execs}:
             return True
         return False
 

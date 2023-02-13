@@ -1,7 +1,8 @@
 from django.test import TestCase
+from django.utils import timezone
 
-from . import Organization, User
-from .post import *
+from core.models import Organization, User
+from core.models.post import *
 
 
 def create_school_org(user: User) -> Organization:
@@ -16,12 +17,14 @@ def create_user() -> User:
     return user
 
 
-def create_announcement(org: Organization, status: str, title: str) -> Announcement:
-    ann = Announcement(organization=org, status=status, title=title)
+def create_announcement(org: Organization, status: str, title: str) -> None:
+    ann = Announcement(
+        organization=org, status=status, title=title, show_after=timezone.now()
+    )
     ann.save()
 
 
-class AnnouncementTests(TestCase):
+class TestAnnouncement(TestCase):
     def test_get_approved(self):
         org = create_school_org(create_user())
         create_announcement(org, "p", "hello")

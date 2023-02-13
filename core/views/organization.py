@@ -1,5 +1,5 @@
-from django.conf import settings
 from django.db.models import Count
+from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView
