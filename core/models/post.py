@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
-
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
 
@@ -11,9 +12,21 @@ from .choices import announcement_status_choices
 class PostInteraction(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,  # todo check if user is deleted and if so set body to "deleted" and remove author from comment
+        on_delete=models.SET(
+            None
+        ),  # todo check if user is deleted and if so set body to "deleted" and remove author from comment
     )
     created_date = models.DateTimeField(auto_now_add=True)
+
+    def delete(self, using=None, keep_parents=False, **kwargs):
+        """
+        Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
+        if force is set to True, then it will actually delete the object (used for when you want to delete a comment or unlike/save something)
+        """
+        if kwargs.get("force", True):
+            super().delete(using=using, keep_parents=keep_parents)
+        self.user = None
+        self.save()
 
     class Meta:
         abstract = True
@@ -24,31 +37,47 @@ class Like(PostInteraction):
 
 
 class Save(PostInteraction):
-    # todo maybe also add collections to save to (like on something like pinterest) though it's probably unnecessary
     pass
 
 
 class Comment(PostInteraction):
     """
     todo:
-    - simplify the parental situation
-    - add a unique id per comment so that it can be referenced in the url
+    - simplify the parental situation (X)
     - add a simple deletion system for staff and such
     - make sure body content is quickly checked for anything too bad (like profanity) and if so, set it to hidden and require approval from staff
 
     """
-    body = models.TextField(max_length=512)
-    parent = models.ForeignKey(
-        "self",
-        on_delete=models.SET_NULL,  # todo check if modal is deleted and if so, just set comment body to "deleted" and remove author
-        blank=True,
-        null=True,
-        related_name="replies",
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey("content_type", "object_id")
+    parent_comment = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.CASCADE
     )
+
+    # above stuff is to allow for comments on comments and comments on both blog posts and announcements
+
+    body = models.TextField(max_length=512)
+    # todo check if owner is deleted and if so, just set comment body to "deleted" and remove author
     likes = models.ManyToManyField(Like, blank=True)
+    saves = models.ManyToManyField(Save, blank=True)
+    live = models.BooleanField(
+        default=False
+    )  # runs a simple profanity check on the comment and if it passes, it will be set to true
+
+    def get_children(self):
+        return Comment.objects.filter(parent_comment=self)
+
+    def get_likes(self) -> int:
+        return self.likes.objects.all().count()
 
     def __str__(self):
         return self.body
+
+    def save(self, **kwargs):
+        # todo run profanity check on body and if it passes, set live to True and save it.
+        return super().save(**kwargs)
 
     class Meta:
         ordering = ["created_date"]
@@ -73,9 +102,14 @@ class Post(models.Model):
     tags = models.ManyToManyField(
         "Tag", blank=True, related_name="%(class)ss", related_query_name="%(class)s"
     )
+
     likes = models.ManyToManyField(Like, blank=True)
     saves = models.ManyToManyField(Save, blank=True)
     comments = models.ManyToManyField(Comment, blank=True)
+
+    @property
+    def get_likes(self) -> int:
+        return self.likes.objects.all().count()
 
     def __str__(self):
         return self.title

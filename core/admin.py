@@ -12,6 +12,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
@@ -204,7 +205,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None or request.user.is_superuser:
-            return []
+            return ["like_count", "save_count"]
 
         all_fields = [
             "organization",
@@ -216,6 +217,9 @@ class AnnouncementAdmin(admin.ModelAdmin):
             "status",
             "rejection_reason",
             "supervisor",
+            "like_count",
+            "save_count",
+            "comments",
         ]
         status_idx = ["d", "p", "a", "r"].index(obj.status)
 
@@ -262,6 +266,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
         fields = list(fields)
         fields.sort(key=lambda x: all_fields.index(x))
+        fields.__add__(["like_count", "save_count"])
 
         return fields
 
@@ -373,6 +378,16 @@ class AnnouncementAdmin(admin.ModelAdmin):
             return False
         return super().has_change_permission(request, obj)
 
+    def like_count(self, obj):
+        return obj.likes.count()
+
+    like_count.short_description = "Amount of likes"
+
+    def save_count(self, obj):
+        return obj.saves.count()
+
+    save_count.short_description = "Amount of saves"
+
     def save_model(self, request, obj, form, change):
         if not change:
             obj.author = request.user
@@ -443,7 +458,7 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
 class BlogPostAdmin(admin.ModelAdmin):
     list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
-    ordering = ["-show_after", "views"]
+    ordering = ["-show_after", "views", "likes", "saves", "comments"]
     fields = [
         "author",
         "title",
@@ -455,10 +470,24 @@ class BlogPostAdmin(admin.ModelAdmin):
         "show_after",
         "tags",
         "is_published",
+        "like_count",
+        "save_count",
+        "comments",
     ]
+    readonly_fields = ["like_count", "save_count"]
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
+
+    def like_count(self, obj):
+        return obj.likes.count()
+
+    like_count.short_description = "Like count"
+
+    def save_count(self, obj):
+        return obj.saves.count()
+
+    save_count.short_description = "Save count"
 
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}
@@ -475,6 +504,33 @@ class BlogPostAdmin(admin.ModelAdmin):
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Tag.objects.all().order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("body", "content_object", "parent_comment")
+    ordering = ("-id",)
+    formfield_overrides = {
+        django.db.models.TextField: {"widget": AdminMartorWidget},
+    }
+
+    def content_object(self, obj):
+        url = reverse(
+            f"admin:{obj.content_type.app_label}_{obj.content_type.model}_change",
+            args=[obj.object_id],
+        )
+        return format_html('<a href="{}">{}</a>', url, str(obj.content_object))
+
+    content_object.short_description = "Content Object"
+
+    def parent_comment(self, obj):
+        if obj.parent_comment:
+            url = reverse("admin:comments_comment_change", args=[obj.parent_comment.id])
+            return format_html(
+                '<a href="{}">{}</a>', url, str(obj.parent_comment.text[:50])
+            )
+        return None
+
+    parent_comment.short_description = "Parent Comment"
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -614,6 +670,7 @@ admin.site.register(models.Term, TermAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
+admin.site.register(models.Comment, CommentAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)

@@ -33,6 +33,8 @@ class User(AbstractUser):
         "Tag", blank=True, related_name="followers", related_query_name="follower"
     )
     qltrs = SetField("Qualified Trials", null=True, blank=True)
+    saved_blogs = models.ManyToManyField("BlogPost", blank=True)
+    saved_announcements = models.ManyToManyField("Announcement", blank=True)
 
     @property
     def qltrs2(self):
