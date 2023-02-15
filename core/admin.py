@@ -507,8 +507,8 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("body", "content_object", "parent_comment")
-    ordering = ("-id",)
+    list_display = ("body", "parent_comment")
+    ordering = ("-id",) # todo change 2 -id
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }

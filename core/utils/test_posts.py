@@ -37,10 +37,13 @@ def create_comment(user: User, post: Post, body: str) -> Comment:
     com = Comment.objects.create(
         content_type=ContentType.objects.get_for_model(post),
         object_id=post.id,
-        body=body,  # todo finish implementing
+        user=user,
+        body=body,
         parent_comment=None,
     )
     com.save()
+    print(ContentType.objects.get_for_model(post))
+    print(post)
     return com
 
 
@@ -58,28 +61,17 @@ class TestAnnouncement(TestCase):
         self.assertEqual(approved, ["abc", "bar", "foo"])
 
 
-class TestLikeCounts(TestCase):
-    def test_likecount(self):
-        user = create_user()
-        create_blog_post(user, "hello")
-        post = create_blog_post(user, "bar")
-        post.increment_views()
-        print(post.views)
-        published = sorted(blog.title for blog in BlogPost.get_likes)
-        self.assertEqual(published, [0, 1])
-
-
 class TestComments(TestCase):
     def test_get_approved(self):
         org = create_school_org(create_user())
         ann = create_announcement(org, "a", "hello")
-        blog = BlogPost(organization=org, title="hello")
-        create_comment(org, "p", "goodbye")
-        create_comment(org, "p", "goodbye")
-        create_comment(org, "a", "foo")
-        create_comment(org, "a", "abc")
-        create_comment(org, "a", "bar")
-        create_comment(org, "r", "bad")
-        create_comment(org, "r", "good")
-        approved = sorted(ann.title for ann in Comment.get_approved())
-        self.assertEqual(approved, ["abc", "bar", "foo"])
+        blog = create_blog_post(author=org.owner, title="hello")
+        create_comment(org.owner, ann, "hello")
+        create_comment(org.owner, ann, "goodbye")
+        create_comment(org.owner, blog, "hello")
+        create_comment(org.owner, blog, "goodbye")
+        create_comment(org.owner, blog, "sah dude")
+        print(ann.comments.all())
+        print(blog.comments.count())
+        self.assertTrue(ann.comments.count() == 2)
+        self.assertTrue(blog.comments.count() == 3)
