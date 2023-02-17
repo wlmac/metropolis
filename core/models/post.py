@@ -105,7 +105,12 @@ class Post(models.Model):
 
     likes = models.ManyToManyField(Like, blank=True)
     saves = models.ManyToManyField(Save, blank=True)
-    comments = models.ManyToManyField(Comment, blank=True)
+
+    @property
+    def comments(self):
+        content_type = ContentType.objects.get_for_model(self)
+        return Comment.objects.filter(content_type=content_type, object_id=self.id, parent_comment=None)
+
 
     @property
     def get_likes(self) -> int:

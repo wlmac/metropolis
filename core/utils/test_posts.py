@@ -71,7 +71,5 @@ class TestComments(TestCase):
         create_comment(org.owner, blog, "hello")
         create_comment(org.owner, blog, "goodbye")
         create_comment(org.owner, blog, "sah dude")
-        print(ann.comments.all())
-        print(blog.comments.count())
         self.assertTrue(ann.comments.count() == 2)
         self.assertTrue(blog.comments.count() == 3)

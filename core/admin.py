@@ -458,7 +458,7 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
 class BlogPostAdmin(admin.ModelAdmin):
     list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
-    ordering = ["-show_after", "views", "likes", "saves", "comments"]
+    ordering = ["-show_after", "views", "likes", "saves"]
     fields = [
         "author",
         "title",
@@ -488,6 +488,11 @@ class BlogPostAdmin(admin.ModelAdmin):
         return obj.saves.count()
 
     save_count.short_description = "Save count"
+
+    def comments(self, obj):
+        return obj.comments()
+
+    comments.short_description = "Comments"
 
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}
