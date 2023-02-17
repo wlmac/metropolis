@@ -49,22 +49,37 @@ class Comment(PostInteraction):
 
     """
 
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        help_text="The type of object this comment is on (core | blog post or core | announcement)",
+    )
+    object_id = models.PositiveIntegerField(
+        help_text="The id of the object this comment is on"
+    )
     content_object = GenericForeignKey("content_type", "object_id")
     parent_comment = models.ForeignKey(
-        "self", null=True, blank=True, on_delete=models.CASCADE
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        help_text="The comment this comment is a reply to (if any is selected)",
     )
 
     # above stuff is to allow for comments on comments and comments on both blog posts and announcements
 
     body = models.TextField(max_length=512)
     # todo check if owner is deleted and if so, just set comment body to "deleted" and remove author
-    likes = models.ManyToManyField(Like, blank=True)
-    saves = models.ManyToManyField(Save, blank=True)
+    likes = models.ManyToManyField(
+        Like, blank=True, help_text="The users who liked this comment"
+    )
+    saves = models.ManyToManyField(
+        Save, blank=True, help_text="The users who saved this comment"
+    )
     live = models.BooleanField(
-        default=False
-    )  # runs a simple profanity check on the comment and if it passes, it will be set to true
+        default=False,
+        help_text="Whether or not the comment is live (if it is not, it will not be shown to the public)",
+    )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
 
     def get_children(self):
         return Comment.objects.filter(parent_comment=self)
@@ -109,8 +124,9 @@ class Post(models.Model):
     @property
     def comments(self):
         content_type = ContentType.objects.get_for_model(self)
-        return Comment.objects.filter(content_type=content_type, object_id=self.id, parent_comment=None)
-
+        return Comment.objects.filter(
+            content_type=content_type, object_id=self.id, parent_comment=None
+        )
 
     @property
     def get_likes(self) -> int:

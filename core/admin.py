@@ -13,6 +13,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
@@ -171,7 +172,31 @@ class OrganizationListFilter(admin.SimpleListFilter):
             return queryset.filter(organization__slug=self.value())
 
 
-class AnnouncementAdmin(admin.ModelAdmin):
+class PostAdmin:
+    def like_count(self, obj):
+        return obj.likes.count()
+
+    like_count.short_description = "Like count"
+
+    def save_count(self, obj):
+        return obj.saves.count()
+
+    save_count.short_description = "Save count"
+
+    def comments(self, obj):
+        objs = list(
+            map(
+                lambda obj: '<a target="_blank" href="/admin/core/comment/%s">%s</a>'
+                % (obj.pk, obj.body[:10]),
+                obj.comments.all(),
+            )
+        )  # todo maybe turn into a an expandable list
+        return mark_safe(",".join(objs))
+
+    comments.short_description = "Comments"
+
+
+class AnnouncementAdmin(PostAdmin, admin.ModelAdmin):
     list_display = ["__str__", "organization", "status"]
     list_filter = [OrganizationListFilter, "status"]
     ordering = ["-show_after"]
@@ -205,7 +230,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None or request.user.is_superuser:
-            return ["like_count", "save_count"]
+            return ["like_count", "save_count", "comments"]
 
         all_fields = [
             "organization",
@@ -266,7 +291,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
         fields = list(fields)
         fields.sort(key=lambda x: all_fields.index(x))
-        fields.__add__(["like_count", "save_count"])
+        fields.__add__(["like_count", "save_count", "comments"])
 
         return fields
 
@@ -282,6 +307,9 @@ class AnnouncementAdmin(admin.ModelAdmin):
             "status",
             "rejection_reason",
             "supervisor",
+            "like_count",
+            "save_count",
+            "comments",
         ]
 
         fields = set(all_fields)
@@ -455,7 +483,7 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
             return queryset.filter(author__pk=self.value())
 
 
-class BlogPostAdmin(admin.ModelAdmin):
+class BlogPostAdmin(PostAdmin, admin.ModelAdmin):
     list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
     ordering = ["-show_after", "views", "likes", "saves"]
@@ -474,25 +502,10 @@ class BlogPostAdmin(admin.ModelAdmin):
         "save_count",
         "comments",
     ]
-    readonly_fields = ["like_count", "save_count"]
+    readonly_fields = ["like_count", "save_count", "comments"]
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
-
-    def like_count(self, obj):
-        return obj.likes.count()
-
-    like_count.short_description = "Like count"
-
-    def save_count(self, obj):
-        return obj.saves.count()
-
-    save_count.short_description = "Save count"
-
-    def comments(self, obj):
-        return obj.comments()
-
-    comments.short_description = "Comments"
 
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}
@@ -513,7 +526,7 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ("body", "parent_comment")
-    ordering = ("-id",) # todo change 2 -id
+    ordering = ("-id",)  # todo change 2 -id
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
