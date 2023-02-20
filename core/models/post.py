@@ -10,6 +10,17 @@ from .choices import announcement_status_choices
 
 
 class PostInteraction(models.Model):
+    """
+    how to fetch a PostInteraction object:
+
+
+    content_type = ContentType.objects.get_for_model(self)
+        return PostInteraction.objects.filter(
+            content_type=content_type, object_id=self.id
+        )
+
+    """
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET(
@@ -28,12 +39,18 @@ class PostInteraction(models.Model):
     )
     content_object = GenericForeignKey("content_type", "object_id")
 
-    def delete(self, using=None, keep_parents=False, **kwargs):
+    def get_object(self, obj: "PostInteraction", **kwargs):
+        content_type = ContentType.objects.get_for_model(obj)  # todo test this
+        return self.__class__.objects.filter(
+            content_type=content_type, object_id=obj.id, **kwargs
+        )
+
+    def delete(self, using=None, keep_parents=False, force=False):
         """
         Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
         if force is set to True, then it will actually delete the object (used for when you want to delete a comment or unlike/save something)
         """
-        if kwargs.get("force", True):
+        if force:
             super().delete(using=using, keep_parents=keep_parents)
         self.user = None
         self.save()
@@ -44,6 +61,7 @@ class PostInteraction(models.Model):
 
 class Like(PostInteraction):
     pass
+
 
 class Comment(PostInteraction):
     """
@@ -87,7 +105,6 @@ class Comment(PostInteraction):
         # todo run profanity check on body and if it passes, set live to True and save it.
         return super().save(**kwargs)
 
-
     class Meta:
         ordering = ["created_date"]
 
@@ -113,7 +130,6 @@ class Post(models.Model):
     )
 
     likes = models.ManyToManyField(Like, blank=True)
-    saves = models.ManyToManyField(Save, blank=True)
 
     @property
     def comments(self):
