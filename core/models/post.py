@@ -18,6 +18,16 @@ class PostInteraction(models.Model):
     )
     created_date = models.DateTimeField(auto_now_add=True)
 
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        help_text="The type of object this comment is on (core | blog post or core | announcement)",
+    )
+    object_id = models.PositiveIntegerField(
+        help_text="The id of the object this comment is on"
+    )
+    content_object = GenericForeignKey("content_type", "object_id")
+
     def delete(self, using=None, keep_parents=False, **kwargs):
         """
         Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
@@ -35,11 +45,6 @@ class PostInteraction(models.Model):
 class Like(PostInteraction):
     pass
 
-
-class Save(PostInteraction):
-    pass
-
-
 class Comment(PostInteraction):
     """
     todo:
@@ -49,15 +54,6 @@ class Comment(PostInteraction):
 
     """
 
-    content_type = models.ForeignKey(
-        ContentType,
-        on_delete=models.CASCADE,
-        help_text="The type of object this comment is on (core | blog post or core | announcement)",
-    )
-    object_id = models.PositiveIntegerField(
-        help_text="The id of the object this comment is on"
-    )
-    content_object = GenericForeignKey("content_type", "object_id")
     parent_comment = models.ForeignKey(
         "self",
         null=True,
@@ -72,9 +68,6 @@ class Comment(PostInteraction):
     # todo check if owner is deleted and if so, just set comment body to "deleted" and remove author
     likes = models.ManyToManyField(
         Like, blank=True, help_text="The users who liked this comment"
-    )
-    saves = models.ManyToManyField(
-        Save, blank=True, help_text="The users who saved this comment"
     )
     live = models.BooleanField(
         default=False,
@@ -93,6 +86,7 @@ class Comment(PostInteraction):
     def save(self, **kwargs):
         # todo run profanity check on body and if it passes, set live to True and save it.
         return super().save(**kwargs)
+
 
     class Meta:
         ordering = ["created_date"]
