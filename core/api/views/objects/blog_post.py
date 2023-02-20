@@ -2,9 +2,15 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
-from ....models import BlogPost
+from ....models import BlogPost, Comment
 from .base import BaseProvider
 
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        ordering = ["-created"]
+        fields = "__all__"
 
 class Serializer(serializers.ModelSerializer):
     class Meta:
