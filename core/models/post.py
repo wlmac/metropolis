@@ -1,8 +1,11 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
+
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
 
@@ -20,15 +23,13 @@ class PostInteraction(models.Model):
         )
 
     """
-
-    user = models.ForeignKey(
+    author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET(
             None
         ),  # todo check if user is deleted and if so set body to "deleted" and remove author from comment
     )
-    created_date = models.DateTimeField(auto_now_add=True)
-
+    created = models.DateTimeField(auto_now_add=True)
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,
@@ -44,13 +45,12 @@ class PostInteraction(models.Model):
         return self.__class__.objects.filter(
             content_type=content_type, object_id=obj.id, **kwargs
         )
-
-    def delete(self, using=None, keep_parents=False, force=False):
+    def delete(self, using=None, keep_parents=False, **kwargs):
         """
         Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
         if force is set to True, then it will actually delete the object (used for when you want to delete a comment or unlike/save something)
         """
-        if force:
+        if kwargs.get("force", True):
             super().delete(using=using, keep_parents=keep_parents)
         self.user = None
         self.save()
@@ -63,6 +63,7 @@ class Like(PostInteraction):
     pass
 
 
+
 class Comment(PostInteraction):
     """
     todo:
@@ -72,30 +73,29 @@ class Comment(PostInteraction):
 
     """
 
-    parent_comment = models.ForeignKey(
-        "self",
-        null=True,
-        blank=True,
+    content_type = models.ForeignKey(
+        ContentType,
         on_delete=models.CASCADE,
-        help_text="The comment this comment is a reply to (if any is selected)",
+        help_text="The type of object this comment is on (core | blog post or core | announcement)",
     )
-
-    # above stuff is to allow for comments on comments and comments on both blog posts and announcements
+    object_id = models.PositiveIntegerField(
+        help_text="The id of the object this comment is on"
+    )
+    content_object = GenericForeignKey("content_type", "object_id")
 
     body = models.TextField(max_length=512)
     # todo check if owner is deleted and if so, just set comment body to "deleted" and remove author
-    likes = models.ManyToManyField(
-        Like, blank=True, help_text="The users who liked this comment"
-    )
-    live = models.BooleanField(
-        default=False,
-        help_text="Whether or not the comment is live (if it is not, it will not be shown to the public)",
-    )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
+    parent = models.ForeignKey("Comment", on_delete=models.CASCADE, related_name="children")
+    likes = models.ManyToManyField(Like, blank=True, help_text="The users who liked this comment")
+    live = models.BooleanField(default=True,
+                               help_text="Shown publicly?",
+                               )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
 
     def get_children(self):
         return Comment.objects.filter(parent_comment=self)
 
-    def get_likes(self) -> int:
+    @property
+    def like_count(self) -> int:
         return self.likes.objects.all().count()
 
     def __str__(self):
@@ -106,8 +106,11 @@ class Comment(PostInteraction):
         return super().save(**kwargs)
 
     class Meta:
-        ordering = ["created_date"]
-
+        ordering = ["created"]
+        indexes = [
+            models.Index(fields=["subject_type", "subject_id"]),
+        ]
+        permissions = (("view_nodelay", "View without delay"),)
 
 class Post(models.Model):
     author = models.ForeignKey(
@@ -130,6 +133,7 @@ class Post(models.Model):
     )
 
     likes = models.ManyToManyField(Like, blank=True)
+    saves = models.ManyToManyField(Save, blank=True)
 
     @property
     def comments(self):
@@ -144,6 +148,19 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def comments_viewable(self, user=None, now=None):
+        if now is None:
+            now = timezone.localtime(timezone.now())
+        q = self.comments
+        if not user or not (
+                user.is_superuser or user.has_perm("core.comment.view_nodelay")
+        ):
+            q = q.filter(
+                Q(created__lt=now - settings.COMMENT_DELAY)
+                | (Q(author=user) if user else Q())
+            )
+        return q
 
     class Meta:
         abstract = True
