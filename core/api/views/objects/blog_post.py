@@ -12,6 +12,7 @@ class CommentSerializer(serializers.ModelSerializer):
         ordering = ["-created"]
         fields = "__all__"
 
+
 class Serializer(serializers.ModelSerializer):
     class Meta:
         model = BlogPost

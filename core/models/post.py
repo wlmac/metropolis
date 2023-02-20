@@ -23,13 +23,17 @@ class PostInteraction(models.Model):
         )
 
     """
+
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET(
             None
-        ),  # todo check if user is deleted and if so set body to "deleted" and remove author from comment
+        ),  # todo replace models.SET with a simple author [deleted] text or something if the author deleted their account
     )
+
     created = models.DateTimeField(auto_now_add=True)
+
+    # --- Generic Foreign Key --- #
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,
@@ -39,12 +43,14 @@ class PostInteraction(models.Model):
         help_text="The id of the object this comment is on"
     )
     content_object = GenericForeignKey("content_type", "object_id")
+    # --- Generic Foreign Key --- #
 
     def get_object(self, obj: "PostInteraction", **kwargs):
         content_type = ContentType.objects.get_for_model(obj)  # todo test this
         return self.__class__.objects.filter(
             content_type=content_type, object_id=obj.id, **kwargs
         )
+
     def delete(self, using=None, keep_parents=False, **kwargs):
         """
         Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
@@ -63,33 +69,25 @@ class Like(PostInteraction):
     pass
 
 
-
 class Comment(PostInteraction):
     """
     todo:
-    - simplify the parental situation (X)
     - add a simple deletion system for staff and such
     - make sure body content is quickly checked for anything too bad (like profanity) and if so, set it to hidden and require approval from staff
 
     """
-
-    content_type = models.ForeignKey(
-        ContentType,
-        on_delete=models.CASCADE,
-        help_text="The type of object this comment is on (core | blog post or core | announcement)",
-    )
-    object_id = models.PositiveIntegerField(
-        help_text="The id of the object this comment is on"
-    )
-    content_object = GenericForeignKey("content_type", "object_id")
-
     body = models.TextField(max_length=512)
     # todo check if owner is deleted and if so, just set comment body to "deleted" and remove author
-    parent = models.ForeignKey("Comment", on_delete=models.CASCADE, related_name="children")
-    likes = models.ManyToManyField(Like, blank=True, help_text="The users who liked this comment")
-    live = models.BooleanField(default=True,
-                               help_text="Shown publicly?",
-                               )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
+    parent = models.ForeignKey(
+        "Comment", on_delete=models.CASCADE, related_name="children"
+    )
+    likes = models.ManyToManyField(
+        Like, blank=True, help_text="The users who liked this comment"
+    )
+    live = models.BooleanField(
+        default=True,
+        help_text="Shown publicly?",
+    )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
 
     def get_children(self):
         return Comment.objects.filter(parent_comment=self)
@@ -112,6 +110,7 @@ class Comment(PostInteraction):
         ]
         permissions = (("view_nodelay", "View without delay"),)
 
+
 class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -133,7 +132,6 @@ class Post(models.Model):
     )
 
     likes = models.ManyToManyField(Like, blank=True)
-    saves = models.ManyToManyField(Save, blank=True)
 
     @property
     def comments(self):
@@ -154,7 +152,7 @@ class Post(models.Model):
             now = timezone.localtime(timezone.now())
         q = self.comments
         if not user or not (
-                user.is_superuser or user.has_perm("core.comment.view_nodelay")
+            user.is_superuser or user.has_perm("core.comment.view_nodelay")
         ):
             q = q.filter(
                 Q(created__lt=now - settings.COMMENT_DELAY)
