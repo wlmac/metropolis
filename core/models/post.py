@@ -106,7 +106,7 @@ class Comment(PostInteraction):
     class Meta:
         ordering = ["created"]
         indexes = [
-            models.Index(fields=["subject_type", "subject_id"]),
+            models.Index(fields=["content_type", "object_id"]),
         ]
         permissions = (("view_nodelay", "View without delay"),)
 

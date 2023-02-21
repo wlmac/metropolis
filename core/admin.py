@@ -295,6 +295,10 @@ class AnnouncementAdmin(PostAdmin, admin.ModelAdmin):
 
         return fields
 
+    def save_count(self, obj):
+        return User.objects.filter(announcements_saved=obj).count()
+    save_count.short_description = "Save Count"
+
     def get_fields(self, request, obj=None):
         all_fields = [
             "organization",
@@ -486,7 +490,7 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
 class BlogPostAdmin(PostAdmin, admin.ModelAdmin):
     list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
-    ordering = ["-show_after", "views", "likes", "saves"]
+    ordering = ["-show_after", "views", "likes"]
     fields = [
         "author",
         "title",
@@ -506,6 +510,10 @@ class BlogPostAdmin(PostAdmin, admin.ModelAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
+
+    def save_count(self, obj):
+        return User.objects.filter(blogposts_saved=obj).count()
+    save_count.short_description = "Save Count"
 
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}

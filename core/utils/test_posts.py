@@ -37,13 +37,11 @@ def create_comment(user: User, post: Post, body: str) -> Comment:
     com = Comment.objects.create(
         content_type=ContentType.objects.get_for_model(post),
         object_id=post.id,
-        user=user,
+        author=user,
         body=body,
-        parent_comment=None,
+        parent=None,
     )
     com.save()
-    print(ContentType.objects.get_for_model(post))
-    print(post)
     return com
 
 
