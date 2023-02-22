@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('object_id', models.PositiveIntegerField(help_text='The id of the object this comment is on')),
                 ('body', models.TextField(max_length=512)),
-                ('live', models.BooleanField(default=True, help_text='Shown publicly?')),
+                ('live', models.BooleanField(default=False, help_text='Shown publicly?')),
                 ('author', models.ForeignKey(on_delete=models.SET(None), to=settings.AUTH_USER_MODEL)),
                 ('content_type', models.ForeignKey(help_text='The type of object this comment is on (core | blog post or core | announcement)', on_delete=django.db.models.deletion.CASCADE, to='contenttypes.contenttype')),
                 ('likes', models.ManyToManyField(blank=True, help_text='The users who liked this comment', to='core.Like')),

@@ -85,7 +85,7 @@ class Comment(PostInteraction):
         Like, blank=True, help_text="The users who liked this comment"
     )
     live = models.BooleanField(
-        default=True,
+        default=False,
         help_text="Shown publicly?",
     )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
 
