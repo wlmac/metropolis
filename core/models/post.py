@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
-from profanity_filter import ProfanityFilter  # didn't add to reqs yet
+#from profanity_filter import ProfanityFilter  # didn't add to reqs yet
 
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
@@ -107,9 +107,9 @@ class Comment(PostInteraction):
 
     def save(self, **kwargs):
         # todo run profanity check on body and if it passes, set live to True and save it.
-        pf = ProfanityFilter()
-        if pf.is_clean(self.body):
-            self.live = True
+        #pf = ProfanityFilter()
+        #if pf.is_clean(self.body):
+        #    self.live = True
 
         return super().save(**kwargs)
 
@@ -118,7 +118,7 @@ class Comment(PostInteraction):
         indexes = [
             models.Index(fields=["content_type", "object_id"]),
         ]
-        permissions = (("view_nodelay", "View without delay"),)
+        permissions = (("view_flagged", "View flagged comments"),)
 
 
 class Post(models.Model):
@@ -164,7 +164,7 @@ class Post(models.Model):
             now = timezone.localtime(timezone.now())
         q = self.comments
         if not user or not (
-            user.is_superuser or user.has_perm("core.comment.view_nodelay")
+            user.is_superuser or user.has_perm("core.comment.view_flagged")
         ):
             q = q.filter(
                 Q(created__lt=now - settings.COMMENT_DELAY)
