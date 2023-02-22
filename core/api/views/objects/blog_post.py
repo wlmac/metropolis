@@ -12,7 +12,14 @@ class CommentSerializer(serializers.ModelSerializer):
         ordering = ["-created"]
         fields = "__all__"
 
-    # todo on get_queryset, filter out comments that are not approved (live)
+    # todo on get_queryset, add this
+    """
+    def get_queryset(self, request):
+        if request.user.has_perm("core.comments.preview") or request.user.is_superuser:
+            return .all()
+        else:
+            return .filter(live=True)
+    """
 
 
 class Serializer(serializers.ModelSerializer):
