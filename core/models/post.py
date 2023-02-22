@@ -79,7 +79,7 @@ class Comment(PostInteraction):
     body = models.TextField(max_length=512)
     # todo check if owner is deleted and if so, just set comment body to "deleted" and remove author
     parent = models.ForeignKey(
-        "Comment", on_delete=models.CASCADE, related_name="children"
+        "Comment", on_delete=models.CASCADE, related_name="children", null=True, blank=True
     )
     likes = models.ManyToManyField(
         Like, blank=True, help_text="The users who liked this comment"
@@ -90,7 +90,7 @@ class Comment(PostInteraction):
     )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
 
     def get_children(self):
-        return Comment.objects.filter(parent_comment=self)
+        return Comment.objects.filter(parent=self)
 
     @property
     def like_count(self) -> int:
@@ -137,7 +137,7 @@ class Post(models.Model):
     def comments(self):
         content_type = ContentType.objects.get_for_model(self)
         return Comment.objects.filter(
-            content_type=content_type, object_id=self.id, parent_comment=None
+            content_type=content_type, object_id=self.id, parent=None # todo this might not be valid (parent=None)
         )
 
     @property
