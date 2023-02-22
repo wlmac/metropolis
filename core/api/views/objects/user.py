@@ -76,7 +76,7 @@ class NewSerializer(serializers.ModelSerializer):
     password = serializers.CharField(required=True)
 
     # Default `create` and `update` behavior...
-    def create(self, validated_data):
+    def create(self, validated_data) -> User:
         user = User()
         keys = [
             "first_name",
@@ -91,7 +91,7 @@ class NewSerializer(serializers.ModelSerializer):
         if validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
             user.is_teacher = True
         user.save()
-        return instance  # fixme instance is not defined
+        return user
 
     class Meta:
         model = models.User
