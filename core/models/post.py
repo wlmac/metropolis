@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
-from profanity_filter import ProfanityFilter # didn't add to reqs yet
+from profanity_filter import ProfanityFilter  # didn't add to reqs yet
 
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
