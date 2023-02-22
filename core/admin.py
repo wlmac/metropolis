@@ -172,16 +172,23 @@ class OrganizationListFilter(admin.SimpleListFilter):
             return queryset.filter(organization__slug=self.value())
 
 
-class PostAdmin:
-    def like_count(self, obj):
-        return obj.likes.count()
+class PostAdmin(admin.ModelAdmin):
+    readonly_fields = ["like_count", "save_count", "comments"]
+    fields = ["like_count", "save_count", "comments"]
+
+    def like_count(self, obj) -> int:
+        c = obj.likes.count()
+        print(c, obj.likes.all())  # todo remove
+        if c is None:
+            return 0
+        return c
 
     like_count.short_description = "Like count"
 
-    def save_count(self, obj):
-        return obj.saves.count()
+    def save_count(self, obj) -> int:
+        return User.objects.filter(saved_announcements=obj).count()
 
-    save_count.short_description = "Save count"
+    save_count.short_description = "Save Count"
 
     def comments(self, obj):
         objs = list(
@@ -195,8 +202,11 @@ class PostAdmin:
 
     comments.short_description = "Comments"
 
+    class Meta:
+        abstract = True
 
-class AnnouncementAdmin(PostAdmin, admin.ModelAdmin):
+
+class AnnouncementAdmin(PostAdmin):
     list_display = ["__str__", "organization", "status"]
     list_filter = [OrganizationListFilter, "status"]
     ordering = ["-show_after"]
@@ -230,7 +240,7 @@ class AnnouncementAdmin(PostAdmin, admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None or request.user.is_superuser:
-            return ["like_count", "save_count", "comments"]
+            return PostAdmin.readonly_fields
 
         all_fields = [
             "organization",
@@ -242,9 +252,6 @@ class AnnouncementAdmin(PostAdmin, admin.ModelAdmin):
             "status",
             "rejection_reason",
             "supervisor",
-            "like_count",
-            "save_count",
-            "comments",
         ]
         status_idx = ["d", "p", "a", "r"].index(obj.status)
 
@@ -291,13 +298,9 @@ class AnnouncementAdmin(PostAdmin, admin.ModelAdmin):
 
         fields = list(fields)
         fields.sort(key=lambda x: all_fields.index(x))
-        fields.__add__(["like_count", "save_count", "comments"])
+        fields.extend(PostAdmin.readonly_fields)
 
         return fields
-
-    def save_count(self, obj):
-        return User.objects.filter(announcements_saved=obj).count()
-    save_count.short_description = "Save Count"
 
     def get_fields(self, request, obj=None):
         all_fields = [
@@ -311,9 +314,6 @@ class AnnouncementAdmin(PostAdmin, admin.ModelAdmin):
             "status",
             "rejection_reason",
             "supervisor",
-            "like_count",
-            "save_count",
-            "comments",
         ]
 
         fields = set(all_fields)
@@ -321,6 +321,7 @@ class AnnouncementAdmin(PostAdmin, admin.ModelAdmin):
 
         fields = list(fields)
         fields.sort(key=lambda x: all_fields.index(x))
+        fields.extend(PostAdmin.fields)
 
         return fields
 
@@ -410,16 +411,6 @@ class AnnouncementAdmin(PostAdmin, admin.ModelAdmin):
             return False
         return super().has_change_permission(request, obj)
 
-    def like_count(self, obj):
-        return obj.likes.count()
-
-    like_count.short_description = "Amount of likes"
-
-    def save_count(self, obj):
-        return obj.saves.count()
-
-    save_count.short_description = "Amount of saves"
-
     def save_model(self, request, obj, form, change):
         if not change:
             obj.author = request.user
@@ -487,7 +478,7 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
             return queryset.filter(author__pk=self.value())
 
 
-class BlogPostAdmin(PostAdmin, admin.ModelAdmin):
+class BlogPostAdmin(PostAdmin):
     list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
     ordering = ["-show_after", "views", "likes"]
@@ -502,18 +493,11 @@ class BlogPostAdmin(PostAdmin, admin.ModelAdmin):
         "show_after",
         "tags",
         "is_published",
-        "like_count",
-        "save_count",
-        "comments",
-    ]
-    readonly_fields = ["like_count", "save_count", "comments"]
+    ] + PostAdmin.fields
+    readonly_fields = PostAdmin.readonly_fields
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
-
-    def save_count(self, obj):
-        return User.objects.filter(blogposts_saved=obj).count()
-    save_count.short_description = "Save Count"
 
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}
@@ -533,7 +517,7 @@ class BlogPostAdmin(PostAdmin, admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("body", "parent_comment")
+    list_display = ("body", "parent")
     ordering = ("-id",)  # todo change 2 -id
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
@@ -548,15 +532,13 @@ class CommentAdmin(admin.ModelAdmin):
 
     content_object.short_description = "Content Object"
 
-    def parent_comment(self, obj):
-        if obj.parent_comment:
-            url = reverse("admin:comments_comment_change", args=[obj.parent_comment.id])
-            return format_html(
-                '<a href="{}">{}</a>', url, str(obj.parent_comment.text[:50])
-            )
+    def parent(self, obj):  # todo rework this
+        if obj.parent:
+            url = reverse("admin:comments_comment_change", args=[obj.parent.id])
+            return format_html('<a href="{}">{}</a>', url, str(obj.parent.text[:50]))
         return None
 
-    parent_comment.short_description = "Parent Comment"
+    parent.short_description = "Parent Comment"
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -622,7 +604,13 @@ class UserAdmin(admin.ModelAdmin):
         "groups",
         "graduating_year",
     ]
-    search_fields = ["username", "first_name", "last_name"]
+    search_fields = [
+        "username",
+        "first_name",
+        "last_name",
+        "saved_blogs",
+        "saved_announcements",
+    ]
 
     def has_view_permission(self, request, obj=None):
         if obj is None and (

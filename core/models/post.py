@@ -76,10 +76,15 @@ class Comment(PostInteraction):
     - make sure body content is quickly checked for anything too bad (like profanity) and if so, set it to hidden and require approval from staff
 
     """
+
     body = models.TextField(max_length=512)
     # todo check if owner is deleted and if so, just set comment body to "deleted" and remove author
     parent = models.ForeignKey(
-        "Comment", on_delete=models.CASCADE, related_name="children", null=True, blank=True
+        "Comment",
+        on_delete=models.CASCADE,
+        related_name="children",
+        null=True,
+        blank=True,
     )
     likes = models.ManyToManyField(
         Like, blank=True, help_text="The users who liked this comment"
@@ -137,7 +142,9 @@ class Post(models.Model):
     def comments(self):
         content_type = ContentType.objects.get_for_model(self)
         return Comment.objects.filter(
-            content_type=content_type, object_id=self.id, parent=None # todo this might not be valid (parent=None)
+            content_type=content_type,
+            object_id=self.id,
+            parent=None,  # todo this might not be valid (parent=None)
         )
 
     @property

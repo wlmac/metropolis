@@ -12,6 +12,8 @@ class CommentSerializer(serializers.ModelSerializer):
         ordering = ["-created"]
         fields = "__all__"
 
+    # todo on get_queryset, filter out comments that are not approved (live)
+
 
 class Serializer(serializers.ModelSerializer):
     class Meta:
