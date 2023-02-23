@@ -792,10 +792,10 @@ MARTOR_MARKDOWN_EXTENSIONS = [
     "markdown.extensions.tables",
     "markdown.extensions.nl2br",
     "markdown.extensions.fenced_code",
-    "martor.extensions.emoji",
     "martor.extensions.escape_html",
     "martor.extensions.urlize",
-    "core.markdown",
+    "core.markdown.embed",
+    "core.markdown.emoji",
 ]
 
 # Select2 settings
