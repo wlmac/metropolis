@@ -2,6 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from .comment_urls import comment_urls
 from .views import *
 from .views.objects import *
 
@@ -76,4 +77,5 @@ urlpatterns = [
         name="api_object_retrieve3",
     ),
     path("version", APIVersion.as_view(), name="api_version"),
+    *comment_urls,
 ]
