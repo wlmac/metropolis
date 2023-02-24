@@ -1,3 +1,4 @@
+from __future__ import annotations
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
@@ -5,8 +6,9 @@ from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
-#from profanity_filter import ProfanityFilter  # didn't add to reqs yet
 
+# from profanity_filter import ProfanityFilter  # didn't add to reqs yet
+from .user import User
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
 
@@ -25,11 +27,11 @@ class PostInteraction(models.Model):
 
     """
 
-    author = models.ForeignKey(
+    author: User | str = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.SET(
-            None
-        ),  # todo replace models.SET with a simple author [deleted] text or something if the author deleted their account
+        null=True,
+        blank=True,
+        on_delete=models.SET("[deleted]"),
     )
 
     created = models.DateTimeField(auto_now_add=True)
@@ -46,8 +48,16 @@ class PostInteraction(models.Model):
     content_object = GenericForeignKey("content_type", "object_id")
     # --- Generic Foreign Key --- #
 
-    def get_object(self, obj: "PostInteraction", **kwargs):
-        content_type = ContentType.objects.get_for_model(obj)  # todo test this
+    @property
+    def deleted(self):
+        return self.author == "[deleted]" or self.author is None
+
+    def get_object(
+        self, obj: "PostInteraction", **kwargs
+    ):  # todo you can probably remove this
+        content_type = ContentType.objects.get_for_model(obj)  #  core | comment
+        print(y := self.__class__.objects.get(), y.content_type, y.object_id)
+        print(content_type, "a", obj.id, "b", kwargs)
         return self.__class__.objects.filter(
             content_type=content_type, object_id=obj.id, **kwargs
         )
@@ -74,12 +84,10 @@ class Comment(PostInteraction):
     """
     todo:
     - add a simple deletion system for staff and such
-    - make sure body content is quickly checked for anything too bad (like profanity) and if so, set it to hidden and require approval from staff
 
     """
 
     body = models.TextField(max_length=512)
-    # todo check if owner is deleted and if so, just set comment body to "deleted" and remove author
     parent = models.ForeignKey(
         "Comment",
         on_delete=models.CASCADE,
@@ -102,13 +110,19 @@ class Comment(PostInteraction):
     def like_count(self) -> int:
         return self.likes.objects.all().count()
 
+    def flagged(self):
+        return self.__class__.objects.filter(live=False)
+
     def __str__(self):
         return self.body
 
     def save(self, **kwargs):
-        # todo run profanity check on body and if it passes, set live to True and save it.
-        #pf = ProfanityFilter()
-        #if pf.is_clean(self.body):
+        # todo run profanity check on body and if it passes, set live to True and save it. (see todo above)
+        if not self.deleted and self.author.is_superuser:
+            return super().save(**kwargs)
+
+        # pf = ProfanityFilter()
+        # if pf.is_clean(self.body):
         #    self.live = True
 
         return super().save(**kwargs)
@@ -149,7 +163,7 @@ class Post(models.Model):
         return Comment.objects.filter(
             content_type=content_type,
             object_id=self.id,
-            parent=None,  # todo this might not be valid (parent=None)
+            parent=None,
         )
 
     @property
