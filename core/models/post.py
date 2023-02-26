@@ -1,11 +1,11 @@
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.urls import reverse
+from django.utils import timezone
 
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
+
 
 # Create your models here.
 
@@ -18,7 +18,7 @@ class Post(models.Model):
         related_name="%(class)ss_authored",
     )
     created_date = models.DateTimeField(auto_now_add=True)
-    last_modified_date = models.DateTimeField(auto_now=True)
+    last_modified_date = models.DateTimeField()
     show_after = models.DateTimeField(
         verbose_name="Automatically post on",
         help_text="Show this announcement after this time.",
@@ -115,6 +115,15 @@ class BlogPost(Post):
     )
     is_published = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # new post
+            self.created_date = timezone.now()
+        if self.pk:
+            old_post = BlogPost.objects.get(pk=self.pk)
+            if old_post.body != self.body:
+                self.last_modified_date = timezone.now()
+        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
