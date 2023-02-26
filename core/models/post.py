@@ -107,6 +107,10 @@ class Comment(PostInteraction):
         return Comment.objects.filter(parent=self)
 
     @property
+    def top_lvl(self):
+        return self.parent is None
+
+    @property
     def like_count(self) -> int:
         return self.likes.objects.all().count()
 
