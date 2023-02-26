@@ -6,6 +6,7 @@ from django.utils import timezone
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
 
+
 # Create your models here.
 
 
@@ -17,7 +18,7 @@ class Post(models.Model):
         related_name="%(class)ss_authored",
     )
     created_date = models.DateTimeField(auto_now_add=True)
-    last_modified_date = models.DateTimeField(auto_now=True)
+    last_modified_date = models.DateTimeField()
     show_after = models.DateTimeField(
         verbose_name="Automatically post on",
         help_text="Show this announcement after this time.",
