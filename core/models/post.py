@@ -107,18 +107,19 @@ class Comment(PostInteraction):
         return Comment.objects.filter(parent=self)
 
     @property
-    def top_lvl(self):
+    def top_lvl(self) -> bool:
+        """Returns True if the comment is a top level comment, False if it is a child comment."""
         return self.parent is None
 
     @property
     def like_count(self) -> int:
         return self.likes.objects.all().count()
 
-    def flagged(self):
+    def flagged(self) -> bool:
         return self.__class__.objects.filter(live=False)
 
-    def __str__(self):
-        return self.body
+    def __str__(self) -> str:
+        return str(self.body)
 
     def save(self, **kwargs):
         # todo run profanity check on body and if it passes, set live to True and save it. (see todo above)
