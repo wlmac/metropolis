@@ -121,8 +121,10 @@ class BlogPost(Post):
         return reverse("blogpost_detail", args=[self.slug])
 
     def increment_views(self) -> str:
-        self.views += 1
-        self.save()
+        pass
+        # TODO: this also changes last_modified_date which is undesirable
+        # self.views += 1
+        # self.save()
 
     class Meta:
         ordering = ["-created_date"]
