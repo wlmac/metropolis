@@ -7,7 +7,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
-# from profanity_filter import ProfanityFilter  # didn't add to reqs yet
+from profanity_check import predict
 from .user import User
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
@@ -120,10 +120,8 @@ class Comment(PostInteraction):
         # todo run profanity check on body and if it passes, set live to True and save it. (see todo above)
         if not self.deleted and self.author.is_superuser:
             return super().save(**kwargs)
-
-        # pf = ProfanityFilter()
-        # if pf.is_clean(self.body):
-        #    self.live = True
+        if bool(predict(self.body)[0]):  # 0.2ms per check, .5 for 10 and 3.5 for 100
+            self.live = True
 
         return super().save(**kwargs)
 
