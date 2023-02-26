@@ -2,24 +2,8 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
-from ....models import BlogPost, Comment
+from ....models import BlogPost
 from .base import BaseProvider
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        ordering = ["-created"]
-        fields = "__all__"
-
-    # todo on get_queryset, add this
-    """
-    def get_queryset(self, request):
-        if request.user.has_perm("core.comments.preview") or request.user.is_superuser:
-            return .all()
-        else:
-            return .filter(live=True)
-    """
 
 
 class Serializer(serializers.ModelSerializer):
