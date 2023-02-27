@@ -582,18 +582,6 @@ plugins = ["setuptools"]
 requirements-deprecated-finder = ["pip-api", "pipreqs"]
 
 [[package]]
-name = "joblib"
-version = "1.2.0"
-description = "Lightweight pipelining with Python functions"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "joblib-1.2.0-py3-none-any.whl", hash = "sha256:091138ed78f800342968c523bdde947e7a305b8594b910a0fea2ab83c3c6d385"},
-    {file = "joblib-1.2.0.tar.gz", hash = "sha256:e1cee4a79e4af22881164f218d4311f60074197fb707e082e803b61f6d137018"},
-]
-
-[[package]]
 name = "jwcrypto"
 version = "1.4"
 description = "Implementation of JOSE Web standards"
@@ -1115,4 +1103,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "6fb65294afda61f4e6703259a96655ca6fce5e6f92d0f44cc089dc73df69a99c"
+content-hash = "c9dcf028309ef166ad3d460c3383b847443b77a3ba9b1e2d5036710b2396c5b4"
