@@ -35,10 +35,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class CommentListSerializer(serializers.ListSerializer, ABC):
     id = serializers.IntegerField(source="pk")
-    is_top_level = serializers.BooleanField()
+    child = CommentSerializer(many=True, read_only=True)
 
     def to_representation(self, instance):
-        is_top_level = instance.is_top_level
+        is_top_level = instance.top_lvl
         # only return live=True comments if the user doesn't have the comments.preview permission
         if (
             not self.context["request"].user.has_perm("core.comments.preview")

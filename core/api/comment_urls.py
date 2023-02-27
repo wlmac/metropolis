@@ -1,24 +1,24 @@
 from django.urls import path
 
+from core.api.views.comments import *
+
 comment_urls = [
     path(
-        "comments/<int:pk>/replies",
-        CommentReplies.as_view(),
+        "comments/<str:type>/<int:pk>",  # done, not FULLY tested
+        CommentListAPIView.as_view(),
+        name="api_comment_list",
+    ),
+    path(
+        "comment/create/<str:type>/<int:pk>",  # type = blogpost or announcement # done.
+        CommentCreateView.as_view(),
+        name="api_comment_create",
+    ),
+    path(
+        "comment/<int:pk>/replies",  # done (but not tested)
+        CommentRepliesAPIView.as_view(),
         name="api_comment_replies",
     ),
-    path("comment/<int:pk>", CommentDetail.as_view(), name="api_comment_detail"),
-    path(
-        "announcements/<int:pk>/comments",
-        AnnouncementComments.as_view(),
-        name="api_announcement_comments",
-    ),
-    path(
-        "blog/<int:pk>/comments",
-        BlogComments.as_view(),
-        name="api_announcement_comments",
-    ),
 ]
-
 
 """
 /coments/pk - get comment and return in this fmt and return 404 if live=false
@@ -43,6 +43,6 @@ comment_urls = [
 
 
 /comments/<int:pk>/replies 
-returnds essentially what /comments/<int:pk> returns but as a list 
+returns essentially what /comments/<int:pk> returns but as a list 
     
 """

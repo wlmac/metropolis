@@ -1,4 +1,7 @@
 from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.conf import settings
 from django.db import models
 from django.db.models import Q
@@ -7,12 +10,14 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
-from profanity_check import predict
-from .user import User
+# from ..api.utils.profanity import predict
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
 
 # Create your models here.
+
+if TYPE_CHECKING:
+    from .user import User
 
 
 class PostInteraction(models.Model):
@@ -27,7 +32,7 @@ class PostInteraction(models.Model):
 
     """
 
-    author: User | str = models.ForeignKey(
+    author: "User" | str = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
@@ -55,7 +60,7 @@ class PostInteraction(models.Model):
     def get_object(
         self, obj: "PostInteraction", **kwargs
     ):  # todo you can probably remove this
-        content_type = ContentType.objects.get_for_model(obj)  #  core | comment
+        content_type = ContentType.objects.get_for_model(obj)
         print(y := self.__class__.objects.get(), y.content_type, y.object_id)
         print(content_type, "a", obj.id, "b", kwargs)
         return self.__class__.objects.filter(
@@ -87,6 +92,7 @@ class Comment(PostInteraction):
 
     """
 
+    last_modified = models.DateTimeField(auto_now_add=True)
     body = models.TextField(max_length=512)
     parent = models.ForeignKey(
         "Comment",
@@ -125,8 +131,9 @@ class Comment(PostInteraction):
         # todo run profanity check on body and if it passes, set live to True and save it. (see todo above)
         if not self.deleted and self.author.is_superuser:
             return super().save(**kwargs)
-        if bool(predict(self.body)[0]):  # 0.2ms per check, .5 for 10 and 3.5 for 100
-            self.live = True
+        # if bool(predict(self.body)[0]):  # 0.2ms per check, .5 for 10 and 3.5 for 100
+        #    self.live = True todo reimpl profanity check
+        self.live = True
 
         return super().save(**kwargs)
 
