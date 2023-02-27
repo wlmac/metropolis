@@ -57,7 +57,7 @@ urllib3 = "1.26.7"
 webencodings = "0.5.1"
 wrapt = "1.13.3"
 django_ical = "1.8.3"
-profanity-check = "1.0.3"
+joblib = "1.2.0"
 
 #[tool.poetry.group.deploy.dependencies]
 gunicorn = "20.1.0"
