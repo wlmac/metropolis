@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from rest_framework import permissions, serializers
+from rest_framework.exceptions import ValidationError
 
 from core.utils.mail import send_mail
 
@@ -24,29 +25,48 @@ class SupervisorField(PrimaryKeyRelatedAbilityField):
         return User.objects.filter(organizations_supervising__in=orgs)
 
 
-class ExecEtcSerializer(serializers.ModelSerializer):
-    supervisor = SupervisorField("edit", queryset=User.all())
+def exec_validator(value, serializer_field):
+    if value not in {'d', 'p'}:
+        raise ValidationError('only draft or pending allowed', code='exec')
+
+
+class Serializer(serializers.ModelSerializer):
     message = serializers.CharField(read_only=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        user = self.context["request"].user
+        instance = self.instance
+        if user in instance.organization.supervisors:
+            self.supervisor = SupervisorField("edit", queryset=User.filter(is_teacher=True))
+            self.status = ModelAbilityField(
+                "approve", model_field=Announcement()._meta.get_field("status")
+            )
+            self.rejection_reason = ModelAbilityField(
+                "approve", model_field=Announcement()._meta.get_field("rejection_reason")
+            )
+        elif user in instance.organization.execs:
+            self.supervisor = SupervisorField("edit", queryset=User.filter(is_teacher=True))
+            self.status = serializers.CharField(validators=[lambda value, serializer_field: 
+            self.rejection_reason = serializers.CharField(read_only=True)
+        else:
+            self.status = serializers.HiddenField()
+            self.rejection_reason = serializers.HiddenField()
 
     def save(self, *args, **kwargs):
         notify_supervisors = False
-
         obj = super().save(*args, **kwargs)
-
         user = self.context["request"].user
-        # if not user.is_superuser:
-        if True:
-            if user in obj.organization.supervisors.all():
-                obj.supervisor = user
-                if obj.status not in {"d", "p"} and user != obj.author:
-                    # Notify author
-                    obj.message = f"Successfully marked announcement as {obj.get_status_display()}."
-            else:
-                if obj.status not in ("d", "p"):
-                    notify_supervisors = True
+        if user in obj.organization.supervisors.all():
+            obj.supervisor = user
+            if obj.status not in {"d", "p"} and user != obj.author:
+                obj.message = f"Successfully marked announcement as {obj.get_status_display()}."
+        else:
+            if obj.status not in ("d", "p"):
+                notify_supervisors = True
 
-                    obj.message = f"Successfully sent announcement for review."
-                obj.status = "p" if obj.status != "d" else "d"
+                obj.message = f"Successfully sent announcement for review."
+            obj.status = "p" if obj.status != "d" else "d"
 
         if notify_supervisors:
             for teacher in obj.organization.supervisors.all():
@@ -76,21 +96,6 @@ class ExecEtcSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcement
         fields = "__all__"
-        read_only_fields = ["status", "rejection_reason"]
-
-
-class SupervisorSerializer(serializers.ModelSerializer):
-    supervisor = SupervisorField("edit", queryset=User.all())
-    status = ModelAbilityField(
-        "approve", model_field=Announcement()._meta.get_field("status")
-    )
-    rejection_reason = ModelAbilityField(
-        "approve", model_field=Announcement()._meta.get_field("rejection_reason")
-    )
-
-    class Meta:
-        model = Announcement
-        fields = "__all__"
 
 
 class Inner(permissions.BasePermission):
@@ -115,7 +120,7 @@ class Provider(BaseProvider):
 
     @property
     def serializer_class(self):
-        return ExecEtcSerializer
+        return Serializer
 
     def get_queryset(self, request):
         return Announcement.get_all(request.user)

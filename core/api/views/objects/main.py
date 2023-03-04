@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
 
-__ALL__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
+__all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
 
 def gen_get_provider(mapping):
