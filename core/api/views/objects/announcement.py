@@ -88,8 +88,8 @@ class OneSerializer(Serializer):
         print(self.context["request"].__dict__)
         user = self.context["request"].user
         # these HiddenFields should never be used to set values
-        self.status = serializers.HiddenField(default='', read_only=True , validators=[always_fail_validator])
-        self.rejection_reason = serializers.HiddenField(default='', read_only=True , validators=[always_fail_validator])
+        self.status = serializers.HiddenField(default='', validators=[always_fail_validator])
+        self.rejection_reason = serializers.HiddenField(default='', validators=[always_fail_validator])
         instance = self.instance
         if instance:
             print('instance', instance)
