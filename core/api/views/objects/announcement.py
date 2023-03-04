@@ -35,23 +35,26 @@ class Serializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        user = self.context["request"].user
-        instance = self.instance
-        if user in instance.organization.supervisors:
-            self.supervisor = SupervisorField("edit", queryset=User.filter(is_teacher=True))
-            self.status = ModelAbilityField(
-                "approve", model_field=Announcement()._meta.get_field("status")
-            )
-            self.rejection_reason = ModelAbilityField(
-                "approve", model_field=Announcement()._meta.get_field("rejection_reason")
-            )
-        elif user in instance.organization.execs:
-            self.supervisor = SupervisorField("edit", queryset=User.filter(is_teacher=True))
-            self.status = serializers.CharField(validators=[exec_validator])
-            self.rejection_reason = serializers.CharField(read_only=True)
-        else:
-            self.status = serializers.HiddenField()
-            self.rejection_reason = serializers.HiddenField()
+        if self.context["request"].kind in ("retrieve", "single"):
+            user = self.context["request"].user
+            instance = self.instance
+            print(instance)
+            print(instance.organization.supervisors)
+            if user in instance.organization.supervisors.all():
+                self.supervisor = SupervisorField("edit", queryset=User.objects.filter(is_teacher=True))
+                self.status = ModelAbilityField(
+                    "approve", model_field=Announcement()._meta.get_field("status")
+                )
+                self.rejection_reason = ModelAbilityField(
+                    "approve", model_field=Announcement()._meta.get_field("rejection_reason")
+                )
+            elif user in instance.organization.execs.all():
+                self.supervisor = SupervisorField("edit", queryset=User.objects.filter(is_teacher=True))
+                self.status = serializers.CharField(validators=[exec_validator])
+                self.rejection_reason = serializers.CharField(read_only=True)
+            else:
+                self.status = serializers.HiddenField()
+                self.rejection_reason = serializers.HiddenField()
 
     def save(self, *args, **kwargs):
         notify_supervisors = False
