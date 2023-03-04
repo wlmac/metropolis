@@ -30,31 +30,12 @@ def exec_validator(value, serializer_field):
         raise ValidationError('only draft or pending allowed', code='exec')
 
 
+def always_fail_validator(value, serializer_field):
+    raise ValidationError('always fail', code='exec')
+
+
 class Serializer(serializers.ModelSerializer):
     message = serializers.CharField(read_only=True)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.context["request"].kind in ("retrieve", "single"):
-            user = self.context["request"].user
-            instance = self.instance
-            print(instance)
-            print(instance.organization.supervisors)
-            if user in instance.organization.supervisors.all():
-                self.supervisor = SupervisorField("edit", queryset=User.objects.filter(is_teacher=True))
-                self.status = ModelAbilityField(
-                    "approve", model_field=Announcement()._meta.get_field("status")
-                )
-                self.rejection_reason = ModelAbilityField(
-                    "approve", model_field=Announcement()._meta.get_field("rejection_reason")
-                )
-            elif user in instance.organization.execs.all():
-                self.supervisor = SupervisorField("edit", queryset=User.objects.filter(is_teacher=True))
-                self.status = serializers.CharField(validators=[exec_validator])
-                self.rejection_reason = serializers.CharField(read_only=True)
-            else:
-                self.status = serializers.HiddenField()
-                self.rejection_reason = serializers.HiddenField()
 
     def save(self, *args, **kwargs):
         notify_supervisors = False
@@ -101,6 +82,32 @@ class Serializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class OneSerializer(Serializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        print(self.context["request"].__dict__)
+        user = self.context["request"].user
+        # these HiddenFields should never be used to set values
+        self.status = serializers.HiddenField(default='', read_only=True , validators=[always_fail_validator])
+        self.rejection_reason = serializers.HiddenField(default='', read_only=True , validators=[always_fail_validator])
+        instance = self.instance
+        if instance:
+            print('instance', instance)
+            print('ios', instance.organization.supervisors)
+            if user in instance.organization.supervisors.all():
+                self.supervisor = SupervisorField("edit", queryset=User.objects.filter(is_teacher=True))
+                self.status = ModelAbilityField(
+                    "approve", model_field=Announcement()._meta.get_field("status")
+                )
+                self.rejection_reason = ModelAbilityField(
+                    "approve", model_field=Announcement()._meta.get_field("rejection_reason")
+                )
+            elif user in instance.organization.execs.all():
+                self.supervisor = SupervisorField("edit", queryset=User.objects.filter(is_teacher=True))
+                self.status = serializers.CharField(validators=[exec_validator])
+                self.rejection_reason = serializers.CharField(read_only=True)
+
+
 class Inner(permissions.BasePermission):
     def has_object_permission(self, request, view, ann):
         if request.method in permissions.SAFE_METHODS:
@@ -123,7 +130,7 @@ class Provider(BaseProvider):
 
     @property
     def serializer_class(self):
-        return Serializer
+        return OneSerializer if self.request.kind in ("single", "retrieve") else Serializer
 
     def get_queryset(self, request):
         return Announcement.get_all(request.user)
