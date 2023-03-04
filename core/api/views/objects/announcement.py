@@ -47,7 +47,7 @@ class Serializer(serializers.ModelSerializer):
             )
         elif user in instance.organization.execs:
             self.supervisor = SupervisorField("edit", queryset=User.filter(is_teacher=True))
-            self.status = serializers.CharField(validators=[lambda value, serializer_field: 
+            self.status = serializers.CharField(validators=[exec_validator])
             self.rejection_reason = serializers.CharField(read_only=True)
         else:
             self.status = serializers.HiddenField()
