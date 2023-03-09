@@ -33,7 +33,7 @@ def gen_get_provider(mapping):
     return get_provider
 
 
-get_provider = gen_get_provider(
+get_provider = gen_get_provider( # todo potentially rewrite using BaseProvider.__subclasses__
     {
         "announcement": "announcement",
         "blog-post": "blog_post",

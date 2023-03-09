@@ -94,6 +94,11 @@ class CommentListSerializer(CommentSerializer):
     replies = serializers.SerializerMethodField()
     edited = serializers.SerializerMethodField()
 
+    def get_queryset(self, request):
+        if request.user.has_perm("core.comment.view_flagged") or request.user.is_staff:
+            return Comment.objects.all().order_by("-likes")
+        return Comment.objects.filter(live=True).order_by("-likes")
+
     def get_replies(self, obj: Comment):
         if obj.bottom_lvl:
             return []
@@ -150,46 +155,6 @@ class Provider(BaseProvider):
             .action_time
         )
 
-
-class CommentListAPIView(generics.ListAPIView):  # todo add to v3 list
-    """
-    List all top-level comments for a given content object
-    """
-
-    serializer_class = CommentListSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.kwargs.get("type") not in ["blogpost", "announcement"]:
-            return Response(
-                {
-                    "error": "Invalid content type make sure it's 'blogpost' or 'announcement'"
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-                content_type="application/json",
-            )
-
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_queryset(self):
-        content_type = ContentType.objects.filter(model=self.kwargs.get("type")).first()
-        print("content_type: ", content_type, type(content_type))
-        pk = self.kwargs.get("pk")
-        print("pk: ", pk, type(pk))
-        if content_type and pk:
-            queryset = Comment.objects.filter(
-                content_type=content_type,
-                object_id=pk,
-                live=True,
-            ).order_by("-likes")
-            return queryset
-        else:
-            return Comment.objects.none()
-
-        # return Response(
-        #    {"error": "Invalid content type or object id"},
-        #    status=status.HTTP_400_BAD_REQUEST,
-        # )
 
 
 class CommentRepliesAPIView(generics.ListAPIView):
