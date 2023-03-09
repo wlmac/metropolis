@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 
-from ..serializers.comments import CommentSerializer, CommentListSerializer
+from .objects.comment import CommentSerializer, CommentListSerializer
 from ..utils.permissions import IsStaffOrAuthor
 from ...models import Comment
 
@@ -139,7 +139,7 @@ class CommentRepliesAPIView(generics.ListAPIView):
         queryset = Comment.objects.filter(
             parent_id=comment_id,
             live=True,
-        ).order_by("created")
+        ).order_by("created_at")
         return queryset
 
     def list(self, request, *args, **kwargs):

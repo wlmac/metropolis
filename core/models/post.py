@@ -39,7 +39,7 @@ class PostInteraction(models.Model):
         on_delete=models.SET("[deleted]"),
     )
 
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     # --- Generic Foreign Key --- #
     content_type = models.ForeignKey(
@@ -112,10 +112,30 @@ class Comment(PostInteraction):
     def get_children(self):
         return Comment.objects.filter(parent=self)
 
+    def delete(self, using=None, keep_parents=False, **kwargs):
+        """
+        Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
+        if force is set to True, then it will actually delete the object (used for when you want to delete a comment or unlike/save something)
+        """
+        if kwargs.get("force", True):
+            if self.bottom_lvl:  # no sub comments
+                super().delete(using=using, keep_parents=keep_parents)
+            else:
+                self.body = "[deleted]"
+                self.author = "[deleted]"
+                self.save()
+        self.user = None
+        self.save()
+
     @property
     def top_lvl(self) -> bool:
         """Returns True if the comment is a top level comment, False if it is a child comment."""
         return self.parent is None
+
+    @property
+    def bottom_lvl(self) -> bool:
+        """Returns True if the comment is a bottom level comment, False if it is a parent comment."""
+        return self.get_children().exists()
 
     @property
     def like_count(self) -> int:
@@ -138,7 +158,7 @@ class Comment(PostInteraction):
         return super().save(**kwargs)
 
     class Meta:
-        ordering = ["created"]
+        ordering = ["created_at"]
         indexes = [
             models.Index(fields=["content_type", "object_id"]),
         ]

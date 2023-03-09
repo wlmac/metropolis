@@ -23,7 +23,11 @@ def gen_get_provider(mapping):
         """
         # TODO; return an exception to automatically return 400
         if provider_name not in providers:
-            raise Http404("確り取説読んだ？")
+            raise Http404(
+                "Invalid object type. Valid types are: "
+                + ", ".join(providers.keys())
+                + "."
+            )
         return providers[provider_name]
 
     return get_provider
@@ -38,6 +42,7 @@ get_provider = gen_get_provider(
         "flatpage": "flatpage",
         "user": "user",
         "tag": "tag",
+        "comment": "comment",
     }
 )
 
@@ -58,7 +63,7 @@ class ObjectAPIView(generics.GenericAPIView):
             self.permission_classes = provider.permission_classes
         self.as_su = as_su
         self.serializer_class = provider.serializer_class
-        # NOTE: better to have following if after initial, but this is easier
+        # NOTE: better to have the following if after initial, but this is easier
 
     # NOTE: dispatch() is copied from https://github.com/encode/django-rest-framework/blob/de7468d0b4c48007aed734fee22db0b79b22e70b/rest_framework/views.py
     # License for this function:
