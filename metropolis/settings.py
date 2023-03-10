@@ -926,9 +926,15 @@ THEMES = {
         "logo": "/static/core/img/themes/logos/christmas-transparent.png",
         "theme": "/static/core/css/themes/christmas-theme.css",
     },
+    "39": {
+        "banner": "/static/core/img/themes/banners/spring.jpg",
+        "banner_css": "/static/core/css/themes/banners/spring-banner.css",
+        "logo": "/static/core/img/themes/logos/spring-transparent.png",
+        "theme": "/static/core/css/themes/39-theme.css",
+    },
 }
 
-CURRENT_THEME = "autumn"
+CURRENT_THEME = "39"
 
 # Lazy Loading
 
