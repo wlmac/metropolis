@@ -19,7 +19,9 @@ def gen_get_provider(mapping):
             __import__(f"core.api.views.objects.{file[:-3]}", fromlist=["*"])
 
     provClasses = BaseProvider.__subclasses__()
-    ProvReqNames = [mapping[cls.__name__.rsplit("Provider")[0].lower()] for cls in provClasses]
+    ProvReqNames = [
+        mapping[cls.__name__.rsplit("Provider")[0].lower()] for cls in provClasses
+    ]
     provClassMapping = {key: value for key, value in zip(ProvReqNames, provClasses)}
 
     def get_provider(provider_name: str):
@@ -29,26 +31,26 @@ def gen_get_provider(mapping):
         # TODO; return an exception to automatically return 400
         if provider_name not in ProvReqNames:
             raise Http404(
-                "Invalid object type. Valid types are: "
-                + ", ".join(ProvReqNames)
-                + "."
+                "Invalid object type. Valid types are: " + ", ".join(ProvReqNames) + "."
             )
         return provClassMapping[provider_name]
 
     return get_provider
 
 
-get_provider = gen_get_provider( # todo potentially rewrite using BaseProvider.__subclasses__
-    {
-        "announcement": "announcement",
-        "blogpost": "blog-post",
-        "event": "event",
-        "organization": "organization",
-        "flatpage": "flatpage",
-        "user": "user",
-        "tag": "tag",
-        "comment": "comment",
-    }
+get_provider = (
+    gen_get_provider(  # todo potentially rewrite using BaseProvider.__subclasses__
+        {
+            "announcement": "announcement",
+            "blogpost": "blog-post",
+            "event": "event",
+            "organization": "organization",
+            "flatpage": "flatpage",
+            "user": "user",
+            "tag": "tag",
+            "comment": "comment",
+        }
+    )
 )
 
 

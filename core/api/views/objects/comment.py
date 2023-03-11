@@ -156,7 +156,6 @@ class CommentProvider(BaseProvider):
         )
 
 
-
 class CommentRepliesAPIView(generics.ListAPIView):
     """# todo impl to v3
     List all replies for a given comment
