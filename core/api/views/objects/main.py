@@ -1,7 +1,7 @@
-import os
-
 from . import *
+import os
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Model
 from django.http import Http404
 from django.urls import reverse
 from rest_framework import generics, permissions
@@ -38,19 +38,17 @@ def gen_get_provider(mapping):
     return get_provider
 
 
-get_provider = (
-    gen_get_provider(  # todo potentially rewrite using BaseProvider.__subclasses__
-        {
-            "announcement": "announcement",
-            "blogpost": "blog-post",
-            "event": "event",
-            "organization": "organization",
-            "flatpage": "flatpage",
-            "user": "user",
-            "tag": "tag",
-            "comment": "comment",
-        }
-    )
+get_provider = gen_get_provider(  # k = Provider class name e.g. comment in CommentProvider, v = request name
+    {
+        "announcement": "announcement",
+        "blogpost": "blog-post",
+        "event": "event",
+        "organization": "organization",
+        "flatpage": "flatpage",
+        "user": "user",
+        "tag": "tag",
+        "comment": "comment",
+    }
 )
 
 
@@ -154,7 +152,7 @@ class ObjectList(
             return None
 
     def get_admin_url(self):
-        model = self.provider.model
+        model: Model = self.provider.model
         return reverse(
             f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
         )

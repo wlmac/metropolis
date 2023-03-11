@@ -157,7 +157,7 @@ class CommentProvider(BaseProvider):
 
 
 class CommentRepliesAPIView(generics.ListAPIView):
-    """# todo impl to v3
+    """# todo impl to v3 or (just impl into detail with a is_top_lvl flag)
     List all replies for a given comment
     """
 
