@@ -117,7 +117,7 @@ class CommentListSerializer(CommentSerializer):
         ]
 
 
-class Provider(BaseProvider):
+class CommentProvider(BaseProvider):
     model = Comment
 
     @property

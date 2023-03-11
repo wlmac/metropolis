@@ -28,7 +28,7 @@ class SupervisorOrExec(permissions.BasePermission):
         return False
 
 
-class Provider(BaseProvider):
+class OrganizationProvider(BaseProvider):
     serializer_class = Serializer
     model = models.Organization
     allow_new = False

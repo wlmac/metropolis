@@ -1,34 +1,39 @@
-import importlib
+import os
 
+from . import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.urls import reverse
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
+from .base import BaseProvider
 from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
 
 __ALL__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
 
 def gen_get_provider(mapping):
-    providers = {
-        key: importlib.import_module(f".{value}", "core.api.views.objects").Provider
-        for key, value in mapping.items()
-    }
+    for file in os.listdir(os.path.dirname(__file__)):
+        if file.endswith(".py") and file not in ["__init__.py", "base.py", "main.py"]:
+            __import__(f"core.api.views.objects.{file[:-3]}", fromlist=["*"])
+
+    provClasses = BaseProvider.__subclasses__()
+    ProvReqNames = [mapping[cls.__name__.rsplit("Provider")[0].lower()] for cls in provClasses]
+    provClassMapping = {key: value for key, value in zip(ProvReqNames, provClasses)}
 
     def get_provider(provider_name: str):
         """
         Gets a provider by type name.
         """
         # TODO; return an exception to automatically return 400
-        if provider_name not in providers:
+        if provider_name not in ProvReqNames:
             raise Http404(
                 "Invalid object type. Valid types are: "
-                + ", ".join(providers.keys())
+                + ", ".join(ProvReqNames)
                 + "."
             )
-        return providers[provider_name]
+        return provClassMapping[provider_name]
 
     return get_provider
 
@@ -36,7 +41,7 @@ def gen_get_provider(mapping):
 get_provider = gen_get_provider( # todo potentially rewrite using BaseProvider.__subclasses__
     {
         "announcement": "announcement",
-        "blog-post": "blog_post",
+        "blogpost": "blog-post",
         "event": "event",
         "organization": "organization",
         "flatpage": "flatpage",

@@ -125,7 +125,7 @@ class Identity(permissions.BasePermission):
         return False
 
 
-class Provider(BaseProvider):
+class UserProvider(BaseProvider):
     model = models.User
 
     @property

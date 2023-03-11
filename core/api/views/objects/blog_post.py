@@ -13,7 +13,7 @@ class Serializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class Provider(BaseProvider):
+class BlogPostProvider(BaseProvider):
     serializer_class = Serializer
     model = BlogPost
 

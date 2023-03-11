@@ -102,7 +102,7 @@ class Inner(permissions.BasePermission):
         return False
 
 
-class Provider(BaseProvider):
+class AnnouncementProvider(BaseProvider):
     model = Announcement
 
     @property
