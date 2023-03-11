@@ -8,10 +8,15 @@ from rest_framework import permissions, serializers, validators
 from .... import models
 from ....models import User
 from .base import BaseProvider
+from ....templatetags.gravatar_tags import gravatar_url
 
 
 class Serializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
+
+    def get_gravatar_url(self, obj):
+        return gravatar_url(obj.email)
 
     def get_email_hash(self, obj):
         return base64.standard_b64encode(
@@ -26,11 +31,13 @@ class Serializer(serializers.ModelSerializer):
             "email_hash",
             "first_name",
             "last_name",
+            "is_staff",
             "bio",
             "timezone",
             "graduating_year",
             "organizations",
             "tags_following",
+            "gravatar_url",
         ]
 
 

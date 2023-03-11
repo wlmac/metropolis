@@ -19,11 +19,13 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "is_staff",
             "bio",
             "timezone",
             "graduating_year",
             "organizations",
             "tags_following",
+            "gravatar_url",
         ]
 
 
@@ -66,6 +68,7 @@ class UserSerializer3(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "is_staff",
             "bio",
             "timezone",
             "graduating_year",
