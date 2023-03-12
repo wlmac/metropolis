@@ -11,7 +11,6 @@
         <div id="main-container">
             {% if blogpost %}
                 <div class="blog row">
-                    <!-- sample blog -->
                     <div class="blog-content s5 col valign-wrapper left-align s5">
                         <div class="blog-content-container">
                             <h4 class="title">{{ blogpost.title }}</h4>
@@ -24,7 +23,7 @@
                             </div>
                         </div>
                     </div>
-                    <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}"/>
+		    <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}" alt="{{ blogpost.featured_image_description }}" />
                 </div>
             {% endif %}
             <div id="recent-events" class="card-list center-align">
@@ -74,8 +73,9 @@
                                 <hr>
                                 <div class="authors">
                                     <div class="authors-image">
-                                        <a href="{{ event.organization.slug|organization_url }}"><img class="circle"
-                                                                                                      src="{{ event.organization.icon.url }}"></a>
+                                        <a href="{{ event.organization.slug|organization_url }}">
+						<img class="circle" src="{{ event.organization.icon.url }}" alt="{{ event.organization.name }} logo">
+					</a>
                                     </div>
                                     <div class="authors-text">
                                         {{ event.organization.slug|organization }}

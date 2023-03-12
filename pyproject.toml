@@ -13,16 +13,16 @@ description = "William Lyon Mackenzie's online hub for announcements, calendar e
 authors = ["nyiyui <+@nyiyui.ca>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.8"
 asgiref = "3.4.1"
 bleach = "4.1.0"
-certifi = "2021.10.8"
+certifi = "2022.12.7"
 cffi = "1.15.0"
 charset-normalizer = "2.0.7"
-cryptography = "35.0.0"
+cryptography = "39.0.1"
 defusedxml = "0.7.1"
 Deprecated = "1.2.13"
-Django = "3.2.17"
+Django = "3.2.18"
 django-allauth = "0.45.0"
 django-appconf = "1.0.5"
 django-cors-headers = "3.10.0"

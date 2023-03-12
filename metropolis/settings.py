@@ -792,10 +792,10 @@ MARTOR_MARKDOWN_EXTENSIONS = [
     "markdown.extensions.tables",
     "markdown.extensions.nl2br",
     "markdown.extensions.fenced_code",
-    "martor.extensions.emoji",
     "martor.extensions.escape_html",
     "martor.extensions.urlize",
-    "core.markdown",
+    "core.markdown.embed",
+    "core.markdown.emoji",
 ]
 
 # Select2 settings
@@ -926,9 +926,15 @@ THEMES = {
         "logo": "/static/core/img/themes/logos/christmas-transparent.png",
         "theme": "/static/core/css/themes/christmas-theme.css",
     },
+    "39": {
+        "banner": "/static/core/img/themes/banners/spring.jpg",
+        "banner_css": "/static/core/css/themes/banners/spring-banner.css",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
+        "theme": "/static/core/css/themes/39-theme.css",
+    },
 }
 
-CURRENT_THEME = "autumn"
+CURRENT_THEME = "39"
 
 # Lazy Loading
 

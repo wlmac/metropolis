@@ -222,8 +222,7 @@ class AnnouncementAdmin(PostAdmin):
         return qs.filter(
             Q(organization__supervisors=request.user)
             | Q(organization__execs=request.user)
-            | Q(organization__is_active=True)
-        ).distinct()
+        ).distinct().filter(organization__is_active=True)
 
     def get_form(self, request, obj=None, **kwargs):
         if request.user.in_qltr("ann-draft"):

@@ -264,7 +264,9 @@ class Announcement(Post):
         feed_all = approved_announcements.filter(is_public=True)
         if user is not None and user.is_authenticated:
             feed_all = (
-                feed_all | approved_announcements.filter(organization__member=user)
+                feed_all
+                | approved_announcements.filter(organization__member=user)
+                | cls.objects.filter(organization__execs__in=[user])
             ).distinct()
 
         return feed_all
@@ -290,6 +292,7 @@ class BlogPost(Post):
         upload_to=featured_image_file_path_generator,
         default="featured_image/default.png",
     )
+    last_modified_date = models.DateTimeField()
     featured_image_description = models.CharField(
         help_text="Alt text for the featured image e.g. what screen readers tell users",
         max_length=140,
@@ -303,8 +306,10 @@ class BlogPost(Post):
         return reverse("blogpost_detail", args=[self.slug])
 
     def increment_views(self) -> str:
-        self.views += 1
-        self.save()
+        pass
+        # TODO: this also changes last_modified_date which is undesirable
+        # self.views += 1
+        # self.save()
 
     class Meta:
         ordering = ["-created_date"]
