@@ -1,6 +1,6 @@
 /**
  * @author      : Ken Shibata (kenxshibata@gmail.com)
- * @description : lazy loading of annoucements
+ * @description : lazy loading of announcements
  */
 
 async function loadPage(page, feed, base) {

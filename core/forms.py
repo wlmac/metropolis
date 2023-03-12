@@ -37,7 +37,7 @@ class MetropolisSignupForm(SignupForm):
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
         user.graduating_year = self.cleaned_data["graduating_year"]
-        if self.cleaned_data["email"].endswith("@tdsb.on.ca"):
+        if self.cleaned_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
             user.is_teacher = True
         user.save()
         return user

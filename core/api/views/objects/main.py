@@ -1,43 +1,53 @@
-import importlib
-
+from . import *
+import os
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Model
 from django.http import Http404
 from django.urls import reverse
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
+from .base import BaseProvider
 from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
 
 __all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
 
 def gen_get_provider(mapping):
-    providers = {
-        key: importlib.import_module(f".{value}", "core.api.views.objects").Provider
-        for key, value in mapping.items()
-    }
+    for file in os.listdir(os.path.dirname(__file__)):
+        if file.endswith(".py") and file not in ["__init__.py", "base.py", "main.py"]:
+            __import__(f"core.api.views.objects.{file[:-3]}", fromlist=["*"])
+
+    provClasses = BaseProvider.__subclasses__()
+    ProvReqNames = [
+        mapping[cls.__name__.rsplit("Provider")[0].lower()] for cls in provClasses
+    ]
+    provClassMapping = {key: value for key, value in zip(ProvReqNames, provClasses)}
 
     def get_provider(provider_name: str):
         """
         Gets a provider by type name.
         """
         # TODO; return an exception to automatically return 400
-        if provider_name not in providers:
-            raise Http404("確り取説読んだ？")
-        return providers[provider_name]
+        if provider_name not in ProvReqNames:
+            raise Http404(
+                "Invalid object type. Valid types are: " + ", ".join(ProvReqNames) + "."
+            )
+        return provClassMapping[provider_name]
 
     return get_provider
 
 
-get_provider = gen_get_provider(
+get_provider = gen_get_provider(  # k = Provider class name e.g. comment in CommentProvider, v = request name
     {
         "announcement": "announcement",
-        "blog-post": "blog_post",
+        "blogpost": "blog-post",
         "event": "event",
         "organization": "organization",
         "flatpage": "flatpage",
         "user": "user",
         "tag": "tag",
+        "comment": "comment",
     }
 )
 
@@ -58,7 +68,7 @@ class ObjectAPIView(generics.GenericAPIView):
             self.permission_classes = provider.permission_classes
         self.as_su = as_su
         self.serializer_class = provider.serializer_class
-        # NOTE: better to have following if after initial, but this is easier
+        # NOTE: better to have the following if after initial, but this is easier
 
     # NOTE: dispatch() is copied from https://github.com/encode/django-rest-framework/blob/de7468d0b4c48007aed734fee22db0b79b22e70b/rest_framework/views.py
     # License for this function:
@@ -142,7 +152,7 @@ class ObjectList(
             return None
 
     def get_admin_url(self):
-        model = self.provider.model
+        model: Model = self.provider.model
         return reverse(
             f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
         )

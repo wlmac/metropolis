@@ -22,7 +22,7 @@ class Inner(permissions.BasePermission):
         return False
 
 
-class Provider(BaseProvider):
+class TagProvider(BaseProvider):
     model = models.Tag
     serializer_class = Serializer
 

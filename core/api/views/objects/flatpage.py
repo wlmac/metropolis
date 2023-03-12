@@ -12,7 +12,7 @@ class Serializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class Provider(BaseProvider):
+class FlatPageProvider(BaseProvider):
     serializer_class = Serializer
     model = FlatPage
     allow_list = False

@@ -49,7 +49,6 @@ properties:
   organizations: { type: array, items: { type: integer } }
   tags_following: { type: array, items: { type: integer } }
   gravatar_url: { type: string, format: url }
-
 ```
 
 ## Get Terms

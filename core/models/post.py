@@ -1,13 +1,168 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
+from django.db.models import Q
 from django.urls import reverse
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 
+# from ..api.utils.profanity import predict
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
 
 # Create your models here.
+
+if TYPE_CHECKING:
+    from .user import User
+
+
+class PostInteraction(models.Model):
+    """
+    how to fetch a PostInteraction object:
+
+
+    content_type = ContentType.objects.get_for_model(self)
+        return PostInteraction.objects.filter(
+            content_type=content_type, object_id=self.id
+        )
+
+    """
+
+    author: "User" | str = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET("[deleted]"),
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # --- Generic Foreign Key --- #
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        help_text="The type of object this comment is on (core | blog post or core | announcement)",
+    )
+    object_id = models.PositiveIntegerField(
+        help_text="The id of the object this comment is on"
+    )
+    content_object = GenericForeignKey("content_type", "object_id")
+    # --- Generic Foreign Key --- #
+
+    @property
+    def deleted(self):
+        return self.author == "[deleted]" or self.author is None
+
+    def get_object(
+        self, obj: "PostInteraction", **kwargs
+    ):  # todo you can probably remove this
+        content_type = ContentType.objects.get_for_model(obj)
+        print(y := self.__class__.objects.get(), y.content_type, y.object_id)
+        print(content_type, "a", obj.id, "b", kwargs)
+        return self.__class__.objects.filter(
+            content_type=content_type, object_id=obj.id, **kwargs
+        )
+
+    def delete(self, using=None, keep_parents=False, **kwargs):
+        """
+        Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
+        if force is set to True, then it will actually delete the object (used for when you want to delete a comment or unlike/save something)
+        """
+        if kwargs.get("force", True):
+            super().delete(using=using, keep_parents=keep_parents)
+        self.user = None
+        self.save()
+
+    class Meta:
+        abstract = True
+
+
+class Like(PostInteraction):
+    pass
+
+
+class Comment(PostInteraction):
+    """
+    todo:
+    - add a simple deletion system for staff and such
+
+    """
+
+    last_modified = models.DateTimeField(auto_now_add=True)
+    body = models.TextField(max_length=512)
+    parent = models.ForeignKey(
+        "Comment",
+        on_delete=models.CASCADE,
+        related_name="children",
+        null=True,
+        blank=True,
+    )
+    likes = models.ManyToManyField(
+        Like, blank=True, help_text="The users who liked this comment"
+    )
+    live = models.BooleanField(
+        default=False,
+        help_text="Shown publicly?",
+    )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
+
+    def get_children(self):
+        return Comment.objects.filter(parent=self)
+
+    def delete(self, using=None, keep_parents=False, **kwargs):
+        """
+        Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
+        if force is set to True, then it will actually delete the object (used for when you want to delete a comment or unlike/save something)
+        """
+        if kwargs.get("force", True):
+            if self.bottom_lvl:  # no sub comments
+                super().delete(using=using, keep_parents=keep_parents)
+            else:
+                self.body = "[deleted]"
+                self.author = "[deleted]"
+                self.save()
+        self.user = None
+        self.save()
+
+    @property
+    def top_lvl(self) -> bool:
+        """Returns True if the comment is a top level comment, False if it is a child comment."""
+        return self.parent is None
+
+    @property
+    def bottom_lvl(self) -> bool:
+        """Returns True if the comment is a bottom level comment, False if it is a parent comment."""
+        return self.get_children().exists()
+
+    @property
+    def like_count(self) -> int:
+        return self.likes.objects.all().count()
+
+    def flagged(self) -> bool:
+        return self.__class__.objects.filter(live=False)
+
+    def __str__(self) -> str:
+        return str(self.body)
+
+    def save(self, **kwargs):
+        # todo run profanity check on body and if it passes, set live to True and save it. (see todo above)
+        if not self.deleted and self.author.is_superuser:
+            return super().save(**kwargs)
+        # if bool(predict(self.body)[0]):  # 0.2ms per check, .5 for 10 and 3.5 for 100
+        #    self.live = True todo reimpl profanity check
+        self.live = True
+
+        return super().save(**kwargs)
+
+    class Meta:
+        ordering = ["created_at"]
+        indexes = [
+            models.Index(fields=["content_type", "object_id"]),
+        ]
+        permissions = (("view_flagged", "View flagged comments"),)
 
 
 class Post(models.Model):
@@ -30,8 +185,36 @@ class Post(models.Model):
         "Tag", blank=True, related_name="%(class)ss", related_query_name="%(class)s"
     )
 
+    likes = models.ManyToManyField(Like, blank=True)
+
+    @property
+    def comments(self):
+        content_type = ContentType.objects.get_for_model(self)
+        return Comment.objects.filter(
+            content_type=content_type,
+            object_id=self.id,
+            parent=None,
+        )
+
+    @property
+    def get_likes(self) -> int:
+        return self.likes.objects.all().count()
+
     def __str__(self):
         return self.title
+
+    def comments_viewable(self, user=None, now=None):
+        if now is None:
+            now = timezone.localtime(timezone.now())
+        q = self.comments
+        if not user or not (
+            user.is_superuser or user.has_perm("core.comment.view_flagged")
+        ):
+            q = q.filter(
+                Q(created__lt=now - settings.COMMENT_DELAY)
+                | (Q(author=user) if user else Q())
+            )
+        return q
 
     class Meta:
         abstract = True

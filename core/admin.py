@@ -12,6 +12,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
@@ -170,7 +172,41 @@ class OrganizationListFilter(admin.SimpleListFilter):
             return queryset.filter(organization__slug=self.value())
 
 
-class AnnouncementAdmin(admin.ModelAdmin):
+class PostAdmin(admin.ModelAdmin):
+    readonly_fields = ["like_count", "save_count", "comments"]
+    fields = ["like_count", "save_count", "comments"]
+
+    def like_count(self, obj) -> int:
+        c = obj.likes.count()
+        print(c, obj.likes.all())  # todo remove
+        if c is None:
+            return 0
+        return c
+
+    like_count.short_description = "Like count"
+
+    def save_count(self, obj) -> int:
+        return User.objects.filter(saved_announcements=obj).count()
+
+    save_count.short_description = "Save Count"
+
+    def comments(self, obj):
+        objs = list(
+            map(
+                lambda obj: '<a target="_blank" href="/admin/core/comment/%s">%s</a>'
+                % (obj.pk, obj.body[:10]),
+                obj.comments.all(),
+            )
+        )  # todo maybe turn into a an expandable list
+        return mark_safe(",".join(objs))
+
+    comments.short_description = "Comments"
+
+    class Meta:
+        abstract = True
+
+
+class AnnouncementAdmin(PostAdmin):
     list_display = ["__str__", "organization", "status"]
     list_filter = [OrganizationListFilter, "status"]
     ordering = ["-show_after"]
@@ -203,7 +239,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None or request.user.is_superuser:
-            return []
+            return PostAdmin.readonly_fields
 
         all_fields = [
             "organization",
@@ -261,6 +297,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
         fields = list(fields)
         fields.sort(key=lambda x: all_fields.index(x))
+        fields.extend(PostAdmin.readonly_fields)
 
         return fields
 
@@ -283,6 +320,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
         fields = list(fields)
         fields.sort(key=lambda x: all_fields.index(x))
+        fields.extend(PostAdmin.fields)
 
         return fields
 
@@ -439,10 +477,10 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
             return queryset.filter(author__pk=self.value())
 
 
-class BlogPostAdmin(admin.ModelAdmin):
+class BlogPostAdmin(PostAdmin):
     list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
-    ordering = ["-show_after", "views"]
+    ordering = ["-show_after", "views", "likes"]
     fields = [
         "author",
         "title",
@@ -454,7 +492,8 @@ class BlogPostAdmin(admin.ModelAdmin):
         "show_after",
         "tags",
         "is_published",
-    ]
+    ] + PostAdmin.fields
+    readonly_fields = PostAdmin.readonly_fields
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
@@ -474,6 +513,31 @@ class BlogPostAdmin(admin.ModelAdmin):
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Tag.objects.all().order_by("name")
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("body", "parent")
+    ordering = ("-id",)  # todo change 2 -id
+    formfield_overrides = {
+        django.db.models.TextField: {"widget": AdminMartorWidget},
+    }
+
+    def content_object(self, obj):
+        url = reverse(
+            f"admin:{obj.content_type.app_label}_{obj.content_type.model}_change",
+            args=[obj.object_id],
+        )
+        return format_html('<a href="{}">{}</a>', url, str(obj.content_object))
+
+    content_object.short_description = "Content Object"
+
+    def parent(self, obj):  # todo rework this
+        if obj.parent:
+            url = reverse("admin:comments_comment_change", args=[obj.parent.id])
+            return format_html('<a href="{}">{}</a>', url, str(obj.parent.text[:50]))
+        return None
+
+    parent.short_description = "Parent Comment"
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -539,7 +603,13 @@ class UserAdmin(admin.ModelAdmin):
         "groups",
         "graduating_year",
     ]
-    search_fields = ["username", "first_name", "last_name"]
+    search_fields = [
+        "username",
+        "first_name",
+        "last_name",
+        "saved_blogs",
+        "saved_announcements",
+    ]
 
     def has_view_permission(self, request, obj=None):
         if obj is None and (
@@ -613,6 +683,7 @@ admin.site.register(models.Term, TermAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
+admin.site.register(models.Comment, CommentAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)

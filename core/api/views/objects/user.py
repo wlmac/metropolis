@@ -9,6 +9,7 @@ from rest_framework import permissions, serializers, validators
 from .... import models
 from ....models import User
 from .base import BaseProvider
+from ....templatetags.gravatar_tags import gravatar_url
 
 
 # return only the URL of the gravatar
@@ -105,7 +106,7 @@ class NewSerializer(serializers.ModelSerializer):
     password = serializers.CharField(required=True)
 
     # Default `create` and `update` behavior...
-    def create(self, validated_data):
+    def create(self, validated_data) -> User:
         user = User()
         keys = [
             "first_name",
@@ -120,7 +121,7 @@ class NewSerializer(serializers.ModelSerializer):
         if validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
             user.is_teacher = True
         user.save()
-        return instance  # fixme instance is not defined
+        return user
 
     class Meta:
         model = models.User
@@ -147,7 +148,7 @@ class Identity(permissions.BasePermission):
         return False
 
 
-class Provider(BaseProvider):
+class UserProvider(BaseProvider):
     model = models.User
 
     @property

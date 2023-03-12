@@ -22,7 +22,7 @@ class DetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class Provider(BaseProvider):
+class EventProvider(BaseProvider):
     model = Event
 
     @property
