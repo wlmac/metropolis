@@ -5,5 +5,5 @@ set -eu
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-poetry run pip freeze > requirements.txt
+python -m poetry run pip freeze > requirements.txt
 ./manage.py runserver
