@@ -219,10 +219,14 @@ class AnnouncementAdmin(PostAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(
-            Q(organization__supervisors=request.user)
-            | Q(organization__execs=request.user)
-        ).distinct().filter(organization__is_active=True)
+        return (
+            qs.filter(
+                Q(organization__supervisors=request.user)
+                | Q(organization__execs=request.user)
+            )
+            .distinct()
+            .filter(organization__is_active=True)
+        )
 
     def get_form(self, request, obj=None, **kwargs):
         if request.user.in_qltr("ann-draft"):

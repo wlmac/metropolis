@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
+from ..utils.gravatar import gravatar_url
 from ... import models
 from .tag import TagSerializer
-from ...templatetags.gravatar_tags import gravatar_url
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,6 +11,10 @@ class UserSerializer(serializers.ModelSerializer):
         slug_field="name", many=True, queryset=models.Organization.objects.all()
     )
     tags_following = TagSerializer(many=True)
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
+
+    def get_gravatar_url(self, obj):
+        return gravatar_url(obj.email)
 
     class Meta:
         model = models.User
@@ -19,7 +23,6 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
-            "is_staff",
             "bio",
             "timezone",
             "graduating_year",
@@ -31,6 +34,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserSerializerInternal(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
+
+    def get_gravatar_url(self, obj):
+        return gravatar_url(obj.email)
 
     class Meta:
         model = models.User
@@ -51,6 +58,7 @@ class UserSerializerInternal(serializers.ModelSerializer):
             "organizations",
             "tags_following",
             "qltrs",
+            "gravatar_url",
         ]
 
 

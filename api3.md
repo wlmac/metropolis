@@ -42,7 +42,6 @@ properties:
   username: { type: string }
   first_name: { type: string, minLength: 1 }
   last_name: { type: string, minLength: 1 }
-  is_staff: { type: boolean }
   bio: { type: string }
   timezone: { type: string }
   graduating_year: { type: string }
@@ -234,7 +233,6 @@ properties:
   slug: { type: string }
   first_name: { type: string }
   last_name: { type: string }
-  is_staff { type: boolean }
   bio: { type: string }
   timezone: { type: string }
   graduatingYear: { type: integer }

@@ -1,24 +1,14 @@
 import base64
 import hashlib
-import urllib
 
 from django.conf import settings
 from django.utils import timezone
 from rest_framework import permissions, serializers, validators
 
+from ...utils.gravatar import gravatar_url
 from .... import models
 from ....models import User
 from .base import BaseProvider
-from ....templatetags.gravatar_tags import gravatar_url
-
-
-# return only the URL of the gravatar
-def gravatar_url(email):
-    email = email.encode("utf-8")
-    return "https://www.gravatar.com/avatar/%s?%s" % (
-        hashlib.md5(email.lower()).hexdigest(),
-        urllib.parse.urlencode({"d": "retro", "s": "40"}),
-    )
 
 
 class Serializer(serializers.ModelSerializer):
@@ -41,7 +31,6 @@ class Serializer(serializers.ModelSerializer):
             "email_hash",
             "first_name",
             "last_name",
-            "is_staff",
             "bio",
             "timezone",
             "graduating_year",

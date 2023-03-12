@@ -12,9 +12,7 @@ class GenericAPIViewWithLastModified:
         resp = super().get(*args, **kwargs)
         last_modified = self.get_last_modified()
         if last_modified:
-            resp["Last-Modified"] = format_date_time(
-                mktime(last_modified.timetuple())
-            )
+            resp["Last-Modified"] = format_date_time(mktime(last_modified.timetuple()))
         return resp
 
 
