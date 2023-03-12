@@ -126,36 +126,9 @@ class CommentNewSerializer(CommentSerializer):
             "author",
         ]
 
-
-class CommentListSerializer(CommentSerializer): # todo  maybe just remove List?
-    replies = serializers.SerializerMethodField()
-    edited = serializers.SerializerMethodField()
-
-    def get_queryset(self, request):
-        if request.user.has_perm("core.comment.view_flagged") or request.user.is_staff:
-            return Comment.objects.all().order_by("-likes")  # todo test
-        return Comment.objects.filter(live=True).order_by("-likes")
-
-    def get_replies(self, obj: Comment):
-        if obj.bottom_lvl:
-            return []
-        return obj.children.all()
-
-    class Meta:
-        model = Comment
-        fields = [
-            "id",
-            "author",
-            "body",
-            "created_at",
-            "edited",
-            "likes",
-            "replies",
-        ]
-
-
 class CommentProvider(BaseProvider):
     model = Comment
+    allow_list = False
 
     @property
     def permission_classes(self):
@@ -165,7 +138,6 @@ class CommentProvider(BaseProvider):
     def serializer_class(self):
         return dict(
             new=CommentNewSerializer,
-            list=CommentListSerializer,
         ).get(self.request.kind, CommentSerializer)
 
     def get_queryset(self, request):
@@ -177,7 +149,7 @@ class CommentProvider(BaseProvider):
         return (
             LogEntry.objects.filter(
                 content_type=ContentType.objects.get(app_label="core", model="comment")
-            )  # todo this might not workkkkkkkk
+            )  # todo get ken to look at this.
             .filter(object_id=str(view.get_object().pk))
             .latest("action_time")
             .action_time
@@ -221,6 +193,7 @@ class LikeSerializer(serializers.ModelSerializer):
 
 class LikeProvider(BaseProvider):
     model = Like
+    allow_list = False
 
     @property
     def permission_classes(self):
