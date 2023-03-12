@@ -929,7 +929,7 @@ THEMES = {
     "39": {
         "banner": "/static/core/img/themes/banners/spring.jpg",
         "banner_css": "/static/core/css/themes/banners/spring-banner.css",
-        "logo": "/static/core/img/themes/logos/dadrk-transparent.png",
+        "logo": "/static/core/img/themes/logos/dark-transparent.png",
         "theme": "/static/core/css/themes/39-theme.css",
     },
 }

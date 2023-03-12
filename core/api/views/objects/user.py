@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import urllib
 
 from django.conf import settings
 from django.utils import timezone
@@ -10,8 +11,21 @@ from ....models import User
 from .base import BaseProvider
 
 
+# return only the URL of the gravatar
+def gravatar_url(email):
+    email = email.encode("utf-8")
+    return "https://www.gravatar.com/avatar/%s?%s" % (
+        hashlib.md5(email.lower()).hexdigest(),
+        urllib.parse.urlencode({"d": "retro", "s": "40"}),
+    )
+
+
 class Serializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
+
+    def get_gravatar_url(self, obj):
+        return gravatar_url(obj.email)
 
     def get_email_hash(self, obj):
         return base64.standard_b64encode(
@@ -26,15 +40,28 @@ class Serializer(serializers.ModelSerializer):
             "email_hash",
             "first_name",
             "last_name",
+            "is_staff",
             "bio",
             "timezone",
             "graduating_year",
             "organizations",
             "tags_following",
+            "gravatar_url",
         ]
 
 
 class ListSerializer(serializers.ModelSerializer):
+    email_hash = serializers.SerializerMethodField(read_only=True)
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
+
+    def get_gravatar_url(self, obj):
+        return gravatar_url(obj.email)
+
+    def get_email_hash(self, obj):
+        return base64.standard_b64encode(
+            hashlib.md5(obj.email.encode("utf-8")).digest()
+        )
+
     class Meta:
         model = models.User
         fields = [
@@ -43,6 +70,8 @@ class ListSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "graduating_year",
+            "email_hash",
+            "gravatar_url",
         ]
 
 

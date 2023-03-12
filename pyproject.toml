@@ -13,7 +13,7 @@ description = "William Lyon Mackenzie's online hub for announcements, calendar e
 authors = ["nyiyui <+@nyiyui.ca>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.8"
 asgiref = "3.4.1"
 bleach = "4.1.0"
 certifi = "2022.12.7"
