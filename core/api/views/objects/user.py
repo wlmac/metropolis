@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import urllib
 
 from django.conf import settings
 from django.utils import timezone
@@ -69,6 +70,8 @@ class ListSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "graduating_year",
+            "email_hash",
+            "gravatar_url",
         ]
 
 
