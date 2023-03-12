@@ -19,9 +19,14 @@ def gen_get_provider(mapping):
             __import__(f"core.api.views.objects.{file[:-3]}", fromlist=["*"])
 
     provClasses = BaseProvider.__subclasses__()
-    ProvReqNames = [
-        mapping[cls.__name__.rsplit("Provider")[0].lower()] for cls in provClasses
-    ]
+    try:
+        ProvReqNames = [
+            mapping[cls.__name__.rsplit("Provider")[0].lower()] for cls in provClasses
+        ]
+    except KeyError as e:
+        raise NotImplementedError(
+            f"Provider class {e} is missing a request name. Please add it to the mapping."
+        ) from e
     provClassMapping = {key: value for key, value in zip(ProvReqNames, provClasses)}
 
     def get_provider(provider_name: str):
@@ -48,6 +53,7 @@ get_provider = gen_get_provider(  # k = Provider class name e.g. comment in Comm
         "user": "user",
         "tag": "tag",
         "comment": "comment",
+        "like": "like",
     }
 )
 

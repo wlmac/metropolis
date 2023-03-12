@@ -239,6 +239,8 @@ properties:
   organizations: { type: array, items: { type: integer } }
   following: { type: array, items: { type: integer } }
   gravatar_url: { type: string, format: url }
+  saved_blogs: { type: array, items: { type: integer } }
+  saved_announcements: { type: array, items: { type: integer } }
 ```
 
 
@@ -268,3 +270,21 @@ properties:
   links: { type: array, items: { type: string } }
 ```
 
+## Comment
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/comment.json
+type: object
+properties:
+  id: { type: integer }
+  author: { type: integer }
+  body: { type: string }
+  created_at: { type: string }
+  likes: { type: integer }
+  edited: { type: boolean }
+  children: 
+    type: object
+    properties:
+      id: { type: integer }
+      has_children: { type: boolean }
+```
