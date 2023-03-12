@@ -125,7 +125,7 @@ Example:
 
 ### For `flatpage`
 
-**Note** `id` is the slug.
+**Note** `id` is the slug (percent-encoded).
 
 **Returns** title then content separated by `\n`, such as:
 ```
