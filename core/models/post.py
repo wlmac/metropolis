@@ -292,7 +292,7 @@ class BlogPost(Post):
         upload_to=featured_image_file_path_generator,
         default="featured_image/default.png",
     )
-    last_modified_date = models.DateTimeField()
+    last_modified_date = models.DateTimeField(auto_now_add=True)
     featured_image_description = models.CharField(
         help_text="Alt text for the featured image e.g. what screen readers tell users",
         max_length=140,
