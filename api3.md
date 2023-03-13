@@ -277,7 +277,7 @@ $id: https://maclyonsden.com/api/v3/schema/comment.json
 type: object
 properties:
   id: { type: integer }
-  author: { type: integer }
+  author: { type: integer | null }
   body: { type: string }
   created_at: { type: string }
   likes: { type: integer }

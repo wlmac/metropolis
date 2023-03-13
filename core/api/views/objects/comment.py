@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 from django.db.models import Count, Case, BooleanField, When
 from django.utils import timezone
 from rest_framework import generics, status
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 
@@ -19,9 +22,24 @@ typedir: dict[str, str] = {
 
 class CommentSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
-    author = serializers.ReadOnlyField(source="author.id")
+    author = serializers.SerializerMethodField(read_only=True)
     edited = serializers.SerializerMethodField(read_only=True)
     children = serializers.SerializerMethodField(read_only=True)
+
+    def validate(self, attrs):
+        if self.context["request"].user.is_anonymous:
+            raise serializers.ValidationError("You must be logged in to comment.")
+        parent = attrs.get("parent", None)
+        id = attrs.get("id", None)
+        if parent.id == id:
+            raise ValidationError("A Comment cannot be a parent of itself.")
+
+        return super().validate(attrs)
+
+    def get_author(self, obj: Comment) -> User | None:
+        if obj.author is not None:
+            return obj.author.id
+        return None
 
     def get_likes(self, obj: Comment) -> int:
         return obj.likes.count()
@@ -83,6 +101,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def delete(instance: Comment):
+        # todo add a check to see if the user is the author of the comment.
         instance.delete(force=True)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -103,17 +122,17 @@ class CommentSerializer(serializers.ModelSerializer):
 class CommentNewSerializer(CommentSerializer):
     def create(self, validated_data) -> Comment:
         com = Comment()
-        print(validated_data)  # todo remove
 
         keys = self.Meta.fields
         user: User = self.context["request"].user
         validated_data["author"] = user
+        print(validated_data)  # todo remove
         for key in keys:
             setattr(com, key, validated_data[key])
         if user.is_staff:  # bypass moderation if user is staff.
             com.live = True
         com.save()
-        return Response(com, status=status.HTTP_201_CREATED)
+        return com
 
     class Meta:
         model = Comment
@@ -125,6 +144,7 @@ class CommentNewSerializer(CommentSerializer):
             "parent",
             "author",
         ]
+
 
 class CommentProvider(BaseProvider):
     model = Comment

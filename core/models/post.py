@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
@@ -55,7 +56,7 @@ class PostInteraction(models.Model):
 
     @property
     def deleted(self):
-        return self.author == "[deleted]" or self.author is None
+        return self.author is None
 
     def get_object(
         self, obj: "PostInteraction", **kwargs
@@ -93,8 +94,8 @@ class Comment(PostInteraction):
     """
 
     last_modified = models.DateTimeField(auto_now_add=True)
-    body = models.TextField(max_length=512)
-    parent = models.ForeignKey(
+    body = models.TextField(max_length=512, null=True, blank=False)
+    parent = models.ForeignKey(  # todo make sure parent isn't equal to self
         "Comment",
         on_delete=models.CASCADE,
         related_name="children",
@@ -109,6 +110,11 @@ class Comment(PostInteraction):
         help_text="Shown publicly?",
     )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
 
+    def clean(self):
+        if self.id == self.parent.id:
+            raise ValidationError("A Comment cannot be a parent of itself.")
+        return super().clean()
+
     def get_children(self):
         return Comment.objects.filter(parent=self)
 
@@ -121,11 +127,12 @@ class Comment(PostInteraction):
             if self.bottom_lvl:  # no sub comments
                 super().delete(using=using, keep_parents=keep_parents)
             else:
-                self.body = "[deleted]"
-                self.author = "[deleted]"
+                self.body = None
+                self.author = None
                 self.save()
-        self.user = None
-        self.save()
+        else:
+            self.user = None
+            self.save()
 
     @property
     def top_lvl(self) -> bool:
@@ -135,7 +142,7 @@ class Comment(PostInteraction):
     @property
     def bottom_lvl(self) -> bool:
         """Returns True if the comment is a bottom level comment, False if it is a parent comment."""
-        return self.get_children().exists()
+        return not self.get_children().exists()
 
     @property
     def like_count(self) -> int:
