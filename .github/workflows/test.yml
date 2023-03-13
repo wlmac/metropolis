@@ -17,4 +17,4 @@ jobs:
           make metropolis/local_rsa_privkey.pem
           cat metropolis/local_rsa_privkey.pem
           make metropolis/local_settings.py
-          python3 manage.py test
+          python3 -Wa manage.py test
