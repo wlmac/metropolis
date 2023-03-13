@@ -52,7 +52,10 @@ class Serializer(serializers.ModelSerializer):
     class Meta:
         model = BlogPost
         ordering = ["-created_date"]
-        fields = "__all__"
+        fields = [
+            "id", "slug", "title", "body", "author", "created_date", "last_modified_date", "featured_image", "featured_image_description", "is_published", "tags", "likes",
+            "comments"
+        ]
 
 
 class BlogPostProvider(BaseProvider):

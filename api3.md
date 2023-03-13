@@ -174,6 +174,12 @@ properties:
 
   supervisor: { type: integer }
   rejectionReason: { type: string }
+  likes: { type: integer }
+  comments: 
+    type: object
+    properties:
+      id: { type: integer }
+      has_children: { type: boolean }
 ```
 
 ## Blog Post
@@ -182,13 +188,23 @@ $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/blog-post.json
 type: object
 properties:
+  id: { type: integer }
+  slug: { type: string }
+  title: { type: string }
+  body: { type: string }
   author: { type: integer }
-  organization: { type: integer }
+  created_date: { type: string, format: date-time }
+  last_modified_date: { type: string, format: date-time }
+  featured_image: { type: string, format: url }
+  featured_image_description: { type: string }
+  is_published: { type: boolean }
   tags: { type: array, items: integer }
-
-  status: { type: string, enum: [ pending, approved ] }
-
-  featuredImage: { type: string, format: url }
+  likes: { type: integer }
+  comments: 
+    type: object
+    properties:
+      id: { type: integer }
+      has_children: { type: boolean }
 ```
 
 ## Event
