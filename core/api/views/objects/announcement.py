@@ -35,7 +35,6 @@ def always_fail_validator(value, serializer_field):
 
 
 class Serializer(serializers.ModelSerializer):
-    message = serializers.CharField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
 
