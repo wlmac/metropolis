@@ -1,3 +1,4 @@
+from django.db.models import Count
 from rest_framework import generics
 
 from ... import models
@@ -6,10 +7,10 @@ from ..utils import ListAPIViewWithFallback
 
 
 class OrganizationList(ListAPIViewWithFallback):
-    queryset = models.Organization.objects.all()
+    queryset = models.Organization.objects.filter(is_active=True).annotate(num_members=Count('member')).order_by('-num_members')
     serializer_class = serializers.OrganizationSerializer
 
 
 class OrganizationDetail(generics.RetrieveAPIView):
-    queryset = models.Organization.objects.all()
+    queryset = models.Organization.objects.filter(is_active=True)
     serializer_class = serializers.OrganizationSerializer

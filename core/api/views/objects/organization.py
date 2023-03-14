@@ -1,5 +1,6 @@
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Count
 from rest_framework import permissions, serializers
 
 from .... import models
@@ -42,7 +43,7 @@ class OrganizationProvider(BaseProvider):
         )
 
     def get_queryset(self, request):
-        return models.Organization.objects.filter(is_active=True)
+        return models.Organization.objects.filter(is_active=True).annotate(num_members=Count('member')).order_by('-num_members')
 
     def get_last_modified(self, view):
         return (
