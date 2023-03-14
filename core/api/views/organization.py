@@ -7,7 +7,11 @@ from ..utils import ListAPIViewWithFallback
 
 
 class OrganizationList(ListAPIViewWithFallback):
-    queryset = models.Organization.objects.filter(is_active=True).annotate(num_members=Count('member')).order_by('-num_members')
+    queryset = (
+        models.Organization.objects.filter(is_active=True)
+        .annotate(num_members=Count("member"))
+        .order_by("-num_members")
+    )
     serializer_class = serializers.OrganizationSerializer
 
 
