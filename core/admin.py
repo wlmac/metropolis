@@ -526,6 +526,9 @@ class CommentAdmin(admin.ModelAdmin):
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).filter(author__isnull=False)
+
     def content_object(self, obj):
         url = reverse(
             f"admin:{obj.content_type.app_label}_{obj.content_type.model}_change",
