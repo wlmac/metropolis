@@ -35,8 +35,18 @@ def always_fail_validator(value, serializer_field):
 
 
 class Serializer(serializers.ModelSerializer):
+    message = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
+
+    def get_message(self, obj: Announcement) -> str:
+        user = self.context["request"].user
+        if obj.status not in {"d", "p"} and user != obj.author:
+            return f"Successfully marked announcement as {obj.get_status_display()}."
+
+        else:
+            if obj.status not in ("d", "p"):
+                return f"Successfully sent announcement for review."
 
     def get_likes(self, obj: Announcement) -> int:
         return obj.likes.count()
@@ -76,7 +86,7 @@ class Serializer(serializers.ModelSerializer):
 
     def save(self, *args, **kwargs):
         notify_supervisors = False
-        obj = super().save(*args, **kwargs)
+        obj: Announcement = super().save(*args, **kwargs)
         user = self.context["request"].user
         if user in obj.organization.supervisors.all():
             obj.supervisor = user
@@ -134,6 +144,7 @@ class Serializer(serializers.ModelSerializer):
             "tags",
             "likes",
             "comments",
+            "message",
         ]
 
 
