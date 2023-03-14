@@ -1,8 +1,8 @@
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase
 
-from ..models import Event, Organization, Term, Timetable, User
 from .get_schedule import *
+from ..models import Event, Organization, Term, Timetable, User
 
 
 def create_current_term():

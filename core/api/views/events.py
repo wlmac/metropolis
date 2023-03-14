@@ -3,9 +3,9 @@ from django.utils import timezone
 from rest_framework import permissions
 from rest_framework.parsers import JSONParser
 
-from ... import models
 from .. import serializers
 from ..utils import ListAPIViewWithFallback
+from ... import models
 
 
 class EventsList(ListAPIViewWithFallback):

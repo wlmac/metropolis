@@ -1,4 +1,4 @@
-import clubStasRaw from "./club-data.json" assert { type: "json" };
+import clubStasRaw from "./club-data.json" assert {type: "json"};
 
 function setQR(clubId) {
     $('#qrcode').empty();

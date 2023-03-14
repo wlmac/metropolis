@@ -1,5 +1,5 @@
-from . import *
 import os
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Model
 from django.http import Http404

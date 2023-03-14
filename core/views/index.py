@@ -9,9 +9,8 @@ from django_ical.views import ICalFeed
 
 from core.utils import generate_slam as gs
 from core.utils import get_week_schedule_info
-
-from .. import models
 from . import mixins
+from .. import models
 
 
 class Index(TemplateView, mixins.TitleMixin):

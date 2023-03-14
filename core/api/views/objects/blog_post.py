@@ -3,9 +3,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, Case, When, BooleanField
 from rest_framework import permissions, serializers
 
+from .base import BaseProvider
 from ...utils.posts import likes
 from ....models import BlogPost
-from .base import BaseProvider
 
 
 class Serializer(serializers.ModelSerializer):

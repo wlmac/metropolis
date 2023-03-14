@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from ... import models
 from .organization import OrganizationSerializer
 from .tag import TagSerializer
+from ... import models
 
 
 class TermSerializer(serializers.ModelSerializer):

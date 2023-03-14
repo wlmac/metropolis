@@ -4,8 +4,8 @@ from django.views.generic import DetailView
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import UpdateView
 
-from .. import models
 from . import mixins
+from .. import models
 
 
 class ProfileRedirect(LoginRequiredMixin, RedirectView):

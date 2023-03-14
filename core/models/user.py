@@ -10,6 +10,7 @@ from .course import Term
 from .post import Announcement
 from .util import SetField
 
+
 # Create your models here.
 
 

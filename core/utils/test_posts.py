@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from core.models import Organization, User
+from core.models import Organization
 from core.models.post import *
 
 

@@ -10,9 +10,8 @@ from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
 
 from core.templatetags.markdown_tags import markdown
-
-from .. import models
 from . import mixins
+from .. import models
 
 
 def custom_feed(request, pk: int, limit: Optional[int] = None):
