@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from django.db.models import Count, Case, BooleanField, When
 from django.utils import timezone
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from django.contrib.admin.models import LogEntry
@@ -105,7 +105,9 @@ class CommentSerializer(serializers.ModelSerializer):
         print(obj.last_modified, obj.created_at)
         return obj.last_modified != obj.created_at
 
-    def update(self, instance: Comment, validated_data) -> Comment:
+    def update(
+        self, instance: Comment, validated_data
+    ) -> Comment:  # block any updates if deleted..
         if instance.body != validated_data.get(
             "body", instance.body
         ):  # if change is  to body.

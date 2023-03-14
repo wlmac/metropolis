@@ -5,11 +5,9 @@ from typing import TYPE_CHECKING
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q
 from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.utils import timezone
 
 from ..api.utils.posts import likes
 
@@ -42,7 +40,7 @@ class PostInteraction(models.Model):
         on_delete=models.SET("[deleted]"),
     )
 
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     # --- Generic Foreign Key --- #
     content_type = models.ForeignKey(
@@ -58,7 +56,7 @@ class PostInteraction(models.Model):
 
     @property
     def deleted(self):
-        return self.author is None
+        return self.created_at is None
 
     def get_object(
         self, obj: "PostInteraction", **kwargs
@@ -90,6 +88,7 @@ class Comment(PostInteraction):
     """
     todo:
     - add a simple deletion system for staff and such
+    - possibly add comment history ( if a comment is edited, it will be saved in a history field )
 
     """
 
@@ -116,9 +115,14 @@ class Comment(PostInteraction):
         return super().clean()
 
     def get_children(self):
-        return Comment.objects.filter(parent=self, body__isnull=False)
+        comments = Comment.objects.filter(parent=self)
+        filtered = [
+            c.pk for c in comments if all([c.live, not c.deleted]) or not c.bottom_lvl
+        ]
+        last = Comment.objects.filter(pk__in=filtered)
+        return last
 
-    def delete(self, using=None, keep_parents=False, **kwargs):
+    def delete(self: Comment, using=None, keep_parents=False, **kwargs):
         """
         Don't actually delete the object, just set the user to None and save it, that way you can still have sub comments.
         if force is set to True, then it will actually delete the object (used for when you want to delete a comment or unlike/save something)
@@ -127,12 +131,21 @@ class Comment(PostInteraction):
             if self.bottom_lvl:  # no sub comments
                 super().delete(using=using, keep_parents=keep_parents)
             else:
+                self.created_at = None
                 self.body = None
                 self.author = None
+                self.likes.all().delete()
                 self.save()
+
         else:
-            self.user = None
+            self.user = None  # in the case that the user was deleted.
             self.save()
+        if self.parent.can_be_deleted:
+            self.parent.delete(force=True)
+
+    @property
+    def can_be_deleted(self):
+        return self.bottom_lvl and self.deleted
 
     @property
     def top_lvl(self) -> bool:
@@ -169,7 +182,7 @@ class Comment(PostInteraction):
         """
         Deletes all comments that have been deleted and now have no children.
         """
-        comments = cls.objects.filter(body__isnull=True)
+        comments = cls.objects.filter(created_at__isnull=True)
         map(lambda com: com.delete(), (x for x in comments if x.bottom_lvl))
 
     class Meta:
@@ -200,7 +213,9 @@ class Post(models.Model):
         "Tag", blank=True, related_name="%(class)ss", related_query_name="%(class)s"
     )
 
-    likes = models.ManyToManyField(Like, blank=True)
+    likes = models.ManyToManyField(
+        Like, blank=True, help_text="The users who liked this comment"
+    )
 
     @property
     def comments(self):
