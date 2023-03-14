@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, Case, When, BooleanField
 from rest_framework import permissions, serializers
 
+from ...utils.posts import likes
 from ....models import BlogPost
 from .base import BaseProvider
 
@@ -16,7 +17,7 @@ class Serializer(serializers.ModelSerializer):
         return super().to_representation(instance)
 
     def get_likes(self, obj: BlogPost) -> int:
-        return obj.likes.count()
+        return likes(obj)
 
     def get_comments(self, obj: BlogPost) -> list[dict[str, bool]]:
         # return a list of comments for this blog post as a tuple of ids and have each show if they have replies.
@@ -34,8 +35,13 @@ class Serializer(serializers.ModelSerializer):
                         default=False,
                         output_field=BooleanField(),
                     ),
+                    likeCount=Case(
+                        When(likes__isnull=True, then=0),
+                        default=Count("likes"),
+                    ),
                 )
-                .values("id", "has_children")
+                .values("id", "has_children", "body", "author", "likeCount")
+                .order_by("-likeCount")
             )
 
         else:
@@ -48,8 +54,13 @@ class Serializer(serializers.ModelSerializer):
                         default=False,
                         output_field=BooleanField(),
                     ),
+                    likeCount=Case(
+                        When(likes__isnull=True, then=0),
+                        default=Count("likes"),
+                    ),
                 )
-                .values("id", "has_children")
+                .values("id", "has_children", "body", "author", "likeCount")
+                .order_by("-likeCount")
             )
         return comments
 

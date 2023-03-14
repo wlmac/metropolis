@@ -21,6 +21,7 @@ from core.utils.mail import send_mail
 from metropolis import settings
 
 from . import models
+from .api.utils.posts import likes
 from .forms import (
     AnnouncementAdminForm,
     AnnouncementSupervisorAdminForm,
@@ -177,7 +178,7 @@ class PostAdmin(admin.ModelAdmin):
     fields = ["like_count", "save_count", "comments"]
 
     def like_count(self, obj) -> int:
-        return obj.likes.count()
+        return likes(obj)
 
     like_count.short_description = "Like count"
 

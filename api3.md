@@ -183,8 +183,11 @@ properties:
   comments: 
     type: object
     properties:
-      id: { type: integer }
+      id: { type: integer }     
       has_children: { type: boolean }
+      body: { type: string }
+      author: { type: integer | null }
+      likeCount: { type: integer }
 ```
 
 ## Blog Post
@@ -208,8 +211,11 @@ properties:
   comments: 
     type: object
     properties:
-      id: { type: integer }
+      id: { type: integer }     
       has_children: { type: boolean }
+      body: { type: string }
+      author: { type: integer | null }
+      likeCount: { type: integer }
 ```
 
 ## Event
@@ -306,6 +312,9 @@ properties:
   children: 
     type: object
     properties:
-      id: { type: integer }
+      id: { type: integer }     
       has_children: { type: boolean }
+      body: { type: string }
+      author: { type: integer | null }
+      likeCount: { type: integer }
 ```

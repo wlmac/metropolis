@@ -70,8 +70,13 @@ class CommentSerializer(serializers.ModelSerializer):
                         default=False,
                         output_field=BooleanField(),
                     ),
+                    likeCount=Case(
+                        When(likes__isnull=True, then=0),
+                        default=Count("likes"),
+                    ),
                 )
-                .values("id", "has_children")
+                .values("id", "has_children", "body", "author", "likeCount")
+                .order_by("-likeCount")
             )
 
         else:
@@ -85,8 +90,13 @@ class CommentSerializer(serializers.ModelSerializer):
                         default=False,
                         output_field=BooleanField(),
                     ),
+                    likeCount=Case(
+                        When(likes__isnull=True, then=0),
+                        default=Count("likes"),
+                    ),
                 )
-                .values("id", "has_children")
+                .values("id", "has_children", "body", "author", "likeCount")
+                .order_by("-likeCount")
             )
         return replies
 

@@ -11,6 +11,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
+from ..api.utils.posts import likes
+
 # from ..api.utils.profanity import predict
 from ..utils.file_upload import file_upload_path_generator
 from .choices import announcement_status_choices
@@ -144,7 +146,7 @@ class Comment(PostInteraction):
 
     @property
     def like_count(self) -> int:
-        return self.likes.objects.all().count()
+        return likes(self)
 
     def flagged(self) -> bool:
         return self.__class__.objects.filter(live=False)
@@ -211,7 +213,7 @@ class Post(models.Model):
 
     @property
     def get_likes(self) -> int:
-        return self.likes.objects.all().count()
+        return likes(self)
 
     def __str__(self):
         return self.title

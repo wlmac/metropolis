@@ -263,7 +263,7 @@ class BlogPostDetail(UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #self.get_object().increment_views() todo find out why it's called twice.
+        # self.get_object().increment_views() todo find out why it's called twice.
         context["title"] = self.get_title()
         return context
 
