@@ -210,19 +210,6 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    def comments_viewable(self, user=None, now=None):
-        if now is None:
-            now = timezone.localtime(timezone.now())
-        q = self.comments
-        if not user or not (
-            user.is_superuser or user.has_perm("core.comment.view_flagged")
-        ):
-            q = q.filter(
-                Q(created__lt=now - settings.COMMENT_DELAY)
-                | (Q(author=user) if user else Q())
-            )
-        return q
-
     class Meta:
         abstract = True
         ordering = ["-show_after"]

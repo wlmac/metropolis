@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
+from django.db.models import Count, Case, BooleanField, When, Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from rest_framework import permissions, serializers
@@ -36,6 +36,44 @@ def always_fail_validator(value, serializer_field):
 
 class Serializer(serializers.ModelSerializer):
     message = serializers.CharField(read_only=True)
+    comments = serializers.SerializerMethodField(read_only=True)
+    likes = serializers.SerializerMethodField(read_only=True)
+
+    def get_likes(self, obj: Announcement) -> int:
+        return obj.likes.count()
+
+    def get_comments(self, obj: Announcement) -> list[dict[str, bool]]:
+        if (
+            self.context["request"].user.has_perm("core.comment.view_flagged")
+            or self.context["request"].user.is_staff
+        ):
+            comments = (
+                obj.comments.all()
+                .annotate(
+                    child_count=Count("children"),
+                    has_children=Case(
+                        When(child_count__gt=0, then=True),
+                        default=False,
+                        output_field=BooleanField(),
+                    ),
+                )
+                .values("id", "has_children")
+            )
+
+        else:
+            comments = (
+                obj.comments.filter(live=True)
+                .annotate(
+                    child_count=Count("children"),
+                    has_children=Case(
+                        When(child_count__gt=0, then=True),
+                        default=False,
+                        output_field=BooleanField(),
+                    ),
+                )
+                .values("id", "has_children")
+            )
+        return comments
 
     def save(self, *args, **kwargs):
         notify_supervisors = False
@@ -81,13 +119,28 @@ class Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = Announcement
-        fields = "__all__"
+        fields = [
+            "id",
+            "created_date",
+            "last_modified_date",
+            "show_after",
+            "title",
+            "body",
+            "is_public",
+            "status",
+            "rejection_reason",
+            "author",
+            "organization",
+            "supervisor",
+            "tags",
+            "likes",
+            "comments",
+        ]
 
 
 class OneSerializer(Serializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        print(self.context["request"].__dict__)
         user = self.context["request"].user
         # these HiddenFields should never be used to set values
         self.status = serializers.HiddenField(
@@ -98,8 +151,6 @@ class OneSerializer(Serializer):
         )
         instance = self.instance
         if instance:
-            print("instance", instance)
-            print("ios", instance.organization.supervisors)
             if user in instance.organization.supervisors.all():
                 self.supervisor = SupervisorField(
                     "edit", queryset=User.objects.filter(is_teacher=True)

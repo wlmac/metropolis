@@ -166,14 +166,7 @@ class CommentProvider(BaseProvider):
         return Comment.objects.filter(live=True)
 
     def get_last_modified(self, view):
-        return (
-            LogEntry.objects.filter(
-                content_type=ContentType.objects.get(app_label="core", model="comment")
-            )  # todo get ken to look at this.
-            .filter(object_id=str(view.get_object().pk))
-            .latest("action_time")
-            .action_time
-        )
+        return view.get_object().last_modified_date
 
     def get_last_modified_queryset(self):
         return (

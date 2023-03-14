@@ -166,14 +166,19 @@ $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/announcement.json
 type: object
 properties:
+  id: { type: integer }
+  created_date: { type: string, format: date-time }
+  last_modified_date: { type: string, format: date-time }
+  show_after: { type: string, format: date-time }
+  title: { type: string }
+  body: { type: string }
+  is_public: { type: boolean }
+  status: { type: string, enum: [ "d", "p", "a", "r" ] }
+  rejection_reason: { type: string }
   author: { type: integer }
   organization: { type: integer }
+  supervisor: { type: integer | null }
   tags: { type: array, items: integer }
-
-  status: { type: string, enum: [ "d", "p", "a", "r" ] }
-
-  supervisor: { type: integer }
-  rejectionReason: { type: string }
   likes: { type: integer }
   comments: 
     type: object

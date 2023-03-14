@@ -53,8 +53,19 @@ class Serializer(serializers.ModelSerializer):
         model = BlogPost
         ordering = ["-created_date"]
         fields = [
-            "id", "slug", "title", "body", "author", "created_date", "last_modified_date", "featured_image", "featured_image_description", "is_published", "tags", "likes",
-            "comments"
+            "id",
+            "slug",
+            "title",
+            "body",
+            "author",
+            "created_date",
+            "last_modified_date",
+            "featured_image",
+            "featured_image_description",
+            "is_published",
+            "tags",
+            "likes",
+            "comments",
         ]
 
 
