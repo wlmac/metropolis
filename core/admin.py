@@ -177,11 +177,7 @@ class PostAdmin(admin.ModelAdmin):
     fields = ["like_count", "save_count", "comments"]
 
     def like_count(self, obj) -> int:
-        c = obj.likes.count()
-        print(c, obj.likes.all())  # todo remove
-        if c is None:
-            return 0
-        return c
+        return obj.likes.count()
 
     like_count.short_description = "Like count"
 

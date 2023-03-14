@@ -60,7 +60,7 @@ class PostInteraction(models.Model):
 
     def get_object(
         self, obj: "PostInteraction", **kwargs
-    ):  # todo you can probably remove this
+    ):  # get ken to check this in accordance with get
         content_type = ContentType.objects.get_for_model(obj)
         print(y := self.__class__.objects.get(), y.content_type, y.object_id)
         print(content_type, "a", obj.id, "b", kwargs)
@@ -68,6 +68,11 @@ class PostInteraction(models.Model):
             content_type=content_type, object_id=obj.id, **kwargs
         )
 
+    class Meta:
+        abstract = True
+
+
+class Like(PostInteraction):
     def delete(self, using=None, keep_parents=False, **kwargs):
         """
         Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
@@ -77,13 +82,6 @@ class PostInteraction(models.Model):
             super().delete(using=using, keep_parents=keep_parents)
         self.user = None
         self.save()
-
-    class Meta:
-        abstract = True
-
-
-class Like(PostInteraction):
-    pass
 
 
 class Comment(PostInteraction):
@@ -120,7 +118,7 @@ class Comment(PostInteraction):
 
     def delete(self, using=None, keep_parents=False, **kwargs):
         """
-        Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
+        Don't actually delete the object, just set the user to None and save it, that way you can still have sub comments.
         if force is set to True, then it will actually delete the object (used for when you want to delete a comment or unlike/save something)
         """
         if kwargs.get("force", True):
@@ -163,6 +161,14 @@ class Comment(PostInteraction):
         self.live = True
 
         return super().save(**kwargs)
+
+    @classmethod
+    def scrub(cls):
+        """
+        Deletes all comments that have been deleted and now have no children.
+        """
+        comments = cls.objects.filter(body__isnull=True)
+        map(lambda com: com.delete(), (x for x in comments if x.bottom_lvl))
 
     class Meta:
         ordering = ["created_at"]
@@ -299,11 +305,9 @@ class BlogPost(Post):
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
 
-    def increment_views(self) -> str:
-        pass
-        # TODO: this also changes last_modified_date which is undesirable
-        # self.views += 1
-        # self.save()
+    def increment_views(self) -> str:  # todo fix.
+        self.views += 1
+        self.save()
 
     class Meta:
         ordering = ["-created_date"]

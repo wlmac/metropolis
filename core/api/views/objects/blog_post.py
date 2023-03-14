@@ -11,6 +11,10 @@ class Serializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
 
+    def to_representation(self, instance: BlogPost):
+        instance.increment_views()
+        return super().to_representation(instance)
+
     def get_likes(self, obj: BlogPost) -> int:
         return obj.likes.count()
 

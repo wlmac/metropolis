@@ -27,12 +27,16 @@ class CommentSerializer(serializers.ModelSerializer):
     children = serializers.SerializerMethodField(read_only=True)
 
     def validate(self, attrs):
+        """
+        https://www.django-rest-framework.org/api-guide/serializers/#object-level-validation
+        """
         if self.context["request"].user.is_anonymous:
             raise serializers.ValidationError("You must be logged in to comment.")
-        parent = attrs.get("parent", None)
-        id = attrs.get("id", None)
-        if parent.id == id:
-            raise ValidationError("A Comment cannot be a parent of itself.")
+        if parent := attrs.get("parent", None):
+            id = attrs.get("id", None)
+            print(parent)  # todo test dis
+            if parent.id == id:
+                raise ValidationError("A Comment cannot be a parent of itself.")
 
         return super().validate(attrs)
 
