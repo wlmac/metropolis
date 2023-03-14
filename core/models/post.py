@@ -306,6 +306,7 @@ class BlogPost(Post):
         return reverse("blogpost_detail", args=[self.slug])
 
     def increment_views(self) -> str:  # todo fix.
+        print("incrementing views", self.views)
         self.views += 1
         self.save()
 

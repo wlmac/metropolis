@@ -256,15 +256,16 @@ class BlogPostList(TemplateView, mixins.TitleMixin):
         return context
 
 
-class BlogPostDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
+class BlogPostDetail(UserPassesTestMixin, DetailView):
     model = models.BlogPost
     context_object_name = "blogpost"
     template_name = "core/blogpost/detail.html"
 
-    def get(self, request, *args, **kwargs):
-        obj = self.get_object()
-        obj.increment_views()
-        return super().get(self, request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #self.get_object().increment_views() todo find out why it's called twice.
+        context["title"] = self.get_title()
+        return context
 
     def get_title(self):
         return self.get_object().title
