@@ -35,18 +35,9 @@ def always_fail_validator(value, serializer_field):
 
 
 class Serializer(serializers.ModelSerializer):
-    message = serializers.SerializerMethodField(read_only=True)
+    message = serializers.CharField()  # todo fix this
     comments = serializers.SerializerMethodField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
-
-    def get_message(self, obj: Announcement) -> str:
-        user = self.context["request"].user
-        if obj.status not in {"d", "p"} and user != obj.author:
-            return f"Successfully marked announcement as {obj.get_status_display()}."
-
-        else:
-            if obj.status not in ("d", "p"):
-                return f"Successfully sent announcement for review."
 
     def get_likes(self, obj: Announcement) -> int:
         return obj.likes.count()
