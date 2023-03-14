@@ -116,7 +116,7 @@ class Comment(PostInteraction):
         return super().clean()
 
     def get_children(self):
-        return Comment.objects.filter(parent=self)
+        return Comment.objects.filter(parent=self, body__isnull=False)
 
     def delete(self, using=None, keep_parents=False, **kwargs):
         """
