@@ -8,9 +8,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 from .choices import announcement_status_choices
 from ..api.utils.posts import likes
+
 # from ..api.utils.profanity import predict
 from ..utils.file_upload import file_upload_path_generator
 
@@ -51,6 +53,7 @@ class PostInteraction(models.Model):
         help_text="The id of the object this comment is on"
     )
     content_object = GenericForeignKey("content_type", "object_id")
+
     # --- Generic Foreign Key --- #
 
     @property
@@ -83,6 +86,12 @@ class Like(PostInteraction):
         self.save()
 
 
+class CommentHistory(models.Model):  # todo add to admin/ api?
+    Comment = models.ForeignKey("Comment", on_delete=models.CASCADE)
+    body = models.TextField(max_length=512, null=True, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+
+
 class Comment(PostInteraction):
     """
     todo:
@@ -91,9 +100,10 @@ class Comment(PostInteraction):
 
     """
 
+    history = models.ManyToManyField(CommentHistory, blank=True)
     last_modified = models.DateTimeField(auto_now_add=True)
     body = models.TextField(max_length=512, null=True, blank=False)
-    parent = models.ForeignKey(  # todo make sure parent isn't equal to self
+    parent = models.ForeignKey(
         "Comment",
         on_delete=models.CASCADE,
         related_name="children",
@@ -106,7 +116,7 @@ class Comment(PostInteraction):
     live = models.BooleanField(
         default=False,
         help_text="Shown publicly?",
-    )  # todo run a simple profanity check on the comment and if it passes, it will be set to true
+    )
 
     def clean(self):
         if self.id == self.parent.id:
@@ -167,7 +177,14 @@ class Comment(PostInteraction):
         return str(self.body)
 
     def save(self, **kwargs):
-        # todo run profanity check on body and if it passes, set live to True and save it. (see todo above)
+        if self.pk is not None:  # Object is being updated
+            old_obj = Comment.objects.get(pk=self.pk)
+            if old_obj.body != self.body:
+                CommentHistory.objects.create(
+                    Comment=self, body=old_obj.body, created_at=old_obj.last_modified
+                )
+                self.last_modified = timezone.now()
+
         if not self.deleted and self.author.is_superuser:
             return super().save(**kwargs)
         # if bool(predict(self.body)[0]):  # 0.2ms per check, .5 for 10 and 3.5 for 100

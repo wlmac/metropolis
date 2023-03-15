@@ -1,6 +1,6 @@
 import os
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model
 from django.http import Http404
 from django.urls import reverse
@@ -33,9 +33,8 @@ def gen_get_provider(mapping):
         """
         Gets a provider by type name.
         """
-        # TODO; return an exception to automatically return 400
         if provider_name not in ProvReqNames:
-            raise Http404(
+            raise BadRequest(
                 "Invalid object type. Valid types are: " + ", ".join(ProvReqNames) + "."
             )
         return provClassMapping[provider_name]

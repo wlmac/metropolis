@@ -1,4 +1,5 @@
-import markdown
+from xml.etree.ElementTree import Element
+
 from markdown.extensions import Extension
 from markdown.inlinepatterns import Pattern
 
@@ -7,9 +8,7 @@ EMBED_RE = r"\{(https?://.+)\}"
 
 class EmbedPattern(Pattern):
     def handleMatch(self, m):
-        el = markdown.util.etree.Element(
-            "iframe"
-        )  # fixme etree is deprecated, consider using  xml.etree.ElementTree.Element
+        el = Element("iframe")
         el.set("src", m.group(2))
         el.set("class", "markdown-embed")
         el.set("frameborder", "0")
