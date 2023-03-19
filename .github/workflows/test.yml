@@ -12,6 +12,8 @@ jobs:
           python-version: '3.9'
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Run migrations
+        run: python3 -Wa manage.py migrate
       - name: Run Unit Tests
         run: |
           make metropolis/local_rsa_privkey.pem
