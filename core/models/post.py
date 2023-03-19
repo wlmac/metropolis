@@ -64,8 +64,6 @@ class PostInteraction(models.Model):
         self, obj: "PostInteraction", **kwargs
     ):  # get ken to check this in accordance with get
         content_type = ContentType.objects.get_for_model(obj)
-        print(y := self.__class__.objects.get(), y.content_type, y.object_id)
-        print(content_type, "a", obj.id, "b", kwargs)
         return self.__class__.objects.filter(
             content_type=content_type, object_id=obj.id, **kwargs
         )
@@ -86,7 +84,7 @@ class Like(PostInteraction):
         self.save()
 
 
-class CommentHistory(models.Model):  # todo add to admin/ api?
+class CommentHistory(models.Model):  # todo add to admin panel
     Comment = models.ForeignKey("Comment", on_delete=models.CASCADE)
     body = models.TextField(max_length=512, null=True, blank=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
@@ -149,7 +147,7 @@ class Comment(PostInteraction):
         else:
             self.user = None  # in the case that the user was deleted.
             self.save()
-        if self.parent.can_be_deleted:
+        if self.parent and self.parent.can_be_deleted:
             self.parent.delete(force=True)
 
     @property
@@ -338,8 +336,7 @@ class BlogPost(Post):
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
 
-    def increment_views(self) -> str:  # todo fix.
-        print("incrementing views", self.views)
+    def increment_views(self) -> str:
         self.views += 1
         self.save()
 

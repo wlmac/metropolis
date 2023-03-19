@@ -73,6 +73,7 @@ class Serializer(serializers.ModelSerializer):
             "title",
             "body",
             "author",
+            "views",
             "created_date",
             "last_modified_date",
             "featured_image",

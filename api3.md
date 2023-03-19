@@ -201,6 +201,7 @@ properties:
   title: { type: string }
   body: { type: string }
   author: { type: integer }
+  views: { type: integer }
   created_date: { type: string, format: date-time }
   last_modified_date: { type: string, format: date-time }
   featured_image: { type: string, format: url }

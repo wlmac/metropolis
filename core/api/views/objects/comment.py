@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Count, Case, BooleanField, When
+from django.db.models import Count, Case, BooleanField, When, QuerySet
 from django.utils import timezone
 from rest_framework import permissions, serializers
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 
 from .base import BaseProvider
@@ -17,6 +17,19 @@ typedir: dict[str, str] = {
     "blogpost": "core | blogpost",
     "announcement": "core | announcements",
 }
+
+
+class IsOwnerOrSuperuser(BasePermission):
+    """
+    Allows access only to staff or the owner of the object.
+    """
+
+    def has_permission(self, request, view):
+        return bool(
+            request.user
+            and request.user.is_staff
+            or request.user == view.get_object().author
+        )
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -33,7 +46,6 @@ class CommentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("You must be logged in to comment.")
         if parent := attrs.get("parent", None):
             id = attrs.get("id", None)
-            print(parent)  # todo test dis
             if parent.id == id:
                 raise ValidationError("A Comment cannot be a parent of itself.")
 
@@ -47,7 +59,7 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_likes(self, obj: Comment) -> int:
         return obj.likes.count()
 
-    def get_children(self, obj: Comment) -> list[dict[str, bool]]:
+    def get_children(self, obj: Comment) -> QuerySet[Comment]:
         """
         Return a list of replies to this comment as a list of ids and have each show if they have replies.
 
@@ -101,28 +113,27 @@ class CommentSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_edited(obj: Comment):
-        print(obj.last_modified, obj.created_at)
         return obj.last_modified != obj.created_at
 
-    def update(
-        self, instance: Comment, validated_data
-    ) -> Comment:  # block any updates if deleted..
+    def update(self, instance: Comment, validated_data) -> Comment:
+        if instance.deleted:
+            raise ValidationError("This comment has been deleted.")
         if instance.body != validated_data.get(
             "body", instance.body
         ):  # if change is  to body.
             instance.last_modified = timezone.now()
         super().update(instance, validated_data)
-        return Response(instance, status=status.HTTP_200_OK)
+        return instance
 
     @staticmethod
     def delete(instance: Comment):
-        # todo add a check to see if the user is the author of the comment.
         instance.delete(force=True)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     class Meta:
         model = Comment
         ordering = ["-likes"]
+        permissions = [IsOwnerOrSuperuser]  # todo test perms
         fields = [
             "id",
             "author",
@@ -141,7 +152,6 @@ class CommentNewSerializer(CommentSerializer):
         keys = self.Meta.fields
         user: User = self.context["request"].user
         validated_data["author"] = user
-        print(validated_data)  # todo remove
         for key in keys:
             setattr(com, key, validated_data[key])
         if user.is_staff:  # bypass moderation if user is staff.

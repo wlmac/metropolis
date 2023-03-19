@@ -521,6 +521,15 @@ class CommentAdmin(admin.ModelAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
+    actions = ["approve_comments", "unapprove_comments"]
+
+    @staticmethod
+    def approve_comments(modeladmin, request, queryset):
+        queryset.update(live=True)
+
+    @staticmethod
+    def unapprove_comments(modeladmin, request, queryset):
+        queryset.update(live=False)
 
     def get_queryset(self, request):
         return super().get_queryset(request).filter(author__isnull=False)
