@@ -27,42 +27,26 @@ class Serializer(serializers.ModelSerializer):
             self.context["request"].user.has_perm("core.comment.view_flagged")
             or self.context["request"].user.is_superuser
         ):
-            comments = (
-                obj.comments.all()
-                .annotate(
-                    child_count=Count("children"),
-                    has_children=Case(
-                        When(child_count__gt=0, then=True),
-                        default=False,
-                        output_field=BooleanField(),
-                    ),
-                    likeCount=Case(
-                        When(likes__isnull=True, then=0),
-                        default=Count("likes"),
-                    ),
-                )
-                .values("id", "has_children", "body", "author", "likeCount")
-                .order_by("-likeCount")
-            )
-
+            queryset = obj.comments.all()
         else:
-            comments = (
-                obj.comments.filter(live=True)
-                .annotate(
-                    child_count=Count("children"),
-                    has_children=Case(
-                        When(child_count__gt=0, then=True),
-                        default=False,
-                        output_field=BooleanField(),
-                    ),
-                    likeCount=Case(
-                        When(likes__isnull=True, then=0),
-                        default=Count("likes"),
-                    ),
-                )
-                .values("id", "has_children", "body", "author", "likeCount")
-                .order_by("-likeCount")
+            queryset = obj.comments.filter(live=True)
+
+        comments = (
+            queryset.annotate(
+                child_count=Count("children"),
+                has_children=Case(
+                    When(child_count__gt=0, then=True),
+                    default=False,
+                    output_field=BooleanField(),
+                ),
+                likeCount=Case(
+                    When(likes__isnull=True, then=0),
+                    default=Count("likes"),
+                ),
             )
+            .values("id", "has_children", "body", "author", "likeCount")
+            .order_by("-likeCount")
+        )
         return comments
 
     class Meta:
