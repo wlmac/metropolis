@@ -1,3 +1,4 @@
+from typing import Dict, List
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -41,7 +42,7 @@ class Serializer(serializers.ModelSerializer):
     def get_likes(self, obj: Announcement) -> int:
         return obj.likes.count()
 
-    def get_comments(self, obj: Announcement) -> list[dict[str, bool]]:
+    def get_comments(self, obj: Announcement) -> List[Dict[str, bool]]:
         if (
             self.context["request"].user.has_perm("core.comment.view_flagged")
             or self.context["request"].user.is_staff
