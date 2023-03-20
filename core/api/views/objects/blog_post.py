@@ -25,7 +25,7 @@ class Serializer(serializers.ModelSerializer):
         # check if the user has the comments.preview permission
         if (
             self.context["request"].user.has_perm("core.comment.view_flagged")
-            or self.context["request"].user.is_staff
+            or self.context["request"].user.is_superuser
         ):
             comments = (
                 obj.comments.all()

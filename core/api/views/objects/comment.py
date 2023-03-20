@@ -215,6 +215,25 @@ class CommentProvider(BaseProvider):
 
 class LikeSerializer(serializers.ModelSerializer):
     def create(self, validated_data) -> Like:
+        VALID_OBJECT_TYPES = ["Announcement", "Blogpost", "Comment"]
+        obj_name = validated_data["content_type"].name.capitalize().replace(" ", "")
+        if (
+            not validated_data["content_type"]
+            .model_class()
+            .objects.filter(id=validated_data["object_id"])
+            .exists()
+        ):  # does the object exist?
+            raise ValidationError(f"The specified {obj_name} does not exist.")
+        elif obj_name not in VALID_OBJECT_TYPES:  # is the object type valid?
+            raise ValidationError(
+                f"Invalid object type: {obj_name}, valid types are: {VALID_OBJECT_TYPES}"
+            )
+        elif Like.objects.filter(  # has the user already liked this object?
+            content_type=validated_data["content_type"],
+            object_id=validated_data["object_id"],
+            author=self.context["request"].user,
+        ).exists():
+            raise ValidationError(f"You have already liked this {obj_name}")
         like = Like()
         keys = self.Meta.fields
         user: User = self.context["request"].user
@@ -222,7 +241,7 @@ class LikeSerializer(serializers.ModelSerializer):
         for key in keys:
             setattr(like, key, validated_data[key])
         like.save()
-        return Response(like, status=status.HTTP_201_CREATED)
+        return like
 
     class Meta:
         model = Like
@@ -241,6 +260,9 @@ class LikeProvider(BaseProvider):
     @property
     def permission_classes(self):
         return [permissions.IsAuthenticated]
+
+    def get_queryset(self, request):
+        return Like.objects.all()
 
     @property
     def serializer_class(self):
