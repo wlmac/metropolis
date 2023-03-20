@@ -188,7 +188,10 @@ class CommentProvider(BaseProvider):
         ).get(self.request.kind, CommentSerializer)
 
     def get_queryset(self, request):
-        if request.user.has_perm("core.comment.view_flagged") or request.user.is_superuser:
+        if (
+            request.user.has_perm("core.comment.view_flagged")
+            or request.user.is_superuser
+        ):
             return Comment.objects.all()
         return Comment.objects.filter(live=True)
 
@@ -203,6 +206,7 @@ class CommentProvider(BaseProvider):
             .latest("action_time")
             .action_time
         )
+
 
 # ====================================================================================================
 # -------------------------------------------  LIKES  -------------------------------------------
