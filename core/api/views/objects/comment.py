@@ -3,7 +3,6 @@ from __future__ import annotations
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Count, Case, BooleanField, When, QuerySet
 from django.utils import timezone
 from rest_framework import permissions, serializers
 from rest_framework import status
@@ -12,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 
 from .base import BaseProvider
+from ...utils.posts import likes, comments
 from ....models import Comment, User, Like
 
 typedir: dict[str, str] = {
@@ -58,59 +58,10 @@ class CommentSerializer(serializers.ModelSerializer):
         return None
 
     def get_likes(self, obj: Comment) -> int:
-        return obj.likes.count()
+        return likes(obj)
 
-    def get_children(self, obj: Comment) -> QuerySet[Comment]:
-        """
-        Return a list of replies to this comment as a list of ids and have each show if they have replies.
-
-        Returns:
-            list: A list of dictionaries representing the replies to this comment. Each dictionary should contain
-                  the keys "id" and "has_children", where "id" is the id of the reply and "has_children" is a boolean
-                  indicating whether the reply has any children.
-        """
-        if (
-            self.context["request"].user.has_perm("core.comment.view_flagged")
-            or self.context["request"].user.is_superuser
-        ):
-            replies = (
-                obj.get_children()
-                .annotate(
-                    child_count=Count("children"),
-                    has_children=Case(
-                        When(child_count__gt=0, then=True),
-                        default=False,
-                        output_field=BooleanField(),
-                    ),
-                    likeCount=Case(
-                        When(likes__isnull=True, then=0),
-                        default=Count("likes"),
-                    ),
-                )
-                .values("id", "has_children", "body", "author", "likeCount")
-                .order_by("-likeCount")
-            )
-
-        else:
-            replies = (
-                obj.get_children()
-                .filter(live=True)
-                .annotate(
-                    child_count=Count("children"),
-                    has_children=Case(
-                        When(child_count__gt=0, then=True),
-                        default=False,
-                        output_field=BooleanField(),
-                    ),
-                    likeCount=Case(
-                        When(likes__isnull=True, then=0),
-                        default=Count("likes"),
-                    ),
-                )
-                .values("id", "has_children", "body", "author", "likeCount")
-                .order_by("-likeCount")
-            )
-        return replies
+    def get_children(self, obj: Comment):
+        return comments(self.context, obj, replies=True)
 
     @staticmethod
     def get_edited(obj: Comment):
@@ -133,7 +84,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        ordering = ["-likes"]
         permissions = [IsOwnerOrSuperuser]  # todo test perms
         fields = [
             "id",

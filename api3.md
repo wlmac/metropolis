@@ -65,6 +65,10 @@ properties:
 
 **Cache Until**: changes are detected (via the changes endpoint, which should be fetched when data is requested from the user of the library)
 
+For `organization`:
+
+**Returns**: The results sorted by `member count` in *descending* order 
+
 ## Get Objects
 
 - `GET /`
@@ -72,6 +76,7 @@ properties:
 **Note** has `Last-Modified` header.
 
 For `event`:
+
 **Returns** list of `{ name, time, organization } ` of `event`.
 **Note** use Single to get details.
 
@@ -187,7 +192,7 @@ properties:
       has_children: { type: boolean }
       body: { type: string }
       author: { type: integer | null }
-      likeCount: { type: integer }
+      likes: { type: integer }
 ```
 
 ## Blog Post
@@ -216,7 +221,7 @@ properties:
       has_children: { type: boolean }
       body: { type: string }
       author: { type: integer | null }
-      likeCount: { type: integer }
+      likes: { type: integer }
 ```
 
 ## Event
@@ -317,7 +322,7 @@ properties:
       has_children: { type: boolean }
       body: { type: string }
       author: { type: integer | null }
-      likeCount: { type: integer }
+      likes: { type: integer }
 ```
 
 ## Banners

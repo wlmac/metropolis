@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -11,8 +11,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 from .choices import announcement_status_choices
-from ..api.utils.posts import likes
-
 # from ..api.utils.profanity import predict
 from ..utils.file_upload import file_upload_path_generator
 
@@ -108,9 +106,6 @@ class Comment(PostInteraction):
         null=True,
         blank=True,
     )
-    likes = models.ManyToManyField(
-        Like, blank=True, help_text="The users who liked this comment"
-    )
     live = models.BooleanField(
         default=False,
         help_text="Shown publicly?",
@@ -121,11 +116,16 @@ class Comment(PostInteraction):
             raise ValidationError("A Comment cannot be a parent of itself.")
         return super().clean()
 
-    def get_children(self):
+    def get_children(self, su: Optional = False):
         comments = Comment.objects.filter(parent=self)
-        filtered = [
-            c.pk for c in comments if all([c.live, not c.deleted]) or not c.bottom_lvl
-        ]
+        if su:
+            filtered = [c.pk for c in comments if not c.deleted or not c.bottom_lvl]
+        else:
+            filtered = [
+                c.pk
+                for c in comments
+                if all([c.live, not c.deleted]) or not c.bottom_lvl
+            ]
         last = Comment.objects.filter(pk__in=filtered)
         return last
 
@@ -166,6 +166,8 @@ class Comment(PostInteraction):
 
     @property
     def like_count(self) -> int:
+        from ..api.utils.posts import likes
+
         return likes(self)
 
     def flagged(self) -> bool:
@@ -219,10 +221,6 @@ class Post(models.Model):
         "Tag", blank=True, related_name="%(class)ss", related_query_name="%(class)s"
     )
 
-    likes = models.ManyToManyField(
-        Like, blank=True, help_text="The users who liked this comment"
-    )
-
     @property
     def comments(self):
         content_type = ContentType.objects.get_for_model(self)
@@ -234,6 +232,8 @@ class Post(models.Model):
 
     @property
     def get_likes(self) -> int:
+        from ..api.utils.posts import likes
+
         return likes(self)
 
     def __str__(self):
