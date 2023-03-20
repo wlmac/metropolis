@@ -18,14 +18,14 @@ class Banners(APIView):
         res = {}
         for key in cls.noncensored_keys:
             res[key] = banner[key]
-        if "icon_url" in res:
-            res["icon_url"] = settings["THEME_LOGO"]
+        if 'icon_url' in res:
+            res['icon_url'] = settings.THEME_LOGO
         return res
 
     def get(self, request):
         now = timezone.now()
-        current = filter(lambda b: b["start"] < now < b["end"], settings.BANNER3)
+        current = filter(lambda b: b['start'] < now < b['end'], settings.BANNER3)
         current = list(map(Banners.censor, current))
-        upcoming = filter(lambda b: b["start"] < now < b["end"], settings.BANNER3)
+        upcoming = filter(lambda b: now <= b['start'], settings.BANNER3)
         upcoming = list(map(Banners.censor, upcoming))
         return Response(dict(current=current, upcoming=upcoming))
