@@ -1,3 +1,4 @@
+from typing import Dict, List
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, Case, When, BooleanField
@@ -19,7 +20,7 @@ class Serializer(serializers.ModelSerializer):
     def get_likes(self, obj: BlogPost) -> int:
         return likes(obj)
 
-    def get_comments(self, obj: BlogPost) -> list[dict[str, bool]]:
+    def get_comments(self, obj: BlogPost) -> List[Dict[str, bool]]:
         # return a list of comments for this blog post as a tuple of ids and have each show if they have replies.
         # check if the user has the comments.preview permission
         if (
