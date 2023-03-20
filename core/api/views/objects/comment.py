@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, Case, BooleanField, When, QuerySet
@@ -174,6 +175,7 @@ class CommentNewSerializer(CommentSerializer):
 class CommentProvider(BaseProvider):
     model = Comment
     allow_list = False
+    allow_new = settings.ALLOW_COMMENTS
 
     @property
     def permission_classes(self):
@@ -201,7 +203,6 @@ class CommentProvider(BaseProvider):
             .latest("action_time")
             .action_time
         )
-
 
 # ====================================================================================================
 # -------------------------------------------  LIKES  -------------------------------------------

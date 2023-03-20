@@ -191,14 +191,6 @@ class Comment(PostInteraction):
 
         return super().save(**kwargs)
 
-    @classmethod
-    def scrub(cls):
-        """
-        Deletes all comments that have been deleted and now have no children.
-        """
-        comments = cls.objects.filter(created_at__isnull=True)
-        map(lambda com: com.delete(), (x for x in comments if x.bottom_lvl))
-
     class Meta:
         ordering = ["created_at"]
         indexes = [
