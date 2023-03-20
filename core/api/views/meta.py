@@ -1,4 +1,6 @@
+from typing import Dict
 from django.conf import settings
+from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -6,3 +8,24 @@ from rest_framework.views import APIView
 class APIVersion(APIView):
     def get(self, request):
         return Response({"version": settings.API_VERSION})
+
+
+class Banners(APIView):
+    noncensored_keys = ('start', 'end', 'content', 'icon_url', 'cta_link', 'cta_label')
+
+    @classmethod
+    def censor(cls, banner: Dict) -> Dict:
+        res = {}
+        for key in cls.noncensored_keys:
+            res[key] = banner[key]
+        if 'icon_url' in res:
+            res['icon_url'] = settings['THEME_LOGO']
+        return res
+
+    def get(self, request):
+        now = timezone.now()
+        current = filter(lambda b: b['start'] < now < b['end'], settings.BANNER3)
+        current = list(map(Banner.censor, current))
+        upcoming = filter(lambda b: b['start'] < now < b['end'], settings.BANNER3)
+        upcoming = list(map(Banner.censor, upcoming))
+        return Response(dict(current=current, upcoming=upcoming))

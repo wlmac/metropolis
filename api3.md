@@ -319,3 +319,30 @@ properties:
       author: { type: integer | null }
       likeCount: { type: integer }
 ```
+
+## Banners
+
+`GET v3/banners`
+
+**Cache Until**: 600 seconds after last fetch
+
+**Returns** upcoming and current banner(s).
+
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/banners.json
+type: object
+properties:
+  current:
+    type: array
+    items:
+      type: object
+      properties:
+        content: { type: string }
+  upcoming:
+    type: array
+    items:
+      type: object
+      properties:
+        content: { type: string }
+```

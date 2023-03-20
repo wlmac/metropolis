@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from datetime import timedelta
-from typing import Dict
+from datetime import datetime, timedelta
+from typing import Dict, List
+from django.utils import timezone
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -722,6 +723,8 @@ NAVBAR = {
 
 ANNOUNCEMENTS_CUSTOM_FEEDS = []
 
+BANNER2 = []
+
 # API settings
 
 REST_FRAMEWORK = {
@@ -960,8 +963,6 @@ DEFAULT_TIMEZONE = "UTC"
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
-BANNER2 = []
-
 ROOT = "http://localhost"
 
 SIMPLE_JWT = {
@@ -995,6 +996,17 @@ COMMENT_DELAY = timedelta(hours=2)
 
 PRE = ""
 
+BANNER3: List = [
+    dict(
+        start=timezone.now(),
+        end=timezone.now() + timedelta(days=1),
+        content='This is some banner :)',
+        icon_url='non-blank means default (default only now)',
+        cta_link='https://nyiyui.ca',
+        cta_label='some shameless plug to nowhere amirite',
+    ),
+]
+
 try:
     from metropolis.config import *
 except ImportError as err:
@@ -1012,3 +1024,25 @@ except IOError:
 
 if SECRET_KEY == "Change me":
     raise TypeError("override SECRET_KEY")
+
+def is_aware(d: datetime) -> bool:
+    return d.tzinfo is not None and d.tzinfo.utcoffset(d) is not None
+
+def check_banner3(banner: Dict) -> None:
+    assert is_aware(banner['start'])
+    assert is_aware(banner['end'])
+    assert bool(banner['cta_link']) == bool(banner['cta_label'])
+
+for banner in BANNER3:
+    check_banner3(banner)
+
+def compat_conv(banner: Dict) -> Dict:
+    banner2 = {}
+    banner2['logo'] = 'icon_url' in banner
+    banner2['text'] = banner['content']
+    banner2['show_btn'] = 'cta_link' in banner
+    banner2['url'] = banner['cta_link']
+    banner2['url_text'] = banner['cta_label']
+    return banner2
+now = timezone.now()
+BANNER2 += list(map(compat_conv, filter(lambda b: b['start'] < now < b['end'], BANNER3)))

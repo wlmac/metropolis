@@ -75,5 +75,6 @@ urlpatterns = [
         ObjectRetrieve.as_view(),
         name="api_object_retrieve3",
     ),
+    path("v3/banners", Banners.as_view(), name="api_banners3"),
     path("version", APIVersion.as_view(), name="api_version"),
 ]
