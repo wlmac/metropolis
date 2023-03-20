@@ -27,7 +27,7 @@ class IsOwnerOrSuperuser(BasePermission):
     def has_permission(self, request, view):
         return bool(
             request.user
-            and request.user.is_staff
+            and request.user.is_superuser
             or request.user == view.get_object().author
         )
 
@@ -70,7 +70,7 @@ class CommentSerializer(serializers.ModelSerializer):
         """
         if (
             self.context["request"].user.has_perm("core.comment.view_flagged")
-            or self.context["request"].user.is_staff
+            or self.context["request"].user.is_superuser
         ):
             replies = (
                 obj.get_children()
@@ -154,7 +154,7 @@ class CommentNewSerializer(CommentSerializer):
         validated_data["author"] = user
         for key in keys:
             setattr(com, key, validated_data[key])
-        if user.is_staff:  # bypass moderation if user is staff.
+        if user.is_superuser:  # bypass moderation if user is staff.
             com.live = True
         com.save()
         return com
@@ -186,7 +186,7 @@ class CommentProvider(BaseProvider):
         ).get(self.request.kind, CommentSerializer)
 
     def get_queryset(self, request):
-        if request.user.has_perm("core.comment.view_flagged") or request.user.is_staff:
+        if request.user.has_perm("core.comment.view_flagged") or request.user.is_superuser:
             return Comment.objects.all()
         return Comment.objects.filter(live=True)
 
