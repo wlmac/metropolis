@@ -980,8 +980,6 @@ THEME_CSS = THEMES[CURRENT_THEME]["theme"]
 TEACHER_EMAIL_SUFFIX = "@tdsb.on.ca"
 STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 
-COMMENT_DELAY = timedelta(hours=2)
-
 PRE = ""
 
 BANNER3: List = [
