@@ -713,6 +713,10 @@ ANNOUNCEMENTS_CUSTOM_FEEDS = []
 
 BANNER2 = []
 
+# Comment settings
+
+ALLOW_COMMENTS: bool = True  # Whether to allow comments on posts
+
 # API settings
 
 REST_FRAMEWORK = {
@@ -986,10 +990,10 @@ BANNER3: List = [
     dict(
         start=timezone.now(),
         end=timezone.now() + timedelta(days=1),
-        content='This is some banner :)',
-        icon_url='non-blank means default (default only now)',
-        cta_link='https://nyiyui.ca',
-        cta_label='some shameless plug to nowhere amirite',
+        content="This is some banner :)",
+        icon_url="non-blank means default (default only now)",
+        cta_link="https://nyiyui.ca",
+        cta_label="some shameless plug to nowhere amirite",
     ),
 ]
 
@@ -1011,24 +1015,32 @@ except IOError:
 if SECRET_KEY == "Change me":
     raise TypeError("override SECRET_KEY")
 
+
 def is_aware(d: datetime) -> bool:
     return d.tzinfo is not None and d.tzinfo.utcoffset(d) is not None
 
+
 def check_banner3(banner: Dict) -> None:
-    assert is_aware(banner['start'])
-    assert is_aware(banner['end'])
-    assert bool(banner['cta_link']) == bool(banner['cta_label'])
+    assert is_aware(banner["start"])
+    assert is_aware(banner["end"])
+    assert bool(banner["cta_link"]) == bool(banner["cta_label"])
+
 
 for banner in BANNER3:
     check_banner3(banner)
 
+
 def compat_conv(banner: Dict) -> Dict:
     banner2 = {}
-    banner2['logo'] = 'icon_url' in banner
-    banner2['text'] = banner['content']
-    banner2['show_btn'] = 'cta_link' in banner
-    banner2['url'] = banner['cta_link']
-    banner2['url_text'] = banner['cta_label']
+    banner2["logo"] = "icon_url" in banner
+    banner2["text"] = banner["content"]
+    banner2["show_btn"] = "cta_link" in banner
+    banner2["url"] = banner["cta_link"]
+    banner2["url_text"] = banner["cta_label"]
     return banner2
+
+
 now = timezone.now()
-BANNER2 += list(map(compat_conv, filter(lambda b: b['start'] < now < b['end'], BANNER3)))
+BANNER2 += list(
+    map(compat_conv, filter(lambda b: b["start"] < now < b["end"], BANNER3))
+)
