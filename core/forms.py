@@ -79,7 +79,7 @@ class AddTimetableSelectTermForm(forms.Form):
 
 class SelectCoursesWidget(s2forms.ModelSelect2MultipleWidget):
     search_fields = [
-        "code__icontains",
+        "code__contains",
     ]
 
 
