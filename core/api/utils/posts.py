@@ -23,7 +23,6 @@ if TYPE_CHECKING:
 def likes(obj: "BlogPost" | "Announcement" | "Comment") -> int:
     c_type = ContentType.objects.get_for_model(obj.__class__)
     count = Like.objects.filter(object_id=obj.id, content_type=c_type).count()
-    print(count, "obj likes")
     return count
 
 

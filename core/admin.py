@@ -16,7 +16,6 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
-
 from core.utils.mail import send_mail
 from metropolis import settings
 from . import models
@@ -176,13 +175,21 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = ["like_count", "save_count", "comments"]
     fields = ["like_count", "save_count", "comments"]
 
-    def like_count(self, obj) -> int:
+    def like_count(
+        self, obj
+    ) -> (
+        int
+    ):  # todo fix like count and save count being white on white (maybe do mark_safe or something?)
         return likes(obj)
 
     like_count.short_description = "Like count"
 
     def save_count(self, obj) -> int:
-        return User.objects.filter(saved_announcements=obj).count()
+        saves = User.objects.filter(saved_announcements=obj).count()
+        print(saves, "saves")
+        if saves is not None:
+            return saves
+        return 0
 
     save_count.short_description = "Save Count"
 
@@ -480,7 +487,7 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
 class BlogPostAdmin(PostAdmin):
     list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
-    ordering = ["-show_after", "views", "likes"]
+    ordering = ["-show_after", "views"]
     fields = [
         "author",
         "title",
@@ -515,9 +522,8 @@ class BlogPostAdmin(PostAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(admin.ModelAdmin):  # todo add likes back.
     list_display = ("body", "parent")
-    ordering = ("-likes",)
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
