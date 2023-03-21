@@ -1,11 +1,9 @@
-from typing import Dict, List
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Count, Case, When, BooleanField
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
-from ...utils.posts import likes
+from ...utils.posts import likes, comments
 from ....models import BlogPost
 
 
@@ -20,50 +18,8 @@ class Serializer(serializers.ModelSerializer):
     def get_likes(self, obj: BlogPost) -> int:
         return likes(obj)
 
-    def get_comments(self, obj: BlogPost) -> List[Dict[str, bool]]:
-        # return a list of comments for this blog post as a tuple of ids and have each show if they have replies.
-        # check if the user has the comments.preview permission
-        if (
-            self.context["request"].user.has_perm("core.comment.view_flagged")
-            or self.context["request"].user.is_staff
-        ):
-            comments = (
-                obj.comments.all()
-                .annotate(
-                    child_count=Count("children"),
-                    has_children=Case(
-                        When(child_count__gt=0, then=True),
-                        default=False,
-                        output_field=BooleanField(),
-                    ),
-                    likeCount=Case(
-                        When(likes__isnull=True, then=0),
-                        default=Count("likes"),
-                    ),
-                )
-                .values("id", "has_children", "body", "author", "likeCount")
-                .order_by("-likeCount")
-            )
-
-        else:
-            comments = (
-                obj.comments.filter(live=True)
-                .annotate(
-                    child_count=Count("children"),
-                    has_children=Case(
-                        When(child_count__gt=0, then=True),
-                        default=False,
-                        output_field=BooleanField(),
-                    ),
-                    likeCount=Case(
-                        When(likes__isnull=True, then=0),
-                        default=Count("likes"),
-                    ),
-                )
-                .values("id", "has_children", "body", "author", "likeCount")
-                .order_by("-likeCount")
-            )
-        return comments
+    def get_comments(self, obj: BlogPost):
+        return comments(self.context, obj)
 
     class Meta:
         model = BlogPost

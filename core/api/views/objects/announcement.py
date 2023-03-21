@@ -1,8 +1,7 @@
-from typing import Dict, List
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Count, Case, BooleanField, When, Q
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from rest_framework import permissions, serializers
@@ -11,6 +10,7 @@ from rest_framework.exceptions import ValidationError
 from core.utils.mail import send_mail
 from .base import BaseProvider
 from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
+from ...utils.posts import likes, comments
 from ....models import Announcement, Organization, User
 
 
@@ -39,51 +39,12 @@ class Serializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
 
-    def get_likes(self, obj: Announcement) -> int:
-        return obj.likes.count()
+    @staticmethod
+    def get_likes(obj: Announcement) -> int:
+        return likes(obj)
 
-    def get_comments(self, obj: Announcement) -> List[Dict[str, bool]]:
-        if (
-            self.context["request"].user.has_perm("core.comment.view_flagged")
-            or self.context["request"].user.is_staff
-        ):
-            comments = (
-                obj.comments.all()
-                .annotate(
-                    child_count=Count("children"),
-                    has_children=Case(
-                        When(child_count__gt=0, then=True),
-                        default=False,
-                        output_field=BooleanField(),
-                    ),
-                    likeCount=Case(
-                        When(likes__isnull=True, then=0),
-                        default=Count("likes"),
-                    ),
-                )
-                .values("id", "has_children", "body", "author", "likeCount")
-                .order_by("-likeCount")
-            )
-
-        else:
-            comments = (
-                obj.comments.filter(live=True)
-                .annotate(
-                    child_count=Count("children"),
-                    has_children=Case(
-                        When(child_count__gt=0, then=True),
-                        default=False,
-                        output_field=BooleanField(),
-                    ),
-                    likeCount=Case(
-                        When(likes__isnull=True, then=0),
-                        default=Count("likes"),
-                    ),
-                )
-                .values("id", "has_children", "body", "author", "likeCount")
-                .order_by("-likeCount")
-            )
-        return comments
+    def get_comments(self, obj: Announcement):
+        return comments(self.context, obj)
 
     def save(self, *args, **kwargs):
         notify_supervisors = False
