@@ -625,8 +625,8 @@ class UserAdmin(admin.ModelAdmin):
         "username",
         "first_name",
         "last_name",
-        "saved_blogs",
-        "saved_announcements",
+        "saved_blogs__title",
+        "saved_announcements__title",
     ]
 
     def has_view_permission(self, request, obj=None):

@@ -110,7 +110,7 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
             if feed_type == 'get':
                 context['search'] = context['feed_all'].filter(pk=query)
             else:
-                context['search'] = context['feed_all'].filter(Q(body__contains=query) | Q(title__contains=query))
+                context['search'] = context['feed_all'].filter(Q(body__icontains=query) | Q(title__icontains=query))
         """
         return context
 
