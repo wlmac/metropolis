@@ -104,7 +104,7 @@ class Serializer(serializers.ModelSerializer):
             "organization",
             "supervisor",
             "tags",
-            "likes",  # todo
+            "likes",
             "comments",
             "message",
         ]

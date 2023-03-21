@@ -84,7 +84,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        permissions = [IsOwnerOrSuperuser]  # todo test perms
+        permissions = [IsOwnerOrSuperuser]
         fields = [
             "id",
             "author",
