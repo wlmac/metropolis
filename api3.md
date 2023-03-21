@@ -326,7 +326,6 @@ properties:
 ```
 
 ## Banners
-
 `GET v3/banners`
 
 **Cache Until**: 600 seconds after last fetch
@@ -351,3 +350,9 @@ properties:
       properties:
         content: { type: string }
 ```
+
+## Expo Notifications: Register Push Token
+`PUT v3/expo-notif/token`
+
+## Expo Notifications: Unregister Push Token
+`DELETE v3/expo-notif/token`
