@@ -12,7 +12,11 @@ class Serializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField(read_only=True)
 
     def to_representation(self, instance: BlogPost):
-        instance.increment_views()
+        request = self.context["request"]
+        if (
+            request.mutate is False and request.detail
+        ):  # detail is True and mutate is False when we are retrieving an object
+            instance.increment_views()
         return super().to_representation(instance)
 
     def get_likes(self, obj: BlogPost) -> int:
