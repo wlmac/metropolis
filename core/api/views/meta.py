@@ -22,7 +22,8 @@ class Banners(APIView):
             res["icon_url"] = settings.THEME_LOGO
         return res
 
-    def get(self, request):
+    @staticmethod
+    def get(request):
         now = timezone.now()
         current = filter(lambda b: b["start"] < now < b["end"], settings.BANNER3)
         current = list(map(Banners.censor, current))
