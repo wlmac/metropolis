@@ -330,8 +330,7 @@ properties:
         content: { type: string }
 ```
 
-## Expo Notifications: Register Push Token
-`PUT v3/notif/expo-token`
+## Expo Notifications
 
-## Expo Notifications: Unregister Push Token
-`DELETE v3/notif/expo-token`
+Do `OPTIONS v3/notif/token` for docs.
+

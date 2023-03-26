@@ -4,7 +4,8 @@ from queue import LifoQueue
 from django.db.models import signals
 from django.dispatch import Signal, receiver
 from django.http import StreamingHttpResponse
-from rest_framework import permissions
+from rest_framework import permissions, response
+from rest_framework import serializers as serializers2
 from rest_framework.views import APIView
 
 from .. import serializers
@@ -81,3 +82,28 @@ class NotificationsNew(APIView):
         )
         response["Cache-Control"] = "no-cache"
         return response
+
+
+class TokenSerializer(serializers2.Serializer):
+    expo_push_token = serializers2.CharField()
+
+
+class NotifToken(APIView):
+    """
+    Submit and delete notifcation push tokens.
+    Supports Expo notification push tokens only for now.
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request, format=None):
+        s = TokenSerializer(data=request.data)
+        s.is_valid(raise_exception=True)
+        request.user.expo_notif_token = s.validated_data["expo_push_token"]
+        request.user.save()
+        return response.Response(None)
+
+    def delete(self, request, format=None):
+        request.user.expo_notif_token = None
+        request.user.save()
+        return response.Response(None)

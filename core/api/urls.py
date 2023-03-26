@@ -75,6 +75,6 @@ urlpatterns = [
         name="api_object_retrieve3",
     ),
     path("v3/banners", Banners.as_view(), name="api_banners3"),
-    path("v3/notif/expo-token", NotifExpoToken.as_view(), name="notif_expo_token"),
+    path("v3/notif/token", NotifToken.as_view(), name="notif_expo_token"),
     path("version", APIVersion.as_view(), name="api_version"),
 ]
