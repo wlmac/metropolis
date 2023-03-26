@@ -26,30 +26,6 @@
 
 **Returns** a list of all `Staff`.
 
-## Get User
-
-- `GET v3/user/<id>`
-
-**Cache Until**: 24 hours after last fetch
-
-**Returns**:
-```yaml
-$schema: https://json-schema.org/draft/2020-12/schema
-$id: https://maclyonsden.com/api/v3/schema/user.json
-type: object
-properties:
-  id: { type: integer }
-  username: { type: string }
-  first_name: { type: string, minLength: 1 }
-  last_name: { type: string, minLength: 1 }
-  bio: { type: string }
-  timezone: { type: string }
-  graduating_year: { type: string }
-  organizations: { type: array, items: { type: integer } }
-  tags_following: { type: array, items: { type: integer } }
-  gravatar_url: { type: string, format: url }
-```
-
 ## Get Terms
 
 - `GET terms`

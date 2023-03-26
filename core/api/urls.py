@@ -30,7 +30,6 @@ urlpatterns = [
         name="api_organization_detail",
     ),
     path("user/<str:username>", UserDetail.as_view(), name="api_user_detail"),
-    path("v3/user/<int:id>", UserDetail3.as_view(), name="api_user_detail3"),
     path("me", UserMe.as_view(), name="api_me"),
     path("me/internal", UserMeInternal.as_view(), name="api_me_internal"),
     path("me/schedule", UserMeSchedule.as_view(), name="api_me_schedule"),
@@ -76,5 +75,6 @@ urlpatterns = [
         name="api_object_retrieve3",
     ),
     path("v3/banners", Banners.as_view(), name="api_banners3"),
+    path("v3/notif/expo-token", NotifExpoToken.as_view(), name="notif_expo_token"),
     path("version", APIVersion.as_view(), name="api_version"),
 ]
