@@ -14,6 +14,7 @@ from ....models import User
 class Serializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
+    password = serializers.CharField(write_only=True, allow_blank=False, trim_whitespace=False)
 
     def get_gravatar_url(self, obj):
         return gravatar_url(obj.email)
@@ -23,11 +24,19 @@ class Serializer(serializers.ModelSerializer):
             hashlib.md5(obj.email.encode("utf-8")).digest()
         )
 
+    def save(self, **kwargs):
+        new_password = self.validated_data.pop('password')
+        obj = super().save(**kwargs)
+        obj.set_password(new_password)
+        obj.save()
+        return obj
+
     class Meta:
         model = models.User
         fields = [
             "id",
             "username",
+            "password",
             "email_hash",
             "first_name",
             "last_name",

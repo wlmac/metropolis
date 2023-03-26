@@ -263,7 +263,8 @@ $id: https://maclyonsden.com/api/v3/schema/user.json
 type: object
 properties:
   id: { type: integer }
-  slug: { type: string }
+  username: { type: string }
+  password: { type: string } # write-only
   first_name: { type: string }
   last_name: { type: string }
   bio: { type: string }
@@ -332,6 +333,8 @@ properties:
 
 **Returns** upcoming and current banner(s).
 
+TODO(nyiyui): fix docs per implementation (sus)
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/banners.json
@@ -352,7 +355,7 @@ properties:
 ```
 
 ## Expo Notifications: Register Push Token
-`PUT v3/expo-notif/token`
+`PUT v3/notif/expo-token`
 
 ## Expo Notifications: Unregister Push Token
-`DELETE v3/expo-notif/token`
+`DELETE v3/notif/expo-token`
