@@ -50,6 +50,7 @@ class Serializer(serializers.ModelSerializer):
             "gravatar_url",
             "saved_blogs",
             "saved_announcements",
+            "is_teacher",
         ]
 
 

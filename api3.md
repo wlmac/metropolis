@@ -251,6 +251,7 @@ properties:
   gravatar_url: { type: string, format: url }
   saved_blogs: { type: array, items: { type: integer } }
   saved_announcements: { type: array, items: { type: integer } }
+  is_teacher: { type: boolean }
 ```
 
 
