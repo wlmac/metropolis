@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model
@@ -12,7 +13,7 @@ from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
 __all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
 
-def gen_get_provider(mapping):
+def gen_get_provider(mapping: Dict[str, str]):
     for file in os.listdir(os.path.dirname(__file__)):
         if file.endswith(".py") and file not in ["__init__.py", "base.py", "main.py"]:
             __import__(f"core.api.views.objects.{file[:-3]}", fromlist=["*"])
