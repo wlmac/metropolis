@@ -142,7 +142,7 @@ class Comment(PostInteraction):
                 self.created_at = None
                 self.body = None
                 self.author = None
-                self.likes.all().delete()
+                Like.objects.filter(content_object=self).delete()
                 self.save()
 
         else:
