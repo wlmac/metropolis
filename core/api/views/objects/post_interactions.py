@@ -38,6 +38,11 @@ class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField(read_only=True)
     edited = serializers.SerializerMethodField(read_only=True)
     children = serializers.SerializerMethodField(read_only=True)
+    content_type = serializers.PrimaryKeyRelatedField(
+        queryset=ContentType.objects.filter(id__in=[18, 21, 16]),
+        many=False
+        # 16 = Announcement, 18 = Blogpost, 21 = Comment
+    )
 
     def validate(self, attrs):
         """
@@ -88,6 +93,8 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "author",
+            "content_type",
+            "object_id",
             "body",
             "created_at",
             "likes",
@@ -97,15 +104,11 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CommentNewSerializer(CommentSerializer):
-    def create(self, validated_data) -> Comment:
-        com = Comment()
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
-        keys = self.Meta.fields
-        user: User = self.context["request"].user
-        validated_data["author"] = user
-        for key in keys:
-            setattr(com, key, validated_data[key])
-        if user.is_superuser:  # bypass moderation if user is staff.
+    def create(self, validated_data) -> Comment:
+        com = Comment(**validated_data)
+        if validated_data["author"].is_superuser:  # bypass moderation if user is staff.
             com.live = True
         com.save()
         return com
@@ -123,6 +126,10 @@ class CommentNewSerializer(CommentSerializer):
 
 
 class CommentProvider(BaseProvider):
+    """
+    TODO:
+    - add the profanity check on comment creation.
+    """
     model = Comment
     allow_list = False
     allow_new = settings.ALLOW_COMMENTS
@@ -164,12 +171,18 @@ class CommentProvider(BaseProvider):
 
 
 class LikeSerializer(serializers.ModelSerializer):
+    content_type = serializers.PrimaryKeyRelatedField(
+        queryset=ContentType.objects.filter(id__in=[18, 21, 16]),
+        many=False
+        # 16 = Announcement, 18 = Blogpost, 21 = Comment
+    )
+
     def create(self, validated_data) -> Like:
         VALID_OBJECT_TYPES = ["Announcement", "Blogpost", "Comment"]
         obj_name = validated_data["content_type"].name.capitalize().replace(" ", "")
         if (
             not validated_data["content_type"]
-            .model_class()
+            .model_class()  # the model of the content type ( e.g. core.models.Announcement or core.models.Comment )
             .objects.filter(id=validated_data["object_id"])
             .exists()
         ):  # does the object exist?
@@ -181,15 +194,10 @@ class LikeSerializer(serializers.ModelSerializer):
         elif Like.objects.filter(  # has the user already liked this object?
             content_type=validated_data["content_type"],
             object_id=validated_data["object_id"],
-            author=self.context["request"].user,
+            author=validated_data["author"],
         ).exists():
-            raise ValidationError(f"You have already liked this {obj_name}")
-        like = Like()
-        keys = self.Meta.fields
-        user: User = self.context["request"].user
-        validated_data["author"] = user
-        for key in keys:
-            setattr(like, key, validated_data[key])
+            raise ValidationError(f"User has already liked this {obj_name}")
+        like = Like(**validated_data)
         like.save()
         return like
 

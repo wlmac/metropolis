@@ -289,6 +289,8 @@ type: object
 properties:
   id: { type: integer }
   author: { type: integer | null }
+  content_type: { type: integer }
+  object_id: { type: integer }
   body: { type: string }
   created_at: { type: string }
   likes: { type: integer }

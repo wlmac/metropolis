@@ -15,7 +15,7 @@ class Serializer(serializers.ModelSerializer):
         request = self.context["request"]
         if (
             request.mutate is False and request.detail
-        ):  # detail is True and mutate is False when we are retrieving an object
+        ):  # detail is True and mutate is False meaning we are retrieving an object
             instance.increment_views()
         return super().to_representation(instance)
 
