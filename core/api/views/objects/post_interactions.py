@@ -82,6 +82,15 @@ class CommentSerializer(serializers.ModelSerializer):
             "body", instance.body
         ):  # if change is  to body.
             instance.last_modified = timezone.now()
+            contains_profanity: bool = bool(
+                profanity_check.predict([validated_data["body"]])
+            )
+            if self.context[
+                "request"
+            ].user.is_superuser:  # bypass content moderation if user is an SU.
+                validated_data["live"] = True
+            else:
+                validated_data["live"] = not contains_profanity
         super().update(instance, validated_data)
         return instance
 
@@ -158,9 +167,11 @@ class CommentProvider(BaseProvider):
         ):
             return Comment.objects.all()
         return Comment.objects.filter(live=True)
+
     @staticmethod
     def get_last_modified(view):
         return view.get_object().last_modified_date
+
     @staticmethod
     def get_last_modified_queryset():
         return (
