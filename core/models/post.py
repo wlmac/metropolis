@@ -120,13 +120,10 @@ class Comment(PostInteraction):
     def get_children(self, su: Optional = False):
         comments = Comment.objects.filter(parent=self)
         if su:
-            filtered = [c.pk for c in comments if not c.deleted or not c.bottom_lvl]
+            filtered = [c.pk for c in comments if not c.deleted]
         else:
-            filtered = [
-                c.pk
-                for c in comments
-                if all([c.live, not c.deleted]) or not c.bottom_lvl
-            ]
+            filtered = [c.pk for c in comments if all([c.live, not c.deleted])]
+
         last = Comment.objects.filter(pk__in=filtered)
         return last
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import profanity_check
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -57,12 +58,14 @@ class CommentSerializer(serializers.ModelSerializer):
 
         return super().validate(attrs)
 
-    def get_author(self, obj: Comment) -> User | None:
+    @staticmethod
+    def get_author(obj: Comment) -> User | None:
         if obj.author is not None:
             return obj.author.id
         return None
 
-    def get_likes(self, obj: Comment) -> int:
+    @staticmethod
+    def get_likes(obj: Comment) -> int:
         return likes(obj)
 
     def get_children(self, obj: Comment):
@@ -107,9 +110,16 @@ class CommentNewSerializer(CommentSerializer):
     author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     def create(self, validated_data) -> Comment:
+        contains_profanity: bool = bool(
+            profanity_check.predict([validated_data["body"]])
+        )
         com = Comment(**validated_data)
-        if validated_data["author"].is_superuser:  # bypass moderation if user is staff.
+        if self.context[
+            "request"
+        ].user.is_superuser:  # bypass content moderation if user is an SU.
             com.live = True
+        else:
+            com.live = not contains_profanity
         com.save()
         return com
 
@@ -126,10 +136,6 @@ class CommentNewSerializer(CommentSerializer):
 
 
 class CommentProvider(BaseProvider):
-    """
-    TODO:
-    - add the profanity check on comment creation.
-    """
     model = Comment
     allow_list = False
     allow_new = settings.ALLOW_COMMENTS
@@ -144,18 +150,19 @@ class CommentProvider(BaseProvider):
             new=CommentNewSerializer,
         ).get(self.request.kind, CommentSerializer)
 
-    def get_queryset(self, request):
+    @staticmethod
+    def get_queryset(request):
         if (
             request.user.has_perm("core.comment.view_flagged")
             or request.user.is_superuser
         ):
             return Comment.objects.all()
         return Comment.objects.filter(live=True)
-
-    def get_last_modified(self, view):
+    @staticmethod
+    def get_last_modified(view):
         return view.get_object().last_modified_date
-
-    def get_last_modified_queryset(self):
+    @staticmethod
+    def get_last_modified_queryset():
         return (
             LogEntry.objects.filter(
                 content_type=ContentType.objects.get(app_label="core", model="comment")
@@ -194,7 +201,7 @@ class LikeSerializer(serializers.ModelSerializer):
         elif Like.objects.filter(  # has the user already liked this object?
             content_type=validated_data["content_type"],
             object_id=validated_data["object_id"],
-            author=validated_data["author"],
+            author=self.context["author"],
         ).exists():
             raise ValidationError(f"User has already liked this {obj_name}")
         like = Like(**validated_data)
