@@ -3,6 +3,7 @@ import datetime
 from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 
 from .. import utils
@@ -187,9 +188,81 @@ class Course(models.Model):
         ]
 
 
-class Event(models.Model):  # todo add reoccurring events
+class RecurrenceRule(models.Model):
+    class RecurrenceOptions(models.TextChoices):
+        DAILY = "daily"
+        WEEKLY = "weekly"
+        MONTHLY = "monthly"
+        YEARLY = "yearly"
+        CUSTOM = "custom"
+
+    class DayOfWeek(models.IntegerChoices):
+        MONDAY = 0
+        TUESDAY = 1
+        WEDNESDAY = 2
+        THURSDAY = 3
+        FRIDAY = 4
+        SATURDAY = 5
+        SUNDAY = 6
+
+    class MonthlyRepeatTypes(models.IntegerChoices):
+        FIRST = 0  # repeat on the first day of the month
+        LAST = 1  # repeat on the last day of the month
+        DAY = 2  # repeat on the first day of the month that matches the day of the week of the original event. e.g. if the original event is on a tuesday, the repeat will be on the first tuesday of the month.
+
+    event = models.ForeignKey(
+        "Event", on_delete=models.CASCADE, related_name="reoccurrences"
+    )
+    type = models.CharField(max_length=16, choices=RecurrenceOptions.choices)
+    starts = models.DateTimeField(help_text="the date and time the repetition starts.")
+
+    repeats_every = models.PositiveSmallIntegerField(
+        default=1,
+        help_text="the gap between repetitions. (e.g. 2 would mean every other day if type=DAILY)",
+    )
+    # --- repetition options --- only one of these can be used at a time
+    repeat_on = (
+        models.PositiveSmallIntegerField()
+    )  # Used on weekly: the days of the week to repeat on e.g. 16 would be tuesday and sunday
+    repeat_type = models.IntegerField(
+        choices=MonthlyRepeatTypes.choices
+    )  # Used on monthly: True means repeat on the first day of the month, False means repeat on the last day of the month
+
+    # --- Custom ending options ---
+    ends = models.DateTimeField()
+    ends_after = (
+        models.PositiveSmallIntegerField()
+    )  # the number of times to repeat the event before ending. e.g. 5 would mean the event will repeat 5 times before ending.
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=Q(ends__gt=models.F("starts")),
+                name="ends_after_greater_than_starts",
+            ),
+            # This constraint ensures that the ends field is always after the starts field. This prevents situations where the event ends before it starts.
+            models.CheckConstraint(
+                check=Q(ends__isnull=True) | Q(ends_after__isnull=True),
+                name="ends_or_ends_after",
+            ),
+            # This constraint ensures that either the ends or ends_after fields are set, but not both. This prevents conflicting data from being entered into the database.
+            models.CheckConstraint(
+                check=Q(type="weekly") | Q(repeat_on__isnull=True),
+                name="repeat_on_only_with_weekly_type",
+            ),
+            # This constraint ensures that the repeat_on field is only set when the type is WEEKLY.
+            models.CheckConstraint(
+                check=models.Q(type="monthly") | models.Q(repeat_type__isnull=True),
+                name="repeat_type_only_with_monthly_type",
+            )
+            # This constraint ensures that the repeat_type field is only set when the type is MONTHLY.
+        ]
+
+
+class Event(models.Model):
     name = models.CharField(max_length=64)
     term = models.ForeignKey(Term, on_delete=models.CASCADE, related_name="events")
+
     organization = models.ForeignKey(
         "Organization",
         on_delete=models.CASCADE,
@@ -209,6 +282,10 @@ class Event(models.Model):  # todo add reoccurring events
     is_public = models.BooleanField(
         default=True,
         help_text="Whether if this event pertains to the general school population, not just those in the organization.",
+    )
+    should_announce = models.BooleanField(
+        default=False,
+        help_text="Whether if this event should be announced to the general school population VIA the important events feed.",
     )
 
     tags = models.ManyToManyField(

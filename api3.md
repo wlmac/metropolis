@@ -217,7 +217,8 @@ properties:
       end: { type: string, format: date-time }
   scheduleFormat: { type: integer }
   instructional: { type: integer }
-  public_: { type: boolean }
+  is_public: { type: boolean }
+  should_announce: { type: boolean }
 
   tags: { type: array, items: integer }
 ```

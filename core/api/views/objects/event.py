@@ -13,7 +13,14 @@ from ....models import Event
 class SuperficialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ["id", "name", "start_date", "end_date", "organization"]
+        fields = [
+            "id",
+            "name",
+            "start_date",
+            "end_date",
+            "organization",
+            "should_announce",
+        ]
 
 
 class DetailSerializer(serializers.ModelSerializer):
