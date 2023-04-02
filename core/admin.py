@@ -692,7 +692,11 @@ class CustomFlatPageAdmin(FlatPageAdmin):
 
 
 class RaffleAdmin(admin.ModelAdmin):
-    list_dispaly = ["__str__", "open_start", "open_end"]
+    list_display = ["__str__", "open_start", "open_end"]
+
+
+class RecurrenceAdmin(admin.ModelAdmin):
+    list_display = ["__str__"]
 
 
 admin.site.register(User, UserAdmin)
@@ -704,6 +708,7 @@ admin.site.register(models.BlogPost, BlogPostAdmin)
 admin.site.register(models.Comment, CommentAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
+admin.site.register(models.RecurrenceRule, RecurrenceAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)
 
 admin.site.unregister(FlatPage)

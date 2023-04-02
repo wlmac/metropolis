@@ -5,6 +5,7 @@ from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
+from multiselectfield import MultiSelectField
 
 from .. import utils
 
@@ -194,16 +195,33 @@ class RecurrenceRule(models.Model):
         WEEKLY = "weekly"
         MONTHLY = "monthly"
         YEARLY = "yearly"
-        CUSTOM = "custom"
+
+        # todo add presets.
 
     class DayOfWeek(models.IntegerChoices):
-        MONDAY = 0
-        TUESDAY = 1
-        WEDNESDAY = 2
-        THURSDAY = 3
-        FRIDAY = 4
-        SATURDAY = 5
-        SUNDAY = 6
+        MONDAY = 0, "Monday"
+        TUESDAY = 1, "Tuesday"
+        WEDNESDAY = 2, "Wednesday"
+        THURSDAY = 3, "Thursday"
+        FRIDAY = 4, "Friday"
+        SATURDAY = 5, "Saturday"
+        SUNDAY = 6, "Sunday"
+
+    """
+    class MonthlyRepeatTypes(models.IntegerChoices):
+        JANUARY = 1, "January"
+        FEBRUARY = 2, "February"
+        MARCH = 3, "March"
+        APRIL = 4, "April"
+        MAY = 5, "May"
+        JUNE = 6, "June"
+        JULY = 7, "July"
+        AUGUST = 8, "August"
+        SEPTEMBER = 9, "September"
+        OCTOBER = 10, "October"
+        NOVEMBER = 11, "November"
+        DECEMBER = 12, "December"
+        """
 
     class MonthlyRepeatTypes(models.IntegerChoices):
         FIRST = 0  # repeat on the first day of the month
@@ -213,34 +231,45 @@ class RecurrenceRule(models.Model):
     event = models.ForeignKey(
         "Event", on_delete=models.CASCADE, related_name="reoccurrences"
     )
-    type = models.CharField(max_length=16, choices=RecurrenceOptions.choices)
-    starts = models.DateTimeField(help_text="the date and time the repetition starts.")
+    type = models.CharField(
+        max_length=16,
+        choices=RecurrenceOptions.choices,
+        help_text="the type of repetition. (e.g. daily, weekly, monthly, yearly)",
+    )
 
     repeats_every = models.PositiveSmallIntegerField(
         default=1,
         help_text="the gap between repetitions. (e.g. 2 would mean every other day if type=DAILY)",
     )
     # --- repetition options --- only one of these can be used at a time
-    repeat_on = (
-        models.PositiveSmallIntegerField()
-    )  # Used on weekly: the days of the week to repeat on e.g. 16 would be tuesday and sunday
+    repeat_on = MultiSelectField(  # todo work on formfield and add check() to the formfield so constraints are checked before saving.
+        choices=DayOfWeek.choices,
+        max_length=13,
+        max_choices=7,
+        blank=True,
+        null=True,
+        help_text="the days of the week to repeat on. or if type=MONTHLY, the first or last of x day to repeat on)",
+    )
+    # Used on weekly: the days of the week to repeat on e.g. 16 would be tuesday and sunday
     repeat_type = models.IntegerField(
-        choices=MonthlyRepeatTypes.choices
-    )  # Used on monthly: True means repeat on the first day of the month, False means repeat on the last day of the month
+        choices=MonthlyRepeatTypes.choices,
+        help_text="the type of monthly repetition to use. (e.g. first, last, day)",
+        blank=True,
+        null=True,
+    )
 
     # --- Custom ending options ---
-    ends = models.DateTimeField()
-    ends_after = (
-        models.PositiveSmallIntegerField()
-    )  # the number of times to repeat the event before ending. e.g. 5 would mean the event will repeat 5 times before ending.
+    ends = models.DateTimeField(
+        help_text="the date and time the repetition ends.", blank=True, null=True
+    )
+    ends_after = models.PositiveSmallIntegerField(
+        help_text="the number of times to repeat the event before ending. e.g. 5 would mean the event will repeat 5 times before ending.",
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         constraints = [
-            models.CheckConstraint(
-                check=Q(ends__gt=models.F("starts")),
-                name="ends_after_greater_than_starts",
-            ),
-            # This constraint ensures that the ends field is always after the starts field. This prevents situations where the event ends before it starts.
             models.CheckConstraint(
                 check=Q(ends__isnull=True) | Q(ends_after__isnull=True),
                 name="ends_or_ends_after",
@@ -254,8 +283,13 @@ class RecurrenceRule(models.Model):
             models.CheckConstraint(
                 check=models.Q(type="monthly") | models.Q(repeat_type__isnull=True),
                 name="repeat_type_only_with_monthly_type",
-            )
+            ),
             # This constraint ensures that the repeat_type field is only set when the type is MONTHLY.
+            models.CheckConstraint(
+                check=models.Q(type="daily", repeats_every__gt=1)
+                | ~models.Q(type="daily"),
+                name="daily_repeat_every_gt_1",
+            ),  # This constraint checks that the repeats_every field is greater than 1 when the type field is set to 'daily', and that the constraint is not applied when the type is not 'daily'.
         ]
 
 

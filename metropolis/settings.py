@@ -962,9 +962,13 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
     "UPDATE_LAST_LOGIN": True,
 }
+# Event calender Settings
 
-# iCalendar Feed
-ICAL_PADDING = timedelta(days=4 * 7)
+
+ICAL_PADDING = timedelta(days=4 * 7)  # iCalendar Feed
+REOCCURRENCE_CUTOFF = timedelta(
+    days=365 * 2
+)  # For reoccurring events only calculate up to x years in advance
 
 # Qualified Trials
 QLTR: Dict[str, Dict] = {
