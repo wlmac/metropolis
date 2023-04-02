@@ -59,6 +59,7 @@ wrapt = "1.13.3"
 django_ical = "1.8.3"
 platformdirs = "2.6.2"
 alt-profanity-check = "*"
+django-multiselectfield = "*"
 #[tool.poetry.group.deploy.dependencies]
 gunicorn = "20.1.0"
 psycopg2 = "2.9.1"
