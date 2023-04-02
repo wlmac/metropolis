@@ -23,6 +23,7 @@ django-appconf==1.0.5
 django-cors-headers==3.10.0
 django-crispy-forms==2.0
 django-ical==1.8.3
+django-multiselectfield==0.1.12
 django-oauth-toolkit==2.2.0
 django-pwa==1.1.0
 django-recaptcha==3.0.0
