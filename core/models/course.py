@@ -8,6 +8,8 @@ from django.utils import timezone
 from multiselectfield import MultiSelectField
 
 from .. import utils
+from ..utils.utils import get_week_and_day
+
 
 class Term(models.Model):
     name = models.CharField(max_length=128)
@@ -186,15 +188,26 @@ class Course(models.Model):
 
 
 class RecurrenceRule(models.Model):
+    """
+    Recurrence rules for events.
+
+    DAILY - Repeats daily with a {repeats_every} day interval.
+    WEEKLY - Repeats weekly on {repeat_on} days with a {repeats_every} week interval
+    MONTHLY - Repeat every month on the {event.start_date.strftime("%d")} day of the month or {get_week_and_day(event.start_date)} (for example this could be the 2nd tuesday of the month) with a {repeats_every} month interval.
+    YEARLY - Repeat every year on the {event.start_date.strftime("%m%d")} day of the year with a {repeats_every} year interval.
+
+    - TODO
+    -  add in a way to cancel an event for a specific date / reschedule it.
+
+    """
+
     class RecurrenceOptions(models.TextChoices):
         DAILY = "daily"
         WEEKLY = "weekly"
         MONTHLY = "monthly"
         YEARLY = "yearly"
 
-        # todo add presets.
-
-    class DayOfWeek(models.IntegerChoices):
+    class DaySOfWeek(models.IntegerChoices):
         MONDAY = 0, "Monday"
         TUESDAY = 1, "Tuesday"
         WEDNESDAY = 2, "Wednesday"
@@ -203,26 +216,9 @@ class RecurrenceRule(models.Model):
         SATURDAY = 5, "Saturday"
         SUNDAY = 6, "Sunday"
 
-    """
-    class MonthlyRepeatTypes(models.IntegerChoices):
-        JANUARY = 1, "January"
-        FEBRUARY = 2, "February"
-        MARCH = 3, "March"
-        APRIL = 4, "April"
-        MAY = 5, "May"
-        JUNE = 6, "June"
-        JULY = 7, "July"
-        AUGUST = 8, "August"
-        SEPTEMBER = 9, "September"
-        OCTOBER = 10, "October"
-        NOVEMBER = 11, "November"
-        DECEMBER = 12, "December"
-        """
-
-    class MonthlyRepeatTypes(models.IntegerChoices):
-        FIRST = 0  # repeat on the first day of the month
-        LAST = 1  # repeat on the last day of the month
-        DAY = 2  # repeat on the first day of the month that matches the day of the week of the original event. e.g. if the original event is on a tuesday, the repeat will be on the first tuesday of the month.
+    class MonthlyRepeatOptions(models.IntegerChoices):
+        DATE = 0  # repeat on the first of that day (i.e. if the original event is on the 15th, the repeat will be on the 15th of the month)
+        DAY = 1  # repeat on the first day of the month that matches the day of the week of the original event. e.g. if the original event is on the first tuesday, the repeat will be on the first tuesday of the month.
 
     event = models.ForeignKey(
         "Event", on_delete=models.CASCADE, related_name="reoccurrences"
@@ -235,11 +231,12 @@ class RecurrenceRule(models.Model):
 
     repeats_every = models.PositiveSmallIntegerField(
         default=1,
-        help_text="the gap between repetitions. (e.g. 2 would mean every other day if type=DAILY)",
+        help_text="repeats every x {type}. (e.g. 2 would mean every other day if type was DAILY)",
     )
-    # --- repetition options --- only one of these can be used at a time
-    repeat_on = MultiSelectField(  # todo work on formfield and add check() to the formfield so constraints are checked before saving.
-        choices=DayOfWeek.choices,
+
+    # --- repetition options ---
+    repeat_on = MultiSelectField(
+        choices=DaySOfWeek.choices,
         max_length=13,
         max_choices=7,
         blank=True,
@@ -247,22 +244,41 @@ class RecurrenceRule(models.Model):
         help_text="the days of the week to repeat on. or if type=MONTHLY, the first or last of x day to repeat on)",
     )
     # Used on weekly: the days of the week to repeat on e.g. 16 would be tuesday and sunday
+
     repeat_type = models.IntegerField(
-        choices=MonthlyRepeatTypes.choices,
-        help_text="the type of monthly repetition to use. (e.g. first, last, day)",
+        choices=MonthlyRepeatOptions.choices,
+        help_text="the type of monthly repetition to use. (I.E. day, date)",
         blank=True,
         null=True,
     )
 
-    # --- Custom ending options ---
-    ends = models.DateTimeField(
-        help_text="the date and time the repetition ends.", blank=True, null=True
+    # --- Custom ending options --- if neither of these are set, the event will repeat forever.
+    ends = models.DateField(
+        help_text="the date the repetition ends.", blank=True, null=True
     )
     ends_after = models.PositiveSmallIntegerField(
         help_text="the number of times to repeat the event before ending. e.g. 5 would mean the event will repeat 5 times before ending.",
         blank=True,
         null=True,
     )
+
+    def _get_x_day_of_month(self, month, year):
+        if self.repeat_type == self.MonthlyRepeatOptions.DATE:
+            return self.event.start_date.day
+        elif self.repeat_type == self.MonthlyRepeatOptions.DAY:
+            first_day = datetime.date(year, month, 1)
+            week, day = get_week_and_day(self.event.start_date)
+
+            # Calculate the offset to the desired day of the week
+            day_offset = (day - first_day.weekday()) % 7
+
+            # Calculate the day of the month
+            day_of_month = 1 + (week - 1) * 7 + day_offset
+
+            # Combine the date and time to create a datetime object
+            return datetime.datetime.combine(
+                datetime.date(year, month, day_of_month), datetime.time.min
+            )
 
     class Meta:
         constraints = [
@@ -285,7 +301,8 @@ class RecurrenceRule(models.Model):
                 check=models.Q(type="daily", repeats_every__gt=1)
                 | ~models.Q(type="daily"),
                 name="daily_repeat_every_gt_1",
-            ),  # This constraint checks that the repeats_every field is greater than 1 when the type field is set to 'daily', and that the constraint is not applied when the type is not 'daily'.
+            ),
+            # This constraint checks that the repeats_every field is greater than 1 when the type field is set to 'daily', and that the constraint is not applied when the type is not 'daily'.
         ]
 
 
