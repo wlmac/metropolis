@@ -15,6 +15,11 @@ jobs:
         python -m pip install poetry
         poetry config virtualenvs.in-project true
         poetry install
+    - name: Make files
+      run:  |
+        make metropolis/local_rsa_privkey.pem
+        cat metropolis/local_rsa_privkey.pem
+        make metropolis/local_settings.py
     - uses: actions/setup-node@v3
       with:
         node-version: 16
