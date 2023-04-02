@@ -7,10 +7,16 @@ test('sanity', async ({ page }) => {
 });
 
 test('sanity 2', async ({ request }) => {
-  await request.get('/api/version');
-  await request.get('/api/v3/staff');
-  await request.get('/api/v3/feeds');
-  await request.get('/api/v3/banners');
+  const urls = [
+    '/api/version',
+    '/api/v3/staff',
+    '/api/v3/feeds',
+    '/api/v3/banners',
+  ];
+  urls.forEach((url) => {
+    const resp = await request.get(url);
+    expect(resp.ok()).toBeTruthy();
+  })
 });
 
 test('token-based auth', async ({ request }) => {
@@ -20,6 +26,7 @@ test('token-based auth', async ({ request }) => {
       password: 'verysecure',
     },
   });
+  expect(auth.ok()).toBeTruthy();
   const tokens = await auth.json;
   const ctx = await request.newContext({
     extraHTTPHeaders: {
