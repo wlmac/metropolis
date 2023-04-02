@@ -26,7 +26,7 @@
         );
       preferWheels = true;
       editablePackageSources = {
-        airy = ./.;
+        metropolis = ./.;
       };
     };
   in {
@@ -37,6 +37,8 @@
         openssl
         black
         isort
+        nodejs
+        act
       ];
     });
   });
