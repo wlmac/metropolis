@@ -9,10 +9,6 @@ from multiselectfield import MultiSelectField
 
 from .. import utils
 
-
-# Create your models here.
-
-
 class Term(models.Model):
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
