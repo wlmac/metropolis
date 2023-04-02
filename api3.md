@@ -328,18 +328,20 @@ properties:
   author: { type: integer | null }
   content_type: { type: integer }
   object_id: { type: integer }
-  body: { type: string }
-  created_at: { type: string }
+  body: { type: string | null }
+  created_at: { type: string | null }
   likes: { type: integer }
   edited: { type: boolean }
   children: 
-    type: object
-    properties:
-      id: { type: integer }     
-      has_children: { type: boolean }
-      body: { type: string }
-      author: { type: integer | null }
-      likes: { type: integer }
+    type: array
+    items:
+      type: object
+      properties:
+        id: { type: integer }     
+        has_children: { type: boolean }
+        body: { type: string }
+        author: { type: integer | null }
+        likes: { type: integer }
 ```
 
 ## Tag
