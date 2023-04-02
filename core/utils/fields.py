@@ -1,0 +1,103 @@
+from django.db import models
+from django.forms import DateInput, DateField
+from django.utils.dateparse import parse_date
+from django.core.exceptions import ValidationError
+from datetime import datetime
+from django.utils.translation import gettext as _
+
+
+class MonthDayFormField(DateField):
+    """
+    A custom form field that only allows month/day dates to be entered.
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.widget = MonthDayInput()
+
+    def to_python(self, value):
+        """
+        Parses a string value representing a month/day date into a datetime.date
+        object with the current year.
+        """
+        if not value:
+            return None
+        try:
+            month, day = value.split("/")
+            return (
+                datetime.now()
+                .replace(year=datetime.now().year, month=int(month), day=int(day))
+                .date()
+            )
+        except ValueError:
+            raise ValidationError(_("Invalid date format (must be MM/DD)"))
+
+    def prepare_value(self, value) -> str:
+        """
+        Converts a datetime.date object into a string in the format "MM/DD".
+        """
+        if isinstance(value, datetime.date):
+            return value.strftime("%m/%d")  # noqa
+        return value
+
+
+class MonthDayInput(DateInput):
+    """
+    A custom date input widget that only displays the month and day fields.
+    """
+
+    input_type = "text"
+
+    def __init__(self, **kwargs):
+        self.format = kwargs.pop("format", "%m/%d")
+        super().__init__(**kwargs)
+
+    def format_value(self, value):
+        if isinstance(value, datetime.date):
+            return value.strftime(self.format)  # noqa
+        return value
+
+
+class MonthDayField(models.DateField):
+    """
+    A custom field that allows storing a month and day without the year.
+    """
+
+    def formfield(self, **kwargs):
+        defaults = {"form_class": MonthDayFormField}
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
+
+    @staticmethod
+    def from_db_value(value, expression, connection):
+        """
+        Converts the date string stored in the database into a datetime.date object.
+        """
+        if value is None:
+            return None
+        return parse_date(value)
+
+    def get_prep_value(self, value):
+        """
+        Converts a datetime.date object into a string in the format "MM/DD".
+        """
+        if value is None:
+            return None
+        return value.strftime("%m/%d")
+
+    def to_python(self, value):
+        """
+        Parses a string value representing a month/day date into a datetime.date
+        object with the current year.
+        """
+        if not value:
+            return None
+        try:
+            month, day = value.split("/")
+            return (
+                datetime.now()
+                .replace(year=datetime.now().year, month=int(month), day=int(day))
+                .date()
+            )
+        except ValueError:
+            raise ValidationError(_("Invalid date format (must be MM/DD)"))
