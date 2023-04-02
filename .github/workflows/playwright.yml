@@ -20,10 +20,10 @@ jobs:
         make metropolis/local_rsa_privkey.pem
         cat metropolis/local_rsa_privkey.pem
         make metropolis/local_settings.py
-    - name: Run migrations
-      run: python3 -Wa manage.py migrate
-    - name: Run Unit Tests
-      run: python3 -Wa manage.py test
+    - name: Migrations
+      run: .venv/bin/python -Wa manage.py migrate
+    - name: Unit Tests
+      run: .venv/bin/python -Wa manage.py test
     - uses: actions/setup-node@v3
       with:
         node-version: 16
