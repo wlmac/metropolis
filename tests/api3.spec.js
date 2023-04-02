@@ -2,18 +2,13 @@
 const { test, expect } = require('@playwright/test');
 
 test('sanity', async ({ page }) => {
-  await page.goto('http://localhost');
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+  await page.goto('/');
+  await expect(page).toHaveTitle(/Metropolis/);
 });
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects the URL to contain intro.
-  await expect(page).toHaveURL(/.*intro/);
+test('sanity 2', async ({ request }) => {
+  await request.get('/api/version');
+  await request.get('/api/v3/staff');
+  await request.get('/api/v3/feeds');
+  await request.get('/api/v3/banners');
 });
