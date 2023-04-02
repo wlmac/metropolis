@@ -22,6 +22,10 @@ jobs:
         make metropolis/local_settings.py
     - name: Migrations
       run: .venv/bin/python -Wa manage.py migrate
+    - name: Setup
+      run: |
+        export DJANGO_SUPERUSER_PASSWORD=verysecure
+        .venv/bin/python -Wa manage.py createsuperuser --username sotokanda --email metropolis+sotokanda@nyiyui.ca --skip-checks
     - name: Unit Tests
       run: .venv/bin/python -Wa manage.py test
     - uses: actions/setup-node@v3
