@@ -696,7 +696,19 @@ class RaffleAdmin(admin.ModelAdmin):
 
 
 class RecurrenceAdmin(admin.ModelAdmin):
-    list_display = ["__str__"]
+    # list_display = ["recurrence_pattern", "event_object"]
+    list_display = ["event_object"]
+
+    # def recurrence_pattern(self, obj):
+    #    return obj.recurrence_pattern
+
+    @admin.display()
+    def event_object(self, obj):
+        url = reverse(
+            f"admin:core_event_change",
+            args=[obj.event.id],
+        )
+        return format_html('<a href="{}">{}</a>', url, str(obj.event.name.capitalize()))
 
 
 admin.site.register(User, UserAdmin)

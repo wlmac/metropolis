@@ -194,6 +194,8 @@ class RecurrenceRule(models.Model):
     DAILY - Repeats daily with a {repeats_every} day interval.
     WEEKLY - Repeats weekly on {repeat_on} days with a {repeats_every} week interval
     MONTHLY - Repeat every month on the {event.start_date.strftime("%d")} day of the month or {get_week_and_day(event.start_date)} (for example this could be the 2nd tuesday of the month) with a {repeats_every} month interval.
+            Date - repeat on the first of that day (i.e. if the original event is on the 15th, the repeat will be on the 15th of the month)
+            Day  - repeat on the first day of the month that matches the day of the week of the original event. e.g. if the original event is on the first tuesday, the repeat will be on the first tuesday of the month.
     YEARLY - Repeat every year on the {event.start_date.strftime("%m%d")} day of the year with a {repeats_every} year interval.
 
     - TODO
@@ -261,6 +263,11 @@ class RecurrenceRule(models.Model):
         blank=True,
         null=True,
     )
+
+
+    def recurrence_pattern(self):
+        ... # todo gen rrules?
+
 
     def _get_x_day_of_month(self, month, year):
         if self.repeat_type == self.MonthlyRepeatOptions.DATE:
