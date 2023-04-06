@@ -1027,7 +1027,7 @@ def is_aware(d: datetime) -> bool:
 def check_banner3(banner: Dict) -> None:
     assert is_aware(banner["start"])
     assert is_aware(banner["end"])
-    assert bool(banner["cta_link"]) == bool(banner["cta_label"])
+    assert bool(banner.get("cta_link")) == bool(banner.get("cta_label"))
 
 
 for banner in BANNER3:
@@ -1039,8 +1039,8 @@ def compat_conv(banner: Dict) -> Dict:
     banner2["logo"] = "icon_url" in banner
     banner2["text"] = banner["content"]
     banner2["show_btn"] = "cta_link" in banner
-    banner2["url"] = banner["cta_link"]
-    banner2["url_text"] = banner["cta_label"]
+    banner2["url"] = banner.get("cta_link")
+    banner2["url_text"] = banner.get("cta_label")
     return banner2
 
 

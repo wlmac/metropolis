@@ -23,10 +23,11 @@
       overrides = pkgs.poetry2nix.defaultPoetryOverrides.extend
         (self: super:
           (add-setuptools super "martor")
+          // (add-setuptools super "alt-profanity-check")
         );
       preferWheels = true;
       editablePackageSources = {
-        airy = ./.;
+        metropolis = ./.;
       };
     };
   in {
@@ -37,6 +38,8 @@
         openssl
         black
         isort
+        nodejs
+        act
       ];
     });
   });

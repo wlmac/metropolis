@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
+from django.contrib.messages import constants as messages
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import HttpResponse
@@ -610,6 +611,15 @@ class EventAdmin(admin.ModelAdmin):
         ):
             return False
         return super().has_change_permission(request, obj)
+
+    def save_model(self, request, obj, form, change):
+        if not all(map(lambda date: obj.term.start_datetime() <= date <= obj.term.end_datetime(), [obj.start_date, obj.end_date])):
+            self.message_user(
+                request,
+                _("Event timeframe does not overlap term timeframe."),
+                level=messages.ERROR,
+            )
+        super().save_model(request, obj, form, change)
 
 
 class UserAdmin(admin.ModelAdmin):
