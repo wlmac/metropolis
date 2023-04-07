@@ -1,5 +1,6 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
+import { request as req } from '@playwright/test';
 
 test('sanity', async ({ page }) => {
   await page.goto('/');
@@ -13,7 +14,7 @@ test('sanity 2', async ({ request }) => {
     '/api/v3/feeds',
     '/api/v3/banners',
   ];
-  urls.forEach((url) => {
+  urls.forEach((url) => async () => {
     const resp = await request.get(url);
     expect(resp.ok()).toBeTruthy();
   })
@@ -28,7 +29,7 @@ test('token-based auth', async ({ request }) => {
   });
   expect(auth.ok()).toBeTruthy();
   const tokens = await auth.json;
-  const ctx = await request.newContext({
+  const ctx = await req.newContext({
     extraHTTPHeaders: {
       "Authentication": `Bearer ${tokens.access}`,
     },

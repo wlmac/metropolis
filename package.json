@@ -16,6 +16,6 @@
   },
   "homepage": "https://github.com/wlmac/metropolis#readme",
   "devDependencies": {
-    "@playwright/test": "^1.32.1"
+    "@playwright/test": "^1.32.2"
   }
 }
