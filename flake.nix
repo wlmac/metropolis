@@ -42,5 +42,14 @@
         act
       ];
     });
+    apps.default.type = "app";
+    apps.default.program = "" + pkgs.writeShellScript "run.sh" ''
+      set -eux
+      trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+      #docker run -d -p 5672:5672 rabbitmq &
+      ./manage.py runserver &
+      celery -A metropolis worker -B --loglevel=DEBUG &
+      wait
+    '';
   });
 }

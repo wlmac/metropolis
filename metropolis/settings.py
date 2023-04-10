@@ -697,11 +697,11 @@ NAVBAR = {
     "Clubs": "/clubs",
     "Content": "/blog",
     "Resources": "/resources",
+    "Map": "/map",
     "About": {
         "WLMCI": "/about?tab=history",
         "About": "/about?tab=about",
         "Team": "/about?tab=team",
-        "Map": "/map",
         "Contact WLMCI": "/about?tab=school",
         "Contact Us": "/about?tab=contact",
     },
@@ -709,7 +709,7 @@ NAVBAR = {
 
 # Announcements settings
 
-ANNOUNCEMENTS_CUSTOM_FEEDS = []
+ANNOUNCEMENTS_CUSTOM_FEEDS = [] # list of PKs of organizations
 
 BANNER2 = []
 
@@ -996,6 +996,15 @@ BANNER3: List = [
         cta_label="some shameless plug to nowhere amirite",
     ),
 ]
+
+CELERY_TIMEZONE = "America/Toronto"
+
+# (Expo) Notifications
+
+NOTIF_EXPO_TIMEOUT_SECS = 3
+
+ANNOUNCEMENTS_NOTIFY_FEEDS = [] # list of PKs of organizations
+EVENTS_NOTIFY_FEEDS = [] # list of PKs of organizations
 
 try:
     from metropolis.config import *

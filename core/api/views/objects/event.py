@@ -72,10 +72,8 @@ class EventProvider(BaseProvider):
 
         start, end = parse("start"), parse("end")
         if start:
-            print("start", start)
             q = q.filter(end_date__gte=start)
         if end:
-            print("end", start)
             q = q.filter(start_date__lte=end)
         if start and end and start > end:
             raise ParseError("start is after end")

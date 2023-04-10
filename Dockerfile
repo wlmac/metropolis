@@ -31,8 +31,4 @@ COPY ./metropolis/docker_settings.py /app/metropolis/local_settings.py
 
 USER root
 EXPOSE 28780
-CMD /app/.venv/bin/gunicorn \
-      --bind :28780 \
-      --error-logfile - \
-      --config /app/container/gunicorn.py \
-      metropolis.wsgi:application
+ENTRYPOINT /app/docker_entrypoint.sh

@@ -2,8 +2,15 @@
 
 ## Running Locally
 
-Recommended: install [Nix](https://nixos.org/download) and run:
+Recommended: install [Nix](https://nixos.org/download) and [direnv](https://direnv.net) and run:
 ```sh
+direnv allow
+./manage.py migrate
+nix run
+```
+If not using direnv:
+```sh
+nix develop # and run `./manage.py migrate` inside
 nix run
 ```
 
@@ -12,5 +19,6 @@ If you do not want to use Nix:
 
 ```
 make
+poetry run python ./manage.py migrate
 poetry run python ./manage.py runserver
 ```

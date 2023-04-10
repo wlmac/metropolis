@@ -230,6 +230,9 @@ class EventAdminForm(forms.ModelForm):
         term = cleaned_data.get("term")
         schedule_format = cleaned_data.get("schedule_format")
 
+        if not term:
+            raise TypeError('term not defined')
+
         timetable_configs = settings.TIMETABLE_FORMATS
         if schedule_format not in timetable_configs[term.timetable_format]["schedules"]:
             raise forms.ValidationError(

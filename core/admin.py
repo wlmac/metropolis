@@ -613,7 +613,14 @@ class EventAdmin(admin.ModelAdmin):
         return super().has_change_permission(request, obj)
 
     def save_model(self, request, obj, form, change):
-        if not all(map(lambda date: obj.term.start_datetime() <= date <= obj.term.end_datetime(), [obj.start_date, obj.end_date])):
+        if not all(
+            map(
+                lambda date: obj.term.start_datetime()
+                <= date
+                <= obj.term.end_datetime(),
+                [obj.start_date, obj.end_date],
+            )
+        ):
             self.message_user(
                 request,
                 _("Event timeframe does not overlap term timeframe."),
