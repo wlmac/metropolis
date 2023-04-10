@@ -13,6 +13,9 @@ from .... import models
 from ....models import Event
 
 
+AOE = datetime.timezone(datetime.timedelta(hours=-12), name="AoE")
+
+
 class SuperficialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
@@ -55,7 +58,15 @@ class EventProvider(BaseProvider):
             if not raw:
                 return None
             try:
-                return datetime.datetime.strptime(raw, "%Y-%m-%d")
+                d = datetime.datetime.strptime(raw, "%Y-%m-%d")
+                if name == 'end':
+                    # AoE time same day
+                    d = d.replace(tzinfo=AOE, hour=23, minute=59, second=59)
+                elif name == 'start':
+                    # AoE time prev day
+                    d = d.replace(tzinfo=AOE)
+                    d -= datetime.timedelta(days=1)
+                return d
             except ValueError as e:
                 raise ParseError(detail=f"parse {name}: {e}")
 

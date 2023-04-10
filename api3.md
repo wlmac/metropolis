@@ -56,6 +56,9 @@ For `event`:
 **Returns** list of `{ name, time, organization } ` of `event`.
 **Note** use Single to get details.
 
+Allows additional query params `start` and `end` of the format `2006-02-01` (following Go's time format).
+Both dates are in AoE time, and the start date is moved to the previous day.
+
 For `flatpage` and `user`:
 Cannot be used.
 
