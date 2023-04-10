@@ -65,7 +65,6 @@ def notif_events_singleday(date: dt.date=None):
     if date is None:
         date = dt.date.today()
     eligible = User.objects.filter(expo_notif_token__isnull=False)
-    eligible = User.objects
     for u in eligible.all():
         # assume we don't have 10 million events overlapping a single day (we can't fit it in a single notif aniway)
         date_mintime = dt.datetime.combine(date, dt.datetime.min.time()).astimezone(tz)
@@ -95,6 +94,9 @@ def notif_events_singleday(date: dt.date=None):
 
 @app.task(bind=True)
 def notif_single(self, recipient_id: int, msg_kwargs):
+    if settings.NOTIF_DRY_RUN:
+        logger.info(f'notif_single to {recipient}: {msg_kwargs}')
+        return
     recipient = User.objects.get(id=recipient_id)
     try:
         resp = PushClient(session=session).publish(
