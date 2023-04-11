@@ -1,14 +1,18 @@
+from __future__ import annotations
+
 import datetime
+from typing import List
 
 from django.conf import settings
-from django.core.exceptions import MultipleObjectsReturned
+from django.core.exceptions import MultipleObjectsReturned, ValidationError
 from django.db import models
-from django.db.models import Q
 from django.utils import timezone
 from multiselectfield import MultiSelectField
+from dateutil.rrule import rrule, MONTHLY, WEEKLY, DAILY, YEARLY
 
 from .. import utils
-from ..utils.utils import get_week_and_day
+from ..utils.fields import PositiveOneSmallIntegerField
+from ..utils.utils import *
 
 
 class Term(models.Model):
@@ -203,24 +207,38 @@ class RecurrenceRule(models.Model):
 
     """
 
-    class RecurrenceOptions(models.TextChoices):
-        DAILY = "daily"
-        WEEKLY = "weekly"
-        MONTHLY = "monthly"
-        YEARLY = "yearly"
+    class RecurrenceOptions(models.Choices):
+        DAILY = DAILY
+        WEEKLY = WEEKLY
+        MONTHLY = MONTHLY
+        YEARLY = YEARLY
 
-    class DaySOfWeek(models.IntegerChoices):
-        MONDAY = 0, "Monday"
-        TUESDAY = 1, "Tuesday"
-        WEDNESDAY = 2, "Wednesday"
-        THURSDAY = 3, "Thursday"
-        FRIDAY = 4, "Friday"
-        SATURDAY = 5, "Saturday"
-        SUNDAY = 6, "Sunday"
+    class DaysOfWeek(models.Choices):
+        MONDAY = 0
+        TUESDAY = 1
+        WEDNESDAY = 2
+        THURSDAY = 3
+        FRIDAY = 4
+        SATURDAY = 5
+        SUNDAY = 6
 
     class MonthlyRepeatOptions(models.IntegerChoices):
         DATE = 0  # repeat on the first of that day (i.e. if the original event is on the 15th, the repeat will be on the 15th of the month)
         DAY = 1  # repeat on the first day of the month that matches the day of the week of the original event. e.g. if the original event is on the first tuesday, the repeat will be on the first tuesday of the month.
+
+    class MonthsOfYear(models.IntegerChoices):
+        JANUARY = 1
+        FEBRUARY = 2
+        MARCH = 3
+        APRIL = 4
+        MAY = 5
+        JUNE = 6
+        JULY = 7
+        AUGUST = 8
+        SEPTEMBER = 9
+        OCTOBER = 10
+        NOVEMBER = 11
+        DECEMBER = 12
 
     event = models.ForeignKey(
         "Event", on_delete=models.CASCADE, related_name="reoccurrences"
@@ -231,14 +249,14 @@ class RecurrenceRule(models.Model):
         help_text="the type of repetition. (e.g. daily, weekly, monthly, yearly)",
     )
 
-    repeats_every = models.PositiveSmallIntegerField(
+    interval = PositiveOneSmallIntegerField(
         default=1,
-        help_text="repeats every x {type}. (e.g. 2 would mean every other day if type was DAILY)",
+        help_text="The interval between each freq iteration. For example, when using YEARLY, an interval of 2 means once every two years, but with HOURLY, it means once every two hours. The default interval is 1.",
     )
 
     # --- repetition options ---
     repeat_on = MultiSelectField(
-        choices=DaySOfWeek.choices,
+        choices=DaysOfWeek.choices,
         max_length=13,
         max_choices=7,
         blank=True,
@@ -253,21 +271,94 @@ class RecurrenceRule(models.Model):
         blank=True,
         null=True,
     )
-
-    # --- Custom ending options --- if neither of these are set, the event will repeat forever.
-    ends = models.DateField(
-        help_text="the date the repetition ends.", blank=True, null=True
+    repeat_months = MultiSelectField(
+        choices=MonthsOfYear.choices,
+        help_text="If given, it must be either an month, or a sequence of months, meaning the months to apply the recurrence to. (only allowed for monthly and yearly recurrences)",
+        blank=True,
+        null=True,
     )
-    ends_after = models.PositiveSmallIntegerField(
-        help_text="the number of times to repeat the event before ending. e.g. 5 would mean the event will repeat 5 times before ending.",
+    repeat_monthdays = MultiSelectField(
+        help_text="If given, it must be either an integer, or a sequence of integers, meaning the days of the month to apply the recurrence to. (only allowed for monthly and yearly recurrences)",
+        choices=[(i, i) for i in range(1, 32)],
         blank=True,
         null=True,
     )
 
+    # --- Custom ending options --- if neither of these are set, the recurrences will repeat forever.
+    ends = models.DateField(
+        help_text="the date the repetition ends.", blank=True, null=True
+    )
+    ends_after = PositiveOneSmallIntegerField(
+        help_text="the number of times to repeat the event before ending. e.g. 5 would mean the event will reoccur 5 times before stopping.",
+        blank=True,
+        null=True,
+    )
+
+    def clean(self):
+        if self.ends is not None and self.ends_after is not None:
+            raise ValidationError(
+                "You can set ends or ends_after, or neither but not both."
+            )
+        if self.repeat_type is not None:
+            if self.type != self.RecurrenceOptions.MONTHLY:
+                raise ValidationError(
+                    "You can only set repeat_type if the type is MONTHLY."
+                )
+
+        if self.type not in [
+            self.RecurrenceOptions.WEEKLY,
+            self.RecurrenceOptions.MONTHLY,
+        ]:
+            if self.repeat_on:
+                raise ValidationError(
+                    "You can only set repeat_on if the type is WEEKLY or MONTHLY."
+                )
+        if self.repeat_monthdays:
+            for month in self.repeat_months:
+                if self.repeat_monthdays < daysPerMonth[month]:
+                    raise ValidationError(
+                        f"Month {month} does not have a day {self.repeat_monthdays}, it only has {daysPerMonth[month]} days."
+                    )
+
+        return super().clean()
+
+    @property
+    def get_repeat_months(self) -> None | List[int] | int:
+        """Returns the repeat_months as a list of ints (instead of list of str) or None if it's not set."""
+        if self.repeat_months:
+            return (
+                [int(day) for day in self.repeat_months]
+                if type(self.repeat_months) == list
+                else int(self.repeat_months[0])
+            )
+        return None
+
+    @property
+    def get_repeat_monthdays(self) -> None | List[int] | int:
+        """Returns the repeat_monthdays as a list of ints (instead of list of str) or None if it's not set."""
+        if self.repeat_monthdays:
+            return (
+                [int(day) for day in self.repeat_monthdays]
+                if type(self.repeat_monthdays) == list
+                else int(self.repeat_monthdays[0])
+            )
+        return None
 
     def recurrence_pattern(self):
-        ... # todo gen rrules?
-
+        rule = rrule(
+            self.type,
+            dtstart=self.event.start_date.day,
+            interval=self.interval,
+            wkst=None,
+            until=self.ends,
+            bysetpos=None,
+            bymonth=self.get_repeat_months,
+            bymonthday=self.get_repeat_monthdays,
+            # byweekno=None,, maybe impl later on (used for when you want to schedule events every x weeks)
+            byweekday=self.repeat_on,
+            cache=True,
+        )
+        return rule.__str__()
 
     def _get_x_day_of_month(self, month, year):
         if self.repeat_type == self.MonthlyRepeatOptions.DATE:
@@ -286,31 +377,6 @@ class RecurrenceRule(models.Model):
             return datetime.datetime.combine(
                 datetime.date(year, month, day_of_month), datetime.time.min
             )
-
-    class Meta:
-        constraints = [
-            models.CheckConstraint(
-                check=Q(ends__isnull=True) | Q(ends_after__isnull=True),
-                name="ends_or_ends_after",
-            ),
-            # This constraint ensures that either the ends or ends_after fields are set, but not both. This prevents conflicting data from being entered into the database.
-            models.CheckConstraint(
-                check=Q(type="weekly") | Q(repeat_on__isnull=True),
-                name="repeat_on_only_with_weekly_type",
-            ),
-            # This constraint ensures that the repeat_on field is only set when the type is WEEKLY.
-            models.CheckConstraint(
-                check=models.Q(type="monthly") | models.Q(repeat_type__isnull=True),
-                name="repeat_type_only_with_monthly_type",
-            ),
-            # This constraint ensures that the repeat_type field is only set when the type is MONTHLY.
-            models.CheckConstraint(
-                check=models.Q(type="daily", repeats_every__gt=1)
-                | ~models.Q(type="daily"),
-                name="daily_repeat_every_gt_1",
-            ),
-            # This constraint checks that the repeats_every field is greater than 1 when the type field is set to 'daily', and that the constraint is not applied when the type is not 'daily'.
-        ]
 
 
 class Event(models.Model):
