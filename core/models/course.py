@@ -213,7 +213,7 @@ class RecurrenceRule(models.Model):
         MONTHLY = MONTHLY
         YEARLY = YEARLY
 
-    class DaysOfWeek(models.Choices):
+    class DaysOfWeek(models.IntegerChoices):
         MONDAY = 0
         TUESDAY = 1
         WEDNESDAY = 2
@@ -265,7 +265,7 @@ class RecurrenceRule(models.Model):
     )
     # Used on weekly: the days of the week to repeat on e.g. 16 would be tuesday and sunday
 
-    repeat_type = models.IntegerField(
+    repeat_type = models.IntegerField( # fixme - not used in rrule
         choices=MonthlyRepeatOptions.choices,
         help_text="the type of monthly repetition to use. (I.E. day, date)",
         blank=True,
@@ -288,7 +288,7 @@ class RecurrenceRule(models.Model):
     ends = models.DateField(
         help_text="the date the repetition ends.", blank=True, null=True
     )
-    ends_after = PositiveOneSmallIntegerField(
+    ends_after = PositiveOneSmallIntegerField( # fixme not used in rrule YET. must add.
         help_text="the number of times to repeat the event before ending. e.g. 5 would mean the event will reoccur 5 times before stopping.",
         blank=True,
         null=True,
@@ -346,10 +346,10 @@ class RecurrenceRule(models.Model):
 
     def recurrence_pattern(self):
         rule = rrule(
-            self.type,
+            freq=self.type,
             dtstart=self.event.start_date.day,
             interval=self.interval,
-            wkst=None,
+            wkst=None, # todo add weekstart
             until=self.ends,
             bysetpos=None,
             bymonth=self.get_repeat_months,
@@ -360,11 +360,11 @@ class RecurrenceRule(models.Model):
         )
         return rule.__str__()
 
-    def _get_x_day_of_month(self, month, year):
+    def _get_x_day_of_month(self) -> datetime.date:
         if self.repeat_type == self.MonthlyRepeatOptions.DATE:
             return self.event.start_date.day
         elif self.repeat_type == self.MonthlyRepeatOptions.DAY:
-            first_day = datetime.date(year, month, 1)
+            first_day = datetime.date(self.event.start_date.year, self.event.start_date.month, 1)
             week, day = get_week_and_day(self.event.start_date)
 
             # Calculate the offset to the desired day of the week
@@ -375,7 +375,7 @@ class RecurrenceRule(models.Model):
 
             # Combine the date and time to create a datetime object
             return datetime.datetime.combine(
-                datetime.date(year, month, day_of_month), datetime.time.min
+                datetime.date(self.event.start_date.year, self.event.start_date.month, day_of_month), datetime.time.min
             )
 
 
