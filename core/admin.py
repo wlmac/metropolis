@@ -775,19 +775,11 @@ class RaffleAdmin(admin.ModelAdmin):
 
 class RecurrenceAdmin(admin.ModelAdmin):
     # list_display = ["recurrence_pattern", "event_object"]
-    list_display = ["event_object"]
+    list_display = ["__str__", "event_object"]
+    search_fields = ["event__name"]
+    list_filter = ["event__name", "event__organization"]
     # def recurrence_pattern(self, obj):
     #    return obj.recurrence_pattern\
-
-    def save_model(self, request, obj, form, change): # todo modify
-        if not all(map(lambda date: obj.term.start_datetime() <= date <= obj.term.end_datetime(), [obj.start_date, obj.end_date])):
-            self.message_user(
-                request,
-                _("Event timeframe does not overlap term timeframe."),
-                level=messages.ERROR,
-            )
-        super().save_model(request, obj, form, change)
-
 
     @admin.display()
     def event_object(self, obj):
