@@ -288,7 +288,7 @@ class RecurrenceRule(models.Model):
     ends = models.DateField(
         help_text="the date the repetition ends.", blank=True, null=True
     )
-    ends_after = PositiveOneSmallIntegerField( # fixme not used in rrule YET. must add.
+    ends_after = PositiveOneSmallIntegerField(
         help_text="the number of times to repeat the event before ending. e.g. 5 would mean the event will reoccur 5 times before stopping.",
         blank=True,
         null=True,
@@ -351,6 +351,7 @@ class RecurrenceRule(models.Model):
             interval=self.interval,
             wkst=None, # todo add weekstart
             until=self.ends,
+            count=self.ends_after,
             bysetpos=None,
             bymonth=self.get_repeat_months,
             bymonthday=self.get_repeat_monthdays,
