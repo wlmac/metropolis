@@ -3,6 +3,8 @@
 import core.models.util
 from django.db import migrations, models
 
+import core.utils.fields
+
 
 class Migration(migrations.Migration):
 
@@ -14,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='qltrs',
-            field=core.models.util.SetField(null=True, verbose_name='Qualified Trials'),
+            field=core.utils.fields.SetField(null=True, verbose_name='Qualified Trials'),
         ),
     ]

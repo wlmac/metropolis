@@ -8,7 +8,7 @@ from django.utils import timezone
 from .choices import graduating_year_choices, timezone_choices
 from .course import Term
 from .post import Announcement
-from .util import SetField
+from ..utils.fields import SetField
 
 
 # Create your models here.

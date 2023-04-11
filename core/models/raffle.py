@@ -1,6 +1,6 @@
 from django.db import models
 
-from .util import SetField
+from ..utils.fields import SetField
 
 
 class Raffle(models.Model):
