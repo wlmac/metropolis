@@ -3,6 +3,8 @@
 import core.models.util
 from django.db import migrations, models
 
+import core.utils.fields
+
 
 class Migration(migrations.Migration):
 
@@ -21,7 +23,7 @@ class Migration(migrations.Migration):
                 ('open_end', models.DateTimeField()),
                 ('page_win', models.CharField(max_length=128)),
                 ('page_lose', models.CharField(max_length=128)),
-                ('codes_win', core.models.util.SetField(blank=True, null=True, verbose_name='Winning Codes')),
+                ('codes_win', core.utils.fields.SetField(blank=True, null=True, verbose_name='Winning Codes')),
             ],
         ),
         migrations.AlterField(
@@ -42,6 +44,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='qltrs',
-            field=core.models.util.SetField(blank=True, null=True, verbose_name='Qualified Trials'),
+            field=core.utils.fields.SetField(blank=True, null=True, verbose_name='Qualified Trials'),
         ),
     ]
