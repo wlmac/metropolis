@@ -28,12 +28,12 @@ class Term(models.Model):
 
     def start_datetime(self):
         return timezone.make_aware(
-            datetime.datetime.combine(self.start_date, datetime.time())
+           datetime.combine(self.start_date, datetime.time())
         )
 
     def end_datetime(self):
         return timezone.make_aware(
-            datetime.datetime.combine(
+            datetime.combine(
                 self.end_date, datetime.time(hour=23, minute=59, second=59)
             )
         )
@@ -375,7 +375,7 @@ class RecurrenceRule(models.Model):
             day_of_month = 1 + (week - 1) * 7 + day_offset
 
             # Combine the date and time to create a datetime object
-            return datetime.datetime.combine(
+            return datetime.combine(
                 datetime.date(self.event.start_date.year, self.event.start_date.month, day_of_month), datetime.time.min
             )
 
