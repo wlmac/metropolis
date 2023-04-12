@@ -1,0 +1,75 @@
+services:
+  caddy:
+    image: caddy
+    ports:
+      - "8000:8000"
+    networks:
+      - gunicorn
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile:ro
+      - log:/var/log
+      - public:/app-public:ro
+      - static2:/app-static2:ro
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "changeme_metropolis_password"
+      POSTGRES_USER: "metropolis_user"
+      POSTGRES_DB: "metropolis_db"
+      # TODO: load secrets from files?
+      # TODO: backup-on-start?
+    networks:
+      - postgres
+  gunicorn:
+    image: ghcr.io/wlmac/metropolis
+    build: .
+    command: /app/docker_entrypoint.sh gunicorn
+    entrypoint: bash
+    environment:
+      METROPOLIS_AUTOSETUP: "yes"
+    networks:
+      - postgres
+      - gunicorn
+      - redis
+    volumes:
+      - ${PWD}/metropolis/local_settings.py:/app-inject/metropolis/local_settings2.py:ro
+      - ${PWD}/metropolis/local_rsa_privkey.pem:/app-inject/metropolis/local_rsa_privkey.pem:ro
+      - public:/app-public:rw
+      - media:/app-media:rw
+  celery:
+    image: ghcr.io/wlmac/metropolis
+    build: .
+    command: /app/docker_entrypoint.sh celery
+    entrypoint: bash
+    networks:
+      - postgres
+      - redis
+    volumes:
+      - ${PWD}/metropolis/local_settings.py:/app-inject/metropolis/local_settings2.py:ro
+      - ${PWD}/metropolis/local_rsa_privkey.pem:/app-inject/metropolis/local_rsa_privkey.pem:ro
+  celery-beat:
+    image: ghcr.io/wlmac/metropolis
+    build: .
+    command: /app/docker_entrypoint.sh as-app /app/.venv/bin/celery -A metropolis beat --loglevel=INFO
+    entrypoint: bash
+    networks:
+      - postgres
+      - redis
+    volumes:
+      - ${PWD}/metropolis/local_settings.py:/app-inject/metropolis/local_settings2.py:ro
+      - ${PWD}/metropolis/local_rsa_privkey.pem:/app-inject/metropolis/local_rsa_privkey.pem:ro
+  redis:
+    image: redis
+    networks:
+      - redis
+
+volumes:
+  log:
+  public:
+  media:
+  static2:
+
+networks:
+  gunicorn: # gunicorn <-> caddy
+  redis: # redis <-> gunicorn
+  postgres: # postgres <-> gunicorn

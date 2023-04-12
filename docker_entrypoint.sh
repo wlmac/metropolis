@@ -1,18 +1,39 @@
 #!/usr/bin/env bash
 
+echo '=== INJECT'
+for file in $(find /app-inject -type f); do
+	dest="/app/${file#"/app-inject/"}"
+	echo "--- inject $dest"
+	cp "$file" "$dest"
+	chown app:app "$dest"
+	chmod u+rX "$dest"
+done
+
 case "$1" in
 	gunicorn)
-		/app/.venv/bin/gunicorn \
+		cd /app/
+		if [[ "$METROPOLIS_AUTOSETUP" == "yes" ]]; then
+			echo '=== AUTOSETUP'
+			echo '--- MIGRATE'
+			runuser -u app -- /app/.venv/bin/python3 manage.py migrate
+			echo '--- COLLECTSTATIC'
+			runuser -u app -- /app/.venv/bin/python3 manage.py collectstatic --noinput
+		fi
+		runuser -u app -- /app/.venv/bin/gunicorn \
 			--bind :28780 \
 			--error-logfile - \
-			--config /app/container/gunicorn.py \
 			metropolis.wsgi:application
 	;;
 	celery)
-		runuser -u app -- celery -A metropolis worker --loglevel=INFO
+		shift
+		runuser -u app -- /app/.venv/bin/celery -A metropolis worker --loglevel=INFO "$@"
+	;;
+	as-app)
+		shift
+		runuser -u app -- "$@"
 	;;
 	*)
-		echo "unknown command $1"
+		echo "unknown command $@"
 		exit 1
 	;;
 esac
