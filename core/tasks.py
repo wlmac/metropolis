@@ -17,7 +17,7 @@ from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.apps import apps
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Value, JSONField, Q
 from core.models import Announcement, User, Event
 from metropolis.celery import app
 
@@ -35,6 +35,9 @@ session.headers.update(
 for m in ("get", "options", "head", "post", "put", "patch", "delete"):
     setattr(session, m, functools.partial(getattr(session, m), timeout=settings.NOTIF_EXPO_TIMEOUT_SECS))
 
+def users_with_token():
+    return User.objects.filter(not Q(expo_notif_tokens=Value({}, JSONField())))
+
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
@@ -43,7 +46,7 @@ def setup_periodic_tasks(sender, **kwargs):
 @app.task
 def notif_broker_announcement(obj_id):
     ann = Announcement.objects.get(id=obj_id)
-    affected = User.objects.filter(expo_notif_token__isnull=False)
+    affected = users_with_token()
     category = ''
     if ann.organization.id in settings.ANNOUNCEMENTS_NOTIFY_FEEDS:
         category = 'ann.public'
@@ -64,7 +67,7 @@ def notif_events_singleday(date: dt.date=None):
     tz = pytz.timezone(settings.TIME_ZONE)
     if date is None:
         date = dt.date.today()
-    eligible = User.objects.filter(expo_notif_token__isnull=False)
+    eligible = users_with_token()
     for u in eligible.all():
         # assume we don't have 10 million events overlapping a single day (we can't fit it in a single notif aniway)
         date_mintime = dt.datetime.combine(date, dt.datetime.min.time()).astimezone(tz)
@@ -94,19 +97,26 @@ def notif_events_singleday(date: dt.date=None):
 
 @app.task(bind=True)
 def notif_single(self, recipient_id: int, msg_kwargs):
-    if settings.NOTIF_DRY_RUN:
-        logger.info(f'notif_single to {recipient}: {msg_kwargs}')
-        return
     recipient = User.objects.get(id=recipient_id)
-    try:
-        resp = PushClient(session=session).publish(
-            PushMessage(to=f'ExponentPushToken[{recipient.expo_notif_token}]', **msg_kwargs)
-        )
-    except (ConnectionError, HTTPError) as exc:
-        raise self.retry(exc=exc)
-    try:
-        resp.validate_response()
-    except DeviceNotRegisteredError:
-        User.objects.filter(id=recipient_id).update(expo_notif_token=None)
-    except PushTicketError as exc:
-        raise self.retry(exc=exc)
+    if settings.NOTIF_DRY_RUN:
+        logger.info(f'notif_single to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}')
+        return
+    notreg_tokens = set()
+    for token in recipient.expo_notif_tokens:
+        try:
+            resp = PushClient(session=session).publish(
+                PushMessage(to=f'ExponentPushToken[{token}]', **msg_kwargs)
+            )
+        except (ConnectionError, HTTPError) as exc:
+            raise self.retry(exc=exc)
+        try:
+            resp.validate_response()
+        except DeviceNotRegisteredError:
+            notreg_tokens.add(token)
+        except PushTicketError as exc:
+            raise self.retry(exc=exc)
+    if notreg_tokens:
+        u = User.objects.filter(id=recipient_id)
+        for token in notreg_tokens:
+            del u.expo_notif_tokens[token]
+        u.save()
