@@ -107,6 +107,9 @@ Example:
 
 **Note** has `Last-Modified` header.
 
+**Note**. Query params (e.g. `username`) can be added as a disjunctive filter.
+          Also, `0` as `<id>` makes the server ignore `0` when retrieving the object.
+
 ### For `flatpage`
 
 **Note** `id` is the slug (percent-encoded).
@@ -237,6 +240,9 @@ properties:
 ```
 
 ## User
+
+`username` can be used in the query string to filter by username (exact match).
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/user.json
@@ -307,6 +313,17 @@ properties:
       body: { type: string }
       author: { type: integer | null }
       likes: { type: integer }
+```
+
+## Tag
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/comment.json
+type: object
+properties:
+  id: { type: integer }
+  name: { type: string }
+  color: { type: string }
 ```
 
 ## Banners

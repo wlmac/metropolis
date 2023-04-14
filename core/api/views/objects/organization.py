@@ -33,6 +33,7 @@ class OrganizationProvider(BaseProvider):
     serializer_class = Serializer
     model = models.Organization
     allow_new = False
+    lookup_fields = ["id", "slug"]
 
     @property
     def permission_classes(self):

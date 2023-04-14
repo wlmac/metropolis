@@ -2,13 +2,15 @@ import os
 from typing import Dict
 
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
-from django.db.models import Model
+from django.db.models import Model, Q
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
 from .base import BaseProvider
 from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
+from core.models import User
 
 __all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
@@ -73,7 +75,26 @@ class ObjectAPIView(generics.GenericAPIView):
             self.permission_classes = provider.permission_classes
         self.as_su = as_su
         self.serializer_class = provider.serializer_class
+        self.lookup_fields = getattr(provider, 'lookup_fields', getattr(provider, 'lookup_field', ['id', 'pk']))
         # NOTE: better to have the following if after initial, but this is easier
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        q = Q()
+        raw = {**self.request.query_params, **{k: [v] for k, v in self.kwargs}}
+        filtered = False
+        for field in self.lookup_fields:
+            if field in raw:
+                if field in ('id', 'pk') and raw[field] == "0":
+                    # ignore 0 pk
+                    continue
+                q |= Q(**{f'{field}__in': raw[field]})
+                filtered = True
+        if not filtered:
+            raise BadRequest('not enough filters')
+        obj = get_object_or_404(queryset, q)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     # NOTE: dispatch() is copied from https://github.com/encode/django-rest-framework/blob/de7468d0b4c48007aed734fee22db0b79b22e70b/rest_framework/views.py
     # License for this function:
