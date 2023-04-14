@@ -663,6 +663,16 @@ class EventAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
+@admin.action(description="Send test notification")
+def send_test_notif(modeladmin, request, queryset):
+    for u in queryset:
+        notif_single.delay(u.id, dict(
+            title="Test Notification",
+            body="Test body.",
+            category="test",
+        ))
+
+
 class UserAdmin(admin.ModelAdmin):
     list_display = ["username", "is_superuser", "is_staff", "is_teacher"]
     list_filter = [
@@ -679,6 +689,7 @@ class UserAdmin(admin.ModelAdmin):
         "saved_blogs__title",
         "saved_announcements__title",
     ]
+    actions = [send_test_notif]
 
     def has_view_permission(self, request, obj=None):
         if obj is None and (
