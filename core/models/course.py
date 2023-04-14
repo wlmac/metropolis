@@ -27,9 +27,7 @@ class Term(models.Model):
         return self.name
 
     def start_datetime(self):
-        return timezone.make_aware(
-           datetime.combine(self.start_date, datetime.time())
-        )
+        return timezone.make_aware(datetime.combine(self.start_date, datetime.time()))
 
     def end_datetime(self):
         return timezone.make_aware(
@@ -241,7 +239,11 @@ class RecurrenceRule(models.Model):
         DECEMBER = 12
 
     event = models.OneToOneField(
-        "Event", on_delete=models.CASCADE, related_name="reoccurrences", related_query_name="reoccurrence", unique=True
+        "Event",
+        on_delete=models.CASCADE,
+        related_name="reoccurrences",
+        related_query_name="reoccurrence",
+        unique=True,
     )
     type = models.CharField(
         max_length=16,
@@ -263,7 +265,7 @@ class RecurrenceRule(models.Model):
     )
     # Used on weekly: the days of the week to repeat on e.g. 16 would be tuesday and sunday
 
-    repeat_type = models.IntegerField( # fixme - not used in rrule
+    repeat_type = models.IntegerField(  # fixme - not used in rrule
         choices=MonthlyRepeatOptions.choices,
         help_text="the type of monthly repetition to use. (I.E. day, date)",
         blank=True,
@@ -348,17 +350,18 @@ class RecurrenceRule(models.Model):
         print(self.repeat_on)
         rule = rrule(
             freq=self.type,
-            dtstart=self.event.start_date, # fixme this or byweekday
+            dtstart=self.event.start_date,  # fixme this or byweekday
             interval=self.interval,
-            wkst=None, # todo add weekstart
+            wkst=None,  # todo add weekstart
             until=self.ends,
             count=self.ends_after,
             bysetpos=None,
             bymonth=self.get_repeat_months,
             bymonthday=self.get_repeat_monthdays,
             # byweekno=None,, maybe impl later on (used for when you want to schedule events every x weeks)
-            byweekday=tuple(self.repeat_on), # fixme 'str' object has no attribute 'n', being converted from the int for some reason........
-
+            byweekday=tuple(
+                self.repeat_on
+            ),  # fixme 'str' object has no attribute 'n', being converted from the int for some reason........
             cache=True,
         )
         return rule.__str__()
@@ -367,7 +370,9 @@ class RecurrenceRule(models.Model):
         if self.repeat_type == self.MonthlyRepeatOptions.DATE:
             return self.event.start_date.day
         elif self.repeat_type == self.MonthlyRepeatOptions.DAY:
-            first_day = datetime.date(self.event.start_date.year, self.event.start_date.month, 1)
+            first_day = datetime.date(
+                self.event.start_date.year, self.event.start_date.month, 1
+            )
             week, day = get_week_and_day(self.event.start_date)
 
             # Calculate the offset to the desired day of the week
@@ -378,7 +383,12 @@ class RecurrenceRule(models.Model):
 
             # Combine the date and time to create a datetime object
             return datetime.combine(
-                datetime.date(self.event.start_date.year, self.event.start_date.month, day_of_month), datetime.time.min
+                datetime.date(
+                    self.event.start_date.year,
+                    self.event.start_date.month,
+                    day_of_month,
+                ),
+                datetime.time.min,
             )
 
 
