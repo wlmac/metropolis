@@ -332,3 +332,19 @@ class BlogPost(Post):
 
     class Meta:
         ordering = ["-created_date"]
+
+
+class Exhibit(Post):
+    slug = models.SlugField(unique=True)
+    content = models.ImageField(
+        upload_to=featured_image_file_path_generator,
+        default="featured_image/default.png",
+    )
+    content_description = models.CharField(
+        help_text="Alt text for the featured image e.g. what screen readers tell users",
+        max_length=140,
+    )
+    is_published = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["-created_date"]

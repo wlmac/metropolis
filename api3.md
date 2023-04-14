@@ -206,6 +206,33 @@ properties:
       likes: { type: integer }
 ```
 
+## Exhibit
+```ymal
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/exhibit.json
+type: object
+properties:
+  id: { type: integer }
+  slug: { type: string }
+  title: { type: string }
+  author: { type: integer }
+  created_date: { type: string, format: date-time }
+  last_modified_date: { type: string, format: date-time }
+  contetn: { type: string, format: url }
+  contetn_description: { type: string }
+  is_published: { type: boolean }
+  tags: { type: array, items: integer }
+  likes: { type: integer }
+  comments:
+    type: object
+    properties:
+      id: { type: integer }
+      has_children: { type: boolean }
+      body: { type: string }
+      author: { type: integer | null }
+      likes: { type: integer }
+```
+
 ## Event
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
@@ -318,7 +345,7 @@ properties:
 ## Tag
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
-$id: https://maclyonsden.com/api/v3/schema/comment.json
+$id: https://maclyonsden.com/api/v3/schema/tag.json
 type: object
 properties:
   id: { type: integer }

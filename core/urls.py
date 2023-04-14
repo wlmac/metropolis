@@ -43,6 +43,7 @@ urlpatterns = [
         name="announcement_tag_list",
     ),
     path("announcements/feed", views.AnnouncementFeed(), name="announcement_feed"),
+    path("gallery", views.ExhibitList.as_view(), name="exhibit_list"),
     path("blog", views.BlogPostList.as_view(), name="blogpost_list"),
     path("blog/<str:slug>", views.BlogPostDetail.as_view(), name="blogpost_detail"),
     path(

@@ -286,3 +286,29 @@ class BlogPostTagList(TemplateView, mixins.TitleMixin):
         )
         context["tag"] = models.Tag.objects.get(id=context["tag"])
         return context
+
+
+class ExhibitList(TemplateView, mixins.TitleMixin):
+    template_name = "core/exhibit/list.html"
+    title = "Gallery"
+
+    def get_ordering(self):
+        return "-last_modified_date"
+
+    def get_queryset(self):
+        return Exhibit.objects.filter(is_published=True, show_after__lte=timezone.now())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if settings.LAZY_LOADING:
+            context["lazy_loading"] = True
+            context["initial_limit"] = settings.LAZY_LOADING["initial_limit"]
+            context["per_page"] = settings.LAZY_LOADING["per_page"]
+
+        context["feed_all"] = models.Exhibit.objects.filter(is_published=True)
+        if settings.LAZY_LOADING:
+            context["feed_all"] = context["feed_all"][
+                : settings.LAZY_LOADING["initial_limit"]
+            ]
+        return context

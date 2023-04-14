@@ -523,6 +523,40 @@ class BlogPostAdmin(PostAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
+class ExhibitAdmin(PostAdmin):
+    list_display = ["title", "author", "is_published"]
+    list_filter = [BlogPostAuthorListFilter, "is_published"]
+    ordering = ["-show_after"]
+    fields = [
+        "author",
+        "title",
+        "slug",
+        "content",
+        "content_description",
+        "show_after",
+        "tags",
+        "is_published",
+    ] + PostAdmin.fields
+    readonly_fields = PostAdmin.readonly_fields
+    formfield_overrides = {
+        django.db.models.TextField: {"widget": AdminMartorWidget},
+    }
+
+    def get_changeform_initial_data(self, request):
+        return {"author": request.user.pk}
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "tags":
+            kwargs["queryset"] = (
+                models.Tag.objects.filter(Q(organization=None)) # TODO: add SAC-only tags?
+                .distinct()
+                .order_by("name")
+            )
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Tag.objects.all().order_by("name")
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
 class CommentAdmin(admin.ModelAdmin):  # todo add likes back.
     list_display = ("body", "parent")
     formfield_overrides = {
@@ -718,6 +752,7 @@ admin.site.register(models.Term, TermAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
+admin.site.register(models.Exhibit, ExhibitAdmin)
 admin.site.register(models.Comment, CommentAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)

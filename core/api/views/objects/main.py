@@ -48,6 +48,7 @@ get_provider = gen_get_provider(  # k = Provider class name e.g. comment in Comm
     {
         "announcement": "announcement",
         "blogpost": "blog-post",
+        "exhibit": "exhibit",
         "event": "event",
         "organization": "organization",
         "flatpage": "flatpage",
