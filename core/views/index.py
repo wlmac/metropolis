@@ -87,7 +87,7 @@ class CalendarFeed(ICalFeed):
         )
 
     def item_rrule(self, item: models.Event):
-        #recurrence = RecurrenceRule.objects.get(event=item)
+        # recurrence = RecurrenceRule.objects.get(event=item)
         if item.reoccurrences:
             return item.reoccurrences.rule
         return None
