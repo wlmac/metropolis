@@ -86,6 +86,12 @@ class CalendarFeed(ICalFeed):
             else item.start_date.date()
         )
 
+    def item_rrule(self, item: models.Event):
+        #recurrence = RecurrenceRule.objects.get(event=item)
+        if item.reoccurrences:
+            return item.reoccurrences.rule
+        return None
+
     def item_end_datetime(self, item):
         return (
             item.end_date

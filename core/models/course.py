@@ -207,7 +207,7 @@ class RecurrenceRule(models.Model):
 
     """
 
-    class RecurrenceOptions(models.Choices):
+    class RecurrenceOptions(models.TextChoices):
         DAILY = DAILY
         WEEKLY = WEEKLY
         MONTHLY = MONTHLY
@@ -240,8 +240,8 @@ class RecurrenceRule(models.Model):
         NOVEMBER = 11
         DECEMBER = 12
 
-    event = models.ForeignKey(
-        "Event", on_delete=models.CASCADE, related_name="reoccurrences"
+    event = models.OneToOneField(
+        "Event", on_delete=models.CASCADE, related_name="reoccurrences", related_query_name="reoccurrence", unique=True
     )
     type = models.CharField(
         max_length=16,
@@ -257,8 +257,6 @@ class RecurrenceRule(models.Model):
     # --- repetition options ---
     repeat_on = MultiSelectField(
         choices=DaysOfWeek.choices,
-        max_length=13,
-        max_choices=7,
         blank=True,
         null=True,
         help_text="the days of the week to repeat on. or if type=MONTHLY, the first or last of x day to repeat on)",
@@ -344,10 +342,13 @@ class RecurrenceRule(models.Model):
             )
         return None
 
-    def recurrence_pattern(self):
+    @property
+    def rule(self):
+        print(type(self.repeat_on))
+        print(self.repeat_on)
         rule = rrule(
             freq=self.type,
-            dtstart=self.event.start_date.day,
+            dtstart=self.event.start_date, # fixme this or byweekday
             interval=self.interval,
             wkst=None, # todo add weekstart
             until=self.ends,
@@ -356,7 +357,8 @@ class RecurrenceRule(models.Model):
             bymonth=self.get_repeat_months,
             bymonthday=self.get_repeat_monthdays,
             # byweekno=None,, maybe impl later on (used for when you want to schedule events every x weeks)
-            byweekday=self.repeat_on,
+            byweekday=tuple(self.repeat_on), # fixme 'str' object has no attribute 'n', being converted from the int for some reason........
+
             cache=True,
         )
         return rule.__str__()
