@@ -82,7 +82,7 @@ class ObjectAPIView(generics.GenericAPIView):
     def get_object(self):
         queryset = self.get_queryset()
         q = Q()
-        raw = {**self.request.query_params, **{k: [v] for k, v in self.kwargs}}
+        raw = {**self.request.query_params, **{k: [v] for k, v in self.kwargs.items()}}
         filtered = False
         for field in self.lookup_fields:
             if field in raw:
