@@ -548,7 +548,9 @@ class ExhibitAdmin(PostAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "tags":
             kwargs["queryset"] = (
-                models.Tag.objects.filter(Q(organization=None)) # TODO: add SAC-only tags?
+                models.Tag.objects.filter(
+                    Q(organization=None)
+                )  # TODO: add SAC-only tags?
                 .distinct()
                 .order_by("name")
             )
@@ -663,16 +665,6 @@ class EventAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-@admin.action(description="Send test notification")
-def send_test_notif(modeladmin, request, queryset):
-    for u in queryset:
-        notif_single.delay(u.id, dict(
-            title="Test Notification",
-            body="Test body.",
-            category="test",
-        ))
-
-
 class UserAdmin(admin.ModelAdmin):
     list_display = ["username", "is_superuser", "is_staff", "is_teacher"]
     list_filter = [
@@ -689,7 +681,19 @@ class UserAdmin(admin.ModelAdmin):
         "saved_blogs__title",
         "saved_announcements__title",
     ]
-    actions = [send_test_notif]
+    actions = ["send_test_notif"]
+
+    @admin.action(permissions=["change"], description="Send test notification")
+    def send_test_notif(modeladmin, request, queryset):
+        for u in queryset:
+            notif_single.delay(
+                u.id,
+                dict(
+                    title="Test Notification",
+                    body="Test body.",
+                    category="test",
+                ),
+            )
 
     def has_view_permission(self, request, obj=None):
         if obj is None and (
@@ -709,10 +713,13 @@ class TimetableAdmin(admin.ModelAdmin):
     list_filter = ["term"]
 
 
-@admin.action(description="Archive selected flatpages and download them as a JSON file")
+@admin.action(
+    permissions=["change"],
+    description="Archive selected flatpages and download them as a JSON file",
+)
 def archive_page(modeladmin, request, queryset):
     if not request.user.has_perm("flatpages.change_flatpage"):
-        raise PermissionDenied
+        raise RuntimeError("permissions kwarg doesn't work")
 
     response = HttpResponse(
         content_type="application/json"
