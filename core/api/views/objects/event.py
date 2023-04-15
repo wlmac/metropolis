@@ -26,6 +26,7 @@ class SuperficialSerializer(serializers.ModelSerializer):
             "end_date",
             "organization",
             "should_announce",
+            "description",
         ]
 
 
