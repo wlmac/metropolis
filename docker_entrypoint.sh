@@ -14,6 +14,8 @@ case "$1" in
 		cd /app/
 		if [[ "$METROPOLIS_AUTOSETUP" == "yes" ]]; then
 			echo '=== AUTOSETUP'
+			echo '--- PUBLIC'
+			chmod -R a+rwX /app-public
 			echo '--- MIGRATE'
 			runuser -u app -- /app/.venv/bin/python3 manage.py migrate
 			echo '--- COLLECTSTATIC'

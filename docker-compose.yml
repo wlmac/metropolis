@@ -1,15 +1,4 @@
 services:
-  caddy:
-    image: caddy
-    ports:
-      - "8000:8000"
-    networks:
-      - gunicorn
-    volumes:
-      - $PWD/Caddyfile:/etc/caddy/Caddyfile:ro
-      - log:/var/log
-      - public:/app-public:ro
-      - static2:/app-static2:ro
   postgres:
     image: postgres
     environment:
@@ -64,7 +53,6 @@ services:
       - redis
 
 volumes:
-  log:
   public:
   media:
   static2:
