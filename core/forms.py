@@ -277,3 +277,13 @@ class AnnouncementSupervisorAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if "status" in self.fields:
             self.fields["status"].initial = "d"
+
+
+class UserExpoNotifField(forms.JSONField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.empty_values = ['', None]
+
+
+class UserAdminForm(forms.ModelForm):
+    expo_notif_tokens = UserExpoNotifField()

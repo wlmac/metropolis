@@ -18,6 +18,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 from core.utils.mail import send_mail
+from core.tasks import notif_single
 from metropolis import settings
 from . import models
 from .api.utils.posts import likes
@@ -29,6 +30,7 @@ from .forms import (
     TagAdminForm,
     TagSuperuserAdminForm,
     TermAdminForm,
+    UserAdminForm,
 )
 
 User = get_user_model()
@@ -682,6 +684,7 @@ class UserAdmin(admin.ModelAdmin):
         "saved_announcements__title",
     ]
     actions = ["send_test_notif"]
+    form = UserAdminForm
 
     @admin.action(permissions=["change"], description="Send test notification")
     def send_test_notif(modeladmin, request, queryset):
