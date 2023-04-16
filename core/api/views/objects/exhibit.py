@@ -57,7 +57,9 @@ class ExhibitProvider(BaseProvider):
         if request.user.has_perm("core.exhibit.view") or request.user.is_superuser:
             return Exhibit.objects.all()
         else:
-            return Exhibit.objects.filter(is_published=True, show_after__lte=timezone.now())
+            return Exhibit.objects.filter(
+                is_published=True, show_after__lte=timezone.now()
+            )
 
     def get_last_modified(self, view):
         return view.get_object().last_modified_date

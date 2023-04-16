@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-_using_docker_config = True # intended for allow changing config *in dev*
+_using_docker_config = True  # intended for allow changing config *in dev*
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,13 +16,13 @@ MEDIA_URL = "/media/"
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'metropolis_db',
-        'USER': 'metropolis_user',
-        'PASSWORD': 'changeme_metropolis_password',
-        'HOST': 'postgres',
-        'PORT': '',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "metropolis_db",
+        "USER": "metropolis_user",
+        "PASSWORD": "changeme_metropolis_password",
+        "HOST": "postgres",
+        "PORT": "",
     }
 }
 

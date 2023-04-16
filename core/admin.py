@@ -693,6 +693,7 @@ class UserAdmin(admin.ModelAdmin):
     form = UserAdminForm
 
     @admin.action(permissions=["change"], description="Send test notification")
+    @staticmethod
     def send_test_notif(modeladmin, request, queryset):
         for u in queryset:
             notif_single.delay(

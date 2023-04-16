@@ -60,10 +60,10 @@ class EventProvider(BaseProvider):
                 return None
             try:
                 d = datetime.datetime.strptime(raw, "%Y-%m-%d")
-                if name == 'end':
+                if name == "end":
                     # AoE time same day
                     d = d.replace(tzinfo=AOE, hour=23, minute=59, second=59)
-                elif name == 'start':
+                elif name == "start":
                     # AoE time prev day
                     d = d.replace(tzinfo=AOE)
                     d -= datetime.timedelta(days=1)

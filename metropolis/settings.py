@@ -709,7 +709,7 @@ NAVBAR = {
 
 # Announcements settings
 
-ANNOUNCEMENTS_CUSTOM_FEEDS = [] # list of PKs of organizations
+ANNOUNCEMENTS_CUSTOM_FEEDS = []  # list of PKs of organizations
 
 BANNER2 = []
 
@@ -1007,8 +1007,8 @@ CELERY_TIMEZONE = "America/Toronto"
 
 NOTIF_EXPO_TIMEOUT_SECS = 3
 
-ANNOUNCEMENTS_NOTIFY_FEEDS = [] # list of PKs of organizations
-EVENTS_NOTIFY_FEEDS = [] # list of PKs of organizations
+ANNOUNCEMENTS_NOTIFY_FEEDS = []  # list of PKs of organizations
+EVENTS_NOTIFY_FEEDS = []  # list of PKs of organizations
 NOTIF_DRY_RUN = True
 
 try:

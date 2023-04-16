@@ -10,7 +10,6 @@ from rest_framework.response import Response
 
 from .base import BaseProvider
 from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
-from core.models import User
 
 __all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
@@ -76,23 +75,36 @@ class ObjectAPIView(generics.GenericAPIView):
             self.permission_classes = provider.permission_classes
         self.as_su = as_su
         self.serializer_class = provider.serializer_class
-        self.lookup_fields = getattr(provider, 'lookup_fields', getattr(provider, 'lookup_field', ['id', 'pk']))
+        self.lookup_fields = getattr(
+            provider, "lookup_fields", getattr(provider, "lookup_field", ["id", "pk"])
+        )
         # NOTE: better to have the following if after initial, but this is easier
 
     def get_object(self):
         queryset = self.get_queryset()
+        lookup = (
+            self.request.query_params.get("lookup", "id")
+            if self.request.query_params.get("lookup") in self.lookup_fields
+            else "id"
+        )
         q = Q()
-        raw = {**self.request.query_params, **{k: [v] for k, v in self.kwargs.items()}}
+        raw = {lookup: [self.kwargs.get("lookup")]}
+        if lookup == "id":
+            if not raw[lookup][0].isdigit():
+                raise BadRequest(
+                    "ID must be an integer, if you want to use a different lookup, refer to the docs for the supported lookups."
+                )
         filtered = False
         for field in self.lookup_fields:
             if field in raw:
-                if field in ('id', 'pk') and raw[field] == "0":
+                if field in ("id", "pk") and raw[field][0] == "0":
                     # ignore 0 pk
                     continue
-                q |= Q(**{f'{field}__in': raw[field]})
+                q |= Q(**{f"{field}__in": raw[field]})
                 filtered = True
         if not filtered:
-            raise BadRequest('not enough filters')
+            raise BadRequest("not enough filters")
+
         obj = get_object_or_404(queryset, q)
         self.check_object_permissions(self.request, obj)
         return obj

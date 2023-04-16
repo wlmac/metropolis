@@ -65,7 +65,7 @@ urlpatterns = [
     path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),
     path("v3/obj/<str:type>/new", ObjectNew.as_view(), name="api_object_new3"),
     path(
-        "v3/obj/<str:type>/single/<path:lookup>", # lookup is typically ID unless otherwise specified via the ?lookup= query parameter
+        "v3/obj/<str:type>/single/<path:lookup>",  # lookup is typically ID unless otherwise specified via the ?lookup= query parameter
         ObjectSingle.as_view(),
         name="api_object_single3",
     ),
