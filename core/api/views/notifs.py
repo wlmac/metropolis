@@ -99,15 +99,16 @@ class NotifToken(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def put(self, request, format=None):
-        s = tokenserializer(data=request.data)
-        s.is_valid(raise_exception=true)
+        s = TokenSerializer(data=request.data)
+        s.is_valid(raise_exception=True)
         request.user.expo_notif_tokens[s.validated_data["expo_push_token"]] = None
+        print('expo_notif_tokens', request.user.expo_notif_tokens)
         request.user.save()
         return response.Response(None)
 
     def delete(self, request, format=None):
-        s = tokenserializer(data=request.data)
-        s.is_valid(raise_exception=true)
+        s = TokenSerializer(data=request.data)
+        s.is_valid(raise_exception=True)
         given = s.validated_data["expo_push_token"]
         if given in request.user.expo_notif_tokens:
             del request.user.expo_notif_tokens[given]
