@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from typing import List
 
 from dateutil.rrule import rrule, MONTHLY, WEEKLY, DAILY, YEARLY
@@ -27,12 +27,12 @@ class Term(models.Model):
         return self.name
 
     def start_datetime(self):
-        return timezone.make_aware(datetime.combine(self.start_date, datetime.time()))
+        return timezone.make_aware(dt.datetime.combine(self.start_date, dt.time()))
 
     def end_datetime(self):
         return timezone.make_aware(
-            datetime.combine(
-                self.end_date, datetime.time(hour=23, minute=59, second=59)
+            dt.datetime.combine(
+                self.end_date, dt.time(hour=23, minute=59, second=59)
             )
         )
 
@@ -93,7 +93,7 @@ class Term(models.Model):
                     cycle_day_type_set.add(cur_iter_day.isocalendar()[1])
                 else:
                     raise NotImplementedError
-            cur_iter_day += datetime.timedelta(1)
+            cur_iter_day += dt.timedelta(1)
 
         return (len(cycle_day_type_set) - 1) % tf["cycle"]["length"] + 1
 
@@ -132,10 +132,10 @@ class Term(models.Model):
             self.day_schedule_format(target_date=target_date)
         ]:
             start_time = timezone.make_aware(
-                datetime.datetime.combine(target_date, datetime.time(*i["time"][0]))
+                dt.datetime.combine(target_date, dt.time(*i["time"][0]))
             )
             end_time = timezone.make_aware(
-                datetime.datetime.combine(target_date, datetime.time(*i["time"][1]))
+                dt.datetime.combine(target_date, dt.time(*i["time"][1]))
             )
 
             result.append(
@@ -366,11 +366,11 @@ class RecurrenceRule(models.Model):
         )
         return rule.__str__()
 
-    def _get_x_day_of_month(self) -> datetime.date:
+    def _get_x_day_of_month(self) -> dt.date:
         if self.repeat_type == self.MonthlyRepeatOptions.DATE:
             return self.event.start_date.day
         elif self.repeat_type == self.MonthlyRepeatOptions.DAY:
-            first_day = datetime.date(
+            first_day = dt.date(
                 self.event.start_date.year, self.event.start_date.month, 1
             )
             week, day = get_week_and_day(self.event.start_date)
@@ -382,13 +382,13 @@ class RecurrenceRule(models.Model):
             day_of_month = 1 + (week - 1) * 7 + day_offset
 
             # Combine the date and time to create a datetime object
-            return datetime.combine(
-                datetime.date(
+            return dt.datetime.combine(
+                dt.date(
                     self.event.start_date.year,
                     self.event.start_date.month,
                     day_of_month,
                 ),
-                datetime.time.min,
+                dt.time.min,
             )
 
 

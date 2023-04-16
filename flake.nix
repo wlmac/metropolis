@@ -38,6 +38,7 @@
         openssl
         black
         isort
+        mypy
         nodejs
         act
       ];

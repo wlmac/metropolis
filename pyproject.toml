@@ -71,8 +71,9 @@ psycopg2 = "2.9.1"
 black = "*"
 isort = "*"
 
-[tool.mypy]
-plugins = ["mypy_django_plugin.main"]
+# TODO: doesn't work right now
+#[tool.mypy]
+#plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
 django_settings_module = "metropolis.settings"
