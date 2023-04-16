@@ -62,6 +62,9 @@ Both dates are in AoE time, and the start date is moved to the previous day.
 For `flatpage` and `user`:
 Cannot be used.
 
+For `Flatpage, User, Organization, Exhibit, BlogPost`:
+You can pass a lookup query param with the format `?lookup=<field>` to change how the results are filtered. (e.g. `?lookup=username` if you want to filter by username instead of ID for `User`) Must be an exact match.
+
 ### Query
 
 `shrink_last_modified_before`ts modified before supplied time will just have a pk in place of the object.
@@ -71,7 +74,7 @@ Pagination (`limit` and `offset`; both **mandatory**): control what data to retu
 **Note**
 `limit` is the maximum number of items to return.
 `offset` is the starting position of the items to return.
-See [https://www.django-rest-framework.org/api-guide/pagination/#limitoffsetpagination] for details.
+See [docs](https://www.django-rest-framework.org/api-guide/pagination/#limitoffsetpagination) for details.
 
 the result will be this format:
 ```yaml
@@ -207,7 +210,7 @@ properties:
 ```
 
 ## Exhibit
-```ymal
+```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/exhibit.json
 type: object
@@ -218,8 +221,8 @@ properties:
   author: { type: integer }
   created_date: { type: string, format: date-time }
   last_modified_date: { type: string, format: date-time }
-  contetn: { type: string, format: url }
-  contetn_description: { type: string }
+  content: { type: string, format: url }
+  content_description: { type: string }
   is_published: { type: boolean }
   tags: { type: array, items: integer }
   likes: { type: integer }
@@ -257,6 +260,9 @@ properties:
 ```
 
 ## Flatpage
+
+`url` can be used for the lookup query string to filter by url path (e.g. `GET /api/v3/obj/flatpage/retrieve//hello/?lookup=url`).
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/flatpage.json
@@ -268,7 +274,7 @@ properties:
 
 ## User
 
-`username` can be used in the query string to filter by username (exact match).
+`username` can be used for the lookup query string to filter by username.
 
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
@@ -293,6 +299,10 @@ properties:
 
 
 ## Organization
+
+`slug` can be used for the lookup query string to filter by slug
+
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/organization.json
