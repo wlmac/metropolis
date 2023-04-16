@@ -3,7 +3,6 @@ import datetime
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.utils import timezone
 from rest_framework import permissions, serializers
 from rest_framework.exceptions import ParseError
 
@@ -11,7 +10,6 @@ from .announcement import Inner
 from .base import BaseProvider
 from .... import models
 from ....models import Event
-
 
 AOE = datetime.timezone(datetime.timedelta(hours=-12), name="AoE")
 

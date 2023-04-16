@@ -1,4 +1,5 @@
-<svg version="1.1" viewBox="0.0 0.0 1020 750" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+<svg version="1.1" viewBox="0.0 0.0 1020 750" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10"
+     xmlns="http://www.w3.org/2000/svg">
 <defs>
   <radialGradient id="ripple-gradient">
     <stop offset="0%" stop-color="#0000" />
@@ -76,7 +77,7 @@
   <feComponentTransfer>
 		<feFuncA type="linear" slope="0.5"/> <!-- shadow opacity -->
   </feComponentTransfer>
-  <feMerge> 
+  <feMerge>
     <feMergeNode/> <!-- this contains the offset blurred image -->
     <feMergeNode in="SourceGraphic"/> <!-- this contains the element that the filter is applied to -->
   </feMerge>

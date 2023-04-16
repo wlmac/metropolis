@@ -1,6 +1,6 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
-import { request as req } from '@playwright/test';
+import {request as req} from '@playwright/test';
 
 test('sanity', async ({ page }) => {
   await page.goto('/');

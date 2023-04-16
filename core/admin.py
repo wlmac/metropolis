@@ -8,7 +8,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.messages import constants as messages
-from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -17,8 +16,9 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
-from core.utils.mail import send_mail
+
 from core.tasks import notif_single
+from core.utils.mail import send_mail
 from metropolis import settings
 from . import models
 from .api.utils.posts import likes

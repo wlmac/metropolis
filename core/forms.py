@@ -282,7 +282,7 @@ class AnnouncementSupervisorAdminForm(forms.ModelForm):
 class UserExpoNotifField(forms.JSONField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.empty_values = ['', None]
+        self.empty_values = ["", None]
 
 
 class UserAdminForm(forms.ModelForm):

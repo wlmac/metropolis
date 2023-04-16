@@ -1,23 +1,24 @@
+import datetime as dt
+import functools
+
+import pytz
+import requests
+from celery.schedules import crontab
+from celery.utils.log import get_task_logger
+from django.conf import settings
+from django.db.models import Value, JSONField, Q
+from django.utils.translation import gettext_lazy as _l
+from django.utils.translation import ngettext
 from exponent_server_sdk import (
     DeviceNotRegisteredError,
     PushClient,
     PushMessage,
     PushTicketError,
 )
-from django.utils.translation import gettext_lazy as _l
-from django.utils.translation import ngettext
-import pytz
-import functools
-import datetime as dt
-import requests
 from requests.exceptions import ConnectionError, HTTPError
-from celery.schedules import crontab
-from celery.utils.log import get_task_logger
-from django.conf import settings
-from django.db.models import Value, JSONField, Q
+
 from core.models import Announcement, User, Event
 from metropolis.celery import app
-
 
 logger = get_task_logger(__name__)
 session = requests.Session()

@@ -1,8 +1,8 @@
 from django.test import TestCase
 
+from core.admin import User
 from core.models import Organization
 from core.models.post import *
-from core.admin import User
 
 
 def create_school_org(user: User) -> Organization:

@@ -1,6 +1,7 @@
 import os
 from datetime import datetime, timedelta
 from typing import Dict, List
+
 from django.utils import timezone
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

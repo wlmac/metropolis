@@ -102,7 +102,7 @@ class NotifToken(APIView):
         s = TokenSerializer(data=request.data)
         s.is_valid(raise_exception=True)
         request.user.expo_notif_tokens[s.validated_data["expo_push_token"]] = None
-        print('expo_notif_tokens', request.user.expo_notif_tokens)
+        print("expo_notif_tokens", request.user.expo_notif_tokens)
         request.user.save()
         return response.Response(None)
 

@@ -3,12 +3,12 @@ from __future__ import annotations
 import datetime
 from typing import List
 
+from dateutil.rrule import rrule, MONTHLY, WEEKLY, DAILY, YEARLY
 from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned, ValidationError
 from django.db import models
 from django.utils import timezone
 from multiselectfield import MultiSelectField
-from dateutil.rrule import rrule, MONTHLY, WEEKLY, DAILY, YEARLY
 
 from .. import utils
 from ..utils.fields import PositiveOneSmallIntegerField
