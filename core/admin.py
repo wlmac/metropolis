@@ -330,8 +330,7 @@ class AnnouncementAdmin(PostAdmin):
 
         fields = list(fields)
         fields.sort(key=lambda x: all_fields.index(x))
-        if obj and obj.pk:
-            fields.extend(PostAdmin.fields)
+        fields.extend(PostAdmin.fields)
 
         return fields
 
@@ -503,16 +502,11 @@ class BlogPostAdmin(PostAdmin):
         "show_after",
         "tags",
         "is_published",
-    ]
+    ] + PostAdmin.fields
     readonly_fields = PostAdmin.readonly_fields
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
-
-    def get_fields(self, request, obj=None):
-        if obj and obj.pk:
-            return self.fields.extend(PostAdmin.fields)
-        return self.fields
 
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}
