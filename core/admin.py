@@ -508,6 +508,11 @@ class BlogPostAdmin(PostAdmin):
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
 
+    def get_fields(self, request, obj=None):
+        if obj and obj.pk:
+            return self.fields + PostAdmin.fields
+        return self.fields
+
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}
 
