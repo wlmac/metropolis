@@ -103,10 +103,10 @@ class NotifToken(APIView):
     PREFIX = "ExponentPushToken["
     SUFFIX = "]"
 
-    @staticmethod
-    def _normalize_token(raw_token: str) -> str:
-        if raw_token.startswith(PREFIX) and raw_token.endswith(SUFFIX):
-            return raw_token[len(PREFIX):-len(SUFFIX)]
+    @classmethod
+    def _normalize_token(cls, raw_token: str) -> str:
+        if raw_token.startswith(cls.PREFIX) and raw_token.endswith(cls.SUFFIX):
+            return raw_token[len(cls.PREFIX):-len(cls.SUFFIX)]
         return raw_token
 
     def put(self, request, format=None):
