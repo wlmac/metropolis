@@ -137,6 +137,8 @@ class SetField(models.TextField):
     def get_db_prep_value(self, value, **kwargs):
         if not value:
             return
+        if isinstance(value, str):
+            return value # allow corruption
         assert isinstance(value, list) or isinstance(value, tuple), f"value must be list or tuple, not {type(value)}"
         return self.__token.join(value)
 
