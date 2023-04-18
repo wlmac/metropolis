@@ -114,7 +114,6 @@ class NotifToken(APIView):
         s.is_valid(raise_exception=True)
         token = self._normalize_token(s.validated_data["expo_push_token"])
         request.user.expo_notif_tokens[token] = None
-        print("expo_notif_tokens", request.user.expo_notif_tokens)
         request.user.save()
         return response.Response(None)
 
