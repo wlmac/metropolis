@@ -36,4 +36,25 @@ test('token-based auth', async ({ request }) => {
   });
   // TODO: refresh the token
   await ctx.get('/api/me');
+  const fakeTokens = [ "fakeExpoToken1", "ExponentPushToken[fakeExpoToken2]" ];
+  fakeTokens.forEach((fakeToken) => {
+    const res1 = await ctx.put('/api/v3/notif/token', {
+      data: { expo_push_token: fakeToken },
+    });
+    expect(res1.ok()).toBeTruthy();
+    expect(res1.status()).toBe(200);
+    const res2 = await ctx.delete('/api/v3/notif/token', {
+      data: { expo_push_token: fakeToken },
+    });
+    expect(res2.ok()).toBeTruthy();
+    expect(res2.status()).toBe(200);
+  });
+
+  // deleting nonexistent token should work
+  const nonexistentToken = "nonexistentToken";
+  const res = await ctx.delete('/api/v3/notif/token', {
+    data: { expo_push_token: fakeToken },
+  });
+  expect(res.ok()).toBeTruthy();
+  expect(res.status()).toBe(200);
 });
