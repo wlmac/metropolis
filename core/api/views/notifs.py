@@ -94,14 +94,26 @@ class NotifToken(APIView):
     """
     Submit and delete notifcation push tokens.
     Supports Expo notification push tokens only for now.
+    JSON object for PUT and DELETE is both of the form:
+    a) {"expo_push_token": "ExponentPushToken[abc123]"}
+    b) {"expo_push_token": "abc123"}
     """
 
     permission_classes = [permissions.IsAuthenticated]
+    PREFIX = "ExponentPushToken["
+    SUFFIX = "]"
+
+    @staticmethod
+    def _normalize_token(raw_token: str) -> str:
+        if raw_token.startswith(PREFIX) and raw_token.endswith(SUFFIX):
+            return raw_token[len(PREFIX):-len(SUFFIX)]
+        return raw_token
 
     def put(self, request, format=None):
         s = TokenSerializer(data=request.data)
         s.is_valid(raise_exception=True)
-        request.user.expo_notif_tokens[s.validated_data["expo_push_token"]] = None
+        token = self._normalize_token(s.validated_data["expo_push_token"]
+        request.user.expo_notif_tokens[token] = None
         print("expo_notif_tokens", request.user.expo_notif_tokens)
         request.user.save()
         return response.Response(None)
@@ -109,8 +121,8 @@ class NotifToken(APIView):
     def delete(self, request, format=None):
         s = TokenSerializer(data=request.data)
         s.is_valid(raise_exception=True)
-        given = s.validated_data["expo_push_token"]
-        if given in request.user.expo_notif_tokens:
-            del request.user.expo_notif_tokens[given]
+        token = self._normalize_token(s.validated_data["expo_push_token"]
+        if token in request.user.expo_notif_tokens:
+            del request.user.expo_notif_tokens[token]
         request.user.save()
         return response.Response(None)
