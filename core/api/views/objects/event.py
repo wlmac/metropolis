@@ -25,6 +25,7 @@ class SuperficialSerializer(serializers.ModelSerializer):
             "organization",
             "should_announce",
             "description",
+            "tags",
         ]
 
 
