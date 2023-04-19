@@ -14,13 +14,14 @@ test('sanity 2', async ({ request }) => {
     '/api/v3/feeds',
     '/api/v3/banners',
   ];
-  urls.forEach((url) => async () => {
-    const resp = await request.get(url);
-    expect(resp.ok()).toBeTruthy();
-  })
+  for (let url of urls) {
+    const res = await request.get(url);
+    expect(res.ok()).toBeTruthy();
+    expect(res.status()).toBe(200);
+  }
 });
 
-test('token-based auth', async ({ request }) => {
+async function authenticate({ request }) {
   const auth = await request.post('/api/auth/token', {
     data: {
       username: 'sotokanda',
@@ -29,19 +30,23 @@ test('token-based auth', async ({ request }) => {
   });
   expect(auth.ok()).toBeTruthy();
   const tokens = await auth.json();
-  const ctx = await req.newContext({
+  const ctx = await await req.newContext({
     extraHTTPHeaders: {
       "Authorization": `Bearer ${tokens.access}`,
     },
   });
-  {
-    const res1 = await ctx.get('/api/me');
-    expect(res1.ok()).toBeTruthy();
-    expect(res1.status()).toBe(200);
-  };
-  // TODO: refresh the token
+  // NOTE: not checking refresh token for now (token should work aniway)
+  // check access token works
+  const res1 = await ctx.get('/api/me');
+  expect(res1.ok()).toBeTruthy();
+  expect(res1.status()).toBe(200);
+  return ctx;
+};
+
+test('expo notif token', async ({ request }) => {
+  const ctx = await authenticate({ request });
   const fakeTokens = [ "fakeExpoToken1", "ExponentPushToken[fakeExpoToken2]" ];
-  fakeTokens.forEach(async (fakeToken) => {
+  for (let fakeToken of fakeTokens) {
     const res1 = await ctx.put('/api/v3/notif/token', {
       data: { expo_push_token: fakeToken },
     });
@@ -52,13 +57,30 @@ test('token-based auth', async ({ request }) => {
     });
     expect(res2.ok()).toBeTruthy();
     expect(res2.status()).toBe(200);
-  });
+  }
 
-  // deleting nonexistent token should work
+  // deleting nonexistent token should return 200
   const nonexistentToken = "nonexistentToken";
   const res = await ctx.delete('/api/v3/notif/token', {
     data: { expo_push_token: nonexistentToken },
   });
   expect(res.ok()).toBeTruthy();
   expect(res.status()).toBe(200);
+});
+
+test('all: list', async ({ request }) => {
+  const ctx = await authenticate({ request });
+  const cases = [
+    { type: "announcement" },
+    { type: "blog-post" },
+    { type: "exhibit" },
+    { type: "event" },
+    { type: "organization" },
+    { type: "tag" },
+  ];
+  for (let case_ of cases) {
+    const res = await ctx.get(`/api/v3/obj/${case_.type}`)
+    expect(res.ok()).toBeTruthy();
+    expect(res.status()).toBe(200);
+  }
 });
