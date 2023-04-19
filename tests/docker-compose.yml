@@ -1,0 +1,7 @@
+services:
+  playwright:
+    network_mode: host
+    build: .
+    volumes:
+      - ${PWD}/..:/proj:rw
+        #- ${PWD}/../test-results:/proj/test-results:rw

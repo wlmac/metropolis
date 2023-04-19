@@ -11,3 +11,7 @@ metropolis/local_settings.py:
 requirements.txt: poetry.lock
 	poetry run pip freeze -> $@ --exclude metropolis
 
+test:
+	cd tests && docker compose up --build
+
+.PHONY: test

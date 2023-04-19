@@ -28,16 +28,20 @@ test('token-based auth', async ({ request }) => {
     },
   });
   expect(auth.ok()).toBeTruthy();
-  const tokens = await auth.json;
+  const tokens = await auth.json();
   const ctx = await req.newContext({
     extraHTTPHeaders: {
-      "Authentication": `Bearer ${tokens.access}`,
+      "Authorization": `Bearer ${tokens.access}`,
     },
   });
+  {
+    const res1 = await ctx.get('/api/me');
+    expect(res1.ok()).toBeTruthy();
+    expect(res1.status()).toBe(200);
+  };
   // TODO: refresh the token
-  await ctx.get('/api/me');
   const fakeTokens = [ "fakeExpoToken1", "ExponentPushToken[fakeExpoToken2]" ];
-  fakeTokens.forEach((fakeToken) => {
+  fakeTokens.forEach(async (fakeToken) => {
     const res1 = await ctx.put('/api/v3/notif/token', {
       data: { expo_push_token: fakeToken },
     });
@@ -53,7 +57,7 @@ test('token-based auth', async ({ request }) => {
   // deleting nonexistent token should work
   const nonexistentToken = "nonexistentToken";
   const res = await ctx.delete('/api/v3/notif/token', {
-    data: { expo_push_token: fakeToken },
+    data: { expo_push_token: nonexistentToken },
   });
   expect(res.ok()).toBeTruthy();
   expect(res.status()).toBe(200);
