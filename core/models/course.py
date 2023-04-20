@@ -205,7 +205,7 @@ class RecurrenceRule(models.Model):
 
     """
 
-    class RecurrenceOptions(models.TextChoices):
+    class RecurrenceOptions(models.IntegerChoices):
         DAILY = DAILY
         WEEKLY = WEEKLY
         MONTHLY = MONTHLY
@@ -245,8 +245,7 @@ class RecurrenceRule(models.Model):
         related_query_name="reoccurrence",
         unique=True,
     )
-    type = models.CharField(
-        max_length=16,
+    type = models.IntegerField(
         choices=RecurrenceOptions.choices,
         help_text="the type of repetition. (e.g. daily, weekly, monthly, yearly)",
     )
@@ -293,6 +292,10 @@ class RecurrenceRule(models.Model):
         blank=True,
         null=True,
     )
+
+    @property
+    def _repeat_on(self):
+        return tuple(map(int, self.repeat_on))
 
     def clean(self):
         if self.ends is not None and self.ends_after is not None:
@@ -346,11 +349,9 @@ class RecurrenceRule(models.Model):
 
     @property
     def rule(self):
-        print(type(self.repeat_on))
-        print(self.repeat_on)
         rule = rrule(
             freq=self.type,
-            dtstart=self.event.start_date,  # fixme this or byweekday
+            dtstart=self.event.start_date,
             interval=self.interval,
             wkst=None,  # todo add weekstart
             until=self.ends,
@@ -359,12 +360,11 @@ class RecurrenceRule(models.Model):
             bymonth=self.get_repeat_months,
             bymonthday=self.get_repeat_monthdays,
             # byweekno=None,, maybe impl later on (used for when you want to schedule events every x weeks)
-            byweekday=tuple(
-                self.repeat_on
-            ),  # fixme 'str' object has no attribute 'n', being converted from the int for some reason........
+            byweekday=self._repeat_on,
             cache=True,
         )
-        return rule.__str__()
+        print(rule.__str__())
+        return rule
 
     def _get_x_day_of_month(self) -> dt.date:
         if self.repeat_type == self.MonthlyRepeatOptions.DATE:

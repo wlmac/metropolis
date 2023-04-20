@@ -53,7 +53,7 @@ class CalendarView(TemplateView, mixins.TitleMixin):
     title = "Calendar"
 
 
-class CalendarFeed(ICalFeed):
+class CalendarFeed(ICalFeed, View):
     product_id = "-//maclyonsden.com//calendar//EN"
     timezone = "UTC"
     file_name = "metropolis_school-wide.ics"
@@ -64,7 +64,7 @@ class CalendarFeed(ICalFeed):
         return (
             models.Event.get_events(user=None)
             .filter(
-                end_date__gte=now - padding,
+                end_date__gte=now - padding, # todo add ?start= and ?end= to url via self.request.query_params
                 start_date__lte=now + padding,
             )
             .order_by("-start_date")
