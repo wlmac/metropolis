@@ -2,7 +2,6 @@ import os
 
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model
-from django.http import Http404
 from django.urls import reverse
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -133,6 +132,8 @@ class ObjectAPIView(generics.GenericAPIView):
             kwargs.pop("type")
             response = handler(request, *args, **kwargs)
 
+        except ValueError:  # JSONDecodeError/UnicodeError
+            raise BadRequest("Invalid JWT, token is malformed.")
         except Exception as exc:
             response = self.handle_exception(exc)
 
