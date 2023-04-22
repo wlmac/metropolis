@@ -79,18 +79,17 @@ class CalendarFeed(ICalFeed, View):
     def _is_hms(self, dt, hour, minute, second):
         return dt.hour == hour and dt.minute == minute and dt.second == second
 
+    def item_rrule(self, item: models.Event):
+        if item.reoccurrences and item.reoccurrences.rule:
+            return item.reoccurrences.rule
+        return None
+
     def item_start_datetime(self, item):
         return (
             item.start_date
             if self._is_hms(item.start_date, 0, 0, 0)
             else item.start_date.date()
         )
-
-    def item_rrule(self, item: models.Event):
-        # recurrence = RecurrenceRule.objects.get(event=item)
-        if item.reoccurrences:
-            return item.reoccurrences.rule
-        return None
 
     def item_end_datetime(self, item):
         return (

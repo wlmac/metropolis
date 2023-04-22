@@ -3,7 +3,7 @@ from __future__ import annotations
 import datetime as dt
 from typing import List
 
-from dateutil.rrule import rrule, MONTHLY, WEEKLY, DAILY, YEARLY
+from dateutil.rrule import rrule, MO, rrulestr
 from django.conf import settings
 from django.core.exceptions import MultipleObjectsReturned, ValidationError
 from django.db import models
@@ -13,7 +13,13 @@ from multiselectfield import MultiSelectField
 from .. import utils
 from ..utils.fields import PositiveOneSmallIntegerField
 from ..utils.utils import *
-
+(YEARLY,
+ MONTHLY,
+ WEEKLY,
+ DAILY,
+ HOURLY,
+ MINUTELY,
+ SECONDLY) = list(range(7))
 
 class Term(models.Model):
     name = models.CharField(max_length=128)
@@ -348,48 +354,22 @@ class RecurrenceRule(models.Model):
         return None
 
     @property
-    def rule(self):
+    def rule(self) -> rrule:
         rule = rrule(
-            freq=self.type,
+            freq=int(self.type),
             dtstart=self.event.start_date,
             interval=self.interval,
-            wkst=None,  # todo add weekstart
+            wkst=MO,
             until=self.ends,
             count=self.ends_after,
             bysetpos=None,
             bymonth=self.get_repeat_months,
             bymonthday=self.get_repeat_monthdays,
-            # byweekno=None,, maybe impl later on (used for when you want to schedule events every x weeks)
             byweekday=self._repeat_on,
             cache=True,
         )
-        print(rule.__str__())
-        return rule
-
-    def _get_x_day_of_month(self) -> dt.date:
-        if self.repeat_type == self.MonthlyRepeatOptions.DATE:
-            return self.event.start_date.day
-        elif self.repeat_type == self.MonthlyRepeatOptions.DAY:
-            first_day = dt.date(
-                self.event.start_date.year, self.event.start_date.month, 1
-            )
-            week, day = get_week_and_day(self.event.start_date)
-
-            # Calculate the offset to the desired day of the week
-            day_offset = (day - first_day.weekday()) % 7
-
-            # Calculate the day of the month
-            day_of_month = 1 + (week - 1) * 7 + day_offset
-
-            # Combine the date and time to create a datetime object
-            return dt.datetime.combine(
-                dt.date(
-                    self.event.start_date.year,
-                    self.event.start_date.month,
-                    day_of_month,
-                ),
-                dt.time.min,
-            )
+        rrule_part = str(rule).split("RRULE:")[1]  # FREQ=WEEKLY;INTERVAL=2;COUNT=54;BYDAY=TU todo remove
+        return rrule_part
 
 
 class Event(models.Model):
