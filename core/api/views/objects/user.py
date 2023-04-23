@@ -15,9 +15,7 @@ class Serializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(required=False)
-    password = serializers.CharField(
-        write_only=True, trim_whitespace=False
-    )
+    password = serializers.CharField(write_only=True, trim_whitespace=False)
 
     def get_gravatar_url(self, obj):
         return gravatar_url(obj.email)
@@ -33,7 +31,6 @@ class Serializer(serializers.ModelSerializer):
             new_password = self.validated_data.pop("password")
         obj = super().save(**kwargs)
         if set_new_password:
-            print('PASSWORD', new_password)
             obj.set_password(new_password)
             obj.save()
         return obj
