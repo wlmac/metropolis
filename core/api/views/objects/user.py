@@ -15,7 +15,7 @@ class Serializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(required=False)
-    password = serializers.CharField(write_only=True, trim_whitespace=False)
+    password = serializers.CharField(required=False, write_only=True, trim_whitespace=False)
 
     def get_gravatar_url(self, obj):
         return gravatar_url(obj.email)
