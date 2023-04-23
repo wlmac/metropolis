@@ -102,8 +102,8 @@
                 <h2 class="subtitle">{{position}}{{ users|pluralize }}</h2>
                 {% endif %}
                 {% for user in users %}
-                <a href="{{user.username|user_url}}">
-                    <div class="member">
+                <div class="member">
+                    <a href="{{user.username|user_url}}">
                         <div class="member-name">
                             <div class="member-image">
                                 <img class="circle" src="{{user.email|gravatar_url:100}}">
@@ -112,14 +112,14 @@
                                 {{user.get_full_name}}
                             </div>
                         </div>
-                        {% if user.staff_bio %}
-                        <hr>
-                        <div class="member-bio">
-                            {{user.staff_bio}}
-                        </div>
-                        {% endif %}
+                    </a>
+                    {% if user.staff_bio %}
+                    <hr>
+                    <div class="member-bio">
+                        {{user.staff_bio}}
                     </div>
-                </a>
+                    {% endif %}
+                </div>
                 {% empty %}
                 No members under this position.
                 {% endfor %}
