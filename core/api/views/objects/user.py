@@ -16,6 +16,7 @@ class Serializer(serializers.ModelSerializer):
     gravatar_url = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(required=False)
     password = serializers.CharField(required=False, write_only=True, trim_whitespace=False)
+    old_password = serializers.CharField(required=False, write_only=True, trim_whitespace=False)
 
     def get_gravatar_url(self, obj):
         return gravatar_url(obj.email)
@@ -25,12 +26,23 @@ class Serializer(serializers.ModelSerializer):
             hashlib.md5(obj.email.encode("utf-8")).digest()
         )
 
+    def validate(self, data):
+        print(data)
+        if ("password" in data) != ("old_password" in data):
+            raise serializers.ValidationError("password and old_password must be in pairs")
+        return data
+
+    def validate_old_password(self, value):
+        if not self.instance.check_password(value):
+            raise serializers.ValidationError("old_password is wrong")
+
     def save(self, **kwargs):
-        set_new_password = "password" in self.validated_data
+        set_new_password = "password" in self.validated_data and "old_password" in self.validated_data
         if set_new_password:
             new_password = self.validated_data.pop("password")
+            old_password = self.validated_data.pop("old_password")
         obj = super().save(**kwargs)
-        if set_new_password:
+        if set_new_password and obj.check_password(old_password):
             obj.set_password(new_password)
             obj.save()
         return obj
@@ -41,6 +53,7 @@ class Serializer(serializers.ModelSerializer):
             "id",
             "username",
             "password",
+            "old_password",
             "email_hash",
             "first_name",
             "last_name",
