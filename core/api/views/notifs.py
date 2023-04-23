@@ -106,7 +106,7 @@ class NotifToken(APIView):
     @classmethod
     def _normalize_token(cls, raw_token: str) -> str:
         if raw_token.startswith(cls.PREFIX) and raw_token.endswith(cls.SUFFIX):
-            return raw_token[len(cls.PREFIX):-len(cls.SUFFIX)]
+            return raw_token[len(cls.PREFIX) : -len(cls.SUFFIX)]
         return raw_token
 
     def put(self, request, format=None):

@@ -295,7 +295,6 @@ class ObjectSingle(
             return x
         return super().patch(*args, **kwargs)
 
-
     def get_admin_url(self):
         model: Model = self.provider.model
         try:

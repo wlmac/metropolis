@@ -64,7 +64,8 @@ class CalendarFeed(ICalFeed, View):
         return (
             models.Event.get_events(user=None)
             .filter(
-                end_date__gte=now - padding, # todo add ?start= and ?end= to url via self.request.query_params
+                end_date__gte=now
+                - padding,  # todo add ?start= and ?end= to url via self.request.query_params
                 start_date__lte=now + padding,
             )
             .order_by("-start_date")

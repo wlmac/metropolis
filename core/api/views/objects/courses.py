@@ -11,7 +11,7 @@ class CourseProvider(BaseProvider):
     serializer_class = CourseSerializer
     model = Course
     allow_single = False
-    listing_filters = ["term", 'position']
+    listing_filters = ["term", "position"]
 
     @property
     def permission_classes(self):

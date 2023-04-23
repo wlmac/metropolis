@@ -15,8 +15,12 @@ class Serializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(required=False)
-    password = serializers.CharField(required=False, write_only=True, trim_whitespace=False)
-    old_password = serializers.CharField(required=False, write_only=True, trim_whitespace=False)
+    password = serializers.CharField(
+        required=False, write_only=True, trim_whitespace=False
+    )
+    old_password = serializers.CharField(
+        required=False, write_only=True, trim_whitespace=False
+    )
 
     def get_gravatar_url(self, obj):
         return gravatar_url(obj.email)
@@ -29,7 +33,9 @@ class Serializer(serializers.ModelSerializer):
     def validate(self, data):
         print(data)
         if ("password" in data) != ("old_password" in data):
-            raise serializers.ValidationError("password and old_password must be in pairs")
+            raise serializers.ValidationError(
+                "password and old_password must be in pairs"
+            )
         return data
 
     def validate_old_password(self, value):
@@ -37,7 +43,9 @@ class Serializer(serializers.ModelSerializer):
             raise serializers.ValidationError("old_password is wrong")
 
     def save(self, **kwargs):
-        set_new_password = "password" in self.validated_data and "old_password" in self.validated_data
+        set_new_password = (
+            "password" in self.validated_data and "old_password" in self.validated_data
+        )
         if set_new_password:
             new_password = self.validated_data.pop("password")
             old_password = self.validated_data.pop("old_password")

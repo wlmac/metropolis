@@ -13,13 +13,9 @@ from multiselectfield import MultiSelectField
 from .. import utils
 from ..utils.fields import PositiveOneSmallIntegerField
 from ..utils.utils import *
-(YEARLY,
- MONTHLY,
- WEEKLY,
- DAILY,
- HOURLY,
- MINUTELY,
- SECONDLY) = list(range(7))
+
+(YEARLY, MONTHLY, WEEKLY, DAILY, HOURLY, MINUTELY, SECONDLY) = list(range(7))
+
 
 class Term(models.Model):
     name = models.CharField(max_length=128)
@@ -37,9 +33,7 @@ class Term(models.Model):
 
     def end_datetime(self):
         return timezone.make_aware(
-            dt.datetime.combine(
-                self.end_date, dt.time(hour=23, minute=59, second=59)
-            )
+            dt.datetime.combine(self.end_date, dt.time(hour=23, minute=59, second=59))
         )
 
     def is_current(self, target_date=None):
@@ -368,7 +362,9 @@ class RecurrenceRule(models.Model):
             byweekday=self._repeat_on,
             cache=True,
         )
-        rrule_part = str(rule).split("RRULE:")[1]  # FREQ=WEEKLY;INTERVAL=2;COUNT=54;BYDAY=TU todo remove
+        rrule_part = str(rule).split("RRULE:")[
+            1
+        ]  # FREQ=WEEKLY;INTERVAL=2;COUNT=54;BYDAY=TU todo remove
         return rrule_part
 
 
