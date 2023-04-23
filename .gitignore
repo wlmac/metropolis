@@ -8,5 +8,3 @@ node_modules/
 /playwright-report/
 /playwright/.cache/
 celerybeat-schedule
-venv/
-tmp/
