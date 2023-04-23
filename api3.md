@@ -367,7 +367,9 @@ properties:
 
 ## Course
 
-`term` and `position` can be used for a listing query string to filter by them. (e.g. `GET /api/v3/obj/course?term=1&position=1`
+`term` and `position` can be used when listing in the query string to filter by them. (e.g. `GET /api/v3/obj/course?term=1&position=1`
+
+**NOTE:** `term` is the term *id*, not the term *position*.
 
 
 ```yaml
