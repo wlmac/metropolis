@@ -107,7 +107,7 @@ class NewSerializer(serializers.ModelSerializer):
         max_length=30,
         required=True,
     )
-    password = serializers.CharField(required=False)
+    password = serializers.CharField(required=True)
 
     # Default `create` and `update` behavior...
     def create(self, validated_data) -> User:
