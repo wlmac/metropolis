@@ -12,6 +12,7 @@ class TermSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    position = serializers.IntegerField(min_value=1, max_value=4)
     class Meta:
         model = models.Course
         fields = "__all__"

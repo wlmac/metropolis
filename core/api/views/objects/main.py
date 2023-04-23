@@ -4,7 +4,7 @@ from typing import Dict
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model, Q
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, NoReverseMatch
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
@@ -55,6 +55,7 @@ get_provider = gen_get_provider(  # k = Provider class name e.g. comment in Comm
         "tag": "tag",
         "comment": "comment",
         "like": "like",
+        "course": "course",
     }
 )
 
@@ -166,7 +167,7 @@ class ObjectAPIView(generics.GenericAPIView):
 
             kwargs.pop("type")
             response = handler(request, *args, **kwargs)
-            
+
         except ValueError:
             raise BadRequest("Invalid JWT, token is malformed.")
 
@@ -195,15 +196,19 @@ class ObjectList(
 
     def get_admin_url(self):
         model: Model = self.provider.model
-        return reverse(
-            f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
-        )
+        try:
+            return reverse(
+                f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+            )
+        except NoReverseMatch:
+            return None
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)
 
     def get(self, *args, **kwargs):
-        if not self.provider.allow_list:
+        allow_list = getattr(self.provider, "allow_list", True)
+        if not allow_list:
             return Response({"detail": "listing not allowed"}, status=422)
         return super().get(*args, **kwargs)
 
@@ -244,11 +249,13 @@ class ObjectRetrieve(
     kind = "retrieve"
 
     def get_admin_url(self):
-        model = self.provider.model
-        return reverse(
-            f"admin:{model._meta.app_label}_{model._meta.model_name}_change",
-            args=[self.get_object().id],
-        )
+        model: Model = self.provider.model
+        try:
+            return reverse(
+                f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+            )
+        except NoReverseMatch:
+            return None
 
     def get_last_modified(self):
         try:
@@ -267,12 +274,36 @@ class ObjectSingle(
     detail = None
     kind = "single"
 
+    def check_allow_single(self):
+        allow_single = getattr(self.provider, "allow_single", True)
+        if not allow_single:
+            return Response({"detail": "editing/deletion not allowed"}, status=422)
+        return None
+
+    def delete(self, *args, **kwargs):
+        if x := self.check_allow_single():
+            return x
+        return super().delete(*args, **kwargs)
+
+    def put(self, *args, **kwargs):
+        if x := self.check_allow_single():
+            return x
+        return super().put(*args, **kwargs)
+
+    def patch(self, *args, **kwargs):
+        if x := self.check_allow_single():
+            return x
+        return super().patch(*args, **kwargs)
+
+
     def get_admin_url(self):
-        model = self.provider.model
-        return reverse(
-            f"admin:{model._meta.app_label}_{model._meta.model_name}_change",
-            args=[self.get_object().id],
-        )
+        model: Model = self.provider.model
+        try:
+            return reverse(
+                f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+            )
+        except NoReverseMatch:
+            return None
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)

@@ -365,6 +365,23 @@ properties:
   color: { type: string }
 ```
 
+## Course
+
+`term` and `position` can be used for a listing query string to filter by them. (e.g. `GET /api/v3/obj/course?term=1&position=1`
+
+
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/course.json
+type: object
+properties:
+  position: { type: integer }
+  code: { type: string }
+  description: { type: string }
+  term : { type: integer }
+  submitter: { type: integer }
+```
+
 ## Banners
 `GET v3/banners`
 
