@@ -58,9 +58,8 @@ def comments(
 
     comment_set = (
         queryset.annotate(
-            child_count=Count("children"),
             has_children=Case(
-                When(child_count__gt=0, then=True),
+                When(children__gt=0, then=True),
                 default=False,
                 output_field=BooleanField(),
             ),
