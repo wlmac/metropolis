@@ -1,25 +1,44 @@
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from rest_framework import permissions
+from rest_framework import permissions, serializers
 
 from core.models import Course
 from .base import BaseProvider
-from ...serializers import CourseSerializer
+
+
+class ReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.method in ('GET', 'HEAD', 'OPTIONS')
+
+
+class Serializer(serializers.ModelSerializer):
+    position = serializers.IntegerField(min_value=1, max_value=4)
+
+    class Meta:
+        model = Course
+        fields = ["id", "code", "description", "position"]
+
+
+class CreateSerializer(Serializer):
+    class Meta:
+        model = Course
+        fields = ["id", "code", "description", "position", "term"]
 
 
 class CourseProvider(BaseProvider):
-    serializer_class = CourseSerializer
     model = Course
     allow_single = False
     listing_filters = ["term", "position"]
 
     @property
+    def serializer_class(self):
+        return CreateSerializer if self.request.kind == "new" else Serializer
+
+    @property
     def permission_classes(self):
-        return (
-            [permissions.DjangoModelPermissions]
-            if self.request.mutate
-            else [permissions.AllowAny]
-        )
+        if self.request.kind == "new":
+            return [permissions.AllowAny]
+        return [ReadOnly]
 
     def get_listing_queryset(self, request):
         query_params = request.query_params

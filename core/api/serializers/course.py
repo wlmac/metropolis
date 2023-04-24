@@ -16,7 +16,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Course
-        fields = "__all__"
+        fields = ["id", "code", "description", "position"]
 
 
 class EventSerializer(serializers.ModelSerializer):

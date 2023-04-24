@@ -371,17 +371,54 @@ properties:
 
 **NOTE:** `term` is the term *id*, not the term *position*.
 
-
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/course.json
 type: object
 properties:
-  position: { type: integer }
+  id: { type: integer }
   code: { type: string }
   description: { type: string }
-  term : { type: integer }
-  submitter: { type: integer }
+  position: { type: integer }
+```
+
+## Term
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/term.json
+type: object
+properties:
+  id: { type: integer }
+  name: { type: string }
+  description: { type: string }
+  timetable_format: { type: string }
+  start_date: { type: string, format: date-time }
+  end_date: { type: string, format: date-time }
+  is_frozen: { type: boolean }
+```
+
+## Timetable
+When viewing:
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/timetable-view.json
+type: object
+properties:
+  term:
+    "$ref": /api/v3/schema/term.json
+  courses:
+    type: array
+    items: { "$ref": /api/v3/schema/course.json }
+
+```
+When mutating:
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/timetable-mutate.json
+type: object
+properties:
+  term: { type: integer }
+  courses: { type: array, items: integer }
 ```
 
 ## Banners
