@@ -81,7 +81,7 @@ class CalendarFeed(ICalFeed, View):
         return dt.hour == hour and dt.minute == minute and dt.second == second
 
     def item_rrule(self, item: models.Event):
-        if item.reoccurrences and item.reoccurrences.rule:
+        if hasattr(item, "reoccurrences") and item.reoccurrences.rule:
             return item.reoccurrences.rule
         return None
 
