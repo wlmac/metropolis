@@ -387,6 +387,8 @@ class AnnouncementAdmin(PostAdmin):
                 kwargs["queryset"] = models.User.objects.filter(
                     organizations_leading__in=orgs,
                 )
+                if request.user.is_superuser:
+                    kwargs["queryset"] = models.User.objects.all()
             elif db_field.name == "supervisor":
                 kwargs["queryset"] = models.User.objects.filter(
                     organizations_supervising__in=orgs,
