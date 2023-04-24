@@ -51,6 +51,7 @@ def setup_periodic_tasks(sender, **kwargs):
 
 @app.task
 def notif_broker_announcement(obj_id):
+    logger.info(f"notif_broker_announcement for {obj_id}")
     ann = Announcement.objects.get(id=obj_id)
     affected = users_with_token()
     category = ""
@@ -62,6 +63,7 @@ def notif_broker_announcement(obj_id):
             | Q(organizations__in=[ann.organization])
         )
         category = "ann.personal"
+    logger.info(f"notif_broker_announcement2 for {obj_id} affects {u}")
     for u in affected.all():
         notif_single.delay(
             u.id,
