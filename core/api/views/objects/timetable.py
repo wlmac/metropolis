@@ -12,6 +12,7 @@ from ....models import Timetable
 class ViewSerializer(serializers.ModelSerializer):
     term = TermSerializer()
     courses = CourseSerializer(many=True)
+
     class Meta:
         model = Timetable
         ordering = ["-term__start_date"]
@@ -27,7 +28,7 @@ class MutateSerializer(serializers.ModelSerializer):
 
 class Identity(permissions.BasePermission):
     def has_object_permission(self, request, view, timetable):
-        if request.method in ('GET', 'HEAD', 'OPTIONS'):
+        if request.method in ("GET", "HEAD", "OPTIONS"):
             return True
         if request.user == timetable.owner:
             return True
@@ -35,7 +36,9 @@ class Identity(permissions.BasePermission):
 
 
 class TimetableProvider(BaseProvider):
-    permission_classes = [Identity] # redundant but in case we make a mistake with the queryset
+    permission_classes = [
+        Identity
+    ]  # redundant but in case we make a mistake with the queryset
     model = Timetable
 
     @property
@@ -63,7 +66,9 @@ class TimetableProvider(BaseProvider):
     def get_last_modified_queryset(self):
         return (
             LogEntry.objects.filter(
-                content_type=ContentType.objects.get(app_label="core", model="timetable")
+                content_type=ContentType.objects.get(
+                    app_label="core", model="timetable"
+                )
             )
             .latest("action_time")
             .action_time

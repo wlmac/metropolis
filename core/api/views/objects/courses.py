@@ -8,7 +8,7 @@ from .base import BaseProvider
 
 class ReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.method in ('GET', 'HEAD', 'OPTIONS')
+        return request.method in ("GET", "HEAD", "OPTIONS")
 
 
 class Serializer(serializers.ModelSerializer):
