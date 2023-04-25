@@ -28,6 +28,7 @@ async function authenticate({ request }) {
       password: 'verysecure',
     },
   });
+  console.log("authenticate: auth:", auth);
   expect(auth.ok()).toBeTruthy();
   const tokens = await auth.json();
   const ctx = await await req.newContext({
@@ -38,6 +39,7 @@ async function authenticate({ request }) {
   // NOTE: not checking refresh token for now (token should work aniway)
   // check access token works
   const res1 = await ctx.get('/api/me');
+  console.log("authenticate: res1:", res1);
   expect(res1.ok()).toBeTruthy();
   expect(res1.status()).toBe(200);
   return ctx;
