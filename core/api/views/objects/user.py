@@ -31,7 +31,6 @@ class Serializer(serializers.ModelSerializer):
         )
 
     def validate(self, data):
-        print(data)
         if ("password" in data) != ("old_password" in data):
             raise serializers.ValidationError(
                 "password and old_password must be in pairs"
