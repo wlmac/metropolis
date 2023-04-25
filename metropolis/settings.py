@@ -965,6 +965,13 @@ SIMPLE_JWT = {
 }
 # Event calender Settings
 
+DEFAULT_REPEAT_CHOICES = (
+    ("RRULE:FREQ=DAILY", "Daily"),
+    ("RRULE:FREQ=WEEKLY", "Weekly"),
+    ("RRULE:FREQ=MONTHLY", "Monthly"),
+    ("RRULE:FREQ=YEARLY", "Yearly"),
+)
+CALCULATE_YEARS_IN_ADVANCE = 2
 
 ICAL_PADDING = timedelta(days=4 * 7)  # iCalendar Feed
 REOCCURRENCE_CUTOFF = timedelta(
