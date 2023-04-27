@@ -12,7 +12,7 @@ class ReadOnly(permissions.BasePermission):
 
 
 class Serializer(serializers.ModelSerializer):
-    position = serializers.IntegerField(min_value=1, max_value=4)
+    position = serializers.IntegerField(min_value=1, max_value=6)  # 5,6 are for spares.
 
     class Meta:
         model = Course
