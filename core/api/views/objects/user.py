@@ -103,7 +103,7 @@ class ListSerializer(serializers.ModelSerializer):
 def tdsb_email(value):
     if not (
         value.endswith(settings.TEACHER_EMAIL_SUFFIX)
-        and value.endswith(settings.STUDENT_EMAIL_SUFFIX)
+        or value.endswith(settings.STUDENT_EMAIL_SUFFIX)
     ):
         raise serializers.ValidationError("Must be either a teacher or student email.")
 
