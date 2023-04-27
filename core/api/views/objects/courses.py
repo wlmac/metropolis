@@ -24,6 +24,10 @@ class CreateSerializer(Serializer):
         model = Course
         fields = ["id", "code", "description", "position", "term"]
 
+    def create(self, validated_data):
+        if Course.objects.filter(code=validated_data["code"], term=validated_data["term"]).exists():
+            raise serializers.ValidationError("Course already exists")
+        return super().create(validated_data)
 
 class CourseProvider(BaseProvider):
     model = Course
