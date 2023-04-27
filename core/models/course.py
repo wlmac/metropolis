@@ -365,7 +365,7 @@ class RecurrenceRule(models.Model):
         rrule_part = str(rule).split("RRULE:")[
             1
         ]  # FREQ=WEEKLY;INTERVAL=2;COUNT=54;BYDAY=TU todo remove
-        return rrule_part
+        return dict(RRULE=rrule_part)
 
 
 class Event(models.Model):
