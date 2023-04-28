@@ -222,11 +222,20 @@ class ObjectList(
 
         return queryset
 
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         allow_list = getattr(self.provider, "allow_list", True)
         if not allow_list:
             return Response({"detail": "listing not allowed"}, status=422)
-        return super().get(*args, **kwargs)
+        response = super().get(self, request, *args, **kwargs)
+        if response.data["next"]:
+            response.data["next"] = response.data["next"].replace(
+                "http://", "https://"
+            )
+        if response.data["previous"]:
+            response.data["previous"] = response.data["previous"].replace(
+                "http://", "https://"
+            )
+        return response
 
 
 class LookupField:
