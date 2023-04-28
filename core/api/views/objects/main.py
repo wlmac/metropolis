@@ -176,7 +176,6 @@ class ObjectAPIView(generics.GenericAPIView):
 
         except (JSONDecodeError, UnicodeDecodeError):
             raise BadRequest("Invalid JWT, token is malformed.")
-
         except Exception as exc:
             response = self.handle_exception(exc)
 
