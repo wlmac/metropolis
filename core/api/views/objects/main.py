@@ -1,4 +1,5 @@
 import os
+from json import JSONDecodeError
 from typing import Dict
 
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
@@ -80,6 +81,9 @@ class ObjectAPIView(generics.GenericAPIView):
         self.serializer_class = provider.serializer_class
         self.lookup_fields = getattr(
             provider, "lookup_fields", getattr(provider, "lookup_field", ["id", "pk"])
+        )
+        self.listing_filters = getattr(
+            provider, "listing_filters", getattr(provider, "listing_filter", ["id", "pk"])
         )
         # NOTE: better to have the following if after initial, but this is easier
 
@@ -170,7 +174,7 @@ class ObjectAPIView(generics.GenericAPIView):
             kwargs.pop("type")
             response = handler(request, *args, **kwargs)
 
-        except ValueError:
+        except (JSONDecodeError, UnicodeDecodeError):
             raise BadRequest("Invalid JWT, token is malformed.")
 
         except Exception as exc:
@@ -206,7 +210,17 @@ class ObjectList(
             return None
 
     def get_queryset(self):
-        return self.provider.get_queryset(self.request)
+        queryset = self.provider.get_queryset(self.request)
+        query_params = self.request.query_params
+        filters = {}
+        for lookup_filter, lookup_value in query_params.items():
+            if lookup_filter in self.listing_filters:
+
+                filters[lookup_filter] = int(lookup_value)
+        if filters:
+            return queryset.filter(**filters)
+
+        return queryset
 
     def get(self, *args, **kwargs):
         allow_list = getattr(self.provider, "allow_list", True)

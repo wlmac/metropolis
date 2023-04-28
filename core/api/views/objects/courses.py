@@ -44,22 +44,8 @@ class CourseProvider(BaseProvider):
             return [permissions.AllowAny]
         return [ReadOnly]
 
-    def get_listing_queryset(self, request):
-        query_params = request.query_params
-        filters = {}
-        for lookup_filter, lookup_value in query_params.items():
-            if lookup_filter in self.listing_filters:
-                filters[lookup_filter] = int(lookup_value)
-
-        if filters:
-            return Course.objects.filter(**filters).order_by("position")
-
-        return Course.objects.order_by("term")
-
     def get_queryset(self, request):
-        if self.request.kind == "list":
-            return self.get_listing_queryset(request)
-        return Course.objects.all()
+        return Course.objects.all().order_by("term", "position").reverse()
 
     def get_last_modified(self, view):
         return view.get_object().last_modified_date
