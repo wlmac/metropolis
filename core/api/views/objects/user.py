@@ -2,7 +2,8 @@ import base64
 import hashlib
 
 from django.conf import settings
-from django.utils import timezone
+from django.contrib.admin.models import LogEntry
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers, validators
 
 from .base import BaseProvider
@@ -191,7 +192,15 @@ class UserProvider(BaseProvider):
         return models.User.objects.filter(is_active=True)
 
     def get_last_modified(self, view):
-        return timezone.now()
+        return view.get_object().last_modified_date
 
     def get_last_modified_queryset(self):
-        return timezone.now()
+        return (
+            LogEntry.objects.filter(
+                content_type=ContentType.objects.get(
+                    app_label="core", model="user"
+                )
+            )
+            .latest("action_time")
+            .action_time
+        )
