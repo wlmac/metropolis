@@ -125,7 +125,13 @@ This is the *content* in CommonMark!
 No emojis :blobsadrain:.
 ```
 
-**Success** returns a 2xx code. 
+**Success** returns a 2xx code.
+
+## (List of) Objects
+You can add **Listing Filters** where supported[^1] to narrow down results. You can also chain these filters together and the system will **AND** them.
+e.g. `GET /api/v3/obj/announcement?tags=10&tags=42` will return all announcements that have **BOTH** the tags 10 and 42.
+
+
 
 ## Error
 Errors are returned with their corresponding fields.
@@ -453,3 +459,6 @@ properties:
 
 Do `OPTIONS v3/notif/token` for docs.
 
+
+
+[^1]: check object doc to see supported args. 
