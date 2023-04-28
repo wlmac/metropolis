@@ -248,7 +248,7 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
         return self.provider.get_queryset(self.request)
 
     def post(self, *args, **kwargs):
-        if not self.provider.agutllow_new:
+        if not self.provider.allow_new:
             return Response({"detail": "creating not allowed"}, status=422)
         return super().post(*args, **kwargs)
 
