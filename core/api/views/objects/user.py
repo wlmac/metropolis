@@ -197,9 +197,7 @@ class UserProvider(BaseProvider):
     def get_last_modified_queryset(self):
         return (
             LogEntry.objects.filter(
-                content_type=ContentType.objects.get(
-                    app_label="core", model="user"
-                )
+                content_type=ContentType.objects.get(app_label="core", model="user")
             )
             .latest("action_time")
             .action_time
