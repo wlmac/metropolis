@@ -83,7 +83,9 @@ class ObjectAPIView(generics.GenericAPIView):
             provider, "lookup_fields", getattr(provider, "lookup_field", ["id", "pk"])
         )
         self.listing_filters = getattr(
-            provider, "listing_filters", getattr(provider, "listing_filter", ["id", "pk"])
+            provider,
+            "listing_filters",
+            getattr(provider, "listing_filter", ["id", "pk"]),
         )
         # NOTE: better to have the following if after initial, but this is easier
 
@@ -214,7 +216,6 @@ class ObjectList(
         filters = {}
         for lookup_filter, lookup_value in query_params.items():
             if lookup_filter in self.listing_filters:
-
                 filters[lookup_filter] = int(lookup_value)
         if filters:
             return queryset.filter(**filters)
@@ -247,7 +248,7 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
         return self.provider.get_queryset(self.request)
 
     def post(self, *args, **kwargs):
-        if not self.provider.allow_new:
+        if not self.provider.agutllow_new:
             return Response({"detail": "creating not allowed"}, status=422)
         return super().post(*args, **kwargs)
 
