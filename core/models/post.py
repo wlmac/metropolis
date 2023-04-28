@@ -7,6 +7,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import QuerySet
 from django.urls import reverse
 from django.utils import timezone
 
@@ -281,7 +282,7 @@ class Announcement(Post):
         return cls.objects.filter(status="a")
 
     @classmethod
-    def get_all(cls, user=None):
+    def get_all(cls, user=None) -> QuerySet:
         approved_announcements = cls.get_approved()
 
         feed_all = approved_announcements.filter(is_public=True)
