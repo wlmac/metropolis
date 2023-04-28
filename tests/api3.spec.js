@@ -7,7 +7,7 @@ test('sanity', async ({ page }) => {
   await expect(page).toHaveTitle(/Metropolis/);
 });
 
-test('sanity 2', async ({ request }) => {
+test('Check OK', async ({ request }) => {
   const urls = [
     '/api/version',
     '/api/v3/staff',
@@ -31,7 +31,7 @@ async function authenticate({ request }) {
   console.log("authenticate: auth:", auth);
   expect(auth.ok()).toBeTruthy();
   const tokens = await auth.json();
-  const ctx = await await req.newContext({
+  const ctx = await req.newContext({
     extraHTTPHeaders: {
       "Authorization": `Bearer ${tokens.access}`,
     },
