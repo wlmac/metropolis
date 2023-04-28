@@ -153,7 +153,7 @@ class Inner(permissions.BasePermission):
 
 class AnnouncementProvider(BaseProvider):
     model = Announcement
-    listing_filters = ["tags"]
+    listing_filters = ["tags", "organization"]
 
     @property
     def permission_classes(self):
@@ -168,7 +168,6 @@ class AnnouncementProvider(BaseProvider):
         return (
             OneSerializer if self.request.kind in ("single", "retrieve") else Serializer
         )
-
     def get_queryset(self, request):
         return Announcement.get_all(request.user)
 
