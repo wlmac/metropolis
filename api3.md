@@ -129,14 +129,15 @@ No emojis :blobsadrain:.
 
 ## (List of) Objects
 You can add **Listing Filters** where supported[^1] to narrow down results. You can also chain these filters together and the system will **OR** them.
-e.g. `GET /api/v3/obj/announcement?tags=10&tags=42` will return all announcements that have **EITHER** the tags 10 or 42.
+e.g. `GET /api/v3/obj/announcement?tags=10&tags=42` will return all announcements that have either the tags _10 **OR** 42_.
 
-but wait! what if you want to find all objects that have **EITHER** tag 10 **OR** 42? well, you can use the `&search_type` query param which accepts either `AND` or `OR` as its value (default is OR).
+__**BUT WAIT!**__ what if you want to find all objects that have **BOTH** tag _10_ **AND** 42? _well_, you can use the `&search_type` query param which accepts either `AND` or `OR` as its value (default is OR).
 
 ###### Examples
 
-- `GET /api/v3/obj/announcement?tags=10&tags=42&search_type=OR` will return all announcements that have **EITHER** tag 10 **OR** 42.
-- `GET /api/v3/obj/announcement?tags=10&tags=42&organization=83&search_type=AND` will return all announcements that have **BOTH** tag 10, 42 **AND** is from the organization with ID 83.
+- `GET /api/v3/obj/course?position=3&term=2&search_type=AND` will return all are **BOTH** in position _3_ **AND** in term _2_.
+- `GET /api/v3/obj/announcement?tags=10&tags=42&organization=83&search_type=AND` will return all announcements that have **BOTH** tag _10_, _42_ **AND** is from the organization with ID _83_.
+- `GET /api/v3/obj/announcement?tags=10&tags=42&search_type=OR` will return all announcements that have **EITHER** tag _10_ **OR** _42_.
 
 
 
