@@ -67,7 +67,6 @@ class BlogPostAuthorListFilter(admin.SimpleListFilter):
     parameter_name = "author"
 
     def lookups(self, request, model_admin):
-
         qs = models.User.objects.filter(blogposts_authored__isnull=False).distinct()
         for author in qs:
             yield (author.pk, author.username)

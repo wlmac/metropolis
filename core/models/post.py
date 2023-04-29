@@ -118,7 +118,7 @@ class Comment(PostInteraction):
             raise ValidationError("A Comment cannot be a parent of itself.")
         return super().clean()
 
-    def get_children(self, su: Optional = False):
+    def get_children(self, su: Optional = False, all: Optional = False) -> QuerySet:
         comments = Comment.objects.filter(parent=self)
         if su:
             filtered = [c.pk for c in comments if not c.deleted]
@@ -126,6 +126,9 @@ class Comment(PostInteraction):
             filtered = [c.pk for c in comments if all([c.live, not c.deleted])]
 
         last = Comment.objects.filter(pk__in=filtered)
+        if all:
+            for comment in last:
+                last = last | comment.get_children(all=True)
         return last
 
     def delete(self: Comment, using=None, keep_parents=False, **kwargs):

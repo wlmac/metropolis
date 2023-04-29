@@ -33,7 +33,11 @@ from .forms import (
     UserAdminForm,
 )
 from .models import Comment
-from .utils.filters import OrganizationListFilter, BlogPostAuthorListFilter, PostTypeFilter
+from .utils.filters import (
+    OrganizationListFilter,
+    BlogPostAuthorListFilter,
+    PostTypeFilter,
+)
 
 User = get_user_model()
 

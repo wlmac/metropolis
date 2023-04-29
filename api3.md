@@ -128,8 +128,16 @@ No emojis :blobsadrain:.
 **Success** returns a 2xx code.
 
 ## (List of) Objects
-You can add **Listing Filters** where supported[^1] to narrow down results. You can also chain these filters together and the system will **AND** them.
-e.g. `GET /api/v3/obj/announcement?tags=10&tags=42` will return all announcements that have **BOTH** the tags 10 and 42.
+You can add **Listing Filters** where supported[^1] to narrow down results. You can also chain these filters together and the system will **OR** them.
+e.g. `GET /api/v3/obj/announcement?tags=10&tags=42` will return all announcements that have **EITHER** the tags 10 or 42.
+
+but wait! what if you want to find all objects that have **EITHER** tag 10 **OR** 42? well, you can use the `&search_type` query param which accepts either `AND` or `OR` as its value (default is OR).
+
+###### Examples
+
+- `GET /api/v3/obj/announcement?tags=10&tags=42&search_type=OR` will return all announcements that have **EITHER** tag 10 **OR** 42.
+- `GET /api/v3/obj/announcement?tags=10&tags=42&organization=83&search_type=AND` will return all announcements that have **BOTH** tag 10, 42 **AND** is from the organization with ID 83.
+
 
 
 
@@ -157,6 +165,11 @@ properties:
 ```
 
 ## Announcement
+###### When listing
+You can use the following filters:
+- `tags`: a tag or comma seperated list of tag IDs to filter by (AND)
+- `author`: a list of author IDs to filter by (OR)
+- `organization`: an organization ID to filter by
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/announcement.json

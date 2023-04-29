@@ -35,7 +35,7 @@ class CreateSerializer(Serializer):
 class CourseProvider(BaseProvider):
     model = Course
     allow_single = False
-    listing_filters = ["term", "position"]
+    listing_filters = {"term": int, "position": int}
 
     @property
     def serializer_class(self):

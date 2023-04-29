@@ -1,6 +1,6 @@
 import os
 from json import JSONDecodeError
-from typing import Dict
+from typing import Dict, Callable, List
 
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model, Q
@@ -37,7 +37,9 @@ def gen_get_provider(mapping: Dict[str, str]):
         """
         if provider_name not in ProvReqNames:
             raise BadRequest(
-                "Invalid object type. Valid types are: " + ", ".join(ProvReqNames) + "."
+                "Object type not found. Valid types are: "
+                + ", ".join(ProvReqNames)
+                + "."
             )
         return provClassMapping[provider_name]
 
@@ -210,15 +212,45 @@ class ObjectList(
         except NoReverseMatch:
             return None
 
+    def __append_filter__(self, lookup_filter, lookup_value, filters) -> List:
+        if lookup_filter in self.listing_filters.keys():
+            lookup_type: Callable = self.listing_filters[lookup_filter]
+            if isinstance(lookup_value, list):
+                lookup_value = [lookup_type(value) for value in lookup_value]
+                filters.setdefault(lookup_filter, []).extend(lookup_value)
+            else:
+                filters.setdefault(lookup_filter, []).append(lookup_type(lookup_value))
+        return filters
+
     def get_queryset(self):
         queryset = self.provider.get_queryset(self.request)
-        query_params = self.request.query_params
+        query_params = dict(self.request.query_params.copy())
+
+        search_type = query_params.pop("search_type", "OR")[0].upper()
+        if search_type not in ["OR", "AND"]:
+            search_type = "OR"
+
         filters = {}
         for lookup_filter, lookup_value in query_params.items():
-            if lookup_filter in self.listing_filters:
-                filters[lookup_filter] = int(lookup_value)
+            if lookup_filter in self.listing_filters.keys():
+                filters = self.__append_filter__(lookup_filter, lookup_value, filters)
+
         if filters:
-            return queryset.filter(**filters)
+            if search_type == "OR":
+                q_objects = Q()
+                for field, values in filters.items():
+                    q_objects |= Q(**{f"{field}__in": values})
+                return queryset.filter(q_objects)
+            else:  # AND
+                query = Q()
+                for field, values in filters.copy().items():
+                    if isinstance(values, list):
+                        for value in values:
+                            query &= Q(**{f"{field}__exact": value})
+                        del filters[field]
+                print(f"query: {query}")
+                print(f"filters: {filters}")
+                return queryset.filter(query).filter(**filters)
 
         return queryset
 
@@ -228,9 +260,7 @@ class ObjectList(
             return Response({"detail": "listing not allowed"}, status=422)
         response = super().get(self, request, *args, **kwargs)
         if response.data["next"]:
-            response.data["next"] = response.data["next"].replace(
-                "http://", "https://"
-            )
+            response.data["next"] = response.data["next"].replace("http://", "https://")
         if response.data["previous"]:
             response.data["previous"] = response.data["previous"].replace(
                 "http://", "https://"
