@@ -153,7 +153,7 @@ class Inner(permissions.BasePermission):
 
 class AnnouncementProvider(BaseProvider):
     model = Announcement
-    listing_filters = {"tags": int, "organization": int}
+    listing_filters = {"tags": int, "organization": int, "author": int}
 
     @property
     def permission_classes(self):

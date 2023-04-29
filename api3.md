@@ -168,9 +168,9 @@ properties:
 ## Announcement
 ###### When listing
 You can use the following filters:
-- `tags`: a tag or comma seperated list of tag IDs to filter by (AND)
-- `author`: a list of author IDs to filter by (OR)
-- `organization`: an organization ID to filter by
+- `tags`: a tag ID to filter by. 
+- `author`: an author ID to filter by
+- `organization`: an organization ID to filter by. (cannot be used with along with itself when using `AND` e.g. `?organization=1&organization=2&search_type=AND` is invalid)
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/announcement.json
