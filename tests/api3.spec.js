@@ -45,6 +45,10 @@ async function authenticate({request}) {
     return ctx;
 }
 
+test('token auth', async({request}) => {
+    await authenticate({request})
+});
+
 test('expo notif token', async ({request}) => {
     const ctx = await authenticate({request});
     const fakeTokens = ["fakeExpoToken1", "ExponentPushToken[fakeExpoToken2]"];

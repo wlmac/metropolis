@@ -24,7 +24,7 @@ class SupervisorOrExec(permissions.BasePermission):
     def has_object_permission(self, request, view, organization):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user in {*organization.supervisors} | {*organization.execs}:
+        if request.user in organization.supervisors.all() or request.user in organization.execs.all():
             return True
         return False
 
