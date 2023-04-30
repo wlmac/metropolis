@@ -2,15 +2,22 @@ from django.utils import timezone
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
+from ...serializers.custom import TagRelatedField, PrimaryKeyAndSlugRelatedField
 from ...utils.posts import likes, comments
+from .... import models
 from ....models import Exhibit
 
 
 class Serializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
+    tags = TagRelatedField()
+    author = PrimaryKeyAndSlugRelatedField(
+        slug_field="username", queryset=models.User.objects.all()
+    )
 
-    def get_likes(self, obj: Exhibit) -> int:
+    @staticmethod
+    def get_likes(obj: Exhibit) -> int:
         return likes(obj)
 
     def get_comments(self, obj: Exhibit):
@@ -37,9 +44,9 @@ class Serializer(serializers.ModelSerializer):
 
 
 class ExhibitProvider(BaseProvider):
-    serializer_class = Serializer
     model = Exhibit
     lookup_fields = ["id", "slug"]
+    serializer_class = Serializer
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -60,8 +67,10 @@ class ExhibitProvider(BaseProvider):
                 is_published=True, show_after__lte=timezone.now()
             )
 
-    def get_last_modified(self, view):
+    @staticmethod
+    def get_last_modified(view):
         return view.get_object().last_modified_date
 
-    def get_last_modified_queryset(self):
+    @staticmethod
+    def get_last_modified_queryset():
         return Exhibit.objects.latest("last_modified_date").last_modified_date

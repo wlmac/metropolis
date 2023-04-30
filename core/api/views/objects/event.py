@@ -8,13 +8,18 @@ from rest_framework.exceptions import ParseError
 
 from .announcement import Inner
 from .base import BaseProvider
-from .... import models
-from ....models import Event
+from ...serializers.custom import TagRelatedField, PrimaryKeyAndSlugRelatedField
+from ....models import Event, Organization
 
 AOE = datetime.timezone(datetime.timedelta(hours=-12), name="AoE")
 
 
 class SuperficialSerializer(serializers.ModelSerializer):
+    tags = TagRelatedField()
+    organization = PrimaryKeyAndSlugRelatedField(
+        slug_field="name", queryset=Organization.objects.all()
+    )
+
     class Meta:
         model = Event
         fields = [
@@ -30,6 +35,11 @@ class SuperficialSerializer(serializers.ModelSerializer):
 
 
 class DetailSerializer(serializers.ModelSerializer):
+    tags = TagRelatedField()
+    organization = PrimaryKeyAndSlugRelatedField(
+        slug_field="name", queryset=Organization.objects.all()
+    )
+
     class Meta:
         model = Event
         fields = "__all__"
@@ -52,7 +62,7 @@ class EventProvider(BaseProvider):
         )
 
     def get_queryset(self, request):
-        q = models.Event.objects.all()
+        q = Event.objects.all()
 
         def parse(name):
             raw = self.request.query_params.get(name)
@@ -86,7 +96,8 @@ class EventProvider(BaseProvider):
             )
         return q
 
-    def get_last_modified(self, view):
+    @staticmethod
+    def get_last_modified(view):
         return (
             LogEntry.objects.filter(
                 content_type=ContentType.objects.get(app_label="core", model="event")
@@ -96,7 +107,8 @@ class EventProvider(BaseProvider):
             .action_time
         )
 
-    def get_last_modified_queryset(self):
+    @staticmethod
+    def get_last_modified_queryset():
         return (
             LogEntry.objects.filter(
                 content_type=ContentType.objects.get(app_label="core", model="event")

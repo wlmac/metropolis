@@ -36,7 +36,7 @@ def comments(
         replies: if True, use obj.get_children() if False, use obj.comments... (default False)
 
     Returns a QuerySet (List) of comments for a given post.
-    If the user is not a superuser or has the view_flagged permission, only live comments will be returned.
+    If the user is not a superuser or has the view_flagged permission, only live comments will be returned. todo check for bugs here.
     """
     if (
         context["request"].user.has_perm("core.comment.view_flagged")

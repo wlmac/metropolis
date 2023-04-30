@@ -12,7 +12,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 from .choices import announcement_status_choices
-
 # from ..api.utils.profanity import predict
 from ..utils.file_upload import file_upload_path_generator
 
@@ -299,6 +298,8 @@ class Announcement(Post):
         return feed_all
 
     def editable(self, user=None):
+        if user.is_superuser:
+            return True
         if user is None:
             return False
         return user in (org := self.organization).supervisors.all() | org.execs.all()
