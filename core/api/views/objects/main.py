@@ -253,7 +253,7 @@ class ObjectList(
             return None
         for lookup_filter, lookup_value in query_params.items():
             if lookup_filter not in self.listing_filters.keys():
-                continue  # skip unknown bjm filters. TODO: raise Bad Request?
+                raise BadRequest(f'{lookup_filter} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {", ".join(self.listing_filters.keys())}.')
             lookup_type: Callable = self.listing_filters[lookup_filter]
             if isinstance(lookup_value, list):
                 filters.append((f"{lookup_filter}__in", lookup_value))
