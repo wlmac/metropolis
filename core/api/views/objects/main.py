@@ -215,23 +215,45 @@ class ObjectList(
         except NoReverseMatch:
             return None
 
-    @staticmethod
-    def __convert_query_params__(query_params: QueryDict) -> (Dict, str):
-        params = dict(query_params.copy())
-        if "limit" in params:
-            del params["limit"]
-        if "offset" in params:
-            del params["offset"]
-        search_type = params.pop("search_type", "OR")[0].upper()
+    def __convert_query_params__(self, query_params: QueryDict) -> (List[Tuple], str):
+        """
+        Removes non-filter params from query_params and converts them to the correct type.
+        :param query_params: QueryDict
+        :return: dict, str (params, search_type)
+        """
+        params = list(dict(query_params.copy()).items())
+        k_filters: List[Tuple] = []
+        search_type = query_params.get("search_type", "OR").upper()
+        print(f"search_type: {search_type}")
         if search_type not in ["OR", "AND"]:
             search_type = "OR"
-        for k, v in params.copy().items():
-            if len(v) == 1:
-                params[k] = v[0]
-            # params[k] = self.__convert_type__(...) # todo move __convert_type__ usage to here
 
-        print(f"{params=}")
-        return params, search_type
+        for index, item in enumerate(params.copy()):
+            lookup_filter, lookup_value = item
+            if lookup_filter in [
+                "limit",
+                "offset",
+                "search_type",
+            ]:  # ignore non-filtering params
+                continue
+            if lookup_filter not in self.listing_filters.keys():
+                raise BadRequest(
+                    f'{lookup_filter} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {", ".join(self.listing_filters.keys())}.'
+                )
+            lookup_type: Callable = self.listing_filters[lookup_filter]
+            if len(lookup_value) == 1:
+                params[lookup_filter] = lookup_value[0]
+            if type(lookup_value) == list:
+                for l_item in lookup_value:
+                    k_filters.append(
+                        (lookup_filter, self.__convert_type__(l_item, lookup_type))
+                    )
+            else:
+                k_filters.append(
+                    (lookup_filter, self.__convert_type__(lookup_value, lookup_type))
+                )
+
+        return k_filters, search_type
 
     def __convert_type__(self, lookup_value: str, lookup_type: Callable) -> Any:
         lookup_value = lookup_value.casefold()
@@ -244,42 +266,23 @@ class ObjectList(
                 raise BadRequest(
                     f'Invalid value for boolean filter: {lookup_value}. Accepted values for True are {" or ".join(self.TRUE_VALUES)} and for False they are {" or ".join(self.FALSE_VALUES)}'
                 )
+
         return lookup_type(lookup_value)
 
     def __compile_filters__(self, query_params: Dict) -> List[Tuple]:
-        print(f"{query_params=}")
         filters = []
         if len(query_params) == 0:  # No query params, return None to avoid filtering.
             return None
-        for lookup_filter, lookup_value in query_params.items():
-            if lookup_filter not in self.listing_filters.keys():
-                raise BadRequest(f'{lookup_filter} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {", ".join(self.listing_filters.keys())}.')
-            lookup_type: Callable = self.listing_filters[lookup_filter]
+        for param in query_params:
+            lookup_filter, lookup_value = param
             if isinstance(lookup_value, list):
                 filters.append((f"{lookup_filter}__in", lookup_value))
                 for value in lookup_value:
-                    filters.append(
-                        (lookup_filter, self.__convert_type__(value, lookup_type))
-                    )
+                    filters.append((lookup_filter, value))
             else:
-                filters.append(
-                    (lookup_filter, self.__convert_type__(lookup_value, lookup_type))
-                )
+                filters.append((lookup_filter, lookup_value))
         print(f"{filters=}")
         return filters
-
-    """
-    todo impl this style:
-    
-    
-announcements = Announcement.objects.filter(
-    organization_id=1,
-    tags__in=[2, 32]
-).distinct().filter(
-    Q(tags=2) & Q(tags=32)
-)
-
-    """
 
     def get_queryset(self):
         queryset: QuerySet = self.provider.get_queryset(self.request)
@@ -292,7 +295,6 @@ announcements = Announcement.objects.filter(
             query = Q()
             for item in filters:
                 field, values = item
-                print(f"search_type: {search_type}, {field}: {values}")
                 query.add(Q(**{field: values}), Q.AND if search_type == "AND" else Q.OR)
             print(f"Q: {query}")
 
