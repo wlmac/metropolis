@@ -24,7 +24,10 @@ class SupervisorOrExec(permissions.BasePermission):
     def has_object_permission(self, request, view, organization):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user in organization.supervisors.all() or request.user in organization.execs.all():
+        if (
+            request.user in organization.supervisors.all()
+            or request.user in organization.execs.all()
+        ):
             return True
         return False
 
@@ -33,7 +36,14 @@ class OrganizationProvider(BaseProvider):
     serializer_class = Serializer
     model = models.Organization
     allow_new = False
-    listing_filters = {"tags": int, "owner": int, "supervisors": int, "execs": int, "is_active": bool, "is_open": bool}
+    listing_filters = {
+        "tags": int,
+        "owner": int,
+        "supervisors": int,
+        "execs": int,
+        "is_active": bool,
+        "is_open": bool,
+    }
     lookup_fields = ["id", "slug"]
 
     @property
