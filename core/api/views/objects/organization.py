@@ -33,6 +33,7 @@ class OrganizationProvider(BaseProvider):
     serializer_class = Serializer
     model = models.Organization
     allow_new = False
+    listing_filters = {"tags": int, "owner": int, "supervisors": int, "execs": int, "is_active": bool, "is_open": bool}
     lookup_fields = ["id", "slug"]
 
     @property
