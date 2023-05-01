@@ -3,12 +3,18 @@ services:
     image: postgres
     environment:
       POSTGRES_PASSWORD: "changeme_metropolis_password"
-      POSTGRES_USER: "metropolis_user"
-      POSTGRES_DB: "metropolis_db"
+      POSTGRES_USER: "metropolis_superuser"
+      POSTGRES_DB: "metropolis"
       # TODO: load secrets from files?
       # TODO: backup-on-start?
+    volumes:
+      - ${PWD}/postgres-init-db.sh:/docker-entrypoint-initdb.d/postgres-init-db.sh
     networks:
       - postgres
+    healthcheck:
+      test: ["CMD", "bash", "-c", "PGPASSWORD=changeme_metropolis_password psql -U metropolis_superuser metropolis"]
+      interval: 10s
+      timeout: 60s
   gunicorn:
     image: ghcr.io/wlmac/metropolis
     build: .
@@ -16,6 +22,11 @@ services:
     entrypoint: bash
     environment:
       METROPOLIS_AUTOSETUP: "yes"
+    ports:
+      - "0.0.0.0:28780:28780" # force only IPv4 (only have iptables rules on IPv4)
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - postgres
       - gunicorn
@@ -30,6 +41,9 @@ services:
     build: .
     command: /app/docker_entrypoint.sh celery
     entrypoint: bash
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - postgres
       - redis
@@ -41,6 +55,9 @@ services:
     build: .
     command: /app/docker_entrypoint.sh as-app /app/.venv/bin/celery -A metropolis beat --loglevel=INFO
     entrypoint: bash
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - postgres
       - redis
@@ -54,7 +71,17 @@ services:
 
 volumes:
   public:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: '/srv2/app/static'
   media:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: '/srv2/app/media'
   static2:
 
 networks:
