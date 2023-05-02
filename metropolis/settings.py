@@ -758,12 +758,6 @@ with open(os.path.join(os.path.dirname(__file__), "local_rsa_privkey.pem")) as f
 
 CORS_URLS_REGEX = r"^/api/.*$"
 
-CORS_ALLOW_METHODS = [
-    "GET",
-    "HEAD",
-    "OPTIONS",
-]
-
 CORS_ALLOWED_ORIGINS = [
     "https://maclyonsden.com",
 ]
