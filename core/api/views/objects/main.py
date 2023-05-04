@@ -88,7 +88,7 @@ class ObjectAPIView(generics.GenericAPIView):
         self.listing_filters = getattr(
             provider,
             "listing_filters",
-            getattr(provider, "listing_filter", ["id", "pk"]),
+            getattr(provider, "listing_filter", {"id": int, "pk": int}),
         )
         # NOTE: better to have the following if after initial, but this is easier
 
@@ -227,7 +227,7 @@ class ObjectList(
             search_type = "OR"
 
         for key, value in query_params.lists():
-            if key in ["limit", "offset", "search_type"]:
+            if key in ["limit", "offset", "search_type"] + self.provider.listing_filters_ignore:
                 continue  # ignore pagination and search_type params
             if key not in self.listing_filters:
                 raise BadRequest(

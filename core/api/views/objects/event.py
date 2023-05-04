@@ -37,6 +37,7 @@ class DetailSerializer(serializers.ModelSerializer):
 
 class EventProvider(BaseProvider):
     model = Event
+    listing_filters_ignore = ["start", "end"]
 
     @property
     def serializer_class(self):
