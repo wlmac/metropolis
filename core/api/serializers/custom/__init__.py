@@ -44,7 +44,7 @@ class TagRelatedField(serializers.Field):
         if not isinstance(data, list):
             raise serializers.ValidationError("Expected a list of tag IDs.")
 
-        # Get the existing Tag objects or create new ones if necessary.
+        # Get the existing Tag objects.
         tags = []
         for tag_id in data:
             try:
