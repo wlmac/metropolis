@@ -18,7 +18,7 @@ global_notifs = Signal()
 @receiver(signals.post_save, sender=models.Announcement)
 def announcement_change(sender, **kwargs):
     global_notifs.send("announcement_change", orig_sender=sender, kwargs=kwargs)
-    tasks.notif_broker_announcement.delay(kwargs["instance"].id)
+    #tasks.notif_broker_announcement.delay(kwargs["instance"].id) TODO fix pls ken :D
 
 
 @receiver(signals.post_save, sender=models.BlogPost)
