@@ -115,7 +115,10 @@ class TagRelatedField(serializers.MultipleChoiceField):
 
     def __init__(self, **kwargs):
         kwargs["required"] = False
-        choices = Tag.objects.all().values_list("id", "name")
+        if Tag.objects.all().count() == 0:
+            choices = []
+        else:
+            choices = Tag.objects.all().values_list("id", "name")
         super().__init__(choices, **kwargs)
 
     def to_representation(self, value):
