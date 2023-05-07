@@ -11,8 +11,13 @@ from django.db.models import (
     When,
     OuterRef,
     QuerySet,
+    Func,
+    F,
+    JSONField,
+    Value,
+    TextField,
 )
-from django.db.models.functions import Coalesce
+from django.db.models.functions import Coalesce, Cast
 
 from core.models import Like
 
@@ -28,9 +33,7 @@ def likes(obj: PostTypes) -> int:
     return count
 
 
-def comments(
-        context, obj: PostTypes, replies: bool = False
-) -> QuerySet[Comment]:
+def comments(context, obj: PostTypes, replies: bool = False) -> QuerySet[Comment]:
     """
     args:
         context: context from the view
@@ -41,8 +44,8 @@ def comments(
     If the user is not a superuser or has the view_flagged permission, only live comments will be returned. todo check for bugs here.
     """
     if (
-            context["request"].user.has_perm("core.comment.view_flagged")
-            or context["request"].user.is_superuser
+        context["request"].user.has_perm("core.comment.view_flagged")
+        or context["request"].user.is_superuser
     ):
         queryset = obj.get_children(su=True) if replies else obj.comments.all()
     else:
@@ -57,6 +60,20 @@ def comments(
         ),
         0,
     )
+    subquery = (
+        queryset.filter(id=OuterRef("id"))
+        .annotate(
+            author_info=Func(
+                Value("id"),
+                Cast(F("author__id"), output_field=TextField()),
+                Value("username"),
+                F("author__username"),
+                function="JSON_OBJECT",
+                output_field=TextField(),
+            ),
+        )
+        .values("author_info")[:1]
+    )
 
     comment_set = (
         queryset.annotate(
@@ -66,8 +83,10 @@ def comments(
                 output_field=BooleanField(),
             ),
             likes=like_count,
+            author_info=Cast(Subquery(subquery), output_field=JSONField()),
         )
-        .values("id", "has_children", "body", "author", "likes")
+        .values("id", "has_children", "body", "likes", "created_at", "author_info")
         .order_by("-likes")
-    ).distinct()
+        .distinct()
+    )
     return comment_set

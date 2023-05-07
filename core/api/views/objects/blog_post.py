@@ -12,7 +12,7 @@ from ....models import BlogPost, User
 class Serializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
-    author = PrimaryKeyAndSlugRelatedField(
+    author = PrimaryKeyAndSlugRelatedField(  # potentially change to AuthorField in the future
         slug_field="username", queryset=User.objects.all()
     )
     tags = TagRelatedField()

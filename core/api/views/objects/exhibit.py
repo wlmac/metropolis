@@ -2,9 +2,8 @@ from django.utils import timezone
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
-from ...serializers.custom import TagRelatedField, PrimaryKeyAndSlugRelatedField
+from ...serializers.custom import TagRelatedField, AuthorField
 from ...utils.posts import likes, comments
-from .... import models
 from ....models import Exhibit
 
 
@@ -12,9 +11,7 @@ class Serializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     tags = TagRelatedField()
-    author = PrimaryKeyAndSlugRelatedField(
-        slug_field="username", queryset=models.User.objects.all()
-    )
+    author = AuthorField()
 
     @staticmethod
     def get_likes(obj: Exhibit) -> int:

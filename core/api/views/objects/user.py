@@ -43,7 +43,7 @@ class Serializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         set_new_password = (
-                "password" in self.validated_data and "old_password" in self.validated_data
+            "password" in self.validated_data and "old_password" in self.validated_data
         )
         if set_new_password:
             new_password = self.validated_data.pop("password")
@@ -102,8 +102,8 @@ class ListSerializer(serializers.ModelSerializer):
 
 def tdsb_email(value):
     if not (
-            value.endswith(settings.TEACHER_EMAIL_SUFFIX)
-            or value.endswith(settings.STUDENT_EMAIL_SUFFIX)
+        value.endswith(settings.TEACHER_EMAIL_SUFFIX)
+        or value.endswith(settings.STUDENT_EMAIL_SUFFIX)
     ):
         raise serializers.ValidationError("Must be either a teacher or student email.")
 

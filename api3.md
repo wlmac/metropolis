@@ -185,10 +185,28 @@ properties:
   is_public: { type: boolean }
   status: { type: string, enum: [ "d", "p", "a", "r" ] }
   rejection_reason: { type: string }
-  author: { type: integer }
-  organization: { type: integer }
+  author: 
+    type: object
+    properties: 
+      id: { type: integer }
+      username: { type: string }
+      first_name: { type: string }
+      last_name: { type: string }
+  organization: 
+    type: object
+    properties: 
+      id: { type: integer }
+      name: { type: string }
+      icon: { type: string, format: url }
   supervisor: { type: integer | null }
-  tags: { type: array, items: integer }
+  tags: 
+    type: array
+    items: 
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        color: { type: string }
   likes: { type: integer }
   comments: 
     type: object
@@ -217,7 +235,14 @@ properties:
   featured_image: { type: string, format: url }
   featured_image_description: { type: string }
   is_published: { type: boolean }
-  tags: { type: array, items: integer }
+  tags: 
+      type: array
+      items: 
+        type: object
+        properties:
+          id: { type: integer }
+          name: { type: string }
+          color: { type: string }  
   likes: { type: integer }
   comments: 
     type: object
@@ -238,13 +263,24 @@ properties:
   id: { type: integer }
   slug: { type: string }
   title: { type: string }
-  author: { type: integer }
+  author:
+    type: object
+    properties:
+      id: { type: integer }
+      username: { type: string }
   created_date: { type: string, format: date-time }
   last_modified_date: { type: string, format: date-time }
   content: { type: string, format: url }
   content_description: { type: string }
   is_published: { type: boolean }
-  tags: { type: array, items: integer }
+  tags: 
+    type: array
+    items: 
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        color: { type: string }
   likes: { type: integer }
   comments:
     type: object
@@ -265,7 +301,12 @@ properties:
   name: { type: string }
   description: { type: string }
   term: { type: integer }
-  organization: { type: integer }
+  organization:  
+    type: object
+    properties:
+      id: { type: integer }
+      name: { type: string }
+      icon: { type: string, format: url }
   time:
     type: object
     properties:
@@ -275,8 +316,14 @@ properties:
   instructional: { type: integer }
   is_public: { type: boolean }
   should_announce: { type: boolean }
-
-  tags: { type: array, items: integer }
+  tags: 
+    type: array
+    items: 
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        color: { type: string }
 ```
 
 ## Flatpage
@@ -342,9 +389,16 @@ properties:
   is_active: { type: boolean }
   is_open: { type: boolean }
   applications_open: { type: boolean }
-  tags: { type: array, items: { type: integer } }
+  tags: 
+    type: array
+    items: 
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        color: { type: string }
   banner: { type: string }
-  icon: { type: string }
+  icon: { type: string, format: url }
   links: { type: array, items: { type: string } }
 ```
 
@@ -355,8 +409,12 @@ $id: https://maclyonsden.com/api/v3/schema/comment.json
 type: object
 properties:
   id: { type: integer }
-  author: { type: integer | null }
-  content_type: { type: integer }
+  author: 
+    type: object | null
+    properties:
+      id: { type: integer }
+      username: { type: string }
+  content_type: { type: string }
   object_id: { type: integer }
   body: { type: string | null }
   created_at: { type: string | null }
@@ -367,11 +425,16 @@ properties:
     items:
       type: object
       properties:
-        id: { type: integer }     
-        has_children: { type: boolean }
+        id: { type: integer }
         body: { type: string }
-        author: { type: integer | null }
+        created_at: { type: string | null }
+        has_children: { type: boolean }
         likes: { type: integer }
+        author: 
+          type: object | null
+          properties:
+            id: { type: integer }
+            username: { type: string }
 ```
 
 ## Tag

@@ -11,11 +11,11 @@ from core.utils.mail import send_mail
 from .base import BaseProvider
 from ...serializers.custom import (
     TagRelatedField,
-    PrimaryKeyAndSlugRelatedField,
+    AuthorField,
+    OrganizationField,
 )
 from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
 from ...utils.posts import likes, comments
-from .... import models
 from ....models import Announcement, Organization, User
 
 
@@ -44,12 +44,8 @@ class Serializer(serializers.ModelSerializer):
     comments = serializers.SerializerMethodField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
     tags = TagRelatedField()
-    author = PrimaryKeyAndSlugRelatedField(
-        slug_field="username", queryset=models.User.objects.all()
-    )
-    organization = PrimaryKeyAndSlugRelatedField(
-        slug_field="name", queryset=models.Organization.objects.all()
-    )
+    author = AuthorField()
+    organization = OrganizationField()
 
     @staticmethod
     def get_likes(obj: Announcement) -> int:

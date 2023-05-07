@@ -173,7 +173,6 @@ class PostAdmin(admin.ModelAdmin):
 
     def save_count(self, obj) -> int:
         saves = User.objects.filter(saved_announcements=obj).count()
-        print(saves, "saves")
         if saves is not None:
             return saves
         return 0

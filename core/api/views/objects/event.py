@@ -8,17 +8,18 @@ from rest_framework.exceptions import ParseError
 
 from .announcement import Inner
 from .base import BaseProvider
-from ...serializers.custom import TagRelatedField, PrimaryKeyAndSlugRelatedField
-from ....models import Event, Organization
+from ...serializers.custom import (
+    TagRelatedField,
+    OrganizationField,
+)
+from ....models import Event
 
 AOE = datetime.timezone(datetime.timedelta(hours=-12), name="AoE")
 
 
 class SuperficialSerializer(serializers.ModelSerializer):
     tags = TagRelatedField()
-    organization = PrimaryKeyAndSlugRelatedField(
-        slug_field="name", queryset=Organization.objects.all()
-    )
+    organization = OrganizationField()
 
     class Meta:
         model = Event
@@ -36,9 +37,7 @@ class SuperficialSerializer(serializers.ModelSerializer):
 
 class DetailSerializer(serializers.ModelSerializer):
     tags = TagRelatedField()
-    organization = PrimaryKeyAndSlugRelatedField(
-        slug_field="name", queryset=Organization.objects.all()
-    )
+    organization = OrganizationField()
 
     class Meta:
         model = Event
