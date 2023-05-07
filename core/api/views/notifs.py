@@ -1,6 +1,7 @@
 import json
 from queue import LifoQueue
 
+from django.conf import settings
 from django.db.models import signals
 from django.dispatch import Signal, receiver
 from django.http import StreamingHttpResponse
@@ -18,7 +19,8 @@ global_notifs = Signal()
 @receiver(signals.post_save, sender=models.Announcement)
 def announcement_change(sender, **kwargs):
     global_notifs.send("announcement_change", orig_sender=sender, kwargs=kwargs)
-    #tasks.notif_broker_announcement.delay(kwargs["instance"].id) TODO fix pls ken :D
+    if not settings.NOTIF_DRY_RUN:
+        tasks.notif_broker_announcement.delay(kwargs["instance"].id)
 
 
 @receiver(signals.post_save, sender=models.BlogPost)
