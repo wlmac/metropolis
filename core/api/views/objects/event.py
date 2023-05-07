@@ -94,7 +94,7 @@ class EventProvider(BaseProvider):
             q = q.filter(
                 Q(is_public=True) | Q(organization__member=self.request.user.id)
             )
-        return q
+        return q.distinct()
 
     @staticmethod
     def get_last_modified(view):
