@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from .choices import announcement_status_choices
+
 # from ..api.utils.profanity import predict
 from ..utils.file_upload import file_upload_path_generator
 
@@ -120,7 +121,7 @@ class Comment(PostInteraction):
     def get_children(self, su: Optional = False, all: Optional = False) -> QuerySet:
         comments = Comment.objects.filter(parent=self)
         if su:
-            filtered = [c.pk for c in comments if not c.deleted]
+            filtered = [c.pk for c in comments if not c.deleted]  # todo(low priority) filter using QuerySet instead of list comprehension
         else:
             filtered = [c.pk for c in comments if all([c.live, not c.deleted])]
 

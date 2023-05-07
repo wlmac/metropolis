@@ -708,6 +708,10 @@ NAVBAR = {
     },
 }
 
+# post settings
+
+POST_CONTENT_TYPES = ['announcement', 'blogpost', 'comment', 'exhibit']
+
 # Announcements settings
 
 ANNOUNCEMENTS_CUSTOM_FEEDS = []  # list of PKs of organizations

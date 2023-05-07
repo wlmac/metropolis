@@ -8,8 +8,7 @@ from rest_framework import permissions, serializers, validators
 
 from .base import BaseProvider
 from ...utils.gravatar import gravatar_url
-from .... import models
-from ....models import User
+from ....models import User, graduating_year_choices
 
 
 class Serializer(serializers.ModelSerializer):
@@ -44,19 +43,19 @@ class Serializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         set_new_password = (
-            "password" in self.validated_data and "old_password" in self.validated_data
+                "password" in self.validated_data and "old_password" in self.validated_data
         )
         if set_new_password:
             new_password = self.validated_data.pop("password")
             old_password = self.validated_data.pop("old_password")
         obj = super().save(**kwargs)
-        if set_new_password and obj.check_password(old_password):
-            obj.set_password(new_password)
+        if set_new_password and obj.check_password(old_password):  # noqa
+            obj.set_password(new_password)  # noqa
             obj.save()
         return obj
 
     class Meta:
-        model = models.User
+        model = User
         fields = [
             "id",
             "username",
@@ -89,7 +88,7 @@ class ListSerializer(serializers.ModelSerializer):
         )
 
     class Meta:
-        model = models.User
+        model = User
         fields = [
             "id",
             "username",
@@ -103,8 +102,8 @@ class ListSerializer(serializers.ModelSerializer):
 
 def tdsb_email(value):
     if not (
-        value.endswith(settings.TEACHER_EMAIL_SUFFIX)
-        or value.endswith(settings.STUDENT_EMAIL_SUFFIX)
+            value.endswith(settings.TEACHER_EMAIL_SUFFIX)
+            or value.endswith(settings.STUDENT_EMAIL_SUFFIX)
     ):
         raise serializers.ValidationError("Must be either a teacher or student email.")
 
@@ -113,18 +112,18 @@ class NewSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=30, required=True)
     last_name = serializers.CharField(max_length=30, required=True)
     graduating_year = serializers.ChoiceField(
-        choices=models.graduating_year_choices, required=True
+        choices=graduating_year_choices, required=True
     )
     email = serializers.EmailField(
         validators=[
             tdsb_email,
-            validators.UniqueValidator(queryset=models.User.objects.all()),
+            validators.UniqueValidator(queryset=User.objects.all()),
         ],
         required=True,
     )
     username = serializers.RegexField(
         "^[\w.@+-]+$",
-        validators=[validators.UniqueValidator(queryset=models.User.objects.all())],
+        validators=[validators.UniqueValidator(queryset=User.objects.all())],
         max_length=30,
         required=True,
     )
@@ -149,7 +148,7 @@ class NewSerializer(serializers.ModelSerializer):
         return user
 
     class Meta:
-        model = models.User
+        model = User
         fields = [
             "first_name",
             "last_name",
@@ -174,7 +173,7 @@ class Identity(permissions.BasePermission):
 
 
 class UserProvider(BaseProvider):
-    model = models.User
+    model = User
     lookup_fields = ["id", "username"]
 
     @property
@@ -188,13 +187,16 @@ class UserProvider(BaseProvider):
             list=ListSerializer,
         ).get(self.request.kind, Serializer)
 
-    def get_queryset(self, request):
-        return models.User.objects.filter(is_active=True)
+    @staticmethod
+    def get_queryset(request):
+        return User.objects.filter(is_active=True)
 
-    def get_last_modified(self, view):
+    @staticmethod
+    def get_last_modified(view):
         return view.get_object().last_modified_date
 
-    def get_last_modified_queryset(self):
+    @staticmethod
+    def get_last_modified_queryset():
         return (
             LogEntry.objects.filter(
                 content_type=ContentType.objects.get(app_label="core", model="user")

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypeAlias
 
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import (
@@ -17,17 +17,19 @@ from django.db.models.functions import Coalesce
 from core.models import Like
 
 if TYPE_CHECKING:
-    from core.models import BlogPost, Announcement, Comment
+    from core.models import BlogPost, Announcement, Comment, Exhibit
+
+    PostTypes: TypeAlias = "BlogPost" | "Announcement" | "Comment" | "Exhibit"  # noqa
 
 
-def likes(obj: "BlogPost" | "Announcement" | "Comment") -> int:
+def likes(obj: PostTypes) -> int:
     c_type = ContentType.objects.get_for_model(obj.__class__)
     count = Like.objects.filter(object_id=obj.id, content_type=c_type).count()
     return count
 
 
 def comments(
-    context, obj: "BlogPost" | "Announcement" | "Comment", replies: bool = False
+        context, obj: PostTypes, replies: bool = False
 ) -> QuerySet[Comment]:
     """
     args:
@@ -39,8 +41,8 @@ def comments(
     If the user is not a superuser or has the view_flagged permission, only live comments will be returned. todo check for bugs here.
     """
     if (
-        context["request"].user.has_perm("core.comment.view_flagged")
-        or context["request"].user.is_superuser
+            context["request"].user.has_perm("core.comment.view_flagged")
+            or context["request"].user.is_superuser
     ):
         queryset = obj.get_children(su=True) if replies else obj.comments.all()
     else:
@@ -67,5 +69,5 @@ def comments(
         )
         .values("id", "has_children", "body", "author", "likes")
         .order_by("-likes")
-    )
+    ).distinct()
     return comment_set
