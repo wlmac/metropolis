@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
@@ -115,10 +116,10 @@ class TagRelatedField(serializers.MultipleChoiceField):
 
     def __init__(self, **kwargs):
         kwargs["required"] = False
-        if Tag.objects.all().count() == 0:
-            choices = []
-        else:
+        if apps.get_model('core', 'tag'):
             choices = Tag.objects.all().values_list("id", "name")
+        else:
+            choices = []
         super().__init__(choices, **kwargs)
 
     def to_representation(self, value):
