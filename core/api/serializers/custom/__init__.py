@@ -70,7 +70,7 @@ class AuthorField(serializers.ChoiceField):
         return AuthorSerializer(obj).data
 
     def to_internal_value(self, data: int):
-        if not isinstance(data, int) and not str(data).isdigit():
+        if not (isinstance(data, int) or str(data).isdigit()):
             raise serializers.ValidationError("Expected a int in the form of User ID.")
 
         # Get the existing User obj.
@@ -93,7 +93,7 @@ class OrganizationField(serializers.ChoiceField):
         return OrganizationSerializer(obj).data
 
     def to_internal_value(self, data: int):
-        if not isinstance(data, int) and not str(data).isdigit():
+        if not (isinstance(data, int) or str(data).isdigit()):
             raise serializers.ValidationError(
                 "Expected a int in the form of Organization ID."
             )
