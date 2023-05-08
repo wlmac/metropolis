@@ -227,7 +227,11 @@ class ObjectList(
             search_type = "OR"
 
         for key, value in query_params.lists():
-            if key in ["limit", "offset", "search_type"] + self.provider.listing_filters_ignore:
+            if (
+                key
+                in ["limit", "offset", "search_type", "format"]
+                + self.provider.listing_filters_ignore
+            ):
                 continue  # ignore pagination and search_type params
             if key not in self.listing_filters:
                 raise BadRequest(
@@ -240,7 +244,7 @@ class ObjectList(
                 k_filters.append((key, self.__convert_type__(value, lookup_type)))
         return k_filters, search_type
 
-    def __convert_type__(self, lookup_value: str, lookup_type: Callable) -> Any:
+    def __convert_type__(self, lookup_value: str, lookup_type: Callable) -> object:
         lookup_value = lookup_value.casefold()
         if lookup_type == bool:
             if lookup_value in self.FALSE_VALUES:
