@@ -30,7 +30,11 @@ class ContentTypeField(serializers.ChoiceField):
         choices = ContentType.objects.filter(
             app_label="core", model__in=settings.POST_CONTENT_TYPES
         ).values_list("model", "model")
+        default_error_messages = {
+            "does_not_exist": "Organization with ID {value} does not exist."
+        }
         super().__init__(choices, **kwargs)
+        self.default_error_messages.update(default_error_messages)
 
     def to_internal_value(self, data):
         try:
@@ -61,51 +65,48 @@ class OrganizationSerializer(serializers.ModelSerializer):
 class AuthorField(serializers.ChoiceField):
     def __init__(self, **kwargs):
         choices = User.objects.filter(is_staff=True).values_list("id", "username")
+        default_error_messages = {
+            "does_not_exist": "User with ID {value} does not exist.",
+            "invalid": "Expected a int in the form of a User ID.",
+        }
         super().__init__(choices, **kwargs)
+        self.default_error_messages.update(default_error_messages)
 
     def to_representation(self, obj: User):
-        """
-        Convert the list of Tag objects to a list of {id, name, color} dictionaries.
-        """
         return AuthorSerializer(obj).data
 
     def to_internal_value(self, data: int):
         if not (isinstance(data, int) or str(data).isdigit()):
-            raise serializers.ValidationError("Expected a int in the form of User ID.")
-
-        # Get the existing User obj.
+            self.fail(
+                "invalid",
+            )
         try:
-            user = User.objects.get(id=data)
+            return User.objects.get(id=data)
         except User.DoesNotExist:
-            raise serializers.ValidationError(f"User with ID {data} does not exist.")
-        return user
+            self.fail("does_not_exist", value=data)
 
 
 class OrganizationField(serializers.ChoiceField):
     def __init__(self, **kwargs):
         choices = Organization.objects.filter(is_active=True).values_list("id", "name")
+        default_error_messages = {
+            "does_not_exist": "Organization with ID {value} does not exist.",
+            "invalid": "Expected a int in the form of an Organization ID.",
+        }
         super().__init__(choices, **kwargs)
+        self.default_error_messages.update(default_error_messages)
 
     def to_representation(self, obj: User):
-        """
-        Convert the list of Tag objects to a list of {id, name, color} dictionaries.
-        """
         return OrganizationSerializer(obj).data
 
     def to_internal_value(self, data: int):
         if not (isinstance(data, int) or str(data).isdigit()):
-            raise serializers.ValidationError(
-                "Expected a int in the form of Organization ID."
-            )
+            self.fail("invalid")
 
-        # Get the existing User obj.
         try:
-            user = Organization.objects.get(id=data)
-        except Tag.DoesNotExist:
-            raise serializers.ValidationError(
-                f"Organization with ID {data} does not exist."
-            )
-        return user
+            return Organization.objects.get(id=data)
+        except Organization.DoesNotExist:
+            self.fail("does_not_exist", value=data)
 
 
 class TagRelatedField(serializers.MultipleChoiceField):
@@ -116,10 +117,7 @@ class TagRelatedField(serializers.MultipleChoiceField):
 
     def __init__(self, **kwargs):
         kwargs["required"] = False
-        if apps.get_model('core', 'tag'):
-            choices = Tag.objects.all().values_list("id", "name")
-        else:
-            choices = []
+        choices = Tag.objects.all().values_list("id", "name")
         super().__init__(choices, **kwargs)
 
     def to_representation(self, value):
@@ -138,17 +136,15 @@ class TagRelatedField(serializers.MultipleChoiceField):
             raise serializers.ValidationError("Expected a list of tag IDs.")
 
         # Get the existing Tag objects.
-        tags = []
-        for tag_id in data:
-            try:
-                tag = Tag.objects.get(id=tag_id)
-            except Tag.DoesNotExist:
-                raise serializers.ValidationError(
-                    f"Tag with ID {tag_id} does not exist."
+        tags = Tag.objects.filter(id__in=data).values_list("id", flat=True)
+        if len(tags) != len(data):
+            missing_ids = set(data) - set(tags)
+            for missing_id in missing_ids:
+                self.fail(
+                    "invalid", message=f"Tag with ID {missing_id} does not exist."
                 )
-            tags.append(tag)
 
-        return tags
+        return Tag.objects.filter(id__in=data)
 
 
 # todo - add Comment and Like serializers.
