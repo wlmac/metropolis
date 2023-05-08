@@ -20,7 +20,6 @@ from django.db.models import (
 from django.db.models.functions import Coalesce, Cast
 
 from core.models import Like
-
 if TYPE_CHECKING:
     from core.models import BlogPost, Announcement, Comment, Exhibit
 
@@ -60,6 +59,7 @@ def comments(context, obj: PostTypes, replies: bool = False) -> QuerySet[Comment
         ),
         0,
     )
+    """
     subquery = (
         queryset.filter(id=OuterRef("id"))
         .annotate(
@@ -71,10 +71,10 @@ def comments(context, obj: PostTypes, replies: bool = False) -> QuerySet[Comment
                 function="JSON_OBJECT",
                 output_field=TextField(),
             ),
-        )
+        ) # todo port this over to POSTGRES and run a check to see when on prod or local
         .values("author_info")[:1]
     )
-
+"""
     comment_set = (
         queryset.annotate(
             has_children=Case(
@@ -83,9 +83,9 @@ def comments(context, obj: PostTypes, replies: bool = False) -> QuerySet[Comment
                 output_field=BooleanField(),
             ),
             likes=like_count,
-            author_info=Cast(Subquery(subquery), output_field=JSONField()),
+           # author_info=Cast(Subquery(subquery), output_field=JSONField()),
         )
-        .values("id", "has_children", "body", "likes", "created_at", "author_info")
+        .values("id", "has_children", "body", "likes", "created_at", "author")
         .order_by("-likes")
         .distinct()
     )
