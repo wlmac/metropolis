@@ -55,7 +55,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
-        fields = ["id", "name", "icon"]
+        fields = ["id", "name", "slug", "icon"]
 
 
 class AuthorField(serializers.ChoiceField):
