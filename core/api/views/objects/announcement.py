@@ -14,7 +14,7 @@ from ...serializers.custom import (
     AuthorField,
     OrganizationField,
     CommentField,
-    LikeCountField,
+    LikeField,
 )
 from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
 from ....models import Announcement, Organization, User
@@ -43,7 +43,7 @@ def always_fail_validator(value, serializer_field):
 class Serializer(serializers.ModelSerializer):
     message = serializers.CharField(read_only=True)
     comments = CommentField()
-    likes = LikeCountField()
+    likes = LikeField()
     tags = TagRelatedField()
     author = AuthorField()
     organization = OrganizationField()

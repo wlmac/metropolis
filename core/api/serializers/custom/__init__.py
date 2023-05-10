@@ -62,20 +62,20 @@ class OrganizationSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "slug", "icon"]
 
 
-class LikeCountField(Field):
+class LikeField(Field):
     def __init__(self, **kwargs):
         kwargs["read_only"] = True
         super().__init__(**kwargs)
 
     def to_representation(self, obj):
-        return obj.likes.count()
+        return {'count': obj.likes.count(), 'liked': obj.likes.filter(author=self.context['author']).exists()}
 
 
 class CommentSerializer(serializers.ModelSerializer):
     author = AuthorSerializer()
     has_children = serializers.SerializerMethodField(read_only=True)
     edited = serializers.SerializerMethodField(read_only=True)
-    likes = LikeCountField()
+    likes = LikeField()
 
     @staticmethod
     def get_edited(obj: Comment):

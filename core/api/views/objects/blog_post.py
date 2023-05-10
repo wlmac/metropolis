@@ -4,12 +4,12 @@ from rest_framework import permissions, serializers
 
 from .base import BaseProvider
 from ...serializers import PrimaryKeyAndSlugRelatedField
-from ...serializers.custom import TagRelatedField, CommentField, LikeCountField
+from ...serializers.custom import TagRelatedField, CommentField, LikeField
 from ....models import BlogPost, User
 
 
 class Serializer(serializers.ModelSerializer):
-    likes = LikeCountField()
+    likes = LikeField()
     comments = CommentField()  # serializers.SerializerMethodField(read_only=True)
     author = PrimaryKeyAndSlugRelatedField(  # potentially change to AuthorField in the future
         slug_field="username", queryset=User.objects.all()

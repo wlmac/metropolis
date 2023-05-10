@@ -5,14 +5,14 @@ from .base import BaseProvider
 from ...serializers.custom import (
     TagRelatedField,
     AuthorField,
-    LikeCountField,
+    LikeField,
     CommentField,
 )
 from ....models import Exhibit
 
 
 class Serializer(serializers.ModelSerializer):
-    likes = LikeCountField()
+    likes = LikeField()
     comments = CommentField()
     tags = TagRelatedField()
     author = AuthorField()
