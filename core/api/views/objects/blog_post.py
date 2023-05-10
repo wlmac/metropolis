@@ -4,14 +4,13 @@ from rest_framework import permissions, serializers
 
 from .base import BaseProvider
 from ...serializers import PrimaryKeyAndSlugRelatedField
-from ...serializers.custom import TagRelatedField
-from ...utils.posts import likes, comments
+from ...serializers.custom import TagRelatedField, CommentField, LikeCountField
 from ....models import BlogPost, User
 
 
 class Serializer(serializers.ModelSerializer):
-    likes = serializers.SerializerMethodField(read_only=True)
-    comments = serializers.SerializerMethodField(read_only=True)
+    likes = LikeCountField()
+    comments = CommentField()  # serializers.SerializerMethodField(read_only=True)
     author = PrimaryKeyAndSlugRelatedField(  # potentially change to AuthorField in the future
         slug_field="username", queryset=User.objects.all()
     )
@@ -24,13 +23,6 @@ class Serializer(serializers.ModelSerializer):
         ):  # detail is True and mutate is False meaning we are retrieving an object
             instance.increment_views()
         return super().to_representation(instance)
-
-    @staticmethod
-    def get_likes(obj: BlogPost) -> int:
-        return likes(obj)
-
-    def get_comments(self, obj: BlogPost):
-        return comments(self.context, obj)
 
     class Meta:
         model = BlogPost

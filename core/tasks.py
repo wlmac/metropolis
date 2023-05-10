@@ -110,7 +110,7 @@ def notif_events_singleday(date: dt.date = None):
             u.id,
             dict(
                 title=_l("%(date)s: %(headline)s")
-                      % dict(date=date.strftime("%a %b %d"), headline=headline.name),
+                % dict(date=date.strftime("%a %b %d"), headline=headline.name),
                 body=body,
                 category="event.singleday",
             ),

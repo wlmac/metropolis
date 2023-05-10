@@ -1,11 +1,11 @@
-from django.apps import apps
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import smart_str
 from rest_framework import serializers
+from rest_framework.fields import Field
 
-from core.models import Tag, User, Organization
+from core.models import Tag, User, Organization, Comment
 
 
 class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
@@ -60,6 +60,42 @@ class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
         fields = ["id", "name", "slug", "icon"]
+
+
+class LikeCountField(Field):
+    def __init__(self, **kwargs):
+        kwargs["read_only"] = True
+        super().__init__(**kwargs)
+
+    def to_representation(self, obj):
+        return obj.likes.count()
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer()
+    has_children = serializers.SerializerMethodField(read_only=True)
+    edited = serializers.SerializerMethodField(read_only=True)
+    likes = LikeCountField()
+
+    @staticmethod
+    def get_edited(obj: Comment):
+        return obj.last_modified != obj.created_at
+
+    @staticmethod
+    def get_has_children(obj: Comment) -> bool:
+        return obj.children.exists()
+
+    class Meta:
+        model = Comment
+        fields = [
+            "id",
+            "body",
+            "author",
+            "has_children",
+            "created_at",
+            "edited",
+            "likes",
+        ]
 
 
 class AuthorField(serializers.ChoiceField):
@@ -147,4 +183,10 @@ class TagRelatedField(serializers.MultipleChoiceField):
         return Tag.objects.filter(id__in=data)
 
 
-# todo - add Comment and Like serializers.
+class CommentField(Field):
+    def __init__(self, **kwargs):
+        kwargs["read_only"] = True
+        super().__init__(**kwargs)
+
+    def to_representation(self, obj):
+        return CommentSerializer(obj, many=True).data

@@ -21,7 +21,6 @@ from core.tasks import notif_single
 from core.utils.mail import send_mail
 from metropolis import settings
 from . import models
-from .api.utils.posts import likes
 from .forms import (
     AnnouncementAdminForm,
     AnnouncementSupervisorAdminForm,
@@ -162,12 +161,8 @@ class PostAdmin(admin.ModelAdmin):
     readonly_fields = ["like_count", "save_count", "comments"]
     fields = ["like_count", "save_count", "comments"]
 
-    def like_count(
-        self, obj
-    ) -> (
-        int
-    ):  # todo fix like count and save count being white on white (maybe do mark_safe or something?)
-        return likes(obj)
+    def like_count(self, obj) -> int:
+        return obj.like_count
 
     like_count.short_description = "Like count"
 
@@ -712,6 +707,7 @@ class RecurrenceAdmin(admin.ModelAdmin):
     list_display = ["__str__", "event_object"]
     search_fields = ["event__name"]
     list_filter = ["event__name", "event__organization"]
+
     # def recurrence_pattern(self, obj):
     #    return obj.recurrence_pattern\
 

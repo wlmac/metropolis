@@ -172,9 +172,8 @@ class Comment(PostInteraction):
 
     @property
     def like_count(self) -> int:
-        from ..api.utils.posts import likes
-
-        return likes(self)
+        c_type = ContentType.objects.get_for_model(self.__class__)
+        return Like.objects.filter(object_id=self.id, content_type=c_type).count()
 
     def flagged(self) -> bool:
         return self.__class__.objects.filter(live=False)
@@ -235,12 +234,6 @@ class Post(models.Model):
             object_id=self.id,
             parent=None,
         )
-
-    @property
-    def get_likes(self) -> int:
-        from ..api.utils.posts import likes
-
-        return likes(self)
 
     def __str__(self):
         return self.title

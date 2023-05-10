@@ -2,23 +2,20 @@ from django.utils import timezone
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
-from ...serializers.custom import TagRelatedField, AuthorField
-from ...utils.posts import likes, comments
+from ...serializers.custom import (
+    TagRelatedField,
+    AuthorField,
+    LikeCountField,
+    CommentField,
+)
 from ....models import Exhibit
 
 
 class Serializer(serializers.ModelSerializer):
-    likes = serializers.SerializerMethodField(read_only=True)
-    comments = serializers.SerializerMethodField(read_only=True)
+    likes = LikeCountField()
+    comments = CommentField()
     tags = TagRelatedField()
     author = AuthorField()
-
-    @staticmethod
-    def get_likes(obj: Exhibit) -> int:
-        return likes(obj)
-
-    def get_comments(self, obj: Exhibit):
-        return comments(self.context, obj)
 
     class Meta:
         model = Exhibit

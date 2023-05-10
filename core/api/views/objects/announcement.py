@@ -13,9 +13,10 @@ from ...serializers.custom import (
     TagRelatedField,
     AuthorField,
     OrganizationField,
+    CommentField,
+    LikeCountField,
 )
 from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
-from ...utils.posts import likes, comments
 from ....models import Announcement, Organization, User
 
 
@@ -41,22 +42,15 @@ def always_fail_validator(value, serializer_field):
 
 class Serializer(serializers.ModelSerializer):
     message = serializers.CharField(read_only=True)
-    comments = serializers.SerializerMethodField(read_only=True)
-    likes = serializers.SerializerMethodField(read_only=True)
+    comments = CommentField()
+    likes = LikeCountField()
     tags = TagRelatedField()
     author = AuthorField()
     organization = OrganizationField()
 
-    @staticmethod
-    def get_likes(obj: Announcement) -> int:
-        return likes(obj)
-
-    def get_comments(self, obj: Announcement):
-        return comments(self.context, obj)
-
-    def save(self, *args, **kwargs):
+    def save(self, **kwargs):
         notify_supervisors = False
-        obj: Announcement = super().save(*args, **kwargs)
+        obj: Announcement = super().save(**kwargs)
         user = self.context["request"].user
         if user in obj.organization.supervisors.all():
             obj.supervisor = user

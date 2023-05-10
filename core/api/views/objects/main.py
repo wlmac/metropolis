@@ -1,6 +1,6 @@
 import os
 from json import JSONDecodeError
-from typing import Dict, Callable, List, Tuple, Any
+from typing import Dict, Callable, List, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model, Q, QuerySet
@@ -215,7 +215,9 @@ class ObjectList(
         except NoReverseMatch:
             return None
 
-    def __convert_query_params__(self, query_params: QueryDict) -> Tuple[List[Tuple], str]:
+    def __convert_query_params__(
+        self, query_params: QueryDict
+    ) -> Tuple[List[Tuple], str]:
         """
         Removes non-filter params from query_params and converts them to the correct type.
         :param query_params: QueryDict
@@ -235,11 +237,13 @@ class ObjectList(
                 continue  # ignore pagination and search_type params
             if key not in self.listing_filters:
                 raise BadRequest(
-                    f"{key} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {', '.join(self.listing_filters.keys())}.")
+                    f"{key} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {', '.join(self.listing_filters.keys())}."
+                )
             lookup_type = self.listing_filters[key]
             if isinstance(value, list):
-                for item in value:
-                    k_filters.append((key, self.__convert_type__(item, lookup_type)))
+                k_filters.append(
+                    (key, [self.__convert_type__(item, lookup_type) for item in value])
+                )
             else:
                 k_filters.append((key, self.__convert_type__(value, lookup_type)))
         return k_filters, search_type
@@ -264,17 +268,31 @@ class ObjectList(
         if not query_params:
             # No query params, return None to avoid filtering.
             return None
+        print(f"{query_params=}")
         for item in query_params:
             lookup_filter, lookup_value = item
             if isinstance(lookup_value, list):
+                print("listing.")
+                # see https://github.com/wlmac/metropolis/blob/b4d996f6957cbabc85130e39a3fbe4529c8f86bf/core/api/views/objects/main.py#L275-L280
                 filters.append((f"{lookup_filter}__in", lookup_value))
-                filters.extend([(lookup_filter, value) for value in lookup_value])
-            else:
-                filters.append((lookup_filter, lookup_value))
+                # filters.extend([(f"{lookup_filter}__in", [value]) for value in lookup_value])
+                # filters.append((lookup_filter, lookup_value))
         query = Q()
+        print(f"{filters=}")
         for item in filters:
+            sub_query = []
             field, values = item
-            query.add(Q(**{field: values}), Q.AND if search_type == "AND" else Q.OR)
+            if isinstance(values, list):
+                for value in values:
+                    sub_query.append(Q(**{field: value}))
+                base = sub_query[0]
+                for qu in sub_query[1:]:
+                    base = base._combine(qu, search_type)
+                query.add(base, search_type)
+                print(f"{sub_query=}")
+                print(f"{base=}")
+
+            query.add(Q(**{field: values}), search_type)
         return query
 
     def get_queryset(self):
@@ -282,9 +300,14 @@ class ObjectList(
         query_params, search_type = self.__convert_query_params__(
             self.request.query_params
         )
-        filters = self.__compile_filters__(query_params=query_params, search_type=search_type)
+        filters = self.__compile_filters__(
+            query_params=query_params, search_type=search_type
+        )
+
         if filters:
-            return queryset.filter(filters)
+            q = queryset.filter(filters).distinct()
+            return q
+
         return queryset
 
     def get(self, request, *args, **kwargs):

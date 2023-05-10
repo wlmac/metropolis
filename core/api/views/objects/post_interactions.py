@@ -12,8 +12,12 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 
 from .base import BaseProvider
-from ...serializers.custom import ContentTypeField
-from ...utils.posts import likes, comments
+from ...serializers.custom import (
+    ContentTypeField,
+    CommentField,
+    AuthorField,
+    LikeCountField,
+)
 from ....models import Comment, User, Like
 
 typedir: dict[str, str] = {
@@ -36,10 +40,10 @@ class IsOwnerOrSuperuser(BasePermission):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    likes = serializers.SerializerMethodField(read_only=True)
-    author = serializers.SerializerMethodField(read_only=True)
+    likes = LikeCountField()
+    author = AuthorField()
     edited = serializers.SerializerMethodField(read_only=True)
-    children = serializers.SerializerMethodField(read_only=True)
+    children = CommentField()
     content_type = ContentTypeField()
 
     def validate(self, attrs):
@@ -54,19 +58,6 @@ class CommentSerializer(serializers.ModelSerializer):
                 raise ValidationError("A Comment cannot be a parent of itself.")
 
         return super().validate(attrs)
-
-    @staticmethod
-    def get_author(obj: Comment) -> User | None:
-        if obj.author is not None:
-            return {"id": obj.author.id, "username": obj.author.username}
-        return None
-
-    @staticmethod
-    def get_likes(obj: Comment) -> int:
-        return likes(obj)
-
-    def get_children(self, obj: Comment):
-        return comments(self.context, obj, replies=True)
 
     @staticmethod
     def get_edited(obj: Comment):
@@ -190,6 +181,10 @@ class LikeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data) -> Like:
         obj_name = validated_data["content_type"].name.lower().replace(" ", "")
+        if obj_name not in settings.POST_CONTENT_TYPES:  # is the object type valid?
+            raise ValidationError(
+                f"Invalid object type: {obj_name}, valid types are: {settings.POST_CONTENT_TYPES}"
+            )
         if (
             not validated_data["content_type"]
             .model_class()  # the model of the content type ( e.g. core.models.Announcement or core.models.Comment )
@@ -197,11 +192,7 @@ class LikeSerializer(serializers.ModelSerializer):
             .exists()
         ):  # does the object exist?
             raise ValidationError(f"The specified {obj_name} does not exist.")
-        elif obj_name not in settings.POST_CONTENT_TYPES:  # is the object type valid?
-            raise ValidationError(
-                f"Invalid object type: {obj_name}, valid types are: {settings.POST_CONTENT_TYPES}"
-            )
-        elif Like.objects.filter(  # has the user already liked this object?
+        if Like.objects.filter(  # has the user already liked this object?
             content_type=validated_data["content_type"],
             object_id=validated_data["object_id"],
             author=self.context["author"],
