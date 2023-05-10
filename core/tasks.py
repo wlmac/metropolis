@@ -63,7 +63,7 @@ def notif_broker_announcement(obj_id):
             | Q(organizations__in=[ann.organization])
         )
         category = "ann.personal"
-    logger.info(f"notif_broker_announcement2 for {obj_id} affects {u}")
+    # logger.info(f"notif_broker_announcement2 for {obj_id} affects {u}") TODO(nyiyui) fix, u is not defined
     for u in affected.all():
         notif_single.delay(
             u.id,
@@ -110,7 +110,7 @@ def notif_events_singleday(date: dt.date = None):
             u.id,
             dict(
                 title=_l("%(date)s: %(headline)s")
-                % dict(date=date.strftime("%a %b %d"), headline=headline.name),
+                      % dict(date=date.strftime("%a %b %d"), headline=headline.name),
                 body=body,
                 category="event.singleday",
             ),
