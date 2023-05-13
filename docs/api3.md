@@ -2,11 +2,13 @@
 
 **Note** All endpoints return JSON notwithstanding exceptions.
 
-**Note** use the Last-Modified header to determine if you should receive content. (conditional requests will not be implemented)
+**Note** use the Last-Modified header to determine if you should receive content. (conditional requests will not be
+implemented)
 
 **Base URL**: `https://maclyonsden.com/api`
 
 ## Get Feeds
+
 `GET v3/feeds`
 
 **Cache Until**: 24 hours after last fetch
@@ -14,8 +16,12 @@
 **Returns** a list of the IDs of the organizations to be used as feeds.
 
 **Example**:
+
 ```json
-[1, 8]
+[
+  1,
+  8
+]
 ```
 
 ## Get Staff
@@ -39,11 +45,12 @@
 
 **Base URL**: `v3/obj/<type>`
 
-**Cache Until**: changes are detected (via the changes endpoint, which should be fetched when data is requested from the user of the library)
+**Cache Until**: changes are detected (via the changes endpoint, which should be fetched when data is requested from the
+user of the library)
 
 For `organization`:
 
-**Returns**: The results sorted by `member count` in *descending* order 
+**Returns**: The results sorted by `member count` in *descending* order
 
 ## Get Objects
 
@@ -63,20 +70,22 @@ For `flatpage` and `user`:
 Cannot be used.
 
 For `Flatpage, User, Organization, Exhibit, BlogPost`:
-You can pass a lookup query param with the format `?lookup=<field>` to change how the results are filtered. (e.g. `?lookup=username` if you want to filter by username instead of ID for `User`) Must be an exact match.
+You can pass a lookup query param with the format `?lookup=<field>` to change how the results are filtered. (
+e.g. `?lookup=username` if you want to filter by username instead of ID for `User`) Must be an exact match.
 
 ### Query
 
 `shrink_last_modified_before`ts modified before supplied time will just have a pk in place of the object.
 
 Pagination (`limit` and `offset`; both **mandatory**): control what data to return.
-**Note** using one of `limit` and `offset` causes undefined behaviour.
+**Note** using one of `limit` and `offset` causes undefined behaviour. 
 **Note**
 `limit` is the maximum number of items to return.
 `offset` is the starting position of the items to return.
 See [docs](https://www.django-rest-framework.org/api-guide/pagination/#limitoffsetpagination) for details.
 
 the result will be this format:
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/objects.json
@@ -89,16 +98,20 @@ properties:
 ```
 
 Example:
+
 ```json
 {
-    "count": 1023,
-    "next": "https://maclyonsden.com/api/v3/events?limit=100&offset=500",
-    "previous": "https://maclyonsden.com/api/v3/events?limit=100&offset=300",
-    "results": [ … ]
+  "count": 1023,
+  "next": "https://maclyonsden.com/api/v3/events?limit=100&offset=500",
+  "previous": "https://maclyonsden.com/api/v3/events?limit=100&offset=300",
+  "results": [
+    …
+  ]
 }
 ```
 
 ## Create Object
+
 `POST new`
 
 ## (Single) Object
@@ -111,13 +124,14 @@ Example:
 **Note** has `Last-Modified` header.
 
 **Note**. Query params (e.g. `username`) can be added as a disjunctive filter.
-          Also, `0` as `<id>` makes the server ignore `0` when retrieving the object.
+Also, `0` as `<id>` makes the server ignore `0` when retrieving the object.
 
 ### For `flatpage`
 
 **Note** `id` is the slug (percent-encoded).
 
 **Returns** title then content separated by `\n`, such as:
+
 ```
 This is the title blah in plain text
 This is the *content* in CommonMark!
@@ -128,21 +142,26 @@ No emojis :blobsadrain:.
 **Success** returns a 2xx code.
 
 ## (List of) Objects
-You can add **Listing Filters** where supported[^1] to narrow down results. You can also chain these filters together and the system will **OR** them.
-e.g. `GET /api/v3/obj/announcement?tags=10&tags=42` will return all announcements that have either the tags _10 **OR** 42_.
 
-__**BUT WAIT!**__ what if you want to find all objects that have **BOTH** tag _10_ **AND** 42? _well_, you can use the `&search_type` query param which accepts either `AND` or `OR` as its value (default is OR).
+You can add **Listing Filters** where supported[^1] to narrow down results. You can also chain these filters together
+and the system will **OR** them.
+e.g. `GET /api/v3/obj/announcement?tags=10&tags=42` will return all announcements that have either the tags _10 **OR**
+42_.
+
+__**BUT WAIT!**__ what if you want to find all objects that have **BOTH** tag _10_ **AND** 42? _well_, you can use
+the `&search_type` query param which accepts either `AND` or `OR` as its value (default is OR).
 
 ###### Examples
 
-- `GET /api/v3/obj/course?position=3&term=2&search_type=AND` will return all are **BOTH** in position _3_ **AND** in term _2_.
-- `GET /api/v3/obj/announcement?tags=10&tags=42&organization=83&search_type=AND` will return all announcements that have **BOTH** tag _10_, _42_ **AND** is from the organization with ID _83_.
-- `GET /api/v3/obj/announcement?tags=10&tags=42&search_type=OR` will return all announcements that have **EITHER** tag _10_ **OR** _42_.
-
-
-
+- `GET /api/v3/obj/course?position=3&term=2&search_type=AND` will return all are **BOTH** in position _3_ **AND** in
+  term _2_.
+- `GET /api/v3/obj/announcement?tags=10&tags=42&organization=83&search_type=AND` will return all announcements that have
+  **BOTH** tag _10_, _42_ **AND** is from the organization with ID _83_.
+- `GET /api/v3/obj/announcement?tags=10&tags=42&search_type=OR` will return all announcements that have **EITHER** tag
+  _10_ **OR** _42_.
 
 ## Error
+
 Errors are returned with their corresponding fields.
 
 ```yaml
@@ -166,11 +185,16 @@ properties:
 ```
 
 ## Announcement
+
 ###### When listing
+
 You can use the following filters:
-- `tags`: a tag ID to filter by. 
+
+- `tags`: a tag ID to filter by.
 - `author`: an author ID to filter by
-- `organization`: an organization ID to filter by. (cannot be used with along with itself when using `AND` e.g. `?organization=1&organization=2&search_type=AND` is invalid)
+- `organization`: an organization ID to filter by. (cannot be used with along with itself when using `AND`
+  e.g. `?organization=1&organization=2&search_type=AND` is invalid)
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/announcement.json
@@ -185,40 +209,49 @@ properties:
   is_public: { type: boolean }
   status: { type: string, enum: [ "d", "p", "a", "r" ] }
   rejection_reason: { type: string }
-  author: 
+  author:
     type: object
-    properties: 
+    properties:
       id: { type: integer }
       username: { type: string }
       first_name: { type: string }
       last_name: { type: string }
-  organization: 
+  organization:
     type: object
-    properties: 
+    properties:
       id: { type: integer }
       name: { type: string }
       icon: { type: string, format: url }
   supervisor: { type: integer | null }
-  tags: 
+  tags:
     type: array
-    items: 
+    items:
       type: object
       properties:
         id: { type: integer }
         name: { type: string }
         color: { type: string }
   likes: { type: integer }
-  comments: 
-    type: object
-    properties:
-      id: { type: integer }     
-      has_children: { type: boolean }
-      body: { type: string }
-      author: { type: integer | null }
-      likes: { type: integer }
+  comments:
+    type: array
+    items:
+      type: object
+      properties:
+        id: { type: integer }
+        has_children: { type: boolean }
+        body: { type: string }
+        author:
+          type: object | null
+          properties:
+            id: { type: integer }
+            username: { type: string }
+            first_name: { type: string }
+            last_name: { type: string }
+        likes: { type: integer }
 ```
 
 ## Blog Post
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/blog-post.json
@@ -228,33 +261,48 @@ properties:
   slug: { type: string }
   title: { type: string }
   body: { type: string }
-  author: { type: integer }
+  author:
+    type: object
+    properties:
+      id: { type: integer }
+      username: { type: string }
+      first_name: { type: string }
+      last_name: { type: string }
   views: { type: integer }
   created_date: { type: string, format: date-time }
   last_modified_date: { type: string, format: date-time }
   featured_image: { type: string, format: url }
   featured_image_description: { type: string }
   is_published: { type: boolean }
-  tags: 
-      type: array
-      items: 
-        type: object
-        properties:
-          id: { type: integer }
-          name: { type: string }
-          color: { type: string }  
+  tags:
+    type: array
+    items:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        color: { type: string }
   likes: { type: integer }
-  comments: 
-    type: object
-    properties:
-      id: { type: integer }     
-      has_children: { type: boolean }
-      body: { type: string }
-      author: { type: integer | null }
-      likes: { type: integer }
+  comments:
+    type: array
+    items:
+      type: object
+      properties:
+        id: { type: integer }
+        has_children: { type: boolean }
+        body: { type: string }
+        author:
+          type: object | null
+          properties:
+            id: { type: integer }
+            username: { type: string }
+            first_name: { type: string }
+            last_name: { type: string }    
+        likes: { type: integer }
 ```
 
 ## Exhibit
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/exhibit.json
@@ -273,9 +321,9 @@ properties:
   content: { type: string, format: url }
   content_description: { type: string }
   is_published: { type: boolean }
-  tags: 
+  tags:
     type: array
-    items: 
+    items:
       type: object
       properties:
         id: { type: integer }
@@ -283,16 +331,25 @@ properties:
         color: { type: string }
   likes: { type: integer }
   comments:
-    type: object
-    properties:
-      id: { type: integer }
-      has_children: { type: boolean }
-      body: { type: string }
-      author: { type: integer | null }
-      likes: { type: integer }
+    type: array
+    items:
+      type: object
+      properties:
+        id: { type: integer }
+        has_children: { type: boolean }
+        body: { type: string }
+        author:
+          type: object | null
+          properties:
+            id: { type: integer }
+            username: { type: string }
+            first_name: { type: string }
+            last_name: { type: string }
+        likes: { type: integer }
 ```
 
 ## Event
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/event.json
@@ -301,7 +358,7 @@ properties:
   name: { type: string }
   description: { type: string }
   term: { type: integer }
-  organization:  
+  organization:
     type: object
     properties:
       id: { type: integer }
@@ -316,9 +373,9 @@ properties:
   instructional: { type: integer }
   is_public: { type: boolean }
   should_announce: { type: boolean }
-  tags: 
+  tags:
     type: array
-    items: 
+    items:
       type: object
       properties:
         id: { type: integer }
@@ -328,7 +385,8 @@ properties:
 
 ## Flatpage
 
-`url` can be used for the lookup query string to filter by url path (e.g. `GET /api/v3/obj/flatpage/retrieve//hello/?lookup=url`).
+`url` can be used for the lookup query string to filter by url path (
+e.g. `GET /api/v3/obj/flatpage/retrieve//hello/?lookup=url`).
 
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
@@ -364,11 +422,9 @@ properties:
   is_teacher: { type: boolean }
 ```
 
-
 ## Organization
 
 `slug` can be used for the lookup query string to filter by slug
-
 
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
@@ -389,9 +445,9 @@ properties:
   is_active: { type: boolean }
   is_open: { type: boolean }
   applications_open: { type: boolean }
-  tags: 
+  tags:
     type: array
-    items: 
+    items:
       type: object
       properties:
         id: { type: integer }
@@ -403,13 +459,14 @@ properties:
 ```
 
 ## Comment
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/comment.json
 type: object
 properties:
   id: { type: integer }
-  author: 
+  author:
     type: object | null
     properties:
       id: { type: integer }
@@ -420,7 +477,7 @@ properties:
   created_at: { type: string | null }
   likes: { type: integer }
   edited: { type: boolean }
-  children: 
+  children:
     type: array
     items:
       type: object
@@ -430,7 +487,7 @@ properties:
         created_at: { type: string | null }
         has_children: { type: boolean }
         likes: { type: integer }
-        author: 
+        author:
           type: object | null
           properties:
             id: { type: integer }
@@ -438,6 +495,7 @@ properties:
 ```
 
 ## Tag
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/tag.json
@@ -450,7 +508,8 @@ properties:
 
 ## Course
 
-`term` and `position` can be used when listing in the query string to filter by them. (e.g. `GET /api/v3/obj/course?term=1&position=1`
+`term` and `position` can be used when listing in the query string to filter by them. (
+e.g. `GET /api/v3/obj/course?term=1&position=1`
 
 **NOTE:** `term` is the term *id*, not the term *position*.
 
@@ -466,6 +525,7 @@ properties:
 ```
 
 ## Term
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/term.json
@@ -481,7 +541,9 @@ properties:
 ```
 
 ## Timetable
+
 When viewing:
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/timetable-view.json
@@ -494,7 +556,9 @@ properties:
     items: { "$ref": /api/v3/schema/course.json }
 
 ```
+
 When mutating:
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/timetable-mutate.json
@@ -505,6 +569,7 @@ properties:
 ```
 
 ## Banners
+
 `GET v3/banners`
 
 **Cache Until**: 600 seconds after last fetch
@@ -535,7 +600,5 @@ properties:
 ## Expo Notifications
 
 Do `OPTIONS v3/notif/token` for docs.
-
-
 
 [^1]: check object doc to see supported args. 
