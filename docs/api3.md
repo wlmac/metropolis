@@ -18,10 +18,7 @@ implemented)
 **Example**:
 
 ```json
-[
-  1,
-  8
-]
+[ 1, 8 ]
 ```
 
 ## Get Staff
@@ -104,9 +101,7 @@ Example:
   "count": 1023,
   "next": "https://maclyonsden.com/api/v3/events?limit=100&offset=500",
   "previous": "https://maclyonsden.com/api/v3/events?limit=100&offset=300",
-  "results": [
-    …
-  ]
+  "results": [ … ]
 }
 ```
 
