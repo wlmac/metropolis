@@ -237,7 +237,8 @@ class ObjectList(
                 continue  # ignore pagination and search_type params
             if key not in self.listing_filters:
                 raise BadRequest(
-                    f"{key} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {', '.join(self.listing_filters.keys())}.")
+                    f"{key} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {', '.join(self.listing_filters.keys())}."
+                )
             lookup_type = self.listing_filters[key]
             if isinstance(value, list):
                 k_filters.append(
