@@ -1,6 +1,6 @@
 import os
 from json import JSONDecodeError
-from typing import Dict, Callable, List, Tuple, Any
+from typing import Dict, Callable, List, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model, Q, QuerySet
@@ -215,7 +215,9 @@ class ObjectList(
         except NoReverseMatch:
             return None
 
-    def __convert_query_params__(self, query_params: QueryDict) -> Tuple[List[Tuple], str]:
+    def __convert_query_params__(
+        self, query_params: QueryDict
+    ) -> Tuple[List[Tuple], str]:
         """
         Removes non-filter params from query_params and converts them to the correct type.
         :param query_params: QueryDict
@@ -238,8 +240,9 @@ class ObjectList(
                     f"{key} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {', '.join(self.listing_filters.keys())}.")
             lookup_type = self.listing_filters[key]
             if isinstance(value, list):
-                for item in value:
-                    k_filters.append((key, self.__convert_type__(item, lookup_type)))
+                k_filters.append(
+                    (key, [self.__convert_type__(item, lookup_type) for item in value])
+                )
             else:
                 k_filters.append((key, self.__convert_type__(value, lookup_type)))
         return k_filters, search_type
