@@ -268,15 +268,19 @@ class ObjectList(
         if not query_params:
             # No query params, return None to avoid filtering.
             return None
+        print(f"{query_params=}")
         for item in query_params:
             lookup_filter, lookup_value = item
             if isinstance(lookup_value, list):
+                print("listing.")
+                # see https://github.com/wlmac/metropolis/blob/b4d996f6957cbabc85130e39a3fbe4529c8f86bf/core/api/views/objects/main.py#L275-L280
                 filters.append((f"{lookup_filter}__in", lookup_value))
-                filters.extend([(lookup_filter, value) for value in lookup_value])
-            else:
-                filters.append((lookup_filter, lookup_value))
+                # filters.extend([(f"{lookup_filter}__in", [value]) for value in lookup_value])
+                # filters.append((lookup_filter, lookup_value))
         query = Q()
+        print(f"{filters=}")
         for item in filters:
+            sub_query = []
             field, values = item
             query.add(Q(**{field: values}), Q.AND if search_type == "AND" else Q.OR)
         return query
@@ -286,9 +290,14 @@ class ObjectList(
         query_params, search_type = self.__convert_query_params__(
             self.request.query_params
         )
-        filters = self.__compile_filters__(query_params=query_params, search_type=search_type)
+        filters = self.__compile_filters__(
+            query_params=query_params, search_type=search_type
+        )
+
         if filters:
-            return queryset.filter(filters)
+            q = queryset.filter(filters).distinct()
+            return q
+
         return queryset
 
     def get(self, request, *args, **kwargs):
