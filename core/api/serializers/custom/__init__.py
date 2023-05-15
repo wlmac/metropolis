@@ -63,6 +63,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = Organization
         fields = ["id", "name", "slug", "icon"]
 
+
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
@@ -107,6 +108,7 @@ class CommentSerializer(serializers.ModelSerializer):
             "likes",
         ]
 
+
 class AuthorField(serializers.Field):
     def to_representation(self, value):
         return AuthorSerializer(value).data if value else None
@@ -115,7 +117,7 @@ class AuthorField(serializers.Field):
         if data is None:
             return None
         if isinstance(data, str):
-            json_string_data = data.replace("'", "\"")
+            json_string_data = data.replace("'", '"')
             data = json.loads(json_string_data)
         if isinstance(data, dict):
             data = data.get("id")
@@ -132,7 +134,7 @@ class AuthorField(serializers.Field):
         default_error_messages = {
             "does_not_exist": "User with ID {value} does not exist.",
         }
-        kwargs['help_text'] = 'The User ID of the author of this object.'
+        kwargs["help_text"] = "The User ID of the author of this object."
         super().__init__(**kwargs)
         self.default_error_messages.update(default_error_messages)
 
@@ -145,7 +147,7 @@ class OrganizationField(serializers.Field):
         if data is None:
             return None
         if isinstance(data, str):
-            json_string_data = data.replace("'", "\"")
+            json_string_data = data.replace("'", '"')
             data = json.loads(json_string_data)
         if isinstance(data, dict):
             data = data.get("id")
@@ -162,9 +164,10 @@ class OrganizationField(serializers.Field):
         default_error_messages = {
             "does_not_exist": "Organization with ID {value} does not exist.",
         }
-        kwargs['help_text'] = 'The Organization ID of the org in charge of this object.'
+        kwargs["help_text"] = "The Organization ID of the org in charge of this object."
         super().__init__(**kwargs)
         self.default_error_messages.update(default_error_messages)
+
 
 class TagRelatedField(serializers.MultipleChoiceField):
     """
@@ -175,7 +178,7 @@ class TagRelatedField(serializers.MultipleChoiceField):
     def __init__(self, **kwargs):
         kwargs["required"] = False
         choices = Tag.objects.all().values_list("id", "name")
-        kwargs['help_text'] = 'The Tags associated with this object.'
+        kwargs["help_text"] = "The Tags associated with this object."
         super().__init__(choices, **kwargs)
 
     def to_representation(self, value):
