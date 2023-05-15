@@ -26,25 +26,21 @@ class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
         }
 
 
-class ContentTypeField(serializers.ChoiceField):
+class ContentTypeField(serializers.Field):
     def __init__(self, **kwargs):
-        self.slug_field = "model"
-        choices = ContentType.objects.filter(
-            app_label="core", model__in=settings.POST_CONTENT_TYPES
-        ).values_list("model", "model")
         default_error_messages = {
-            "does_not_exist": "Organization with ID {value} does not exist."
+            "does_not_exist": "ContentType with model '{value}' does not exist.",
+            "invalid": 'Invalid value. Expected string with the model name e.g. "Comment"',
         }
-        super().__init__(choices, **kwargs)
+        kwargs["help_text"] = 'The model name e.g. "Comment" or "BlogPost"'
+        super().__init__(**kwargs)
         self.default_error_messages.update(default_error_messages)
 
     def to_internal_value(self, data):
         try:
-            return ContentType.objects.get(app_label="core", model=data)
+            return ContentType.objects.get(app_label="core", model=str(data).casefold())
         except ObjectDoesNotExist:
-            self.fail(
-                "does_not_exist", slug_name=self.slug_field, value=smart_str(data)
-            )
+            self.fail("does_not_exist", value=smart_str(data))
         except (TypeError, ValueError):
             self.fail("invalid")
 
