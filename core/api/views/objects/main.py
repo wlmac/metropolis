@@ -215,9 +215,7 @@ class ObjectList(
         except NoReverseMatch:
             return None
 
-    def __convert_query_params__(
-            self, query_params: QueryDict
-    ) -> List[Tuple]:
+    def __convert_query_params__(self, query_params: QueryDict) -> List[Tuple]:
         """
         Removes non-filter params from query_params and converts them to the correct type.
         :param query_params: QueryDict
@@ -226,9 +224,9 @@ class ObjectList(
         k_filters = []
         for key, value in query_params.lists():
             if (
-                    key
-                    in ["limit", "offset", "search_type", "format"]
-                    + self.provider.listing_filters_ignore
+                key
+                in ["limit", "offset", "search_type", "format"]
+                + self.provider.listing_filters_ignore
             ):
                 continue  # ignore pagination and search_type params
             if key not in self.listing_filters:
@@ -270,16 +268,14 @@ class ObjectList(
         for item in query_params:
             lookup_filter, lookup_value = item
             if isinstance(lookup_value, list):
-                filters[f'{lookup_filter}__in'] = lookup_value
+                filters[f"{lookup_filter}__in"] = lookup_value
             else:
                 filters[lookup_filter] = lookup_value
         return filters
 
     def get_queryset(self):
         queryset: QuerySet = self.provider.get_queryset(self.request)
-        query_params = self.__convert_query_params__(
-            self.request.query_params
-        )
+        query_params = self.__convert_query_params__(self.request.query_params)
         filters = self.__compile_filters__(query_params=query_params)
 
         if filters:

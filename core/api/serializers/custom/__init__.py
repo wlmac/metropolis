@@ -68,7 +68,10 @@ class LikeField(Field):
         super().__init__(**kwargs)
 
     def to_representation(self, obj):
-        return {'count': obj.likes.count(), 'liked': obj.likes.filter(author=self.context['author']).exists()}
+        return {
+            "count": obj.likes.count(),
+            "liked": obj.likes.filter(author=self.context["author"]).exists(),
+        }
 
 
 class CommentSerializer(serializers.ModelSerializer):
