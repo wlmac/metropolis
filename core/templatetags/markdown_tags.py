@@ -9,7 +9,7 @@ from martor.utils import markdownify
 
 register = template.Library()
 
-bodge_pattern = re.compile(f"\[([^\]]*)\]\(/")
+bodge_pattern = re.compile(r"\[([^]]*)]\(/")
 
 
 def bodge_replace(match):
