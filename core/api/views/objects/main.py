@@ -269,24 +269,17 @@ class ObjectList(
             return None
         for item in query_params:
             lookup_filter, lookup_value = item
-            filters[lookup_filter] = lookup_value
+            if isinstance(lookup_value, list):
+                filters[f'{lookup_filter}__in'] = lookup_value
+            else:
+                filters[lookup_filter] = lookup_value
         return filters
-
-    @staticmethod
-    def check_query_params(query_params: List):
-        for item in query_params:
-            lookup_filter, lookup_value = item
-            if isinstance(lookup_value, list) and len(lookup_value) > 1:
-                raise BadRequest(
-                    f"Filter {lookup_filter} does not support multiple values YET. Please use a single value for this filter. If you need to filter by multiple values, please contact @JasonLovesDoggo"
-                )
 
     def get_queryset(self):
         queryset: QuerySet = self.provider.get_queryset(self.request)
         query_params = self.__convert_query_params__(
             self.request.query_params
         )
-        self.check_query_params(query_params)
         filters = self.__compile_filters__(query_params=query_params)
 
         if filters:

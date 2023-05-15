@@ -138,22 +138,9 @@ No emojis :blobsadrain:.
 
 ## (List of) Objects
 
-You can add **Listing Filters** where supported[^1] to narrow down results. You can also chain these filters together
-and the system will **OR** them.
+You can add **Listing Filters** where supported[^1] to narrow down results.
 e.g. `GET /api/v3/obj/announcement?tags=10&tags=42` will return all announcements that have either the tags _10 **OR**
 42_.
-
-__**BUT WAIT!**__ what if you want to find all objects that have **BOTH** tag _10_ **AND** 42? _well_, you can use
-the `&search_type` query param which accepts either `AND` or `OR` as its value (default is OR).
-
-###### Examples
-
-- `GET /api/v3/obj/course?position=3&term=2&search_type=AND` will return all are **BOTH** in position _3_ **AND** in
-  term _2_.
-- `GET /api/v3/obj/announcement?tags=10&tags=42&organization=83&search_type=AND` will return all announcements that have
-  **BOTH** tag _10_, _42_ **AND** is from the organization with ID _83_.
-- `GET /api/v3/obj/announcement?tags=10&tags=42&search_type=OR` will return all announcements that have **EITHER** tag
-  _10_ **OR** _42_.
 
 ## Error
 
@@ -187,9 +174,7 @@ You can use the following filters:
 
 - `tags`: a tag ID to filter by.
 - `author`: an author ID to filter by
-- `organization`: an organization ID to filter by. (cannot be used with along with itself when using `AND`
-  e.g. `?organization=1&organization=2&search_type=AND` is invalid)
-
+- `organization`: an organization ID to filter by. 
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/announcement.json
@@ -596,4 +581,4 @@ properties:
 
 Do `OPTIONS v3/notif/token` for docs.
 
-[^1]: check object doc to see supported args. 
+[^1]: check object specific documentation to see supported args. 
