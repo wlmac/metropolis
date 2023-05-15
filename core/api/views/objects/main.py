@@ -216,23 +216,19 @@ class ObjectList(
             return None
 
     def __convert_query_params__(
-        self, query_params: QueryDict
-    ) -> Tuple[List[Tuple], str]:
+            self, query_params: QueryDict
+    ) -> List[Tuple]:
         """
         Removes non-filter params from query_params and converts them to the correct type.
         :param query_params: QueryDict
-        :return: Tuple[List[Tuple], str] (params, search_type)
+        :return: Tuple[List[Tuple], str] (params)
         """
         k_filters = []
-        search_type = query_params.get("search_type", "OR").upper()
-        if search_type not in {"OR", "AND"}:
-            search_type = "OR"
-
         for key, value in query_params.lists():
             if (
-                key
-                in ["limit", "offset", "search_type", "format"]
-                + self.provider.listing_filters_ignore
+                    key
+                    in ["limit", "offset", "search_type", "format"]
+                    + self.provider.listing_filters_ignore
             ):
                 continue  # ignore pagination and search_type params
             if key not in self.listing_filters:
@@ -246,7 +242,7 @@ class ObjectList(
                 )
             else:
                 k_filters.append((key, self.__convert_type__(value, lookup_type)))
-        return k_filters, search_type
+        return k_filters
 
     def __convert_type__(self, lookup_value: str, lookup_type: Callable) -> object:
         lookup_value = lookup_value.casefold()
@@ -263,41 +259,38 @@ class ObjectList(
         return lookup_type(lookup_value)
 
     @staticmethod
-    def __compile_filters__(query_params: List, search_type: str) -> Q:
-        filters = []
+    def __compile_filters__(query_params: List) -> Dict:
+        """
+        todo: add support for multiple values for the same filter (e.g. ?tags=1&tags=2) to get all obj that have both tags 1 and 2 (AND) or all obj that have either tag 1 or 2 (OR)
+        """
+        filters = {}
         if not query_params:
             # No query params, return None to avoid filtering.
             return None
-        print(f"{query_params=}")
         for item in query_params:
             lookup_filter, lookup_value = item
-            if isinstance(lookup_value, list):
-                print("listing.")
-                # see https://github.com/wlmac/metropolis/blob/b4d996f6957cbabc85130e39a3fbe4529c8f86bf/core/api/views/objects/main.py#L275-L280
-                filters.append((f"{lookup_filter}__in", lookup_value))
-                # filters.extend([(f"{lookup_filter}__in", [value]) for value in lookup_value])
-                # filters.append((lookup_filter, lookup_value))
-        query = Q()
-        print(f"{filters=}")
-        for item in filters:
-            sub_query = []
-            field, values = item
-            query.add(Q(**{field: values}), Q.AND if search_type == "AND" else Q.OR)
-        return query
+            filters[lookup_filter] = lookup_value
+        return filters
+
+    @staticmethod
+    def check_query_params(query_params: List):
+        for item in query_params:
+            lookup_filter, lookup_value = item
+            if isinstance(lookup_value, list) and len(lookup_value) > 1:
+                raise BadRequest(
+                    f"Filter {lookup_filter} does not support multiple values YET. Please use a single value for this filter. If you need to filter by multiple values, please contact @JasonLovesDoggo"
+                )
 
     def get_queryset(self):
         queryset: QuerySet = self.provider.get_queryset(self.request)
-        query_params, search_type = self.__convert_query_params__(
+        query_params = self.__convert_query_params__(
             self.request.query_params
         )
-        filters = self.__compile_filters__(
-            query_params=query_params, search_type=search_type
-        )
+        self.check_query_params(query_params)
+        filters = self.__compile_filters__(query_params=query_params)
 
         if filters:
-            q = queryset.filter(filters).distinct()
-            return q
-
+            return queryset.filter(**filters).distinct()
         return queryset
 
     def get(self, request, *args, **kwargs):
