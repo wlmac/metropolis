@@ -1,3 +1,5 @@
+import json
+
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
@@ -61,6 +63,11 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = Organization
         fields = ["id", "name", "slug", "icon"]
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ["id", "name", "color"]
+
 
 class LikeField(Field):
     def __init__(self, **kwargs):
@@ -100,53 +107,64 @@ class CommentSerializer(serializers.ModelSerializer):
             "likes",
         ]
 
+class AuthorField(serializers.Field):
+    def to_representation(self, value):
+        return AuthorSerializer(value).data if value else None
 
-class AuthorField(serializers.ChoiceField):
-    def __init__(self, **kwargs):
-        choices = User.objects.filter(is_staff=True).values_list("id", "username")
-        default_error_messages = {
-            "does_not_exist": "User with ID {value} does not exist.",
-            "invalid": "Expected a int in the form of a User ID.",
-        }
-        super().__init__(choices, **kwargs)
-        self.default_error_messages.update(default_error_messages)
-
-    def to_representation(self, obj: User):
-        return AuthorSerializer(obj).data
-
-    def to_internal_value(self, data: int):
-        if not (isinstance(data, int) or str(data).isdigit()):
-            self.fail(
-                "invalid",
-            )
+    def to_internal_value(self, data):
+        if data is None:
+            return None
+        if isinstance(data, str):
+            json_string_data = data.replace("'", "\"")
+            data = json.loads(json_string_data)
+        if isinstance(data, dict):
+            data = data.get("id")
         try:
-            return User.objects.get(id=data)
+            return User.objects.get(pk=data)
         except User.DoesNotExist:
             self.fail("does_not_exist", value=data)
 
+    @staticmethod
+    def get_queryset():
+        return User.objects.exclude(is_active=False)
 
-class OrganizationField(serializers.ChoiceField):
     def __init__(self, **kwargs):
-        choices = Organization.objects.filter(is_active=True).values_list("id", "name")
         default_error_messages = {
-            "does_not_exist": "Organization with ID {value} does not exist.",
-            "invalid": "Expected a int in the form of an Organization ID.",
+            "does_not_exist": "User with ID {value} does not exist.",
         }
-        super().__init__(choices, **kwargs)
+        kwargs['help_text'] = 'The User ID of the author of this object.'
+        super().__init__(**kwargs)
         self.default_error_messages.update(default_error_messages)
 
-    def to_representation(self, obj: User):
-        return OrganizationSerializer(obj).data
 
-    def to_internal_value(self, data: int):
-        if not (isinstance(data, int) or str(data).isdigit()):
-            self.fail("invalid")
+class OrganizationField(serializers.Field):
+    def to_representation(self, value):
+        return OrganizationSerializer(value).data if value else None
 
+    def to_internal_value(self, data):
+        if data is None:
+            return None
+        if isinstance(data, str):
+            json_string_data = data.replace("'", "\"")
+            data = json.loads(json_string_data)
+        if isinstance(data, dict):
+            data = data.get("id")
         try:
-            return Organization.objects.get(id=data)
+            return Organization.objects.get(pk=data)
         except Organization.DoesNotExist:
             self.fail("does_not_exist", value=data)
 
+    @staticmethod
+    def get_queryset():
+        return Organization.objects.filter(is_active=True)
+
+    def __init__(self, **kwargs):
+        default_error_messages = {
+            "does_not_exist": "Organization with ID {value} does not exist.",
+        }
+        kwargs['help_text'] = 'The Organization ID of the org in charge of this object.'
+        super().__init__(**kwargs)
+        self.default_error_messages.update(default_error_messages)
 
 class TagRelatedField(serializers.MultipleChoiceField):
     """
@@ -157,15 +175,14 @@ class TagRelatedField(serializers.MultipleChoiceField):
     def __init__(self, **kwargs):
         kwargs["required"] = False
         choices = Tag.objects.all().values_list("id", "name")
+        kwargs['help_text'] = 'The Tags associated with this object.'
         super().__init__(choices, **kwargs)
 
     def to_representation(self, value):
         """
         Convert the list of Tag objects to a list of {id, name, color} dictionaries.
         """
-        return [
-            {"id": tag.id, "name": tag.name, "color": tag.color} for tag in value.all()
-        ]
+        return TagSerializer(value, many=True).data
 
     def to_internal_value(self, data):
         """
