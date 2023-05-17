@@ -393,9 +393,9 @@ properties:
   last_name: { type: string }
   bio: { type: string }
   timezone: { type: string }
-  graduatingYear: { type: integer }
+  graduating_year: { type: integer }
   organizations: { type: array, items: { type: integer } }
-  following: { type: array, items: { type: integer } }
+  tags_following: { type: array, items: { type: integer } }
   gravatar_url: { type: string, format: url }
   saved_blogs: { type: array, items: { type: integer } }
   saved_announcements: { type: array, items: { type: integer } }
