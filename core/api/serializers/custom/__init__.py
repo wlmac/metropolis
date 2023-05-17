@@ -84,7 +84,7 @@ class CommentSerializer(serializers.ModelSerializer):
     likes = LikeField()
 
     @staticmethod
-    def get_edited(obj: Comment):
+    def get_edited(obj: Comment) -> bool:
         return obj.last_modified != obj.created_at
 
     @staticmethod
@@ -164,7 +164,7 @@ class OrganizationField(serializers.Field):
         self.default_error_messages.update(default_error_messages)
 
 
-class TagRelatedField(serializers.MultipleChoiceField): # todo fix tests for this
+class TagRelatedField(serializers.MultipleChoiceField):  # todo fix tests for this
     """
     A custom field to represent a list of Tag objects in the form of {id, name, color},
     but accepts input as a list of tag IDs.

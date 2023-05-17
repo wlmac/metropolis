@@ -3,9 +3,8 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
-from ...serializers import PrimaryKeyAndSlugRelatedField
 from ...serializers.custom import TagRelatedField, CommentField, LikeField, AuthorField
-from ....models import BlogPost, User
+from ....models import BlogPost
 
 
 class Serializer(serializers.ModelSerializer):
