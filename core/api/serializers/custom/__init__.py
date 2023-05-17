@@ -165,7 +165,7 @@ class OrganizationField(serializers.Field):
         self.default_error_messages.update(default_error_messages)
 
 
-class TagRelatedField(serializers.MultipleChoiceField):
+class TagRelatedField(serializers.MultipleChoiceField): # todo fix tests for this
     """
     A custom field to represent a list of Tag objects in the form of {id, name, color},
     but accepts input as a list of tag IDs.
