@@ -4,6 +4,7 @@
 
 Recommended: install [Nix](https://nixos.org/download) and [direnv](https://direnv.net) and run:
 ```sh
+make
 direnv allow
 ./manage.py migrate
 nix run
