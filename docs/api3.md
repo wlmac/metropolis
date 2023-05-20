@@ -196,6 +196,7 @@ properties:
       username: { type: string }
       first_name: { type: string }
       last_name: { type: string }
+      gravatar_url: { type: string, format: url }
   organization:
     type: object
     properties:
@@ -227,6 +228,7 @@ properties:
             username: { type: string }
             first_name: { type: string }
             last_name: { type: string }
+            gravatar_url: { type: string, format: url }
         likes: { type: integer }
 ```
 
@@ -248,6 +250,7 @@ properties:
       username: { type: string }
       first_name: { type: string }
       last_name: { type: string }
+      gravatar_url: { type: string, format: url }
   views: { type: integer }
   created_date: { type: string, format: date-time }
   last_modified_date: { type: string, format: date-time }
@@ -277,7 +280,8 @@ properties:
             id: { type: integer }
             username: { type: string }
             first_name: { type: string }
-            last_name: { type: string }    
+            last_name: { type: string }  
+            gravatar_url: { type: string, format: url }
         likes: { type: integer }
 ```
 
@@ -296,6 +300,9 @@ properties:
     properties:
       id: { type: integer }
       username: { type: string }
+      first_name: { type: string }
+      last_name: { type: string }
+      gravatar_url: { type: string, format: url }
   created_date: { type: string, format: date-time }
   last_modified_date: { type: string, format: date-time }
   content: { type: string, format: url }
@@ -451,6 +458,9 @@ properties:
     properties:
       id: { type: integer }
       username: { type: string }
+      first_name: { type: string }
+      last_name: { type: string }
+      gravatar_url: { type: string, format: url }
   content_type: { type: string }
   object_id: { type: integer }
   body: { type: string | null }
@@ -472,6 +482,9 @@ properties:
           properties:
             id: { type: integer }
             username: { type: string }
+            first_name: { type: string }
+            last_name: { type: string }
+            gravatar_url: { type: string, format: url }
 ```
 
 ## Tag

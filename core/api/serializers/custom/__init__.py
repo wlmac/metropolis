@@ -6,6 +6,7 @@ from django.utils.encoding import smart_str
 from rest_framework import serializers
 from rest_framework.fields import Field
 
+from core.api.utils.gravatar import gravatar_url
 from core.models import Tag, User, Organization, Comment
 
 
@@ -48,9 +49,14 @@ class ContentTypeField(serializers.Field):
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = User
-        fields = ["id", "username", "first_name", "last_name"]
+        fields = ["id", "username", "first_name", "last_name", "gravatar_url"]
+
+    @staticmethod
+    def get_gravatar_url(obj: User):
+        return gravatar_url(obj.email)
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
