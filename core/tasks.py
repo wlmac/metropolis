@@ -41,7 +41,7 @@ for m in ("get", "options", "head", "post", "put", "patch", "delete"):
 
 
 def users_with_token():
-    return User.objects.filter(not Q(expo_notif_tokens=Value({}, JSONField())))
+    return User.objects.exclude(Q(expo_notif_tokens=Value({}, JSONField())))
 
 
 @app.on_after_configure.connect
