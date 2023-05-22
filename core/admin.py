@@ -635,7 +635,7 @@ class UserAdmin(admin.ModelAdmin):
 
     @admin.action(permissions=["change"], description=_("Send singleday notification"))
     @staticmethod
-    def send_test_notif(modeladmin, request, queryset):
+    def send_notif_singleday(modeladmin, request, queryset):
         for u in queryset:
             notif_events_singleday.delay()
 
