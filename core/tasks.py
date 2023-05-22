@@ -140,7 +140,13 @@ def notif_single(self, recipient_id: int, msg_kwargs):
     if settings.NOTIF_DRY_RUN:
         return
     notreg_tokens = set()
-    for token in recipient.expo_notif_tokens:
+    for token, options in recipient.expo_notif_tokens.items():
+        allowlist = options.get('allow')
+        if isinstance(allowlist, dict) and msg_kwargs['category'] not in allowlist.keys():
+            logger.info(
+                f"notif_single not allowed to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}" + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
+            )
+            continue
         try:
             resp = PushClient(session=session).publish(
                 PushMessage(to=f"ExponentPushToken[{token}]", **msg_kwargs)
@@ -154,7 +160,7 @@ def notif_single(self, recipient_id: int, msg_kwargs):
         except PushTicketError as exc:
             raise self.retry(exc=exc)
     if notreg_tokens:
-        u = User.objects.filter(id=recipient_id)
+        u = User.objects.filter(id=recipient_id).first()
         for token in notreg_tokens:
             del u.expo_notif_tokens[token]
         u.save()

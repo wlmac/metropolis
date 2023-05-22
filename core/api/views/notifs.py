@@ -97,6 +97,7 @@ class NotificationsNew(APIView):
 
 class TokenSerializer(serializers2.Serializer):
     expo_push_token = serializers2.CharField()
+    options = serializers2.DictField(allow_empty=True)
 
 
 class NotifToken(APIView):
@@ -122,7 +123,7 @@ class NotifToken(APIView):
         s = TokenSerializer(data=request.data)
         s.is_valid(raise_exception=True)
         token = self._normalize_token(s.validated_data["expo_push_token"])
-        request.user.expo_notif_tokens[token] = None
+        request.user.expo_notif_tokens[token] = s.validated_data["options"]
         request.user.save()
         return response.Response(None)
 
