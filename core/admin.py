@@ -17,7 +17,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, ngettext
 from martor.widgets import AdminMartorWidget
 
-from core.tasks import notif_single
+from core.tasks import notif_single, notif_events_singleday
 from core.utils.mail import send_mail
 from metropolis import settings
 from . import models
@@ -617,10 +617,10 @@ class UserAdmin(admin.ModelAdmin):
         "saved_blogs__title",
         "saved_announcements__title",
     ]
-    actions = ["send_test_notif"]
+    actions = ["send_test_notif", "send_notif_singleday"]
     form = UserAdminForm
 
-    @admin.action(permissions=["change"], description="Send test notification")
+    @admin.action(permissions=["change"], description=_("Send test notification"))
     @staticmethod
     def send_test_notif(modeladmin, request, queryset):
         for u in queryset:
@@ -632,6 +632,12 @@ class UserAdmin(admin.ModelAdmin):
                     category="test",
                 ),
             )
+
+    @admin.action(permissions=["change"], description=_("Send singleday notification"))
+    @staticmethod
+    def send_test_notif(modeladmin, request, queryset):
+        for u in queryset:
+            notif_events_singleday.delay()
 
     def has_view_permission(self, request, obj=None):
         if obj is None and (

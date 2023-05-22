@@ -134,10 +134,10 @@ def notif_events_singleday(date: dt.date = None):
 @app.task(bind=True)
 def notif_single(self, recipient_id: int, msg_kwargs):
     recipient = User.objects.get(id=recipient_id)
+    logger.info(
+        f"notif_single to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}" + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
+    )
     if settings.NOTIF_DRY_RUN:
-        logger.info(
-            f"notif_single to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}"
-        )
         return
     notreg_tokens = set()
     for token in recipient.expo_notif_tokens:
