@@ -63,7 +63,6 @@ def notif_broker_announcement(obj_id):
             | Q(organizations__in=[ann.organization])
         )
         category = "ann.personal"
-    # logger.info(f"notif_broker_announcement2 for {obj_id} affects {u}") TODO(nyiyui) fix, u is not defined
     for u in affected.all():
         notif_single.delay(
             u.id,
@@ -73,7 +72,22 @@ def notif_broker_announcement(obj_id):
                 category=category,
             ),
         )
-    notif_events_singleday.delay()
+
+
+@app.task
+def notif_broker_blogpost(obj_id):
+    logger.info(f"notif_broker_blogpost for {obj_id}")
+    post = BlogPost.objects.get(id=obj_id)
+    affected = users_with_token()
+    for u in affected.all():
+        notif_single.delay(
+            u.id,
+            dict(
+                title=_l("New Blog Post: %(title)s") % dict(title=post.title),
+                body=post.body,
+                category="blog",
+            ),
+        )
 
 
 @app.task

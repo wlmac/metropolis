@@ -26,6 +26,13 @@ def announcement_change(sender, **kwargs):
 @receiver(signals.post_save, sender=models.BlogPost)
 def blogpost_change(sender, **kwargs):
     global_notifs.send("blogpost_change", orig_sender=sender, kwargs=kwargs)
+    if not settings.NOTIF_DRY_RUN:
+        tasks.notif_broker_blogpost.delay(kwargs["instance"].id)
+
+
+@receiver(signals.post_save, sender=models.BlogPost)
+def blogpost_change(sender, **kwargs):
+    global_notifs.send("blogpost_change", orig_sender=sender, kwargs=kwargs)
 
 
 class NotificationStream:
