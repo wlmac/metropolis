@@ -46,7 +46,7 @@ def users_with_token():
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(crontab(hour=4, minute=0), notif_events_singleday)
+    sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
 
 
 @app.task
@@ -94,7 +94,7 @@ def notif_broker_blogpost(obj_id):
 def notif_events_singleday(date: dt.date = None):
     tz = pytz.timezone(settings.TIME_ZONE)
     if date is None:
-        date = dt.date.today()
+        date = dt.date.today() + dt.timedelta(days=1)
     eligible = users_with_token()
     for u in eligible.all():
         # assume we don't have 10 million events overlapping a single day (we can't fit it in a single notif aniway)
