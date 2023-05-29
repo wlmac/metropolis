@@ -98,8 +98,8 @@ def notif_events_singleday(date: dt.date = None):
     eligible = users_with_token()
     for u in eligible.all():
         # assume we don't have 10 million events overlapping a single day (we can't fit it in a single notif aniway)
-        date_mintime = dt.datetime.combine(date, dt.datetime.min.time()).astimezone(tz)
-        date_maxtime = dt.datetime.combine(date, dt.datetime.max.time()).astimezone(tz)
+        date_mintime = tz.localize(dt.datetime.combine(date, dt.datetime.min.time()))
+        date_maxtime = tz.localize(dt.datetime.combine(date, dt.datetime.max.time()))
         covering = list(
             Event.get_events(u)
             .filter(
@@ -141,12 +141,13 @@ def notif_single(self, recipient_id: int, msg_kwargs):
         return
     notreg_tokens = set()
     for token, options in recipient.expo_notif_tokens.items():
-        allowlist = options.get('allow')
-        if isinstance(allowlist, dict) and msg_kwargs['category'] not in allowlist.keys():
-            logger.info(
-                f"notif_single not allowed to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}" + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
-            )
-            continue
+        if options is not None:
+            allowlist = options.get('allow')
+            if isinstance(allowlist, dict) and msg_kwargs['category'] not in allowlist.keys():
+                logger.info(
+                    f"notif_single not allowed to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}" + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
+                )
+                continue
         try:
             resp = PushClient(session=session).publish(
                 PushMessage(to=f"ExponentPushToken[{token}]", **msg_kwargs)
