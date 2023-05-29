@@ -633,6 +633,40 @@ TIMETABLE_FORMATS = {
                     "position": [{4, 6}, {3, 6}],
                 },
             ],
+            "sac-election": [
+                {
+                    "description": {
+                        "time": "09:00 am - 10:40 am",
+                        "course": "Period 1",
+                    },
+                    "time": [[9, 0], [10, 40]],
+                    "position": [{1, 5}, {1, 5}],
+                },
+                {
+                    "description": {
+                        "time": "10:45 am - 12:10 pm",
+                        "course": "Period 2",
+                    },
+                    "time": [[10, 45], [12, 10]],
+                    "position": [{2, 5}, {2, 5}],
+                },
+                {
+                    "description": {
+                        "time": "01:10 pm - 02:10 pm",
+                        "course": "Period 3",
+                    },
+                    "time": [[13, 10], [14, 10]],
+                    "position": [{3, 6}, {4, 6}],
+                },
+                {
+                    "description": {
+                        "time": "2:15 pm - 3:15 pm",
+                        "course": "Period 4",
+                    },
+                    "time": [[14, 15], [15, 15]],
+                    "position": [{4, 6}, {3, 6}],
+                },
+            ],
         },
         "courses": 4,
         "positions": {1, 2, 3, 4, 5, 6},
