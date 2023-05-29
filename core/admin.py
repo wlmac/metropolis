@@ -1,4 +1,5 @@
 import json
+import datetime as dt
 
 import django.db
 from django import forms
@@ -637,7 +638,7 @@ class UserAdmin(admin.ModelAdmin):
     @staticmethod
     def send_notif_singleday(modeladmin, request, queryset):
         for u in queryset:
-            notif_events_singleday.delay()
+            notif_events_singleday.delay(date=dt.date.today())
 
     def has_view_permission(self, request, obj=None):
         if obj is None and (
