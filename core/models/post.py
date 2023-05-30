@@ -281,7 +281,7 @@ class Announcement(Post):
 
     @classmethod
     def get_all(cls, user=None) -> QuerySet:
-        if user.is_superuser:
+        if user is not None and user.is_superuser:
             return cls.objects.all()
         approved_announcements = cls.get_approved()
 
