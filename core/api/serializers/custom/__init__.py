@@ -50,6 +50,7 @@ class ContentTypeField(serializers.Field):
 
 class AuthorSerializer(serializers.ModelSerializer):
     gravatar_url = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = User
         fields = ["id", "username", "first_name", "last_name", "gravatar_url"]

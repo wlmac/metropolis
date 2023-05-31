@@ -362,9 +362,7 @@ class RecurrenceRule(models.Model):
             byweekday=self._repeat_on,
             cache=True,
         )
-        rrule_part = str(rule).split("RRULE:")[
-            1
-        ]  # FREQ=WEEKLY;INTERVAL=2;COUNT=54;BYDAY=TU todo remove
+        rrule_part = str(rule).split("RRULE:")[1]
         return dict(RRULE=rrule_part)
 
 

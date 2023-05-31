@@ -276,14 +276,14 @@ class Announcement(Post):
         return reverse("announcement_detail", args=[self.pk])
 
     @classmethod
-    def get_approved(cls):
+    def get_approved(cls) -> QuerySet:
         return cls.objects.filter(status="a")
 
     @classmethod
     def get_all(cls, user=None) -> QuerySet:
-        if user is not None and user.is_superuser:
-            return cls.objects.all()
         approved_announcements = cls.get_approved()
+        if user is not None and user.is_superuser:
+            return approved_announcements  # return all announcements if user is superuser (admin).
 
         feed_all = approved_announcements.filter(is_public=True)
         if user is not None and user.is_authenticated:

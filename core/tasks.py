@@ -17,7 +17,7 @@ from exponent_server_sdk import (
 )
 from requests.exceptions import ConnectionError, HTTPError
 
-from core.models import Announcement, User, Event
+from core.models import Announcement, User, Event, BlogPost
 from metropolis.celery import app
 
 logger = get_task_logger(__name__)
@@ -54,7 +54,6 @@ def notif_broker_announcement(obj_id):
     logger.info(f"notif_broker_announcement for {obj_id}")
     ann = Announcement.objects.get(id=obj_id)
     affected = users_with_token()
-    category = ""
     if ann.organization.id in settings.ANNOUNCEMENTS_NOTIFY_FEEDS:
         category = "ann.public"
     else:
@@ -135,17 +134,22 @@ def notif_events_singleday(date: dt.date = None):
 def notif_single(self, recipient_id: int, msg_kwargs):
     recipient = User.objects.get(id=recipient_id)
     logger.info(
-        f"notif_single to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}" + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
+        f"notif_single to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}"
+        + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
     )
     if settings.NOTIF_DRY_RUN:
         return
     notreg_tokens = set()
     for token, options in recipient.expo_notif_tokens.items():
         if options is not None:
-            allowlist = options.get('allow')
-            if isinstance(allowlist, dict) and msg_kwargs['category'] not in allowlist.keys():
+            allowlist = options.get("allow")
+            if (
+                isinstance(allowlist, dict)
+                and msg_kwargs["category"] not in allowlist.keys()
+            ):
                 logger.info(
-                    f"notif_single not allowed to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}" + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
+                    f"notif_single not allowed to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}"
+                    + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
                 )
                 continue
         try:

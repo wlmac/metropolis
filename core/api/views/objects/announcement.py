@@ -171,13 +171,16 @@ class AnnouncementProvider(BaseProvider):
             OneSerializer if self.request.kind in ("single", "retrieve") else Serializer
         )
 
-    def get_queryset(self, request):
+    @staticmethod
+    def get_queryset(request):
         return Announcement.get_all(request.user)
 
-    def get_last_modified(self, view):
+    @staticmethod
+    def get_last_modified(view):
         return view.get_object().last_modified_date
 
-    def get_last_modified_queryset(self):
+    @staticmethod
+    def get_last_modified_queryset():
         return (
             LogEntry.objects.filter(
                 content_type=ContentType.objects.get(
