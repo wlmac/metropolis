@@ -402,6 +402,7 @@ properties:
   timezone: { type: string }
   graduating_year: { type: integer }
   organizations: { type: array, items: { type: integer } }
+  organizations_leading: { type: array, items: { type: integer } }
   tags_following: { type: array, items: { type: integer } }
   gravatar_url: { type: string, format: url }
   saved_blogs: { type: array, items: { type: integer } }

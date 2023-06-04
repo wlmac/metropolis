@@ -68,6 +68,7 @@ class Serializer(serializers.ModelSerializer):
             "timezone",
             "graduating_year",
             "organizations",
+            "organizations_leading",
             "tags_following",
             "gravatar_url",
             "saved_blogs",
