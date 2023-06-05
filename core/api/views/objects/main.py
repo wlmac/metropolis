@@ -270,7 +270,7 @@ class ObjectList(
     def __compile_filters__(query_params: List) -> Dict:
         filters = {}
         if not query_params:
-            # No query params, return None to avoid filtering.
+            # No query params, return None to avoid wastefully filtering.
             return None
         for item in query_params:
             lookup_filter, lookup_value = item
