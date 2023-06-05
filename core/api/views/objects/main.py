@@ -187,7 +187,6 @@ class ObjectAPIView(generics.GenericAPIView):
         self.response = self.finalize_response(request, response, *args, **kwargs)
         return self.response
 
-
 class ObjectList(
     GenericAPIViewWithLastModified,
     GenericAPIViewWithDebugInfo,
@@ -228,7 +227,7 @@ class ObjectList(
                 in ["limit", "offset", "search_type", "format"]
                 + self.provider.listing_filters_ignore
             ):
-                continue  # ignore pagination and search_type params
+                continue
             if key not in self.listing_filters:
                 raise BadRequest(
                     f"{key} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {', '.join(self.listing_filters.keys())}."
@@ -253,7 +252,17 @@ class ObjectList(
                 raise BadRequest(
                     f'Invalid value for boolean filter: {lookup_value}. Accepted values for True are {" or ".join(self.TRUE_VALUES)} and for False they are {" or ".join(self.FALSE_VALUES)}'
                 )
-
+        if isinstance(lookup_type, list):
+            """
+            there are multiple types that are accepted for this filter. See which one matches.
+            """
+            for type_group in lookup_type:
+                type_, category = type_group
+                if isinstance(lookup_value, type_):
+                    try:
+                        return {"item": type_(lookup_value), "category": category}
+                    except ValueError:
+                        continue
         return lookup_type(lookup_value)
 
     @staticmethod
@@ -267,17 +276,33 @@ class ObjectList(
             return None
         for item in query_params:
             lookup_filter, lookup_value = item
-            if isinstance(lookup_value, list):
-                filters[f"{lookup_filter}__in"] = lookup_value
+
+            if isinstance(lookup_value, list) and len(lookup_value) > 1:
+                if isinstance(lookup_value[0], dict):
+                    filters[f"{lookup_filter}__{lookup_value['category']}__in"] = (
+                        lookup_value["item"]
+                        if not isinstance(lookup_value["item"], list)
+                        else lookup_value["item"][0]
+                    )
+                else:
+                    filters[f"{lookup_filter}__in"] = lookup_value
             else:
-                filters[lookup_filter] = lookup_value
+                if isinstance(lookup_value, list):
+                    lookup_value = lookup_value[0]
+                if isinstance(lookup_value, dict):
+                    filters[f"{lookup_filter}__{lookup_value['category']}"] = (
+                        lookup_value["item"]
+                        if not isinstance(lookup_value["item"], list)
+                        else lookup_value["item"][0]
+                    )
+                else:
+                    filters[lookup_filter] = lookup_value
         return filters
 
     def get_queryset(self):
         queryset: QuerySet = self.provider.get_queryset(self.request)
         query_params = self.__convert_query_params__(self.request.query_params)
         filters = self.__compile_filters__(query_params=query_params)
-
         if filters:
             return queryset.filter(**filters).distinct()
         return queryset

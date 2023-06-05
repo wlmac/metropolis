@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -155,7 +157,11 @@ class Inner(permissions.BasePermission):
 
 class AnnouncementProvider(BaseProvider):
     model = Announcement
-    listing_filters = {"tags": int, "organization": int, "author": int}
+    listing_filters = {
+        "tags": [(int, ""), (str, "name")],
+        "organization": int,
+        "author": int,
+    }
 
     @property
     def permission_classes(self):
