@@ -187,6 +187,7 @@ class ObjectAPIView(generics.GenericAPIView):
         self.response = self.finalize_response(request, response, *args, **kwargs)
         return self.response
 
+
 class ObjectList(
     GenericAPIViewWithLastModified,
     GenericAPIViewWithDebugInfo,
@@ -267,9 +268,6 @@ class ObjectList(
 
     @staticmethod
     def __compile_filters__(query_params: List) -> Dict:
-        """
-        todo: add support for multiple values for the same filter (e.g. ?tags=1&tags=2) to get all obj that have both tags 1 and 2 (AND) or all obj that have either tag 1 or 2 (OR)
-        """
         filters = {}
         if not query_params:
             # No query params, return None to avoid filtering.
@@ -279,7 +277,9 @@ class ObjectList(
 
             if isinstance(lookup_value, list) and len(lookup_value) > 1:
                 if isinstance(lookup_value[0], dict):
-                    filters[f"{lookup_filter}__{lookup_value['category']}__in"] = (
+                    filters[
+                        f"{lookup_filter}__{lookup_value['category']}__in"
+                    ] = (  # todo add option to use ID or spec field (fix option)
                         lookup_value["item"]
                         if not isinstance(lookup_value["item"], list)
                         else lookup_value["item"][0]
