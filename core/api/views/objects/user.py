@@ -81,10 +81,12 @@ class ListSerializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
 
-    def get_gravatar_url(self, obj):
+    @staticmethod
+    def get_gravatar_url(obj):
         return gravatar_url(obj.email)
 
-    def get_email_hash(self, obj):
+    @staticmethod
+    def get_email_hash(obj):
         return base64.standard_b64encode(
             hashlib.md5(obj.email.encode("utf-8")).digest()
         )
@@ -124,7 +126,7 @@ class NewSerializer(serializers.ModelSerializer):
         required=True,
     )
     username = serializers.RegexField(
-        "^[\w.@+-]+$",
+        r"^[\w.@+-]+$",
         validators=[validators.UniqueValidator(queryset=User.objects.all())],
         max_length=30,
         required=True,
