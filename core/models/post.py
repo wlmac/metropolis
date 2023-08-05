@@ -91,13 +91,6 @@ class CommentHistory(models.Model):  # todo add to admin panel
 
 
 class Comment(PostInteraction):
-    """
-    todo:
-    - add a simple deletion system for staff and such
-    - possibly add comment history ( if a comment is edited, it will be saved in a history field )
-
-    """
-
     history = models.ManyToManyField(CommentHistory, blank=True)
     last_modified = models.DateTimeField(auto_now_add=True)
     body = models.TextField(max_length=512, null=True, blank=False)
@@ -185,9 +178,7 @@ class Comment(PostInteraction):
         if self.pk is not None:  # Object is being updated
             old_obj = Comment.objects.get(pk=self.pk)
             if old_obj.body != self.body:
-                CommentHistory.objects.create(
-                    Comment=self, body=old_obj.body, created_at=old_obj.last_modified
-                )
+                CommentHistory.objects.create(Comment=old_obj)
                 self.last_modified = timezone.now()
 
         if not self.deleted and self.author.is_superuser:

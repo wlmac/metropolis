@@ -71,7 +71,6 @@ psycopg2 = "2.9.1"
 black = "*"
 isort = "*"
 
-# TODO: doesn't work right now
 #[tool.mypy]
 #plugins = ["mypy_django_plugin.main"]
 

@@ -182,7 +182,7 @@ class PostAdmin(admin.ModelAdmin):
                 % (obj.pk, obj.body[:10]),
                 obj.comments.all(),
             )
-        )  # todo maybe turn into a an expandable list
+        )
         return mark_safe(",".join(objs))
 
     comments.short_description = "Comments"
@@ -516,9 +516,7 @@ class ExhibitAdmin(PostAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "tags":
             kwargs["queryset"] = (
-                models.Tag.objects.filter(
-                    Q(organization=None)
-                )  # TODO: add SAC-only tags?
+                models.Tag.objects.filter(Q(organization=None))
                 .distinct()
                 .order_by("name")
             )

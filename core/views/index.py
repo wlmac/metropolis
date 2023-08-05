@@ -100,7 +100,6 @@ class CalendarFeed(ICalFeed, View):
         )
 
     def item_link(self, item):
-        # TODO: implement by-pk link
         return reverse("calendar") + f"?pk={item.pk}"  # NOTE: workaround for UID
 
     def item_categories(self, item):
