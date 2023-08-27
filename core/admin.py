@@ -214,16 +214,11 @@ class AnnouncementAdmin(PostAdmin):
         )
 
     def get_form(self, request, obj=None, **kwargs):
-        if request.user.in_qltr("ann-draft"):
-            self.message_user(
-                request,
-                "The default status is now 'Draft' as a trial. Set it to 'Pending Approval' to send to supervisor(s) for approval. Please send feedback if applicable.",
-            )
-            kwargs["form"] = (
-                AnnouncementSupervisorAdminForm
-                if request.user.is_superuser or request.user.is_teacher
-                else AnnouncementAdminForm
-            )
+        kwargs["form"] = (
+            AnnouncementSupervisorAdminForm
+            if request.user.is_superuser or request.user.is_teacher
+            else AnnouncementAdminForm
+        )
         return super().get_form(request, obj, **kwargs)
 
     def get_readonly_fields(self, request, obj=None):

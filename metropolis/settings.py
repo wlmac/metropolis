@@ -1012,9 +1012,6 @@ REOCCURRENCE_CUTOFF = timedelta(
 
 # Qualified Trials
 QLTR: Dict[str, Dict] = {
-    "ann-draft": dict(
-        title="Announcement Status Default as Draft",
-    ),
     "ia": dict(
         title="Cumulative Minor Changes to Index",
     ),
