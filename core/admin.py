@@ -128,7 +128,12 @@ class OrganizationAdmin(admin.ModelAdmin):
         TagInline,
         OrganizationURLInline,
     ]
-    actions = ["set_club_unactive", "set_club_active", "reset_club_president"]
+    actions = [
+        "set_club_unactive",
+        "set_club_active",
+        "reset_club_president",
+        "reset_club_execs",
+    ]
     form = OrganizationAdminForm
 
     @admin.action(
@@ -150,6 +155,15 @@ class OrganizationAdmin(admin.ModelAdmin):
     @staticmethod
     def reset_club_president(modeladmin, request, queryset: QuerySet[Organization]):
         queryset.update(owner=User.objects.get(id=970))  # temp user.
+
+    @admin.action(
+        permissions=["change"],
+        description=_("Remove all club execs."),
+    )
+    @staticmethod
+    def reset_club_execs(modeladmin, request, queryset: QuerySet[Organization]):
+        for club in queryset:
+            club.execs.clear()
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
