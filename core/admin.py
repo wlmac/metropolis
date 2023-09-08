@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.messages import constants as messages
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -32,7 +32,7 @@ from .forms import (
     TermAdminForm,
     UserAdminForm,
 )
-from .models import Comment
+from .models import Comment, Organization
 from .utils.filters import (
     OrganizationListFilter,
     BlogPostAuthorListFilter,
@@ -128,7 +128,28 @@ class OrganizationAdmin(admin.ModelAdmin):
         TagInline,
         OrganizationURLInline,
     ]
+    actions = ["set_club_unactive", "set_club_active", "reset_club_president"]
     form = OrganizationAdminForm
+
+    @admin.action(
+        permissions=["change"], description=_("Set selected clubs to unactive")
+    )
+    @staticmethod
+    def set_club_unactive(modeladmin, request, queryset: QuerySet[Organization]):
+        queryset.update(is_active=False)
+
+    @admin.action(permissions=["change"], description=_("Set selected clubs to active"))
+    @staticmethod
+    def set_club_active(modeladmin, request, queryset: QuerySet[Organization]):
+        queryset.update(is_active=True)
+
+    @admin.action(
+        permissions=["change"],
+        description=_("Set selected clubs's present to a temp user."),
+    )
+    @staticmethod
+    def reset_club_president(modeladmin, request, queryset: QuerySet[Organization]):
+        queryset.update(owner=User.objects.get(id=970))  # temp user.
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
