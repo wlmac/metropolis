@@ -6,12 +6,14 @@ from django.contrib.syndication.views import Feed
 from django.core.paginator import EmptyPage, Paginator
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
 
 from core.templatetags.markdown_tags import markdown
 from . import mixins
 from .. import models
+from ..models import Exhibit
 
 
 def custom_feed(request, pk: int, limit: Optional[int] = None):
@@ -216,7 +218,7 @@ class BlogPostCards(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.feed == "all":
-            feed = models.BlogPost.objects.filter(is_published=True)
+            feed = models.BlogPost.public()
         else:
             raise HttpResponseBadRequest("feed must be all")
         paginator = Paginator(feed, settings.LAZY_LOADING["per_page"])
@@ -237,7 +239,7 @@ class BlogPostList(TemplateView, mixins.TitleMixin):
         return "-last_modified_date"
 
     def get_queryset(self):
-        return models.BlogPost.objects.filter(is_published=True)
+        return models.BlogPost.public()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -247,7 +249,7 @@ class BlogPostList(TemplateView, mixins.TitleMixin):
             context["initial_limit"] = settings.LAZY_LOADING["initial_limit"]
             context["per_page"] = settings.LAZY_LOADING["per_page"]
 
-        context["feed_all"] = models.BlogPost.objects.filter(is_published=True)
+        context["feed_all"] = models.BlogPost.public()
         if settings.LAZY_LOADING:
             context["feed_all"] = context["feed_all"][
                 : settings.LAZY_LOADING["initial_limit"]
@@ -281,9 +283,7 @@ class BlogPostTagList(TemplateView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["feed_tag"] = models.BlogPost.objects.filter(is_published=True).filter(
-            tags=context["tag"]
-        )
+        context["feed_tag"] = models.BlogPost.public().filter(tags=context["tag"])
         context["tag"] = models.Tag.objects.get(id=context["tag"])
         return context
 

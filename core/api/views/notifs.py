@@ -65,7 +65,9 @@ class NotificationStream:
         return f"event: {event_name}\n" f"data: {json.dumps(data)}\n"
 
 
-def serializer(sender, signal=None, orig_sender=None, kwargs={}):
+def serializer(sender, signal=None, orig_sender=None, kwargs=None):
+    if kwargs is None:
+        kwargs = {}
     if sender == "announcement_change":
         return (
             sender,
@@ -77,22 +79,22 @@ def serializer(sender, signal=None, orig_sender=None, kwargs={}):
             serializers.BlogPostSerializer(kwargs["instance"]).data,
         )
     else:
-        return (sender, kwargs)
+        return sender, kwargs
 
 
 class NotificationsNew(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        response = StreamingHttpResponse(
+        res = StreamingHttpResponse(
             NotificationStream(
                 signal=global_notifs,
                 serializer=serializer,
             ),
             content_type="text/event-stream",
         )
-        response["Cache-Control"] = "no-cache"
-        return response
+        res["Cache-Control"] = "no-cache"
+        return res
 
 
 class TokenSerializer(serializers2.Serializer):
@@ -102,7 +104,7 @@ class TokenSerializer(serializers2.Serializer):
 
 class NotifToken(APIView):
     """
-    Submit and delete notifcation push tokens.
+    Submit and delete notification push tokens.
     Supports Expo notification push tokens only for now.
     JSON object for PUT and DELETE is both of the form:
     a) {"expo_push_token": "ExponentPushToken[abc123]"}

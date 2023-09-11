@@ -60,9 +60,9 @@ class BlogPostProvider(BaseProvider):
 
     def get_queryset(self, request):
         if request.user.has_perm("core.blog_post.view") or request.user.is_superuser:
-            return BlogPost.objects.all()
+            return BlogPost.objects.filter(is_archived=False)
         else:
-            return BlogPost.objects.filter(is_published=True)
+            return BlogPost.public()
 
     def get_last_modified(self, view):
         return view.get_object().last_modified_date

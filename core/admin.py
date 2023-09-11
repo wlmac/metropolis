@@ -1,16 +1,11 @@
-import json
-import datetime as dt
-
 import django.db
 from django import forms
 from django.conf import settings
-from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.messages import constants as messages
-from django.db.models import Q, QuerySet
-from django.http import HttpResponse
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
@@ -18,7 +13,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, ngettext
 from martor.widgets import AdminMartorWidget
 
-from core.tasks import notif_single, notif_events_singleday
 from core.utils.mail import send_mail
 from metropolis import settings
 from . import models
@@ -32,12 +26,13 @@ from .forms import (
     TermAdminForm,
     UserAdminForm,
 )
-from .models import Comment, Organization
+from .models import Comment
 from .utils.filters import (
     OrganizationListFilter,
     BlogPostAuthorListFilter,
     PostTypeFilter,
 )
+from .utils.actions import *
 
 User = get_user_model()
 
@@ -129,41 +124,12 @@ class OrganizationAdmin(admin.ModelAdmin):
         OrganizationURLInline,
     ]
     actions = [
-        "set_club_unactive",
-        "set_club_active",
-        "reset_club_president",
-        "reset_club_execs",
+        set_club_unactive,
+        set_club_active,
+        reset_club_president,
+        reset_club_execs,
     ]
     form = OrganizationAdminForm
-
-    @admin.action(
-        permissions=["change"], description=_("Set selected clubs to unactive")
-    )
-    @staticmethod
-    def set_club_unactive(modeladmin, request, queryset: QuerySet[Organization]):
-        queryset.update(is_active=False)
-
-    @admin.action(permissions=["change"], description=_("Set selected clubs to active"))
-    @staticmethod
-    def set_club_active(modeladmin, request, queryset: QuerySet[Organization]):
-        queryset.update(is_active=True)
-
-    @admin.action(
-        permissions=["change"],
-        description=_("Set selected clubs's present to a temp user."),
-    )
-    @staticmethod
-    def reset_club_president(modeladmin, request, queryset: QuerySet[Organization]):
-        queryset.update(owner=User.objects.get(id=970))  # temp user.
-
-    @admin.action(
-        permissions=["change"],
-        description=_("Remove all club execs."),
-    )
-    @staticmethod
-    def reset_club_execs(modeladmin, request, queryset: QuerySet[Organization]):
-        for club in queryset:
-            club.execs.clear()
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -484,8 +450,8 @@ class AnnouncementAdmin(PostAdmin):
 
 
 class BlogPostAdmin(PostAdmin):
-    list_display = ["title", "author", "is_published", "views"]
-    list_filter = [BlogPostAuthorListFilter, "is_published"]
+    list_display = ["title", "author", "is_published", "views", "is_archived"]
+    list_filter = [BlogPostAuthorListFilter, "is_published", "is_archived"]
     ordering = ["-show_after", "views"]
     fields = [
         "author",
@@ -498,11 +464,13 @@ class BlogPostAdmin(PostAdmin):
         "show_after",
         "tags",
         "is_published",
+        "is_archived",
     ]
     readonly_fields = PostAdmin.readonly_fields
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
+    actions = [set_post_archived, set_post_unarchived]
 
     def get_fields(self, request, obj=None):
         if obj and obj.pk:
@@ -646,27 +614,8 @@ class UserAdmin(admin.ModelAdmin):
         "saved_blogs__title",
         "saved_announcements__title",
     ]
-    actions = ["send_test_notif", "send_notif_singleday"]
+    actions = [send_test_notif, send_notif_singleday]
     form = UserAdminForm
-
-    @admin.action(permissions=["change"], description=_("Send test notification"))
-    @staticmethod
-    def send_test_notif(modeladmin, request, queryset):
-        for u in queryset:
-            notif_single.delay(
-                u.id,
-                dict(
-                    title="Test Notification",
-                    body="Test body.",
-                    category="test",
-                ),
-            )
-
-    @admin.action(permissions=["change"], description=_("Send singleday notification"))
-    @staticmethod
-    def send_notif_singleday(modeladmin, request, queryset):
-        for u in queryset:
-            notif_events_singleday.delay(date=dt.date.today())
 
     def has_view_permission(self, request, obj=None):
         if obj is None and (
@@ -684,33 +633,6 @@ class UserAdmin(admin.ModelAdmin):
 class TimetableAdmin(admin.ModelAdmin):
     list_display = ["__str__", "term"]
     list_filter = ["term"]
-
-
-@admin.action(
-    permissions=["change"],
-    description="Archive selected flatpages and download them as a JSON file",
-)
-def archive_page(modeladmin, request, queryset):
-    if not request.user.has_perm("flatpages.change_flatpage"):
-        raise RuntimeError("permissions kwarg doesn't work")
-
-    response = HttpResponse(
-        content_type="application/json"
-    )  # write a json file with all the page date and then download it
-    response["Content-Disposition"] = 'attachment; filename="pages.json"'
-    data = []
-    for page in queryset:
-        data.append(
-            {
-                "url": page.url,
-                "title": page.title,
-                "content": page.content,
-                "registration_required": page.registration_required,
-                "template_name": page.template_name,
-            }
-        )
-    response.write(json.dumps(data))
-    return response
 
 
 class CustomFlatPageAdmin(FlatPageAdmin):
@@ -761,7 +683,7 @@ class CommentAdmin(admin.ModelAdmin):
     }
     list_display = ["author", "content_object", "created_at"]
     search_fields = ["author__username", "body"]
-    actions = ["approve_comments", "unapprove_comments"]
+    actions = [approve_comments, unapprove_comments]
     readonly_fields = ["created_at", "likes"]
     list_filter = ["live", PostTypeFilter]
     actions_on_top = True
@@ -770,35 +692,6 @@ class CommentAdmin(admin.ModelAdmin):
 
     def likes(self, obj: Comment):
         return obj.like_count
-
-    def approve_comments(self, request, queryset):
-        count = queryset.update(live=True)
-
-        self.message_user(
-            request,
-            ngettext(
-                "%d comment successfully approved.",
-                "%d comments successfully approved.",
-                count,
-            )
-            % count,
-        )
-
-    approve_comments.short_description = _("Approve (Show) comments")
-
-    def unapprove_comments(self, modeladmin, request, queryset):
-        count = queryset.update(live=False)
-        self.message_user(
-            request,
-            ngettext(
-                "%d comment successfully unapproved.",
-                "%d comments successfully unapproved.",
-                count,
-            )
-            % count,
-        )
-
-    unapprove_comments.short_description = _("Unapprove (Hide) comments")
 
     def get_queryset(self, request):
         return Comment.objects.filter(author__isnull=False).order_by("-created_at")

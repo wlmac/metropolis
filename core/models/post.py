@@ -318,6 +318,13 @@ class BlogPost(Post):
     )
     is_published = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
+    is_archived = models.BooleanField(
+        default=False, help_text="Archived posts are not shown on the blog page."
+    )
+
+    @classmethod
+    def public(cls):
+        return cls.objects.filter(is_published=True, is_archived=False)
 
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])
