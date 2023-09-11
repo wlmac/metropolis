@@ -464,7 +464,6 @@ class BlogPostAdmin(PostAdmin):
         "show_after",
         "tags",
         "is_published",
-        "is_archived",
     ]
     readonly_fields = PostAdmin.readonly_fields
     formfield_overrides = {
