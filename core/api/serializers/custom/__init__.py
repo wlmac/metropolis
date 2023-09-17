@@ -27,6 +27,7 @@ class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
         }
 
 
+# todo switch all of these back to ChoiceField. refer to git history for the old code.
 class ContentTypeField(serializers.Field):
     def __init__(self, **kwargs):
         default_error_messages = {
@@ -172,7 +173,7 @@ class OrganizationField(serializers.Field):
         self.default_error_messages.update(default_error_messages)
 
 
-class TagRelatedField(serializers.MultipleChoiceField):  # todo fix tests for this
+class TagRelatedField(serializers.MultipleChoiceField):
     """
     A custom field to represent a list of Tag objects in the form of {id, name, color},
     but accepts input as a list of tag IDs.
@@ -180,7 +181,6 @@ class TagRelatedField(serializers.MultipleChoiceField):  # todo fix tests for th
 
     def __init__(self, **kwargs):
         kwargs["required"] = False
-        print(os.environ)
         if not os.environ.get("GITHUB_ACTIONS", True):
             choices = Tag.objects.all().values_list("id", "name")
         else:
