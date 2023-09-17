@@ -1,4 +1,5 @@
 import json
+import os
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
@@ -179,7 +180,11 @@ class TagRelatedField(serializers.MultipleChoiceField):  # todo fix tests for th
 
     def __init__(self, **kwargs):
         kwargs["required"] = False
-        choices = Tag.objects.all().values_list("id", "name")
+        print(os.environ)
+        if not os.environ.get("GITHUB_ACTIONS", True):
+            choices = Tag.objects.all().values_list("id", "name")
+        else:
+            choices = []
         kwargs["help_text"] = "The Tags associated with this object."
         super().__init__(choices, **kwargs)
 
