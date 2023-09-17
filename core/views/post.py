@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import DetailView
 from django.views.generic.base import TemplateView
+from rest_framework.exceptions import ValidationError
 
 from core.templatetags.markdown_tags import markdown
 from . import mixins
@@ -220,7 +221,7 @@ class BlogPostCards(TemplateView):
         if self.feed == "all":
             feed = models.BlogPost.public()
         else:
-            raise HttpResponseBadRequest("feed must be all")
+            raise ValidationError("feed must be all")
         paginator = Paginator(feed, settings.LAZY_LOADING["per_page"])
         try:
             self.posts = paginator.page(self.page)
