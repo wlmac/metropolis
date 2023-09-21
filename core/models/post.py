@@ -284,7 +284,7 @@ class Announcement(Post):
                 | approved_announcements.filter(organization__member=user)
                 | cls.objects.filter(organization__execs__in=[user])
             ).distinct()
-        feed = feed_all.filter(show_after__lte=timezone.now())  # not ported to api atm.
+        feed = feed_all.filter(show_after__lte=timezone.now())
         return feed
 
     def editable(self, user=None):
