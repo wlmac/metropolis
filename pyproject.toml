@@ -14,7 +14,7 @@ authors = ["nyiyui <+@nyiyui.ca>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-asgiref = "3.4.1"
+asgiref = "3.7.2"
 bleach = "4.1.0"
 certifi = "2023.7.22"
 cffi = "1.15.0"
@@ -22,7 +22,7 @@ charset-normalizer = "2.0.7"
 cryptography = "*"
 defusedxml = "0.7.1"
 Deprecated = "1.2.13"
-Django = "4.0.10"
+Django = "4.1.10"
 django-allauth = "0.45.0"
 django-appconf = "1.0.5"
 django-cors-headers = "3.10.0"
