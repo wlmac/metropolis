@@ -273,6 +273,7 @@ class Announcement(Post):
     @classmethod
     def get_all(cls, user=None) -> QuerySet:
         approved_announcements = cls.get_approved()
+
         if user is not None and user.is_superuser:
             return approved_announcements  # return all announcements if user is superuser (admin).
 
@@ -283,8 +284,8 @@ class Announcement(Post):
                 | approved_announcements.filter(organization__member=user)
                 | cls.objects.filter(organization__execs__in=[user])
             ).distinct()
-
-        return feed_all
+        feed = feed_all.filter(show_after__lte=timezone.now())  # not ported to api atm.
+        return feed
 
     def editable(self, user=None):
         if user.is_superuser:
