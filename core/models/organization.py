@@ -55,6 +55,10 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def active(cls):
+        return cls.objects.filter(is_active=True)
+
     def get_absolute_url(self):
         return reverse("organization_detail", args=[self.slug])
 

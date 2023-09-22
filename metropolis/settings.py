@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.flatpages",
     "django.contrib.redirects",
+    "django.contrib.sitemaps",
     "core",
     "allauth",
     "allauth.account",

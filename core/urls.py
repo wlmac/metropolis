@@ -1,10 +1,24 @@
 from django.conf import settings
+from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 
 from . import views
+from .utils.sitemaps import *
 
 urlpatterns = [
     path("", views.Index.as_view(), name="index"),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {
+            "sitemaps": {
+                "blog": BlogSitemap,
+                "announcements": AnnouncementsSitemap,
+                # "events": EventsSitemap,
+            }
+        },
+        name="django.contrib.sitemaps.views.sitemaps",
+    ),
     path("api/", include("core.api.urls")),
     path("timetable", views.TimetableList.as_view(), name="timetable_list"),
     path(

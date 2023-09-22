@@ -268,7 +268,7 @@ class Announcement(Post):
 
     @classmethod
     def get_approved(cls) -> QuerySet:
-        return cls.objects.filter(status="a")
+        return cls.objects.filter(status="a").filter(show_after__lte=timezone.now())
 
     @classmethod
     def get_all(cls, user=None) -> QuerySet:
@@ -284,7 +284,7 @@ class Announcement(Post):
                 | approved_announcements.filter(organization__member=user)
                 | cls.objects.filter(organization__execs__in=[user])
             ).distinct()
-        feed = feed_all.filter(show_after__lte=timezone.now())
+        feed = feed_all
         return feed
 
     def editable(self, user=None):
