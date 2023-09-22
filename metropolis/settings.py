@@ -963,8 +963,8 @@ CURRENT_THEME = "spring"
 # Lazy Loading
 
 LAZY_LOADING = {  # set to False to disable
-    "per_page": 1,
-    "initial_limit": 1,
+    "per_page": 2,
+    "initial_limit": 4,
 }
 
 # Misc settings
@@ -997,18 +997,8 @@ SIMPLE_JWT = {
 }
 # Event calender Settings
 
-DEFAULT_REPEAT_CHOICES = (
-    ("RRULE:FREQ=DAILY", "Daily"),
-    ("RRULE:FREQ=WEEKLY", "Weekly"),
-    ("RRULE:FREQ=MONTHLY", "Monthly"),
-    ("RRULE:FREQ=YEARLY", "Yearly"),
-)
-CALCULATE_YEARS_IN_ADVANCE = 2
-
 ICAL_PADDING = timedelta(days=4 * 7)  # iCalendar Feed
-REOCCURRENCE_CUTOFF = timedelta(
-    days=365 * 2
-)  # For reoccurring events only calculate up to x years in advance
+
 
 # Qualified Trials
 QLTR: Dict[str, Dict] = {

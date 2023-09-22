@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0060_event_should_announce_recurrencerule_and_more'),
+        ("core", "0060_event_should_announce_recurrencerule_and_more"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='expo_notif_token',
-        ),
         migrations.AddField(
-            model_name='user',
-            name='expo_notif_tokens',
-            field=models.JSONField(default=dict, help_text='JSON object with keys as tokens and values as null.', verbose_name='Expo Notifications Tokens'),
+            model_name="user",
+            name="expo_notif_tokens",
+            field=models.JSONField(
+                default=dict,
+                help_text="JSON object with keys as tokens and values as null.",
+                verbose_name="Expo Notifications Tokens",
+            ),
         ),
     ]

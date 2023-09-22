@@ -658,24 +658,6 @@ class RaffleAdmin(admin.ModelAdmin):
     list_display = ["__str__", "open_start", "open_end"]
 
 
-class RecurrenceAdmin(admin.ModelAdmin):
-    # list_display = ["recurrence_pattern", "event_object"]
-    list_display = ["__str__", "event_object"]
-    search_fields = ["event__name"]
-    list_filter = ["event__name", "event__organization"]
-
-    # def recurrence_pattern(self, obj):
-    #    return obj.recurrence_pattern\
-
-    @admin.display()
-    def event_object(self, obj):
-        url = reverse(
-            f"admin:core_event_change",
-            args=[obj.event.id],
-        )
-        return format_html('<a href="{}">{}</a>', url, str(obj.event.name.capitalize()))
-
-
 class CommentAdmin(admin.ModelAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
@@ -712,10 +694,9 @@ admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
 admin.site.register(models.Exhibit, ExhibitAdmin)
-admin.site.register(models.Comment, CommentAdmin)
+# admin.site.register(models.Comment, CommentAdmin) atm it's not used so we don't need it
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
-admin.site.register(models.RecurrenceRule, RecurrenceAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)
 
 admin.site.unregister(FlatPage)

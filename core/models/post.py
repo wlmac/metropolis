@@ -93,7 +93,7 @@ class CommentHistory(models.Model):  # todo add to admin panel
 class Comment(PostInteraction):
     history = models.ManyToManyField(CommentHistory, blank=True)
     last_modified = models.DateTimeField(auto_now_add=True)
-    body = models.TextField(max_length=512, null=True, blank=False)
+    body = models.TextField(max_length=512, null=True, blank=False, default="Hello!")
     parent = models.ForeignKey(
         "Comment",
         on_delete=models.CASCADE,
