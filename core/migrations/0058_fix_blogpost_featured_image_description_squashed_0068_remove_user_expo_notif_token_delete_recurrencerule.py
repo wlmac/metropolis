@@ -23,22 +23,6 @@ def delete_recurrencerule(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-    replaces = [
-        ("core", "0058_fix_blogpost_featured_image_description"),
-        ("core", "0060_event_should_announce_recurrencerule_and_more"),
-        ("core", "0061_remove_recurrencerule_ends_after_greater_than_starts_and_more"),
-        ("core", "0062_remove_recurrencerule_ends_or_ends_after_and_more"),
-        ("core", "0063_alter_recurrencerule_event"),
-        ("core", "0061_expo_notif_tokens_support_multiple"),
-        ("core", "0062_exhibit"),
-        ("core", "0064_merge_0062_exhibit_0063_alter_recurrencerule_event"),
-        ("core", "0065_alter_user_graduating_year"),
-        ("core", "0066_blogpost_is_archived_alter_recurrencerule_type"),
-        ("core", "0059_auto_20230221_1937_squashed_0065_user_expo_notif_token"),
-        ("core", "0067_merge_20230921_2017"),
-        ("core", "0068_remove_user_expo_notif_token_delete_recurrencerule"),
-    ]
-
     dependencies = [
         ("contenttypes", "0002_remove_content_type_name"),
         ("core", "0057_alter_blogpost_featured_image_description"),
