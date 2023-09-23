@@ -21,6 +21,7 @@ from requests.exceptions import ConnectionError, HTTPError
 from core.models import Announcement, User, Event, BlogPost
 from metropolis.celery import app
 from scripts.migrations import migrate_groups
+
 migrate_groups()
 
 logger = get_task_logger(__name__)

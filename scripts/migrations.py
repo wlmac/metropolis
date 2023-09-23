@@ -10,7 +10,7 @@ def migrate_groups():
     count_leading = {"added": 0, "removed": 0}
     staffs = {"added": 0, "removed": 0}
     for user in User.objects.all():
-        if user.is_teacher:
+        if user.is_teacher and not user.is_staff:
             user.is_staff = True
             user.save()
             staffs["added"] += 1
@@ -55,5 +55,5 @@ def migrate_groups():
     print(f"Removed {staffs['removed']} users from staff")
 
     print("total in execs group: " + str(execs_group.user_set.count()))
-    print("total in owners group: " + str(owner_group.user_set.count()) + "\n")
-    print("total staff: " + str(User.objects.filter(is_staff=True).count()))
+    print("total in owners group: " + str(owner_group.user_set.count()))
+    print("total staff: " + str(User.objects.filter(is_staff=True).count()) + "\n")
