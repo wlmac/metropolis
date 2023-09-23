@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy as _, ngettext
+from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
 from core.utils.mail import send_mail
@@ -118,7 +118,8 @@ class OrganizationAdmin(admin.ModelAdmin):
         "icon",
     ]
     autocomplete_fields = ["owner", "supervisors", "execs"]
-    search_fields = ["name"]
+    search_fields = ["name", "owner__username"]
+    filter_horizontal = ("execs",)
     inlines = [
         TagInline,
         OrganizationURLInline,

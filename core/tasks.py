@@ -6,6 +6,7 @@ import requests
 from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
+from django.contrib.auth.models import Group
 from django.db.models import Value, JSONField, Q
 from django.utils.translation import gettext_lazy as _l
 from django.utils.translation import ngettext
@@ -47,6 +48,24 @@ def users_with_token():
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
+    sender.add_periodic_task(crontab(day_of_week=0), clear_unused_users)
+
+
+@app.task
+def clear_unused_users():
+    owner_group, _ = Group.objects.get_or_create(name="Org Owners")
+    execs_group, _ = Group.objects.get_or_create(name="Execs")
+    all_staff = execs_group.user_set.all() | owner_group.user_set.all()
+    for user in all_staff.distinct():
+        print(
+            f"Checking {user} - {user.organizations_leading.count()} - {user.organizations_owning.count()}"
+        )
+        if user.organizations_leading.count() == 0:
+            user.groups.remove(execs_group)
+            print(f"Removed {user} from execs group")
+        if user.organizations_owning.count() == 0:
+            user.groups.remove(owner_group)
+            print(f"Removed {user} from owners group")
 
 
 @app.task
