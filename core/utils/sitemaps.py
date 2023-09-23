@@ -31,4 +31,4 @@ class ClubsSitemap(Sitemap):
     changefreq = "weekly"
 
     def items(self):
-        return Organization.objects.all()
+        return Organization.active()
