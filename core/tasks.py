@@ -54,7 +54,7 @@ def setup_periodic_tasks(sender, **kwargs):
 @app.task
 def clear_unused_owners():
     owner_group, _ = Group.objects.get_or_create(name="Org Owners")
-    for user in owner_group.user_set.all()():
+    for user in owner_group.user_set.all():
         if user.organizations_owning.count() == 0:
             user.groups.remove(owner_group)
 
