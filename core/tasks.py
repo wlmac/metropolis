@@ -181,4 +181,3 @@ def notif_single(self, recipient_id: int, msg_kwargs):
         u.save()
 
 
-clear_unused_owners()
