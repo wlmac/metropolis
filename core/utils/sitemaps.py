@@ -16,7 +16,7 @@ class BlogSitemap(Sitemap):
 
 class AnnouncementsSitemap(Sitemap):
     changefreq = "daily"
-    priority = 0.8
+    priority = 0.7
 
     def items(self):
         return Announcement.get_approved()
