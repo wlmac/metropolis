@@ -195,7 +195,7 @@ class Event(models.Model):
     description = models.TextField(blank=True)
 
     start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    end_date = models.DateTimeField()  # todo fix this
 
     schedule_format = models.CharField(max_length=64, default="default")
     is_instructional = models.BooleanField(
@@ -229,3 +229,16 @@ class Event(models.Model):
             events = (events | events.filter(organization__member=user)).distinct()
 
         return events
+
+    def save(self, *args, **kwargs):
+        if not timezone.is_aware(self.end_date):
+            # Convert naive datetime to aware datetime
+            self.end_date = timezone.make_aware(
+                self.end_date, timezone.get_current_timezone()
+            )
+        if not timezone.is_aware(self.start_date):
+            # Convert naive datetime to aware datetime
+            self.start_date = timezone.make_aware(
+                self.start_date, timezone.get_current_timezone()
+            )
+        super().save(*args, **kwargs)
