@@ -57,6 +57,3 @@ def migrate_groups():
     print("total in execs group: " + str(execs_group.user_set.count()))
     print("total in owners group: " + str(owner_group.user_set.count()) + "\n")
     print("total staff: " + str(User.objects.filter(is_staff=True).count()))
-
-
-migrate_groups()
