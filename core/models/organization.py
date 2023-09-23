@@ -104,7 +104,13 @@ def manage_org_owner(sender, instance, created, raw, update_fields, **kwargs):
             instance.owner.is_staff = True
             instance.owner.save()
     else:
-        if instance.owner.is_staff and not instance.owner.is_superuser:
+        if all(
+            [
+                instance.owner.is_staff,
+                not instance.owner.is_superuser,
+                not instance.owner.is_teacher,
+            ]
+        ):
             instance.owner.is_staff = False
             instance.owner.save()
 
@@ -124,6 +130,12 @@ def manage_org_execs(sender, instance, action, reverse, model, pk_set, **kwargs)
             user = User.objects.get(pk=user_pk)
             if user.organizations_leading.count() == 0:
                 user.groups.remove(execs_group)
-                if user.is_staff and not user.is_superuser:
-                    user.is_staff = False
-                    user.save()
+                if all(
+                    [
+                        instance.owner.is_staff,
+                        not instance.owner.is_superuser,
+                        not instance.owner.is_teacher,
+                    ]
+                ):
+                    instance.owner.is_staff = False
+                    instance.owner.save()
