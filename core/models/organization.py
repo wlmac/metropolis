@@ -99,6 +99,14 @@ class OrganizationURL(models.Model):
 def manage_org_owner(sender, instance, created, raw, update_fields, **kwargs):
     owner_group, _ = Group.objects.get_or_create(name="Org Owners")
     instance.owner.groups.add(owner_group)
+    if instance.owner.organizations_owning.count() >= 1:
+        if not instance.owner.is_staff:
+            instance.owner.is_staff = True
+            instance.owner.save()
+    else:
+        if instance.owner.is_staff and not instance.owner.is_superuser:
+            instance.owner.is_staff = False
+            instance.owner.save()
 
 
 @receiver(m2m_changed, sender=Organization.execs.through)
@@ -106,7 +114,16 @@ def manage_org_execs(sender, instance, action, reverse, model, pk_set, **kwargs)
     execs_group, _ = Group.objects.get_or_create(name="Execs")
     if action == "post_add":
         for user_pk in pk_set:
-            User.objects.get(pk=user_pk).groups.add(execs_group)
+            user = User.objects.get(pk=user_pk)
+            if not user.is_staff:
+                user.is_staff = True
+                user.save()
+
     elif action == "post_remove":
         for user_pk in pk_set:
-            User.objects.get(pk=user_pk).groups.remove(execs_group)
+            user = User.objects.get(pk=user_pk)
+            if user.organizations_leading.count() == 0:
+                user.groups.remove(execs_group)
+                if user.is_staff and not user.is_superuser:
+                    user.is_staff = False
+                    user.save()

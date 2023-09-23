@@ -20,6 +20,7 @@ from requests.exceptions import ConnectionError, HTTPError
 
 from core.models import Announcement, User, Event, BlogPost
 from metropolis.celery import app
+from scripts.migrations import migrate_groups
 
 logger = get_task_logger(__name__)
 session = requests.Session()
@@ -179,5 +180,3 @@ def notif_single(self, recipient_id: int, msg_kwargs):
         for token in notreg_tokens:
             del u.expo_notif_tokens[token]
         u.save()
-
-
