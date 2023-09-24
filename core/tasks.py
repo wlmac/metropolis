@@ -19,7 +19,6 @@ from exponent_server_sdk import (
 from requests.exceptions import ConnectionError, HTTPError
 
 from core.models import Announcement, User, Event, BlogPost
-from core.utils.sitemaps import ping_sitemap_watchers
 from metropolis.celery import app
 
 
@@ -51,7 +50,6 @@ def users_with_token():
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
     sender.add_periodic_task(crontab(day_of_month=0), clear_unused_owners)
-    sender.add_periodic_task(crontab(day_of_month=0), ping_sitemap_watchers)
 
 
 @app.task

@@ -38,7 +38,6 @@ class ClubsSitemap(Sitemap):
 @receiver(post_save, sender=BlogPost)
 @receiver(post_save, sender=Announcement)
 @receiver(post_save, sender=Organization)
-@app.task
 def ping_sitemap_watchers(sender, instance, created, raw, update_fields, **kwargs):
     if settings.DEBUG:
         return
