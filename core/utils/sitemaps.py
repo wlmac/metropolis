@@ -1,5 +1,6 @@
-from django.contrib.sitemaps import Sitemap
+from django.contrib.sitemaps import Sitemap, ping_google
 from core.models import *
+from metropolis.celery import app
 
 
 class BlogSitemap(Sitemap):
@@ -32,3 +33,21 @@ class ClubsSitemap(Sitemap):
 
     def items(self):
         return Organization.active()
+
+
+@receiver(post_save, sender=BlogPost)
+@receiver(post_save, sender=Announcement)
+@receiver(post_save, sender=Organization)
+@app.task
+def ping_sitemap_watchers(sender, instance, created, raw, update_fields, **kwargs):
+    if settings.DEBUG:
+        return
+    if not created:
+        return
+    try:
+        ping_google(sitemap_url="/sitemap.xml")
+    except Exception:
+        print("Could not ping Google.")
+        # Bare 'except' because we could get a variety
+        # of HTTP-related exceptions.
+        pass
