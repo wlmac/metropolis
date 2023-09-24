@@ -8,7 +8,6 @@ import core.models.post
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0022_alter_event_is_instructional"),
     ]

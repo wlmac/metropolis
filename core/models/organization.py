@@ -1,6 +1,6 @@
 from django.conf import settings
-from django.db import models
 from django.contrib.auth.models import Group
+from django.db import models
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse

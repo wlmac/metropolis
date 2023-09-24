@@ -7,7 +7,6 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers, validators
 
 from .base import BaseProvider
-from ...serializers.custom import OrganizationField
 from ...utils.gravatar import gravatar_url
 from ....models import User, graduating_year_choices
 

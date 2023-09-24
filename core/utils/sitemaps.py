@@ -1,6 +1,6 @@
 from django.contrib.sitemaps import Sitemap, ping_google
+
 from core.models import *
-from metropolis.celery import app
 
 
 class BlogSitemap(Sitemap):

@@ -21,7 +21,6 @@ from requests.exceptions import ConnectionError, HTTPError
 from core.models import Announcement, User, Event, BlogPost
 from metropolis.celery import app
 
-
 logger = get_task_logger(__name__)
 session = requests.Session()
 session.headers.update(

@@ -27,12 +27,12 @@ from .forms import (
     UserAdminForm,
 )
 from .models import Comment
+from .utils.actions import *
 from .utils.filters import (
     OrganizationListFilter,
     BlogPostAuthorListFilter,
     PostTypeFilter,
 )
-from .utils.actions import *
 
 User = get_user_model()
 

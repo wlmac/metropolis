@@ -6,7 +6,6 @@ import core.models.organization
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0029_alter_event_schedule_format"),
     ]

@@ -1,14 +1,13 @@
+import datetime as dt
 import json
 
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpResponse
-
 from django.utils.translation import gettext_lazy as _, ngettext
-from core.tasks import notif_single, notif_events_singleday
-import datetime as dt
 
 from core.models import Post, User, Organization
+from core.tasks import notif_single, notif_events_singleday
 
 
 # Clubs

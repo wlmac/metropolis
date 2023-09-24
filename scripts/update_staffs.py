@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import datetime as dt
 from collections import defaultdict
-import requests
 
+import requests
 
 METROPOLIS_STAFFS = {
     "Project Manager": {9},
