@@ -1,5 +1,5 @@
 # Metropolis (Backend)
-
+Make sure you have python 3.9+ installed. As of now, the project is not compatible with python 3.8 or lower.
 ## Running Locally
 
 Recommended: install [Nix](https://nixos.org/download) and [direnv](https://direnv.net) and run:
