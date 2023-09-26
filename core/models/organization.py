@@ -121,6 +121,7 @@ def manage_org_execs(sender, instance, action, reverse, model, pk_set, **kwargs)
     if action == "post_add":
         for user_pk in pk_set:
             user = User.objects.get(pk=user_pk)
+            user.groups.add(execs_group)
             if not user.is_staff:
                 user.is_staff = True
                 user.save()
