@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import profanity_check
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -70,15 +69,15 @@ class CommentSerializer(serializers.ModelSerializer):
             "body", instance.body
         ):  # if change is  to body.
             instance.last_modified = timezone.now()
-            contains_profanity: bool = bool(
-                profanity_check.predict([validated_data["body"]])
-            )
+            # contains_profanity: bool = bool(
+            #    profanity_check.predict([validated_data["body"]])
+            # )
             if self.context[
                 "request"
             ].user.is_superuser:  # bypass content moderation if user is an SU.
                 validated_data["live"] = True
             else:
-                validated_data["live"] = not contains_profanity
+                validated_data["live"] = False  # not contains_profanity
         super().update(instance, validated_data)
         return instance
 
@@ -108,7 +107,7 @@ class CommentNewSerializer(CommentSerializer):
 
     def create(self, validated_data) -> Comment:
         contains_profanity: bool = bool(
-            profanity_check.predict([validated_data["body"]])
+            # profanity_check.predict([validated_data["body"]])
         )
         com = Comment(**validated_data)
         if self.context[
@@ -116,7 +115,7 @@ class CommentNewSerializer(CommentSerializer):
         ].user.is_superuser:  # bypass content moderation if user is an SU.
             com.live = True
         else:
-            com.live = not contains_profanity
+            com.live = False  # not contains_profanity
         com.save()
         return com
 
