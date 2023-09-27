@@ -1,105 +1,74 @@
-amqp==5.1.1
-asgiref==3.7.2
-async-timeout==4.0.3
-attrs==22.2.0
-billiard==4.1.0
-black==23.9.1
-bleach==4.1.0
-build==0.10.0
-CacheControl==0.13.1
-celery==5.3.4
-certifi==2023.7.22
-cffi==1.15.0
-chardet==5.1.0
-charset-normalizer==2.0.7
-cleo==2.0.1
-click==8.1.7
-click-didyoumean==0.3.0
-click-plugins==1.1.1
-click-repl==0.3.0
-colorama==0.4.6
-crashtest==0.4.1
-cryptography==41.0.4
-defusedxml==0.7.1
-Deprecated==1.2.13
-distlib==0.3.7
-Django==4.1.10
-django-allauth==0.45.0
-django-appconf==1.0.5
-django-cors-headers==3.10.0
-django-crispy-forms==2.0
-django-ical==1.8.3
-django-oauth-toolkit==2.3.0
-django-pwa==1.1.0
-django-recaptcha==3.0.0
-django-recurrence==1.11.1
-django-redis==5.0.0
-django-select2==8.1.2
-django-storages==1.12.2
-djangorestframework==3.12.4
-djangorestframework-simplejwt==5.0.0
-dulwich==0.21.3
-exponent-server-sdk==2.0.0
-filelock==3.12.4
-gunicorn==20.1.0
-html5lib==1.1
-icalendar==5.0.9
-idna==3.3
-importlib-metadata==4.8.3
-installer==0.7.0
-isort==5.12.0
-jaraco.classes==3.2.3
-jsonschema==4.17.3
-jwcrypto==1.4
-keyring==24.2.0
-kombu==5.3.2
-lockfile==0.12.2
-Markdown==3.3.4
-martor==1.6.28
-more-itertools==9.1.0
-msgpack==1.0.5
-mypy-extensions==1.0.0
-oauthlib==3.2.2
-packaging==23.0
-pathspec==0.11.2
-pexpect==4.8.0
-Pillow==9.3.0
-pkginfo==1.9.6
-platformdirs==2.6.2
-poetry==1.6.1
-poetry-core==1.7.0
-poetry-plugin-export==1.5.0
-prompt-toolkit==3.0.39
-psycopg2==2.9.1
-ptyprocess==0.7.0
-pycparser==2.20
-Pygments==2.15.0
-PyJWT==2.4.0
-pyparsing==3.0.6
-pyproject_hooks==1.0.0
-pyrsistent==0.19.3
-python-dateutil==2.8.2
-python3-openid==3.2.0
-pytz==2021.3
-pywin32-ctypes==0.2.0
-PyYAML==6.0
-rapidfuzz==2.13.7
-redis==4.4.4
-requests==2.31.0
-requests-oauthlib==1.3.0
-requests-toolbelt==0.10.1
-shellingham==1.5.0.post1
-six==1.16.0
-sqlparse==0.4.4
-tomli==2.0.1
-tomlkit==0.11.6
-trove-classifiers==2023.3.9
-typing_extensions==4.8.0
-tzdata==2023.3
-urllib3==2.0.5
-vine==5.0.0
-virtualenv==20.24.5
-wcwidth==0.2.6
-webencodings==0.5.1
-wrapt==1.15.0
-zipp==3.17.0
+amqp @ file:///build/dist/amqp-5.1.1-py3-none-any.whl
+asgiref @ file:///build/dist/asgiref-3.7.2-py3-none-any.whl
+async-timeout @ file:///build/dist/async_timeout-4.0.3-py3-none-any.whl
+billiard @ file:///build/dist/billiard-4.1.0-py3-none-any.whl
+black @ file:///build/dist/black-23.9.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+bleach @ file:///build/dist/bleach-4.1.0-py2.py3-none-any.whl
+celery @ file:///build/dist/celery-5.3.4-py3-none-any.whl
+certifi @ file:///build/dist/certifi-2023.7.22-py3-none-any.whl
+cffi @ file:///build/dist/cffi-1.15.0-cp310-cp310-manylinux_2_12_x86_64.manylinux2010_x86_64.whl
+charset-normalizer @ file:///build/dist/charset_normalizer-2.0.7-py3-none-any.whl
+click @ file:///build/dist/click-8.1.7-py3-none-any.whl
+click-didyoumean @ file:///build/dist/click_didyoumean-0.3.0-py3-none-any.whl
+click-plugins @ file:///build/dist/click_plugins-1.1.1-py2.py3-none-any.whl
+click-repl @ file:///build/dist/click_repl-0.3.0-py3-none-any.whl
+cryptography @ file:///build/dist/cryptography-41.0.4-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+defusedxml @ file:///build/dist/defusedxml-0.7.1-py2.py3-none-any.whl
+Deprecated @ file:///build/dist/Deprecated-1.2.13-py2.py3-none-any.whl
+Django @ file:///build/dist/Django-4.1.10-py3-none-any.whl
+django-allauth @ file:///build/django-allauth-0.45.0/dist/django_allauth-0.45.0-py3-none-any.whl
+django-appconf @ file:///build/dist/django_appconf-1.0.5-py3-none-any.whl
+django-cors-headers @ file:///build/dist/django_cors_headers-3.10.0-py3-none-any.whl
+django-crispy-forms @ file:///build/dist/django_crispy_forms-2.0-py3-none-any.whl
+django-ical @ file:///build/dist/django_ical-1.8.3-py3-none-any.whl
+django-oauth-toolkit @ file:///build/dist/django_oauth_toolkit-2.3.0-py3-none-any.whl
+django-pwa @ file:///build/dist/django_pwa-1.1.0-py3-none-any.whl
+django-recaptcha @ file:///build/dist/django_recaptcha-3.0.0-py3-none-any.whl
+django-recurrence @ file:///build/dist/django_recurrence-1.11.1-py3-none-any.whl
+django-redis @ file:///build/dist/django_redis-5.0.0-py3-none-any.whl
+django-select2 @ file:///build/dist/django_select2-8.1.2-py3-none-any.whl
+django-storages @ file:///build/dist/django_storages-1.12.2-py3-none-any.whl
+djangorestframework @ file:///build/dist/djangorestframework-3.12.4-py3-none-any.whl
+djangorestframework-simplejwt @ file:///build/dist/djangorestframework_simplejwt-5.0.0-py3-none-any.whl
+exponent-server-sdk @ file:///build/dist/exponent_server_sdk-2.0.0-py3-none-any.whl
+gunicorn @ file:///build/dist/gunicorn-20.1.0-py3-none-any.whl
+icalendar @ file:///build/dist/icalendar-5.0.9-py3-none-any.whl
+idna @ file:///build/dist/idna-3.3-py3-none-any.whl
+importlib-metadata @ file:///build/dist/importlib_metadata-4.8.3-py3-none-any.whl
+isort @ file:///build/dist/isort-5.12.0-py3-none-any.whl
+jwcrypto @ file:///build/jwcrypto-1.4/dist/jwcrypto-1.4-py3-none-any.whl
+kombu @ file:///build/dist/kombu-5.3.2-py3-none-any.whl
+Markdown @ file:///build/dist/Markdown-3.3.4-py3-none-any.whl
+martor @ file:///build/martor-1.6.28/dist/martor-1.6.28-py3-none-any.whl
+mypy @ file:///build/source/dist/mypy-0.981-cp310-cp310-linux_x86_64.whl
+mypy-extensions @ file:///build/dist/mypy_extensions-1.0.0-py3-none-any.whl
+oauthlib @ file:///build/dist/oauthlib-3.2.2-py3-none-any.whl
+packaging @ file:///build/dist/packaging-23.0-py3-none-any.whl
+pathspec @ file:///build/dist/pathspec-0.11.2-py3-none-any.whl
+Pillow @ file:///build/dist/Pillow-9.3.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+platformdirs @ file:///build/dist/platformdirs-2.6.2-py3-none-any.whl
+poetry @ file:///build/source/dist/poetry-1.3.0-py3-none-any.whl
+prompt-toolkit @ file:///build/dist/prompt_toolkit-3.0.39-py3-none-any.whl
+psycopg2 @ file:///build/psycopg2-2.9.1/dist/psycopg2-2.9.1-cp310-cp310-linux_x86_64.whl
+pycparser @ file:///build/dist/pycparser-2.20-py2.py3-none-any.whl
+Pygments @ file:///build/dist/Pygments-2.15.0-py3-none-any.whl
+PyJWT @ file:///build/dist/PyJWT-2.4.0-py3-none-any.whl
+pyparsing @ file:///build/dist/pyparsing-3.0.6-py3-none-any.whl
+python-dateutil @ file:///build/dist/python_dateutil-2.8.2-py2.py3-none-any.whl
+python3-openid @ file:///build/dist/python3_openid-3.2.0-py3-none-any.whl
+pytz @ file:///build/dist/pytz-2021.3-py2.py3-none-any.whl
+redis @ file:///build/dist/redis-4.4.4-py3-none-any.whl
+requests @ file:///build/dist/requests-2.31.0-py3-none-any.whl
+requests-oauthlib @ file:///build/dist/requests_oauthlib-1.3.0-py2.py3-none-any.whl
+six @ file:///build/dist/six-1.16.0-py2.py3-none-any.whl
+sqlparse @ file:///build/dist/sqlparse-0.4.4-py3-none-any.whl
+toml @ file:///build/toml-0.10.2/dist/toml-0.10.2-py2.py3-none-any.whl
+tomli @ file:///build/dist/tomli-2.0.1-py3-none-any.whl
+typing_extensions @ file:///build/dist/typing_extensions-4.8.0-py3-none-any.whl
+tzdata @ file:///build/dist/tzdata-2023.3-py2.py3-none-any.whl
+urllib3 @ file:///build/dist/urllib3-2.0.5-py3-none-any.whl
+vine @ file:///build/dist/vine-5.0.0-py2.py3-none-any.whl
+wcwidth @ file:///build/dist/wcwidth-0.2.6-py2.py3-none-any.whl
+webencodings @ file:///build/dist/webencodings-0.5.1-py2.py3-none-any.whl
+wrapt @ file:///build/dist/wrapt-1.15.0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+zipp @ file:///build/dist/zipp-3.17.0-py3-none-any.whl
