@@ -48,7 +48,7 @@ def users_with_token():
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
-    sender.add_periodic_task(crontab(day_of_month=0), clear_unused_owners)
+    sender.add_periodic_task(crontab(day_of_week=1), clear_unused_owners)
 
 
 @app.task
