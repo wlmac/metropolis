@@ -99,10 +99,10 @@ class OrganizationURL(models.Model):
 def manage_org_owner(sender, instance, created, raw, update_fields, **kwargs):
     owner_group, _ = Group.objects.get_or_create(name="Org Owners")
     instance.owner.groups.add(owner_group)
+
     if instance.owner.organizations_owning.count() >= 1:
-        if not instance.owner.is_staff:
-            instance.owner.is_staff = True
-            instance.owner.save()
+        instance.owner.is_staff = True
+        instance.owner.save()
     else:
         if all(
             [
