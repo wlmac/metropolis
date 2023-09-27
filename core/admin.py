@@ -145,7 +145,7 @@ class OrganizationAdmin(admin.ModelAdmin):
             return ["owner", "supervisors", "execs", "is_active"]
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
-        if db_field.name == "supervisors":
+        if db_field.name == "supervisors" and not request.user.is_superuser:
             kwargs["queryset"] = models.User.objects.filter(is_teacher=True).order_by(
                 "username"
             )
@@ -243,8 +243,8 @@ class AnnouncementAdmin(PostAdmin):
         fields = set(all_fields)
         fields_matrix = [
             [
-                {"author", "organization", "title", "tags", "is_public"},
-                {"author", "organization", "title", "tags", "is_public"},
+                {"author", "organization", "title", "tags", "is_public", "supervisor"},
+                {"author", "organization", "title", "tags", "is_public", "supervisor"},
                 {
                     "author",
                     "organization",
@@ -269,8 +269,8 @@ class AnnouncementAdmin(PostAdmin):
                 },
             ],
             [
-                {"author", "organization"},
-                {"author", "organization", "status"},
+                {"author", "organization", "supervisor"},
+                {"author", "organization", "status", "supervisor"},
                 {"author", "organization", "status", "show_after", "supervisor"},
                 {"author", "organization", "status", "supervisor", "rejection_reason"},
             ],
@@ -354,7 +354,7 @@ class AnnouncementAdmin(PostAdmin):
                     .distinct()
                     .order_by("name")
                 )
-        elif db_field.name in {"author", "supervisor"}:
+        elif db_field.name in {"author", "supervisor"} and not request.user.is_superuser:
             orgs = models.Organization.objects.filter(
                 Q(supervisors=request.user) | Q(execs=request.user)
             )
