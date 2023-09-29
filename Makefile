@@ -9,7 +9,7 @@ metropolis/local_settings.py:
 	cp metropolis/local_settings_sample.py metropolis/local_settings.py
 
 requirements.txt: poetry.lock
-	poetry run pip freeze -> $@ --exclude metropolis
+	poetry export --without-hashes --format=requirements.txt > $@
 
 test:
 	cd tests && docker compose up --build
