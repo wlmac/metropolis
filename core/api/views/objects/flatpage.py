@@ -9,14 +9,18 @@ from .base import BaseProvider
 class Serializer(serializers.ModelSerializer):
     class Meta:
         model = FlatPage
-        fields = "__all__"
+        exclude = [
+            "sites",
+            "enable_comments",
+            "template_name",
+        ]  # fields = all - sites, enable_comments, template_name
 
 
 class FlatPageProvider(BaseProvider):
     serializer_class = Serializer
     model = FlatPage
-    allow_list = False
-    lookup_fields = ["url"]
+    allow_list = True
+    lookup_fields = ["id", "url"]
 
     @property
     def permission_classes(self):
