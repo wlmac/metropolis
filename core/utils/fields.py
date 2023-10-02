@@ -147,3 +147,9 @@ class SetField(models.TextField):
     def value_to_string(self, obj):
         value = self._get_val_from_obj(obj)
         return self.get_db_prep_value(value)
+
+    def _get_val_from_obj(self, obj):
+        """
+        Get the value of this field from the model instance.
+        """
+        return getattr(obj, self.attname)
