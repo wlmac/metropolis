@@ -19,9 +19,14 @@ def migrate_groups():
                 user.is_staff = True
                 user.save()
                 count["staff"]["added"] += 1
-            if not user.groups.filter(name="Supervisors").exists():
-                user.groups.add(supervisor_group)
-                count["supervisor"]["added"] += 1
+            if user.organizations_supervising.count() >= 1:
+                if not user.groups.filter(name="Supervisors").exists():
+                    user.groups.add(supervisor_group)
+                    count["supervisor"]["added"] += 1
+            else:
+                if user.groups.filter(name="Supervisors").exists():
+                    user.groups.remove(supervisor_group)
+                    count["supervisor"]["removed"] += 1
         else:
             if user.groups.filter(name="Supervisors").exists():
                 user.groups.remove(supervisor_group)
