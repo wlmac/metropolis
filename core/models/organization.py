@@ -140,3 +140,25 @@ def manage_org_execs(sender, instance, action, reverse, model, pk_set, **kwargs)
                 ):
                     instance.owner.is_staff = False
                     instance.owner.save()
+
+
+@receiver(m2m_changed, sender=Organization.supervisors.through)
+def manage_org_execs(sender, instance, action, reverse, model, pk_set, **kwargs):
+    supervisors_group, _ = Group.objects.get_or_create(name="Supervisors")
+    if action == "post_add":
+        for user_pk in pk_set:
+            user = User.objects.get(pk=user_pk)
+            if not user.is_teacher:
+                continue
+            user.groups.add(supervisors_group)
+            if not user.is_staff:
+                user.is_staff = True
+                user.save()
+
+    elif action == "post_remove":
+        for user_pk in pk_set:
+            user = User.objects.get(pk=user_pk)
+            if not user.is_teacher:
+                continue
+            if user.organizations_supervising.count() == 0:
+                user.groups.remove(supervisors_group)

@@ -48,15 +48,14 @@ def users_with_token():
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
-    sender.add_periodic_task(crontab(day_of_week=1), clear_unused_owners)
+    sender.add_periodic_task(crontab(day_of_month=1), run_group_migrations)
 
 
 @app.task
-def clear_unused_owners():
-    owner_group, _ = Group.objects.get_or_create(name="Org Owners")
-    for user in owner_group.user_set.all():
-        if user.organizations_owning.count() == 0:
-            user.groups.remove(owner_group)
+def run_group_migrations():
+    from scripts.migrations import migrate_groups
+
+    print(migrate_groups())
 
 
 @app.task
