@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "django_select2",
     "pwa",
     "oauth2_provider",
+    "hijack",
+    "hijack.contrib.admin",
 ]
 
 MIDDLEWARE = [
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     "core.middleware.TimezoneMiddleware",
     "core.middleware.CustomRedirectFallbackTemporaryMiddleware",
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
+    "hijack.middleware.HijackUserMiddleware",
 ]
 
 ROOT_URLCONF = "metropolis.urls"
@@ -984,6 +987,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 SILENCED_SYSTEM_CHECKS = ["urls.W002"]
 
 API_VERSION = "3.2.0"
+
+HIJACK_PERMISSION_CHECK = "core.utils.hijack.hijack_permissions_check"
+ALLOWED_HIJACKERS = [746, 165]  # Jason Cameron & Ken Shibata
+
 
 DEFAULT_TIMEZONE = "UTC"
 

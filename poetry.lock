@@ -147,6 +147,17 @@ six = ">=1.9.0"
 webencodings = "*"
 
 [[package]]
+name = "cachetools"
+version = "5.3.1"
+description = "Extensible memoizing collections and decorators"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "cachetools-5.3.1-py3-none-any.whl", hash = "sha256:95ef631eeaea14ba2e36f06437f36463aac3a096799e876ee55e5cdccb102590"},
+    {file = "cachetools-5.3.1.tar.gz", hash = "sha256:dce83f2d9b4e1f732a8cd44af8e8fab2dbe46201467fc98b3ef8f269092bf62b"},
+]
+
+[[package]]
 name = "celery"
 version = "5.3.4"
 description = "Distributed Task Queue."
@@ -515,6 +526,23 @@ files = [
 
 [package.dependencies]
 django = ">=3.2"
+
+[[package]]
+name = "django-hijack"
+version = "3.4.1"
+description = "django-hijack allows superusers to hijack (=login as) and work on behalf of another user."
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-hijack-3.4.1.tar.gz", hash = "sha256:2bdd7ffa42198637f49c195468b8330ea51dc36b7c2bee0f3c220c9d7de78764"},
+    {file = "django_hijack-3.4.1-py3-none-any.whl", hash = "sha256:d49b4b6426f4c4694ee0c7591990f9ccb91a7910ba22a8f10e11e0b1f3e0b5b4"},
+]
+
+[package.dependencies]
+django = ">=2.2"
+
+[package.extras]
+test = ["pytest", "pytest-cov", "pytest-django"]
 
 [[package]]
 name = "django-ical"
@@ -1423,4 +1451,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "0e9521267a3153c974db86258410f84f5690f7b595a4ff36e9abf48d313bda8a"
+content-hash = "ecd39da22f9873d9654fd59d1a949f25c0db3de219b6593ce3c83f03a7c9dcae"
