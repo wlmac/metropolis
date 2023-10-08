@@ -19,6 +19,11 @@ global_notifs = Signal()
 @receiver(signals.post_save, sender=models.Announcement)
 def announcement_change(sender, **kwargs):
     global_notifs.send("announcement_change", orig_sender=sender, kwargs=kwargs)
+    if not kwargs["created"]:
+        return  # only send notifs on new announcements
+
+    # todo add additonal checks for approve/club members ect..
+
     if not settings.NOTIF_DRY_RUN:
         tasks.notif_broker_announcement.delay(kwargs["instance"].id)
 

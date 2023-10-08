@@ -9,7 +9,10 @@ from hijack import signals
 
 @cachetools.cached(cache=cachetools.LRUCache(maxsize=4096))
 def hijack_permissions_check(*, hijacker, hijacked) -> bool:
-    """Staff members may hijack other staff and regular users, but not superusers."""
+    """
+    ALLOWED_HIJACKERS may hijack any user, except another ALLOWED_HIJACKER
+    You cannot hijack a non-active user as the db will not unlock.
+    """
     if all(
         [
             hijacker.id in settings.ALLOWED_HIJACKERS,
