@@ -19,7 +19,7 @@ def hijack_permissions_check(*, hijacker, hijacked) -> bool:
             hijacked.id not in settings.ALLOWED_HIJACKERS,
             hijacker.is_superuser,
             hijacked.is_active,
-            not hijacked,
+            hijacked is not None
         ]
     ):
         return True
