@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List
 
 from django.utils import timezone
-from timetable_formats import *
+from .timetable_formats import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -504,24 +504,6 @@ ANNOUNCEMENTS_NOTIFY_FEEDS = []  # list of PKs of organizations
 EVENTS_NOTIFY_FEEDS = []  # list of PKs of organizations
 NOTIF_DRY_RUN = True
 
-try:
-    from metropolis.config import *
-except ImportError as err:
-    pass
-else:
-    import warnings
-
-    warnings.warn(DeprecationWarning("use local_settings.py instead of config.py"))
-
-try:
-    with open(os.path.join(os.path.dirname(__file__), "local_settings.py")) as f:
-        exec(f.read(), globals())
-except IOError:
-    pass
-
-if SECRET_KEY == "Change me":
-    raise TypeError("override SECRET_KEY")
-
 
 def is_aware(d: datetime) -> bool:
     return d.tzinfo is not None and d.tzinfo.utcoffset(d) is not None
@@ -551,3 +533,22 @@ now = timezone.now()
 BANNER2 += list(
     map(compat_conv, filter(lambda b: b["start"] < now < b["end"], BANNER3))
 )
+
+
+try:
+    from metropolis.config import *
+except ImportError as err:
+    pass
+else:
+    import warnings
+
+    warnings.warn(DeprecationWarning("use local_settings.py instead of config.py"))
+
+try:
+    with open(os.path.join(os.path.dirname(__file__), "local_settings.py")) as f:
+        exec(f.read(), globals())
+except IOError:
+    pass
+
+if SECRET_KEY == "Change me":
+    raise TypeError("override SECRET_KEY")
