@@ -588,10 +588,10 @@ TIMETABLE_FORMATS = {  # possible formats for timetables, position is the classe
                 },
                 {
                     "description": {
-                        "time": "01:10 pm - 2:10 pm",
+                        "time": "01:05 pm - 2:10 pm",  # TODO check if this should be 1:10
                         "course": "Period 3",
                     },
-                    "time": [[13, 10], [14, 10]],
+                    "time": [[13, 5], [14, 10]],
                     "position": [{3, 6}, {4, 6}],
                 },
                 {
