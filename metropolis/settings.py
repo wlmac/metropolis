@@ -483,14 +483,14 @@ STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 PRE = ""
 
 BANNER3: List = [
-    dict(
-        start=timezone.now(),
-        end=timezone.now() + timedelta(days=1),
-        content="This is some banner :)",
-        icon_url="non-blank means default (default only now)",
-        cta_link="https://nyiyui.ca",
-        cta_label="some shameless plug to nowhere amirite",
-    ),
+    #   dict(
+    #       start=timezone.now(),
+    #       end=timezone.now() + timedelta(days=1),
+    #       content="This is some banner :)",
+    #       icon_url="non-blank means default (default only now)",
+    #       cta_link="https://nyiyui.ca",
+    #       cta_label="some shameless plug to nowhere amirite",
+    #   ),
 ]
 
 CELERY_TIMEZONE = "America/Toronto"
