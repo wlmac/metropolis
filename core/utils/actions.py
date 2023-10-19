@@ -1,13 +1,18 @@
 import datetime as dt
 import json
 
+from django.conf import settings
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, ngettext
 
-from core.models import Post, User, Organization
+from core.models import Post, User, Organization, Announcement
 from core.tasks import notif_single, notif_events_singleday
+from core.utils.mail import send_mail
+from core.utils.ratelimiting import admin_action_rate_limit
 
 
 # Clubs
@@ -55,6 +60,40 @@ def set_post_archived(modeladmin, request, queryset: QuerySet[Post]):
 )
 def set_post_unarchived(modeladmin, request, queryset: QuerySet[Post]):
     queryset.update(is_archived=False)
+
+
+## Announcements
+
+
+@admin.action(
+    permissions=["view"],
+    description=_("resend the approval email for the selected announcements"),
+)
+@admin_action_rate_limit
+def resend_approval_email(modeladmin, request, queryset: QuerySet[Announcement]):
+    for post in queryset:
+        for teacher in post.organization.supervisors.all():
+            email_template_context = {
+                "teacher": teacher,
+                "announcement": post,
+                "review_link": settings.SITE_URL
+                + reverse("admin:core_announcement_change", args=(post.pk,)),
+            }
+
+            send_mail(
+                f"[ACTION REQUIRED] An announcement for {post.organization.name} needs your approval.",
+                render_to_string(
+                    "core/email/verify_announcement.txt",
+                    email_template_context,
+                ),
+                None,
+                [teacher.email],
+                bcc=settings.ANNOUNCEMENT_APPROVAL_BCC_LIST,
+                html_message=render_to_string(
+                    "core/email/verify_announcement.html",
+                    email_template_context,
+                ),
+            )
 
 
 # Users / Notifications

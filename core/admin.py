@@ -197,6 +197,7 @@ class AnnouncementAdmin(PostAdmin):
     list_display = ["__str__", "organization", "status"]
     list_filter = [OrganizationListFilter, "status"]
     ordering = ["-show_after"]
+    actions = [resend_approval_email]
     empty_value_display = "Not specified."
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
@@ -354,7 +355,9 @@ class AnnouncementAdmin(PostAdmin):
                     .distinct()
                     .order_by("name")
                 )
-        elif db_field.name in {"author", "supervisor"} and not request.user.is_superuser:
+        elif (
+            db_field.name in {"author", "supervisor"} and not request.user.is_superuser
+        ):
             orgs = models.Organization.objects.filter(
                 Q(supervisors=request.user) | Q(execs=request.user)
             )
