@@ -148,7 +148,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 TERM_GRACE_PERIOD = timedelta(weeks=2)
 
-TIMETABLE_FORMATS = {
+TIMETABLE_FORMATS = {  # possible formats for timetables, position is the classes it can hold in day one and day two format.
     "pre-2020": {
         "schedules": {
             "default": [
@@ -572,23 +572,23 @@ TIMETABLE_FORMATS = {
             "late-start": [
                 {
                     "description": {
-                        "time": "10:00 am - 11:05 am",
+                        "time": "9:55 am - 10:55 am",
                         "course": "Period 1",
                     },
-                    "time": [[10, 0], [11, 5]],
+                    "time": [[9, 55], [11, 5]],
                     "position": [{1, 5}, {1, 5}],
                 },
                 {
                     "description": {
-                        "time": "11:10 am - 12:10 pm",
+                        "time": "11:00 am - 12:00 pm",
                         "course": "Period 2",
                     },
-                    "time": [[11, 10], [12, 10]],
+                    "time": [[11, 0], [12, 0]],
                     "position": [{2, 5}, {2, 5}],
                 },
                 {
                     "description": {
-                        "time": "01:10 pm - 02:10 pm",
+                        "time": "01:10 pm - 2:10 pm",
                         "course": "Period 3",
                     },
                     "time": [[13, 10], [14, 10]],
