@@ -456,7 +456,8 @@ ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 ROOT = "http://localhost"
 
 SIMPLE_JWT = {
-    "ROTATE_REFRESH_TOKENS": True,
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "ROTATE_REFRESH_TOKENS": True,  # create new refresh token on every refresh (with renewed on refresh
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
     "UPDATE_LAST_LOGIN": True,
 }
@@ -493,7 +494,7 @@ BANNER3: List = [
     #   ),
 ]
 
-CELERY_TIMEZONE = "America/Toronto"
+CELERY_TIMEZONE = "America`/Toronto"
 
 # (Expo) Notifications
 

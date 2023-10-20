@@ -6,7 +6,6 @@ import requests
 from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
-from django.contrib.auth.models import Group
 from django.db.models import Value, JSONField, Q
 from django.utils.translation import gettext_lazy as _l
 from django.utils.translation import ngettext
