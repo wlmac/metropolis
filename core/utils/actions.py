@@ -112,7 +112,7 @@ def send_test_notif(modeladmin, request, queryset):
 
 @admin.action(permissions=["change"], description=_("Send singleday notification"))
 def send_notif_singleday(modeladmin, request, queryset):
-    for u in queryset:
+    for _ in queryset:
         notif_events_singleday.delay(date=dt.date.today())
 
 
