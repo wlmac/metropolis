@@ -102,6 +102,9 @@ def notif_events_singleday(date: dt.date = None):
     tz = pytz.timezone(settings.TIME_ZONE)
     if date is None:
         date = dt.date.today() + dt.timedelta(days=1)
+    elif isinstance(date, str):  # ken things
+        date = dt.datetime.fromisoformat(date)
+        raise RuntimeError(f"date {type(date)} {date}")
     eligible = users_with_token()
     for u in eligible.all():
         # assume we don't have 10 million events overlapping a single day (we can't fit it in a single notif aniway)
@@ -156,7 +159,7 @@ def notif_single(self, recipient_id: int, msg_kwargs):
                 and msg_kwargs["category"] not in allowlist.keys()
             ):
                 logger.info(
-                    f"notif_single not allowed to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}"
+                    f"notif_single (category {msg_kwargs['category']}) not allowed to {recipient} (allowlist {allowlist}) ({recipient.expo_notif_tokens}): {msg_kwargs}"
                     + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
                 )
                 continue
