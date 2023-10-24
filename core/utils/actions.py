@@ -72,7 +72,7 @@ def set_post_unarchived(modeladmin, request, queryset: QuerySet[Post]):
     permissions=["view"],
     description=_("resend the approval email for the selected announcements"),
 )
-@admin_action_rate_limit
+@admin_action_rate_limit(rate_limit=2, time_period=60 * 60)
 def resend_approval_email(modeladmin, request, queryset: QuerySet[Announcement]):
     for post in queryset:
         for teacher in post.organization.supervisors.all():
@@ -128,7 +128,7 @@ class AdminPasswordResetForm(ActionForm):
 
 
 @admin_action_rate_limit(
-    rate_limit=1, time_period=60 * 60 * 12, scope="user"
+    rate_limit=1, time_period=60 * 60 * 6, scope="user"
 )  # specific SU can only reset one password every 12 hours, to prevent abuse. if more is needed contact the backend team to reset.
 @admin.action(
     permissions=["change"], description=_("Reset the password for the selected user")
