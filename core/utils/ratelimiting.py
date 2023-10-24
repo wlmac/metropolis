@@ -7,7 +7,7 @@ from django_redis.cache import RedisCache
 from django.core.exceptions import PermissionDenied
 
 
-def get_key_expiration(key, human_readable: bool = True):
+def get_key_expiration(key: str, human_readable: bool = True):
     """
     Returns the number of seconds until the key expires.
     If the key does not expire, returns 0.
@@ -44,14 +44,15 @@ def get_key_expiration(key, human_readable: bool = True):
 
 
 def admin_action_rate_limit(
-    rate_limit=2,  # 2 actions per 10 minutes
-    time_period=60 * 10,  # 10 minutes
+    rate_limit: int =2,  # 2 actions per 10 minutes
+    time_period: int =60 * 10,  # 10 minutes
     scope: Literal["user", "path"] = "path",
+    must_be_staff: bool = True,
 ):
     def decorator(action_func):
         @wraps(action_func)
         def wrapper(modeladmin, request, queryset, *args, **kwargs):
-            if not request.user.is_staff:
+            if must_be_staff and not request.user.is_staff:
                 raise PermissionDenied(
                     "You must be a staff member to perform this action."
                 )
