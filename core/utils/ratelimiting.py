@@ -51,21 +51,21 @@ def admin_action_rate_limit(
     def decorator(action_func):
         @wraps(action_func)
         def wrapper(modeladmin, request, queryset, *args, **kwargs):
-            if request.user.is_staff:
-                if scope == "user":
-                    key = f"admin_rate_limit_{request.user.pk}_{action_func.__name__}"
-                else:
-                    key = f"admin_rate_limit_{request.user.pk}_{request.path}_{action_func.__name__}"  # shouldn't have to worry about key length as redis supports up to 512MB keys
-                count = cache.get_or_set(key, 0, timeout=time_period)
-                if count >= rate_limit:
-                    raise PermissionDenied(
-                        f"Rate limit exceeded for this action, try again in {get_key_expiration(key)}"  # noqa
-                    )
-                cache.incr(key)
-            else:
+            if not request.user.is_staff:
                 raise PermissionDenied(
                     "You must be a staff member to perform this action."
                 )
+            if scope == "user":
+                key = f"admin_rate_limit_{request.user.pk}_{action_func.__name__}"
+            else:
+                key = f"admin_rate_limit_{request.user.pk}_{request.path}_{action_func.__name__}"  # shouldn't have to worry about key length as redis supports up to 512MB keys
+
+            count = cache.get_or_set(key, 0, timeout=time_period)
+            if count >= rate_limit:
+                raise PermissionDenied(
+                    f"Rate limit exceeded for this action, try again in {get_key_expiration(key)}"  # noqa
+                )
+            cache.incr(key)
             return action_func(modeladmin, request, queryset, *args, **kwargs)
 
         return wrapper
