@@ -24,7 +24,7 @@ logger = get_task_logger(__name__)
 session = requests.Session()
 session.headers.update(
     {
-        # "Authorization": f"Bearer {os.getenv('EXPO_TOKEN')}",# TODO: expo push notifications authn?
+        # "Authorization": f"Bearer {os.getenv('EXPO_TOKEN')}", # TODO: expo push notifications authn?
         "accept": "application/json",
         "accept-encoding": "gzip, deflate",
         "content-type": "application/json",

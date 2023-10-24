@@ -1,7 +1,8 @@
+from functools import wraps
+
 from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse
-from functools import wraps
 
 
 class TooManyRequests(HttpResponse):
