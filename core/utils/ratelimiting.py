@@ -3,8 +3,8 @@ from functools import wraps
 from typing import Literal
 
 from django.core.cache import cache, caches
-from django_redis.cache import RedisCache
 from django.core.exceptions import PermissionDenied
+from django_redis.cache import RedisCache
 
 
 def get_key_expiration(key: str, human_readable: bool = True):
