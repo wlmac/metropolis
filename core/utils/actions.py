@@ -127,6 +127,9 @@ class AdminPasswordResetForm(ActionForm):
     )
 
 
+@admin_action_rate_limit(
+    rate_limit=1, time_period=60 * 60 * 12, scope="user"
+)  # specific SU can only reset one password every 12 hours, to prevent abuse. if more is needed contact the backend team to reset.
 @admin.action(
     permissions=["change"], description=_("Reset the password for the selected user")
 )
