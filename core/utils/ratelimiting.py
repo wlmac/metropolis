@@ -44,8 +44,8 @@ def get_key_expiration(key: str, human_readable: bool = True):
 
 
 def admin_action_rate_limit(
-    rate_limit: int =2,  # 2 actions per 10 minutes
-    time_period: int =60 * 10,  # 10 minutes
+    rate_limit: int = 2,  # 2 actions per 10 minutes
+    time_period: int = 60 * 10,  # 10 minutes
     scope: Literal["user", "path"] = "path",
     must_be_staff: bool = True,
 ):
