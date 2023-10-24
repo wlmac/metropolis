@@ -134,11 +134,19 @@ class AdminPasswordResetForm(ActionForm):
     permissions=["change"], description=_("Reset the password for the selected user")
 )
 def reset_password(modeladmin, request, queryset):
+    user = queryset.first()
     if not request.user.is_superuser:
         modeladmin.message_user(
             request,
             "You must be a superuser to reset passwords.",
             level=messages.WARNING,
+        )
+        return
+    if user.is_superuser:
+        modeladmin.message_user(
+            request,
+            "You cannot reset the password of a superuser, please contact the backend lead to reset the password.",
+            level=messages.ERROR,
         )
         return
     if len(queryset) > 1:
@@ -153,7 +161,6 @@ def reset_password(modeladmin, request, queryset):
             level=messages.ERROR,
         )
         return
-    user = queryset.first()
     user.set_password(request.POST["new_password"])
     user.save()
     modeladmin.message_user(
