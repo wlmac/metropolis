@@ -1,19 +1,15 @@
 import django.db
-from django import forms
-from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.messages import constants as messages
 from django.db.models import Q
-from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
-from core.utils.mail import send_mail
 from metropolis import settings
 from . import models
 from .forms import (
@@ -617,7 +613,8 @@ class UserAdmin(admin.ModelAdmin):
         "saved_blogs__title",
         "saved_announcements__title",
     ]
-    actions = [send_test_notif, send_notif_singleday]
+    actions = [send_test_notif, send_notif_singleday, reset_password]
+    action_form = AdminPasswordResetForm  # admin reset password form
     form = UserAdminForm
 
     def has_view_permission(self, request, obj=None):

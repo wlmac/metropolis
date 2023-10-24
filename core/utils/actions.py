@@ -1,8 +1,11 @@
 import datetime as dt
 import json
 
+from django import forms
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.admin.helpers import ActionForm
+from django.core.checks import messages
 from django.db.models import QuerySet
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -114,6 +117,45 @@ def send_test_notif(modeladmin, request, queryset):
 def send_notif_singleday(modeladmin, request, queryset):
     for _ in queryset:
         notif_events_singleday.delay(date=dt.date.today())
+
+
+class AdminPasswordResetForm(ActionForm):
+    new_password = forms.CharField(
+        required=False,
+        label=_(" New password "),
+        help_text="The password to set for the user if you are using the reset password action",
+    )
+
+
+@admin.action(
+    permissions=["change"], description=_("Reset the password for the selected user")
+)
+def reset_password(modeladmin, request, queryset):
+    if not request.user.is_superuser:
+        modeladmin.message_user(
+            request,
+            "You must be a superuser to reset passwords.",
+            level=messages.WARNING,
+        )
+        return
+    if len(queryset) > 1:
+        modeladmin.message_user(
+            request, "Please only select one user at a time.", level=messages.ERROR
+        )
+        return
+    if not request.POST["new_password"]:
+        modeladmin.message_user(
+            request,
+            "Please enter a new password in the 'New Password' field.",
+            level=messages.ERROR,
+        )
+        return
+    user = queryset.first()
+    user.set_password(request.POST["new_password"])
+    user.save()
+    modeladmin.message_user(
+        request, f"Password for {user} has been set to the specified password."
+    )
 
 
 # FlatPages
