@@ -230,6 +230,9 @@ class EventAdminForm(forms.ModelForm):
         term = cleaned_data.get("term")
         schedule_format = cleaned_data.get("schedule_format")
 
+        if not term:
+            raise TypeError("term not defined")
+
         timetable_configs = settings.TIMETABLE_FORMATS
         if schedule_format not in timetable_configs[term.timetable_format]["schedules"]:
             raise forms.ValidationError(
@@ -248,7 +251,7 @@ class TagAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
     def clean_organization(self):
-        if self.cleaned_data["organization"] == None:
+        if self.cleaned_data["organization"] is None:
             raise forms.ValidationError("Tags must have an organization.")
         return self.cleaned_data["organization"]
 
@@ -274,3 +277,7 @@ class AnnouncementSupervisorAdminForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if "status" in self.fields:
             self.fields["status"].initial = "d"
+
+
+class UserAdminForm(forms.ModelForm):
+    expo_notif_tokens = forms.JSONField(required=False)

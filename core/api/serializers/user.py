@@ -29,6 +29,8 @@ class UserSerializer(serializers.ModelSerializer):
             "organizations",
             "tags_following",
             "gravatar_url",
+            "saved_blogs",
+            "saved_announcements",
         ]
 
 

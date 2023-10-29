@@ -1,6 +1,7 @@
 import json
 from queue import LifoQueue
 
+from django.conf import settings
 from django.db.models import signals
 from django.dispatch import Signal, receiver
 from django.http import StreamingHttpResponse
@@ -10,6 +11,7 @@ from rest_framework.views import APIView
 
 from .. import serializers
 from ... import models
+from ... import tasks
 
 global_notifs = Signal()
 
@@ -17,6 +19,8 @@ global_notifs = Signal()
 @receiver(signals.post_save, sender=models.Announcement)
 def announcement_change(sender, **kwargs):
     global_notifs.send("announcement_change", orig_sender=sender, kwargs=kwargs)
+    if not settings.NOTIF_DRY_RUN:
+        tasks.notif_broker_announcement.delay(kwargs["instance"].id)
 
 
 @receiver(signals.post_save, sender=models.BlogPost)
@@ -92,18 +96,34 @@ class NotifToken(APIView):
     """
     Submit and delete notifcation push tokens.
     Supports Expo notification push tokens only for now.
+    JSON object for PUT and DELETE is both of the form:
+    a) {"expo_push_token": "ExponentPushToken[abc123]"}
+    b) {"expo_push_token": "abc123"}
     """
 
     permission_classes = [permissions.IsAuthenticated]
+    PREFIX = "ExponentPushToken["
+    SUFFIX = "]"
+
+    @classmethod
+    def _normalize_token(cls, raw_token: str) -> str:
+        if raw_token.startswith(cls.PREFIX) and raw_token.endswith(cls.SUFFIX):
+            return raw_token[len(cls.PREFIX) : -len(cls.SUFFIX)]
+        return raw_token
 
     def put(self, request, format=None):
         s = TokenSerializer(data=request.data)
         s.is_valid(raise_exception=True)
-        request.user.expo_notif_token = s.validated_data["expo_push_token"]
+        token = self._normalize_token(s.validated_data["expo_push_token"])
+        request.user.expo_notif_tokens[token] = None
         request.user.save()
         return response.Response(None)
 
     def delete(self, request, format=None):
-        request.user.expo_notif_token = None
+        s = TokenSerializer(data=request.data)
+        s.is_valid(raise_exception=True)
+        token = self._normalize_token(s.validated_data["expo_push_token"])
+        if token in request.user.expo_notif_tokens:
+            del request.user.expo_notif_tokens[token]
         request.user.save()
         return response.Response(None)

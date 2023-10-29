@@ -9,6 +9,11 @@ from rest_framework.exceptions import ValidationError
 
 from core.utils.mail import send_mail
 from .base import BaseProvider
+from ...serializers.custom import (
+    TagRelatedField,
+    AuthorField,
+    OrganizationField,
+)
 from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
 from ...utils.posts import likes, comments
 from ....models import Announcement, Organization, User
@@ -38,6 +43,9 @@ class Serializer(serializers.ModelSerializer):
     message = serializers.CharField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
+    tags = TagRelatedField()
+    author = AuthorField()
+    organization = OrganizationField()
 
     @staticmethod
     def get_likes(obj: Announcement) -> int:
@@ -153,6 +161,7 @@ class Inner(permissions.BasePermission):
 
 class AnnouncementProvider(BaseProvider):
     model = Announcement
+    listing_filters = {"tags": int, "organization": int, "author": int}
 
     @property
     def permission_classes(self):

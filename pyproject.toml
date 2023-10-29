@@ -19,7 +19,7 @@ bleach = "4.1.0"
 certifi = "2022.12.7"
 cffi = "1.15.0"
 charset-normalizer = "2.0.7"
-cryptography = "35.0.0"
+cryptography = "*"
 defusedxml = "0.7.1"
 Deprecated = "1.2.13"
 Django = "4.0.10"
@@ -27,6 +27,7 @@ django-allauth = "0.45.0"
 django-appconf = "1.0.5"
 django-cors-headers = "3.10.0"
 django-crispy-forms = "*"
+django-multiselectfield = "0.1.12"
 django-oauth-toolkit = "*"
 django-pwa = "*"
 django-recaptcha = "3.0.0"
@@ -58,6 +59,9 @@ webencodings = "0.5.1"
 wrapt = "1.13.3"
 django_ical = "1.8.3"
 platformdirs = "2.6.2"
+alt-profanity-check = "*"
+celery = "*"
+exponent_server_sdk = "*"
 #[tool.poetry.group.deploy.dependencies]
 gunicorn = "20.1.0"
 psycopg2 = "2.9.1"
@@ -67,8 +71,9 @@ psycopg2 = "2.9.1"
 black = "*"
 isort = "*"
 
-[tool.mypy]
-plugins = ["mypy_django_plugin.main"]
+# TODO: doesn't work right now
+#[tool.mypy]
+#plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
 django_settings_module = "metropolis.settings"

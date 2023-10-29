@@ -23,10 +23,11 @@
       overrides = pkgs.poetry2nix.defaultPoetryOverrides.extend
         (self: super:
           (add-setuptools super "martor")
+          // (add-setuptools super "alt-profanity-check")
         );
       preferWheels = true;
       editablePackageSources = {
-        airy = ./.;
+        metropolis = ./.;
       };
     };
   in {
@@ -37,7 +38,19 @@
         openssl
         black
         isort
+        mypy
+        nodejs
+        act
       ];
     });
+    apps.default.type = "app";
+    apps.default.program = "" + pkgs.writeShellScript "run.sh" ''
+      set -eux
+      trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+      #docker run -d -p 5672:5672 rabbitmq &
+      ./manage.py runserver &
+      celery -A metropolis worker -B --loglevel=DEBUG &
+      wait
+    '';
   });
 }

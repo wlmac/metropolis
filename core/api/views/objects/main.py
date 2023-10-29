@@ -1,9 +1,12 @@
 import os
+from json import JSONDecodeError
+from typing import Dict, Callable, List, Tuple, Any
 
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
-from django.db.models import Model
-from django.http import Http404
-from django.urls import reverse
+from django.db.models import Model, Q, QuerySet
+from django.http import QueryDict
+from django.shortcuts import get_object_or_404
+from django.urls import reverse, NoReverseMatch
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 
@@ -13,7 +16,7 @@ from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
 __all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
 
-def gen_get_provider(mapping):
+def gen_get_provider(mapping: Dict[str, str]):
     for file in os.listdir(os.path.dirname(__file__)):
         if file.endswith(".py") and file not in ["__init__.py", "base.py", "main.py"]:
             __import__(f"core.api.views.objects.{file[:-3]}", fromlist=["*"])
@@ -35,7 +38,9 @@ def gen_get_provider(mapping):
         """
         if provider_name not in ProvReqNames:
             raise BadRequest(
-                "Invalid object type. Valid types are: " + ", ".join(ProvReqNames) + "."
+                "Object type not found. Valid types are: "
+                + ", ".join(ProvReqNames)
+                + "."
             )
         return provClassMapping[provider_name]
 
@@ -46,13 +51,17 @@ get_provider = gen_get_provider(  # k = Provider class name e.g. comment in Comm
     {
         "announcement": "announcement",
         "blogpost": "blog-post",
+        "exhibit": "exhibit",
         "event": "event",
         "organization": "organization",
         "flatpage": "flatpage",
         "user": "user",
         "tag": "tag",
+        "term": "term",
+        "timetable": "timetable",
         "comment": "comment",
         "like": "like",
+        "course": "course",
     }
 )
 
@@ -73,7 +82,44 @@ class ObjectAPIView(generics.GenericAPIView):
             self.permission_classes = provider.permission_classes
         self.as_su = as_su
         self.serializer_class = provider.serializer_class
+        self.lookup_fields = getattr(
+            provider, "lookup_fields", getattr(provider, "lookup_field", ["id", "pk"])
+        )
+        self.listing_filters = getattr(
+            provider,
+            "listing_filters",
+            getattr(provider, "listing_filter", {"id": int, "pk": int}),
+        )
         # NOTE: better to have the following if after initial, but this is easier
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        lookup = (
+            self.request.query_params.get("lookup", "id")
+            if self.request.query_params.get("lookup") in self.lookup_fields
+            else "id"
+        )
+        q = Q()
+        raw = {lookup: [self.kwargs.get("lookup")]}
+        if lookup == "id":
+            if not raw[lookup][0].isdigit():
+                raise BadRequest(
+                    "ID must be an integer, if you want to use a different lookup, refer to the docs for the supported lookups."
+                )
+        filtered = False
+        for field in self.lookup_fields:
+            if field in raw:
+                if field in ("id", "pk") and raw[field][0] == "0":
+                    # ignore 0 pk
+                    continue
+                q |= Q(**{f"{field}__in": raw[field]})
+                filtered = True
+        if not filtered:
+            raise BadRequest("not enough filters")
+
+        obj = get_object_or_404(queryset, q)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     # NOTE: dispatch() is copied from https://github.com/encode/django-rest-framework/blob/de7468d0b4c48007aed734fee22db0b79b22e70b/rest_framework/views.py
     # License for this function:
@@ -133,6 +179,8 @@ class ObjectAPIView(generics.GenericAPIView):
             kwargs.pop("type")
             response = handler(request, *args, **kwargs)
 
+        except (JSONDecodeError, UnicodeDecodeError):
+            raise BadRequest("Invalid JWT, token is malformed.")
         except Exception as exc:
             response = self.handle_exception(exc)
 
@@ -149,6 +197,8 @@ class ObjectList(
     mutate = False
     detail = False
     kind = "list"
+    FALSE_VALUES = ["false", "0"]
+    TRUE_VALUES = ["true", "1"]
 
     def get_last_modified(self):
         try:
@@ -158,17 +208,97 @@ class ObjectList(
 
     def get_admin_url(self):
         model: Model = self.provider.model
-        return reverse(
-            f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
-        )
+        try:
+            return reverse(
+                f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+            )
+        except NoReverseMatch:
+            return None
+
+    def __convert_query_params__(self, query_params: QueryDict) -> Tuple[List[Tuple], str]:
+        """
+        Removes non-filter params from query_params and converts them to the correct type.
+        :param query_params: QueryDict
+        :return: Tuple[List[Tuple], str] (params, search_type)
+        """
+        k_filters = []
+        search_type = query_params.get("search_type", "OR").upper()
+        if search_type not in {"OR", "AND"}:
+            search_type = "OR"
+
+        for key, value in query_params.lists():
+            if (
+                key
+                in ["limit", "offset", "search_type", "format"]
+                + self.provider.listing_filters_ignore
+            ):
+                continue  # ignore pagination and search_type params
+            if key not in self.listing_filters:
+                raise BadRequest(
+                    f"{key} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {', '.join(self.listing_filters.keys())}.")
+            lookup_type = self.listing_filters[key]
+            if isinstance(value, list):
+                for item in value:
+                    k_filters.append((key, self.__convert_type__(item, lookup_type)))
+            else:
+                k_filters.append((key, self.__convert_type__(value, lookup_type)))
+        return k_filters, search_type
+
+    def __convert_type__(self, lookup_value: str, lookup_type: Callable) -> object:
+        lookup_value = lookup_value.casefold()
+        if lookup_type == bool:
+            if lookup_value in self.FALSE_VALUES:
+                return False
+            elif lookup_value in self.TRUE_VALUES:
+                return True
+            else:
+                raise BadRequest(
+                    f'Invalid value for boolean filter: {lookup_value}. Accepted values for True are {" or ".join(self.TRUE_VALUES)} and for False they are {" or ".join(self.FALSE_VALUES)}'
+                )
+
+        return lookup_type(lookup_value)
+
+    @staticmethod
+    def __compile_filters__(query_params: List, search_type: str) -> Q:
+        filters = []
+        if not query_params:
+            # No query params, return None to avoid filtering.
+            return None
+        for item in query_params:
+            lookup_filter, lookup_value = item
+            if isinstance(lookup_value, list):
+                filters.append((f"{lookup_filter}__in", lookup_value))
+                filters.extend([(lookup_filter, value) for value in lookup_value])
+            else:
+                filters.append((lookup_filter, lookup_value))
+        query = Q()
+        for item in filters:
+            field, values = item
+            query.add(Q(**{field: values}), Q.AND if search_type == "AND" else Q.OR)
+        return query
 
     def get_queryset(self):
-        return self.provider.get_queryset(self.request)
+        queryset: QuerySet = self.provider.get_queryset(self.request)
+        query_params, search_type = self.__convert_query_params__(
+            self.request.query_params
+        )
+        filters = self.__compile_filters__(query_params=query_params, search_type=search_type)
+        if filters:
+            return queryset.filter(filters)
+        return queryset
 
-    def get(self, *args, **kwargs):
-        if not self.provider.allow_list:
+    def get(self, request, *args, **kwargs):
+        allow_list = getattr(self.provider, "allow_list", True)
+        if not allow_list:
             return Response({"detail": "listing not allowed"}, status=422)
-        return super().get(*args, **kwargs)
+        response = super().get(self, request, *args, **kwargs)
+        if response.data["next"]:
+            response.data["next"] = response.data["next"].replace("http://", "https://")
+        if response.data["previous"]:
+            response.data["previous"] = response.data["previous"].replace(
+                "http://", "https://"
+            )
+        return response
 
 
 class LookupField:
@@ -207,11 +337,13 @@ class ObjectRetrieve(
     kind = "retrieve"
 
     def get_admin_url(self):
-        model = self.provider.model
-        return reverse(
-            f"admin:{model._meta.app_label}_{model._meta.model_name}_change",
-            args=[self.get_object().id],
-        )
+        model: Model = self.provider.model
+        try:
+            return reverse(
+                f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+            )
+        except NoReverseMatch:
+            return None
 
     def get_last_modified(self):
         try:
@@ -230,12 +362,35 @@ class ObjectSingle(
     detail = None
     kind = "single"
 
+    def check_allow_single(self):
+        allow_single = getattr(self.provider, "allow_single", True)
+        if not allow_single:
+            return Response({"detail": "editing/deletion not allowed"}, status=422)
+        return None
+
+    def delete(self, *args, **kwargs):
+        if x := self.check_allow_single():
+            return x
+        return super().delete(*args, **kwargs)
+
+    def put(self, *args, **kwargs):
+        if x := self.check_allow_single():
+            return x
+        return super().put(*args, **kwargs)
+
+    def patch(self, *args, **kwargs):
+        if x := self.check_allow_single():
+            return x
+        return super().patch(*args, **kwargs)
+
     def get_admin_url(self):
-        model = self.provider.model
-        return reverse(
-            f"admin:{model._meta.app_label}_{model._meta.model_name}_change",
-            args=[self.get_object().id],
-        )
+        model: Model = self.provider.model
+        try:
+            return reverse(
+                f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+            )
+        except NoReverseMatch:
+            return None
 
     def get_queryset(self):
         return self.provider.get_queryset(self.request)

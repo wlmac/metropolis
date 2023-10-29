@@ -16,6 +16,7 @@ class Tag(models.Model):
         Organization, blank=True, null=True, default=None, on_delete=models.CASCADE
     )
 
+    @property
     def color(self):
         random.seed(self.name + self.description)
         return get_tag_color(random.random())

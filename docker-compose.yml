@@ -1,0 +1,90 @@
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "changeme_metropolis_password"
+      POSTGRES_USER: "metropolis_superuser"
+      POSTGRES_DB: "metropolis"
+      # TODO: load secrets from files?
+      # TODO: backup-on-start?
+    volumes:
+      - ${PWD}/postgres-init-db.sh:/docker-entrypoint-initdb.d/postgres-init-db.sh
+    networks:
+      - postgres
+    healthcheck:
+      test: ["CMD", "bash", "-c", "PGPASSWORD=changeme_metropolis_password psql -U metropolis_superuser metropolis"]
+      interval: 10s
+      timeout: 60s
+  gunicorn:
+    image: ghcr.io/wlmac/metropolis
+    build: .
+    command: /app/docker_entrypoint.sh gunicorn
+    entrypoint: bash
+    environment:
+      METROPOLIS_AUTOSETUP: "yes"
+    ports:
+      - "0.0.0.0:28780:28780" # force only IPv4 (only have iptables rules on IPv4)
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - postgres
+      - gunicorn
+      - redis
+    volumes:
+      - ${PWD}/metropolis/local_settings.py:/app-inject/metropolis/local_settings2.py:ro
+      - ${PWD}/metropolis/local_rsa_privkey.pem:/app-inject/metropolis/local_rsa_privkey.pem:ro
+      - public:/app-public:rw
+      - media:/app-media:rw
+  celery:
+    image: ghcr.io/wlmac/metropolis
+    build: .
+    command: /app/docker_entrypoint.sh celery
+    entrypoint: bash
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - postgres
+      - redis
+    volumes:
+      - ${PWD}/metropolis/local_settings.py:/app-inject/metropolis/local_settings2.py:ro
+      - ${PWD}/metropolis/local_rsa_privkey.pem:/app-inject/metropolis/local_rsa_privkey.pem:ro
+  celery-beat:
+    image: ghcr.io/wlmac/metropolis
+    build: .
+    command: /app/docker_entrypoint.sh as-app /app/.venv/bin/celery -A metropolis beat --loglevel=INFO
+    entrypoint: bash
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - postgres
+      - redis
+    volumes:
+      - ${PWD}/metropolis/local_settings.py:/app-inject/metropolis/local_settings2.py:ro
+      - ${PWD}/metropolis/local_rsa_privkey.pem:/app-inject/metropolis/local_rsa_privkey.pem:ro
+  redis:
+    image: redis
+    networks:
+      - redis
+
+volumes:
+  public:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: '/srv2/app/static'
+  media:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: '/srv2/app/media'
+  static2:
+
+networks:
+  gunicorn: # gunicorn <-> caddy
+  redis: # redis <-> gunicorn
+  postgres: # postgres <-> gunicorn

@@ -8,7 +8,7 @@ from django.utils import timezone
 from .choices import graduating_year_choices, timezone_choices
 from .course import Term
 from .post import Announcement
-from .util import SetField
+from ..utils.fields import SetField
 
 
 # Create your models here.
@@ -37,10 +37,10 @@ class User(AbstractUser):
     saved_blogs = models.ManyToManyField("BlogPost", blank=True)
     saved_announcements = models.ManyToManyField("Announcement", blank=True)
 
-    expo_notif_token = models.TextField(
-        "Expo Notifications Token",
-        blank=True,
-        null=True,
+    expo_notif_tokens = models.JSONField(
+        "Expo Notifications Tokens",
+        default=dict,
+        help_text="JSON object with keys as tokens and values as null.",
         # the length is not specified :( https://github.com/expo/expo/issues/1135#issuecomment-399622890
     )
 

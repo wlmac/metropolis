@@ -56,8 +56,14 @@ For `event`:
 **Returns** list of `{ name, time, organization } ` of `event`.
 **Note** use Single to get details.
 
+Allows additional query params `start` and `end` of the format `2006-02-01` (following Go's time format).
+Both dates are in AoE time, and the start date is moved to the previous day.
+
 For `flatpage` and `user`:
 Cannot be used.
+
+For `Flatpage, User, Organization, Exhibit, BlogPost`:
+You can pass a lookup query param with the format `?lookup=<field>` to change how the results are filtered. (e.g. `?lookup=username` if you want to filter by username instead of ID for `User`) Must be an exact match.
 
 ### Query
 
@@ -68,7 +74,7 @@ Pagination (`limit` and `offset`; both **mandatory**): control what data to retu
 **Note**
 `limit` is the maximum number of items to return.
 `offset` is the starting position of the items to return.
-See [https://www.django-rest-framework.org/api-guide/pagination/#limitoffsetpagination] for details.
+See [docs](https://www.django-rest-framework.org/api-guide/pagination/#limitoffsetpagination) for details.
 
 the result will be this format:
 ```yaml
@@ -104,6 +110,9 @@ Example:
 
 **Note** has `Last-Modified` header.
 
+**Note**. Query params (e.g. `username`) can be added as a disjunctive filter.
+          Also, `0` as `<id>` makes the server ignore `0` when retrieving the object.
+
 ### For `flatpage`
 
 **Note** `id` is the slug (percent-encoded).
@@ -116,7 +125,22 @@ This is the *content* in CommonMark!
 No emojis :blobsadrain:.
 ```
 
-**Success** returns a 2xx code. 
+**Success** returns a 2xx code.
+
+## (List of) Objects
+You can add **Listing Filters** where supported[^1] to narrow down results. You can also chain these filters together and the system will **OR** them.
+e.g. `GET /api/v3/obj/announcement?tags=10&tags=42` will return all announcements that have either the tags _10 **OR** 42_.
+
+__**BUT WAIT!**__ what if you want to find all objects that have **BOTH** tag _10_ **AND** 42? _well_, you can use the `&search_type` query param which accepts either `AND` or `OR` as its value (default is OR).
+
+###### Examples
+
+- `GET /api/v3/obj/course?position=3&term=2&search_type=AND` will return all are **BOTH** in position _3_ **AND** in term _2_.
+- `GET /api/v3/obj/announcement?tags=10&tags=42&organization=83&search_type=AND` will return all announcements that have **BOTH** tag _10_, _42_ **AND** is from the organization with ID _83_.
+- `GET /api/v3/obj/announcement?tags=10&tags=42&search_type=OR` will return all announcements that have **EITHER** tag _10_ **OR** _42_.
+
+
+
 
 ## Error
 Errors are returned with their corresponding fields.
@@ -142,6 +166,11 @@ properties:
 ```
 
 ## Announcement
+###### When listing
+You can use the following filters:
+- `tags`: a tag ID to filter by. 
+- `author`: an author ID to filter by
+- `organization`: an organization ID to filter by. (cannot be used with along with itself when using `AND` e.g. `?organization=1&organization=2&search_type=AND` is invalid)
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/announcement.json
@@ -156,10 +185,28 @@ properties:
   is_public: { type: boolean }
   status: { type: string, enum: [ "d", "p", "a", "r" ] }
   rejection_reason: { type: string }
-  author: { type: integer }
-  organization: { type: integer }
+  author: 
+    type: object
+    properties: 
+      id: { type: integer }
+      username: { type: string }
+      first_name: { type: string }
+      last_name: { type: string }
+  organization: 
+    type: object
+    properties: 
+      id: { type: integer }
+      name: { type: string }
+      icon: { type: string, format: url }
   supervisor: { type: integer | null }
-  tags: { type: array, items: integer }
+  tags: 
+    type: array
+    items: 
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        color: { type: string }
   likes: { type: integer }
   comments: 
     type: object
@@ -188,12 +235,57 @@ properties:
   featured_image: { type: string, format: url }
   featured_image_description: { type: string }
   is_published: { type: boolean }
-  tags: { type: array, items: integer }
+  tags: 
+      type: array
+      items: 
+        type: object
+        properties:
+          id: { type: integer }
+          name: { type: string }
+          color: { type: string }  
   likes: { type: integer }
   comments: 
     type: object
     properties:
       id: { type: integer }     
+      has_children: { type: boolean }
+      body: { type: string }
+      author: { type: integer | null }
+      likes: { type: integer }
+```
+
+## Exhibit
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/exhibit.json
+type: object
+properties:
+  id: { type: integer }
+  slug: { type: string }
+  title: { type: string }
+  author:
+    type: object
+    properties:
+      id: { type: integer }
+      username: { type: string }
+  created_date: { type: string, format: date-time }
+  last_modified_date: { type: string, format: date-time }
+  content: { type: string, format: url }
+  content_description: { type: string }
+  is_published: { type: boolean }
+  tags: 
+    type: array
+    items: 
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        color: { type: string }
+  likes: { type: integer }
+  comments:
+    type: object
+    properties:
+      id: { type: integer }
       has_children: { type: boolean }
       body: { type: string }
       author: { type: integer | null }
@@ -209,7 +301,12 @@ properties:
   name: { type: string }
   description: { type: string }
   term: { type: integer }
-  organization: { type: integer }
+  organization:  
+    type: object
+    properties:
+      id: { type: integer }
+      name: { type: string }
+      icon: { type: string, format: url }
   time:
     type: object
     properties:
@@ -217,12 +314,22 @@ properties:
       end: { type: string, format: date-time }
   scheduleFormat: { type: integer }
   instructional: { type: integer }
-  public_: { type: boolean }
-
-  tags: { type: array, items: integer }
+  is_public: { type: boolean }
+  should_announce: { type: boolean }
+  tags: 
+    type: array
+    items: 
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        color: { type: string }
 ```
 
 ## Flatpage
+
+`url` can be used for the lookup query string to filter by url path (e.g. `GET /api/v3/obj/flatpage/retrieve//hello/?lookup=url`).
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/flatpage.json
@@ -233,6 +340,9 @@ properties:
 ```
 
 ## User
+
+`username` can be used for the lookup query string to filter by username.
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/user.json
@@ -251,10 +361,15 @@ properties:
   gravatar_url: { type: string, format: url }
   saved_blogs: { type: array, items: { type: integer } }
   saved_announcements: { type: array, items: { type: integer } }
+  is_teacher: { type: boolean }
 ```
 
 
 ## Organization
+
+`slug` can be used for the lookup query string to filter by slug
+
+
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/organization.json
@@ -274,9 +389,16 @@ properties:
   is_active: { type: boolean }
   is_open: { type: boolean }
   applications_open: { type: boolean }
-  tags: { type: array, items: { type: integer } }
+  tags: 
+    type: array
+    items: 
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        color: { type: string }
   banner: { type: string }
-  icon: { type: string }
+  icon: { type: string, format: url }
   links: { type: array, items: { type: string } }
 ```
 
@@ -287,19 +409,99 @@ $id: https://maclyonsden.com/api/v3/schema/comment.json
 type: object
 properties:
   id: { type: integer }
-  author: { type: integer | null }
-  body: { type: string }
-  created_at: { type: string }
+  author: 
+    type: object | null
+    properties:
+      id: { type: integer }
+      username: { type: string }
+  content_type: { type: string }
+  object_id: { type: integer }
+  body: { type: string | null }
+  created_at: { type: string | null }
   likes: { type: integer }
   edited: { type: boolean }
   children: 
-    type: object
-    properties:
-      id: { type: integer }     
-      has_children: { type: boolean }
-      body: { type: string }
-      author: { type: integer | null }
-      likes: { type: integer }
+    type: array
+    items:
+      type: object
+      properties:
+        id: { type: integer }
+        body: { type: string }
+        created_at: { type: string | null }
+        has_children: { type: boolean }
+        likes: { type: integer }
+        author: 
+          type: object | null
+          properties:
+            id: { type: integer }
+            username: { type: string }
+```
+
+## Tag
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/tag.json
+type: object
+properties:
+  id: { type: integer }
+  name: { type: string }
+  color: { type: string }
+```
+
+## Course
+
+`term` and `position` can be used when listing in the query string to filter by them. (e.g. `GET /api/v3/obj/course?term=1&position=1`
+
+**NOTE:** `term` is the term *id*, not the term *position*.
+
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/course.json
+type: object
+properties:
+  id: { type: integer }
+  code: { type: string }
+  description: { type: string }
+  position: { type: integer }
+```
+
+## Term
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/term.json
+type: object
+properties:
+  id: { type: integer }
+  name: { type: string }
+  description: { type: string }
+  timetable_format: { type: string }
+  start_date: { type: string, format: date-time }
+  end_date: { type: string, format: date-time }
+  is_frozen: { type: boolean }
+```
+
+## Timetable
+When viewing:
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/timetable-view.json
+type: object
+properties:
+  term:
+    "$ref": /api/v3/schema/term.json
+  courses:
+    type: array
+    items: { "$ref": /api/v3/schema/course.json }
+
+```
+When mutating:
+```yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://maclyonsden.com/api/v3/schema/timetable-mutate.json
+type: object
+properties:
+  term: { type: integer }
+  courses: { type: array, items: integer }
 ```
 
 ## Banners
@@ -334,3 +536,6 @@ properties:
 
 Do `OPTIONS v3/notif/token` for docs.
 
+
+
+[^1]: check object doc to see supported args. 

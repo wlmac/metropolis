@@ -7,15 +7,17 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
-from django.core.exceptions import PermissionDenied
+from django.contrib.messages import constants as messages
 from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, ngettext
 from martor.widgets import AdminMartorWidget
+
+from core.tasks import notif_single
 from core.utils.mail import send_mail
 from metropolis import settings
 from . import models
@@ -28,6 +30,13 @@ from .forms import (
     TagAdminForm,
     TagSuperuserAdminForm,
     TermAdminForm,
+    UserAdminForm,
+)
+from .models import Comment
+from .utils.filters import (
+    OrganizationListFilter,
+    BlogPostAuthorListFilter,
+    PostTypeFilter,
 )
 
 User = get_user_model()
@@ -149,28 +158,6 @@ class OrganizationAdmin(admin.ModelAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
-class OrganizationListFilter(admin.SimpleListFilter):
-    title = "organization"
-    parameter_name = "org"
-
-    def lookups(self, request, model_admin):
-        qs = models.Organization.objects.all()
-        if not request.user.is_superuser:
-            qs = qs.filter(
-                Q(owner=request.user)
-                | Q(supervisors=request.user)
-                | Q(execs=request.user)
-            ).distinct()
-        for org in qs:
-            yield (org.slug, org.name)
-
-    def queryset(self, request, queryset):
-        if self.value() is None:
-            return queryset
-        else:
-            return queryset.filter(organization__slug=self.value())
-
-
 class PostAdmin(admin.ModelAdmin):
     readonly_fields = ["like_count", "save_count", "comments"]
     fields = ["like_count", "save_count", "comments"]
@@ -186,7 +173,6 @@ class PostAdmin(admin.ModelAdmin):
 
     def save_count(self, obj) -> int:
         saves = User.objects.filter(saved_announcements=obj).count()
-        print(saves, "saves")
         if saves is not None:
             return saves
         return 0
@@ -327,7 +313,8 @@ class AnnouncementAdmin(PostAdmin):
 
         fields = list(fields)
         fields.sort(key=lambda x: all_fields.index(x))
-        fields.extend(PostAdmin.fields)
+        if obj and obj.pk:
+            fields.extend(PostAdmin.fields)
 
         return fields
 
@@ -383,6 +370,8 @@ class AnnouncementAdmin(PostAdmin):
                 kwargs["queryset"] = models.User.objects.filter(
                     organizations_leading__in=orgs,
                 )
+                if request.user.is_superuser:
+                    kwargs["queryset"] = models.User.objects.all()
             elif db_field.name == "supervisor":
                 kwargs["queryset"] = models.User.objects.filter(
                     organizations_supervising__in=orgs,
@@ -468,22 +457,6 @@ class AnnouncementAdmin(PostAdmin):
                 )
 
 
-class BlogPostAuthorListFilter(admin.SimpleListFilter):
-    title = "author"
-    parameter_name = "author"
-
-    def lookups(self, request, model_admin):
-        qs = User.objects.filter(blogposts_authored__isnull=False).distinct()
-        for author in qs:
-            yield (author.pk, author.username)
-
-    def queryset(self, request, queryset):
-        if self.value() is None:
-            return queryset
-        else:
-            return queryset.filter(author__pk=self.value())
-
-
 class BlogPostAdmin(PostAdmin):
     list_display = ["title", "author", "is_published", "views"]
     list_filter = [BlogPostAuthorListFilter, "is_published"]
@@ -499,11 +472,16 @@ class BlogPostAdmin(PostAdmin):
         "show_after",
         "tags",
         "is_published",
-    ] + PostAdmin.fields
+    ]
     readonly_fields = PostAdmin.readonly_fields
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
+
+    def get_fields(self, request, obj=None):
+        if obj and obj.pk:
+            return self.fields + PostAdmin.fields
+        return self.fields
 
     def get_changeform_initial_data(self, request):
         return {"author": request.user.pk}
@@ -522,40 +500,40 @@ class BlogPostAdmin(PostAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
-class CommentAdmin(admin.ModelAdmin):  # todo add likes back.
-    list_display = ("body", "parent")
+class ExhibitAdmin(PostAdmin):
+    list_display = ["title", "author", "is_published"]
+    list_filter = [BlogPostAuthorListFilter, "is_published"]
+    ordering = ["-show_after"]
+    fields = [
+        "author",
+        "title",
+        "slug",
+        "content",
+        "content_description",
+        "show_after",
+        "tags",
+        "is_published",
+    ] + PostAdmin.fields
+    readonly_fields = PostAdmin.readonly_fields
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
     }
-    actions = ["approve_comments", "unapprove_comments"]
 
-    @staticmethod
-    def approve_comments(modeladmin, request, queryset):
-        queryset.update(live=True)
+    def get_changeform_initial_data(self, request):
+        return {"author": request.user.pk}
 
-    @staticmethod
-    def unapprove_comments(modeladmin, request, queryset):
-        queryset.update(live=False)
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).filter(author__isnull=False)
-
-    def content_object(self, obj):
-        url = reverse(
-            f"admin:{obj.content_type.app_label}_{obj.content_type.model}_change",
-            args=[obj.object_id],
-        )
-        return format_html('<a href="{}">{}</a>', url, str(obj.content_object))
-
-    content_object.short_description = "Content Object"
-
-    def parent(self, obj):  # todo rework this
-        if obj.parent:
-            url = reverse("admin:comments_comment_change", args=[obj.parent.id])
-            return format_html('<a href="{}">{}</a>', url, str(obj.parent.text[:50]))
-        return None
-
-    parent.short_description = "Parent Comment"
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "tags":
+            kwargs["queryset"] = (
+                models.Tag.objects.filter(
+                    Q(organization=None)
+                )  # TODO: add SAC-only tags?
+                .distinct()
+                .order_by("name")
+            )
+            if request.user.is_superuser:
+                kwargs["queryset"] = models.Tag.objects.all().order_by("name")
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -611,6 +589,22 @@ class EventAdmin(admin.ModelAdmin):
             return False
         return super().has_change_permission(request, obj)
 
+    def save_model(self, request, obj, form, change):
+        if not all(
+            map(
+                lambda date: obj.term.start_datetime()
+                <= date
+                <= obj.term.end_datetime(),
+                [obj.start_date, obj.end_date],
+            )
+        ):
+            self.message_user(
+                request,
+                _("Event timeframe does not overlap term timeframe."),
+                level=messages.ERROR,
+            )
+        super().save_model(request, obj, form, change)
+
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ["username", "is_superuser", "is_staff", "is_teacher"]
@@ -628,6 +622,21 @@ class UserAdmin(admin.ModelAdmin):
         "saved_blogs__title",
         "saved_announcements__title",
     ]
+    actions = ["send_test_notif"]
+    form = UserAdminForm
+
+    @admin.action(permissions=["change"], description="Send test notification")
+    @staticmethod
+    def send_test_notif(modeladmin, request, queryset):
+        for u in queryset:
+            notif_single.delay(
+                u.id,
+                dict(
+                    title="Test Notification",
+                    body="Test body.",
+                    category="test",
+                ),
+            )
 
     def has_view_permission(self, request, obj=None):
         if obj is None and (
@@ -647,10 +656,13 @@ class TimetableAdmin(admin.ModelAdmin):
     list_filter = ["term"]
 
 
-@admin.action(description="Archive selected flatpages and download them as a JSON file")
+@admin.action(
+    permissions=["change"],
+    description="Archive selected flatpages and download them as a JSON file",
+)
 def archive_page(modeladmin, request, queryset):
     if not request.user.has_perm("flatpages.change_flatpage"):
-        raise PermissionDenied
+        raise RuntimeError("permissions kwarg doesn't work")
 
     response = HttpResponse(
         content_type="application/json"
@@ -692,7 +704,82 @@ class CustomFlatPageAdmin(FlatPageAdmin):
 
 
 class RaffleAdmin(admin.ModelAdmin):
-    list_dispaly = ["__str__", "open_start", "open_end"]
+    list_display = ["__str__", "open_start", "open_end"]
+
+
+class RecurrenceAdmin(admin.ModelAdmin):
+    # list_display = ["recurrence_pattern", "event_object"]
+    list_display = ["__str__", "event_object"]
+    search_fields = ["event__name"]
+    list_filter = ["event__name", "event__organization"]
+    # def recurrence_pattern(self, obj):
+    #    return obj.recurrence_pattern\
+
+    @admin.display()
+    def event_object(self, obj):
+        url = reverse(
+            f"admin:core_event_change",
+            args=[obj.event.id],
+        )
+        return format_html('<a href="{}">{}</a>', url, str(obj.event.name.capitalize()))
+
+
+class CommentAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        django.db.models.TextField: {"widget": AdminMartorWidget},
+    }
+    list_display = ["author", "content_object", "created_at"]
+    search_fields = ["author__username", "body"]
+    actions = ["approve_comments", "unapprove_comments"]
+    readonly_fields = ["created_at", "likes"]
+    list_filter = ["live", PostTypeFilter]
+    actions_on_top = True
+    actions_on_bottom = True
+    date_hierarchy = "created_at"
+
+    def likes(self, obj: Comment):
+        return obj.like_count
+
+    def approve_comments(self, request, queryset):
+        count = queryset.update(live=True)
+
+        self.message_user(
+            request,
+            ngettext(
+                "%d comment successfully approved.",
+                "%d comments successfully approved.",
+                count,
+            )
+            % count,
+        )
+
+    approve_comments.short_description = _("Approve (Show) comments")
+
+    def unapprove_comments(self, modeladmin, request, queryset):
+        count = queryset.update(live=False)
+        self.message_user(
+            request,
+            ngettext(
+                "%d comment successfully unapproved.",
+                "%d comments successfully unapproved.",
+                count,
+            )
+            % count,
+        )
+
+    unapprove_comments.short_description = _("Unapprove (Hide) comments")
+
+    def get_queryset(self, request):
+        return Comment.objects.filter(author__isnull=False).order_by("-created_at")
+
+    def content_object(self, obj):
+        url = reverse(
+            f"admin:{obj.content_type.app_label}_{obj.content_type.model}_change",
+            args=[obj.object_id],
+        )
+        return format_html('<a href="{}">{}</a>', url, str(obj.content_object))
+
+    content_object.short_description = "Associated Post"
 
 
 admin.site.register(User, UserAdmin)
@@ -701,9 +788,11 @@ admin.site.register(models.Term, TermAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
+admin.site.register(models.Exhibit, ExhibitAdmin)
 admin.site.register(models.Comment, CommentAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
+admin.site.register(models.RecurrenceRule, RecurrenceAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)
 
 admin.site.unregister(FlatPage)

@@ -3,23 +3,30 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
+from ...serializers import PrimaryKeyAndSlugRelatedField
+from ...serializers.custom import TagRelatedField
 from ...utils.posts import likes, comments
-from ....models import BlogPost
+from ....models import BlogPost, User
 
 
 class Serializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
+    author = PrimaryKeyAndSlugRelatedField(  # potentially change to AuthorField in the future
+        slug_field="username", queryset=User.objects.all()
+    )
+    tags = TagRelatedField()
 
     def to_representation(self, instance: BlogPost):
         request = self.context["request"]
         if (
             request.mutate is False and request.detail
-        ):  # detail is True and mutate is False when we are retrieving an object
+        ):  # detail is True and mutate is False meaning we are retrieving an object
             instance.increment_views()
         return super().to_representation(instance)
 
-    def get_likes(self, obj: BlogPost) -> int:
+    @staticmethod
+    def get_likes(obj: BlogPost) -> int:
         return likes(obj)
 
     def get_comments(self, obj: BlogPost):
@@ -49,6 +56,7 @@ class Serializer(serializers.ModelSerializer):
 class BlogPostProvider(BaseProvider):
     serializer_class = Serializer
     model = BlogPost
+    lookup_fields = ["id", "slug"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

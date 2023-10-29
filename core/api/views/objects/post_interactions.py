@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import profanity_check
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -11,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 
 from .base import BaseProvider
+from ...serializers.custom import ContentTypeField
 from ...utils.posts import likes, comments
 from ....models import Comment, User, Like
 
@@ -38,6 +40,7 @@ class CommentSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField(read_only=True)
     edited = serializers.SerializerMethodField(read_only=True)
     children = serializers.SerializerMethodField(read_only=True)
+    content_type = ContentTypeField()
 
     def validate(self, attrs):
         """
@@ -52,12 +55,14 @@ class CommentSerializer(serializers.ModelSerializer):
 
         return super().validate(attrs)
 
-    def get_author(self, obj: Comment) -> User | None:
+    @staticmethod
+    def get_author(obj: Comment) -> User | None:
         if obj.author is not None:
-            return obj.author.id
+            return {"id": obj.author.id, "username": obj.author.username}
         return None
 
-    def get_likes(self, obj: Comment) -> int:
+    @staticmethod
+    def get_likes(obj: Comment) -> int:
         return likes(obj)
 
     def get_children(self, obj: Comment):
@@ -74,6 +79,15 @@ class CommentSerializer(serializers.ModelSerializer):
             "body", instance.body
         ):  # if change is  to body.
             instance.last_modified = timezone.now()
+            contains_profanity: bool = bool(
+                profanity_check.predict([validated_data["body"]])
+            )
+            if self.context[
+                "request"
+            ].user.is_superuser:  # bypass content moderation if user is an SU.
+                validated_data["live"] = True
+            else:
+                validated_data["live"] = not contains_profanity
         super().update(instance, validated_data)
         return instance
 
@@ -88,6 +102,8 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "author",
+            "content_type",
+            "object_id",
             "body",
             "created_at",
             "likes",
@@ -97,16 +113,19 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CommentNewSerializer(CommentSerializer):
-    def create(self, validated_data) -> Comment:
-        com = Comment()
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
-        keys = self.Meta.fields
-        user: User = self.context["request"].user
-        validated_data["author"] = user
-        for key in keys:
-            setattr(com, key, validated_data[key])
-        if user.is_superuser:  # bypass moderation if user is staff.
+    def create(self, validated_data) -> Comment:
+        contains_profanity: bool = bool(
+            profanity_check.predict([validated_data["body"]])
+        )
+        com = Comment(**validated_data)
+        if self.context[
+            "request"
+        ].user.is_superuser:  # bypass content moderation if user is an SU.
             com.live = True
+        else:
+            com.live = not contains_profanity
         com.save()
         return com
 
@@ -137,7 +156,8 @@ class CommentProvider(BaseProvider):
             new=CommentNewSerializer,
         ).get(self.request.kind, CommentSerializer)
 
-    def get_queryset(self, request):
+    @staticmethod
+    def get_queryset(request):
         if (
             request.user.has_perm("core.comment.view_flagged")
             or request.user.is_superuser
@@ -145,10 +165,12 @@ class CommentProvider(BaseProvider):
             return Comment.objects.all()
         return Comment.objects.filter(live=True)
 
-    def get_last_modified(self, view):
+    @staticmethod
+    def get_last_modified(view):
         return view.get_object().last_modified_date
 
-    def get_last_modified_queryset(self):
+    @staticmethod
+    def get_last_modified_queryset():
         return (
             LogEntry.objects.filter(
                 content_type=ContentType.objects.get(app_label="core", model="comment")
@@ -164,32 +186,28 @@ class CommentProvider(BaseProvider):
 
 
 class LikeSerializer(serializers.ModelSerializer):
+    content_type = ContentTypeField()
+
     def create(self, validated_data) -> Like:
-        VALID_OBJECT_TYPES = ["Announcement", "Blogpost", "Comment"]
-        obj_name = validated_data["content_type"].name.capitalize().replace(" ", "")
+        obj_name = validated_data["content_type"].name.lower().replace(" ", "")
         if (
             not validated_data["content_type"]
-            .model_class()
+            .model_class()  # the model of the content type ( e.g. core.models.Announcement or core.models.Comment )
             .objects.filter(id=validated_data["object_id"])
             .exists()
         ):  # does the object exist?
             raise ValidationError(f"The specified {obj_name} does not exist.")
-        elif obj_name not in VALID_OBJECT_TYPES:  # is the object type valid?
+        elif obj_name not in settings.POST_CONTENT_TYPES:  # is the object type valid?
             raise ValidationError(
-                f"Invalid object type: {obj_name}, valid types are: {VALID_OBJECT_TYPES}"
+                f"Invalid object type: {obj_name}, valid types are: {settings.POST_CONTENT_TYPES}"
             )
         elif Like.objects.filter(  # has the user already liked this object?
             content_type=validated_data["content_type"],
             object_id=validated_data["object_id"],
-            author=self.context["request"].user,
+            author=self.context["author"],
         ).exists():
-            raise ValidationError(f"You have already liked this {obj_name}")
-        like = Like()
-        keys = self.Meta.fields
-        user: User = self.context["request"].user
-        validated_data["author"] = user
-        for key in keys:
-            setattr(like, key, validated_data[key])
+            raise ValidationError(f"User has already liked this {obj_name}")
+        like = Like(**validated_data)
         like.save()
         return like
 

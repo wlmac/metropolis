@@ -81,16 +81,6 @@ $(document).ready(function () {
     highlightSelectedNumber()
 })
 
-function formatAllDays() {
-    // if we're in the calendar view
-    if (calendar.currentViewType === "dayGridMonth") {
-        // format each day cell
-        $(".fc-daygrid-day").each(function (ind, el) {
-            reformatDay(el)
-        })
-    }
-}
-
 function reformatDay(dayElement) {
     let el = dayElement.querySelector(".fc-daygrid-day-top")
     let container = document.createElement("div")

@@ -16,7 +16,7 @@ class FlatPageProvider(BaseProvider):
     serializer_class = Serializer
     model = FlatPage
     allow_list = False
-    lookup_field = "url"
+    lookup_fields = ["url"]
 
     @property
     def permission_classes(self):

@@ -7,6 +7,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import QuerySet
 from django.urls import reverse
 from django.utils import timezone
 
@@ -117,17 +118,19 @@ class Comment(PostInteraction):
             raise ValidationError("A Comment cannot be a parent of itself.")
         return super().clean()
 
-    def get_children(self, su: Optional = False):
+    def get_children(self, su: Optional = False, all: Optional = False) -> QuerySet:
         comments = Comment.objects.filter(parent=self)
         if su:
-            filtered = [c.pk for c in comments if not c.deleted or not c.bottom_lvl]
-        else:
             filtered = [
-                c.pk
-                for c in comments
-                if all([c.live, not c.deleted]) or not c.bottom_lvl
-            ]
+                c.pk for c in comments if not c.deleted
+            ]  # todo(low priority) filter using QuerySet instead of list comprehension
+        else:
+            filtered = [c.pk for c in comments if all([c.live, not c.deleted])]
+
         last = Comment.objects.filter(pk__in=filtered)
+        if all:
+            for comment in last:
+                last = last | comment.get_children(all=True)
         return last
 
     def delete(self: Comment, using=None, keep_parents=False, **kwargs):
@@ -142,7 +145,9 @@ class Comment(PostInteraction):
                 self.created_at = None
                 self.body = None
                 self.author = None
-                self.likes.all().delete()
+                Like.objects.filter(
+                    content_type=self.content_type, object_id=self.object_id
+                ).delete()
                 self.save()
 
         else:
@@ -282,7 +287,9 @@ class Announcement(Post):
         return cls.objects.filter(status="a")
 
     @classmethod
-    def get_all(cls, user=None):
+    def get_all(cls, user=None) -> QuerySet:
+        if user.is_superuser:
+            return cls.objects.all()
         approved_announcements = cls.get_approved()
 
         feed_all = approved_announcements.filter(is_public=True)
@@ -296,6 +303,8 @@ class Announcement(Post):
         return feed_all
 
     def editable(self, user=None):
+        if user.is_superuser:
+            return True
         if user is None:
             return False
         return user in (org := self.organization).supervisors.all() | org.execs.all()
@@ -332,6 +341,22 @@ class BlogPost(Post):
     def increment_views(self) -> str:
         self.views += 1
         self.save()
+
+    class Meta:
+        ordering = ["-created_date"]
+
+
+class Exhibit(Post):
+    slug = models.SlugField(unique=True)
+    content = models.ImageField(
+        upload_to=featured_image_file_path_generator,
+        default="featured_image/default.png",
+    )
+    content_description = models.CharField(
+        help_text="Alt text for the featured image e.g. what screen readers tell users",
+        max_length=140,
+    )
+    is_published = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-created_date"]

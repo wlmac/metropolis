@@ -37,25 +37,14 @@
                                     {% if event.start_date|date:"Y-M-D" != today %}
                                         <span class="date">{{ event.start_date|date }}</span><br>
                                     {% endif %}
-                                    {% if 'ia' in request.user.qltrs2 %}
-                                        {% if normal or event.start_date|time:"G:i" != "0:00" %}
-                                            <span class="time">{{ event.start_date|time:"g:i A"|lower }}</span><br>
-                                        {% endif %}
-                                    {% else %}
+                                    {% if normal or event.start_date|time:"G:i" != "0:00" %}
                                         <span class="time">{{ event.start_date|time:"g:i A"|lower }}</span><br>
                                     {% endif %}
                                     <span class="intermediate">to</span><br>
-                                    {% if 'ia' in request.user.qltrs2 %}
-                                        {% if event.end_date|date:"Y-M-D" != event.start_date|date:"Y-M-D" %}
-                                            <span class="date">{{ event.end_date|date }}</span><br>
-                                        {% endif %}
-                                        {% if normal or event.end_date|time:"G:i" != "23:59" %}
-                                            <span class="time">{{ event.end_date|time:"g:i A"|lower }}</span><br>
-                                        {% endif %}
-                                    {% else %}
-                                        {% if event.end_date|date:"Y-M-D" != today %}
-                                            <span class="date">{{ event.end_date|date }}</span><br>
-                                        {% endif %}
+                                    {% if event.end_date|date:"Y-M-D" != event.start_date|date:"Y-M-D" %}
+                                        <span class="date">{{ event.end_date|date }}</span><br>
+                                    {% endif %}
+                                    {% if normal or event.end_date|time:"G:i" != "23:59" %}
                                         <span class="time">{{ event.end_date|time:"g:i A"|lower }}</span><br>
                                     {% endif %}
 
@@ -94,7 +83,7 @@
             <div id="recent-announcements" class="center-align">
                 <div id="announcements" class="cards-container">
                     {% for announcement in announcements %}
-                        <div class="announcement-card card {% if forloop.counter == 3 and 'ia' not in request.user.qltrs2 %} hide-on-med-and-down {% endif %} left-align"
+                        <div class="announcement-card card left-align"
                              style="border-color: {{ announcement.tags.first.color }}">
                             <a class="link" href="{{ announcement.pk|announcement_url }}">
                                 <h5 class="title truncate">{{ announcement.title }}</h5>
@@ -108,16 +97,9 @@
                                     {{ announcement.organization.slug|organization }}
                                 </div>
                             </div>
-                            {% if 'ia' in request.user.qltrs2 %}
-                                <div class="announcement-description markdown-container hide-on-med-and-down">
-                                    <p>{{ announcement.body|markdown|striptags|linebreaksbr }}</p>
-                                </div>
-                            {% endif %}
-                            {% if 'ia' not in request.user.qltrs2 %}
-                                <hr>
-                                <a class="link" href="{{ announcement.pk|announcement_url }}">See announcement <i
-                                    class='zmdi zmdi-chevron-right'></i></a>
-                            {% endif %}
+                            <div class="announcement-description markdown-container hide-on-med-and-down">
+                                <p>{{ announcement.body|markdown|striptags|linebreaksbr }}</p>
+                            </div>
                         </div>
                     {% empty %}
                         There are no announcements at this time.

@@ -1,22 +1,44 @@
+import datetime
+
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django.utils import timezone
 from rest_framework import permissions, serializers
+from rest_framework.exceptions import ParseError
 
 from .announcement import Inner
 from .base import BaseProvider
-from .... import models
+from ...serializers.custom import (
+    TagRelatedField,
+    OrganizationField,
+)
 from ....models import Event
+
+AOE = datetime.timezone(datetime.timedelta(hours=-12), name="AoE")
 
 
 class SuperficialSerializer(serializers.ModelSerializer):
+    tags = TagRelatedField()
+    organization = OrganizationField()
+
     class Meta:
         model = Event
-        fields = ["id", "name", "start_date", "end_date", "organization"]
+        fields = [
+            "id",
+            "name",
+            "start_date",
+            "end_date",
+            "organization",
+            "should_announce",
+            "description",
+            "tags",
+        ]
 
 
 class DetailSerializer(serializers.ModelSerializer):
+    tags = TagRelatedField()
+    organization = OrganizationField()
+
     class Meta:
         model = Event
         fields = "__all__"
@@ -24,6 +46,7 @@ class DetailSerializer(serializers.ModelSerializer):
 
 class EventProvider(BaseProvider):
     model = Event
+    listing_filters_ignore = ["start", "end"]
 
     @property
     def serializer_class(self):
@@ -38,65 +61,42 @@ class EventProvider(BaseProvider):
         )
 
     def get_queryset(self, request):
-        start = timezone.now()
-        if self.request.data.get("start"):
-            start = self.request.data.get("start")
-        elif self.request.query_params.get("start"):
-            start = self.request.query_params.get("start")
+        q = Event.objects.all()
 
-        if not self.request.user.is_anonymous:
-            if self.request.data.get("end"):
-                end = self.request.data.get("end")
-                events = (
-                    models.Event.objects.filter(
-                        end_date__gte=start, start_date__lte=end
-                    )
-                    .filter(
-                        Q(is_public=True) | Q(organization__member=self.request.user.id)
-                    )
-                    .distinct()
-                    .order_by("start_date")
-                )
-            elif self.request.query_params.get("end"):
-                end = self.request.query_params.get("end")
-                events = (
-                    models.Event.objects.filter(
-                        end_date__gte=start, start_date__lte=end
-                    )
-                    .filter(
-                        Q(is_public=True) | Q(organization__member=self.request.user.id)
-                    )
-                    .distinct()
-                    .order_by("start_date")
-                )
-            else:
-                events = (
-                    models.Event.objects.filter(end_date__gte=start)
-                    .filter(
-                        Q(is_public=True) | Q(organization__member=self.request.user.id)
-                    )
-                    .distinct()
-                    .order_by("start_date")
-                )
+        def parse(name):
+            raw = self.request.query_params.get(name)
+            if not raw:
+                return None
+            try:
+                d = datetime.datetime.strptime(raw, "%Y-%m-%d")
+                if name == "end":
+                    # AoE time same day
+                    d = d.replace(tzinfo=AOE, hour=23, minute=59, second=59)
+                elif name == "start":
+                    # AoE time prev day
+                    d = d.replace(tzinfo=AOE)
+                    d -= datetime.timedelta(days=1)
+                return d
+            except ValueError as e:
+                raise ParseError(detail=f"parse {name}: {e}")
+
+        start, end = parse("start"), parse("end")
+        if start:
+            q = q.filter(end_date__gte=start)
+        if end:
+            q = q.filter(start_date__lte=end)
+        if start and end and start > end:
+            raise ParseError("start is after end")
+        if self.request.user.is_anonymous:
+            q = q.filter(is_public=True)
         else:
-            if self.request.data.get("end"):
-                end = self.request.data.get("end")
-                events = models.Event.objects.filter(
-                    end_date__gte=start, start_date__lte=end, is_public=True
-                ).order_by("start_date")
-            elif self.request.query_params.get("end"):
-                end = self.request.query_params.get("end")
-                events = models.Event.objects.filter(
-                    end_date__gte=start, start_date__lte=end, is_public=True
-                ).order_by("start_date")
-            else:
-                events = models.Event.objects.filter(
-                    end_date__gte=start, is_public=True
-                ).order_by("start_date")
+            q = q.filter(
+                Q(is_public=True) | Q(organization__member=self.request.user.id)
+            )
+        return q.distinct()
 
-        return events
-
-    def get_last_modified(self, view):
+    @staticmethod
+    def get_last_modified(view):
         return (
             LogEntry.objects.filter(
                 content_type=ContentType.objects.get(app_label="core", model="event")
@@ -106,7 +106,8 @@ class EventProvider(BaseProvider):
             .action_time
         )
 
-    def get_last_modified_queryset(self):
+    @staticmethod
+    def get_last_modified_queryset():
         return (
             LogEntry.objects.filter(
                 content_type=ContentType.objects.get(app_label="core", model="event")

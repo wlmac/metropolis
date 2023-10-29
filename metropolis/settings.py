@@ -1,6 +1,7 @@
 import os
 from datetime import datetime, timedelta
 from typing import Dict, List
+
 from django.utils import timezone
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -697,19 +698,23 @@ NAVBAR = {
     "Clubs": "/clubs",
     "Content": "/blog",
     "Resources": "/resources",
+    "Map": "/map",
     "About": {
         "WLMCI": "/about?tab=history",
         "About": "/about?tab=about",
         "Team": "/about?tab=team",
-        "Map": "/map",
         "Contact WLMCI": "/about?tab=school",
         "Contact Us": "/about?tab=contact",
     },
 }
 
+# post settings
+
+POST_CONTENT_TYPES = ["announcement", "blogpost", "comment", "exhibit"]
+
 # Announcements settings
 
-ANNOUNCEMENTS_CUSTOM_FEEDS = []
+ANNOUNCEMENTS_CUSTOM_FEEDS = []  # list of PKs of organizations
 
 BANNER2 = []
 
@@ -756,12 +761,6 @@ with open(os.path.join(os.path.dirname(__file__), "local_rsa_privkey.pem")) as f
 # CORS settings
 
 CORS_URLS_REGEX = r"^/api/.*$"
-
-CORS_ALLOW_METHODS = [
-    "GET",
-    "HEAD",
-    "OPTIONS",
-]
 
 CORS_ALLOWED_ORIGINS = [
     "https://maclyonsden.com",
@@ -962,9 +961,20 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
     "UPDATE_LAST_LOGIN": True,
 }
+# Event calender Settings
 
-# iCalendar Feed
-ICAL_PADDING = timedelta(days=4 * 7)
+DEFAULT_REPEAT_CHOICES = (
+    ("RRULE:FREQ=DAILY", "Daily"),
+    ("RRULE:FREQ=WEEKLY", "Weekly"),
+    ("RRULE:FREQ=MONTHLY", "Monthly"),
+    ("RRULE:FREQ=YEARLY", "Yearly"),
+)
+CALCULATE_YEARS_IN_ADVANCE = 2
+
+ICAL_PADDING = timedelta(days=4 * 7)  # iCalendar Feed
+REOCCURRENCE_CUTOFF = timedelta(
+    days=365 * 2
+)  # For reoccurring events only calculate up to x years in advance
 
 # Qualified Trials
 QLTR: Dict[str, Dict] = {
@@ -997,6 +1007,16 @@ BANNER3: List = [
     ),
 ]
 
+CELERY_TIMEZONE = "America/Toronto"
+
+# (Expo) Notifications
+
+NOTIF_EXPO_TIMEOUT_SECS = 3
+
+ANNOUNCEMENTS_NOTIFY_FEEDS = []  # list of PKs of organizations
+EVENTS_NOTIFY_FEEDS = []  # list of PKs of organizations
+NOTIF_DRY_RUN = True
+
 try:
     from metropolis.config import *
 except ImportError as err:
@@ -1023,7 +1043,7 @@ def is_aware(d: datetime) -> bool:
 def check_banner3(banner: Dict) -> None:
     assert is_aware(banner["start"])
     assert is_aware(banner["end"])
-    assert bool(banner["cta_link"]) == bool(banner["cta_label"])
+    assert bool(banner.get("cta_link")) == bool(banner.get("cta_label"))
 
 
 for banner in BANNER3:
@@ -1035,8 +1055,8 @@ def compat_conv(banner: Dict) -> Dict:
     banner2["logo"] = "icon_url" in banner
     banner2["text"] = banner["content"]
     banner2["show_btn"] = "cta_link" in banner
-    banner2["url"] = banner["cta_link"]
-    banner2["url_text"] = banner["cta_label"]
+    banner2["url"] = banner.get("cta_link")
+    banner2["url_text"] = banner.get("cta_label")
     return banner2
 
 
