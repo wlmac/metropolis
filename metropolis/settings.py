@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timedelta
 from typing import Dict, List
 
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import timezone
 
 from .timetable_formats import *
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     "core.middleware.CustomRedirectFallbackTemporaryMiddleware",
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
     "hijack.middleware.HijackUserMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "metropolis.urls"
