@@ -4,6 +4,11 @@ from core.api.serializers.custom import PrimaryKeyAndSlugRelatedField
 from .tag import TagSerializer
 from ... import models
 
+class OrganizationPartialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Organization
+        fields = ('id', 'name', 'slug', 'banner', 'icon')
+
 
 class OrganizationSerializer(serializers.ModelSerializer):
     owner = PrimaryKeyAndSlugRelatedField(

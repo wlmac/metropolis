@@ -7,6 +7,17 @@ from django.views.generic.edit import UpdateView
 from . import mixins
 from .. import models
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from ..api.serializers.user import UserPartialSerializer
+from ..models import User
+
+class UserProfileAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        user = User.objects.get(username=kwargs.get('username'))
+        serializer = UserPartialSerializer(user)
+        return Response(serializer.data)
+
 
 class ProfileRedirect(LoginRequiredMixin, RedirectView):
     permanent = False

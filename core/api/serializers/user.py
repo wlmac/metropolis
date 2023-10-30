@@ -5,6 +5,12 @@ from ..utils.gravatar import gravatar_url
 from ... import models
 
 
+class UserPartialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = ('id', 'username', 'bio', 'timezone')
+
+
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
     organizations = serializers.SlugRelatedField(
