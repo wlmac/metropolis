@@ -178,12 +178,6 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-# ReCaptcha settings
-
-RECAPTCHA_PUBLIC_KEY = ""
-RECAPTCHA_PRIVATE_KEY = ""
-RECAPTCHA_REQUIRED_SCORE = 0.85
-
 # NavBar settings
 
 NAVBAR = {
@@ -423,11 +417,11 @@ THEMES = {
     },
 }
 
-CURRENT_THEME = "spring"
+CURRENT_THEME = "halloween"
 
 # Lazy Loading
 
-LAZY_LOADING = {  # set to False to disable
+LAZY_LOADING = {  # set to` False to disable
     "per_page": 2,
     "initial_limit": 4,
 }
