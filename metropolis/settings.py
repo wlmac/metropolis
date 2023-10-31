@@ -556,9 +556,3 @@ except IOError:
 
 if SECRET_KEY == "Change me":
     raise TypeError("override SECRET_KEY")
-
-+RECAPTCHA_PUBLIC_KEY = "6LcRKbAlAAAAAI7kNQTj_XefZX2-Fp5fIVbk8-LQ"
-+RECAPTCHA_PRIVATE_KEY = "6LcRKbAlAAAAAKFNc6WHdiex6HqpPS4RqgfVG6vc"
-
-
-NOTIF_DRY_RUN = False#True
