@@ -492,7 +492,7 @@ BANNER3: List = [
     #   ),
 ]
 
-CELERY_TIMEZONE = "America`/Toronto"
+CELERY_TIMEZONE = "America/Toronto"
 
 # (Expo) Notifications
 
