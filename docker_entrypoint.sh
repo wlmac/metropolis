@@ -17,7 +17,6 @@ case "$1" in
 			echo '--- PUBLIC'
 			chmod -R a+rwX /app-public
 			echo '--- MIGRATE'
-			runuser -u app -- /app/.venv/bin/python3 manage.py makemigrations # sometimes a package like oauth2_provider needs this
 			runuser -u app -- /app/.venv/bin/python3 manage.py migrate
 			echo '--- COLLECTSTATIC'
 			runuser -u app -- /app/.venv/bin/python3 manage.py collectstatic --noinput

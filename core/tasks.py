@@ -93,9 +93,7 @@ def notif_broker_blogpost(obj_id):
     try:
         post = BlogPost.objects.get(id=obj_id)
     except BlogPost.DoesNotExist:
-        logger.warning(
-            f"notif_broker_blogpost: blogpost {obj_id} does not exist"
-        )
+        logger.warning(f"notif_broker_blogpost: blogpost {obj_id} does not exist")
         return
     affected = users_with_token()
     for u in affected.all():
