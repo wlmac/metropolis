@@ -2,9 +2,11 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 
 from . import views
+from .api.views import MartorImageUpload
 from .utils.sitemaps import *
 
 urlpatterns = [
+    path("martor/api/upload-image/", MartorImageUpload.as_view(), name="api_martor_image_upload", ),
     path("", views.Index.as_view(), name="index"),
     path(
         "sitemap.xml",
