@@ -417,7 +417,7 @@ THEMES = {
     },
 }
 
-CURRENT_THEME = "halloween"
+CURRENT_THEME = "winter" # should be changed in local_settings.py
 
 # Lazy Loading
 
@@ -471,24 +471,18 @@ QLTR: Dict[str, Dict] = {
     ),
 }
 
-THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
-THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
-THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
-THEME_CSS = THEMES[CURRENT_THEME]["theme"]
-
 TEACHER_EMAIL_SUFFIX = "@tdsb.on.ca"
 STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 
 PRE = ""
-
 BANNER3: List = [
     #   dict(
-    #       start=timezone.now(),
-    #       end=timezone.now() + timedelta(days=1),
+    #       start=BANNER_REFERENCE_TIME,
+    #       end=BANNER_REFERENCE_TIME + timedelta(days=5),
     #       content="This is some banner :)",
-    #       icon_url="non-blank means default (default only now)",
-    #       cta_link="https://nyiyui.ca",
-    #       cta_label="some shameless plug to nowhere amirite",
+    #       icon_url="...", # optional
+    #       cta_link="https://nyiyui.ca", # optional
+    #       cta_label="some shameless plug to nowhere amirite", # optional (but required if cta_link is present)
     #   ),
 ]
 
@@ -535,3 +529,9 @@ except IOError:
 
 if SECRET_KEY == "Change me":
     raise TypeError("override SECRET_KEY")
+
+
+THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
+THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
+THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
+THEME_CSS = THEMES[CURRENT_THEME]["theme"]
