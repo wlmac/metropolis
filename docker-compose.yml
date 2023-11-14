@@ -32,8 +32,8 @@ services:
       - gunicorn
       - redis
     volumes:
-      - ${PWD}/metropolis/local_settings.py:/app-inject/metropolis/local_settings2.py:ro
-      - ${PWD}/metropolis/local_rsa_privkey.pem:/app-inject/metropolis/local_rsa_privkey.pem:ro
+      - ${PWD}/metropolis/local_settings.py:/app-inject/metropolis/local_settings2.py:ro # changed to /metropolis2/ on server
+      - ${PWD}/metropolis/local_rsa_privkey.pem:/app-inject/metropolis/local_rsa_privkey.pem:ro # see above for all other references.
       - public:/app-public:rw
       - media:/app-media:rw
   celery:
