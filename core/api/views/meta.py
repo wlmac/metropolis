@@ -13,14 +13,18 @@ class APIVersion(APIView):
 
 class Banners(APIView):
     noncensored_keys = ("start", "end", "content", "icon_url", "cta_link", "cta_label")
+    allowed_blank = ("icon_url", "cta_link", "cta_label")
 
     @classmethod
     def censor(cls, banner: Dict) -> Dict:
         res = {}
-        if "icon_url" not in banner:
-            banner["icon_url"] = settings.THEME_LOGO
         for key in cls.noncensored_keys:
-            res[key] = banner[key]
+            if key in banner:
+                res[key] = banner[key]
+            elif key not in banner and key in cls.allowed_blank:
+                pass
+            else:
+                raise KeyError(f"Required Key {key} not found in banner {banner}")
         return res
 
     @staticmethod
