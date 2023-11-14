@@ -16,6 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "Change me"
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -267,6 +268,7 @@ TAG_COLOR_VALUE = 1.0
 # Martor settings
 
 MARTOR_THEME = "bootstrap"
+# MARTOR_ALTERNATIVE_CSS_FILE_THEME = "fix-martor.css" todo add back
 MARTOR_MARKDOWN_BASE_MENTION_URL = "/user/"
 MARTOR_UPLOAD_URL = "/api/upload-image"
 MARTOR_UPLOAD_MEDIA_DIR = "martor"
@@ -510,7 +512,7 @@ def is_aware(d: datetime) -> bool:
 def check_banner3(banner: Dict) -> None:
     assert is_aware(banner["start"])
     assert is_aware(banner["end"])
-    assert bool(banner.get("cta_link")) == bool(banner.get("cta_label"))
+    assert bool(banner.get("cta_link")) == bool(banner.get("cta_label")) # both or neither, not one or the other
 
 
 for banner in BANNER3:
