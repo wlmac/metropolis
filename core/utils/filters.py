@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.db.models import Q
-
 from django.utils.translation import gettext_lazy as _
 
 from core import models

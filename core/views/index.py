@@ -42,7 +42,7 @@ class Index(TemplateView, mixins.TitleMixin):
         )[: 3 - len(events)]
         context["events"] = events
 
-        context["blogpost"] = models.BlogPost.objects.filter(is_published=True).first()
+        context["blogpost"] = models.BlogPost.public().first()
 
         context["banner_data"] = get_week_schedule_info(self.request.user)
         return context
@@ -100,7 +100,6 @@ class CalendarFeed(ICalFeed, View):
         )
 
     def item_link(self, item):
-        # TODO: implement by-pk link
         return reverse("calendar") + f"?pk={item.pk}"  # NOTE: workaround for UID
 
     def item_categories(self, item):

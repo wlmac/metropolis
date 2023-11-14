@@ -18,16 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-urlpatterns = [
-    path("", include("core.urls")),
-    path("", include("oauth2_provider.urls", namespace="oauth2_provider")),
-    path("o/", include("oauth2_provider.urls", namespace="oauth2_provider2")),
-    path("admin/", admin.site.urls),
-    path("accounts/", include("allauth.urls")),
-    path("martor/", include("martor.urls")),
-    path("select2/", include("django_select2.urls")),
-    path("", include("pwa.urls")),
-    path("/<path:url>", include("django.contrib.flatpages.urls")),
-]
+urlpatterns = [path("", include("core.urls")),
+               path("", include("oauth2_provider.urls", namespace="oauth2_provider")),
+               path("o/", include("oauth2_provider.urls", namespace="oauth2_provider2")),
+               path("admin/", admin.site.urls),
+               path("accounts/", include("allauth.urls")),
+               path("martor/", include("martor.urls")),
+               path("select2/", include("django_select2.urls")),
+               path("", include("pwa.urls")),
+               path("/<path:url>", include("django.contrib.flatpages.urls")), ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -26,7 +26,7 @@
         </div>
         <div class="cards">
             {% for organization in organizations %}
-                <div class="card {% if not organization.is_open %} red-status {% elif organization.applications_open %} yellow-status {% else %} green-status {% endif %}">
+                <div class="card {% if  organization.is_open %} green-status {% elif organization.applications_open %} yellow-status {% else %} red-status {% endif %}">
                     <div class="valign-wrapper">
                         <div class="club-logo">
                             {% if organization.icon %}

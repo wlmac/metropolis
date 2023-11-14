@@ -17,14 +17,14 @@ from exponent_server_sdk import (
 )
 from requests.exceptions import ConnectionError, HTTPError
 
-from core.models import Announcement, User, Event
+from core.models import Announcement, User, Event, BlogPost
 from metropolis.celery import app
 
 logger = get_task_logger(__name__)
 session = requests.Session()
 session.headers.update(
     {
-        # "Authorization": f"Bearer {os.getenv('EXPO_TOKEN')}",# TODO: expo push notifications authn?
+        # "Authorization": f"Bearer {os.getenv('EXPO_TOKEN')}", # TODO: expo push notifications authn?
         "accept": "application/json",
         "accept-encoding": "gzip, deflate",
         "content-type": "application/json",
@@ -41,20 +41,33 @@ for m in ("get", "options", "head", "post", "put", "patch", "delete"):
 
 
 def users_with_token():
-    return User.objects.filter(not Q(expo_notif_tokens=Value({}, JSONField())))
+    return User.objects.exclude(Q(expo_notif_tokens=Value({}, JSONField())))
 
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(crontab(hour=4, minute=0), notif_events_singleday)
+    sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
+    sender.add_periodic_task(crontab(day_of_month=1), run_group_migrations)
+
+
+@app.task
+def run_group_migrations():
+    from scripts.migrations import migrate_groups
+
+    print(migrate_groups())
 
 
 @app.task
 def notif_broker_announcement(obj_id):
     logger.info(f"notif_broker_announcement for {obj_id}")
-    ann = Announcement.objects.get(id=obj_id)
+    try:
+        ann = Announcement.objects.get(id=obj_id)
+    except Announcement.DoesNotExist:
+        logger.warning(
+            f"notif_broker_announcement: announcement {obj_id} does not exist"
+        )
+        return
     affected = users_with_token()
-    category = ""
     if ann.organization.id in settings.ANNOUNCEMENTS_NOTIFY_FEEDS:
         category = "ann.public"
     else:
@@ -63,7 +76,6 @@ def notif_broker_announcement(obj_id):
             | Q(organizations__in=[ann.organization])
         )
         category = "ann.personal"
-    logger.info(f"notif_broker_announcement2 for {obj_id} affects {u}")
     for u in affected.all():
         notif_single.delay(
             u.id,
@@ -73,19 +85,41 @@ def notif_broker_announcement(obj_id):
                 category=category,
             ),
         )
-    notif_events_singleday.delay()
+
+
+@app.task
+def notif_broker_blogpost(obj_id):
+    logger.info(f"notif_broker_blogpost for {obj_id}")
+    try:
+        post = BlogPost.objects.get(id=obj_id)
+    except BlogPost.DoesNotExist:
+        logger.warning(f"notif_broker_blogpost: blogpost {obj_id} does not exist")
+        return
+    affected = users_with_token()
+    for u in affected.all():
+        notif_single.delay(
+            u.id,
+            dict(
+                title=_l("New Blog Post: %(title)s") % dict(title=post.title),
+                body=post.body,
+                category="blog",
+            ),
+        )
 
 
 @app.task
 def notif_events_singleday(date: dt.date = None):
     tz = pytz.timezone(settings.TIME_ZONE)
     if date is None:
-        date = dt.date.today()
+        date = dt.date.today() + dt.timedelta(days=1)
+    elif isinstance(date, str):  # ken things
+        date = dt.datetime.fromisoformat(date)
+        raise RuntimeError(f"date {type(date)} {date}")
     eligible = users_with_token()
     for u in eligible.all():
         # assume we don't have 10 million events overlapping a single day (we can't fit it in a single notif aniway)
-        date_mintime = dt.datetime.combine(date, dt.datetime.min.time()).astimezone(tz)
-        date_maxtime = dt.datetime.combine(date, dt.datetime.max.time()).astimezone(tz)
+        date_mintime = tz.localize(dt.datetime.combine(date, dt.datetime.min.time()))
+        date_maxtime = tz.localize(dt.datetime.combine(date, dt.datetime.max.time()))
         covering = list(
             Event.get_events(u)
             .filter(
@@ -120,13 +154,25 @@ def notif_events_singleday(date: dt.date = None):
 @app.task(bind=True)
 def notif_single(self, recipient_id: int, msg_kwargs):
     recipient = User.objects.get(id=recipient_id)
+    logger.info(
+        f"notif_single to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}"
+        + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
+    )
     if settings.NOTIF_DRY_RUN:
-        logger.info(
-            f"notif_single to {recipient} ({recipient.expo_notif_tokens}): {msg_kwargs}"
-        )
         return
     notreg_tokens = set()
-    for token in recipient.expo_notif_tokens:
+    for token, options in recipient.expo_notif_tokens.items():
+        if options is not None:
+            allowlist = options.get("allow")
+            if (
+                isinstance(allowlist, dict)
+                and msg_kwargs["category"] not in allowlist.keys()
+            ):
+                logger.info(
+                    f"notif_single (category {msg_kwargs['category']}) not allowed to {recipient} (allowlist {allowlist}) ({recipient.expo_notif_tokens}): {msg_kwargs}"
+                    + ("(dry run)" if settings.NOTIF_DRY_RUN else "")
+                )
+                continue
         try:
             resp = PushClient(session=session).publish(
                 PushMessage(to=f"ExponentPushToken[{token}]", **msg_kwargs)
@@ -140,7 +186,7 @@ def notif_single(self, recipient_id: int, msg_kwargs):
         except PushTicketError as exc:
             raise self.retry(exc=exc)
     if notreg_tokens:
-        u = User.objects.filter(id=recipient_id)
+        u = User.objects.filter(id=recipient_id).first()
         for token in notreg_tokens:
             del u.expo_notif_tokens[token]
         u.save()

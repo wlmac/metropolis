@@ -1,6 +1,6 @@
 import os
 from json import JSONDecodeError
-from typing import Dict, Callable, List, Tuple, Any
+from typing import Dict, Callable, List, Tuple
 
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model, Q, QuerySet
@@ -215,34 +215,32 @@ class ObjectList(
         except NoReverseMatch:
             return None
 
-    def __convert_query_params__(self, query_params: QueryDict) -> Tuple[List[Tuple], str]:
+    def __convert_query_params__(self, query_params: QueryDict) -> List[Tuple]:
         """
         Removes non-filter params from query_params and converts them to the correct type.
         :param query_params: QueryDict
-        :return: Tuple[List[Tuple], str] (params, search_type)
+        :return: Tuple[List[Tuple], str] (params)
         """
         k_filters = []
-        search_type = query_params.get("search_type", "OR").upper()
-        if search_type not in {"OR", "AND"}:
-            search_type = "OR"
-
         for key, value in query_params.lists():
             if (
                 key
                 in ["limit", "offset", "search_type", "format"]
                 + self.provider.listing_filters_ignore
             ):
-                continue  # ignore pagination and search_type params
+                continue
             if key not in self.listing_filters:
                 raise BadRequest(
-                    f"{key} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {', '.join(self.listing_filters.keys())}.")
+                    f"{key} is not a valid filter for {self.provider.model.__name__} listing. Valid filters are: {', '.join(self.listing_filters.keys())}."
+                )
             lookup_type = self.listing_filters[key]
             if isinstance(value, list):
-                for item in value:
-                    k_filters.append((key, self.__convert_type__(item, lookup_type)))
+                k_filters.append(
+                    (key, [self.__convert_type__(item, lookup_type) for item in value])
+                )
             else:
                 k_filters.append((key, self.__convert_type__(value, lookup_type)))
-        return k_filters, search_type
+        return k_filters
 
     def __convert_type__(self, lookup_value: str, lookup_type: Callable) -> object:
         lookup_value = lookup_value.casefold()
@@ -255,36 +253,58 @@ class ObjectList(
                 raise BadRequest(
                     f'Invalid value for boolean filter: {lookup_value}. Accepted values for True are {" or ".join(self.TRUE_VALUES)} and for False they are {" or ".join(self.FALSE_VALUES)}'
                 )
-
+        if isinstance(lookup_type, list):
+            """
+            there are multiple types that are accepted for this filter. See which one matches.
+            """
+            for type_group in lookup_type:
+                type_, category = type_group
+                if isinstance(lookup_value, type_):
+                    try:
+                        return {"item": type_(lookup_value), "category": category}
+                    except ValueError:
+                        continue
         return lookup_type(lookup_value)
 
     @staticmethod
-    def __compile_filters__(query_params: List, search_type: str) -> Q:
-        filters = []
+    def __compile_filters__(query_params: List) -> Dict:
+        filters = {}
         if not query_params:
-            # No query params, return None to avoid filtering.
+            # No query params, return None to avoid wastefully filtering.
             return None
         for item in query_params:
             lookup_filter, lookup_value = item
-            if isinstance(lookup_value, list):
-                filters.append((f"{lookup_filter}__in", lookup_value))
-                filters.extend([(lookup_filter, value) for value in lookup_value])
+
+            if isinstance(lookup_value, list) and len(lookup_value) > 1:
+                if isinstance(lookup_value[0], dict):
+                    filters[
+                        f"{lookup_filter}__{lookup_value['category']}__in"
+                    ] = (  # todo add option to use ID or spec field (fix option)
+                        lookup_value["item"]
+                        if not isinstance(lookup_value["item"], list)
+                        else lookup_value["item"][0]
+                    )
+                else:
+                    filters[f"{lookup_filter}__in"] = lookup_value
             else:
-                filters.append((lookup_filter, lookup_value))
-        query = Q()
-        for item in filters:
-            field, values = item
-            query.add(Q(**{field: values}), Q.AND if search_type == "AND" else Q.OR)
-        return query
+                if isinstance(lookup_value, list):
+                    lookup_value = lookup_value[0]
+                if isinstance(lookup_value, dict):
+                    filters[f"{lookup_filter}__{lookup_value['category']}"] = (
+                        lookup_value["item"]
+                        if not isinstance(lookup_value["item"], list)
+                        else lookup_value["item"][0]
+                    )
+                else:
+                    filters[lookup_filter] = lookup_value
+        return filters
 
     def get_queryset(self):
         queryset: QuerySet = self.provider.get_queryset(self.request)
-        query_params, search_type = self.__convert_query_params__(
-            self.request.query_params
-        )
-        filters = self.__compile_filters__(query_params=query_params, search_type=search_type)
+        query_params = self.__convert_query_params__(self.request.query_params)
+        filters = self.__compile_filters__(query_params=query_params)
         if filters:
-            return queryset.filter(filters)
+            return queryset.filter(**filters).distinct()
         return queryset
 
     def get(self, request, *args, **kwargs):

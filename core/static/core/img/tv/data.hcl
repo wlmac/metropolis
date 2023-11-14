@@ -29,27 +29,27 @@ group "B" {
   #colour = "#25bb9d"
   colour = "#93ead8"
 
-  desk "9-10" {
+  desk "9" {
     x = 105 * 0
     y = 0
   }
-  desk "11-12" {
+  desk "10-11" {
     x = 105 * 1
     y = 0
   }
-  desk "13-14" {
+  desk "12-13" {
     x = 105 * 2
     y = 0
   }
-  desk "15-16" {
+  desk "14-15" {
     x = 105 * 3
     y = 0
   }
-  desk "17-18" {
+  desk "16-17" {
     x = 105 * 4
     y = 0
   }
-  desk "19-20" {
+  desk "18-54" {
     x = 105 * 5
     y = 0
   }
@@ -61,31 +61,36 @@ group "C" {
   #colour = "#b1ac14"
   colour = "#f1ee84"
 
-  desk "21-22" {
+  desk "34-35" {
     x = 20
     y = 70
     rotate = 90
   }
-  desk "23-24" {
+  desk "38-39" {
     x = 105 * 0
     y = 105 + 70
   }
-  desk "25-26" {
+  desk "40-41" {
     x = 105 * 1
     y = 105 + 70
   }
-  desk "27-28" {
+  desk "37-36" {
     x = 170
     y = 160
     rotate = -90
   }
-  desk "30-29" {
+  desk "32-33" {
     x = 105 * 1
     y = 0
   }
-  desk "32-31" {
+  desk "30-31" {
     x = 105 * 0
     y = 0
+  }
+  desk "42-43" {
+    x = 360
+    y = 70
+    rotate = 90
   }
 }
 
@@ -95,29 +100,24 @@ group "D" {
   #colour = "#35ac62"
   colour = "#9de1b7"
 
-  desk "33-34" {
-    x = 20
-    y = 70
-    rotate = 90
-  }
-  desk "35-36" {
+  desk "48-49" {
     x = 105 * 0
     y = 105 + 70
   }
-  desk "37-38" {
+  desk "50-51" {
     x = 105 * 1
     y = 105 + 70
   }
-  desk "39-40" {
+  desk "53-52" {
     x = 170
     y = 160
     rotate = -90
   }
-  desk "42-41" {
+  desk "46-47" {
     x = 105 * 1
     y = 0
   }
-  desk "44-43" {
+  desk "44-45" {
     x = 105 * 0
     y = 0
   }
@@ -129,27 +129,27 @@ group "E" {
   #colour = "#997075"
   colour = "#cab5b7"
 
-  desk "45-46" {
+  desk "19-20" {
     x = 105 * 0
     y = 0
   }
-  desk "47-48" {
+  desk "21-22" {
     x = 105 * 1
     y = 0
   }
-  desk "49-50" {
+  desk "23-24" {
     x = 105 * 2
     y = 0
   }
-  desk "51-52" {
+  desk "25-26" {
     x = 105 * 3
     y = 0
   }
-  desk "53-54" {
+  desk "27-28" {
     x = 105 * 4
     y = 0
   }
-  desk "55-56" {
+  desk "29" {
     x = 105 * 5
     y = 0
   }

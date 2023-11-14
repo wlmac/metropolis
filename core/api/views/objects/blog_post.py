@@ -3,18 +3,14 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
-from ...serializers import PrimaryKeyAndSlugRelatedField
-from ...serializers.custom import TagRelatedField
-from ...utils.posts import likes, comments
-from ....models import BlogPost, User
+from ...serializers.custom import TagRelatedField, CommentField, LikeField, AuthorField
+from ....models import BlogPost
 
 
 class Serializer(serializers.ModelSerializer):
-    likes = serializers.SerializerMethodField(read_only=True)
-    comments = serializers.SerializerMethodField(read_only=True)
-    author = PrimaryKeyAndSlugRelatedField(  # potentially change to AuthorField in the future
-        slug_field="username", queryset=User.objects.all()
-    )
+    likes = LikeField()
+    comments = CommentField()
+    author = AuthorField()
     tags = TagRelatedField()
 
     def to_representation(self, instance: BlogPost):
@@ -24,13 +20,6 @@ class Serializer(serializers.ModelSerializer):
         ):  # detail is True and mutate is False meaning we are retrieving an object
             instance.increment_views()
         return super().to_representation(instance)
-
-    @staticmethod
-    def get_likes(obj: BlogPost) -> int:
-        return likes(obj)
-
-    def get_comments(self, obj: BlogPost):
-        return comments(self.context, obj)
 
     class Meta:
         model = BlogPost
@@ -71,9 +60,9 @@ class BlogPostProvider(BaseProvider):
 
     def get_queryset(self, request):
         if request.user.has_perm("core.blog_post.view") or request.user.is_superuser:
-            return BlogPost.objects.all()
+            return BlogPost.objects.filter(is_archived=False)
         else:
-            return BlogPost.objects.filter(is_published=True)
+            return BlogPost.public()
 
     def get_last_modified(self, view):
         return view.get_object().last_modified_date

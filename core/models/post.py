@@ -12,7 +12,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 from .choices import announcement_status_choices
-
 # from ..api.utils.profanity import predict
 from ..utils.file_upload import file_upload_path_generator
 
@@ -91,16 +90,9 @@ class CommentHistory(models.Model):  # todo add to admin panel
 
 
 class Comment(PostInteraction):
-    """
-    todo:
-    - add a simple deletion system for staff and such
-    - possibly add comment history ( if a comment is edited, it will be saved in a history field )
-
-    """
-
     history = models.ManyToManyField(CommentHistory, blank=True)
     last_modified = models.DateTimeField(auto_now_add=True)
-    body = models.TextField(max_length=512, null=True, blank=False)
+    body = models.TextField(max_length=512, null=True, blank=False, default="Hello!")
     parent = models.ForeignKey(
         "Comment",
         on_delete=models.CASCADE,
@@ -172,9 +164,8 @@ class Comment(PostInteraction):
 
     @property
     def like_count(self) -> int:
-        from ..api.utils.posts import likes
-
-        return likes(self)
+        c_type = ContentType.objects.get_for_model(self.__class__)
+        return Like.objects.filter(object_id=self.id, content_type=c_type).count()
 
     def flagged(self) -> bool:
         return self.__class__.objects.filter(live=False)
@@ -186,9 +177,7 @@ class Comment(PostInteraction):
         if self.pk is not None:  # Object is being updated
             old_obj = Comment.objects.get(pk=self.pk)
             if old_obj.body != self.body:
-                CommentHistory.objects.create(
-                    Comment=self, body=old_obj.body, created_at=old_obj.last_modified
-                )
+                CommentHistory.objects.create(Comment=old_obj)
                 self.last_modified = timezone.now()
 
         if not self.deleted and self.author.is_superuser:
@@ -236,12 +225,6 @@ class Post(models.Model):
             parent=None,
         )
 
-    @property
-    def get_likes(self) -> int:
-        from ..api.utils.posts import likes
-
-        return likes(self)
-
     def __str__(self):
         return self.title
 
@@ -283,14 +266,15 @@ class Announcement(Post):
         return reverse("announcement_detail", args=[self.pk])
 
     @classmethod
-    def get_approved(cls):
-        return cls.objects.filter(status="a")
+    def get_approved(cls) -> QuerySet:
+        return cls.objects.filter(status="a").filter(show_after__lte=timezone.now())
 
     @classmethod
     def get_all(cls, user=None) -> QuerySet:
-        if user.is_superuser:
-            return cls.objects.all()
         approved_announcements = cls.get_approved()
+
+        if user is not None and user.is_superuser:
+            return approved_announcements  # return all announcements if user is superuser (admin).
 
         feed_all = approved_announcements.filter(is_public=True)
         if user is not None and user.is_authenticated:
@@ -299,8 +283,8 @@ class Announcement(Post):
                 | approved_announcements.filter(organization__member=user)
                 | cls.objects.filter(organization__execs__in=[user])
             ).distinct()
-
-        return feed_all
+        feed = feed_all
+        return feed
 
     def editable(self, user=None):
         if user.is_superuser:
@@ -334,6 +318,13 @@ class BlogPost(Post):
     )
     is_published = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
+    is_archived = models.BooleanField(
+        default=False, help_text="Archived posts are not shown on the blog page."
+    )
+
+    @classmethod
+    def public(cls):
+        return cls.objects.filter(is_published=True, is_archived=False)
 
     def get_absolute_url(self):
         return reverse("blogpost_detail", args=[self.slug])

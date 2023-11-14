@@ -1,10 +1,25 @@
-from django.conf import settings
+from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 
 from . import views
+from .api.views import MartorImageUpload
+from .utils.sitemaps import *
 
 urlpatterns = [
+    path("martor/api/upload-image/", MartorImageUpload.as_view(), name="api_martor_image_upload", ),
     path("", views.Index.as_view(), name="index"),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {
+            "sitemaps": {
+                "blog": BlogSitemap,
+                "announcements": AnnouncementsSitemap,
+                "clubs": ClubsSitemap,
+            }
+        },
+        name="django.contrib.sitemaps.views.sitemaps",
+    ),
     path("api/", include("core.api.urls")),
     path("timetable", views.TimetableList.as_view(), name="timetable_list"),
     path(
@@ -59,6 +74,7 @@ urlpatterns = [
     path("tv/clubs", views.TVClubView.as_view(), name="tvclub"),
     path("c/<int:pk>", views.OrganizationShort.as_view(), name="organization_short"),
     path("raffle", views.RaffleRedirect.as_view(), name="raffle"),
+    path("hijack/", include("hijack.urls")),
 ]
 
 if settings.LAZY_LOADING:

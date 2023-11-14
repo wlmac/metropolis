@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{% block main %}
+    <div class="card">
+        <p class="card-body">
+        <h5 class="card-title">403: Permission denied!</h5>
+        <h3 class="card-text">
+            {% if exception %}
+                <p>{{ exception }}</p>
+            {% else %}
+                <p>If you believe this is an error please contact the site admins</p>
+            {% endif %}
+            <a href="/">Return Home</a>
+        </h3>
+    </div>
+{% endblock %}

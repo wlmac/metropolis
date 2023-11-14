@@ -6,7 +6,6 @@ import core.models.user
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0031_alter_user_graduating_year"),
     ]

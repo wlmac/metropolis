@@ -7,12 +7,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 ALLOWED_HOSTS = ["localhost"]
 
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+STATICFILES_STORAGE = (
+    "django.contrib.staticfiles.storage.StaticFilesStorage"  # decapitated
+)
 STATIC_ROOT = "/app-public"
 
-DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"  # decapitated
 MEDIA_ROOT = "/app-media"
 MEDIA_URL = "/media/"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 
 DATABASES = {
@@ -20,7 +31,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "metropolis_db",
         "USER": "metropolis_user",
-        "PASSWORD": "changeme_metropolis_password",
+        "PASSWORD": "changeme_metropolis_password",  # CHANGE IN PROD
         "HOST": "postgres",
         "PORT": "",
     }

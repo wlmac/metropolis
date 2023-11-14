@@ -6,15 +6,16 @@ import core.utils.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0052_merge_0051_auto_20220922_1619_0051_auto_20220926_2257'),
+        ("core", "0052_merge_0051_auto_20220922_1619_0051_auto_20220926_2257"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='user',
-            name='qltrs',
-            field=core.utils.fields.SetField(null=True, verbose_name='Qualified Trials'),
+            model_name="user",
+            name="qltrs",
+            field=core.utils.fields.SetField(
+                null=True, verbose_name="Qualified Trials"
+            ),
         ),
     ]

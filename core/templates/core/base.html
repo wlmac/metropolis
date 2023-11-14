@@ -18,17 +18,17 @@
 
 {% settings_value "PRE" as pre %}
 {% if pre %}{{ pre | safe }}{% endif %}
-{% settings_value "BANNER2" as banner2 %}
-{% for value in banner2 %}
+{% settings_value "BANNER3" as banner3 %}
+{% for value in banner3 %}
     <div class="install-popup">
-        {% if value.logo %}
-            <img src="{% settings_value 'THEME_LOGO' %}">
+        {% if value.icon_url %}
+            <img src="{{ value.icon_url }}" alt="Banner Icon">
         {% endif %}
-        <span>{{ value.text | safe }}</span>
-        {% if value.show_btn %}
+        <span>{{ value.content | safe }}</span>
+        {% if value.cta_link %}
             <div>
-                <a id="install-popup-button" class="waves-effect waves-light btn" href="{{ value.url }}" target="_blank">
-                    {{ value.url_text }}
+                <a id="install-popup-button" class="waves-effect waves-light btn" href="{{ value.cta_link }}" rel="noopener" target="_blank">
+                    {{ value.cta_label }}
                 </a>
             </div>
         {% endif %}

@@ -45,7 +45,12 @@ class TimetableProvider(BaseProvider):
     def serializer_class(self):
         return MutateSerializer if self.request.mutate else ViewSerializer
 
-    def get_queryset(self, request):
+    @staticmethod
+    def get_queryset(request):
+        if (
+            request.user.is_anonymous
+        ):  # it's up to the client to check if the user is logged in
+            return Timetable.objects.none()
         return Timetable.objects.filter(
             owner=request.user,
             term__end_date__gte=timezone.now() - settings.TERM_GRACE_PERIOD,

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import profanity_check
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -12,8 +11,12 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 
 from .base import BaseProvider
-from ...serializers.custom import ContentTypeField
-from ...utils.posts import likes, comments
+from ...serializers.custom import (
+    ContentTypeField,
+    CommentField,
+    AuthorField,
+    LikeField,
+)
 from ....models import Comment, User, Like
 
 typedir: dict[str, str] = {
@@ -36,10 +39,10 @@ class IsOwnerOrSuperuser(BasePermission):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    likes = serializers.SerializerMethodField(read_only=True)
-    author = serializers.SerializerMethodField(read_only=True)
+    likes = LikeField()
+    author = AuthorField()
     edited = serializers.SerializerMethodField(read_only=True)
-    children = serializers.SerializerMethodField(read_only=True)
+    children = CommentField()
     content_type = ContentTypeField()
 
     def validate(self, attrs):
@@ -56,19 +59,6 @@ class CommentSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     @staticmethod
-    def get_author(obj: Comment) -> User | None:
-        if obj.author is not None:
-            return {"id": obj.author.id, "username": obj.author.username}
-        return None
-
-    @staticmethod
-    def get_likes(obj: Comment) -> int:
-        return likes(obj)
-
-    def get_children(self, obj: Comment):
-        return comments(self.context, obj, replies=True)
-
-    @staticmethod
     def get_edited(obj: Comment):
         return obj.last_modified != obj.created_at
 
@@ -79,15 +69,15 @@ class CommentSerializer(serializers.ModelSerializer):
             "body", instance.body
         ):  # if change is  to body.
             instance.last_modified = timezone.now()
-            contains_profanity: bool = bool(
-                profanity_check.predict([validated_data["body"]])
-            )
+            # contains_profanity: bool = bool(
+            #    profanity_check.predict([validated_data["body"]])
+            # )
             if self.context[
                 "request"
             ].user.is_superuser:  # bypass content moderation if user is an SU.
                 validated_data["live"] = True
             else:
-                validated_data["live"] = not contains_profanity
+                validated_data["live"] = False  # not contains_profanity
         super().update(instance, validated_data)
         return instance
 
@@ -117,7 +107,7 @@ class CommentNewSerializer(CommentSerializer):
 
     def create(self, validated_data) -> Comment:
         contains_profanity: bool = bool(
-            profanity_check.predict([validated_data["body"]])
+            # profanity_check.predict([validated_data["body"]])
         )
         com = Comment(**validated_data)
         if self.context[
@@ -125,7 +115,7 @@ class CommentNewSerializer(CommentSerializer):
         ].user.is_superuser:  # bypass content moderation if user is an SU.
             com.live = True
         else:
-            com.live = not contains_profanity
+            com.live = False  # not contains_profanity
         com.save()
         return com
 
@@ -190,6 +180,10 @@ class LikeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data) -> Like:
         obj_name = validated_data["content_type"].name.lower().replace(" ", "")
+        if obj_name not in settings.POST_CONTENT_TYPES:  # is the object type valid?
+            raise ValidationError(
+                f"Invalid object type: {obj_name}, valid types are: {settings.POST_CONTENT_TYPES}"
+            )
         if (
             not validated_data["content_type"]
             .model_class()  # the model of the content type ( e.g. core.models.Announcement or core.models.Comment )
@@ -197,11 +191,7 @@ class LikeSerializer(serializers.ModelSerializer):
             .exists()
         ):  # does the object exist?
             raise ValidationError(f"The specified {obj_name} does not exist.")
-        elif obj_name not in settings.POST_CONTENT_TYPES:  # is the object type valid?
-            raise ValidationError(
-                f"Invalid object type: {obj_name}, valid types are: {settings.POST_CONTENT_TYPES}"
-            )
-        elif Like.objects.filter(  # has the user already liked this object?
+        if Like.objects.filter(  # has the user already liked this object?
             content_type=validated_data["content_type"],
             object_id=validated_data["object_id"],
             author=self.context["author"],

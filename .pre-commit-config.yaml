@@ -1,11 +1,18 @@
 default_language_version:
   python: python
 repos:
-- repo: https://github.com/psf/black
-  rev: 21.10b0
-  hooks:
-  - id: black
-- repo: https://github.com/pycqa/isort
-  rev: 5.10.1
-  hooks:
-  - id: isort
+  - repo: https://github.com/psf/black
+    rev: 21.10b0
+    hooks:
+      - id: black
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+  - repo: local
+    hooks:
+      - id: make-requirements
+        name: "Make requirements.txt"
+        entry: make
+        language: system
+        args: [ "requirements.txt" ]

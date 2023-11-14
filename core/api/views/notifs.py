@@ -19,8 +19,20 @@ global_notifs = Signal()
 @receiver(signals.post_save, sender=models.Announcement)
 def announcement_change(sender, **kwargs):
     global_notifs.send("announcement_change", orig_sender=sender, kwargs=kwargs)
+    if not kwargs["created"]:
+        return  # only send notifs on new announcements
+
+    # todo add additonal checks for approve/club members ect..
+
     if not settings.NOTIF_DRY_RUN:
         tasks.notif_broker_announcement.delay(kwargs["instance"].id)
+
+
+@receiver(signals.post_save, sender=models.BlogPost)
+def blogpost_change(sender, **kwargs):
+    global_notifs.send("blogpost_change", orig_sender=sender, kwargs=kwargs)
+    if not settings.NOTIF_DRY_RUN:
+        tasks.notif_broker_blogpost.delay(kwargs["instance"].id)
 
 
 @receiver(signals.post_save, sender=models.BlogPost)
@@ -58,7 +70,9 @@ class NotificationStream:
         return f"event: {event_name}\n" f"data: {json.dumps(data)}\n"
 
 
-def serializer(sender, signal=None, orig_sender=None, kwargs={}):
+def serializer(sender, signal=None, orig_sender=None, kwargs=None):
+    if kwargs is None:
+        kwargs = {}
     if sender == "announcement_change":
         return (
             sender,
@@ -70,31 +84,32 @@ def serializer(sender, signal=None, orig_sender=None, kwargs={}):
             serializers.BlogPostSerializer(kwargs["instance"]).data,
         )
     else:
-        return (sender, kwargs)
+        return sender, kwargs
 
 
 class NotificationsNew(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        response = StreamingHttpResponse(
+        res = StreamingHttpResponse(
             NotificationStream(
                 signal=global_notifs,
                 serializer=serializer,
             ),
             content_type="text/event-stream",
         )
-        response["Cache-Control"] = "no-cache"
-        return response
+        res["Cache-Control"] = "no-cache"
+        return res
 
 
 class TokenSerializer(serializers2.Serializer):
     expo_push_token = serializers2.CharField()
+    options = serializers2.DictField(allow_empty=True)
 
 
 class NotifToken(APIView):
     """
-    Submit and delete notifcation push tokens.
+    Submit and delete notification push tokens.
     Supports Expo notification push tokens only for now.
     JSON object for PUT and DELETE is both of the form:
     a) {"expo_push_token": "ExponentPushToken[abc123]"}
@@ -115,7 +130,7 @@ class NotifToken(APIView):
         s = TokenSerializer(data=request.data)
         s.is_valid(raise_exception=True)
         token = self._normalize_token(s.validated_data["expo_push_token"])
-        request.user.expo_notif_tokens[token] = None
+        request.user.expo_notif_tokens[token] = s.validated_data["options"]
         request.user.save()
         return response.Response(None)
 

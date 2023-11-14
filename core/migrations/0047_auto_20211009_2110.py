@@ -6,7 +6,6 @@ import core.models.user
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0046_merge_0045_alter_tag_name_0045_auto_20211007_2353"),
     ]

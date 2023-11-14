@@ -8,6 +8,8 @@ class TVView(TemplateView, mixins.TitleMixin):
     title = "TV"
 
 
-class TVClubView(TemplateView, mixins.TitleMixin):
+class TVClubView(
+    TemplateView, mixins.TitleMixin
+):  # todo: add ?club= param to specify club
     template_name = "core/tv/clubs.html"
     title = "Club Crawl"
