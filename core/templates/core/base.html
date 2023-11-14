@@ -27,7 +27,7 @@
         <span>{{ value.content | safe }}</span>
         {% if value.cta_link %}
             <div>
-                <a id="install-popup-button" class="waves-effect waves-light btn" href="{{ value.cta_link }}" target="_blank">
+                <a id="install-popup-button" class="waves-effect waves-light btn" href="{{ value.cta_link }}" rel="noopener" target="_blank">
                     {{ value.cta_label }}
                 </a>
             </div>
