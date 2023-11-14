@@ -210,8 +210,6 @@ POST_CONTENT_TYPES = ["announcement", "blogpost", "comment", "exhibit"]
 
 ANNOUNCEMENTS_CUSTOM_FEEDS = []  # list of PKs of organizations
 
-BANNER2 = []
-
 # Comment settings
 
 ALLOW_COMMENTS: bool = True  # Whether to allow comments on posts
@@ -518,21 +516,6 @@ def check_banner3(banner: Dict) -> None:
 for banner in BANNER3:
     check_banner3(banner)
 
-
-def compat_conv(banner: Dict) -> Dict:
-    banner2 = {}
-    banner2["logo"] = "icon_url" in banner
-    banner2["text"] = banner["content"]
-    banner2["show_btn"] = "cta_link" in banner
-    banner2["url"] = banner.get("cta_link")
-    banner2["url_text"] = banner.get("cta_label")
-    return banner2
-
-
-now = timezone.now()
-BANNER2 += list(
-    map(compat_conv, filter(lambda b: b["start"] < now < b["end"], BANNER3))
-)
 
 
 try:
