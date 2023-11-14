@@ -17,10 +17,10 @@ class Banners(APIView):
     @classmethod
     def censor(cls, banner: Dict) -> Dict:
         res = {}
+        if "icon_url" not in banner:
+            banner["icon_url"] = settings.THEME_LOGO
         for key in cls.noncensored_keys:
             res[key] = banner[key]
-        if "icon_url" in res:
-            res["icon_url"] = settings.THEME_LOGO
         return res
 
     @staticmethod
