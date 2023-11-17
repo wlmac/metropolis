@@ -5,12 +5,6 @@ from ..utils.gravatar import gravatar_url
 from ... import models
 
 
-class UserPartialSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.User
-        fields = ('id', 'username', 'bio', 'timezone')
-
-
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
     organizations = serializers.SlugRelatedField(
@@ -74,9 +68,6 @@ class UserSerializer3(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
     gravatar_url = serializers.SerializerMethodField(read_only=True)
 
-    def get_gravatar_url(self, obj):
-        return gravatar_url(obj.email)
-
     class Meta:
         model = models.User
         fields = [
@@ -92,3 +83,7 @@ class UserSerializer3(serializers.ModelSerializer):
             "tags_following",
             "gravatar_url",
         ]
+
+    @staticmethod
+    def get_gravatar_url(obj: models.User):
+        return gravatar_url(obj.email)

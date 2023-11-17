@@ -63,9 +63,14 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Organization
         fields = ["id", "name", "slug", "icon"]
+
+    @staticmethod
+    def get_gravatar_url(obj: Organization):
+        return gravatar_url(obj.pk)
 
 
 class TagSerializer(serializers.ModelSerializer):
