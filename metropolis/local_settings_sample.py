@@ -12,21 +12,29 @@ if DEBUG:
     import mimetypes
 
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2", ]
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
+        "127.0.0.1",
+        "10.0.2.2",
+    ]
 
-    mimetypes.add_type("application/javascript", ".js", True)  # fix some browser issues.
+    mimetypes.add_type(
+        "application/javascript", ".js", True
+    )  # fix some browser issues.
 
 # Banner config
 tz = pytz.timezone("America/Toronto")
 now = datetime.now(tz)
-BANNER_REFERENCE_TIME = datetime.now()  # datetime.strptime("2023-11-14", "%Y-%m-%d").replace(tzinfo=timezone.utc)  # set to whatever date/time
+# BANNER_REFERENCE_TIME =  datetime.strptime("2023-11-14", "%Y-%m-%d").replace(tzinfo=timezone.utc)  # use instead of $now for non-relative banners.
 
-BANNER3 += [dict(start=BANNER_REFERENCE_TIME,  # when to start displaying the banner
-                 end=BANNER_REFERENCE_TIME + timedelta(days=5),
-                 # when to stop displaying the banner (e.g. 5 days after start)
-                 content="Hello Hey!",  # banner text
-                 icon_url="/static/core/img/logo/logo-maskable-192.png",
-                 # optional, displays an icon on the left of the banner
-                 cta_link="https://jasoncameron.dev",  # optional
-                 cta_label="wow! go visit this cool site!",  # optional (but required if cta_link is present)
-                 )]
+BANNER3 += [
+    dict(
+        start=now,  # when to start displaying the banner
+        end=now + timedelta(days=5),
+        # when to stop displaying the banner (e.g. 5 days after start)
+        content="Hello Hey!",  # banner text
+        icon_url="/static/core/img/logo/logo-maskable-192.png",
+        # optionally, displays an icon on the left of the banner
+        cta_link="https://jasoncameron.dev",  # optional
+        cta_label="wow! go visit this cool site!",  # optional (but required if cta_link is present)
+    )
+]

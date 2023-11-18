@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from .choices import announcement_status_choices
+
 # from ..api.utils.profanity import predict
 from ..utils.file_upload import file_upload_path_generator
 
