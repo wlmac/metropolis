@@ -178,7 +178,7 @@ class Identity(permissions.BasePermission):
 
 class UserProvider(BaseProvider):
     model = User
-    lookup_fields = ["id", "username"]
+    lookup_fields = ["id", "username__iexact"]
 
     @property
     def permission_classes(self):
