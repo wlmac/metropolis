@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from core.api.serializers.custom import PrimaryKeyAndSlugRelatedField
+from core.api.utils.gravatar import gravatar_url
 from .tag import TagSerializer
 from ... import models
-from core.api.utils.gravatar import gravatar_url
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
