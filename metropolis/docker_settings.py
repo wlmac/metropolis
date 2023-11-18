@@ -31,7 +31,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "metropolis_db",
         "USER": "metropolis_user",
-        "PASSWORD": "changeme_metropolis_password",
+        "PASSWORD": "changeme_metropolis_password",  # CHANGE IN PROD
         "HOST": "postgres",
         "PORT": "",
     }

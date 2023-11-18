@@ -695,7 +695,7 @@ admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
 admin.site.register(models.Exhibit, ExhibitAdmin)
-# admin.site.register(models.Comment, CommentAdmin) atm it's not used so we don't need it
+# admin.site.register(models.Comment, CommentAdmin) atm it's not used, so we don't need it
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)

@@ -16,6 +16,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "Change me"
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -178,12 +179,6 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-# ReCaptcha settings
-
-RECAPTCHA_PUBLIC_KEY = ""
-RECAPTCHA_PRIVATE_KEY = ""
-RECAPTCHA_REQUIRED_SCORE = 0.85
-
 # NavBar settings
 
 NAVBAR = {
@@ -195,8 +190,9 @@ NAVBAR = {
     "Calendar": "/calendar",
     "Clubs": "/clubs",
     "Content": "/blog",
-    "Resources": "/resources",
+    "Doodle": "https://doodle.maclyonsden.com",
     "Map": "/map",
+    "Resources": "/resources",
     "About": {
         "WLMCI": "/about?tab=history",
         "About": "/about?tab=about",
@@ -213,8 +209,6 @@ POST_CONTENT_TYPES = ["announcement", "blogpost", "comment", "exhibit"]
 # Announcements settings
 
 ANNOUNCEMENTS_CUSTOM_FEEDS = []  # list of PKs of organizations
-
-BANNER2 = []
 
 # Comment settings
 
@@ -272,8 +266,9 @@ TAG_COLOR_VALUE = 1.0
 # Martor settings
 
 MARTOR_THEME = "bootstrap"
+# MARTOR_ALTERNATIVE_CSS_FILE_THEME = "fix-martor.css" todo add back
 MARTOR_MARKDOWN_BASE_MENTION_URL = "/user/"
-MARTOR_UPLOAD_URL = "/api/martor/upload-image"
+MARTOR_UPLOAD_URL = "/api/upload-image"
 MARTOR_UPLOAD_MEDIA_DIR = "martor"
 MARTOR_UPLOAD_SAFE_EXTS = {".jpg", ".jpeg", ".png", ".gif"}
 MARTOR_MARKDOWN_EXTENSIONS = [
@@ -422,11 +417,11 @@ THEMES = {
     },
 }
 
-CURRENT_THEME = "spring"
+CURRENT_THEME = "winter" # should be changed in local_settings.py
 
 # Lazy Loading
 
-LAZY_LOADING = {  # set to False to disable
+LAZY_LOADING = {  # set to` False to disable
     "per_page": 2,
     "initial_limit": 4,
 }
@@ -476,28 +471,22 @@ QLTR: Dict[str, Dict] = {
     ),
 }
 
-THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
-THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
-THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
-THEME_CSS = THEMES[CURRENT_THEME]["theme"]
-
 TEACHER_EMAIL_SUFFIX = "@tdsb.on.ca"
 STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 
 PRE = ""
-
 BANNER3: List = [
     #   dict(
-    #       start=timezone.now(),
-    #       end=timezone.now() + timedelta(days=1),
+    #       start=BANNER_REFERENCE_TIME,
+    #       end=BANNER_REFERENCE_TIME + timedelta(days=5),
     #       content="This is some banner :)",
-    #       icon_url="non-blank means default (default only now)",
-    #       cta_link="https://nyiyui.ca",
-    #       cta_label="some shameless plug to nowhere amirite",
+    #       icon_url="...", # optional
+    #       cta_link="https://nyiyui.ca", # optional
+    #       cta_label="some shameless plug to nowhere amirite", # optional (but required if cta_link is present)
     #   ),
 ]
 
-CELERY_TIMEZONE = "America`/Toronto"
+CELERY_TIMEZONE = "America/Toronto"
 
 # (Expo) Notifications
 
@@ -515,27 +504,12 @@ def is_aware(d: datetime) -> bool:
 def check_banner3(banner: Dict) -> None:
     assert is_aware(banner["start"])
     assert is_aware(banner["end"])
-    assert bool(banner.get("cta_link")) == bool(banner.get("cta_label"))
+    assert bool(banner.get("cta_link")) == bool(banner.get("cta_label")) # both or neither, not one or the other
 
 
 for banner in BANNER3:
     check_banner3(banner)
 
-
-def compat_conv(banner: Dict) -> Dict:
-    banner2 = {}
-    banner2["logo"] = "icon_url" in banner
-    banner2["text"] = banner["content"]
-    banner2["show_btn"] = "cta_link" in banner
-    banner2["url"] = banner.get("cta_link")
-    banner2["url_text"] = banner.get("cta_label")
-    return banner2
-
-
-now = timezone.now()
-BANNER2 += list(
-    map(compat_conv, filter(lambda b: b["start"] < now < b["end"], BANNER3))
-)
 
 
 try:
@@ -555,3 +529,9 @@ except IOError:
 
 if SECRET_KEY == "Change me":
     raise TypeError("override SECRET_KEY")
+
+
+THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
+THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
+THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
+THEME_CSS = THEMES[CURRENT_THEME]["theme"]

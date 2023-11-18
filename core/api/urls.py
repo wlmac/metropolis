@@ -55,11 +55,6 @@ urlpatterns = [
         TermScheduleWeek.as_view(),
         name="api_term_schedule_week",
     ),
-    path(
-        "martor/upload-image",
-        MartorImageUpload.as_view(),
-        name="api_martor_image_upload",
-    ),
     path("v3/staff", staff, name="api_staff3"),
     path("v3/feeds", feeds, name="api_feeds3"),
     path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),

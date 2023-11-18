@@ -60,7 +60,13 @@ def run_group_migrations():
 @app.task
 def notif_broker_announcement(obj_id):
     logger.info(f"notif_broker_announcement for {obj_id}")
-    ann = Announcement.objects.get(id=obj_id)
+    try:
+        ann = Announcement.objects.get(id=obj_id)
+    except Announcement.DoesNotExist:
+        logger.warning(
+            f"notif_broker_announcement: announcement {obj_id} does not exist"
+        )
+        return
     affected = users_with_token()
     if ann.organization.id in settings.ANNOUNCEMENTS_NOTIFY_FEEDS:
         category = "ann.public"
@@ -84,7 +90,11 @@ def notif_broker_announcement(obj_id):
 @app.task
 def notif_broker_blogpost(obj_id):
     logger.info(f"notif_broker_blogpost for {obj_id}")
-    post = BlogPost.objects.get(id=obj_id)
+    try:
+        post = BlogPost.objects.get(id=obj_id)
+    except BlogPost.DoesNotExist:
+        logger.warning(f"notif_broker_blogpost: blogpost {obj_id} does not exist")
+        return
     affected = users_with_token()
     for u in affected.all():
         notif_single.delay(
