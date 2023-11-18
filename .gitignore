@@ -10,3 +10,9 @@ node_modules/
 celerybeat-schedule
 /mobile
 /doodle
+# editors
+/.idea
+.vscode/*
+# django stuff
+local_settings.py
+*.log
