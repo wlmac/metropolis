@@ -1,3 +1,32 @@
+from datetime import datetime
+
+import pytz
+
 SECRET_KEY = "change me!"
 DEBUG = True
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # to emails just get printed to the console.
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".ngrok.io", ".ngrok-free.app"]
+
+if DEBUG:
+    import socket  # only if you haven't already imported this
+    import mimetypes
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2", ]
+
+    mimetypes.add_type("application/javascript", ".js", True)  # fix some browser issues.
+
+# Banner config
+tz = pytz.timezone("America/Toronto")
+now = datetime.now(tz)
+BANNER_REFERENCE_TIME = datetime.now()  # datetime.strptime("2023-11-14", "%Y-%m-%d").replace(tzinfo=timezone.utc)  # set to whatever date/time
+
+BANNER3 += [dict(start=BANNER_REFERENCE_TIME,  # when to start displaying the banner
+                 end=BANNER_REFERENCE_TIME + timedelta(days=5),
+                 # when to stop displaying the banner (e.g. 5 days after start)
+                 content="Hello Hey!",  # banner text
+                 icon_url="/static/core/img/logo/logo-maskable-192.png",
+                 # optional, displays an icon on the left of the banner
+                 cta_link="https://jasoncameron.dev",  # optional
+                 cta_label="wow! go visit this cool site!",  # optional (but required if cta_link is present)
+                 )]
