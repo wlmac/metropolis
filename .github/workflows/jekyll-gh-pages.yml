@@ -3,7 +3,9 @@ name: Jekyll
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "develop"]
+    paths:
+      - 'docs/**'
   workflow_dispatch:
 
 permissions:
