@@ -417,7 +417,7 @@ THEMES = {
     },
 }
 
-CURRENT_THEME = "winter" # should be changed in local_settings.py
+CURRENT_THEME = "autumn" # should be changed in local_settings.py
 
 # Lazy Loading
 
