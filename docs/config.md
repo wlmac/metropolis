@@ -1,5 +1,5 @@
 # Configs
-This file serves as documentation for the various possible configurations for the backend.
+This file serves as documentation for the various possible configurations for the backend, to actually run the server follow [the guide](https://docs.maclyonsden.com/#running-locally)
 
 ### Banners
 
