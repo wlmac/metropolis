@@ -26,7 +26,7 @@ If you do not want to use Nix:
 ```
 python -m pip install poetry
 poetry install
-make ( can remove for windows )
+make # can remove for windows 
 poetry run python ./manage.py migrate
 poetry run python ./manage.py runserver
 ```
