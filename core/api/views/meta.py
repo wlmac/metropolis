@@ -29,7 +29,7 @@ class Banners(APIView):
 
     @staticmethod
     def get(request):
-        return Response(Banners.calculate_banners)
+        return Response(Banners.calculate_banners())
 
     @classmethod
     def calculate_banners(cls):
