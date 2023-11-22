@@ -10,7 +10,6 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
-from metropolis import settings
 from . import models
 from .forms import (
     AnnouncementAdminForm,

@@ -2,10 +2,7 @@ import os
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils import timezone
-
-from .timetable_formats import *
+import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -128,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
-
+TZ = pytz.timezone("America/Toronto")
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)

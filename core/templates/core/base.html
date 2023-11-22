@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load common_tags %}
 {% load settings_tags %}
+{% load banners %}
 {% load static %}
 
 {% block title %}{% block head_title %}{{ title }}{% endblock %} | Metropolis{% endblock %}
@@ -18,8 +19,8 @@
 
 {% settings_value "PRE" as pre %}
 {% if pre %}{{ pre | safe }}{% endif %}
-{% settings_value "BANNER3" as banner3 %}
-{% for value in banner3 %}
+{% banners "current" as current_banners %}
+{% for value in current_banners %}
     <div class="install-popup">
         {% if value.icon_url %}
             <img src="{{ value.icon_url }}" alt="Banner Icon">

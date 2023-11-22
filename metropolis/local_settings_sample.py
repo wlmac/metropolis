@@ -1,7 +1,5 @@
 from datetime import datetime
 
-import pytz
-
 SECRET_KEY = "change me!"
 DEBUG = True
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # to emails just get printed to the console.
@@ -22,8 +20,7 @@ if DEBUG:
     )  # fix some browser issues.
 
 # Banner config
-tz = pytz.timezone("America/Toronto")
-now = datetime.now(tz)
+# now = datetime.now(TZ)
 # BANNER_REFERENCE_TIME =  datetime.strptime("2023-11-14", "%Y-%m-%d").replace(tzinfo=timezone.utc)  # use instead of $now for non-relative banners.
 
 BANNER3 += [
