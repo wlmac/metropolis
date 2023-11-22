@@ -20,7 +20,7 @@ if DEBUG:
     )  # fix some browser issues.
 
 # Banner config
-# now = datetime.now(TZ)
+now = datetime.now(TZ)
 # BANNER_REFERENCE_TIME =  datetime.strptime("2023-11-14", "%Y-%m-%d").replace(tzinfo=timezone.utc)  # use instead of $now for non-relative banners.
 
 BANNER3 += [
