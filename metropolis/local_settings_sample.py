@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 SECRET_KEY = "change me!"
 DEBUG = True
