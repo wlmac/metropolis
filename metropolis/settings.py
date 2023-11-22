@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta
 from typing import Dict, List
-
+from timetable_formats import *
 import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

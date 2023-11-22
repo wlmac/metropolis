@@ -1,4 +1,5 @@
-from datetime import datetime, timezone
+from datetime import datetime
+from django.utils import timezone
 
 SECRET_KEY = "change me!"
 DEBUG = True
