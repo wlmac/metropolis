@@ -7,9 +7,7 @@ register = template.Library()
 
 
 @register.simple_tag
-def banners(filter: typing.Literal["current", "upcoming", "all"]):
-    print(Banners.calculate_banners())
-    print("^")
-    if filter != "all":
-        return Banners.calculate_banners()[filter]
+def banners(banner_type: typing.Literal["current", "upcoming", "all"]):
+    if banner_type != "all":
+        return Banners.calculate_banners()[banner_type]
     return Banners.calculate_banners()
