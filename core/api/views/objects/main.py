@@ -64,6 +64,10 @@ get_provider = gen_get_provider(  # k = Provider class name e.g. comment in Comm
         "course": "course",
     }
 )
+lookup_field_replacements: Dict[str, str] = {
+    "TextField": "__iexact",
+    "CharField": "__iexact",
+}
 
 
 class ObjectAPIView(generics.GenericAPIView):
@@ -80,9 +84,9 @@ class ObjectAPIView(generics.GenericAPIView):
             self.permission_classes = [permissions.AllowAny]
         else:
             self.permission_classes = provider.permission_classes
-        self.as_su = as_su
+        self.as_su = as_su  # if the user is a SU
         self.serializer_class = provider.serializer_class
-        self.lookup_fields = getattr(
+        self.lookup_fields = getattr(  # the lookup fields allowed for the provider
             provider, "lookup_fields", getattr(provider, "lookup_field", ["id", "pk"])
         )
         self.listing_filters = getattr(
@@ -92,29 +96,46 @@ class ObjectAPIView(generics.GenericAPIView):
         )
         # NOTE: better to have the following if after initial, but this is easier
 
-    def get_object(self):
-        queryset = self.get_queryset()
+    @property
+    def lookup_field(self):
         lookup = (
             self.request.query_params.get("lookup", "id")
             if self.request.query_params.get("lookup") in self.lookup_fields
             else "id"
         )
+
+        field_type = self.provider.model._meta.get_field(
+            lookup
+        ).get_internal_type()  # get value like CharField
+        if field_type in lookup_field_replacements.keys():
+            lookup = f"{lookup}{lookup_field_replacements[field_type]}"
+        print(lookup, "lookuppp")
+        return lookup
+
+    def get_object(self):
+        queryset = self.get_queryset()
+
         q = Q()
-        raw = {lookup: [self.kwargs.get("lookup")]}
-        if lookup == "id":
-            if not raw[lookup][0].isdigit():
+        raw = {self.lookup_field: self.kwargs.get("lookup")}
+        print(raw)
+        if self.lookup_field == "id":
+            if not raw[self.lookup_field][0].isdigit():
                 raise BadRequest(
                     "ID must be an integer, if you want to use a different lookup, refer to the docs for the supported lookups."
                 )
         filtered = False
-        for field in self.lookup_fields:
-            if field in raw:
-                if field in ("id", "pk") and raw[field][0] == "0":
-                    # ignore 0 pk
-                    continue
-                q |= Q(**{f"{field}__in": raw[field]})
-                filtered = True
-        if not filtered:
+        # for field in self.lookup_fields:
+        field = self.lookup_field
+        print(field, "hi")
+        if field in raw:
+            print("debug true ")
+            if field in ("id", "pk") and raw[field][0] == "0":
+                # ignore 0 pk
+                pass
+            print(field, raw[field], "final values")
+            q |= Q(**{f"{field}": raw[field]})
+            filtered = True
+        if not filtered:  # most likely Bad impl of a lookup field
             raise BadRequest("not enough filters")
 
         obj = get_object_or_404(queryset, q)

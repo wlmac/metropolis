@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
+from django.db.models.functions import Lower
 from django.utils import timezone
 
 from .choices import graduating_year_choices, timezone_choices
@@ -101,3 +102,8 @@ class User(AbstractUser):
     @classmethod
     def all(cls):
         return cls.objects.filter(is_active=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(Lower("username"), name="username-lower-check")
+        ]
