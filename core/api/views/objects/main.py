@@ -109,7 +109,6 @@ class ObjectAPIView(generics.GenericAPIView):
         ).get_internal_type()  # get value like CharField
         if field_type in lookup_field_replacements.keys():
             lookup = f"{lookup}{lookup_field_replacements[field_type]}"
-        print(lookup, "lookuppp")
         return lookup
 
     def get_object(self):
@@ -117,26 +116,20 @@ class ObjectAPIView(generics.GenericAPIView):
 
         q = Q()
         raw = {self.lookup_field: self.kwargs.get("lookup")}
-        print(raw)
         if self.lookup_field == "id":
             if not raw[self.lookup_field][0].isdigit():
                 raise BadRequest(
                     "ID must be an integer, if you want to use a different lookup, refer to the docs for the supported lookups."
                 )
-        filtered = False
         # for field in self.lookup_fields:
         field = self.lookup_field
-        print(field, "hi")
         if field in raw:
-            print("debug true ")
             if field in ("id", "pk") and raw[field][0] == "0":
                 # ignore 0 pk
                 pass
-            print(field, raw[field], "final values")
             q |= Q(**{f"{field}": raw[field]})
-            filtered = True
-        if not filtered:  # most likely Bad impl of a lookup field
-            raise BadRequest("not enough filters")
+        else:
+            raise BadRequest("Invalid filtering - Most likely a server error")
 
         obj = get_object_or_404(queryset, q)
         self.check_object_permissions(self.request, obj)
