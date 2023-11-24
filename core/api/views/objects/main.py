@@ -99,7 +99,7 @@ class ObjectAPIView(generics.GenericAPIView):
         allowed_fields: List = getattr(  # the lookup fields allowed for the provider
             self.provider, "additional_lookup_fields", []
         )
-        allowed_fields.extend(GLOBAL_LOOKUPS)
+        allowed_fields.extend(settings.GLOBAL_LOOKUPS)
         return set(
             allowed_fields
         )  # use a set for better memory performance & no duplicates.
@@ -127,7 +127,7 @@ class ObjectAPIView(generics.GenericAPIView):
         lookup = self.request.query_params.get("lookup")
         if lookup is None:
             return
-        lookup = lookup or GLOBAL_LOOKUPS[0]
+        lookup = lookup or settings.GLOBAL_LOOKUPS[0]
         if lookup not in self.additional_lookup_fields:
             raise BadRequest(
                 f"Invalid lookup field {lookup}. Valid fields are: {', '.join(self.additional_lookup_fields)}."
