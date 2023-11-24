@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from json import JSONDecodeError
 from typing import Dict, Callable, List, Tuple, Set, Final
@@ -107,7 +109,7 @@ class ObjectAPIView(generics.GenericAPIView):
         )  # use a set for better memory performance & no duplicates.
 
     @property
-    def lookup_field(self):
+    def lookup_field(self) -> str:
         lookup = (
             self.request.query_params.get("lookup", "id")
             if self.request.query_params.get("lookup") in self.additional_lookup_fields
@@ -135,7 +137,7 @@ class ObjectAPIView(generics.GenericAPIView):
                 f"Invalid lookup field {lookup}. Valid fields are: {', '.join(self.additional_lookup_fields)}."
             )
 
-    def get_object(self):
+    def get_object(self) -> Model | None:  # None if 4040
         self.validate_lookup()
         queryset = self.get_queryset()
 
@@ -146,12 +148,11 @@ class ObjectAPIView(generics.GenericAPIView):
                 raise BadRequest(
                     "ID must be an integer, if you want to use a different lookup, refer to the docs for the supported lookups."
                 )
-        field = self.lookup_field
-        if field in raw:
-            if field in ("id", "pk") and raw[field][0] == "0":
+        if self.lookup_field in raw:
+            if self.lookup_field in ("id", "pk") and raw[self.lookup_field][0] == "0":  # todo, check if needed
                 # ignore 0 pk
                 pass
-            q |= Q(**{f"{field}": raw[field]})
+            q |= Q(**{self.lookup_field: raw[self.lookup_field]})
         else:
             raise BadRequest("Invalid filtering - Most likely a server error")
 
