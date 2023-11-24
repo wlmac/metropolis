@@ -45,7 +45,7 @@ class Serializer(serializers.ModelSerializer):
 class BlogPostProvider(BaseProvider):
     serializer_class = Serializer
     model = BlogPost
-    lookup_fields = ["id", "slug"]
+    additional_lookup_fields = ["slug"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

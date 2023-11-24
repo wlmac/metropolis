@@ -1,7 +1,6 @@
 import os
 from json import JSONDecodeError
-from typing import Dict, Callable, List, Tuple
-
+from typing import Dict, Callable, List, Tuple, Set, Final
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model, Q, QuerySet
 from django.http import QueryDict
@@ -14,6 +13,8 @@ from .base import BaseProvider
 from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
 
 __all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
+
+GLOBAL_LOOKUPS: Final = ["id"]  # lookups allowed for all providers, first value will be the default if not specified
 
 
 def gen_get_provider(mapping: Dict[str, str]):
@@ -86,21 +87,30 @@ class ObjectAPIView(generics.GenericAPIView):
             self.permission_classes = provider.permission_classes
         self.as_su = as_su  # if the user is a SU
         self.serializer_class = provider.serializer_class
-        self.lookup_fields = getattr(  # the lookup fields allowed for the provider
-            provider, "lookup_fields", getattr(provider, "lookup_field", ["id", "pk"])
-        )
+        self.additional_lookup_fields = self._compile_lookup_fields()
         self.listing_filters = getattr(
             provider,
             "listing_filters",
             getattr(provider, "listing_filter", {"id": int, "pk": int}),
+        )  # NOTE: better to have the following if after initial, but this is easier
+
+    def _compile_lookup_fields(self) -> Set[str]:
+        """
+        Compiles the additional lookup fields + the two required into one clean set.
+        """
+        allowed_fields: List = getattr(  # the lookup fields allowed for the provider
+            self.provider, "additional_lookup_fields", []
         )
-        # NOTE: better to have the following if after initial, but this is easier
+        allowed_fields.extend(GLOBAL_LOOKUPS)
+        return set(
+            allowed_fields
+        )  # use a set for better memory performance & no duplicates.
 
     @property
     def lookup_field(self):
         lookup = (
             self.request.query_params.get("lookup", "id")
-            if self.request.query_params.get("lookup") in self.lookup_fields
+            if self.request.query_params.get("lookup") in self.additional_lookup_fields
             else "id"
         )
 
@@ -111,7 +121,22 @@ class ObjectAPIView(generics.GenericAPIView):
             lookup = f"{lookup}{lookup_field_replacements[field_type]}"
         return lookup
 
+    def validate_lookup(self) -> None:
+        """
+        checks the lookup field to see if it's a valid lookup field for the provider.
+        :return: NoneType
+        """
+        lookup = self.request.query_params.get("lookup")
+        if lookup is None:
+            return
+        lookup = lookup or GLOBAL_LOOKUPS[0]
+        if lookup not in self.additional_lookup_fields:
+            raise BadRequest(
+                f"Invalid lookup field {lookup}. Valid fields are: {', '.join(self.additional_lookup_fields)}."
+            )
+
     def get_object(self):
+        self.validate_lookup()
         queryset = self.get_queryset()
 
         q = Q()
@@ -121,7 +146,6 @@ class ObjectAPIView(generics.GenericAPIView):
                 raise BadRequest(
                     "ID must be an integer, if you want to use a different lookup, refer to the docs for the supported lookups."
                 )
-        # for field in self.lookup_fields:
         field = self.lookup_field
         if field in raw:
             if field in ("id", "pk") and raw[field][0] == "0":
@@ -183,10 +207,8 @@ class ObjectAPIView(generics.GenericAPIView):
             self.initial(request, *args, **kwargs)
 
             # Get the appropriate handler method
-            if request.method.lower() in self.http_method_names:
-                handler = getattr(
-                    self, request.method.lower(), self.http_method_not_allowed
-                )
+            if (request_type := request.method.lower()) in self.http_method_names:
+                handler = getattr(self, request_type, self.http_method_not_allowed)
             else:
                 handler = self.http_method_not_allowed
 
@@ -291,9 +313,8 @@ class ObjectList(
 
             if isinstance(lookup_value, list) and len(lookup_value) > 1:
                 if isinstance(lookup_value[0], dict):
-                    filters[
-                        f"{lookup_filter}__{lookup_value['category']}__in"
-                    ] = (  # todo add option to use ID or spec field (fix option)
+                    filters[f"{lookup_filter}__{lookup_value['category']}__in"] = (
+                        # todo add option to use ID or specified field (fix option)
                         lookup_value["item"]
                         if not isinstance(lookup_value["item"], list)
                         else lookup_value["item"][0]

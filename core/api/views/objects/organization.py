@@ -44,7 +44,7 @@ class OrganizationProvider(BaseProvider):
         "is_active": bool,
         "is_open": bool,
     }
-    lookup_fields = ["id", "slug"]
+    additional_lookup_fields = ["slug"]
 
     @property
     def permission_classes(self):

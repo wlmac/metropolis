@@ -39,7 +39,7 @@ class Serializer(serializers.ModelSerializer):
 
 class ExhibitProvider(BaseProvider):
     model = Exhibit
-    lookup_fields = ["id", "slug"]
+    additional_lookup_fields = ["slug"]
     serializer_class = Serializer
 
     def __init__(self, *args, **kwargs):
