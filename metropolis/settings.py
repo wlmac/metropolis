@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from typing import Dict, List
+from typing import Dict, List, Set
 from .timetable_formats import *
 import pytz
 
@@ -212,6 +212,7 @@ ANNOUNCEMENTS_CUSTOM_FEEDS = []  # list of PKs of organizations
 ALLOW_COMMENTS: bool = True  # Whether to allow comments on posts
 
 # API settings
+API_VERSION = "3.2.1"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -222,6 +223,12 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 50,
 }
+IGNORED_QUERY_PARAMS: Set[str] = ("limit", "offset", "search_type", "format")  # query params that are ignored by the API (e.g., for lookups)
+LOOKUP_FIELD_REPLACEMENTS: Dict[str, str] = {
+    "TextField": "__iexact",
+    "CharField": "__iexact",
+}
+
 
 # SSO (OAuth) Settings
 
@@ -437,8 +444,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 SILENCED_SYSTEM_CHECKS = ["urls.W002"]
-
-API_VERSION = "3.2.0"
 
 HIJACK_PERMISSION_CHECK = "core.utils.hijack.hijack_permissions_check"
 ALLOWED_HIJACKERS = [746, 165]  # Jason Cameron & Ken Shibata

@@ -3,6 +3,8 @@ from __future__ import annotations
 import os
 from json import JSONDecodeError
 from typing import Dict, Callable, List, Tuple, Set, Final
+
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model, Q, QuerySet
 from django.http import QueryDict
@@ -67,12 +69,6 @@ get_provider = gen_get_provider(  # k = Provider class name e.g. comment in Comm
         "course": "course",
     }
 )
-lookup_field_replacements: Dict[str, str] = {
-    "TextField": "__iexact",
-    "CharField": "__iexact",
-}
-
-
 class ObjectAPIView(generics.GenericAPIView):
     def get_as_su(self):
         return self.as_su
@@ -119,8 +115,8 @@ class ObjectAPIView(generics.GenericAPIView):
         field_type = self.provider.model._meta.get_field(
             lookup
         ).get_internal_type()  # get value like CharField
-        if field_type in lookup_field_replacements.keys():
-            lookup += lookup_field_replacements[field_type]
+        if field_type in settings.LOOKUP_FIELD_REPLACEMENTS.keys():
+            lookup += settings.LOOKUP_FIELD_REPLACEMENTS[field_type]
         return lookup
 
     def validate_lookup(self) -> None:
@@ -262,7 +258,7 @@ class ObjectList(
         for key, value in query_params.lists():
             if (
                     key
-                    in ["limit", "offset", "search_type", "format"]
+                    in settings.IGNORED_QUERY_PARAMS
                     + self.provider.listing_filters_ignore
             ):
                 continue
