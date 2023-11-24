@@ -137,7 +137,7 @@ class ObjectAPIView(generics.GenericAPIView):
                 f"Invalid lookup field {lookup}. Valid fields are: {', '.join(self.additional_lookup_fields)}."
             )
 
-    def get_object(self) -> Model | None:  # None if 4040
+    def get_object(self) -> Model | None:  # None if a 404 (obj not found)
         self.validate_lookup()
         queryset = self.get_queryset()
 
