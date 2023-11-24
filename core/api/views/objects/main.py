@@ -18,8 +18,6 @@ from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
 
 __all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
-GLOBAL_LOOKUPS: Final = ["id"]  # lookups allowed for all providers, first value will be the default if not specified
-
 
 def gen_get_provider(mapping: Dict[str, str]):
     for file in os.listdir(os.path.dirname(__file__)):
@@ -69,6 +67,8 @@ get_provider = gen_get_provider(  # k = Provider class name e.g. comment in Comm
         "course": "course",
     }
 )
+
+
 class ObjectAPIView(generics.GenericAPIView):
     def get_as_su(self):
         return self.as_su
@@ -145,7 +145,9 @@ class ObjectAPIView(generics.GenericAPIView):
                     "ID must be an integer, if you want to use a different lookup, refer to the docs for the supported lookups."
                 )
         if self.lookup_field in raw:
-            if self.lookup_field in ("id", "pk") and raw[self.lookup_field][0] == "0":  # todo, check if needed
+            if (
+                self.lookup_field in ("id", "pk") and raw[self.lookup_field][0] == "0"
+            ):  # todo, check if needed
                 # ignore 0 pk
                 pass
             q |= Q(**{self.lookup_field: raw[self.lookup_field]})
@@ -257,9 +259,8 @@ class ObjectList(
         k_filters = []
         for key, value in query_params.lists():
             if (
-                    key
-                    in settings.IGNORED_QUERY_PARAMS
-                    + self.provider.listing_filters_ignore
+                key
+                in settings.IGNORED_QUERY_PARAMS + self.provider.listing_filters_ignore
             ):
                 continue
             if key not in self.listing_filters:

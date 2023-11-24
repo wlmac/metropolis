@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from typing import Dict, List, Set
+from typing import Dict, List, Set, Final
 from .timetable_formats import *
 import pytz
 
@@ -223,7 +223,15 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 50,
 }
-IGNORED_QUERY_PARAMS: Set[str] = ("limit", "offset", "search_type", "format")  # query params that are ignored by the API (e.g., for lookups)
+GLOBAL_LOOKUPS: Final[List[str]] = [
+    "id"
+]  # lookups allowed for all providers, first value will be the default if not specified
+IGNORED_QUERY_PARAMS: Set[str] = {
+    "limit",
+    "offset",
+    "search_type",
+    "format",
+}  # query params that are ignored by the API (e.g., for lookups)
 LOOKUP_FIELD_REPLACEMENTS: Dict[str, str] = {
     "TextField": "__iexact",
     "CharField": "__iexact",
