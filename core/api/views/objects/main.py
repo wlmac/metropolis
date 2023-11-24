@@ -118,7 +118,7 @@ class ObjectAPIView(generics.GenericAPIView):
             lookup
         ).get_internal_type()  # get value like CharField
         if field_type in lookup_field_replacements.keys():
-            lookup = f"{lookup}{lookup_field_replacements[field_type]}"
+            lookup += lookup_field_replacements[field_type]
         return lookup
 
     def validate_lookup(self) -> None:
@@ -260,9 +260,9 @@ class ObjectList(
         k_filters = []
         for key, value in query_params.lists():
             if (
-                key
-                in ["limit", "offset", "search_type", "format"]
-                + self.provider.listing_filters_ignore
+                    key
+                    in ["limit", "offset", "search_type", "format"]
+                    + self.provider.listing_filters_ignore
             ):
                 continue
             if key not in self.listing_filters:
