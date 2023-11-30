@@ -101,7 +101,7 @@ class ObjectAPIView(generics.GenericAPIView):
             else "id"
         )
         if lookup == "username":
-            queryset = queryset.annotate(username=Lower("username"))
+            queryset = queryset.annotate(lowered_username=Lower("username"))
         q = Q()
         raw = {lookup: [self.kwargs.get("lookup")]}
         if lookup == "id":
