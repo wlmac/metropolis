@@ -10,7 +10,6 @@ from .base import BaseProvider
 from ...utils.gravatar import gravatar_url
 from ....models import User, graduating_year_choices
 
-
 class Serializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
@@ -152,6 +151,7 @@ class NewSerializer(serializers.ModelSerializer):
         return user
 
     class Meta:
+        gravatar_url = serializers.SerializerMethodField(read_only=True)
         model = User
         fields = [
             "first_name",
@@ -166,6 +166,10 @@ class NewSerializer(serializers.ModelSerializer):
             "tags_following",
         ]
 
+        @staticmethod
+        def get_gravatar_url(obj: User):
+            return gravatar_url(obj.email)
+
 
 class Identity(permissions.BasePermission):
     def has_object_permission(self, request, view, user):
@@ -178,7 +182,7 @@ class Identity(permissions.BasePermission):
 
 class UserProvider(BaseProvider):
     model = User
-    lookup_fields = ["id", "username__iexact"]
+    lookup_fields = ["id", "username"]
 
     @property
     def permission_classes(self):

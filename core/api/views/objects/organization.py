@@ -3,11 +3,15 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from rest_framework import permissions, serializers
 
+from core.api.utils.gravatar import gravatar_url
+from core.models import Tag, User, Organization, Comment
+
 from .base import BaseProvider
 from .... import models
 
 
 class Serializer(serializers.ModelSerializer):
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
     links = serializers.SlugRelatedField(
         slug_field="url", many=True, queryset=models.OrganizationURL.objects.all()
     )
@@ -17,7 +21,11 @@ class Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Organization
-        fields = "__all__"
+        fields = ["id", "username", "first_name", "last_name", "organization", "gravatar_url"]
+
+    @staticmethod
+    def get_gravatar_url(obj: Organization):
+        return gravatar_url(obj.organization)
 
 
 class SupervisorOrExec(permissions.BasePermission):

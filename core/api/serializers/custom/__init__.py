@@ -1,5 +1,4 @@
 import json
-import os
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
@@ -27,7 +26,6 @@ class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
         }
 
 
-# todo switch all of these back to ChoiceField. refer to git history for the old code.
 class ContentTypeField(serializers.Field):
     def __init__(self, **kwargs):
         default_error_messages = {
@@ -63,14 +61,9 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
-    gravatar_url = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Organization
         fields = ["id", "name", "slug", "icon"]
-
-    @staticmethod
-    def get_gravatar_url(obj: Organization):
-        return gravatar_url(obj.pk)
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -178,7 +171,7 @@ class OrganizationField(serializers.Field):
         self.default_error_messages.update(default_error_messages)
 
 
-class TagRelatedField(serializers.MultipleChoiceField):
+class TagRelatedField(serializers.MultipleChoiceField):  # todo fix tests for this
     """
     A custom field to represent a list of Tag objects in the form of {id, name, color},
     but accepts input as a list of tag IDs.
@@ -186,10 +179,7 @@ class TagRelatedField(serializers.MultipleChoiceField):
 
     def __init__(self, **kwargs):
         kwargs["required"] = False
-        if not os.environ.get("GITHUB_ACTIONS", True):
-            choices = Tag.objects.all().values_list("id", "name")
-        else:
-            choices = []
+        choices = Tag.objects.all().values_list("id", "name")
         kwargs["help_text"] = "The Tags associated with this object."
         super().__init__(choices, **kwargs)
 

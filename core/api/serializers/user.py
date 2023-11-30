@@ -68,6 +68,9 @@ class UserSerializer3(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
     gravatar_url = serializers.SerializerMethodField(read_only=True)
 
+    def get_gravatar_url(self, obj):
+        return gravatar_url(obj.email)
+
     class Meta:
         model = models.User
         fields = [
@@ -83,7 +86,3 @@ class UserSerializer3(serializers.ModelSerializer):
             "tags_following",
             "gravatar_url",
         ]
-
-    @staticmethod
-    def get_gravatar_url(obj: models.User):
-        return gravatar_url(obj.email)
