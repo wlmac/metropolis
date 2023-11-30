@@ -5,10 +5,12 @@ from rest_framework import permissions, serializers
 
 from .base import BaseProvider
 from .... import models
+from ....models import Organization
+from ....templatetags.gravatar_tags import gravatar_url
 
 
 class Serializer(serializers.ModelSerializer):
-    '''gravatar_url = serializers.SerializerMethodField(read_only=True)'''
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
     links = serializers.SlugRelatedField(
         slug_field="url", many=True, queryset=models.OrganizationURL.objects.all()
     )
@@ -20,9 +22,9 @@ class Serializer(serializers.ModelSerializer):
         model = models.Organization
         fields = "__all__"
 
-'''    @staticmethod
+    @staticmethod
     def get_gravatar_url(obj: Organization):
-        return gravatar_url(obj.organization)'''
+        return gravatar_url(obj.organization)
 
 
 class SupervisorOrExec(permissions.BasePermission):
