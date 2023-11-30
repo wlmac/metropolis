@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse, NoReverseMatch
 from rest_framework import generics, permissions
 from rest_framework.response import Response
+from django.db.models.functions import Lower
 
 from .base import BaseProvider
 from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
@@ -99,6 +100,8 @@ class ObjectAPIView(generics.GenericAPIView):
             if self.request.query_params.get("lookup") in self.lookup_fields
             else "id"
         )
+        if lookup == "username":
+            queryset = queryset.annotate(username=Lower("username"))
         q = Q()
         raw = {lookup: [self.kwargs.get("lookup")]}
         if lookup == "id":
@@ -112,6 +115,8 @@ class ObjectAPIView(generics.GenericAPIView):
                 if field in ("id", "pk") and raw[field][0] == "0":
                     # ignore 0 pk
                     continue
+                if lookup == "username":
+                    raw[field] = [x.lower() for x in raw[field]]
                 q |= Q(**{f"{field}__in": raw[field]})
                 filtered = True
         if not filtered:
