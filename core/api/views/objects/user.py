@@ -151,7 +151,7 @@ class NewSerializer(serializers.ModelSerializer):
         return user
 
     class Meta:
-        gravatar_url = serializers.SerializerMethodField(read_only=True)
+        '''gravatar_url = serializers.SerializerMethodField(read_only=True)'''
         model = User
         fields = [
             "first_name",
@@ -166,9 +166,9 @@ class NewSerializer(serializers.ModelSerializer):
             "tags_following",
         ]
 
-        @staticmethod
+'''        @staticmethod
         def get_gravatar_url(obj: User):
-            return gravatar_url(obj.email)
+            return gravatar_url(obj.email)'''
 
 
 class Identity(permissions.BasePermission):

@@ -18,7 +18,7 @@ class Serializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Organization
-        fields = ["id", "username", "first_name", "last_name", "organization", "gravatar_url"]
+        fields = "__all__"
 
 '''    @staticmethod
     def get_gravatar_url(obj: Organization):
