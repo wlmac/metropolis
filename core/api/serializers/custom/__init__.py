@@ -61,6 +61,18 @@ class AuthorSerializer(serializers.ModelSerializer):
         return gravatar_url(obj.email)
 
 
+class MembersSerializer(serializers.ModelSerializer):
+    gravatar_url = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "last_name", "gravatar_url"]
+
+    @staticmethod
+    def get_gravatar_url(obj: User):
+        return gravatar_url(obj.email_user())
+
+
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
@@ -115,6 +127,35 @@ class CommentSerializer(serializers.ModelSerializer):
 class AuthorField(serializers.Field):
     def to_representation(self, value):
         return AuthorSerializer(value).data if value else None
+
+    def to_internal_value(self, data):
+        if data is None:
+            return None
+        if isinstance(data, str):
+            json_string_data = data.replace("'", '"')
+            data = json.loads(json_string_data)
+        if isinstance(data, dict):
+            data = data.get("id")
+        try:
+            return User.objects.get(pk=data)
+        except User.DoesNotExist:
+            self.fail("does_not_exist", value=data)
+
+    @staticmethod
+    def get_queryset():
+        return User.objects.exclude(is_active=False)
+
+    def __init__(self, **kwargs):
+        default_error_messages = {
+            "does_not_exist": "User with ID {value} does not exist.",
+        }
+        kwargs["help_text"] = "The User ID of the author of this object."
+        super().__init__(**kwargs)
+        self.default_error_messages.update(default_error_messages)
+
+class MembersField(serializers.Field):
+    def to_representation(self, value):
+        return MembersSerializer(value).data if value else None
 
     def to_internal_value(self, data):
         if data is None:

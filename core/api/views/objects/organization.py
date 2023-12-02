@@ -4,17 +4,22 @@ from django.db.models import Count
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
+from ...serializers.custom import TagRelatedField, MembersField
 from .... import models
 from ....models import Organization
 
 
 class Serializer(serializers.ModelSerializer):
+    tags = TagRelatedField()
+    members = MembersField()
+
+
     links = serializers.SlugRelatedField(
         slug_field="url", many=True, queryset=models.OrganizationURL.objects.all()
     )
-    members = serializers.PrimaryKeyRelatedField(
+    '''members = serializers.PrimaryKeyRelatedField(
         many=True, queryset=models.User.objects.all()
-    )
+    )'''
 
     def to_representation(self, instance: Organization):
         request = self.context["request"]
@@ -25,7 +30,7 @@ class Serializer(serializers.ModelSerializer):
         return super().to_representation(instance)
 
     class Meta:
-        model = models.Organization
+        model = Organization
         fields = "__all__"
 
 
@@ -43,16 +48,16 @@ class SupervisorOrExec(permissions.BasePermission):
 
 class OrganizationProvider(BaseProvider):
     serializer_class = Serializer
-    model = models.Organization
+    model = Organization
     allow_new = False
-    listing_filters = {
+    '''listing_filters = {
         "tags": int,
         "owner": int,
         "supervisors": int,
         "execs": int,
         "is_active": bool,
         "is_open": bool,
-    }
+    }'''
     additional_lookup_fields = ["slug"]
 
     @property
