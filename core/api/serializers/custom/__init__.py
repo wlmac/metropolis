@@ -70,7 +70,7 @@ class MembersSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_gravatar_url(obj: User):
-        return gravatar_url(obj.email_user())
+        return gravatar_url(str(obj))
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
