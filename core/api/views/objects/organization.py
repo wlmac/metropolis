@@ -6,11 +6,9 @@ from rest_framework import permissions, serializers
 from .base import BaseProvider
 from .... import models
 from ....models import Organization
-from ....templatetags.gravatar_tags import gravatar_url
 
 
 class Serializer(serializers.ModelSerializer):
-    gravatar_url = serializers.SerializerMethodField(read_only=True)
     links = serializers.SlugRelatedField(
         slug_field="url", many=True, queryset=models.OrganizationURL.objects.all()
     )
@@ -18,13 +16,17 @@ class Serializer(serializers.ModelSerializer):
         many=True, queryset=models.User.objects.all()
     )
 
+    def to_representation(self, instance: Organization):
+        request = self.context["request"]
+        if (
+                request.mutate is False and request.detail
+        ):  # detail is True and mutate is False meaning we are retrieving an object
+            instance.increment_views()
+        return super().to_representation(instance)
+
     class Meta:
         model = models.Organization
-        fields = ["id", "username", "first_name", "last_name", "organization", "gravatar_url"]
-
-    @staticmethod
-    def get_gravatar_url(obj: Organization):
-        return gravatar_url(obj.organization)
+        fields = "__all__"
 
 
 class SupervisorOrExec(permissions.BasePermission):
@@ -51,7 +53,7 @@ class OrganizationProvider(BaseProvider):
         "is_active": bool,
         "is_open": bool,
     }
-    lookup_fields = ["id", "slug"]
+    additional_lookup_fields = ["slug"]
 
     @property
     def permission_classes(self):
@@ -61,12 +63,16 @@ class OrganizationProvider(BaseProvider):
             else [permissions.AllowAny]
         )
 
-    def get_queryset(self, request):
+    '''def get_queryset(self, request):
         return (
             models.Organization.objects.filter(is_active=True)
             .annotate(num_members=Count("member"))
             .order_by("-num_members")
-        )
+        )'''
+
+    def get_queryset(self, request):
+        if request.user.has_perm("core.organization.view") or request.user.is_superuser:
+            return Organization.objects.filter()
 
     def get_last_modified(self, view):
         return (
