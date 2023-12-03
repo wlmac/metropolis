@@ -70,7 +70,7 @@ class MembersSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_gravatar_url(obj: User):
-        return gravatar_url(str(obj))
+        return gravatar_url(obj.email)
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -153,22 +153,25 @@ class AuthorField(serializers.Field):
         super().__init__(**kwargs)
         self.default_error_messages.update(default_error_messages)
 
+
 class MembersField(serializers.Field):
     def to_representation(self, value):
-        return MembersSerializer(value).data if value else None
+        return MembersSerializer(value, many=True).data
 
     def to_internal_value(self, data):
         if data is None:
             return None
-        if isinstance(data, str):
-            json_string_data = data.replace("'", '"')
-            data = json.loads(json_string_data)
-        if isinstance(data, dict):
-            data = data.get("id")
-        try:
-            return User.objects.get(pk=data)
-        except User.DoesNotExist:
-            self.fail("does_not_exist", value=data)
+        if not isinstance(data, list):
+            raise serializers.ValidationError("Expected a list of user IDs.")
+
+        users = User.objects.filter(id__in=data).values_list("id", flat=True)
+        if len(users) != len(data):
+            missing_ids = set(data) - set(users)
+            for missing_id in missing_ids:
+                self.fail(
+                    "invalid", message=f"User with ID {missing_id} does not exist."
+                )
+        return User.objects.filter(id__in=data)
 
     @staticmethod
     def get_queryset():
@@ -178,7 +181,7 @@ class MembersField(serializers.Field):
         default_error_messages = {
             "does_not_exist": "User with ID {value} does not exist.",
         }
-        kwargs["help_text"] = "The User ID of the author of this object."
+        kwargs["help_text"] = "The User ID of the member of this object."
         super().__init__(**kwargs)
         self.default_error_messages.update(default_error_messages)
 
