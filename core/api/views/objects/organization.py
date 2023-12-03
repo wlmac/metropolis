@@ -1,3 +1,4 @@
+from core.api.serializers.custom import MembersField, TagRelatedField, SingleUserField
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
@@ -8,13 +9,17 @@ from .... import models
 
 
 class Serializer(serializers.ModelSerializer):
+    tags = TagRelatedField()
+    members = MembersField()
+    execs = MembersField()
+    supervisors = MembersField()
+    owner = SingleUserField()
+
     links = serializers.SlugRelatedField(
         slug_field="url", many=True, queryset=models.OrganizationURL.objects.all()
     )
-    members = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=models.User.objects.all()
-    )
-
+    
+    
     class Meta:
         model = models.Organization
         fields = "__all__"

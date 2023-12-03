@@ -1,6 +1,7 @@
 import base64
 import hashlib
 
+from core.api.serializers.custom import UserOrganizationField
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -21,11 +22,15 @@ class Serializer(serializers.ModelSerializer):
     old_password = serializers.CharField(
         required=False, write_only=True, trim_whitespace=False
     )
-
-    def get_gravatar_url(self, obj):
+    organizations = UserOrganizationField()
+    organizations_leading = UserOrganizationField()
+    
+    @staticmethod
+    def get_gravatar_url(obj):
         return gravatar_url(obj.email)
 
-    def get_email_hash(self, obj):
+    @staticmethod
+    def get_email_hash(obj):
         return base64.standard_b64encode(
             hashlib.md5(obj.email.encode("utf-8")).digest()
         )

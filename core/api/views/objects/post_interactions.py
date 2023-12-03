@@ -14,7 +14,7 @@ from .base import BaseProvider
 from ...serializers.custom import (
     ContentTypeField,
     CommentField,
-    AuthorField,
+    SingleUserField,
     LikeField,
 )
 from ....models import Comment, User, Like
@@ -40,7 +40,7 @@ class IsOwnerOrSuperuser(BasePermission):
 
 class CommentSerializer(serializers.ModelSerializer):
     likes = LikeField()
-    author = AuthorField()
+    author = SingleUserField()
     edited = serializers.SerializerMethodField(read_only=True)
     children = CommentField()
     content_type = ContentTypeField()

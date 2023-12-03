@@ -13,7 +13,7 @@ from core.utils.mail import send_mail
 from .base import BaseProvider
 from ...serializers.custom import (
     TagRelatedField,
-    AuthorField,
+    SingleUserField,
     OrganizationField,
     CommentField,
     LikeField,
@@ -47,7 +47,7 @@ class Serializer(serializers.ModelSerializer):
     comments = CommentField()
     likes = LikeField()
     tags = TagRelatedField()
-    author = AuthorField()
+    author = SingleUserField()
     organization = OrganizationField()
 
     def save(self, **kwargs):
