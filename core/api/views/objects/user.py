@@ -9,6 +9,7 @@ from rest_framework import permissions, serializers, validators
 from .base import BaseProvider
 from ...utils.gravatar import gravatar_url
 from ....models import User, graduating_year_choices
+from ...serializers.custom import UserOrganizationField
 
 class Serializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
@@ -20,6 +21,8 @@ class Serializer(serializers.ModelSerializer):
     old_password = serializers.CharField(
         required=False, write_only=True, trim_whitespace=False
     )
+    organizations = UserOrganizationField()
+    organizations_leading = UserOrganizationField()
 
     def get_gravatar_url(self, obj):
         return gravatar_url(obj.email)
