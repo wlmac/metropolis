@@ -203,6 +203,9 @@ class OrganizationField(serializers.Field):
         self.default_error_messages.update(default_error_messages)
 
 class UserOrganizationField(OrganizationField):
+    def to_representation(self, value):
+        return OrganizationSerializer(value, many=True).data if value else None
+    
     def to_internal_value(self, data):
         if data is None:
             return None
@@ -217,6 +220,7 @@ class UserOrganizationField(OrganizationField):
                     "invalid", message=f"Organization with ID {missing_id} does not exist."
                 )
         return Organization.objects.filter(id__in=data)
+    
 
 class TagRelatedField(serializers.MultipleChoiceField):
     """
