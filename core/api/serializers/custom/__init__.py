@@ -124,7 +124,7 @@ class CommentSerializer(serializers.ModelSerializer):
         ]
 
 
-class AuthorField(serializers.Field):
+class SingleUserField(serializers.Field):
     def to_representation(self, value):
         return AuthorSerializer(value).data if value else None
 

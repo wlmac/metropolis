@@ -3,14 +3,14 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
-from ...serializers.custom import TagRelatedField, CommentField, LikeField, AuthorField
+from ...serializers.custom import TagRelatedField, CommentField, LikeField, SingleUserField
 from ....models import BlogPost
 
 
 class Serializer(serializers.ModelSerializer):
     likes = LikeField()
     comments = CommentField()
-    author = AuthorField()
+    author = SingleUserField()
     tags = TagRelatedField()
 
     def to_representation(self, instance: BlogPost):

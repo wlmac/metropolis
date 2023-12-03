@@ -4,7 +4,7 @@ from rest_framework import permissions, serializers
 from .base import BaseProvider
 from ...serializers.custom import (
     TagRelatedField,
-    AuthorField,
+    SingleUserField,
     LikeField,
     CommentField,
 )
@@ -15,7 +15,7 @@ class Serializer(serializers.ModelSerializer):
     likes = LikeField()
     comments = CommentField()
     tags = TagRelatedField()
-    author = AuthorField()
+    author = SingleUserField()
 
     class Meta:
         model = Exhibit

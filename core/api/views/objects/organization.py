@@ -4,7 +4,7 @@ from django.db.models import Count
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
-from ...serializers.custom import TagRelatedField, MembersField, AuthorField
+from ...serializers.custom import TagRelatedField, MembersField, SingleUserField
 from .... import models
 from ....models import Organization
 
@@ -14,7 +14,7 @@ class Serializer(serializers.ModelSerializer):
     members = MembersField()
     execs = MembersField()
     supervisors = MembersField()
-    owner = AuthorField()
+    owner = SingleUserField()
 
 
     links = serializers.SlugRelatedField(
