@@ -12,7 +12,7 @@ from ... import models
 class UserDetail(generics.RetrieveAPIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
-    lookup_field = "username__iexact"
+    lookup_field = ["id", "username"]
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["user"]
 

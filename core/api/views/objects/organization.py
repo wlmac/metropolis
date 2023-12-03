@@ -4,7 +4,7 @@ from django.db.models import Count
 from rest_framework import permissions, serializers
 
 from .base import BaseProvider
-from ...serializers.custom import TagRelatedField, MembersField
+from ...serializers.custom import TagRelatedField, MembersField, AuthorField
 from .... import models
 from ....models import Organization
 
@@ -12,14 +12,14 @@ from ....models import Organization
 class Serializer(serializers.ModelSerializer):
     tags = TagRelatedField()
     members = MembersField()
+    execs = MembersField()
+    supervisors = MembersField()
+    owner = AuthorField()
 
 
     links = serializers.SlugRelatedField(
         slug_field="url", many=True, queryset=models.OrganizationURL.objects.all()
     )
-    '''members = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=models.User.objects.all()
-    )'''
 
     def to_representation(self, instance: Organization):
         request = self.context["request"]
