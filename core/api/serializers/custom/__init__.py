@@ -216,6 +216,38 @@ class OrganizationField(serializers.Field):
         self.default_error_messages.update(default_error_messages)
 
 
+class UserOrganizationField(serializers.Field):
+    def to_representation(self, value):
+        return OrganizationSerializer(value, many=True).data if value else None
+
+    def to_internal_value(self, data):
+        if data is None:
+            return None
+        if not isinstance(data, list):
+            raise serializers.ValidationError("Expected a list of organization IDs.")
+
+        organizations = Organization.objects.filter(id__in=data).values_list("id", flat=True)
+        if len(organizations) != len(data):
+            missing_ids = set(data) - set(organizations)
+            for missing_id in missing_ids:
+                self.fail(
+                    "invalid", message=f"Organization with ID {missing_id} does not exist."
+                )
+        return Organization.objects.filter(id__in=data)
+
+    @staticmethod
+    def get_queryset():
+        return Organization.objects.filter(is_active=True)
+
+    def __init__(self, **kwargs):
+        default_error_messages = {
+            "does_not_exist": "Organization with ID {value} does not exist.",
+        }
+        kwargs["help_text"] = "The Organization ID of the org in charge of this object."
+        super().__init__(**kwargs)
+        self.default_error_messages.update(default_error_messages)
+
+
 class TagRelatedField(serializers.MultipleChoiceField):
     """
     A custom field to represent a list of Tag objects in the form of {id, name, color},
