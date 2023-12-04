@@ -36,7 +36,7 @@ poetry run python ./manage.py runserver
 ###### poetry ModuleNotFoundError: No module named 'charset_normalizer'
 reinstall poetry and run poetry install in an elevated (admin) terminal 
 #### OpenSSL isn't found
-Git installs it, so you can just add git's programs to path
+Git installs it, so you can add git's programs to your path
 - add git's path (defualt: C:\Program Files\Git\usr\bin\) to your user path
 Since OpenSSL isn't installed, make probably isn't so below are the steps to bypass make
 - `cd ./metropolis`

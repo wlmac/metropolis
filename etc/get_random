@@ -1,3 +1,2 @@
 #!/bin/bash
-
 ls -1 qr-* | shuf -n 20 | cut -c4- | rev | cut -c5- | rev | tr "\n" " "

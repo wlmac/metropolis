@@ -18,10 +18,16 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+oauth2_endpoint_views = [
+    path('authorize', oauth2_views.AuthorizationView.as_view(), name="authorize"),
+    path('token', oauth2_views.TokenView.as_view(), name="token"),
+    path('revoke-token', oauth2_views.RevokeTokenView.as_view(), name="revoke-token"),
+]
+
 urlpatterns = [
     path("", include("core.urls")),
     path("", include("oauth2_provider.urls", namespace="oauth2_provider")),
-    path("o/", include("oauth2_provider.urls", namespace="oauth2_provider2")),
+    path("o/", include(oauth2_endpoint_views, namespace="oauth2_provider2")),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("martor/", include("martor.urls")),
