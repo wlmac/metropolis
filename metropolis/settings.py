@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from typing import Dict, List, Set, Final
+from typing import Dict, List, Final
 from .timetable_formats import *
 import pytz
 
@@ -226,12 +226,12 @@ REST_FRAMEWORK = {
 GLOBAL_LOOKUPS: Final[List[str]] = [
     "id"
 ]  # lookups allowed for all providers, first value will be the default if not specified
-IGNORED_QUERY_PARAMS: Set[str] = {
+IGNORED_QUERY_PARAMS: List[str] = [
     "limit",
     "offset",
     "search_type",
     "format",
-}  # query params that are ignored by the API (e.g., for lookups)
+]  # query params that are ignored by the API (e.g., for lookups)
 LOOKUP_FIELD_REPLACEMENTS: Dict[str, str] = {
     "TextField": "__iexact",
     "CharField": "__iexact",
