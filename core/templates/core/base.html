@@ -21,7 +21,11 @@
 {% if pre %}{{ pre | safe }}{% endif %}
 {% banners "current" as current_banners %}
 {% for value in current_banners %}
-    <div class="install-popup">
+    {% if forloop.first %}
+        <div class="install-popup">
+    {% else %} 
+        <div class="install-popup hide">
+    {% endif %}
         {% if value.icon_url %}
             <img src="{{ value.icon_url }}" alt="Banner Icon">
         {% endif %}
@@ -35,6 +39,28 @@
         {% endif %}
     </div>
 {% endfor %}
+    <script async defer>
+        $(document).ready(function () {
+            // JavaScript to rotate through banners
+            let banners = document.querySelectorAll('.install-popup');
+            let currentIndex = 0;
+
+            console.log(banners.length);
+            function showBanner(index) {
+                banners.forEach((banner, i) => {
+                    console.log(i, index);
+                    banner.classList.toggle('hide', i !== index);
+                });
+            }
+
+            function rotateBanners() {
+                currentIndex = (currentIndex + 1) % banners.length;
+                showBanner(currentIndex);
+            }
+            // Rotate banners every 5.555 seconds (adjust as needed)
+            setInterval(rotateBanners, 5555);
+        });
+    </script>
 
 <ul id="dropdownAcc" class="dropdown-content">
     {% if request.user.is_authenticated %}
