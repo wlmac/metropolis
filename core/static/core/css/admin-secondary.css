@@ -171,9 +171,9 @@ td, th {
   background-color: var(--line-grey);
 }
 
-.ms-lg-auto {
-    margin-left: unset !important;
-}
+/*.ms-lg-auto {*/         /*Uncomment to move to left*/
+/*    margin-left: unset !important;*/
+/*}*/
 
 .form-row{
   margin-top: 5px;
