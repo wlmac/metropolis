@@ -23,7 +23,7 @@
 {% for value in current_banners %}
     {% if forloop.first %}
         <div class="install-popup">
-    {% else %} 
+    {% else %}
         <div class="install-popup hide">
     {% endif %}
         {% if value.icon_url %}
@@ -44,7 +44,6 @@
             // JavaScript to rotate through banners
             let banners = document.querySelectorAll('.install-popup');
             let currentIndex = 0;
-
             function showBanner(index) {
                 banners.forEach((banner, i) => {
                     banner.classList.toggle('hide', i !== index);
