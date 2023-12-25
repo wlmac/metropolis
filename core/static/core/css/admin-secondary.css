@@ -162,13 +162,18 @@ td, th {
 }
 
 .btn-light{
-  width: 100%;
+  /*width: 100%;*/
   background-color: var(--light-grey);
+  padding: 0.375rem 0.75rem;
 }
 
 .btn-light:hover, .btn-light:active {
   background-color: var(--line-grey);
 }
+
+/*.ms-lg-auto {*/         /*Uncomment to move to left*/
+/*    margin-left: unset !important;*/
+/*}*/
 
 .form-row{
   margin-top: 5px;
@@ -230,11 +235,6 @@ textarea {
 
 .form-row div.help {
   /*padding-left: 0px !important;*/
-}
-
-*, *:before, *:after {
-  -webkit-box-sizing: initial !important;
-          box-sizing: initial !important;
 }
 
 .aligned label {

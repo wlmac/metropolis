@@ -4,7 +4,7 @@ let installPopupClass = '.install-popup'
 function displayInstallPrompt(event) {
     event.preventDefault();
     deferredPrompt = event;
-    if (Cookies.get('hide_install_prompt') != '1') {
+    if (Cookies.get('hide_install_prompt') !== '1') {
         $(installPopupClass).show();
     }
 }
