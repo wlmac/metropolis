@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from oauth2_provider.views.base import AuthorizationView, RevokeTokenView, TokenView
+from oauth2_provider.views import AuthorizationView, RevokeTokenView, TokenView
 oauth2_endpoint_views = [
     path('authorize', AuthorizationView.as_view(), name="authorize"),
     path('token', TokenView.as_view(), name="token"),
@@ -26,7 +26,6 @@ oauth2_endpoint_views = [
 
 urlpatterns = [
     path("", include("core.urls")),
-    path("", include("oauth2_provider.urls", "oauth2_provider"), namespace="oauth2_provider"),
     path('o/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
