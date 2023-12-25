@@ -17,11 +17,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-
+from oauth2_provider.views.base import AuthorizationView, RevokeTokenView, TokenView
 oauth2_endpoint_views = [
-    path('authorize', oauth2_views.AuthorizationView.as_view(), name="authorize"),
-    path('token', oauth2_views.TokenView.as_view(), name="token"),
-    path('revoke-token', oauth2_views.RevokeTokenView.as_view(), name="revoke-token"),
+    path('authorize', AuthorizationView.as_view(), name="authorize"),
+    path('token', TokenView.as_view(), name="token"),
+    path('revoke-token', RevokeTokenView.as_view(), name="revoke-token"),
 ]
 
 urlpatterns = [
