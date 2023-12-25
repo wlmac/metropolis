@@ -31,7 +31,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "metropolis_db",
         "USER": "metropolis_user",
-        "PASSWORD": "changeme_metropolis_password",  # CHANGE IN PROD
+        "PASSWORD": "changeme_metropolis_password",  # overwritten by local settings
         "HOST": "postgres",
         "PORT": "",
     }
@@ -40,9 +40,9 @@ DATABASES = {
 CELERY_BROKER_URL = "redis://redis:6379"
 
 try:
-    with open(os.path.join(os.path.dirname(__file__), "local_settings2.py")) as f:
+    with open(os.path.join(os.path.dirname(__file__), "docker_local_settings.py")) as f:
         exec(f.read(), globals())
 except IOError:
     raise TypeError(
-        "Please create a config file to override values in local_settings2.py"
+        "There is an error in the naming of docker_local_settings.py. See docker compose. It should contain the data in local_settings.py."
     )
