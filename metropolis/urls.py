@@ -23,9 +23,11 @@ oauth2_endpoint_views = [
     path('token', TokenView.as_view(), name="token"),
     path('revoke-token', RevokeTokenView.as_view(), name="revoke-token"),
 ]
+
 urlpatterns = [
-    path('', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
     path("", include("core.urls")),
+    path('o/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
+    path("", include("oauth2_provider.urls", "oauth2_provider"), namespace="oauth2_provider"),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("martor/", include("martor.urls")),
@@ -33,6 +35,5 @@ urlpatterns = [
     path("", include("pwa.urls")),
     path("/<path:url>", include("django.contrib.flatpages.urls")),
 ]
-
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
