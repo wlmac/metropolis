@@ -26,8 +26,8 @@ oauth2_endpoint_views = [
 
 urlpatterns = [
     path("", include("core.urls")),
-    path('o/', include((oauth2_endpoint_views, 'oauth2_provider'), namespace="oauth2_provider")),
-    path("", include("oauth2_provider.urls", "oauth2_provider"), namespace="oauth2_provider"),
+    path("", include("oauth2_provider.urls", namespace="oauth2_provider")),
+    path("o/", include("oauth2_provider.urls", namespace="oauth2_provider2")),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("martor/", include("martor.urls")),
