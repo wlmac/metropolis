@@ -24,7 +24,7 @@ class Serializer(serializers.ModelSerializer):
     )
     organizations = UserOrganizationField()
     organizations_leading = UserOrganizationField()
-    
+
     @staticmethod
     def get_gravatar_url(obj):
         return gravatar_url(obj.email)

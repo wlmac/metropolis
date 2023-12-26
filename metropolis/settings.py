@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from typing import Dict, List, Final
+from typing import Dict, List, Final, Literal
 from .timetable_formats import *
 import pytz
 
@@ -484,6 +484,7 @@ QLTR: Dict[str, Dict] = {
 TEACHER_EMAIL_SUFFIX = "@tdsb.on.ca"
 STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 
+MAINTENANCE_MODE: Literal["", False, "pre", "post", "in"] = ""
 PRE = ""
 BANNER3: List = [
     #   dict(
@@ -541,6 +542,21 @@ except IOError:
 if SECRET_KEY == "Change me":
     raise TypeError("override SECRET_KEY")
 
+
+def set_maintenance():
+    _PRE = ""
+    match MAINTENANCE_MODE:
+        case "pre":
+            _PRE = '<div style="background-color: #ffc107; color: #000000; text-align: center; padding: 10px;">Metropolis is undergoing pre - maintenance preparations. Please be advised that temporary service interruptions may occur. We appreciate your patience as we work towards improving and enhancing your experience.</div>'
+        case "post":
+            _PRE = '<div style="background-color: #cce5ff; color: #000000; text-align: center; padding: 10px;">Metropolis recently experienced downtime for essential server maintenance.We appreciate your understanding during this period of ongoing improvements and enhancements.</div>'
+        case "in":
+            '<div style="background-color: #ff0000; color: #ffffff; text-align: center; padding: 10px; font-weight: bold;">Metropolis is currently undergoing upgrades.Please note that any data may not be saved during this process. </div>'
+    global PRE
+    PRE = PRE or _PRE  # Prioritise PRE
+
+
+set_maintenance()
 
 THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
 THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]

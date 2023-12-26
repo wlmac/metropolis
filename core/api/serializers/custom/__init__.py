@@ -48,6 +48,8 @@ class ContentTypeField(serializers.Field):
 
     def to_representation(self, obj):
         return obj.model
+
+
 class SingleUserSerializer(serializers.ModelSerializer):
     gravatar_url = serializers.SerializerMethodField(read_only=True)
 
@@ -144,13 +146,13 @@ class SingleUserField(serializers.Field):
 class MembersField(serializers.Field):
     def to_representation(self, value):
         return SingleUserSerializer(value, many=True).data
-    
+
     def to_internal_value(self, data):
         if data is None:
             return None
         if not isinstance(data, list):
             raise serializers.ValidationError("Expected a list of user IDs.")
-        
+
         users = User.objects.filter(id__in=data).values_list("id", flat=True)
         if len(users) != len(data):
             missing_ids = set(data) - set(users)
@@ -159,11 +161,11 @@ class MembersField(serializers.Field):
                     "invalid", message=f"User with ID {missing_id} does not exist."
                 )
         return User.objects.filter(id__in=data)
-    
+
     @staticmethod
     def get_queryset():
         return User.objects.exclude(is_active=False)
-    
+
     def __init__(self, **kwargs):
         default_error_messages = {
             "does_not_exist": "User with ID {value} does not exist.",
@@ -202,25 +204,29 @@ class OrganizationField(serializers.Field):
         super().__init__(**kwargs)
         self.default_error_messages.update(default_error_messages)
 
+
 class UserOrganizationField(OrganizationField):
     def to_representation(self, value):
         return OrganizationSerializer(value, many=True).data if value else None
-    
+
     def to_internal_value(self, data):
         if data is None:
             return None
         if not isinstance(data, list):
             raise serializers.ValidationError("Expected a list of organization IDs.")
-        
-        organizations = Organization.objects.filter(id__in=data).values_list("id", flat=True)
+
+        organizations = Organization.objects.filter(id__in=data).values_list(
+            "id", flat=True
+        )
         if len(organizations) != len(data):
             missing_ids = set(data) - set(organizations)
             for missing_id in missing_ids:
                 self.fail(
-                    "invalid", message=f"Organization with ID {missing_id} does not exist."
+                    "invalid",
+                    message=f"Organization with ID {missing_id} does not exist.",
                 )
         return Organization.objects.filter(id__in=data)
-    
+
 
 class TagRelatedField(serializers.MultipleChoiceField):
     """
@@ -261,7 +267,7 @@ class TagRelatedField(serializers.MultipleChoiceField):
 
         return Tag.objects.filter(id__in=data)
 
-    
+
 class CommentField(Field):
     def __init__(self, **kwargs):
         kwargs["read_only"] = True

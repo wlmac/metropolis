@@ -16,4 +16,4 @@ GRANT ALL PRIVILEGES ON DATABASE metropolis TO metropolisuser;
 GRANT ALL ON SCHEMA public TO metropolisuser;
 EOF
 
-cat ./pg_dump.sql.gz | gzip -d | psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB"
+cat ./pg_dump.sql.gz | gzip -d | psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" # update pg_dump.sql.gz
