@@ -852,16 +852,16 @@ requirements-deprecated-finder = ["pip-api", "pipreqs"]
 
 [[package]]
 name = "jwcrypto"
-version = "1.4"
+version = "1.5.1"
 description = "Implementation of JOSE Web standards"
 optional = false
 python-versions = ">= 3.6"
 files = [
-    {file = "jwcrypto-1.4.tar.gz", hash = "sha256:30bcfc2d199f2f1a52d04558ffa99112ad81d7b787f29e0d9aa4ef499934307e"},
+    {file = "jwcrypto-1.5.1.tar.gz", hash = "sha256:48bb9bf433777136253579e52b75ffe0f9a4a721d133d01f45a0b91ed5f4f1ae"},
 ]
 
 [package.dependencies]
-cryptography = ">=2.3"
+cryptography = ">=3.4"
 deprecated = "*"
 
 [[package]]
@@ -1475,4 +1475,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "14dfb1b0be392f5800d7c3bdcece6ae69f45f9cac811fc0e7bddf9bdf8b6643b"
+content-hash = "c642ee1cda1bb8c1443a05d81bcb8f1b32032682ac2ef433388b280a41a06e9e"
