@@ -12,7 +12,7 @@ from ...utils.gravatar import gravatar_url
 from ....models import User, graduating_year_choices
 
 
-class Serializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(required=False)
@@ -184,6 +184,12 @@ class Identity(permissions.BasePermission):
 class UserProvider(BaseProvider):
     model = User
     additional_lookup_fields = ["username"]
+    listing_filters = {
+        "organizations": int,
+        "organizations_leading": int,
+        "organizations_owning": int,
+        "organizations_supervising": int,
+    }
 
     @property
     def permission_classes(self):
@@ -194,7 +200,7 @@ class UserProvider(BaseProvider):
         return dict(
             new=NewSerializer,
             list=ListSerializer,
-        ).get(self.request.kind, Serializer)
+        ).get(self.request.kind, UserSerializer)
 
     @staticmethod
     def get_queryset(request):

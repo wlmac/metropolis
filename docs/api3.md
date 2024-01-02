@@ -387,7 +387,12 @@ properties:
 ## User
 
 `username` can be used for the lookup query string to filter by username.
-
+                                   
+#### Listing filters
+- organizations: The id of the organization to get members of. 
+- organizations_leading: The id of the organization to get execs of.  
+- organizations_owning: The id of the organization to get the owner of. 
+- organizations_supervising: The id of the organization to get supervisors of.
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/user.json
