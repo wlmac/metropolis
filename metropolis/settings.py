@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "pwa",
     "oauth2_provider",
     "hijack",
-    "hijack.contrib.admin",
+    "hijack.contrib.admin", # show a hijack button on admin.
 ]
 
 MIDDLEWARE = [
@@ -239,6 +239,8 @@ LOOKUP_FIELD_REPLACEMENTS: Dict[str, str] = {
 
 
 # SSO (OAuth) Settings
+CLEAR_EXPIRED_TOKENS_BATCH_INTERVAL = 5
+CLEAR_EXPIRED_TOKENS_BATCH_SIZE = 500
 
 OAUTH2_PROVIDER = dict(
     SCOPES={
@@ -376,6 +378,7 @@ METROPOLIS_STAFFS = {   # todo remove
     "Graphic Designer": {},
     "Content Creator": {},
 }
+METROPOLIS_STAFF_BIO = {} # todo remove
 
 # Theme Settings
 
