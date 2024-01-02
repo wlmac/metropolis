@@ -359,16 +359,15 @@ MAPBOX_APIKEY = "change me"
 
 # Metropolis settings
 
-METROPOLIS_STAFFS = {
-    "Project Manager": {},
-    "Frontend Developer": {},
-    "Backend Developer": {},
-    "App Developer": {},
-    "Graphic Designer": {},
-    "Content Creator": {},
-}
-
-METROPOLIS_STAFF_BIO = {}
+METROPOLIS_POSITIONS = (
+    ("PM", "Project Manager"),
+    ("frontend", "Frontend Developer"),
+    ("backend", "Backend Developer"),
+    ("app", "App Developer"),
+    ("graphics", "Graphic Designer"),
+    ("content", "Content Creator"),
+    ("doodle", "Doodle Developer"),
+)
 
 # Theme Settings
 

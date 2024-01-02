@@ -44,7 +44,9 @@ class User(AbstractUser):
         help_text="JSON object with keys as tokens and values as null.",
         # the length is not specified :( https://github.com/expo/expo/issues/1135#issuecomment-399622890
     )
-
+    staff_bio = models.TextField(blank=True, null=True, help_text="Staff bio for Metropolis staff")
+    staff_position = MultiSelectField(settings.METROPOLIS_POSITIONS)
+    
     @property
     def qltrs2(self):
         return set(self.qltrs.split(" "))
@@ -85,13 +87,6 @@ class User(AbstractUser):
             )
             .distinct()
         )
-
-    @property
-    def staff_bio(self):
-        if self.pk in settings.METROPOLIS_STAFF_BIO:
-            return settings.METROPOLIS_STAFF_BIO[self.pk]
-        else:
-            return None
 
     def can_edit(self, obj):
         return obj.editable(user=self)

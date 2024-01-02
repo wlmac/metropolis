@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime
 
 from django.core.exceptions import ValidationError
@@ -127,7 +129,7 @@ class SetField(models.TextField):
     def __init__(self, *args, **kwargs):
         super(SetField, self).__init__(*args, **kwargs)
 
-    def to_python(self, value):
+    def to_python(self, value) -> list | tuple | None:
         if not value:
             return
         if isinstance(value, list):
