@@ -48,7 +48,7 @@ class User(AbstractUser):
     staff_bio = models.TextField(
         blank=True, null=True, help_text="Staff bio for Metropolis staff"
     )
-    staff_position = MultiSelectField(settings.METROPOLIS_POSITIONS)
+    #staff_position = MultiSelectField(settings.METROPOLIS_POSITIONS)
 
     @property
     def qltrs2(self):
