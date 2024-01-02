@@ -368,6 +368,14 @@ METROPOLIS_POSITIONS = (
     ("content", "Content Creator"),
     ("doodle", "Doodle Developer"),
 )
+METROPOLIS_STAFFS = {   # todo remove
+    "Project Manager": {},
+    "Frontend Developer": {},
+    "Backend Developer": {},
+    "App Developer": {},
+    "Graphic Designer": {},
+    "Content Creator": {},
+}
 
 # Theme Settings
 
