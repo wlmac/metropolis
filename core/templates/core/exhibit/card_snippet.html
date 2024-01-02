@@ -8,7 +8,7 @@
         <div class="card-text">
             <div class="tag-section">
                 {% for tag in exhibit.tags.all %}
-                <a href="/blog/tag/{{tag.id}}"><p class="tag" style="background-color:{{tag.color}}">{{tag}}</p></a>
+                    <a href="/blog/tag/{{tag.id}}"><p class="tag" style="background-color:{{tag.color}}">{{tag}}</p></a>
                 {% endfor %}
             </div>
             <h1 class="title">{{exhibit.title}}</h1>
@@ -21,7 +21,7 @@
                     <br>
                     <dot>•</dot> posted {{ exhibit.created_date|date:"M. j, Y" }}{{ exhibit.created_date|date:", g:i A"|lower }}
                     {% if exhibit.last_modified_date != exhibit.created_date %}
-                    (Edited on {{ exhibit.created_date|date:"M. j, Y" }}{{ exhibit.created_date|date:", g:i A"|lower }})
+                        (Edited on {{ exhibit.created_date|date:"M. j, Y" }}{{ exhibit.created_date|date:", g:i A"|lower }})
                     {% endif %}
                 </div>
             </div>

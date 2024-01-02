@@ -7,25 +7,25 @@
 {% block title %}{% block head_title %}{{ title }}{% endblock %} | Metropolis{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{% settings_value 'THEME_CSS' %}">
-<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <link rel="stylesheet" href="{% settings_value 'THEME_CSS' %}">
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 <!--script src="{% static 'core/js/install.js' %}" type="text/javascript"></script-->
-{% block deps %}
-{% endblock %}
+    {% block deps %}
+    {% endblock %}
 {% endblock %}
 
 {% block body %}
 
-{% settings_value "PRE" as pre %}
-{% if pre %}{{ pre | safe }}{% endif %}
-{% banners "current" as current_banners %}
-{% for value in current_banners %}
-    {% if forloop.first %}
-        <div class="install-popup">
-    {% else %}
-        <div class="install-popup hide">
-    {% endif %}
+    {% settings_value "PRE" as pre %}
+    {% if pre %}{{ pre | safe }}{% endif %}
+    {% banners "current" as current_banners %}
+    {% for value in current_banners %}
+        {% if forloop.first %}
+            <div class="install-popup">
+        {% else %}
+            <div class="install-popup hide">
+        {% endif %}
         {% if value.icon_url %}
             <img src="{{ value.icon_url }}" alt="Banner Icon">
         {% endif %}
@@ -37,8 +37,8 @@
                 </a>
             </div>
         {% endif %}
-    </div>
-{% endfor %}
+        </div>
+    {% endfor %}
     <script async defer>
         $(document).ready(function () {
             // JavaScript to rotate through banners
@@ -59,124 +59,124 @@
         });
     </script>
 
-<ul id="dropdownAcc" class="dropdown-content">
-    {% if request.user.is_authenticated %}
-    <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
-    <li><a href="{% url 'timetable_list' %}">Timetable</a></li>
-    {% if user.is_staff %}
-    <li><a href="{% url 'admin:index' %}">Admin</a></li>
-    {% endif %}
-    <li><a href="{% url 'account_logout' %}">Logout</a></li>
-    {% else %}
-    <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
-    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
-    {% endif %}
-</ul>
-<ul class="sidenav" id="slide-out">
-    {% settings_value "NAVBAR" as navbar %}
-    {% for heading, items in navbar.items %}
-    {% if items|gettype == 'str' %}
-    <li >
-        <a href="{{ items }}" class="sidenav-close">{{ heading }}</a>
-    </li>
-    {% elif items|gettype == 'dict' %}
-    <li class="divider"></li>
-    <li>
-        {% for item, path in items.items %}
-            <li>
-                <a href="{{ path }}">{{ item }}</a>
-            </li>
-        {% endfor %}
-    {% else %}
-    {{ items|gettype }}
-    {% endif %}
-    {% endfor %}
-    <li class="divider"></li>
-    {% if request.user.is_authenticated %}
-    <li><a href="{% url 'profile_redirect' %}" class="sidenav-close">Profile</a></li>
-    <li><a class="link" href="{% url 'timetable_list' %}">Timetable</a></li>
-    {% if user.is_staff %}
-    <li><a href="{% url 'admin:index' %}" class="sidenav-close">Admin</a></li>
-    {% endif %}
-    <li class="divider"></li>
-    <li><a href="{% url 'account_logout' %}" class="sidenav-close">Logout</a></li>
-    {% else %}
-    <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}" class="sidenav-close">Login</a></li>
-    <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}" class="sidenav-close">Sign Up</a></li>
-    {% endif %}
-</ul>
-<nav>
-    <div class="nav-wrapper">
-        <a href="{% url 'index' %}">
-            <div class="brand-logo">
-                <img class="img-logo" src="{% settings_value 'THEME_LOGO' %}?fmt=webp&w=90" alt="Metropolis logo">
-                <!-- <span>Metropolis</span> -->
-            </div>
-        </a>
-
-        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
-        <ul class="right hide-on-med-and-down">
-            {% settings_value "NAVBAR" as navbar %}
-            {% for heading, items in navbar.items %}
+    <ul id="dropdownAcc" class="dropdown-content">
+        {% if request.user.is_authenticated %}
+            <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
+            <li><a href="{% url 'timetable_list' %}">Timetable</a></li>
+            {% if user.is_staff %}
+                <li><a href="{% url 'admin:index' %}">Admin</a></li>
+            {% endif %}
+            <li><a href="{% url 'account_logout' %}">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
+            <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
+        {% endif %}
+    </ul>
+    <ul class="sidenav" id="slide-out">
+        {% settings_value "NAVBAR" as navbar %}
+        {% for heading, items in navbar.items %}
             {% if items|gettype == 'str' %}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ items }}">{{ heading }}</a>
-            </li>
+                <li >
+                    <a href="{{ items }}" class="sidenav-close">{{ heading }}</a>
+                </li>
             {% elif items|gettype == 'dict' %}
-            <li>
-                <a class="dropdown-trigger" href="#!" data-target="dropdown{{ heading }}">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
-                <ul id="dropdown{{ heading }}" class="dropdown-content">
+                <li class="divider"></li>
+                <li>
                     {% for item, path in items.items %}
                         <li>
                             <a href="{{ path }}">{{ item }}</a>
                         </li>
                     {% endfor %}
-                </ul>
-            </li>
             {% else %}
-            {{ items|gettype }}
+                {{ items|gettype }}
             {% endif %}
-            {% endfor %}
-            <li><a class="dropdown-trigger" href="#!" data-target="dropdownAcc">
-                {% if request.user.is_authenticated %}
-                Account
-                {% else %}
-                Login/Sign Up
-                {% endif %}
-                <i class="zmdi zmdi-caret-down"></i>
-            </a></li>
-            <script>
-                $(document).ready(function(){
-                    $('.dropdown-trigger').dropdown();
-                    $('.sidenav').sidenav();
-                });
-            </script>
-        </ul>
-    </div>
-</nav>
-<a id="back" onclick="goBack()">
-    <i class="zmdi zmdi-arrow-left"></i>
-</a>
-<script>
-    function goBack() {
-        window.history.back();
-    }
-</script>
-{% block main %}
-{% endblock %}
+        {% endfor %}
+        <li class="divider"></li>
+        {% if request.user.is_authenticated %}
+            <li><a href="{% url 'profile_redirect' %}" class="sidenav-close">Profile</a></li>
+            <li><a class="link" href="{% url 'timetable_list' %}">Timetable</a></li>
+            {% if user.is_staff %}
+                <li><a href="{% url 'admin:index' %}" class="sidenav-close">Admin</a></li>
+            {% endif %}
+            <li class="divider"></li>
+            <li><a href="{% url 'account_logout' %}" class="sidenav-close">Logout</a></li>
+        {% else %}
+            <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}" class="sidenav-close">Login</a></li>
+            <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}" class="sidenav-close">Sign Up</a></li>
+        {% endif %}
+    </ul>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="{% url 'index' %}">
+                <div class="brand-logo">
+                    <img class="img-logo" src="{% settings_value 'THEME_LOGO' %}?fmt=webp&w=90" alt="Metropolis logo">
+                <!-- <span>Metropolis</span> -->
+                </div>
+            </a>
 
-<div class="footer">
-    <div class="footer-title-par">
-        <p class="footer-title">William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables.</p>
-        <p class="footer-title"><a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></p>
+            <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
+            <ul class="right hide-on-med-and-down">
+                {% settings_value "NAVBAR" as navbar %}
+                {% for heading, items in navbar.items %}
+                    {% if items|gettype == 'str' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ items }}">{{ heading }}</a>
+                        </li>
+                    {% elif items|gettype == 'dict' %}
+                        <li>
+                            <a class="dropdown-trigger" href="#!" data-target="dropdown{{ heading }}">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
+                            <ul id="dropdown{{ heading }}" class="dropdown-content">
+                                {% for item, path in items.items %}
+                                    <li>
+                                        <a href="{{ path }}">{{ item }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% else %}
+                        {{ items|gettype }}
+                    {% endif %}
+                {% endfor %}
+                <li><a class="dropdown-trigger" href="#!" data-target="dropdownAcc">
+                    {% if request.user.is_authenticated %}
+                        Account
+                    {% else %}
+                        Login/Sign Up
+                    {% endif %}
+                    <i class="zmdi zmdi-caret-down"></i>
+                </a></li>
+                <script>
+                    $(document).ready(function(){
+                        $('.dropdown-trigger').dropdown();
+                        $('.sidenav').sidenav();
+                    });
+                </script>
+            </ul>
+        </div>
+    </nav>
+    <a id="back" onclick="goBack()">
+        <i class="zmdi zmdi-arrow-left"></i>
+    </a>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+    {% block main %}
+    {% endblock %}
+
+    <div class="footer">
+        <div class="footer-title-par">
+            <p class="footer-title">William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables.</p>
+            <p class="footer-title"><a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a></p>
+        </div>
+        <hr class="footer-bar">
+        <div class="footer-icon-par">
+            <a class="footer-name" href="https://github.com/wlmac/metropolis" rel="noreferrer" target="_blank">
+                <i class="footer-icon zmdi zmdi-hc-3x zmdi-github"></i>
+            </a>
+        </div>
     </div>
-    <hr class="footer-bar">
-    <div class="footer-icon-par">
-        <a class="footer-name" href="https://github.com/wlmac/metropolis" rel="noreferrer" target="_blank">
-            <i class="footer-icon zmdi zmdi-hc-3x zmdi-github"></i>
-        </a>
-    </div>
-</div>
 
 {% endblock %}
 

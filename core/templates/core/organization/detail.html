@@ -57,7 +57,7 @@
                         <ul class="link-section" style="display: inline">
                             {% for i in organization.links.all %}
                                 <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a
-                                        href="{{ i.url }}" style="word-break: break-word">{{ i.url }}</a></li>
+                                    href="{{ i.url }}" style="word-break: break-word">{{ i.url }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -76,14 +76,14 @@
                                         <div class="member">
                                             <div class="member-image">
                                                 <img class="circle" src="{{ i.email|gravatar_url:100}}"
-								    alt="{{ i.get_full_name }} profile picture">
+                                                     alt="{{ i.get_full_name }} profile picture">
                                             </div>
                                             <div class="member-text">
                                                 {{ i.get_full_name }}
                                             </div>
                                         </div>
                                     </a>
-                                    {% empty %}
+                                {% empty %}
                                     <br>
                                     There are no executives right now.
                                 {% endfor %}
@@ -101,14 +101,14 @@
                                             <div class="member">
                                                 <div class="member-image">
                                                     <img class="circle" src="{{ i.email|gravatar_url:100}}"
-						                        alt="{{ i.get_full_name }} profile picture">
+                                                         alt="{{ i.get_full_name }} profile picture">
                                                 </div>
                                                 <div class="member-text">
                                                     {{ i.get_full_name }}
                                                 </div>
                                             </div>
                                         </a>
-                                        {% empty %}
+                                    {% empty %}
                                         <br>
                                         There are no members right now. {% if organization.is_open %}Join us!{% endif %}
                                     {% endfor %}

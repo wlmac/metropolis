@@ -16,35 +16,35 @@
 {% endblock %}
 
 {% block body %}
-<div id="fade"></div>
-<div class="wrapper">
-    <div class="content">
-        <div class="club-detail">
-            <div class="club-header">
-                <div class="club-header-img">
-                    <div class="club-logo">
-                        <img class="circle" id="club-logo">
+    <div id="fade"></div>
+    <div class="wrapper">
+        <div class="content">
+            <div class="club-detail">
+                <div class="club-header">
+                    <div class="club-header-img">
+                        <div class="club-logo">
+                            <img class="circle" id="club-logo">
+                        </div>
+                    </div>
+                    <div class="club-header-text">
+                        <h2 id="club-name"></h2>
+                        <div id="tag-section">
+                        </div>
                     </div>
                 </div>
-                <div class="club-header-text">
-                    <h2 id="club-name"></h2>
-                    <div id="tag-section">
-                    </div>
-                </div>
+                <p id="bio"></p>
+                <h3 id="exec-title">Executives</h3>
+                <hr>
+                <div class="club-execs scrollable" id="scrollable1"></div>
+                <div id="qrcode" alt="QR code for the club"></div>
             </div>
-            <p id="bio"></p>
-            <h3 id="exec-title">Executives</h3>
-            <hr>
-            <div class="club-execs scrollable" id="scrollable1"></div>
-            <div id="qrcode" alt="QR code for the club"></div>
-        </div>
-        <div class="club-detail">
+            <div class="club-detail">
             <!--<div class="description scrollable" id="scrollable2"></div>-->
-            <div class="location">
-                <object id="location" type="image/svg+xml" data="{% static 'core/img/tv/gen-map.svg' %}"></object>
+                <div class="location">
+                    <object id="location" type="image/svg+xml" data="{% static 'core/img/tv/gen-map.svg' %}"></object>
+                </div>
+                <img id="made-by" src="{% static 'core/img/tv/made-by.png' %}" />
             </div>
-            <img id="made-by" src="{% static 'core/img/tv/made-by.png' %}" />
         </div>
     </div>
-</div>
 {% endblock %}

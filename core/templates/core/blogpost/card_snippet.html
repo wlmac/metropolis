@@ -8,7 +8,7 @@
         <div class="card-text">
             <div class="tag-section">
                 {% for tag in blogpost.tags.all %}
-                <a href="/blog/tag/{{tag.id}}"><p class="tag" style="background-color:{{tag.color}}">{{tag}}</p></a>
+                    <a href="/blog/tag/{{tag.id}}"><p class="tag" style="background-color:{{tag.color}}">{{tag}}</p></a>
                 {% endfor %}
             </div>
             <h1 class="title">{{blogpost.title}}</h1>

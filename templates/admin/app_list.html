@@ -1,27 +1,27 @@
 {% load i18n %}
 
 {% if app_list %}
-  
-   <div class="module">
-      <table>
-        <tbody><tr>
-          <th><a href="{% url 'profile_redirect' %}">Profile</a></th>
-        </tr></tbody>
-      </table>
+
+  <div class="module">
+    <table>
+      <tbody><tr>
+        <th><a href="{% url 'profile_redirect' %}">Profile</a></th>
+      </tr></tbody>
+    </table>
   </div>
   <div class="module">
-      <table>
-        <tbody><tr>
-          <th><a href="{% url 'timetable_list' %}">Timetable</a></th>
-        </tr></tbody>
-      </table>
+    <table>
+      <tbody><tr>
+        <th><a href="{% url 'timetable_list' %}">Timetable</a></th>
+      </tr></tbody>
+    </table>
   </div>
 
-  
+
 
   {% for app in app_list %}
 
-      <hr class="applist-divider">
+    <hr class="applist-divider">
 
     <div class="app-{{ app.app_label }} module{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
       <table>

@@ -5,48 +5,48 @@
 {% load static %}
 
 {% block deps %}
-<link rel="stylesheet" href="{% static 'core/css/blog-detail.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/blog-detail.css' %}">
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="card-container">
-        <img class="card-image"
-             src="{{ blogpost.featured_image.url }}"
-             alt="{{ blogpost.featured_image_description }}">
-        <div class="tag-section">
-            {% for tag in blogpost.tags.all %}
-            <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
-            {% endfor %}
-        </div>
-        <h1 class="title">{{blogpost.title}}</h1>
-        <div class="card-authors">
-            <div class="card-authors-image">
-                <a href="{{blogpost.author.username|user_url}}"><img class="circle" src="{{blogpost.author.email|gravatar_url:100}}" alt=""></a> <!-- not exactly decorative but adding descriptions doesn't help much...? -->
+    <div class="container">
+        <div class="card-container">
+            <img class="card-image"
+                 src="{{ blogpost.featured_image.url }}"
+                 alt="{{ blogpost.featured_image_description }}">
+            <div class="tag-section">
+                {% for tag in blogpost.tags.all %}
+                    <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+                {% endfor %}
             </div>
-            <div class="card-authors-text">
-                {{blogpost.author.username|user}}
-                <br>
-                <dot>•</dot> {{blogpost.last_modified_date}}
+            <h1 class="title">{{blogpost.title}}</h1>
+            <div class="card-authors">
+                <div class="card-authors-image">
+                    <a href="{{blogpost.author.username|user_url}}"><img class="circle" src="{{blogpost.author.email|gravatar_url:100}}" alt=""></a> <!-- not exactly decorative but adding descriptions doesn't help much...? -->
+                </div>
+                <div class="card-authors-text">
+                    {{blogpost.author.username|user}}
+                    <br>
+                    <dot>•</dot> {{blogpost.last_modified_date}}
                 <!--{% if blogpost.last_modified_date != blogpost.created_date %}
                 (Edited)
                 {% endif %}-->
+                </div>
+                {% if perms.blog.view_blogpost %}
+                    <span class="view-counter"><b>{{ blogpost.views }}</b> view{{ blogpost.views|pluralize:",s" }}</span>
+                {% endif %}
             </div>
-        {% if perms.blog.view_blogpost %}
-            <span class="view-counter"><b>{{ blogpost.views }}</b> view{{ blogpost.views|pluralize:",s" }}</span>
-        {% endif %}
+            <hr>
+            <div class="card-body">
+                {{blogpost.body|markdown}}
+            </div>
+            <br>
+            <div>
+                <a class="link" noprefetch href="{% url 'blogpost_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Blog Posts</a>
+            </div>
+            <script>
+                $(".card-authors-text").find("a").addClass("link");
+            </script>
         </div>
-        <hr>
-        <div class="card-body">
-            {{blogpost.body|markdown}}
-        </div>
-        <br>
-        <div>
-            <a class="link" noprefetch href="{% url 'blogpost_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Blog Posts</a>
-        </div>
-        <script>
-            $(".card-authors-text").find("a").addClass("link");
-        </script>
     </div>
-</div>
 {% endblock %}

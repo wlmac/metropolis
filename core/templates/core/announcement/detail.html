@@ -5,67 +5,67 @@
 {% load static %}
 
 {% block deps %}
-<link rel="stylesheet" href="{% static 'core/css/announcement-detail.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/announcement-detail.css' %}">
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="headers">
-        <ul>
-            <li class="header" id="all">ALL</li>
-            {% for feed_custom in feeds_custom %}
-            <li class="header" id="{{feed_custom.name|lower|cut:" "}}">{{feed_custom.name|upper}}</li>
-            {% endfor %}
-        </ul>
-        <script>
-            $(document).ready(function() {
-                $(".header").click(function() {
-                    window.location.href = "{% url 'announcement_list' %}?feed="+this.id;
+    <div class="container">
+        <div class="headers">
+            <ul>
+                <li class="header" id="all">ALL</li>
+                {% for feed_custom in feeds_custom %}
+                    <li class="header" id="{{feed_custom.name|lower|cut:" "}}">{{feed_custom.name|upper}}</li>
+                {% endfor %}
+            </ul>
+            <script>
+                $(document).ready(function() {
+                    $(".header").click(function() {
+                        window.location.href = "{% url 'announcement_list' %}?feed="+this.id;
+                    });
                 });
-            });
-        </script>
-    </div>
-    <div class="card-container">
-  			<div class="admin">
-  			    <a class="link" href="{% url 'admin:core_announcement_change' object_id=announcement.id %}">Edit</a>
-  			</div>
-        <div class="tag-section">
-            {% if announcement.status != 'a' %}
-            <p class="tag" style="background-color:{% tag_color 0 %}">Unpublished</p>
-            {% endif %}
-            {% for tag in announcement.tags.all %}
-            <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
-            {% endfor %}
+            </script>
         </div>
-        <h1 class="title">{{announcement.title}}</h1>
-        <div class="card-authors">
-            <div class="card-authors-image">
-                <a href="{{announcement.organization.slug|organization_url}}"><img class="circle" src="{{announcement.organization.icon.url}}"></a>
+        <div class="card-container">
+            <div class="admin">
+                <a class="link" href="{% url 'admin:core_announcement_change' object_id=announcement.id %}">Edit</a>
             </div>
-            <div class="card-authors-text">
-                {{announcement.organization.slug|organization}},
-                {{announcement.author.username|user}}
-                <br>
-                <dot>•</dot> {{announcement.last_modified_date}}
+            <div class="tag-section">
+                {% if announcement.status != 'a' %}
+                    <p class="tag" style="background-color:{% tag_color 0 %}">Unpublished</p>
+                {% endif %}
+                {% for tag in announcement.tags.all %}
+                    <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+                {% endfor %}
+            </div>
+            <h1 class="title">{{announcement.title}}</h1>
+            <div class="card-authors">
+                <div class="card-authors-image">
+                    <a href="{{announcement.organization.slug|organization_url}}"><img class="circle" src="{{announcement.organization.icon.url}}"></a>
+                </div>
+                <div class="card-authors-text">
+                    {{announcement.organization.slug|organization}},
+                    {{announcement.author.username|user}}
+                    <br>
+                    <dot>•</dot> {{announcement.last_modified_date}}
                 <!--{% if announcement.last_modified_date != announcement.created_date %}
                 (Edited)
                 {% endif %}-->
+                </div>
             </div>
+            {% if announcement.status != 'a' %}
+                <p style="color: var(--mid-grey);">This post is not approved yet and is not visible to {% if announcement.is_public %}everyone else{% else %}club members{% endif %}</p>
+            {% endif %}
+            <hr>
+            <div class="card-body">
+                {{announcement.body|markdown}}
+            </div>
+            <br>
+            <a class="link" href="{% url 'announcement_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Announcements</a>
+            <script>
+                $(document).ready(function() {
+                    $(".card-authors-text").find("a").addClass("link");
+                });
+            </script>
         </div>
-        {% if announcement.status != 'a' %}
-        <p style="color: var(--mid-grey);">This post is not approved yet and is not visible to {% if announcement.is_public %}everyone else{% else %}club members{% endif %}</p>
-        {% endif %}
-        <hr>
-        <div class="card-body">
-            {{announcement.body|markdown}}
-        </div>
-        <br>
-        <a class="link" href="{% url 'announcement_list' %}"><i class='zmdi zmdi-chevron-left'></i> Return to Announcements</a>
-        <script>
-            $(document).ready(function() {
-                $(".card-authors-text").find("a").addClass("link");
-            });
-        </script>
     </div>
-</div>
 {% endblock %}

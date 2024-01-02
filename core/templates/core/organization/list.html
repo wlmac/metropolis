@@ -8,53 +8,53 @@
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="card-container">
-        <div class="legend">
-            <div class="legend-items">
-                <div class="green-square"></div>
-                <span>Open Membership</span>
-            </div>
-            <div class="legend-items">
-                <div class="yellow-square"> </div>
-                <span>Accepting Applications</span>
-            </div>
-            <div class="legend-items">
-                <div class="red-square"> </div>
-                <span>Closed Applications</span>
-            </div>
-        </div>
-        <div class="cards">
-            {% for organization in organizations %}
-                <div class="card {% if  organization.is_open %} green-status {% elif organization.applications_open %} yellow-status {% else %} red-status {% endif %}">
-                    <div class="valign-wrapper">
-                        <div class="club-logo">
-                            {% if organization.icon %}
-                                <img class="circle" src="{{ organization.icon.url }}?fmt=webp&w=200">
-                            {% else %}
-                                <img class="circle" src="https://via.placeholder.com/100">
-                            {% endif %}
-                        </div>
-                        <h1 class="title link">
-                            {{ organization.slug|organization }}
-                        </h1>
-                    </div>
-
-                    <hr>
-                    <div class="club-description">
-                        <p>{{ organization.bio }}</p>
-                    </div>
-                    <div class="tag-section">
-                        {% for tag in organization.tags.all %}
-                        <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
-                        {% endfor %}
-
+    <div class="container">
+        <div class="card-container">
+            <div class="legend">
+                <div class="legend-items">
+                    <div class="green-square"></div>
+                    <span>Open Membership</span>
+                </div>
+                <div class="legend-items">
+                    <div class="yellow-square"> </div>
+                    <span>Accepting Applications</span>
+                </div>
+                <div class="legend-items">
+                    <div class="red-square"> </div>
+                    <span>Closed Applications</span>
                 </div>
             </div>
-            {% empty %}
-                <div class="message">There are no clubs open at this time. Check back in a bit!</div>
-            {% endfor %}
+            <div class="cards">
+                {% for organization in organizations %}
+                    <div class="card {% if  organization.is_open %} green-status {% elif organization.applications_open %} yellow-status {% else %} red-status {% endif %}">
+                        <div class="valign-wrapper">
+                            <div class="club-logo">
+                                {% if organization.icon %}
+                                    <img class="circle" src="{{ organization.icon.url }}?fmt=webp&w=200">
+                                {% else %}
+                                    <img class="circle" src="https://via.placeholder.com/100">
+                                {% endif %}
+                            </div>
+                            <h1 class="title link">
+                                {{ organization.slug|organization }}
+                            </h1>
+                        </div>
+
+                        <hr>
+                        <div class="club-description">
+                            <p>{{ organization.bio }}</p>
+                        </div>
+                        <div class="tag-section">
+                            {% for tag in organization.tags.all %}
+                                <p class="tag" style="background-color:{{tag.color}}">{{tag}}</p>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="message">There are no clubs open at this time. Check back in a bit!</div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

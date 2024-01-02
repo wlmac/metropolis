@@ -5,56 +5,56 @@
 {% load link_tags %}
 
 {% block hd %}
-<link rel="stylesheet" href="{% static 'core/css/profile/detail.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/profile/detail.css' %}">
 {% endblock %}
 
 {% block content %}
-{% get_current_timezone as TIME_ZONE %}
-<div class="white-bg">
-    <div class="header">
-        <img class="circle responsive-img profile-picture" src="{{ profile.email|gravatar_url:100 }}" alt="{{ profile.username }}'s profile picture">
-        <div class="name-info">
-            <h5 class="full-name">{{ profile.get_full_name }}</h5>
-            <h6 class="username">{{ profile.username }}</h6>
-        </div>
-        {% if profile == request.user %}
-        <div class="edit-button"> 
-            <i class="zmdi zmdi-fw-3x zmdi-edit"></i>
-            <a href="{% url 'profile_update' %}">Edit</a>
-        </div>
-        {% endif %}
-    </div>
-    <hr>
-    <div class="body">
-        {% if profile.graduating_year %}
-        <div class="field">
-                <div class="label">Graduating</div><div>{{ profile.graduating_year }}</div>
-        </div>
-        {% endif %}
-        {% if profile.organizations_leading.all %}
-        <div class="field">
-                <div class="label">Executive of</div>
-                {% for organization in profile.organizations_leading.all %}
-                {{ organization }}{% if not forloop.last %},&nbsp{% endif %}
-                {% endfor %}
-        </div>
-        {% endif %}
-        {% if following %}
-        <div class="field">
-                <div class="label">Following</div>
-                {% for organization in following %}
-                {{ organization }}{% if not forloop.last %},&nbsp{% endif %}
-                {% endfor %}
-        </div>
-        {% endif %}
-        <br>
-        <div>
-            {% if profile.bio == "" %}
-            This user has not shared any information.
-            {% else %}
-            {{ profile.bio|linebreaksbr }}
+    {% get_current_timezone as TIME_ZONE %}
+    <div class="white-bg">
+        <div class="header">
+            <img class="circle responsive-img profile-picture" src="{{ profile.email|gravatar_url:100 }}" alt="{{ profile.username }}'s profile picture">
+            <div class="name-info">
+                <h5 class="full-name">{{ profile.get_full_name }}</h5>
+                <h6 class="username">{{ profile.username }}</h6>
+            </div>
+            {% if profile == request.user %}
+                <div class="edit-button">
+                    <i class="zmdi zmdi-fw-3x zmdi-edit"></i>
+                    <a href="{% url 'profile_update' %}">Edit</a>
+                </div>
             {% endif %}
         </div>
+        <hr>
+        <div class="body">
+            {% if profile.graduating_year %}
+                <div class="field">
+                    <div class="label">Graduating</div><div>{{ profile.graduating_year }}</div>
+                </div>
+            {% endif %}
+            {% if profile.organizations_leading.all %}
+                <div class="field">
+                    <div class="label">Executive of</div>
+                    {% for organization in profile.organizations_leading.all %}
+                        {{ organization }}{% if not forloop.last %},&nbsp{% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if following %}
+                <div class="field">
+                    <div class="label">Following</div>
+                    {% for organization in following %}
+                        {{ organization }}{% if not forloop.last %},&nbsp{% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <br>
+            <div>
+                {% if profile.bio == "" %}
+                    This user has not shared any information.
+                {% else %}
+                    {{ profile.bio|linebreaksbr }}
+                {% endif %}
+            </div>
+        </div>
     </div>
-</div>
 {% endblock %}

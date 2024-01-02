@@ -3,32 +3,32 @@
 {% load static %}
 
 {% block deps %}
-<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-<link rel="stylesheet" href="{% static 'core/css/announcement-list.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/announcement-list.css' %}">
 {% endblock %}
 
 {% block main %}
-<div class="container">
-    <div class="headers">
-        <ul>
-	    <a href="/announcements"><li class="header" id="all">ALL</li></a>
-            {% if user.is_authenticated %}
-	    <a href="/announcements?feed=my-feed"><li class="header" id="my-feed">MY FEED</li></a>
-            {% endif %}
-            {% for feed_custom in feeds_custom %}
-	    <a href="/announcements?feed={{feed_custom.0.name|lower}}"><li class="header" id="{{feed_custom.0.name|lower}}">{{feed_custom.0.name|upper}}</li></a>
-            {% endfor %}
-	    <a href="/announcements/tag/{{ tag.id }}"><li class="header active">{{ tag.name|upper }}</li></a>
-        </ul>
-    </div>
-    <div class="card-container">
-	    <div class="cards" id="cards-{{ tag.name }}">
-            {% for announcement in feed_tag %}
-            {% include "./card_snippet.html" %}
-            {% empty %}
-            <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
-            {% endfor %}
+    <div class="container">
+        <div class="headers">
+            <ul>
+                <a href="/announcements"><li class="header" id="all">ALL</li></a>
+                {% if user.is_authenticated %}
+                    <a href="/announcements?feed=my-feed"><li class="header" id="my-feed">MY FEED</li></a>
+                {% endif %}
+                {% for feed_custom in feeds_custom %}
+                    <a href="/announcements?feed={{feed_custom.0.name|lower}}"><li class="header" id="{{feed_custom.0.name|lower}}">{{feed_custom.0.name|upper}}</li></a>
+                {% endfor %}
+                <a href="/announcements/tag/{{ tag.id }}"><li class="header active">{{ tag.name|upper }}</li></a>
+            </ul>
+        </div>
+        <div class="card-container">
+            <div class="cards" id="cards-{{ tag.name }}">
+                {% for announcement in feed_tag %}
+                    {% include "./card_snippet.html" %}
+                {% empty %}
+                    <div class="message">There are no announcements posted at this time. Check back in a bit!</div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
