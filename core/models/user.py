@@ -10,6 +10,7 @@ from .choices import graduating_year_choices, timezone_choices
 from .course import Term
 from .post import Announcement
 from ..utils.fields import SetField
+from ..utils.multiselectfield import MultiSelectField
 
 
 # Create your models here.
@@ -44,9 +45,11 @@ class User(AbstractUser):
         help_text="JSON object with keys as tokens and values as null.",
         # the length is not specified :( https://github.com/expo/expo/issues/1135#issuecomment-399622890
     )
-    staff_bio = models.TextField(blank=True, null=True, help_text="Staff bio for Metropolis staff")
+    staff_bio = models.TextField(
+        blank=True, null=True, help_text="Staff bio for Metropolis staff"
+    )
     staff_position = MultiSelectField(settings.METROPOLIS_POSITIONS)
-    
+
     @property
     def qltrs2(self):
         return set(self.qltrs.split(" "))

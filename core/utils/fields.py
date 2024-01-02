@@ -7,7 +7,6 @@ from django.db import models
 from django.db.models.fields import PositiveIntegerRelDbTypeMixin, SmallIntegerField
 from django.forms import DateInput, DateField
 from django.utils.dateparse import parse_date
-from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _
 
 
