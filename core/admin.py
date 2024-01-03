@@ -621,13 +621,13 @@ class UserAdmin(admin.ModelAdmin):
     actions = [send_test_notif, send_notif_singleday, reset_password]
     action_form = AdminPasswordResetForm  # admin reset password form
     form = UserAdminForm
-    
+
     def get_inline_instances(self, request, obj=None):
         if obj and StaffMember.objects.filter(user=obj).exists():
             # Add StaffMemberInline if the user has a related StaffMember
             return [StaffMemberInline(self.model, self.admin_site)]
         return []
-    
+
     def has_view_permission(self, request, obj=None):
         if obj is None and (
             request.user.organizations_owning.exists()
