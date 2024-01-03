@@ -1,15 +1,14 @@
 from __future__ import annotations
 
+from core.utils.mail import send_mail
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from rest_framework import permissions, serializers
 from rest_framework.exceptions import ValidationError
 
-from core.utils.mail import send_mail
 from .base import BaseProvider
 from ...serializers.custom import (
     TagRelatedField,
@@ -17,20 +16,10 @@ from ...serializers.custom import (
     OrganizationField,
     CommentField,
     LikeField,
+    SupervisorField,
 )
-from ...utils import ModelAbilityField, PrimaryKeyRelatedAbilityField
-from ....models import Announcement, Organization, User
-
-
-class SupervisorField(PrimaryKeyRelatedAbilityField):
-    def get_queryset(self):
-        request = self.context.get("request", None)
-        if not request.user.is_authenticated:
-            return User.objects.none()
-        orgs = Organization.objects.filter(
-            Q(supervisors=request.user) | Q(execs=request.user)
-        )
-        return User.objects.filter(organizations_supervising__in=orgs)
+from ...utils import ModelAbilityField
+from ....models import Announcement, User
 
 
 def exec_validator(value, serializer_field):

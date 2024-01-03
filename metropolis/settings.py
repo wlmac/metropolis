@@ -201,7 +201,7 @@ NAVBAR = {
 
 # post settings
 
-POST_CONTENT_TYPES = ["announcement", "blogpost", "comment", "exhibit"]
+POST_CONTENT_TYPES = ("announcement", "blogpost", "comment", "exhibit")
 
 # Announcements settings
 
