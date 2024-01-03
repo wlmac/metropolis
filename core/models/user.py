@@ -10,8 +10,7 @@ from .choices import graduating_year_choices, timezone_choices
 from .course import Term
 from .post import Announcement
 from ..utils import generate_years
-from ..utils.fields import SetField
-from ..utils.multiselectfield import *
+from ..utils.fields import SetField, ArrayField
 
 
 # Create your models here.
