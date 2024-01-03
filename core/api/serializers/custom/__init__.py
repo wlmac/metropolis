@@ -1,6 +1,7 @@
 import json
 import os
 
+from core.api.utils.github import CI_safe
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import smart_str
@@ -10,6 +11,7 @@ from rest_framework.fields import Field, MultipleChoiceField
 
 from core.api.utils.gravatar import gravatar_url
 from core.models import Tag, User, Organization, Comment
+
 
 class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
     def __init__(self, **kwargs):
@@ -30,9 +32,11 @@ class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
 class ContentTypeField(serializers.ChoiceField):
     def __init__(self, **kwargs):
         self.slug_field = "model"
-        choices = ContentType.objects.filter(
-            app_label="core", model__in=settings.POST_CONTENT_TYPES
-        ).values_list("model", "model")
+        choices = CI_safe(
+            ContentType.objects.filter(
+                app_label="core", model__in=settings.POST_CONTENT_TYPES
+            ).values_list("model", "model")
+        )
         default_error_messages = {
             "does_not_exist": "ContentType with model '{value}' does not exist."
         }
@@ -51,7 +55,6 @@ class ContentTypeField(serializers.ChoiceField):
 
     def to_representation(self, obj):
         return obj.model
-
 
 
 class SingleUserSerializer(serializers.ModelSerializer):
@@ -240,13 +243,9 @@ class TagRelatedField(MultipleChoiceField):
 
     def __init__(self, **kwargs):
         kwargs["required"] = False
-        if os.environ.get("GITHUB_ACTIONS"):
-            choices = []
-        else:
-            choices = Tag.objects.all().values_list("id", "name")
+        kwargs["choices"] = CI_safe(Tag.objects.all().values_list("id", "name"))
         kwargs["help_text"] = "The Tags associated with this object."
-        kwargs["choices"] = choices
-        super().__init__(choices=choices)
+        super().__init__(**kwargs)
 
     def to_representation(self, value):
         """
