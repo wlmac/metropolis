@@ -5,11 +5,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import smart_str
 from rest_framework import serializers
-from rest_framework.fields import Field
+from rest_framework.fields import Field, MultipleChoiceField
 
 from core.api.utils.gravatar import gravatar_url
 from core.models import Tag, User, Organization, Comment
-
 
 class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
     def __init__(self, **kwargs):
@@ -228,7 +227,7 @@ class UserOrganizationField(OrganizationField):
         return Organization.objects.filter(id__in=data)
 
 
-class TagRelatedField(serializers.MultipleChoiceField):
+class TagRelatedField(MultipleChoiceField):
     """
     A custom field to represent a list of Tag objects in the form of {id, name, color},
     but accepts input as a list of tag IDs.
@@ -236,12 +235,13 @@ class TagRelatedField(serializers.MultipleChoiceField):
 
     def __init__(self, **kwargs):
         kwargs["required"] = False
-        if not os.environ.get("GITHUB_ACTIONS", True):
-            choices = Tag.objects.all().values_list("id", "name")
-        else:
+        if os.environ.get("GITHUB_ACTIONS"):
             choices = []
+        else:
+            choices = Tag.objects.all().values_list("id", "name")
         kwargs["help_text"] = "The Tags associated with this object."
-        super().__init__(choices, **kwargs)
+        kwargs["choices"] = choices
+        super().__init__(choices=choices)
 
     def to_representation(self, value):
         """

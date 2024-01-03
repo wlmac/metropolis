@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import datetime
 
 from django.core.exceptions import ValidationError
@@ -5,7 +7,6 @@ from django.db import models
 from django.db.models.fields import PositiveIntegerRelDbTypeMixin, SmallIntegerField
 from django.forms import DateInput, DateField
 from django.utils.dateparse import parse_date
-from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _
 
 
@@ -127,7 +128,7 @@ class SetField(models.TextField):
     def __init__(self, *args, **kwargs):
         super(SetField, self).__init__(*args, **kwargs)
 
-    def to_python(self, value):
+    def to_python(self, value) -> list | tuple | None:
         if not value:
             return
         if isinstance(value, list):

@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "pwa",
     "oauth2_provider",
     "hijack",
-    "hijack.contrib.admin",
+    "hijack.contrib.admin", # show a hijack button on admin.
 ]
 
 MIDDLEWARE = [
@@ -239,6 +239,8 @@ LOOKUP_FIELD_REPLACEMENTS: Dict[str, str] = {
 
 
 # SSO (OAuth) Settings
+CLEAR_EXPIRED_TOKENS_BATCH_INTERVAL = 5
+CLEAR_EXPIRED_TOKENS_BATCH_SIZE = 500
 
 OAUTH2_PROVIDER = dict(
     SCOPES={
@@ -359,7 +361,16 @@ MAPBOX_APIKEY = "change me"
 
 # Metropolis settings
 
-METROPOLIS_STAFFS = {
+METROPOLIS_POSITIONS = (
+    ("PM", "Project Manager"),
+    ("frontend", "Frontend Developer"),
+    ("backend", "Backend Developer"),
+    ("app", "App Developer"),
+    ("graphics", "Graphic Designer"),
+    ("content", "Content Creator"),
+    ("doodle", "Doodle Developer"),
+)
+METROPOLIS_STAFFS = {   # todo remove
     "Project Manager": {},
     "Frontend Developer": {},
     "Backend Developer": {},
@@ -367,8 +378,7 @@ METROPOLIS_STAFFS = {
     "Graphic Designer": {},
     "Content Creator": {},
 }
-
-METROPOLIS_STAFF_BIO = {}
+METROPOLIS_STAFF_BIO = {} # todo remove
 
 # Theme Settings
 
