@@ -18,7 +18,7 @@ documentation = "https://docs.maclyonsden.com"
 
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 asgiref = "3.7.2"
 bleach = "4.1.0"
 certifi = "2023.7.22"
@@ -27,7 +27,7 @@ charset-normalizer = "*"
 cryptography = "41.0.6"
 defusedxml = "0.7.1"
 Deprecated = "1.2.13"
-Django = "4.1.13"
+Django = "5.0.1"
 django-allauth = "0.58.1"
 django-appconf = "1.0.5"
 django-cors-headers = "3.10.0"
@@ -77,7 +77,6 @@ isort = "*"
 #plugins = ["mypy_django_plugin.main"]
 django-hijack = "^3.4.1"
 cachetools = "^5.3.1"
-frozendict = "^2.4.0"
 
 [tool.django-stubs]
 django_settings_module = "metropolis.settings"
