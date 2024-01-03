@@ -7,6 +7,7 @@ from .views.objects import *
 
 router = SimpleRouter()
 
+
 urlpatterns = [
     path("", include(router.urls)),
     path("auth/token", TokenObtainPairView.as_view(), name="api_token_obtain_pair"),
@@ -18,11 +19,6 @@ urlpatterns = [
         name="api_announcement_feed",
     ),
     path("announcements", AnnouncementListAll.as_view(), name="api_all_announcements"),
-    path(
-        "announcements/changes",
-        AnnouncementChangeStream.as_view(),
-        name="api_announcement_changes",
-    ),
     path("organizations", OrganizationList.as_view(), name="api_organization_list"),
     path(
         "organization/<int:pk>",

@@ -244,9 +244,11 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Metropolis",
     "DESCRIPTION": "The API for metropolis and related services",
     "VERSION": API_VERSION,
-    'LICENSE': {"name": "AGPL-3", "url": "https://github.com/wlmac/metropolis/blob/develop/LICENSE"},
-    "SORT_OPERATION_PARAMETERS": False   ,
-    
+    "LICENSE": {
+        "name": "AGPL-3",
+        "url": "https://github.com/wlmac/metropolis/blob/develop/LICENSE",
+    },
+    "SORT_OPERATION_PARAMETERS": False,
     #'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
@@ -587,4 +589,4 @@ THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
 THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
 THEME_CSS = THEMES[CURRENT_THEME]["theme"]
 
-SPECTACULAR_SETTINGS.update(SWAGGER_UI_FAVICON_HREF=STATIC_URL + THEME_LOGO)
+SPECTACULAR_SETTINGS.update(SWAGGER_UI_FAVICON_HREF=THEME_LOGO)

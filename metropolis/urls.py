@@ -17,9 +17,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView, SpectacularRedocView
+from drf_spectacular.views import (
+    SpectacularSwaggerView,
+    SpectacularAPIView,
+    SpectacularRedocView,
+)
 from oauth2_provider.urls import base_urlpatterns, app_name
-from oauth2_provider.views import AuthorizationView, RevokeTokenView, TokenView
+
 
 urlpatterns = [
     path("", include("core.urls")),
@@ -30,11 +34,9 @@ urlpatterns = [
     path("martor/", include("martor.urls")),
     path("select2/", include("django_select2.urls")),
     path("/<path:url>", include("django.contrib.flatpages.urls")),
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-
+    path("api", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]
-
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
