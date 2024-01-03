@@ -45,6 +45,12 @@ class CourseInline(admin.TabularInline):
     extra = 0
 
 
+class StaffMemberInline(admin.StackedInline):
+    model = models.StaffMember
+    can_delete = False
+    verbose_name_plural = "Staff Member Info"
+
+
 class TermAdmin(admin.ModelAdmin):
     inlines = [
         CourseInline,
@@ -597,6 +603,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class UserAdmin(admin.ModelAdmin):
+    inlines = (StaffMemberInline,)
     list_display = ["username", "is_superuser", "is_staff", "is_teacher"]
     list_filter = [
         "is_superuser",
@@ -698,6 +705,7 @@ admin.site.register(models.Exhibit, ExhibitAdmin)
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)
+admin.site.register(models.StaffMember)
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, CustomFlatPageAdmin)

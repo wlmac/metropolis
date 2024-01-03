@@ -17,8 +17,6 @@ for role, users in settings.METROPOLIS_STAFFS.items():
 def staff(request):
     """
     Returns a list of all staff.
-
-    https://noi.nyiyui.ca/k/1063/5041#Get Staff
     """
     return Response(
         [

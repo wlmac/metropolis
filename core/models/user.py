@@ -45,10 +45,6 @@ class User(AbstractUser):
         help_text="JSON object with keys as tokens and values as null.",
         # the length is not specified :( https://github.com/expo/expo/issues/1135#issuecomment-399622890
     )
-    staff_bio = models.TextField(
-        blank=True, null=True, help_text="Staff bio for Metropolis staff"
-    )
-    # staff_position = MultiSelectField(settings.METROPOLIS_POSITIONS)
 
     @property
     def qltrs2(self):
@@ -105,3 +101,28 @@ class User(AbstractUser):
         constraints = [
             models.UniqueConstraint(Lower("username"), name="username-lower-check")
         ]
+
+
+class StaffMember(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name="staff",
+    )
+    bio = models.TextField(blank=False, null=False)
+
+    position = MultiSelectField(settings.METROPOLIS_POSITIONS)
+
+    year_ranges = [
+        f"{year}-{str(year + 1)[-2:]}" for year in range(2021, timezone.now().year + 2) # you need to make a migration every 2nd year
+    ]
+
+    years = MultiSelectField(year_ranges)
+
+    def __str__(self):
+        return f"{self.user.get_full_name()} ({self.user})"
+
+    class Meta:
+        verbose_name = "Staff Member"
+        verbose_name_plural = "Staff Members"
