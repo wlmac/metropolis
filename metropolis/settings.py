@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "pwa",
     "oauth2_provider",
     "hijack",
-    "hijack.contrib.admin", # show a hijack button on admin.
+    "hijack.contrib.admin",  # show a hijack button on admin.
 ]
 
 MIDDLEWARE = [
@@ -370,7 +370,7 @@ METROPOLIS_POSITIONS = (
     ("content", "Content Creator"),
     ("doodle", "Doodle Developer"),
 )
-METROPOLIS_STAFFS = {   # todo remove
+METROPOLIS_STAFFS = {  # todo remove
     "Project Manager": {},
     "Frontend Developer": {},
     "Backend Developer": {},
@@ -378,7 +378,7 @@ METROPOLIS_STAFFS = {   # todo remove
     "Graphic Designer": {},
     "Content Creator": {},
 }
-METROPOLIS_STAFF_BIO = {} # todo remove
+METROPOLIS_STAFF_BIO = {}  # todo remove
 
 # Theme Settings
 

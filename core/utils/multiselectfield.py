@@ -137,7 +137,11 @@ class MultiSelectField(models.CharField):
         self.min_choices = kwargs.pop("min_choices", None)
         self.max_choices = kwargs.pop("max_choices", None)
         super(MultiSelectField, self).__init__(*args, **kwargs)
-        self.validators = [v for v in self.validators if not isinstance(v, validators.MaxLengthValidator)] # remove existing MaxLengthValidator
+        self.validators = [
+            v
+            for v in self.validators
+            if not isinstance(v, validators.MaxLengthValidator)
+        ]  # remove existing MaxLengthValidator
         self.max_length = get_max_length(self.choices, self.max_length)
         if len(self.validators) == 0:
             self.validators.append(MaxValueMultiFieldValidator(self.max_length))
@@ -145,8 +149,6 @@ class MultiSelectField(models.CharField):
             self.validators.append(MinChoicesValidator(self.min_choices))
         if self.max_choices is not None:
             self.validators.append(MaxChoicesValidator(self.max_choices))
-
-
 
     def get_choices_default(self):
         return self.get_choices(include_blank=False)
