@@ -21,7 +21,7 @@ from .forms import (
     TermAdminForm,
     UserAdminForm,
 )
-from .models import Comment
+from .models import Comment, StaffMember
 from .utils.actions import *
 from .utils.filters import (
     OrganizationListFilter,
@@ -603,7 +603,6 @@ class EventAdmin(admin.ModelAdmin):
 
 
 class UserAdmin(admin.ModelAdmin):
-    inlines = (StaffMemberInline,)
     list_display = ["username", "is_superuser", "is_staff", "is_teacher"]
     list_filter = [
         "is_superuser",
@@ -622,7 +621,13 @@ class UserAdmin(admin.ModelAdmin):
     actions = [send_test_notif, send_notif_singleday, reset_password]
     action_form = AdminPasswordResetForm  # admin reset password form
     form = UserAdminForm
-
+    
+    def get_inline_instances(self, request, obj=None):
+        if obj and StaffMember.objects.filter(user=obj).exists():
+            # Add StaffMemberInline if the user has a related StaffMember
+            return [StaffMemberInline(self.model, self.admin_site)]
+        return []
+    
     def has_view_permission(self, request, obj=None):
         if obj is None and (
             request.user.organizations_owning.exists()
