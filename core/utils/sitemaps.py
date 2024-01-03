@@ -5,7 +5,6 @@ from core.models import *
 
 
 class BlogSitemap(Sitemap):
-    changefreq = "never"
     priority = 0.6
 
     def items(self):
@@ -17,7 +16,6 @@ class BlogSitemap(Sitemap):
 
 
 class AnnouncementsSitemap(Sitemap):
-    changefreq = "never"
     priority = 0.7
 
     def items(self):
@@ -30,17 +28,17 @@ class AnnouncementsSitemap(Sitemap):
 
 class ClubsSitemap(Sitemap):
     priority = 0.8
-    changefreq = "yearly"
 
     def items(self):
         return Organization.active()
 
+
 class FlatpagesSitemap(Sitemap):
     priority = 0.8
-    changefreq = "yearly"
 
     def items(self):
         return FlatPage.objects.all()
+
 
 @receiver(post_save, sender=BlogPost)
 @receiver(post_save, sender=Announcement)
