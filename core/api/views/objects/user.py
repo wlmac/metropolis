@@ -79,6 +79,7 @@ class UserSerializer(serializers.ModelSerializer):
             "saved_blogs",
             "saved_announcements",
             "is_teacher",
+            "is_superuser"
         ]
 
 
