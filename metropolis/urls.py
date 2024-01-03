@@ -17,24 +17,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import SpectacularSwaggerView, SpectacularAPIView, SpectacularRedocView
 from oauth2_provider.urls import base_urlpatterns, app_name
 from oauth2_provider.views import AuthorizationView, RevokeTokenView, TokenView
-
-oauth2_endpoint_views = [
-    path("authorize", AuthorizationView.as_view(), name="authorize"),
-    path("token", TokenView.as_view(), name="token"),
-    path("revoke-token", RevokeTokenView.as_view(), name="revoke-token"),
-]
 
 urlpatterns = [
     path("", include("core.urls")),
     path("", include((base_urlpatterns, app_name), namespace=app_name)),
+    path("", include("pwa.urls")),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("martor/", include("martor.urls")),
     path("select2/", include("django_select2.urls")),
-    path("", include("pwa.urls")),
     path("/<path:url>", include("django.contrib.flatpages.urls")),
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
 ]
+
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

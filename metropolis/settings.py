@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "Change me"
 
-
+API_VERSION = "3.2.1"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "oauth2_provider",
     "hijack",
     "hijack.contrib.admin",  # show a hijack button on admin.
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -212,7 +213,6 @@ ANNOUNCEMENTS_CUSTOM_FEEDS = []  # list of PKs of organizations
 ALLOW_COMMENTS: bool = True  # Whether to allow comments on posts
 
 # API settings
-API_VERSION = "3.2.1"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -222,7 +222,9 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 30,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
 GLOBAL_LOOKUPS: Final[List[str]] = [
     "id"
 ]  # lookups allowed for all providers, first value will be the default if not specified
@@ -235,6 +237,18 @@ IGNORED_QUERY_PARAMS: List[str] = [
 LOOKUP_FIELD_REPLACEMENTS: Dict[str, str] = {
     "TextField": "__iexact",
     "CharField": "__iexact",
+}
+
+# Scheme generation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Metropolis",
+    "DESCRIPTION": "The API for metropolis and related services",
+    "VERSION": API_VERSION,
+    'LICENSE': {"name": "AGPL-3", "url": "https://github.com/wlmac/metropolis/blob/develop/LICENSE"},
+    "SORT_OPERATION_PARAMETERS": False   ,
+    
+    #'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }
 
 
@@ -572,3 +586,5 @@ THEME_BANNER = THEMES[CURRENT_THEME]["banner"]
 THEME_BANNER_CSS = THEMES[CURRENT_THEME]["banner_css"]
 THEME_LOGO = THEMES[CURRENT_THEME]["logo"]
 THEME_CSS = THEMES[CURRENT_THEME]["theme"]
+
+SPECTACULAR_SETTINGS.update(SWAGGER_UI_FAVICON_HREF=STATIC_URL + THEME_LOGO)
