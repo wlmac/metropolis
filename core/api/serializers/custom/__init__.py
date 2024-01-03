@@ -4,6 +4,7 @@ import os
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import smart_str
+from django.conf import settings
 from rest_framework import serializers
 from rest_framework.fields import Field, MultipleChoiceField
 
@@ -26,27 +27,31 @@ class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
         }
 
 
-# todo switch all of these back to ChoiceField. refer to git history for the old code.
-class ContentTypeField(serializers.Field):
+class ContentTypeField(serializers.ChoiceField):
     def __init__(self, **kwargs):
+        self.slug_field = "model"
+        choices = ContentType.objects.filter(
+            app_label="core", model__in=settings.POST_CONTENT_TYPES
+        ).values_list("model", "model")
         default_error_messages = {
-            "does_not_exist": "ContentType with model '{value}' does not exist.",
-            "invalid": 'Invalid value. Expected string with the model name e.g. "Comment"',
+            "does_not_exist": "ContentType with model '{value}' does not exist."
         }
-        kwargs["help_text"] = 'The model name e.g. "Comment" or "BlogPost"'
-        super().__init__(**kwargs)
+        super().__init__(choices, **kwargs)
         self.default_error_messages.update(default_error_messages)
 
     def to_internal_value(self, data):
         try:
-            return ContentType.objects.get(app_label="core", model=str(data).casefold())
+            return ContentType.objects.get(app_label="core", model=data)
         except ObjectDoesNotExist:
-            self.fail("does_not_exist", value=smart_str(data))
+            self.fail(
+                "does_not_exist", slug_name=self.slug_field, value=smart_str(data)
+            )
         except (TypeError, ValueError):
             self.fail("invalid")
 
     def to_representation(self, obj):
         return obj.model
+
 
 
 class SingleUserSerializer(serializers.ModelSerializer):

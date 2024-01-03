@@ -78,8 +78,8 @@ class Like(PostInteraction):
         Don't actually delete the object, just set the user to None and save it. This way, we can still keep track of the likes, saves and comments.
         if force is set to True, then it will actually delete the object (used for when you want to delete a comment or unlike/save something)
         """
-        if kwargs.get("force", True):
-            super().delete(using=using, keep_parents=keep_parents)
+        if kwargs.get("force", False):
+            return super().delete(using=using, keep_parents=keep_parents)
         self.user = None
         self.save()
 

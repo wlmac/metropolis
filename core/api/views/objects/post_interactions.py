@@ -177,9 +177,20 @@ class CommentProvider(BaseProvider):
 
 class LikeSerializer(serializers.ModelSerializer):
     content_type = ContentTypeField()
-
+    
+    def update(self, instance, validated_data):
+        raise NotImplementedError("You cannot update a like, if you wish to delete. do so.")
+        
+    def destroy(self, instance: Like, validated_data):
+        if instance.author != self.context["request"].user:
+            raise ValidationError("You cannot unlike another user's like.")
+        instance.delete(force=True)
+    
     def create(self, validated_data) -> Like:
         obj_name = validated_data["content_type"].name.lower().replace(" ", "")
+        if (self.context["request"].user != validated_data["author"]) and not self.context["request"].user.is_superuser:
+            raise ValidationError("You cannot like as another user.")
+        
         if obj_name not in settings.POST_CONTENT_TYPES:  # is the object type valid?
             raise ValidationError(
                 f"Invalid object type: {obj_name}, valid types are: {settings.POST_CONTENT_TYPES}"
@@ -191,15 +202,17 @@ class LikeSerializer(serializers.ModelSerializer):
             .exists()
         ):  # does the object exist?
             raise ValidationError(f"The specified {obj_name} does not exist.")
+        
         if Like.objects.filter(  # has the user already liked this object?
             content_type=validated_data["content_type"],
             object_id=validated_data["object_id"],
-            author=self.context["author"],
+            author=validated_data['author'],       # author is current user?
         ).exists():
             raise ValidationError(f"User has already liked this {obj_name}")
-        like = Like(**validated_data)
-        like.save()
-        return like
+        else:
+            like = Like(**validated_data)
+            like.save()
+            return like
 
     class Meta:
         model = Like
