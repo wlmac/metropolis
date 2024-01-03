@@ -94,35 +94,31 @@
                 </p>
                 <h1 class="title">Members</h1>
                 <hr>
-                {% for position, users in members.items %}
+                {% for staff_member in members.items %}
                     <div class="member-list">
-                        {% if position == "Alumnus" %}
+                        {% if staff_member.is_alumni %}
                             <h2 class="subtitle">Alumn{{ users|pluralize:"us,i" }}</h2>
                         {% else %}
                             <h2 class="subtitle">{{position}}{{ users|pluralize }}</h2>
                         {% endif %}
-                        {% for user in users %}
-                            <a href="{{user.username|user_url}}">
+                            <a href="{{ staff_member.user.username|user_url}}">
                                 <div class="member">
                                     <div class="member-name">
                                         <div class="member-image">
-                                            <img class="circle" src="{{user.email|gravatar_url:100}}">
+                                            <img class="circle" src="{{ staff_member.user.gravatar_url}}">
                                         </div>
                                         <div class="member-text">
-                                            {{user.get_full_name}}
+                                            {{user.first_name}} {{user.last_name}}
                                         </div>
                                     </div>
-                                    {% if user.staff %}
                                         <hr>
                                         <div class="member-bio">
-                                            {{user.staff.bio}}
+                                            {{ staff_member.bio}}
                                         </div>
-                                    {% endif %}
                                 </div>
                             </a>
                         {% empty %}
                             No members under this position.
-                        {% endfor %}
                     </div>
                 {% endfor %}
             </div>

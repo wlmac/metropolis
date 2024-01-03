@@ -1,7 +1,3 @@
-from collections import defaultdict
-from typing import Literal
-
-from django.conf import settings
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.decorators import api_view
@@ -12,19 +8,15 @@ __all__ = ["staff"]
 from core.api.serializers.custom import SingleUserField
 from core.models import StaffMember
 
-staff_roles = defaultdict(list)
-for role, users in settings.METROPOLIS_STAFFS.items():
-    for user in users:
-        staff_roles[user].append(role)
-
-
 class StaffSerializer(serializers.ModelSerializer):
     user = SingleUserField()
     bio = serializers.CharField()
+    is_alumni = serializers.ReadOnlyField()
+    
     
     class Meta:
         model = StaffMember
-        fields = ["user", "bio", "positions", "years"]
+        fields = ["user", "bio", "positions", "positions_leading", "years", "is_alumni"]
 
 @api_view(["GET"])
 def staff(request, year=None):

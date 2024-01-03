@@ -113,12 +113,34 @@ class StaffMember(models.Model):
     bio = models.TextField(blank=False, null=False)
 
     positions = ArrayField(base_field=CharField(choices=settings.METROPOLIS_POSITIONS))
+    positions_leading = ArrayField(
+        base_field=CharField(choices=settings.METROPOLIS_POSITIONS)
+    )
 
     years = ArrayField(base_field=CharField(choices=generate_years()))
 
     def __str__(self):
         return f"{self.user.get_full_name()} ({self.user})"
-
+    
+    @property
+    def is_alumni(self):
+        current_year = timezone.now().year
+        current_month = timezone.now().month
+        
+        # If the current month is between January and July, use the previous year
+        if 1 <= current_month <= 7:
+            current_year -= 1
+        
+        current_year_range = f"{current_year}-{str(current_year + 1)[-2:]}"
+        return current_year_range not in self.years
+    
     class Meta:
         verbose_name = "Staff Member"
         verbose_name_plural = "Staff Members"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user"],
+                name="unique_staff_member",
+            )
+        ]
+        

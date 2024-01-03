@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.conf import settings
 from django.db.models import Q
 from django.http import HttpResponse
@@ -6,24 +8,27 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 from django_ical.views import ICalFeed
+from rest_framework.response import Response
 
 from core.utils import generate_slam as gs
 from core.utils import get_week_schedule_info
 from . import mixins
 from .. import models
+from ..api.views.staff import StaffSerializer
+from ..models import StaffMember
 
 
 class Index(TemplateView, mixins.TitleMixin):
     template_name = "core/index.html"
     title = "Home"
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        
         context["announcements"] = models.Announcement.get_all(user=self.request.user)[
-            :3
-        ]
-
+                                   :3
+                                   ]
+        
         datetime_now = timezone.localtime()
         events1 = (
             lambda: models.Event.get_events(user=self.request.user)
@@ -41,9 +46,9 @@ class Index(TemplateView, mixins.TitleMixin):
             Q(schedule_format="default"),
         )[: 3 - len(events)]
         context["events"] = events
-
+        
         context["blogpost"] = models.BlogPost.public().first()
-
+        
         context["banner_data"] = get_week_schedule_info(self.request.user)
         return context
 
@@ -57,7 +62,7 @@ class CalendarFeed(ICalFeed, View):
     product_id = "-//maclyonsden.com//calendar//EN"
     timezone = "UTC"
     file_name = "metropolis_school-wide.ics"
-
+    
     def items(self):
         now = timezone.now()
         padding = settings.ICAL_PADDING
@@ -65,50 +70,50 @@ class CalendarFeed(ICalFeed, View):
             models.Event.get_events(user=None)
             .filter(
                 end_date__gte=now
-                - padding,  # todo add ?start= and ?end= to url via self.request.query_params
+                              - padding,  # todo add ?start= and ?end= to url via self.request.query_params
                 start_date__lte=now + padding,
             )
             .order_by("-start_date")
         )
-
+    
     def item_title(self, item):
         return item.name
-
+    
     def item_description(self, item):
         return item.description
-
+    
     def _is_hms(self, dt, hour, minute, second):
         return dt.hour == hour and dt.minute == minute and dt.second == second
-
+    
     def item_rrule(self, item: models.Event):
         if hasattr(item, "reoccurrences") and item.reoccurrences.rule:
             return item.reoccurrences.rule
         return None
-
+    
     def item_start_datetime(self, item):
         return (
             item.start_date
             if self._is_hms(item.start_date, 0, 0, 0)
             else item.start_date.date()
         )
-
+    
     def item_end_datetime(self, item):
         return (
             item.end_date
             if self._is_hms(item.end_date, 23, 59, 0)
             else item.end_date.date()
         )
-
+    
     def item_link(self, item):
         return reverse("calendar") + f"?pk={item.pk}"  # NOTE: workaround for UID
-
+    
     def item_categories(self, item):
         return (
-            [tag.name for tag in item.tags.all()]
-            + (["public"] if item.is_public else [])
-            + (["instructional"] if item.is_instructional else [])
+                [tag.name for tag in item.tags.all()]
+                + (["public"] if item.is_public else [])
+                + (["instructional"] if item.is_instructional else [])
         )
-
+    
     def item_author_name(self, item):
         return item.organization.name
 
@@ -116,7 +121,7 @@ class CalendarFeed(ICalFeed, View):
 class MapView(TemplateView, mixins.TitleMixin):
     template_name = "core/map/map.html"
     title = "Map"
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["mapbox_apikey"] = {"apikey": settings.MAPBOX_APIKEY}
@@ -126,18 +131,28 @@ class MapView(TemplateView, mixins.TitleMixin):
 class AboutView(TemplateView, mixins.TitleMixin):
     template_name = "core/about/about.html"
     title = "About"
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        members_config = settings.METROPOLIS_STAFFS
-        context["members"] = {}
-        members_pk_set = set()
-        for position in members_config:
-            context["members"][position] = models.User.objects.filter(
-                pk__in=members_config[position]
-            ).order_by("last_name", "first_name")
-            members_pk_set.update(members_config[position])
-        context["member_count"] = len(members_pk_set)
+        members_data = StaffSerializer(StaffMember.objects.all(), many=True).data
+        
+        # Group members based on positions and alumni status
+        grouped_members = sorteddict(Alumni=[])
+        for member in members_data:
+            positions = member.get("positions", [])
+            if member["is_alumni"]:
+                grouped_members["Alumni"].append(member)
+                continue
+            
+            for position in positions:
+                if position not in grouped_members:
+                    grouped_members[position] = []
+                grouped_members[position].append(member)
+            
+        context["members"] = dict(grouped_members)
+        context["member_count"] = len(members_data)
+        import json
+        print(json.dumps(context["members"], indent=4))
         return context
 
 
@@ -153,3 +168,9 @@ class Justinian(View):
             + gs.justinian_slam(),
             status=402,
         )
+
+
+class Json(View):
+    @staticmethod
+    def get(request):
+        return Response({"message": "hi", "name": "NOT JSON DERULO"}, status=418, )
