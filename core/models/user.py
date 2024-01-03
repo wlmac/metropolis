@@ -2,15 +2,16 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, CharField
 from django.db.models.functions import Lower
 from django.utils import timezone
 
 from .choices import graduating_year_choices, timezone_choices
 from .course import Term
 from .post import Announcement
+from ..utils import generate_years
 from ..utils.fields import SetField
-from ..utils.multiselectfield import MultiSelectField
+from ..utils.multiselectfield import *
 
 
 # Create your models here.
@@ -112,13 +113,9 @@ class StaffMember(models.Model):
     )
     bio = models.TextField(blank=False, null=False)
 
-    position = MultiSelectField(settings.METROPOLIS_POSITIONS)
+    positions = ArrayField(base_field=CharField(choices=settings.METROPOLIS_POSITIONS))
 
-    year_ranges = [
-        f"{year}-{str(year + 1)[-2:]}" for year in range(2021, timezone.now().year + 2) # you need to make a migration every 2nd year
-    ]
-
-    years = MultiSelectField(year_ranges)
+    years = ArrayField(base_field=CharField(choices=generate_years()))
 
     def __str__(self):
         return f"{self.user.get_full_name()} ({self.user})"

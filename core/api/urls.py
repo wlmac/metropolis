@@ -51,6 +51,7 @@ urlpatterns = [
         TermScheduleWeek.as_view(),
         name="api_term_schedule_week",
     ),
+    path("v3/staff/<str:year>", staff, name="api_staff3_year"),
     path("v3/staff", staff, name="api_staff3"),
     path("v3/feeds", feeds, name="api_feeds3"),
     path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),
