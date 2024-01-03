@@ -5,7 +5,7 @@ from core.models import *
 
 
 class BlogSitemap(Sitemap):
-    priority = 0.6
+    priority = 0.7
 
     def items(self):
         return BlogPost.public()
@@ -16,7 +16,7 @@ class BlogSitemap(Sitemap):
 
 
 class AnnouncementsSitemap(Sitemap):
-    priority = 0.7
+    priority = 0.5
 
     def items(self):
         return Announcement.get_approved()
@@ -27,14 +27,14 @@ class AnnouncementsSitemap(Sitemap):
 
 
 class ClubsSitemap(Sitemap):
-    priority = 0.8
+    priority = 0.7
 
     def items(self):
         return Organization.active()
 
 
 class FlatpagesSitemap(Sitemap):
-    priority = 0.8
+    priority = 1
 
     def items(self):
         return FlatPage.objects.all()
