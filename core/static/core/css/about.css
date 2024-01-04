@@ -112,6 +112,15 @@
     color: var(--dark-grey);
     font-size: 1.2rem;
 }
+.member-years {
+    font-size: 0.7rem;
+    margin-left: 0.9rem;
+    background-color: var(--link-colour);
+    color: white;
+    padding: 0.3rem;
+    border-radius: 0.3em;
+    vertical-align: middle;
+}
 .member-bio {
     color: var(--dark-grey);
     font-size: 1rem;
@@ -128,9 +137,9 @@
     margin-bottom: 40px;
     display: -webkit-box;
     display: -ms-flexbox;
-    display: flex; 
-    -webkit-box-pack: start; 
-        -ms-flex-pack: start; 
+    display: flex;
+    -webkit-box-pack: start;
+        -ms-flex-pack: start;
             justify-content: flex-start;
     -webkit-box-align: center;
         -ms-flex-align: center;

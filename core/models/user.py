@@ -111,10 +111,10 @@ class StaffMember(models.Model):
         related_name="staff",
     )
     bio = models.TextField(blank=False, null=False)
-
-    positions = ArrayField(base_field=CharField(choices=settings.METROPOLIS_POSITIONS))
+    _positions_options = tuple(settings.METROPOLIS_POSITIONS.items())
+    positions = ArrayField(base_field=CharField(choices=_positions_options))
     positions_leading = ArrayField(
-        base_field=CharField(choices=settings.METROPOLIS_POSITIONS)
+        base_field=CharField(choices=_positions_options, blank=True, null=True),
     )
 
     years = ArrayField(base_field=CharField(choices=generate_years()))

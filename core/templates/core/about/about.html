@@ -94,32 +94,35 @@
                 </p>
                 <h1 class="title">Members</h1>
                 <hr>
-                {% for staff_member in members.items %}
+                {% for name, members in members.items %}
                     <div class="member-list">
-                        {% if staff_member.is_alumni %}
-                            <h2 class="subtitle">Alumn{{ users|pluralize:"us,i" }}</h2>
-                        {% else %}
-                            <h2 class="subtitle">{{position}}{{ users|pluralize }}</h2>
-                        {% endif %}
-                            <a href="{{ staff_member.user.username|user_url}}">
+                            <h2 class="subtitle">{{name}}{{ members.keys|pluralize }}</h2>
+                        {%  for member in members %}
+                            <a href="{{ member.user.username|user_url}}">
                                 <div class="member">
                                     <div class="member-name">
                                         <div class="member-image">
-                                            <img class="circle" src="{{ staff_member.user.gravatar_url}}">
+                                            <img class="circle" src="{{ member.user.gravatar_url}}">
                                         </div>
                                         <div class="member-text">
-                                            {{user.first_name}} {{user.last_name}}
+                                            {{member.user.first_name}} {{member.user.last_name}}
+                                            {% if member.years %}
+                                            <span class="member-years">
+                                                {{ member.years|join:", " }}
+                                            </span>
+                                            {% endif %}
                                         </div>
                                     </div>
                                         <hr>
                                         <div class="member-bio">
-                                            {{ staff_member.bio}}
+                                            {{ member.bio}}
                                         </div>
                                 </div>
                             </a>
                         {% empty %}
                             No members under this position.
                     </div>
+                            {% endfor %}
                 {% endfor %}
             </div>
             <div class="content" id="content-contact">

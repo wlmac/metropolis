@@ -1,4 +1,4 @@
-from collections import defaultdict
+from typing import Dict, List, Union
 
 from django.conf import settings
 from django.db.models import Q
@@ -128,29 +128,36 @@ class MapView(TemplateView, mixins.TitleMixin):
         return context
 
 
+UserType = Dict[str, Union[int, str, bool, List[str]]]
+PositionType = Dict[str, Union[UserType, str, List[str], bool]] # str being None
+
+TeamData = Dict[
+    str,  # Team role (e.g., "Project Manager", "Frontend Developer", etc.)
+    List[PositionType]  # List of positions and associated details
+]
 class AboutView(TemplateView, mixins.TitleMixin):
     template_name = "core/about/about.html"
     title = "About"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> Dict[int, TeamData]:
         context = super().get_context_data(**kwargs)
         members_data = StaffSerializer(StaffMember.objects.all(), many=True).data
 
         # Group members based on positions and alumni status
-        grouped_members = sorteddict(Alumni=[])
+        grouped_members: TeamData = {name: [] for name in settings.METROPOLIS_POSITIONS.values()}
+        grouped_members["Alumni"] = []
         for member in members_data:
-            positions = member.get("positions", [])
-            if member["is_alumni"]:
+            positions = member.get("positions", None)  # default to alumni if no positions
+            if member["is_alumni"] or positions is None:
                 grouped_members["Alumni"].append(member)
                 continue
 
             for position in positions:
-                if position not in grouped_members:
-                    grouped_members[position] = []
-                grouped_members[position].append(member)
+                key = settings.METROPOLIS_POSITIONS[position]
+                grouped_members[key].append(member)
 
-        context["members"] = dict(grouped_members)
-        context["member_count"] = len(members_data)
+        context["members"]: TeamData = dict(grouped_members)
+        context["member_count"]: int = len(members_data)
         import json
 
         print(json.dumps(context["members"], indent=4))
