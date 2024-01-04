@@ -157,9 +157,9 @@ class AboutView(TemplateView, mixins.TitleMixin):
             if member["is_alumni"] or positions is None:
                 grouped_members["Alumni"].append(member)
                 continue
-            
+
             [grouped_members[position].append(member) for position in positions]
-        
+
         context["members"]: TeamData = dict(grouped_members)
         context["member_count"]: int = len(members_data)
         return context

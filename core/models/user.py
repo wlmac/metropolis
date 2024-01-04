@@ -108,17 +108,37 @@ class StaffMember(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         primary_key=True,
-        related_name="staff")
-    bio = models.TextField(blank=False, null=False, help_text="The users staff bio (displayed on the staff page).")
-    positions = ArrayField(base_field=CharField(choices=settings.METROPOLIS_POSITIONS), help_text="The positions the user had/does hold.")
+        related_name="staff",
+    )
+    bio = models.TextField(
+        blank=False,
+        null=False,
+        help_text="The users staff bio (displayed on the staff page).",
+    )
+    positions = ArrayField(
+        base_field=CharField(choices=settings.METROPOLIS_POSITIONS),
+        help_text="The positions the user had/does hold.",
+    )
     positions_leading = ArrayField(
         blank=True,
         null=True,
-        base_field=CharField(choices=[(key, val) for key, val in settings.METROPOLIS_POSITIONS if key != 'Project Manager']),
+        base_field=CharField(
+            choices=[
+                (key, val)
+                for key, val in settings.METROPOLIS_POSITIONS
+                if key != "Project Manager"
+            ]
+        ),
     )
 
-    years = ArrayField(base_field=CharField(choices=calculate_years(fmt="generate")), help_text="The years the user was a staff member. Used to determine if the user is an alumni.")
-    is_active = models.BooleanField(default=True, help_text="If the user is no longer a member of metro for whatever reason. Toggle this instead of deleting.") # if the user got kicked or smth
+    years = ArrayField(
+        base_field=CharField(choices=calculate_years(fmt="generate")),
+        help_text="The years the user was a staff member. Used to determine if the user is an alumni.",
+    )
+    is_active = models.BooleanField(
+        default=True,
+        help_text="If the user is no longer a member of metro for whatever reason. Toggle this instead of deleting.",
+    )  # if the user got kicked or smth
 
     def __str__(self):
         return f"{self.user.get_full_name()} ({self.user})"
