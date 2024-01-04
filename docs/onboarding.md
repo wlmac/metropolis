@@ -25,7 +25,7 @@ If you do not want to use Nix:
 (Note: only tested on Unix-like platforms)
 ```
 python -m pip install poetry
-poetry install
+poetry install --without deploy
 make # can remove for windows 
 poetry run python ./manage.py migrate
 poetry run python ./manage.py runserver
