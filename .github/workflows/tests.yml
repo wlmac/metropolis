@@ -22,6 +22,6 @@ jobs:
         make metropolis/local_rsa_privkey.pem
         make metropolis/local_settings.py
     - name: Migrations
-      run: .venv/bin/python -Wa manage.py migrate
+      run: .venv/bin/python -Wa manage.py migrate --parallel
     - name: Django Tests
       run: .venv/bin/python -Wa manage.py test

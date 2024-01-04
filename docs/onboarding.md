@@ -33,7 +33,7 @@ poetry run python ./manage.py runserver
 
 ### Errors
 ##### Any issue with psycopg2
-- `pip install psycopg2-binary` and try again (pip3 if you have both python 2 and 3 installed)
+- `pip install psycopg2-binary` and try again (pip or pip3 not poetry add)
 #### Windows
 ###### poetry ModuleNotFoundError: No module named 'charset_normalizer'
 reinstall poetry and run poetry install in an elevated (admin) terminal 

@@ -39,7 +39,6 @@
         black
         isort
         mypy
-        nodejs
         act
       ];
     });
