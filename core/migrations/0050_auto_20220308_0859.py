@@ -4,30 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0049_alter_user_timezone'),
+        ("core", "0049_alter_user_timezone"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='announcement',
-            name='body',
+            model_name="announcement",
+            name="body",
             field=models.TextField(),
         ),
         migrations.AlterField(
-            model_name='announcement',
-            name='title',
+            model_name="announcement",
+            name="title",
             field=models.CharField(max_length=64),
         ),
         migrations.AlterField(
-            model_name='blogpost',
-            name='body',
+            model_name="blogpost",
+            name="body",
             field=models.TextField(),
         ),
         migrations.AlterField(
-            model_name='blogpost',
-            name='title',
+            model_name="blogpost",
+            name="title",
             field=models.CharField(max_length=64),
         ),
     ]

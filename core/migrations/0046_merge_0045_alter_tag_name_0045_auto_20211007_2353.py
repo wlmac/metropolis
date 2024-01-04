@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0045_alter_tag_name"),
         ("core", "0045_auto_20211007_2353"),

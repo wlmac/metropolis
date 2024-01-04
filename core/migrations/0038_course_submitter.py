@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0037_merge_0036_auto_20210913_0226_0036_user_is_teacher"),
     ]

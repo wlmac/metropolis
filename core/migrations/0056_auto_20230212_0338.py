@@ -4,20 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('core', '0055_raffle_log'),
+        ("core", "0055_raffle_log"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='blogpost',
-            name='featured_image_description',
-            field=models.CharField(blank=True, default='This image has no description.', help_text='Alt text for the featured image I.E. The description of the image', max_length=140),
+            model_name="blogpost",
+            name="featured_image_description",
+            field=models.CharField(
+                blank=True,
+                default="This image has no description.",
+                help_text="Alt text for the featured image I.E. The description of the image",
+                max_length=140,
+            ),
         ),
         migrations.AddField(
-            model_name='blogpost',
-            name='views',
+            model_name="blogpost",
+            name="views",
             field=models.PositiveIntegerField(default=0),
         ),
     ]

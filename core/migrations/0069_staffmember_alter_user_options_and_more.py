@@ -10,14 +10,16 @@ from django.db import migrations, models, IntegrityError
 def populate_bios(apps, schema_editor):
     StaffMember = apps.get_model("core", "StaffMember")
     User = apps.get_model("core", "User")
-    
+
     for position, user_ids in settings.METROPOLIS_STAFFS.items():
         for user_id in user_ids:
             try:
                 user = User.objects.get(pk=user_id)
                 bio = settings.METROPOLIS_STAFF_BIO.get(user_id, "")
-                staff_member, created = StaffMember.objects.get_or_create(user=user, bio=bio)
-                staff_member.positions = (list(staff_member.positions) + [position])
+                staff_member, created = StaffMember.objects.get_or_create(
+                    user=user, bio=bio
+                )
+                staff_member.positions = list(staff_member.positions) + [position]
                 staff_member.save()
             except User.DoesNotExist:
                 print(f"User {user_id} does not exist")
@@ -53,7 +55,7 @@ class Migration(migrations.Migration):
                         to=settings.AUTH_USER_MODEL,
                     ),
                 ),
-                ("bio", models.TextField()),
+                ("bio", models.TextField(help_text="The user's staff bio.")),
                 (
                     "positions",
                     core.utils.fields.ArrayField(
@@ -74,8 +76,11 @@ class Migration(migrations.Migration):
                 (
                     "positions_leading",
                     core.utils.fields.ArrayField(
+                        blank=True,
+                        null=True,
                         base_field=models.CharField(
                             blank=True,
+                            help_text="Branch lead positions (if any)",
                             choices=[
                                 ("PM", "Project Manager"),
                                 ("frontend", "Frontend Developer"),
