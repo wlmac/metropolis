@@ -8,9 +8,12 @@ class Command(BaseCommand):
 	help = "Populate staff members based on METROPOLIS_STAFFS and bio settings."
 	
 	def handle(self, *args, **options):
-		self.stdout.write(StaffMember.objects.all().count())
+		self.stdout.write(str(StaffMember.objects.all().count()))
 		try:
 			for position, user_ids in settings.METROPOLIS_STAFFS.items():
+				if position == "Alumnus" or not position:
+					position = "Backend Developer"  # set it to backend TEMP
+				
 				for user_id in user_ids:
 					try:
 						user = User.objects.get(pk=user_id)
@@ -23,6 +26,7 @@ class Command(BaseCommand):
 							print(f"Bio for user {user.username}  ID:{user.id} is empty")
 						staff_member, created = StaffMember.objects.get_or_create(user=user, bio=bio)
 						staff_member.positions = list(staff_member.positions) + [position]
+						
 						staff_member.save()
 					except IntegrityError as e:
 						self.stdout.write(
