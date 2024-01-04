@@ -51,7 +51,10 @@ class MetropolisSignupForm(SignupForm):
 
     def clean_email(self):
         email = super(MetropolisSignupForm, self).clean_email()
-        if not (email.endswith("@student.tdsb.on.ca") or email.endswith("@tdsb.on.ca")):
+        if not (
+            email.endswith(settings.STUDENT_EMAIL_SUFFIX)
+            or email.endswith(settings.TEACHER_EMAIL_SUFFIX)
+        ):
             raise forms.ValidationError("A TDSB email must be used.")
         return email
 
