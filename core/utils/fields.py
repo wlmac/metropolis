@@ -185,7 +185,8 @@ class ArrayField(DjangoArrayField):
         return super(ArrayField, self).formfield(**defaults)
 
 
-if connection.features.is_sqlite:
+if "sqlite" in settings.DATABASES["default"]["ENGINE"]:
+
     class JSONField(Field):
         def db_type(self, connection):
             return "text"
