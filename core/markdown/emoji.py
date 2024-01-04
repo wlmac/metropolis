@@ -29,7 +29,7 @@ class EmojiPattern(Pattern):
 class EmojiExtension(Extension):
     def extendMarkdown(self, md):
         """Setup `emoji_img` with EmojiPattern"""
-        md.inlinePatterns.register(EmojiPattern(EMOJI_RE, md), "emoji_img", 123*2)
+        md.inlinePatterns.register(EmojiPattern(EMOJI_RE, md), "emoji_img", 123 * 2)
 
 
 def makeExtension(*args, **kwargs):
