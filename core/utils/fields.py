@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from datetime import datetime
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import models
-from django.db.models.fields import PositiveIntegerRelDbTypeMixin, SmallIntegerField
+from django.db import models, connection
+from django.db.models.fields import PositiveIntegerRelDbTypeMixin, SmallIntegerField, CharField
 from django.forms import DateInput, DateField
 from django.utils import timezone
 from django.utils.dateparse import parse_date
@@ -160,7 +161,6 @@ class SetField(models.TextField):
 import json
 
 from django import forms
-from django.conf import settings
 from django.db.models import JSONField as DjangoJSONField
 from django.contrib.postgres.fields import (
     ArrayField as DjangoArrayField,
@@ -178,15 +178,14 @@ class ArrayField(DjangoArrayField):
             "form_class": forms.MultipleChoiceField,
             "choices": self.base_field.choices,
         }
+        kwargs.pop("base_field", None)
         defaults.update(kwargs)
-        # Skip our parent's formfield implementation completely as we don't
-        # care for it.
-        # pylint:disable=bad-super-call
+        
+        # Update the 'base_field' attribute with the instance of the base field
         return super(ArrayField, self).formfield(**defaults)
 
 
-if "sqlite" in settings.DATABASES["default"]["ENGINE"]:
-
+if connection.features.is_sqlite:
     class JSONField(Field):
         def db_type(self, connection):
             return "text"
