@@ -11,6 +11,7 @@ class Command(BaseCommand):
     help = "Populate staff members based on METROPOLIS_STAFFS and bio settings."
 
     def handle(self, *args, **options):
+        self.stdout.write(self.style.INFO(StaffMember.objects.all().count()))
         try:
             for position, user_ids in settings.METROPOLIS_STAFFS.items():
                 for user_id in user_ids:
@@ -34,10 +35,10 @@ class Command(BaseCommand):
                             position
                         ]
                         staff_member.save()
-                    except IntegrityError:
+                    except IntegrityError as e:
                         self.stdout.write(
                             self.style.WARNING(
-                                f"StaffMember for user {user_id} already exists"
+                                f"StaffMember for user {user_id} already exists: " + str(e)
                             )
                         )
 
