@@ -114,6 +114,8 @@ class StaffMember(models.Model):
     _positions_options = tuple(settings.METROPOLIS_POSITIONS.items())
     positions = ArrayField(base_field=CharField(choices=_positions_options))
     positions_leading = ArrayField(
+        blank=True,
+        null=True,
         base_field=CharField(choices=_positions_options, blank=True, null=True),
     )
 
