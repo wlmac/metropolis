@@ -4,12 +4,20 @@ from datetime import datetime
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import models, connection
-from django.db.models.fields import PositiveIntegerRelDbTypeMixin, SmallIntegerField, CharField
+from django.db import models
+from django.db.models.fields import PositiveIntegerRelDbTypeMixin, SmallIntegerField
 from django.forms import DateInput, DateField
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
+import json
+
+from django import forms
+from django.db.models import JSONField as DjangoJSONField
+from django.contrib.postgres.fields import (
+    ArrayField as DjangoArrayField,
+)
+from django.db.models import Field
 
 
 class MonthDayFormField(DateField):
@@ -158,18 +166,15 @@ class SetField(models.TextField):
         return getattr(obj, self.attname)
 
 
-import json
-
-from django import forms
-from django.db.models import JSONField as DjangoJSONField
-from django.contrib.postgres.fields import (
-    ArrayField as DjangoArrayField,
-)
-from django.db.models import Field
-
-
 class JSONField(DjangoJSONField):
     pass
+
+
+class _TypedMultipleChoiceField(forms.TypedMultipleChoiceField):
+    def __init__(self, *args, **kwargs):
+        kwargs.pop("base_field", None)
+        kwargs.pop("max_length", None)
+        super().__init__(*args, **kwargs)
 
 
 class ArrayField(DjangoArrayField):
@@ -178,10 +183,7 @@ class ArrayField(DjangoArrayField):
             "form_class": forms.MultipleChoiceField,
             "choices": self.base_field.choices,
         }
-        kwargs.pop("base_field", None)
         defaults.update(kwargs)
-        
-        # Update the 'base_field' attribute with the instance of the base field
         return super(ArrayField, self).formfield(**defaults)
 
 
@@ -240,3 +242,29 @@ if "sqlite" in settings.DATABASES["default"]["ENGINE"]:
             # care for it.
             # pylint:disable=bad-super-call
             return super().formfield(**defaults)
+
+
+class ChoiceArrayField(ArrayField):  # credit goes to https://github.com/anyidea
+    """
+    A field that allows us to store an array of choices.
+
+    Uses Django 4.2's postgres ArrayField
+    and a TypeMultipleChoiceField for its formfield.
+
+    Usage:
+
+            choices = ChoiceArrayField(
+                    models.CharField(max_length=..., choices=(...,)), blank=[...], default=[...]
+            )
+    """
+
+    def formfield(self, **kwargs):
+        defaults = {
+            "form_class": _TypedMultipleChoiceField,
+            "choices": self.base_field.choices,
+            "coerce": self.base_field.to_python,
+        }
+        defaults.update(kwargs)
+        # Skip our parent's formfield implementation completely as we don't care for it.
+        # pylint:disable=bad-super-call
+        return super().formfield(**defaults)

@@ -10,7 +10,7 @@ from .choices import graduating_year_choices, timezone_choices
 from .course import Term
 from .post import Announcement
 from ..utils import calculate_years
-from ..utils.fields import SetField, ArrayField
+from ..utils.fields import SetField, ChoiceArrayField
 
 
 # Create your models here.
@@ -115,11 +115,11 @@ class StaffMember(models.Model):
         null=False,
         help_text="The users staff bio (displayed on the staff page).",
     )
-    positions = ArrayField(
+    positions = ChoiceArrayField(
         base_field=CharField(choices=settings.METROPOLIS_POSITIONS),
         help_text="The positions the user had/does hold.",
     )
-    positions_leading = ArrayField(
+    positions_leading = ChoiceArrayField(
         blank=True,
         null=True,
         base_field=CharField(
@@ -131,7 +131,7 @@ class StaffMember(models.Model):
         ),
     )
 
-    years = ArrayField(
+    years = ChoiceArrayField(
         base_field=CharField(choices=calculate_years(fmt="generate")),
         help_text="The years the user was a staff member. Used to determine if the user is an alumni.",
     )
@@ -150,9 +150,3 @@ class StaffMember(models.Model):
     class Meta:
         verbose_name = "Staff Member"
         verbose_name_plural = "Staff Members"
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user"],
-                name="unique_staff_member",
-            )
-        ]

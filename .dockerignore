@@ -4,7 +4,12 @@ db.sqlite3
 _build
 /.direnv
 node_modules/
-/test-results/
-/playwright-report/
-/playwright/.cache/
 celerybeat-schedule
+Dockerfile
+docker-compose.yml
+LICENSE
+flake.nix
+flake.lock
+_config.yml
+README.md
+
