@@ -1,9 +1,8 @@
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q, CharField
-from django.db.models.functions import Lower
 from django.utils import timezone
 
 from .choices import graduating_year_choices, timezone_choices
@@ -16,11 +15,21 @@ from ..utils.fields import SetField, ChoiceArrayField
 # Create your models here.
 
 
+class CaseInsensitiveUserManager(UserManager):
+    def get_by_natural_key(self, username):
+        """
+        By default, Django does a case-sensitive check on usernames. This is Wrong™.
+        Overriding this method fixes it.
+        """
+        return self.get(**{self.model.USERNAME_FIELD + "__iexact": username})
+
+
 def get_default_user_timezone():
     return settings.DEFAULT_TIMEZONE
 
 
 class User(AbstractUser):
+    objects = CaseInsensitiveUserManager()
     bio = models.TextField(blank=True)
     timezone = models.CharField(
         max_length=50, choices=timezone_choices, default=get_default_user_timezone
@@ -96,11 +105,6 @@ class User(AbstractUser):
     @classmethod
     def all(cls):
         return cls.objects.filter(is_active=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(Lower("username"), name="username-lower-check")
-        ]
 
 
 class StaffMember(models.Model):

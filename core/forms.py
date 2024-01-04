@@ -5,10 +5,16 @@ from django.utils import timezone
 from django_select2 import forms as s2forms
 from martor.widgets import AdminMartorWidget
 
-from . import models
+from core import models
+from django.contrib.auth.forms import (
+    UserChangeForm as ContribUserChangeForm,
+    UserCreationForm as ContribUserCreationForm,
+)
+
+from core.views.mixins import CaseInsensitiveUsernameMixin
 
 
-class MetropolisSignupForm(SignupForm):
+class MetropolisSignupForm(SignupForm, CaseInsensitiveUsernameMixin):
     first_name = forms.CharField(
         max_length=30,
         label="First Name",
@@ -282,5 +288,9 @@ class AnnouncementSupervisorAdminForm(forms.ModelForm):
             self.fields["status"].initial = "d"
 
 
-class UserAdminForm(forms.ModelForm):
+class UserAdminForm(CaseInsensitiveUsernameMixin, ContribUserChangeForm):
     expo_notif_tokens = forms.JSONField(required=False)
+
+
+class UserCreationForm(CaseInsensitiveUsernameMixin, ContribUserCreationForm):
+    pass

@@ -6,11 +6,11 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, FormMixin, UpdateView
 
 from . import mixins
-from .. import models
-from ..forms import (
-    AddCourseForm,
+from core import models
+from core.forms import (
     AddTimetableSelectTermForm,
     TimetableSelectCoursesForm,
+    AddCourseForm,
 )
 
 

@@ -119,58 +119,6 @@ def send_notif_singleday(modeladmin, request, queryset):
         notif_events_singleday.delay(date=dt.date.today())
 
 
-class AdminPasswordResetForm(ActionForm):
-    new_password = forms.CharField(
-        required=False,
-        label=_(" New password "),
-        help_text="The password to set for the user if you are using the reset password action",
-    )
-
-
-@admin_action_rate_limit(
-    rate_limit=1, time_period=60 * 60 * 6, scope="user"
-)  # specific SU can only reset one password every 12 hours, to prevent abuse. if more is needed contact the backend team to reset.
-@admin.action(
-    permissions=["change"], description=_("Reset the password for the selected user")
-)
-def reset_password(modeladmin, request, queryset):
-    user = queryset.first()
-    if not request.user.is_superuser:
-        modeladmin.message_user(
-            request,
-            "You must be a superuser to reset passwords.",
-            level=messages.WARNING,
-        )
-        return
-    if user.is_superuser:
-        modeladmin.message_user(
-            request,
-            "You cannot reset the password of a superuser, please contact the backend lead to reset the password.",
-            level=messages.ERROR,
-        )
-        return
-    if len(queryset) > 1:
-        modeladmin.message_user(
-            request, "Please only select one user at a time.", level=messages.ERROR
-        )
-        return
-    if not request.POST["new_password"]:
-        modeladmin.message_user(
-            request,
-            "Please enter a new password in the 'New Password' field.",
-            level=messages.ERROR,
-        )
-        return
-    user.set_password(request.POST["new_password"])
-    user.save()
-    modeladmin.message_user(
-        request, f"Password for {user} has been set to the specified password."
-    )
-
-
-# FlatPages
-
-
 @admin.action(
     permissions=["change"],
     description="Archive selected flatpages and download them as a JSON file",
