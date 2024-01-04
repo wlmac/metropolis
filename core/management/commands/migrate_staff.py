@@ -11,9 +11,7 @@ class Command(BaseCommand):
 		self.stdout.write(str(StaffMember.objects.all().count()))
 		try:
 			for position, user_ids in settings.METROPOLIS_STAFFS.items():
-				if position == "Alumnus" or not position:
-					position = "Backend Developer"  # set it to backend TEMP
-				
+				assert position
 				for user_id in user_ids:
 					try:
 						user = User.objects.get(pk=user_id)
@@ -23,9 +21,12 @@ class Command(BaseCommand):
 					try:
 						bio = settings.METROPOLIS_STAFF_BIO.get(user_id, "")
 						if not bio:
-							print(f"Bio for user {user.username}  ID:{user.id} is empty")
-						staff_member, created = StaffMember.objects.get_or_create(user=user, bio=bio)
-						staff_member.positions = list(staff_member.positions) + [position]
+							self.stdout.write(self.style.ERROR(f"Bio for user {user.username}  ID:{user.id} is empty") )
+						# make new member
+						
+						staff_member = StaffMember(user=user, bio=bio)
+						staff_member.years = ["2024-2025"]
+						staff_member.positions = (list(staff_member.positions) + [position]) if staff_member.positions is not None else [position] or ["Backend Developer"]
 						
 						staff_member.save()
 					except IntegrityError as e:
