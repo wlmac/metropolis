@@ -9,7 +9,7 @@ from django.utils import timezone
 from .choices import graduating_year_choices, timezone_choices
 from .course import Term
 from .post import Announcement
-from ..utils import generate_years
+from ..utils import calculate_years
 from ..utils.fields import SetField, ArrayField
 
 
@@ -117,22 +117,14 @@ class StaffMember(models.Model):
         base_field=CharField(choices=_positions_options, blank=True, null=True),
     )
 
-    years = ArrayField(base_field=CharField(choices=generate_years()))
+    years = ArrayField(base_field=CharField(choices=calculate_years(fmt="generate")))
 
     def __str__(self):
         return f"{self.user.get_full_name()} ({self.user})"
 
     @property
     def is_alumni(self):
-        current_year = timezone.now().year
-        current_month = timezone.now().month
-
-        # If the current month is between January and July, use the previous year
-        if 1 <= current_month <= 7:
-            current_year -= 1
-
-        current_year_range = f"{current_year}-{str(current_year + 1)[-2:]}"
-        return current_year_range not in self.years
+        return calculate_years("is_alumni", self.years)
 
     class Meta:
         verbose_name = "Staff Member"

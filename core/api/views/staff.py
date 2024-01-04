@@ -1,9 +1,8 @@
-from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-__all__ = ["staff"]
+__all__ = ["staff", "StaffSerializer"]
 
 from core.api.serializers.custom import SingleUserField
 from core.models import StaffMember
@@ -29,7 +28,5 @@ def staff(request, year=None):
     Returns:
         A list of all staff.
     """
-    if year is None:
-        year = f"{timezone.now().year}-{str(timezone.now().year + 1)[-2:]}"
     # todo add filtering via year
     return Response(StaffSerializer(StaffMember.objects.all(), many=True).data)

@@ -129,12 +129,14 @@ class MapView(TemplateView, mixins.TitleMixin):
 
 
 UserType = Dict[str, Union[int, str, bool, List[str]]]
-PositionType = Dict[str, Union[UserType, str, List[str], bool]] # str being None
+PositionType = Dict[str, Union[UserType, str, List[str], bool]]  # str being None
 
 TeamData = Dict[
     str,  # Team role (e.g., "Project Manager", "Frontend Developer", etc.)
-    List[PositionType]  # List of positions and associated details
+    List[PositionType],  # List of positions and associated details
 ]
+
+
 class AboutView(TemplateView, mixins.TitleMixin):
     template_name = "core/about/about.html"
     title = "About"
@@ -144,10 +146,14 @@ class AboutView(TemplateView, mixins.TitleMixin):
         members_data = StaffSerializer(StaffMember.objects.all(), many=True).data
 
         # Group members based on positions and alumni status
-        grouped_members: TeamData = {name: [] for name in settings.METROPOLIS_POSITIONS.values()}
+        grouped_members: TeamData = {
+            name: [] for name in settings.METROPOLIS_POSITIONS.values()
+        }
         grouped_members["Alumni"] = []
         for member in members_data:
-            positions = member.get("positions", None)  # default to alumni if no positions
+            positions = member.get(
+                "positions", None
+            )  # default to alumni if no positions
             if member["is_alumni"] or positions is None:
                 grouped_members["Alumni"].append(member)
                 continue
@@ -158,9 +164,6 @@ class AboutView(TemplateView, mixins.TitleMixin):
 
         context["members"]: TeamData = dict(grouped_members)
         context["member_count"]: int = len(members_data)
-        import json
-
-        print(json.dumps(context["members"], indent=4))
         return context
 
 

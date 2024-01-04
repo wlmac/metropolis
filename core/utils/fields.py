@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.fields import PositiveIntegerRelDbTypeMixin, SmallIntegerField
 from django.forms import DateInput, DateField
+from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
 
@@ -29,8 +30,8 @@ class MonthDayFormField(DateField):
         try:
             month, day = value.split("/")
             return (
-                datetime.now()
-                .replace(year=datetime.now().year, month=int(month), day=int(day))
+                (y := timezone.now())
+                .replace(year=y.year, month=int(month), day=int(day))
                 .date()
             )
         except ValueError:
@@ -99,8 +100,8 @@ class MonthDayField(models.DateField):
         try:
             month, day = value.split("/")
             return (
-                datetime.now()
-                .replace(year=datetime.now().year, month=int(month), day=int(day))
+                (y := timezone.now())
+                .replace(year=y.year, month=int(month), day=int(day))
                 .date()
             )
         except ValueError:

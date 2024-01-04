@@ -17,7 +17,7 @@ METROPOLIS_STAFFS = {
 
 current_year = dt.datetime.now().year
 if dt.datetime.now().month < 7:
-    raise TypeError("鬱陶しいのは分かるけどちょっと待って！")
+    raise TypeError("鬱陶しいのは分かるけどちょっと待って！")  # LOL - json
 
 r = requests.get("https://maclyonsden.com/api/v3/staff")
 r.raise_for_status()
