@@ -26,9 +26,9 @@ class EmojiPattern(markdown.inlinepatterns.Pattern):
 
 
 class EmojiExtension(markdown.Extension):
-    def extendMarkdown(self, md, md_globals):
+    def extendMarkdown(self, md):
         """Setup `emoji_img` with EmojiPattern"""
-        md.inlinePatterns["emoji_img"] = EmojiPattern(EMOJI_RE, md)
+        md.inlinePatterns.register("emoji_img", EmojiPattern(EMOJI_RE, md))
 
 
 def makeExtension(*args, **kwargs):
