@@ -16,19 +16,35 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.http import FileResponse
+from django.urls import include, path, re_path
 from drf_spectacular.views import (
     SpectacularSwaggerView,
     SpectacularAPIView,
     SpectacularRedocView,
 )
 from oauth2_provider.urls import base_urlpatterns, app_name
+from pwa.views import manifest, offline
 
+
+def service_worker(request):
+    return FileResponse(
+        open(settings.PWA_SERVICE_WORKER_PATH, "rb"),
+        content_type="application/javascript",
+    )
+
+
+pwa_urlpatterns = [
+    re_path(r"^serviceworker\.js$", service_worker, name="serviceworker"),
+    # overwrite django pwa's default service worker view to fix mem leak
+    re_path(r"^manifest\.json$", manifest, name="manifest"),
+    re_path("^offline/$", offline, name="offline"),
+]
 
 urlpatterns = [
     path("", include("core.urls")),
     path("", include((base_urlpatterns, app_name), namespace=app_name)),
-    path("", include("pwa.urls")),
+    path("", include(pwa_urlpatterns)),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("martor/", include("martor.urls")),
