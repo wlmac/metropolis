@@ -1,6 +1,7 @@
 import django.db
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.messages import constants as messages
@@ -9,7 +10,6 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
-
 from . import models
 from .forms import (
     AnnouncementAdminForm,
@@ -20,6 +20,7 @@ from .forms import (
     TagSuperuserAdminForm,
     TermAdminForm,
     UserAdminForm,
+    UserCreationForm,
 )
 from .models import Comment, StaffMember
 from .utils.actions import *
@@ -602,7 +603,7 @@ class EventAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(DjangoUserAdmin):
     list_display = ["username", "is_superuser", "is_staff", "is_teacher"]
     list_filter = [
         "is_superuser",
@@ -618,9 +619,9 @@ class UserAdmin(admin.ModelAdmin):
         "saved_blogs__title",
         "saved_announcements__title",
     ]
-    actions = [send_test_notif, send_notif_singleday, reset_password]
-    action_form = AdminPasswordResetForm  # admin reset password form
+    actions = [send_test_notif, send_notif_singleday]
     form = UserAdminForm
+    add_form = UserCreationForm
 
     def get_inline_instances(self, request, obj=None):
         if obj and StaffMember.objects.filter(user=obj).exists():
