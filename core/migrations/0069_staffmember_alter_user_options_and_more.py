@@ -10,23 +10,25 @@ from django.db import migrations, models, IntegrityError
 def populate_bios(apps, schema_editor):
     StaffMember = apps.get_model("core", "StaffMember")
     User = apps.get_model("core", "User")
-    
-    for position, user_ids in settings.METROPOLIS_STAFFS.items():
-        for user_id in user_ids:
-            try:
-                user = User.objects.get(pk=user_id)
-                bio = settings.METROPOLIS_STAFF_BIO.get(user_id, "")
-                staff_member, created = StaffMember.objects.get_or_create(
-                    user=user, bio=bio
-                )
-                staff_member.positions = list(staff_member.positions) + [position]
-                staff_member.save()
-            except User.DoesNotExist:
-                print(f"User {user_id} does not exist")
-            except IntegrityError:
-                print(f"StaffMember for user {user_id} already exists")
-
-
+    try:
+        
+        for position, user_ids in settings.METROPOLIS_STAFFS.items():
+            for user_id in user_ids:
+                try:
+                    user = User.objects.get(pk=user_id)
+                    bio = settings.METROPOLIS_STAFF_BIO.get(user_id, "")
+                    staff_member, created = StaffMember.objects.get_or_create(
+                        user=user, bio=bio
+                    )
+                    staff_member.positions = list(staff_member.positions) + [position]
+                    staff_member.save()
+                except User.DoesNotExist:
+                    print(f"User {user_id} does not exist")
+                except IntegrityError:
+                    print(f"StaffMember for user {user_id} already exists")
+        
+    except AttributeError:
+        pass # this is fine, it just means that the settings.METROPOLIS_STAFFS does not exist anymore!! (yay)
 def reversed_pop(apps, schema_editor):
     raise RuntimeError("Cannot reverse this migration.")
     # just uncomment the above line if you want to reverse this migration, but you will lose all staff bios
