@@ -110,13 +110,11 @@ class StaffMember(models.Model):
         primary_key=True,
         related_name="staff")
     bio = models.TextField(blank=False, null=False, help_text="The users staff bio (displayed on the staff page).")
-    _positions_options = tuple(settings.METROPOLIS_POSITIONS.items())
-    positions = ArrayField(base_field=CharField(choices=_positions_options), help_text="The positions the user had/does hold.")
+    positions = ArrayField(base_field=CharField(choices=settings.METROPOLIS_POSITIONS), help_text="The positions the user had/does hold.")
     positions_leading = ArrayField(
         blank=True,
         null=True,
-        base_field=CharField(choices=tuple(({key: val for key,
-        val in _positions_options if key != 'PM'}).items())), # remove PM from the list of positions leading as all PM's are leading PM
+        base_field=CharField(choices=[(key, val) for key, val in settings.METROPOLIS_POSITIONS if key != 'Project Manager']),
     )
 
     years = ArrayField(base_field=CharField(choices=calculate_years(fmt="generate")), help_text="The years the user was a staff member. Used to determine if the user is an alumni.")

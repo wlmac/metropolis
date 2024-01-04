@@ -1,4 +1,5 @@
 {% extends 'core/base.html' %}
+{% load i18n %}
 {% load link_tags %}
 {% load gravatar_tags %}
 {% load settings_tags %}
@@ -20,23 +21,23 @@
                 <li class="header" id="contact">CONTACT US</li>
             </ul>
             <script>
-                $(document).ready(function() {
+                $(document).ready(function () {
                     var urlParams = new URLSearchParams(window.location.search);
-                    if(!urlParams.get("tab")) {
+                    if (!urlParams.get("tab")) {
                         $("#history").addClass("active");
                         urlParams.set("tab", "history");
                     }
-                    history.replaceState(null, null, "?"+urlParams.toString());
-                    $(".header").click(function() {
+                    history.replaceState(null, null, "?" + urlParams.toString());
+                    $(".header").click(function () {
                         if (this.id === "map") {
                             window.open("/map", "_self")
                         } else {
                             $(".header").removeClass("active");
                             $(this).addClass("active");
                             $(".content").hide();
-                            $("#content-"+this.id).show();
+                            $("#content-" + this.id).show();
                             urlParams.set("tab", this.id);
-                            history.replaceState(null, null, "?"+urlParams.toString());
+                            history.replaceState(null, null, "?" + urlParams.toString());
                         }
                     });
                 });
@@ -48,18 +49,27 @@
                 <hr>
                 <h2 class="subtitle">Home and Pride of the Mackenzie Lyons circa 1960</h2>
                 <p class="text">
-                    William Lyon Mackenzie C. I. is a Toronto District Secondary School opened in 1960 and located in North York.
-                    Mackenzie was named after the historical prowess William Lyon Mackenzie, the political agitator who led the
-                    government revolt in Toronto in 1837. In its years of establishing a home of blue and gold, William Lyon Mackenzie
-                    Collegiate not only built an incredible student body of 1500 strong, but also a strong, tight-knit community that
-                    prides itself on multicultural diversity, inclusion, creativity and academic innovation. And, here is where the
+                    William Lyon Mackenzie C. I. is a Toronto District Secondary School opened in 1960 and located in
+                    North York.
+                    Mackenzie was named after the historical prowess William Lyon Mackenzie, the political agitator who
+                    led the
+                    government revolt in Toronto in 1837. In its years of establishing a home of blue and gold, William
+                    Lyon Mackenzie
+                    Collegiate not only built an incredible student body of 1500 strong, but also a strong, tight-knit
+                    community that
+                    prides itself on multicultural diversity, inclusion, creativity and academic innovation. And, here
+                    is where the
                     heart and soul of the Lyon Pride resound.
                 </p>
                 <p class="text">
-                    William Lyon Mackenzie Collegiate boasts scholastic excellence in its academic programing: the MaCS enrichment
-                    program, the Gifted Program, the ELL program, the Advanced Placement Program, and the FIT program. Collectively,
-                    these programs have helped nurture student voice and advocacy and inspire a variety of extracurricular
-                    opportunities from clubs and councils to intramurals and athletics, to school-wide events and initiatives, all
+                    William Lyon Mackenzie Collegiate boasts scholastic excellence in its academic programing: the MaCS
+                    enrichment
+                    program, the Gifted Program, the ELL program, the Advanced Placement Program, and the FIT program.
+                    Collectively,
+                    these programs have helped nurture student voice and advocacy and inspire a variety of
+                    extracurricular
+                    opportunities from clubs and councils to intramurals and athletics, to school-wide events and
+                    initiatives, all
                     of which beautifully reflect the spirit of membership - the roar of the Lyon Pride.
                 </p>
             </div>
@@ -69,16 +79,20 @@
                 <p class="text">
                     By definition, a metropolis is a significant cultural center of a country or region
                     and a central hub for regional connections and communications.
-                    Likewise, it is our goal at Project Metropolis to create a centralized website at WLMAC where all students can easily
+                    Likewise, it is our goal at Project Metropolis to create a centralized website at WLMAC where all
+                    students can easily
                     access and share information with their peers, making this our own, online metropolis.
                 </p>
                 <h1 class="title">About the Site</h1>
                 <hr>
                 <p class="text">
-                    The Mackenzie Lyon's Den (Project Metropolis) is a student-driven website that showcases the best of Mackenzie's pride;
+                    The Mackenzie Lyon's Den (Project Metropolis) is a student-driven website that showcases the best of
+                    Mackenzie's pride;
                     a central microcosm and communication hub, rich in representing the diverse facets of student life.
-                    Welcome to the Lyon's Den, the first stop to find out more about Mackenzie, its school-wide activities, events,
-                    initiatives, clubs and councils, Student Council offerings, creative student voice and essential resources to enrich
+                    Welcome to the Lyon's Den, the first stop to find out more about Mackenzie, its school-wide
+                    activities, events,
+                    initiatives, clubs and councils, Student Council offerings, creative student voice and essential
+                    resources to enrich
                     Mackenzie student life!
                 </p>
                 <p class="text">
@@ -90,37 +104,53 @@
                 <h1 class="title">Our Team</h1>
                 <hr>
                 <p class="text">
-                    A diverse group of {{ member_count }} developers, artists, and creators worked in tandem to build this site. Our applications are open to all students, so if you're interested in joining our team, please apply <a href="https://forms.gle/MLrFckYTyYJ3R5KdA">here</a>
+                    A diverse group of {{ member_count }} developers, artists, and creators worked in tandem to build
+                    this site. Our applications are open to all students, so if you're interested in joining our team,
+                    please apply <a href="https://forms.gle/MLrFckYTyYJ3R5KdA">here</a>
                 </p>
                 <h1 class="title">Members</h1>
                 <hr>
                 {% for name, branch in members.items %}
-                    <h2 class="subtitle">{{name}}{{ branch.keys|pluralize }}</h2>
-                        {%  for member in branch %}
-                            <a href="{{ member.user.username|user_url}}">
+                    <h2 class="subtitle">{{ name }}{{ branch.keys|pluralize }}</h2>
+                    {% for member in branch %}
+                        <a href="{{ member.user.username|user_url }}">
+                            {% if name in member.positions_leading %}
+                                <div class="member branch-lead">
+                            {% else %}
                                 <div class="member">
-                                    <div class="member-name">
-                                        <div class="member-image">
-                                            <img class="circle" src="{{ member.user.gravatar_url}}">
-                                        </div>
-                                        <div class="member-text">
-                                            {{member.user.first_name}} {{member.user.last_name}}
-                                            {% if member.years %}
-                                            <span class="member-years">
-                                                {{ member.years|join:", " }}
-                                            </span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                        <hr>
-                                        <div class="member-bio">
-                                            {{ member.bio}}
-                                        </div>
+                            {% endif %}
+                            <div class="member-name">
+                                <div class="member-image">
+                                    <img class="circle" src="{{ member.user.gravatar_url }}">
                                 </div>
-                            </a>
-                        {% empty %}
-                            No members under this position.
-                            {% endfor %}
+                                <div class="member-text">
+                                    {{ member.user.first_name }} {{ member.user.last_name }}
+
+                                    {% if name in member.positions_leading %}
+                                        <span class="member-position">
+                                                {% translate 'Lead' %}
+                                            </span>
+                                    {% endif %}
+                                    {% if member.years %}
+                                        {% if name in member.positions_leading %}
+                                            <span class="member-years" style="margin-left: 0.5rem;">
+                                        {% else %}
+                                            <span class="member-years">
+                                        {% endif %}
+                                    {{ member.years|join:", " }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="member-bio">
+                                {{ member.bio }}
+                            </div>
+                            </div>
+                        </a>
+                    {% empty %}
+                        No members under this position.
+                    {% endfor %}
                 {% endfor %}
             </div>
             <div class="content" id="content-contact">
@@ -161,7 +191,8 @@
                 </ul>
                 <br>
                 <div class="content-embed">
-                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSerD9wL2Sg8AIEVxc7ZPPIYcNPnCBnUuXTxOajhkvv8TMxwAw/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">
+                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSerD9wL2Sg8AIEVxc7ZPPIYcNPnCBnUuXTxOajhkvv8TMxwAw/viewform?embedded=true"
+                            frameborder="0" marginheight="0" marginwidth="0">
                         Loading…
                     </iframe>
                 </div>
@@ -211,7 +242,8 @@
                                 <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
                                 <p>Mrs. Cynthia Nguyen (cynthia.nguyen@tdsb.on.ca)</p>
                             </a>
-                        </li>   <h3 class="section-title">Vice Principals</h3>
+                        </li>
+                        <h3 class="section-title">Vice Principals</h3>
                         <li>
                             <a class="link" href="mailto:jyoti.khona@tdsb.on.ca" target="_blank">
                                 <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
@@ -232,7 +264,7 @@
                         </li>
                     </div>
                 </ul>
-            {% comment %}
+                {% comment %}
             {% if user.is_authenticated %}
             <h2 class="subtitle">Staff</h2>
             <hr>
@@ -257,17 +289,17 @@
             {% endcomment %}
             </div>
             <script>
-                $(document).ready(function() {
+                $(document).ready(function () {
                     var urlParams = new URLSearchParams(window.location.search);
                     $(".content").hide();
-                    if(!$("#content-"+urlParams.get("tab")).length) {
+                    if (!$("#content-" + urlParams.get("tab")).length) {
                         urlParams.set("tab", "history");
-                        history.replaceState(null, null, "?"+urlParams.toString());
+                        history.replaceState(null, null, "?" + urlParams.toString());
                     }
-                    $("#content-"+urlParams.get("tab")).show();
+                    $("#content-" + urlParams.get("tab")).show();
                     $(".header").removeClass("active");
-                    $("#"+urlParams.get("tab")).addClass("active");
-                //$(".card-authors-text").find("a").addClass("link");
+                    $("#" + urlParams.get("tab")).addClass("active");
+                    //$(".card-authors-text").find("a").addClass("link");
                 });
             </script>
         </div>

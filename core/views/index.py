@@ -147,7 +147,7 @@ class AboutView(TemplateView, mixins.TitleMixin):
 
         # Group members based on positions and alumni status
         grouped_members: TeamData = {
-            name: [] for name in settings.METROPOLIS_POSITIONS.values()
+            position: [] for _, position in settings.METROPOLIS_POSITIONS
         }
         grouped_members["Alumni"] = []
         for member in members_data:
@@ -157,11 +157,9 @@ class AboutView(TemplateView, mixins.TitleMixin):
             if member["is_alumni"] or positions is None:
                 grouped_members["Alumni"].append(member)
                 continue
-
-            for position in positions:
-                key = settings.METROPOLIS_POSITIONS[position]
-                grouped_members[key].append(member)
-
+            
+            [grouped_members[position].append(member) for position in positions]
+        
         context["members"]: TeamData = dict(grouped_members)
         context["member_count"]: int = len(members_data)
         return context

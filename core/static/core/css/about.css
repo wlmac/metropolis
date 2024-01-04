@@ -109,7 +109,7 @@
     color: var(--dark-grey);
     font-size: 1.2rem;
 }
-.member-years {
+.member-years, .member-position {
     font-size: 0.7rem;
     margin-left: 0.9rem;
     background-color: var(--link-colour);
@@ -118,6 +118,15 @@
     border-radius: 0.3em;
     vertical-align: middle;
 }
+.member-position {
+    background-color: var(--dark-colour);
+    color: var(--contrast-colour)
+}
+
+.branch-lead {
+    /*border: 3px solid var(--link-colour);*/
+}
+
 .member-bio {
     color: var(--dark-grey);
     font-size: 1rem;

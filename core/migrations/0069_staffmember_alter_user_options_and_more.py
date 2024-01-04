@@ -66,13 +66,13 @@ class Migration(migrations.Migration):
                     core.utils.fields.ArrayField(
                         base_field=models.CharField(
                             choices=[
-                                ("PM", "Project Manager"),
-                                ("frontend", "Frontend Developer"),
-                                ("backend", "Backend Developer"),
-                                ("app", "App Developer"),
-                                ("graphics", "Graphic Designer"),
-                                ("content", "Content Creator"),
-                                ("doodle", "Doodle Developer"),
+                                ("Project Manager", "Project Manager"),
+                                ("Frontend Developer", "Frontend Developer"),
+                                ("Backend Developer", "Backend Developer"),
+                                ("App Developer", "App Developer"),
+                                ("Graphic Designer", "Graphic Designer"),
+                                ("Content Creator", "Content Creator"),
+                                ("Doodle Developer", "Doodle Developer"),
                             ]
                         ),
                         help_text="The positions the user had/does hold.",
@@ -84,12 +84,12 @@ class Migration(migrations.Migration):
                     core.utils.fields.ArrayField(
                         base_field=models.CharField(
                             choices=[
-                                ("frontend", "Frontend Developer"),
-                                ("backend", "Backend Developer"),
-                                ("app", "App Developer"),
-                                ("graphics", "Graphic Designer"),
-                                ("content", "Content Creator"),
-                                ("doodle", "Doodle Developer"),
+                                ("Frontend Developer", "Frontend Developer"),
+                                ("Backend Developer", "Backend Developer"),
+                                ("App Developer", "App Developer"),
+                                ("Graphic Designer", "Graphic Designer"),
+                                ("Content Creator", "Content Creator"),
+                                ("Doodle Developer", "Doodle Developer"),
                             ]
                         ),
                         blank=True,
