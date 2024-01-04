@@ -16,6 +16,12 @@ class Command(BaseCommand):
                 for user_id in user_ids:
                     try:
                         user = User.objects.get(pk=user_id)
+                    except User.DoesNotExist:
+                        self.stdout.write(
+                            self.style.ERROR(f"User {user_id} does not exist")
+                        )
+                        continue
+                    try:
                         bio = settings.METROPOLIS_STAFF_BIO.get(user_id, "")
                         if not bio:
                             print(
@@ -28,10 +34,6 @@ class Command(BaseCommand):
                             position
                         ]
                         staff_member.save()
-                    except User.DoesNotExist:
-                        self.stdout.write(
-                            self.style.ERROR(f"User {user_id} does not exist")
-                        )
                     except IntegrityError:
                         self.stdout.write(
                             self.style.WARNING(
