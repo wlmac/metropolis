@@ -6,12 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 ALLOWED_HOSTS = ["localhost"]
 
-STATICFILES_STORAGE = (
-    "django.contrib.staticfiles.storage.StaticFilesStorage"  # decapitated
-)
 STATIC_ROOT = "/app-public"
 
-DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"  # decapitated
 MEDIA_ROOT = "/app-media"
 MEDIA_URL = "/media/"
 
