@@ -94,10 +94,9 @@
                 </p>
                 <h1 class="title">Members</h1>
                 <hr>
-                {% for name, members in members.items %}
-                    <div class="member-list">
-                            <h2 class="subtitle">{{name}}{{ members.keys|pluralize }}</h2>
-                        {%  for member in members %}
+                {% for name, branch in members.items %}
+                    <h2 class="subtitle">{{name}}{{ branch.keys|pluralize }}</h2>
+                        {%  for member in branch %}
                             <a href="{{ member.user.username|user_url}}">
                                 <div class="member">
                                     <div class="member-name">
@@ -121,7 +120,6 @@
                             </a>
                         {% empty %}
                             No members under this position.
-                    </div>
                             {% endfor %}
                 {% endfor %}
             </div>

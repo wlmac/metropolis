@@ -85,9 +85,6 @@
 .text:last-child {
     margin-bottom: 0;
 }
-.member-list:not(:last-child) {
-    margin-bottom: 24px;
-}
 .member {
     margin: 10px 0;
     background-color: #F8F8F8;
