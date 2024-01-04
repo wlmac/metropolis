@@ -16,6 +16,7 @@ jobs:
         python -m pip install poetry
         poetry config virtualenvs.in-project true
         poetry install
+        poetry add psycopg2-binary
     - name: Make files
       run:  |
         make metropolis/local_rsa_privkey.pem
