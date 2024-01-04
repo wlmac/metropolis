@@ -11,7 +11,6 @@ def populate_bios(apps, schema_editor):
     StaffMember = apps.get_model("core", "StaffMember")
     User = apps.get_model("core", "User")
     try:
-        
         for position, user_ids in settings.METROPOLIS_STAFFS.items():
             for user_id in user_ids:
                 try:
@@ -26,9 +25,11 @@ def populate_bios(apps, schema_editor):
                     print(f"User {user_id} does not exist")
                 except IntegrityError:
                     print(f"StaffMember for user {user_id} already exists")
-        
+
     except AttributeError:
-        pass # this is fine, it just means that the settings.METROPOLIS_STAFFS does not exist anymore!! (yay)
+        pass  # this is fine, it just means that the settings.METROPOLIS_STAFFS does not exist anymore!! (yay)
+
+
 def reversed_pop(apps, schema_editor):
     raise RuntimeError("Cannot reverse this migration.")
     # just uncomment the above line if you want to reverse this migration, but you will lose all staff bios

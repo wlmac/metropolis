@@ -1,4 +1,5 @@
-import markdown
+from markdown.extensions import Extension
+from markdown.inlinepatterns import Pattern
 
 EMOJI_RE = r"(:[+\-\w]+:)"
 
@@ -11,7 +12,7 @@ REWRITES = {
 }
 
 
-class EmojiPattern(markdown.inlinepatterns.Pattern):
+class EmojiPattern(Pattern):
     def handleMatch(self, m):
         orig = self.unescape(m.group(2))
         name = orig.replace("_", " ")[1:-1]
@@ -25,11 +26,11 @@ class EmojiPattern(markdown.inlinepatterns.Pattern):
             return converted
 
 
-class EmojiExtension(markdown.Extension):
+class EmojiExtension(Extension):
     def extendMarkdown(self, md):
         """Setup `emoji_img` with EmojiPattern"""
-        md.inlinePatterns.register("emoji_img", EmojiPattern(EMOJI_RE, md))
+        md.inlinePatterns.register(EmojiPattern(EMOJI_RE, md), "emoji_img", 123*2)
 
 
 def makeExtension(*args, **kwargs):
-    return EmojiExtension(*args, **kwargs)
+    return EmojiExtension(**kwargs)

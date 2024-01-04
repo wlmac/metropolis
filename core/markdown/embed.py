@@ -21,4 +21,4 @@ class EmbedExtension(Extension):
 
 
 def makeExtension(*args, **kwargs):
-    return EmbedExtension(*args, **kwargs)
+    return EmbedExtension(**kwargs)
