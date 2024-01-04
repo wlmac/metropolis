@@ -132,13 +132,6 @@ class Migration(migrations.Migration):
             options={},
         ),
         migrations.AddConstraint(
-            model_name="user",
-            constraint=models.UniqueConstraint(
-                django.db.models.functions.text.Lower("username"),
-                name="username-lower-check",
-            ),
-        ),
-        migrations.AddConstraint(
             model_name="staffmember",
             constraint=models.UniqueConstraint(
                 fields=("user",), name="unique_staff_member"
