@@ -18,15 +18,13 @@ WORKDIR /app2/static
 WORKDIR /app
 USER app
 
-# Install Poetry and dependencies
+COPY poetry.lock pyproject.toml /app/
 RUN python -m pip install --no-cache-dir poetry && \
     python -m poetry config virtualenvs.in-project true && \
     python -m poetry install --no-root && \
     /app/.venv/bin/python3 -m pip install --no-cache-dir psycopg2
 
 USER root
-
-# Cleanup unnecessary dependencies
 RUN python -m pip uninstall poetry && \
     apt-get purge -y build-essential python3-dev libpq-dev libffi-dev libssl-dev && \
     rm -rf /var/lib/apt/lists/*
