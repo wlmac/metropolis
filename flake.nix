@@ -19,7 +19,7 @@
   in let
     common = {
       projectDir = ./.;
-      python = pkgs.python310;
+      python = pkgs.python312;
       overrides = pkgs.poetry2nix.defaultPoetryOverrides.extend
         (self: super:
           (add-setuptools super "martor")
@@ -33,7 +33,7 @@
   in {
     devShells.default = (mkPoetryEnv common).env.overrideAttrs (prev: {
       buildInputs = with pkgs; [
-        python310
+        python312
         poetry
         openssl
         black

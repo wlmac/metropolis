@@ -1,6 +1,6 @@
 # Metropolis (Backend)
-Make sure you have python 3.9 - 3.10 installed;
-As of now, the project is only compatible with versions between python 3.9 and 3.10.11.
+Make sure you have python 3.10–3.12 installed;
+Ideally, you use python 3.12 
 
 ## Running Locally
 
