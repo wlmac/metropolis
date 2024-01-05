@@ -18,7 +18,8 @@ RUN python -m pip install --no-cache-dir poetry
 
 COPY poetry.lock pyproject.toml /app/
 RUN python -m poetry config virtualenvs.in-project true && \
-    python -m poetry install --no-root --without dev
+    python -m poetry install --no-root --without dev && \
+    /app/.venv/bin/python3 -m pip install --no-cache-dir psycopg2
 USER root
 RUN apt-get purge -y build-essential python3-dev libpq-dev libffi-dev libssl-dev && \
     rm -rf /var/lib/apt/lists/*
