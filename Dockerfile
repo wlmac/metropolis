@@ -3,6 +3,8 @@ FROM python:3.12.1-slim@sha256:c127a8c4aca8a5d3ac3a333cbab4c082c7ddbd0891441cc4e
 LABEL org.opencontainers.image.authors="Ken Shibata <+@nyiyui.ca>, Kyunghan (Paul) Lee <contact@paullee.dev>, Jason Cameron <jason@jasoncameron.dev>"
 LABEL org.opencontainers.image.source="https://github.com/wlmac/metropolis"
 
+ENV PYTHONDONTWRITEBYTECODE 1 # db.sqlite3D
+ENV PYTHONUNBUFFERED 1
 # Install system dependencies
 RUN adduser --system --home /app --gecos "Metropolis" app && \
     groupadd app && \

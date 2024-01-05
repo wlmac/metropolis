@@ -22,10 +22,9 @@ nix run
 
 ### Anything besides Nix
 If you do not want to use Nix:
-(Note: only tested on Unix-like platforms)
 ```
 python -m pip install poetry
-poetry install --without deploy
+poetry install
 make # can remove for windows 
 poetry run python ./manage.py migrate
 poetry run python ./manage.py runserver
