@@ -6,7 +6,7 @@ from ..utils import ListAPIViewWithFallback
 from ... import models
 
 
-class OrganizationList(ListAPIViewWithFallback):
+class ApiOrganizationList(ListAPIViewWithFallback):
     queryset = (
         models.Organization.objects.filter(is_active=True)
         .annotate(num_members=Count("member"))

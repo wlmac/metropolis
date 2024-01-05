@@ -4,7 +4,7 @@ from django.urls import include, path
 from .api.views import *
 from .utils.sitemaps import *
 from .views.index import *
-from .views.organization import OrganizationShort
+from .views.organization import *
 from .views.post import *
 from .views.raffle import *
 from .views.timetable import *
@@ -26,6 +26,8 @@ urlpatterns = [
                 "blog": BlogSitemap,
                 "announcements": AnnouncementsSitemap,
                 "clubs": ClubsSitemap,
+                "flatpages": FlatpagesSitemap,
+                
             }
         },
         name="django.contrib.sitemaps.sitemaps",
