@@ -137,24 +137,17 @@ class NewSerializer(serializers.ModelSerializer):
         max_length=30,
         required=True,
     )
-    password = serializers.CharField(required=True)
-
+    password = serializers.CharField(required=True, write_only=True)
     # Default `create` and `update` behavior...
     def create(self, validated_data) -> User:
-        user = User()
-        keys = [
-            "first_name",
-            "last_name",
-            "graduating_year",
-            "email",
-            "username",
-            "password",
-        ]
-        for key in keys:
-            setattr(user, key, validated_data[key])
+        password =  validated_data.pop("password")
+        user = User(**validated_data)
         if validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
             user.is_teacher = True
+        user.set_password(password)
         user.save()
+        # if Group.objects.filter(name="Supervisors").exists():
+        #     user.groups.add(Group.objects.get(name="Supervisors"))
         return user
 
     class Meta:
@@ -168,8 +161,6 @@ class NewSerializer(serializers.ModelSerializer):
             "password",
             "bio",
             "timezone",
-            "organizations",
-            "tags_following",
         ]
 
 

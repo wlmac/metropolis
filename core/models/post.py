@@ -38,7 +38,7 @@ class PostInteraction(models.Model):
         settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
-        on_delete=models.SET("[deleted]"),
+        on_delete=models.SET(None),
     )
 
     created_at = models.DateTimeField(auto_now_add=True, null=True)

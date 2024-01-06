@@ -255,7 +255,6 @@ SPECTACULAR_SETTINGS = {
 
 
 # SSO (OAuth) Settings
-PKCE_REQUIRED = False
 CLEAR_EXPIRED_TOKENS_BATCH_INTERVAL = 5
 CLEAR_EXPIRED_TOKENS_BATCH_SIZE = 500
 
@@ -472,10 +471,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 SILENCED_SYSTEM_CHECKS = ["urls.W002"]
 
 HIJACK_PERMISSION_CHECK = "core.utils.hijack.hijack_permissions_check"
+
 ALLOWED_HIJACKERS = [746, 165]  # Jason Cameron & Ken Shibata
 
 
-DEFAULT_TIMEZONE = "UTC"
+DEFAULT_TIMEZONE = "America/Toronto" # default timezone for users
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
