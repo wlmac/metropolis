@@ -5,10 +5,10 @@ from django.db import models
 from django.db.models import Q, CharField
 from django.utils import timezone
 
-from .choices import graduating_year_choices, timezone_choices
+from . import timezone_choices, graduating_year_choices
 from .course import Term
 from .post import Announcement
-from ..utils import calculate_years
+from ..utils.choices import calculate_years
 from ..utils.fields import SetField, ChoiceArrayField
 
 

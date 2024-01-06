@@ -27,7 +27,6 @@ urlpatterns = [
                 "announcements": AnnouncementsSitemap,
                 "clubs": ClubsSitemap,
                 "flatpages": FlatpagesSitemap,
-                
             }
         },
         name="django.contrib.sitemaps.sitemaps",

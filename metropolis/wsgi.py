@@ -13,7 +13,8 @@ import warnings
 from django.core.wsgi import get_wsgi_application
 
 warnings.filterwarnings(
-	"ignore", lineno=37, module="dateutil.tz", category=DeprecationWarning)
+    "ignore", lineno=37, module="dateutil.tz", category=DeprecationWarning
+)
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "metropolis.settings")
 

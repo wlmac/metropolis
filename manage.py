@@ -16,7 +16,8 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     warnings.filterwarnings(
-        "ignore", lineno=37, module="dateutil.tz", category=DeprecationWarning)
+        "ignore", lineno=37, module="dateutil.tz", category=DeprecationWarning
+    )
     execute_from_command_line(sys.argv)
 
 

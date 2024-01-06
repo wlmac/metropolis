@@ -138,9 +138,10 @@ class NewSerializer(serializers.ModelSerializer):
         required=True,
     )
     password = serializers.CharField(required=True, write_only=True)
+
     # Default `create` and `update` behavior...
     def create(self, validated_data) -> User:
-        password =  validated_data.pop("password")
+        password = validated_data.pop("password")
         user = User(**validated_data)
         if validated_data["email"].endswith(settings.TEACHER_EMAIL_SUFFIX):
             user.is_teacher = True

@@ -475,7 +475,7 @@ HIJACK_PERMISSION_CHECK = "core.utils.hijack.hijack_permissions_check"
 ALLOWED_HIJACKERS = [746, 165]  # Jason Cameron & Ken Shibata
 
 
-DEFAULT_TIMEZONE = "America/Toronto" # default timezone for users
+DEFAULT_TIMEZONE = "America/Toronto"  # default timezone for users
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 
