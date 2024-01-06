@@ -167,7 +167,7 @@ class ObjectList(
 
 @extend_schema(
     tags=["Objects"],
-    description="Endpoint for creating objects.",
+    description="Endpoint for creating new objects.",
     parameters=[
         OpenApiParameter(
             name="type",
