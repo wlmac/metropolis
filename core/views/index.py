@@ -8,7 +8,6 @@ from django.utils import timezone
 from django.views import View
 from django.views.generic import TemplateView
 from django_ical.views import ICalFeed
-from rest_framework.response import Response
 
 from core.utils import generate_slam as gs
 from core.utils import get_week_schedule_info
@@ -143,7 +142,7 @@ class AboutView(TemplateView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        members_data = StaffSerializer(StaffMember.objects.all(), many=True).data
+        members_data = StaffSerializer(StaffMember.objects.filter(is_active=True), many=True).data
 
         # Group members based on positions and alumni status
         grouped_members = {

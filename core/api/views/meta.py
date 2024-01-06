@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 
 
 class APIVersion(APIView):
+    """Returns the current API version."""
+
     def get(self, request):
         return Response({"version": settings.API_VERSION})
 
