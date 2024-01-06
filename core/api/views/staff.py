@@ -25,14 +25,14 @@ class StaffSerializer(serializers.ModelSerializer):
     parameters=[
         OpenApiParameter(
             "year",
-            int,
+            str,
             OpenApiParameter.QUERY,
             description="the year to filter staff by",
             examples=[
                 OpenApiExample(
                     "The year 2023",
-                    2023,
-                    description="Only show members who were in metro in 2024",
+                    "2023-2024",
+                    description="Only show members who were in metro in 2023-24",
                 ),
             ],
         ),
@@ -54,7 +54,7 @@ def staff(request, year=None):
         year = request.GET.get("year")
         return Response(
             StaffSerializer(
-                qs.filter(years__contains=[year]), many=True
+                qs.filter(years=[year]), many=True
             ).data
         )
     return Response(StaffSerializer(qs, many=True).data)
