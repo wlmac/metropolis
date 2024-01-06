@@ -9,3 +9,4 @@ from .tag import *
 from .term import *
 from .timetable import *
 from .user import *
+from .exhibit import *
