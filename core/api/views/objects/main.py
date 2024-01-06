@@ -30,23 +30,6 @@ def get_provider(provider_name: str):
     return providers[provider_name]
 
 
-get_provider = gen_get_provider(  # k = Provider class name e.g. comment in CommentProvider, v = request name
-    {
-        "announcement": "announcement",
-        "blogpost": "blog-post",
-        "exhibit": "exhibit",
-        "event": "event",
-        "organization": "organization",
-        "flatpage": "flatpage",
-        "user": "user",
-        "tag": "tag",
-        "term": "term",
-        "timetable": "timetable",
-        "comment": "comment",
-        "like": "like",
-        "course": "course",
-    }
-)
 providers = {  # k = request type (param passed in url), v = provider class
     "announcement": AnnouncementProvider,
     "blog-post": BlogPostProvider,
@@ -64,6 +47,17 @@ providers = {  # k = request type (param passed in url), v = provider class
 }
 
 
+def get_providers_by_operation(
+    operation: Literal["single", "retrieve", "new", "list"]
+) -> List[BaseProvider]:
+    """
+    Gets a list of providers by operation.
+    """
+    return [
+        prov
+        for prov in BaseProvider.__subclasses__()
+        if getattr(prov, operation, False)
+    ]
 
 
 class ObjectAPIView(generics.GenericAPIView):
