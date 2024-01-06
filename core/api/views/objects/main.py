@@ -8,7 +8,7 @@ from django.db.models import Model, Q, QuerySet
 from django.http import QueryDict
 from django.shortcuts import get_object_or_404
 from django.urls import NoReverseMatch
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, OpenApiResponse
 from rest_framework import generics
 
 from .__init__ import *
@@ -48,15 +48,15 @@ providers = {  # k = request type (param passed in url), v = provider class
 
 
 def get_providers_by_operation(
-    operation: Literal["single", "retrieve", "new", "list"]
+    operation: Literal["single", "new", "list", "retrieve"]
 ) -> List[BaseProvider]:
     """
     Gets a list of providers by operation.
     """
     return [
-        prov
-        for prov in BaseProvider.__subclasses__()
-        if getattr(prov, operation, False)
+        key
+        for key,prov in providers.items()
+        if getattr(prov, f"allow_{operation}", True) == True
     ]
 
 
@@ -214,6 +214,14 @@ class ObjectAPIView(generics.GenericAPIView):
         return self.response
 
 
+@extend_schema(
+    tags=["Objects"],
+    description="Endpoint for listing objects with various filters.",
+    parameters=[
+        OpenApiParameter(name="type", location="path", type=str, enum=get_providers_by_operation("list"), description="Which object provider to use"),
+        # Add more parameters as needed
+    ],
+)
 class ObjectList(
     GenericAPIViewWithLastModified,
     GenericAPIViewWithDebugInfo,
