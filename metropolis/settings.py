@@ -239,21 +239,6 @@ LOOKUP_FIELD_REPLACEMENTS: Dict[str, str] = {
     "CharField": "__iexact",
 }
 
-# Scheme generation
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Metropolis",
-    "DESCRIPTION": "The API for metropolis and related services",
-    "VERSION": API_VERSION,
-    "LICENSE": {
-        "name": "AGPL-3",
-        "url": "https://github.com/wlmac/metropolis/blob/develop/LICENSE",
-    },
-    "SORT_OPERATION_PARAMETERS": False,
-    #'SERVE_INCLUDE_SCHEMA': False,
-    # OTHER SETTINGS
-}
-
-
 # SSO (OAuth) Settings
 CLEAR_EXPIRED_TOKENS_BATCH_INTERVAL = 5
 CLEAR_EXPIRED_TOKENS_BATCH_SIZE = 500
@@ -279,6 +264,29 @@ with open(os.path.join(os.path.dirname(__file__), "local_rsa_privkey.pem")) as f
             OIDC_RSA_PRIVATE_KEY=f.read(),
         )
     )
+
+
+# Scheme generation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Metropolis",
+    "DESCRIPTION": "The API for metropolis and related services",
+    "VERSION": API_VERSION,
+    "LICENSE": {
+        "name": "AGPL-3",
+        "url": "https://github.com/wlmac/metropolis/blob/develop/LICENSE",
+    },
+    "SORT_OPERATION_PARAMETERS": False,
+    "COMPONENT_SPLIT_PATCH": False,
+    'OAUTH2_FLOWS': [],
+    'OAUTH2_AUTHORIZATION_URL': "/authorize",
+    'OAUTH2_TOKEN_URL': "/api/auth/token",
+    'OAUTH2_REFRESH_URL': "/api/auth/token/refresh",
+    'OAUTH2_SCOPES': OAUTH2_PROVIDER["SCOPES"].keys(),
+    
+    #'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
+
 
 # CORS settings
 

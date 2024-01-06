@@ -50,9 +50,9 @@ urlpatterns = [
     path("martor/", include("martor.urls")),
     path("select2/", include("django_select2.urls")),
     path("/<path:url>", include("django.contrib.flatpages.urls")),
-    path("api", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("docs", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    path("docs/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
