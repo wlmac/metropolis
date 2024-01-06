@@ -41,9 +41,13 @@ providers = {  # k = request type (param passed in url), v = provider class
 
 def get_providers_by_operation(
     operation: Literal["single", "new", "list", "retrieve"]
-) -> List[BaseProvider]:
+) -> List[str]:
     """
-    Gets a list of providers by operation.
+    returns a list of provider path names that support the given operation.
+    
+    Example:
+    >>> get_providers_by_operation("single")
+    ["announcement", "blog-post", "exhibit", "event", "organization", "flatpage", "user", "tag", "term", "timetable", "comment", "like", "course"]
     """
     return [
         key

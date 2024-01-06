@@ -23,7 +23,6 @@ from ...utils.polymorphism import get_providers_by_operation, ObjectAPIView
 
 @extend_schema(
     tags=["Objects"],
-    description="Endpoint for listing objects with various filters.",
     parameters=[
         OpenApiParameter(
             name="type",
@@ -40,6 +39,9 @@ class ObjectList(
     ObjectAPIView,
     generics.ListAPIView,
 ):
+    """
+    Endpoint for listing objects with various filters.
+    """
     mutate = False
     detail = False
     kind = "list"
@@ -167,7 +169,6 @@ class ObjectList(
 
 @extend_schema(
     tags=["Objects"],
-    description="Endpoint for creating new objects.",
     parameters=[
         OpenApiParameter(
             name="type",
@@ -179,6 +180,9 @@ class ObjectList(
     ],
 )
 class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
+    """
+    Endpoint for creating new objects.
+    """
     mutate = True
     detail = None
     kind = "new"
@@ -194,7 +198,6 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
 
 @extend_schema(
     tags=["Objects"],
-    description="Endpoint for retrieving objects with various lookups.",
     parameters=[
         OpenApiParameter(
             name="type",
@@ -206,12 +209,16 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
     ],
 )
 class ObjectRetrieve(
+
     ObjectAPIView,
     LookupField,
     generics.RetrieveAPIView,
     GenericAPIViewWithDebugInfo,
     GenericAPIViewWithLastModified,
 ):
+    """
+    Endpoint for retrieving objects with various lookups.
+    """
     mutate = False
     detail = True
     kind = "retrieve"
@@ -237,7 +244,6 @@ class ObjectRetrieve(
 
 @extend_schema(
     tags=["Objects"],
-    description="Endpoint for editing objects.",
     parameters=[
         OpenApiParameter(
             name="type",
@@ -251,6 +257,9 @@ class ObjectRetrieve(
 class ObjectSingle(
     ObjectAPIView, LookupField, generics.DestroyAPIView, generics.UpdateAPIView
 ):
+    """
+    Endpoint for editing objects with support for lookups.
+    """
     mutate = True
     detail = None
     kind = "single"
