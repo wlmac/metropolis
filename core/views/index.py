@@ -142,7 +142,9 @@ class AboutView(TemplateView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        members_data = StaffSerializer(StaffMember.objects.filter(is_active=True), many=True).data
+        members_data = StaffSerializer(
+            StaffMember.objects.filter(is_active=True), many=True
+        ).data
 
         # Group members based on positions and alumni status
         grouped_members = {

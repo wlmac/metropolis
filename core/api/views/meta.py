@@ -41,6 +41,8 @@ class Banners(APIView):
         now = timezone.now()
         current = filter(lambda b: b["start"] <= now < b["end"], settings.BANNER3)
         current = list(map(Banners.censor, current))
-        upcoming = filter(lambda b: now < b["start"] > now + timedelta(days=1), settings.BANNER3)
+        upcoming = filter(
+            lambda b: now < b["start"] > now + timedelta(days=1), settings.BANNER3
+        )
         upcoming = list(map(Banners.censor, upcoming))
         return dict(current=current, upcoming=upcoming)

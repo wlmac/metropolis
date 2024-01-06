@@ -52,9 +52,5 @@ def staff(request, year=None):
     qs = StaffMember.objects.filter(is_active=True)
     if request.GET.get("year"):
         year = request.GET.get("year")
-        return Response(
-            StaffSerializer(
-                qs.filter(years=[year]), many=True
-            ).data
-        )
+        return Response(StaffSerializer(qs.filter(years=[year]), many=True).data)
     return Response(StaffSerializer(qs, many=True).data)

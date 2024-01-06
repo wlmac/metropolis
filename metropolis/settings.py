@@ -277,12 +277,11 @@ SPECTACULAR_SETTINGS = {
     },
     "SORT_OPERATION_PARAMETERS": False,
     "COMPONENT_SPLIT_PATCH": False,
-    'OAUTH2_FLOWS': [],
-    'OAUTH2_AUTHORIZATION_URL': "/authorize",
-    'OAUTH2_TOKEN_URL': "/api/auth/token",
-    'OAUTH2_REFRESH_URL': "/api/auth/token/refresh",
-    'OAUTH2_SCOPES': OAUTH2_PROVIDER["SCOPES"].keys(),
-    
+    "OAUTH2_FLOWS": [],
+    "OAUTH2_AUTHORIZATION_URL": "/authorize",
+    "OAUTH2_TOKEN_URL": "/api/auth/token",
+    "OAUTH2_REFRESH_URL": "/api/auth/token/refresh",
+    "OAUTH2_SCOPES": OAUTH2_PROVIDER["SCOPES"].keys(),
     #'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
