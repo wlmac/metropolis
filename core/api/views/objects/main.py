@@ -1,53 +1,33 @@
 from __future__ import annotations
 
-import os
 from json import JSONDecodeError
-from typing import Dict, Callable, List, Tuple, Set, Final
+from typing import Dict, Callable, List, Tuple, Set, Literal
 
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, BadRequest
 from django.db.models import Model, Q, QuerySet
 from django.http import QueryDict
 from django.shortcuts import get_object_or_404
-from django.urls import reverse, NoReverseMatch
-from rest_framework import generics, permissions
-from rest_framework.response import Response
+from django.urls import NoReverseMatch
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from rest_framework import generics
 
-from .base import BaseProvider
+from .__init__ import *
+from .event import EventProvider
+from .exhibit import ExhibitProvider
 from ...utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
 
 __all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
 
-def gen_get_provider(mapping: Dict[str, str]):
-    for file in os.listdir(os.path.dirname(__file__)):
-        if file.endswith(".py") and file not in ["__init__.py", "base.py", "main.py"]:
-            __import__(f"core.api.views.objects.{file[:-3]}", fromlist=["*"])
-
-    provClasses = BaseProvider.__subclasses__()
-    try:
-        ProvReqNames = [
-            mapping[cls.__name__.rsplit("Provider")[0].lower()] for cls in provClasses
-        ]
-    except KeyError as e:
-        raise NotImplementedError(
-            f"Provider class {e} is missing a request name. Please add it to the mapping."
-        ) from e
-    provClassMapping = {key: value for key, value in zip(ProvReqNames, provClasses)}
-
-    def get_provider(provider_name: str):
-        """
-        Gets a provider by type name.
-        """
-        if provider_name not in ProvReqNames:
-            raise BadRequest(
-                "Object type not found. Valid types are: "
-                + ", ".join(ProvReqNames)
-                + "."
-            )
-        return provClassMapping[provider_name]
-
-    return get_provider
+def get_provider(provider_name: str):
+    """
+    Gets a provider by type name.
+    """
+    if provider_name not in providers:
+        raise BadRequest(
+            "Object type not found. Valid types are: " + ", ".join(providers) + "."
+        )
+    return providers[provider_name]
 
 
 get_provider = gen_get_provider(  # k = Provider class name e.g. comment in CommentProvider, v = request name
@@ -67,6 +47,23 @@ get_provider = gen_get_provider(  # k = Provider class name e.g. comment in Comm
         "course": "course",
     }
 )
+providers = {  # k = request type (param passed in url), v = provider class
+    "announcement": AnnouncementProvider,
+    "blog-post": BlogPostProvider,
+    "exhibit": ExhibitProvider,
+    "event": EventProvider,
+    "organization": OrganizationProvider,
+    "flatpage": FlatPageProvider,
+    "user": UserProvider,
+    "tag": TagProvider,
+    "term": TermProvider,
+    "timetable": TimetableProvider,
+    "comment": CommentProvider,
+    "like": LikeProvider,
+    "course": CourseProvider,
+}
+
+
 
 
 class ObjectAPIView(generics.GenericAPIView):

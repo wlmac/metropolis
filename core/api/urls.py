@@ -3,7 +3,7 @@ from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .views import *
-from .views.objects import *
+from .views.objects.main import ObjectList, ObjectNew, ObjectRetrieve, ObjectSingle
 
 router = SimpleRouter()
 
