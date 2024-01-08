@@ -59,20 +59,13 @@ def get_providers_by_operation(
     
     
 class ObjectAPIView(generics.GenericAPIView):
-    def get_as_su(self):
-        return self.as_su
-
     def initial(self, *args, **kwargs):
         super().initial(*args, **kwargs)
         self.request.mutate = self.mutate
         self.request.kind = self.kind
         self.request.detail = self.detail
         self.provider = provider = get_provider(kwargs.pop("type"))(self.request)
-        if as_su := (self.request.GET.get("as-su") == "true"):
-            self.permission_classes = [permissions.AllowAny]
-        else:
-            self.permission_classes = provider.permission_classes
-        self.as_su = as_su  # if the user is a SU
+        self.permission_classes = provider.permission_classes
         self.serializer_class = provider.serializer_class
         self.additional_lookup_fields = self._compile_lookup_fields()
         self.listing_filters = getattr(
