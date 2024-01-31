@@ -31,6 +31,8 @@ from ...utils.polymorphism import get_providers_by_operation, ObjectAPIView
             enum=get_providers_by_operation("list"),
             description="Which object provider to use",
         ),
+        # OpenApiParameter(
+        #     name="lookup", location="query", type=int, description="Lookup field", required=False, default="id"),
     ],
 )
 class ObjectList(
@@ -42,6 +44,7 @@ class ObjectList(
     """
     Endpoint for listing objects with various filters.
     """
+
     mutate = False
     detail = False
     kind = "list"
@@ -183,6 +186,7 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
     """
     Endpoint for creating new objects.
     """
+
     mutate = True
     detail = None
     kind = "new"
@@ -209,7 +213,6 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
     ],
 )
 class ObjectRetrieve(
-
     ObjectAPIView,
     LookupField,
     generics.RetrieveAPIView,
@@ -219,6 +222,7 @@ class ObjectRetrieve(
     """
     Endpoint for retrieving objects with various lookups.
     """
+
     mutate = False
     detail = True
     kind = "retrieve"
@@ -260,6 +264,7 @@ class ObjectSingle(
     """
     Endpoint for editing objects with support for lookups.
     """
+
     mutate = True
     detail = None
     kind = "single"
@@ -273,6 +278,8 @@ class ObjectSingle(
     def delete(self, *args, **kwargs):
         if x := self.check_allow_single():
             return x
+        if getattr(self.provider, "delete", None):
+            return self.provider.delete(self, *args, **kwargs)
         return super().delete(*args, **kwargs)
 
     def put(self, *args, **kwargs):

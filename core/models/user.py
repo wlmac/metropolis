@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q, CharField
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone
 
 from . import timezone_choices, graduating_year_choices
@@ -10,6 +12,7 @@ from .course import Term
 from .post import Announcement
 from ..utils.choices import calculate_years
 from ..utils.fields import SetField, ChoiceArrayField
+from ..utils.mail import send_mail
 
 
 # Create your models here.
@@ -101,6 +104,30 @@ class User(AbstractUser):
 
     def can_approve(self, obj):
         return obj.approvable(user=self)
+
+    def mark_deleted(self):
+        self.is_active = False
+        self.last_login = timezone.now()
+        self.save()
+        email_template_context = {
+            "user": self,
+            "time_deleted": timezone.now(),
+            "restore_link": settings.SITE_URL + reverse("restore", args=(self.id,)),
+        }
+
+        send_mail(  # todo: frontend needs to make a page for this
+            f"[ACTION REQUIRED] Your account has been marked for deletion.",
+            render_to_string(
+                "core/email/restore_deleted_user.txt",
+                email_template_context,
+            ),
+            None,
+            [self.email],
+            html_message=render_to_string(
+                "core/email/restore_deleted_user.html",
+                email_template_context,
+            ),
+        )
 
     @classmethod
     def all(cls):

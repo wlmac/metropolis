@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 
 from .. import serializers, utils
 from ... import models
+from core.models import User
 
 
 class UserDetail(generics.RetrieveAPIView):
@@ -74,3 +75,14 @@ class UserMeTimetable(APIView):
 
         serializer = serializers.TimetableSerializer(current_timetable)
         return Response(serializer.data)
+
+
+class UserDeleteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, id):
+        user: User = models.User.objects.filter(id=id).first()
+        if user is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        user.mark_deleted()
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -7,6 +7,7 @@ from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.db.models import Value, JSONField, Q
+from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _l
 from django.utils.translation import ngettext
 from exponent_server_sdk import (
@@ -19,6 +20,7 @@ from oauth2_provider.models import clear_expired
 from requests.exceptions import ConnectionError, HTTPError
 
 from core.models import Announcement, User, Event, BlogPost
+from core.utils.tasks import get_random_username
 from metropolis.celery import app
 
 logger = get_task_logger(__name__)
@@ -47,11 +49,35 @@ def users_with_token():
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
+    sender.add_periodic_task(crontab(hour=0, minute=0), delete_expired_users)
     sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
     sender.add_periodic_task(crontab(day_of_month=1), run_group_migrations)
     sender.add_periodic_task(
         crontab(hour=1, minute=0), clear_expired
     )  # Delete expired oauth2 tokens from db everyday at 1am
+
+
+@app.task
+def delete_expired_users():
+    """Scrub user data from inactive accounts that have not logged in for 14 days. (marked deleted)"""
+    queryset = User.objects.filter(
+        is_active=False, last_login__lt=dt.datetime.now() - dt.timedelta(days=14)
+    )
+    queryset.update(  # We need to object to not break posts or comments
+        first_name="Deleted",
+        last_name="User",
+        username=get_random_username(),
+        bio="",
+        timezone="",
+        graduating_year=None,
+        is_teacher=False,
+        organizations=[],
+        tags_following=[],
+        qltrs=None,
+        saved_blogs=[],
+        saved_announcements=[],
+        expo_notif_tokens={},
+    )
 
 
 @app.task

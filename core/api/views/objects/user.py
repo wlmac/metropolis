@@ -1,11 +1,14 @@
 import base64
 import hashlib
 
+from django.http import JsonResponse
+from rest_framework.response import Response
+
 from core.api.serializers.custom import UserOrganizationField
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from rest_framework import permissions, serializers, validators
+from rest_framework import permissions, serializers, validators, status
 
 from .base import BaseProvider
 from ...utils.gravatar import gravatar_url
@@ -211,4 +214,14 @@ class UserProvider(BaseProvider):
             )
             .latest("action_time")
             .action_time
+        )
+
+    @staticmethod
+    def delete(request, *args, **kwargs):
+        """Respond with correct endpoint for deleting a user."""
+        return JsonResponse(
+            status=status.HTTP_304_NOT_MODIFIED,
+            data={
+                "detail": "Not allowed, Please read the docs for the correct endpoint."
+            },
         )
