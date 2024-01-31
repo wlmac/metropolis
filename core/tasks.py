@@ -6,9 +6,9 @@ import requests
 from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
-from django.db.models import Value, JSONField, Q
+from django.db.models import Value, JSONField, Q, Field, F
+from django.db.models.functions.text import Concat
 from django.utils import timezone
-from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _l
 from django.utils.translation import ngettext
 from exponent_server_sdk import (
@@ -62,7 +62,7 @@ def setup_periodic_tasks(sender, **kwargs):
 def delete_expired_users():
     """Scrub user data from inactive accounts that have not logged in for 14 days. (marked deleted)"""
     queryset = User.objects.filter(
-        is_active=False, last_login__lt=dt.datetime.now() - dt.timedelta(days=14)
+        is_deleted=True, last_login__lt=dt.datetime.now() - dt.timedelta(days=14)
     )
     comments = Comment.objects.filter(author__in=queryset)
     comments.update(body=None, last_modified=timezone.now()) # if body is None "deleted on %last_modified% would be shown
@@ -81,7 +81,9 @@ def delete_expired_users():
         saved_announcements=[],
         expo_notif_tokens={},
     )
-
+    queryset.update(
+        email=Concat(F("random_username"), Value("@maclyonsden.com"))
+    )
 
 @app.task
 def run_group_migrations():

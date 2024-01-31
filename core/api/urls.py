@@ -2,6 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from .v3.views.user import UserDeleteView, UserRestoreView
 from .views import *
 from .views.objects.main import ObjectList, ObjectNew, ObjectRetrieve, ObjectSingle
 
@@ -54,9 +55,11 @@ urlpatterns = [
     path("v3/staff", staff, name="api_staff3"),
     path("v3/feeds", feeds, name="api_feeds3"),
     path(
-        "v3/obj/user/<int:id>/delete", UserDeleteView.as_view(), name="api_user_delete3"
+        "v3/obj/user/<int:id>/delete", UserDeleteView.as_view(), name="api3_user_delete"
     ),
-    path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),
+    path(
+        "v3/obj/user/<int:id>/restore", UserRestoreView.as_view(), name="api3_user_restore"
+    ),    path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),
     path("v3/obj/<str:type>/new", ObjectNew.as_view(), name="api_object_new3"),
     path(
         "v3/obj/<str:type>/single/<path:lookup>",  # lookup is typically ID unless otherwise specified via the ?lookup= query parameter

@@ -57,6 +57,8 @@ class User(AbstractUser):
         help_text="JSON object with keys as tokens and values as null.",
         # the length is not specified :( https://github.com/expo/expo/issues/1135#issuecomment-399622890
     )
+    is_deleted = models.BooleanField(default=False, help_text="If the user is deleted. Never change this in admin", null=False, blank=False)
+    deleted_at = models.DateTimeField(null=True, default=None, blank=True, help_text="When the user was deleted. Never change this in admin")
 
     @property
     def qltrs2(self):
@@ -106,7 +108,7 @@ class User(AbstractUser):
         return obj.approvable(user=self)
 
     def mark_deleted(self):
-        self.is_active = False
+        self.is_deleted = True
         self.last_login = timezone.now()
         self.save()
         email_template_context = {
@@ -128,7 +130,28 @@ class User(AbstractUser):
                 email_template_context,
             ),
         )
-
+        
+    def mark_restored(self):
+        self.is_deleted = True
+        self.last_login = timezone.now()
+        self.save()
+        email_template_context = {
+            "user": self,
+        }
+        
+        send_mail(  # todo: frontend needs to make a page for this
+            f"Your account has successfully been restored.",
+            render_to_string(
+                "core/email/restored_user.txt",
+                email_template_context,
+            ),
+            None,
+            [self.email],
+            html_message=render_to_string(
+                "core/email/restored_user.html",
+                email_template_context,
+            ),
+        )
     @classmethod
     def all(cls):
         return cls.objects.filter(is_active=True)
