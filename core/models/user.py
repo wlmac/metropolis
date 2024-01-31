@@ -109,7 +109,7 @@ class User(AbstractUser):
 
     def mark_deleted(self):
         self.is_deleted = True
-        self.last_login = timezone.now()
+        self.deleted_at = timezone.now()
         self.save()
         email_template_context = {
             "user": self,
@@ -132,8 +132,8 @@ class User(AbstractUser):
         )
         
     def mark_restored(self):
-        self.is_deleted = True
-        self.last_login = timezone.now()
+        self.is_deleted = False
+        self.deleted_at = None
         self.save()
         email_template_context = {
             "user": self,
