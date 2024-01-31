@@ -7,6 +7,7 @@ from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.db.models import Value, JSONField, Q
+from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _l
 from django.utils.translation import ngettext
@@ -19,7 +20,7 @@ from exponent_server_sdk import (
 from oauth2_provider.models import clear_expired
 from requests.exceptions import ConnectionError, HTTPError
 
-from core.models import Announcement, User, Event, BlogPost
+from core.models import Announcement, User, Event, BlogPost, Comment
 from core.utils.tasks import get_random_username
 from metropolis.celery import app
 
@@ -63,6 +64,8 @@ def delete_expired_users():
     queryset = User.objects.filter(
         is_active=False, last_login__lt=dt.datetime.now() - dt.timedelta(days=14)
     )
+    comments = Comment.objects.filter(author__in=queryset)
+    comments.update(body=None, last_modified=timezone.now()) # if body is None "deleted on %last_modified% would be shown
     queryset.update(  # We need to object to not break posts or comments
         first_name="Deleted",
         last_name="User",
