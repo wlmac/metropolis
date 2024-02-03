@@ -1,0 +1,18 @@
+{% load settings_tags %}
+
+Hello {{ user.get_full_name }},
+
+Your account is subjected to be deleted on {{ deleted_at }}.
+
+This action is reversible up to the time above. If you want to keep your account, please click or copy paste the following link to recover your account.
+
+{{ recover_link }}
+
+Please click or copy paste the following link to review this announcement.
+
+{{ review_link }}
+
+Sincerely,
+Metropolis Team
+
+This email is automated. Please send us an email at {% settings_value 'DEFAULT_FROM_EMAIL' %} for any concerns.

@@ -611,6 +611,7 @@ class UserAdmin(DjangoUserAdmin):
         "is_teacher",
         "groups",
         "graduating_year",
+        "is_deleted",
     ]
     search_fields = [
         "username",

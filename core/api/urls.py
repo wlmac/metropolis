@@ -55,11 +55,14 @@ urlpatterns = [
     path("v3/staff", staff, name="api_staff3"),
     path("v3/feeds", feeds, name="api_feeds3"),
     path(
-        "v3/obj/user/<int:id>/delete", UserDeleteView.as_view(), name="api3_user_delete"
+        "v3/obj/user/me/delete", UserDeleteView.as_view(), name="api3_user_delete"
     ),
     path(
-        "v3/obj/user/<int:id>/restore", UserRestoreView.as_view(), name="api3_user_restore"
-    ),    path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),
+        "v3/obj/user/me/restore",
+        UserRestoreView.as_view(),
+        name="api3_user_restore",
+    ),
+    path("v3/obj/<str:type>", ObjectList.as_view(), name="api_object_list3"),
     path("v3/obj/<str:type>/new", ObjectNew.as_view(), name="api_object_new3"),
     path(
         "v3/obj/<str:type>/single/<path:lookup>",  # lookup is typically ID unless otherwise specified via the ?lookup= query parameter

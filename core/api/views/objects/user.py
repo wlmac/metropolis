@@ -63,7 +63,6 @@ class UserSerializer(serializers.ModelSerializer):
         return obj
 
     class Meta:
-        model = User
         fields = [
             "id",
             "username",
@@ -83,7 +82,10 @@ class UserSerializer(serializers.ModelSerializer):
             "saved_announcements",
             "is_teacher",
             "is_superuser",
+            "is_deleted",
+            "deleted_at"
         ]
+        model = User
 
 
 class ListSerializer(serializers.ModelSerializer):

@@ -39,7 +39,8 @@ class TermDetail(generics.RetrieveAPIView):
 
 
 class TermSchedule(APIView):
-    def get(self, request, pk, format=None):
+    @staticmethod
+    def get(request, pk, fmt=None):
         term = get_object_or_404(models.Term, pk=pk)
         date = utils.parse_date_query_param(request)
 
@@ -47,7 +48,8 @@ class TermSchedule(APIView):
 
 
 class TermScheduleWeek(APIView):
-    def get(self, request, pk, format=None):
+    @staticmethod
+    def get(request, pk, fmt=None):
         term = get_object_or_404(models.Term, pk=pk)
         date = utils.parse_date_query_param(request)
 
@@ -62,7 +64,8 @@ class TermScheduleWeek(APIView):
 
 
 class TermCurrent(APIView):
-    def get(self, request, format=None):
+    @staticmethod
+    def get(request, fmt=None):
         term = models.Term.get_current()
 
         if term is None:
@@ -73,7 +76,8 @@ class TermCurrent(APIView):
 
 
 class TermCurrentSchedule(APIView):
-    def get(self, request, format=None):
+    @staticmethod
+    def get(request, fmt=None):
         term = models.Term.get_current()
         date = utils.parse_date_query_param(request)
 

@@ -65,7 +65,9 @@ def delete_expired_users():
         is_deleted=True, last_login__lt=dt.datetime.now() - dt.timedelta(days=14)
     )
     comments = Comment.objects.filter(author__in=queryset)
-    comments.update(body=None, last_modified=timezone.now()) # if body is None "deleted on %last_modified% would be shown
+    comments.update(
+        body=None, last_modified=timezone.now()
+    )  # if body is None "deleted on %last_modified% would be shown
     queryset.update(  # We need to object to not break posts or comments
         first_name="Deleted",
         last_name="User",
@@ -81,9 +83,8 @@ def delete_expired_users():
         saved_announcements=[],
         expo_notif_tokens={},
     )
-    queryset.update(
-        email=Concat(F("random_username"), Value("@maclyonsden.com"))
-    )
+    queryset.update(email=Concat(F("random_username"), Value("@maclyonsden.com")))
+
 
 @app.task
 def run_group_migrations():

@@ -57,8 +57,18 @@ class User(AbstractUser):
         help_text="JSON object with keys as tokens and values as null.",
         # the length is not specified :( https://github.com/expo/expo/issues/1135#issuecomment-399622890
     )
-    is_deleted = models.BooleanField(default=False, help_text="If the user is deleted. Never change this in admin", null=False, blank=False)
-    deleted_at = models.DateTimeField(null=True, default=None, blank=True, help_text="When the user was deleted. Never change this in admin")
+    is_deleted = models.BooleanField(
+        default=False,
+        help_text="If the user is deleted. Never change this in admin",
+        null=False,
+        blank=False,
+    )
+    deleted_at = models.DateTimeField(
+        null=True,
+        default=None,
+        blank=True,
+        help_text="When the user was deleted. Never change this in admin",
+    )
 
     @property
     def qltrs2(self):
@@ -113,24 +123,25 @@ class User(AbstractUser):
         self.save()
         email_template_context = {
             "user": self,
-            "time_deleted": timezone.now(),
-            "restore_link": settings.SITE_URL + reverse("restore", args=(self.id,)),
+            "deleted_at": timezone.now() + timezone.timedelta(days=14),
+            "restore_link": settings.SITE_URL + reverse("api3_user_restore"),
         }
+        print("hiosas", email_template_context)
 
         send_mail(  # todo: frontend needs to make a page for this
             f"[ACTION REQUIRED] Your account has been marked for deletion.",
             render_to_string(
-                "core/email/restore_deleted_user.txt",
+                "core/email/user/deleted.txt",
                 email_template_context,
             ),
             None,
             [self.email],
             html_message=render_to_string(
-                "core/email/restore_deleted_user.html",
+                "core/email/user/deleted.html",
                 email_template_context,
             ),
         )
-        
+
     def mark_restored(self):
         self.is_deleted = False
         self.deleted_at = None
@@ -138,20 +149,21 @@ class User(AbstractUser):
         email_template_context = {
             "user": self,
         }
-        
+
         send_mail(  # todo: frontend needs to make a page for this
             f"Your account has successfully been restored.",
             render_to_string(
-                "core/email/restored_user.txt",
+                "core/email/user/restored.txt",
                 email_template_context,
             ),
             None,
             [self.email],
             html_message=render_to_string(
-                "core/email/restored_user.html",
+                "core/email/user/restored.html",
                 email_template_context,
             ),
         )
+
     @classmethod
     def all(cls):
         return cls.objects.filter(is_active=True)
@@ -195,6 +207,7 @@ class StaffMember(models.Model):
     )  # if the user got kicked or smth
 
     def __str__(self):
+        self.user: User
         return f"{self.user.get_full_name()} ({self.user})"
 
     @property
