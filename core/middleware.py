@@ -1,24 +1,10 @@
 from urllib.parse import urlparse
 
-import pytz
 from django import http
 from django.conf import settings
 from django.contrib.redirects.middleware import RedirectFallbackMiddleware
 from django.contrib.redirects.models import Redirect
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils import timezone
-
-
-class TimezoneMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        if request.user.is_authenticated:
-            timezone.activate(pytz.timezone(request.user.timezone))
-        else:
-            timezone.activate(pytz.timezone(settings.DEFAULT_TIMEZONE))
-        return self.get_response(request)
 
 
 class CustomRedirectFallbackTemporaryMiddleware(RedirectFallbackMiddleware):
@@ -31,7 +17,7 @@ class CustomRedirectFallbackTemporaryMiddleware(RedirectFallbackMiddleware):
 
         full_path = request.get_full_path()
         """
-            Seperate query parameters and url if full absolute path contains
+            Separate query parameters and url if full absolute path contains
             query parameters using python urlparse library
         """
         parsed_url = None
