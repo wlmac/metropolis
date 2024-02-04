@@ -35,9 +35,13 @@ def render_timetable(timetable):
                         "<td>{}</td>",
                         (
                             (
-                                courses[position_day.intersection(courses.keys()).pop()]
-                                if position_day.intersection(courses.keys())
-                                else "-",
+                                (
+                                    courses[
+                                        position_day.intersection(courses.keys()).pop()
+                                    ]
+                                    if position_day.intersection(courses.keys())
+                                    else "-"
+                                ),
                             )
                             for position_day in schedule_day["position"]
                         ),

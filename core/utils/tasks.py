@@ -2,9 +2,6 @@
 One off random tasks that need to be run on the server.
 """
 
-
-import datetime as dt
-
 from django.utils.crypto import get_random_string
 
 from core.models import User

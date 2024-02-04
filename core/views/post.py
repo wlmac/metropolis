@@ -98,9 +98,11 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
             custom_feed(
                 self.request,
                 pk,
-                limit=settings.LAZY_LOADING["initial_limit"]
-                if settings.LAZY_LOADING
-                else None,
+                limit=(
+                    settings.LAZY_LOADING["initial_limit"]
+                    if settings.LAZY_LOADING
+                    else None
+                ),
             )
             for pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS
         ]

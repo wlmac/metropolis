@@ -9,7 +9,7 @@ if DEBUG:
     import socket  # only if you haven't already imported this
     import mimetypes
 
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    host_name, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
         "127.0.0.1",
         "10.0.2.2",
@@ -18,6 +18,10 @@ if DEBUG:
     mimetypes.add_type(
         "application/javascript", ".js", True
     )  # fix some browser issues.
+
+    environment_name = f"development-{host_name}"
+else:
+    environment_name = "production"
 
 # Banner config
 now = datetime.now(TZ)
@@ -35,3 +39,18 @@ BANNER3 += [
         cta_label="wow! go visit this cool site!",  # optional (but required if cta_link is present)
     )
 ]
+
+
+sentry_sdk.init(
+    dsn="DSN HERE!",
+    enable_tracing=True,
+    # Set traces_sample_rate to 1.0 to capture 100% of transactions%
+    traces_sample_rate=0.7,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    profiles_sample_rate=0.7,
+    include_source_context=True,
+    include_local_variables=True,
+    environment=environment_name,
+    send_default_pii=True,
+    integrations=SENTRY_INTEGRATIONS,
+)
