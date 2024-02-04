@@ -31,13 +31,13 @@ class Profile(LoginRequiredMixin, DetailView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if context["object"].organizations.count() > 0:
-            if context["object"] == self.request.user:
-                context["following"] = context["object"].organizations.all()
-            else:
-                context["following"] = context["object"].organizations.filter(
-                    show_members=True
-                )
+        obj_org_exists = context["object"].organizations.exists()
+        if context["object"] == self.request.user and obj_org_exists:
+            context["following"] = context["object"].organizations.all()
+        elif obj_org_exists:
+            context["following"] = context["object"].organizations.filter(
+                show_members=True
+            )
         return context
 
 
