@@ -1,6 +1,12 @@
+import logging
 import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Final, Literal
+
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
+
 from .timetable_formats import *
 import pytz
 
@@ -265,6 +271,25 @@ with open(os.path.join(os.path.dirname(__file__), "local_rsa_privkey.pem")) as f
         )
     )
 
+
+# sentry settings
+
+SENTRY_INTEGRATIONS = [  # https://docs.sentry.io/platforms/python/integrations/logging/#ignoring-a-logger
+    DjangoIntegration(
+        transaction_style="url",
+        # Create spans and track performance of all middleware.
+        middleware_spans=True,  # todo disable in a week (2024-02-10)
+        # Create spans and track performance of all synchronous Django signals receiver functions in your Django project
+        signals_spans=True,  # todo disable in a month then enable to test notifs
+        # Create spans and track performance of all read operations to configured caches. The spans also include information if the cache access was a hit or a miss.
+        cache_spans=True,
+    ),
+    RedisIntegration(),
+    LoggingIntegration(
+        level=logging.INFO,  # Capture info and above as breadcrumbs
+        event_level=logging.WARNING,  # Send records as events
+    ),
+]
 
 # Scheme generation
 SPECTACULAR_SETTINGS = {

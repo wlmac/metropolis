@@ -31,7 +31,7 @@ class UserRestoreView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        #user: User = models.User.objects.filter(id=id).first()
+        # user: User = models.User.objects.filter(id=id).first()
         user: User = request.user
         if user is None:  # old code from id based delete
             return Response(status=status.HTTP_410_GONE)
