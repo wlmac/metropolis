@@ -7,12 +7,10 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 
-from . import timezone_choices, graduating_year_choices
-from .course import Term
-from .post import Announcement
-from ..utils.choices import calculate_years
-from ..utils.fields import SetField, ChoiceArrayField
-from ..utils.mail import send_mail
+from core.models import graduating_year_choices, course, post
+from core.utils.choices import calculate_years
+from core.utils.fields import SetField, ChoiceArrayField
+from core.utils.mail import send_mail
 
 
 # Create your models here.
@@ -28,15 +26,13 @@ class CaseInsensitiveUserManager(UserManager):
 
 
 def get_default_user_timezone():
-    return settings.DEFAULT_TIMEZONE
+    """Only used in migrations now."""
+    return settings.TIME_ZONE
 
 
 class User(AbstractUser):
     objects = CaseInsensitiveUserManager()
     bio = models.TextField(blank=True)
-    timezone = models.CharField(
-        max_length=50, choices=timezone_choices, default=get_default_user_timezone
-    )
     graduating_year = models.PositiveSmallIntegerField(
         blank=True, null=True, choices=graduating_year_choices
     )
@@ -80,7 +76,7 @@ class User(AbstractUser):
         return False
 
     def get_current_timetable(self):
-        current_term = Term.get_current()
+        current_term = course.Term.get_current()
         if current_term is None:
             return None
 
@@ -104,7 +100,7 @@ class User(AbstractUser):
 
     def get_feed(self):
         return (
-            Announcement.get_approved()
+            post.Announcement.get_approved()
             .filter(
                 Q(is_public=True, tags__follower=self) | Q(organization__member=self)
             )

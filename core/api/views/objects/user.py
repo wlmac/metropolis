@@ -2,7 +2,6 @@ import base64
 import hashlib
 
 from django.http import JsonResponse
-from rest_framework.response import Response
 
 from core.api.serializers.custom import UserOrganizationField
 from django.conf import settings
@@ -72,7 +71,6 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "bio",
-            "timezone",
             "graduating_year",
             "organizations",
             "organizations_leading",
@@ -166,7 +164,6 @@ class NewSerializer(serializers.ModelSerializer):
             "username",
             "password",
             "bio",
-            "timezone",
         ]
 
 
