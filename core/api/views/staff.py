@@ -1,4 +1,9 @@
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiParameter,
+    OpenApiExample,
+    extend_schema_serializer,
+)
 from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -9,6 +14,24 @@ from core.api.serializers.custom import SingleUserField
 from core.models import StaffMember
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "A staff member",
+            value={
+                "user": 746,
+                "bio": "Hi, I'm jason and here is my BIO",
+                "positions": ["Doodle Developer"],
+                "positions_leading": ["Backend Developer"],
+                "years": [
+                    "2022-2023",
+                    "2023-2024",
+                ],
+                "is_alumni": False,
+            },
+        )
+    ]
+)
 class StaffSerializer(serializers.ModelSerializer):
     user = SingleUserField()
     bio = serializers.CharField()
