@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from json import JSONDecodeError
-from typing import Literal, List, Set, Protocol
+from typing import Literal, List, Set, Protocol, Final
 
 from django.conf import settings
 from django.core.exceptions import BadRequest
@@ -70,6 +70,7 @@ providers: Dict[str, BaseProvider] = {  # k = request type (param passed in url)
     "course": CourseProvider,
 }
 provider_keys = providers.keys()
+type Operations = Final[Literal["single", "new", "list", "retrieve"]]
 def get_provider(provider_name: provider_keys) -> Callable:
     """
     Gets a provider by type name.
@@ -80,14 +81,14 @@ def get_provider(provider_name: provider_keys) -> Callable:
         )
     return providers[provider_name]
 
-def extend_schema_with_type(provider=None, **kwargs):
+def extend_schema_with_type(provider: BaseProvider, operation: Operations, **kwargs):
     def decorator(view_func):
-        serializer = get_serializer_by_provider(type, view_func.__name__)
+        serializer = provider.serializers.get(operation)
         return extend_schema(request=serializer, **kwargs)(view_func)
     return decorator
 
 def get_providers_by_operation(
-    operation: Literal["single", "new", "list", "retrieve"]
+    operation: Operations
 ) -> List[str]:
     """
     returns a list of provider path names that support the given operation.
@@ -101,19 +102,6 @@ def get_providers_by_operation(
         for key, prov in providers.items()
         if getattr(prov, f"allow_{operation}", True) == True
     ]
-
-
-def get_serializer_by_provider(provider, action):
-    """
-    Gets the serializer for a provider.
-    """
-    
-    serializer = getattr(provider, f"{action}_serializer_class")
-    if serializer is None:
-        raise AttributeError(
-            f"Serializer for {provider.__name__} is not defined."
-        )
-    return serializer
     
 class ObjectAPIView(generics.GenericAPIView):
     def initial(self, *args, **kwargs):
