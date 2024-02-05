@@ -25,11 +25,6 @@ class CaseInsensitiveUserManager(UserManager):
         return self.get(**{self.model.USERNAME_FIELD + "__iexact": username})
 
 
-def get_default_user_timezone():
-    """Only used in migrations now."""
-    return settings.TIME_ZONE
-
-
 class User(AbstractUser):
     objects = CaseInsensitiveUserManager()
     bio = models.TextField(blank=True)

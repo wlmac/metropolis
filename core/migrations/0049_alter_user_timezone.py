@@ -465,7 +465,7 @@ class Migration(migrations.Migration):
                     ("US/Pacific", "US/Pacific"),
                     ("UTC", "UTC"),
                 ],
-                default=core.models.user.get_default_user_timezone,
+                default="UTC",
                 max_length=50,
             ),
         ),
