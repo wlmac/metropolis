@@ -10,7 +10,8 @@ from rest_framework import permissions, serializers
 from rest_framework.exceptions import ValidationError
 
 from .base import BaseProvider
-from ...serializers.custom import (
+
+from core.api.serializers.custom import (
     TagRelatedField,
     SingleUserField,
     OrganizationField,
@@ -18,8 +19,8 @@ from ...serializers.custom import (
     LikeField,
     SupervisorField,
 )
-from ...utils import ModelAbilityField
-from ....models import Announcement, User
+from core.api.utils import ModelAbilityField
+from core.models import Announcement, User
 
 
 def exec_validator(value, serializer_field):

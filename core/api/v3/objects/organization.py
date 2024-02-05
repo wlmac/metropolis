@@ -4,8 +4,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from rest_framework import permissions, serializers
 
+
 from .base import BaseProvider
-from .... import models
+from core import models
 
 
 class Serializer(serializers.ModelSerializer):

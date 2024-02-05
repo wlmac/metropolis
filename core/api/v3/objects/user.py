@@ -9,9 +9,10 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers, validators, status
 
+
 from .base import BaseProvider
-from ...utils.gravatar import gravatar_url
-from ....models import User, graduating_year_choices
+from core.api.utils.gravatar import gravatar_url
+from core.models import User, graduating_year_choices
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -185,17 +186,17 @@ class UserProvider(BaseProvider):
         "organizations_owning": int,
         "organizations_supervising": int,
     }
+    raw_serializers = {
+        "new": NewSerializer,
+        "list": ListSerializer,
+        "_": UserSerializer
+    }
+
 
     @property
     def permission_classes(self):
         return [Identity] if self.request.mutate else [permissions.IsAuthenticated]
-
-    @property
-    def serializer_class(self):
-        return dict(
-            new=NewSerializer,
-            list=ListSerializer,
-        ).get(self.request.kind, UserSerializer)
+    
 
     @staticmethod
     def get_queryset(request):

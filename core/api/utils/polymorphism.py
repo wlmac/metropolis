@@ -1,28 +1,58 @@
 from __future__ import annotations
 
 from json import JSONDecodeError
-from typing import Literal, List
+from typing import Literal, List, Set, Protocol
 
+from django.conf import settings
 from django.core.exceptions import BadRequest
-from django.db.models import Model
+from django.db.models import Model, Q
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics
 
-from core.api.views.objects import *
+from functools import lru_cache
+
+import frozendict
+from rest_framework.serializers import BaseSerializer
+
+from typing import Iterable, Any, Dict, Callable
+
+from core.api.v3.objects import *
+from core.api.v3.objects.base import BaseProvider
 
 
-def get_provider(provider_name: str):
+
+Item = frozendict.frozendict  # is an instance of frozendict (immutable dict)
+type IgnoredKey = str | Iterable[str]
+type SerializerItems = Dict[str, BaseSerializer]
+class SplitDictResult:
+    def __init__(self, new: Item, old: Item, default: IgnoredKey):
+        self.new = new
+        self.old = old
+        self.default = default
+    
+    def get(self, item):
+        return self.new.get(item, self.default)
+        
+    def __getitem__(self, key):
+        return self.get(key)
+def split_dict_wrapper(ignore: IgnoredKey) -> Callable[[Dict[str, Any]], SplitDictResult]:
     """
-    Gets a provider by type name.
+    Note: this will fail as the dict must be frozen so LRU cache can hash it
     """
-    if provider_name not in providers:
-        raise BadRequest(
-            "Object type not found. Valid types are: " + ", ".join(providers) + "."
-        )
-    return providers[provider_name]
+    @lru_cache(maxsize=None)
+    def split_dict(dictionary: Item) -> SplitDictResult:
+        new = {k: v for k, v in dictionary.items() if (k not in ignore if isinstance(ignore, Iterable) else k != ignore)}
+        return SplitDictResult(new, dictionary, ignore)
+    return split_dict
+
+splitter = split_dict_wrapper("_") # ignore key for serializers
+def serializer_fmt(serializers: SerializerItems):
+    items = frozendict.frozendict(serializers)
+    return splitter(items)
 
 
-providers = {  # k = request type (param passed in url), v = provider class
+providers: Dict[str, BaseProvider] = {  # k = request type (param passed in url), v = provider class
     "announcement": AnnouncementProvider,
     "blog-post": BlogPostProvider,
     "exhibit": ExhibitProvider,
@@ -37,7 +67,22 @@ providers = {  # k = request type (param passed in url), v = provider class
     "like": LikeProvider,
     "course": CourseProvider,
 }
+provider_keys = providers.keys()
+def get_provider(provider_name: provider_keys) -> Callable:
+    """
+    Gets a provider by type name.
+    """
+    if provider_name not in provider_keys:
+        raise BadRequest(
+            "Object type not found. Valid types are: " + ", ".join(providers) + "."
+        )
+    return providers[provider_name]
 
+def extend_schema_with_type(provider=None, **kwargs):
+    def decorator(view_func):
+        serializer = get_serializer_by_provider(type, view_func.__name__)
+        return extend_schema(request=serializer, **kwargs)(view_func)
+    return decorator
 
 def get_providers_by_operation(
     operation: Literal["single", "new", "list", "retrieve"]
@@ -54,9 +99,19 @@ def get_providers_by_operation(
         for key, prov in providers.items()
         if getattr(prov, f"allow_{operation}", True) == True
     ]
+
+
+def get_serializer_by_provider(provider, action):
+    """
+    Gets the serializer for a provider.
+    """
     
-    
-    
+    serializer = getattr(provider, f"{action}_serializer_class")
+    if serializer is None:
+        raise AttributeError(
+            f"Serializer for {provider.__name__} is not defined."
+        )
+    return serializer
     
 class ObjectAPIView(generics.GenericAPIView):
     def initial(self, *args, **kwargs):
@@ -65,6 +120,7 @@ class ObjectAPIView(generics.GenericAPIView):
         self.request.kind = self.kind
         self.request.detail = self.detail
         self.provider = provider = get_provider(kwargs.pop("type"))(self.request)
+        self.provider: Provider
         self.permission_classes = provider.permission_classes
         self.serializer_class = provider.serializer_class
         self.additional_lookup_fields = self._compile_lookup_fields()
@@ -203,3 +259,17 @@ class ObjectAPIView(generics.GenericAPIView):
 
         self.response = self.finalize_response(request, response, *args, **kwargs)
         return self.response
+    
+    def get_serializer_class(self):
+        return self.provider.serializer_class
+        
+
+class Provider(Protocol):
+    allow_list: bool
+    allow_new: bool
+    kind: Literal["list", "new", "single", "retrieve"]
+    listing_filters_ignore: List[str]
+    
+    serializers: SplitDictResult
+    def __init__(self, request) -> None:
+        ...

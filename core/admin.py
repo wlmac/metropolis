@@ -6,6 +6,7 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.messages import constants as messages
 from django.db.models import Q
+from django.forms import Textarea
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -38,7 +39,7 @@ User = get_user_model()
 
 class CourseInline(admin.TabularInline):
     formfield_overrides = {
-        django.db.models.TextField: {"widget": forms.Textarea(attrs={"rows": 1})},
+        django.db.models.TextField: {"widget": Textarea(attrs={"rows": 1})},
     }
     fields = ["code", "position", "description"]
     ordering = ["code"]
@@ -88,7 +89,7 @@ class TagAdmin(admin.ModelAdmin):
 
 class TagInline(admin.StackedInline):
     formfield_overrides = {
-        django.db.models.TextField: {"widget": forms.Textarea(attrs={"rows": 1})},
+        django.db.models.TextField: {"widget": Textarea(attrs={"rows": 1})},
     }
     model = models.Tag
     extra = 0

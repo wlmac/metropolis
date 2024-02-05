@@ -1,14 +1,15 @@
 from django.utils import timezone
 from rest_framework import permissions, serializers
 
+
 from .base import BaseProvider
-from ...serializers.custom import (
+from core.api.serializers.custom import (
     TagRelatedField,
     SingleUserField,
     LikeField,
     CommentField,
 )
-from ....models import Exhibit
+from core.models import Exhibit
 
 
 class Serializer(serializers.ModelSerializer):

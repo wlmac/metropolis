@@ -7,12 +7,13 @@ from rest_framework import permissions, serializers
 from rest_framework.exceptions import ParseError
 
 from .announcement import Inner
+
 from .base import BaseProvider
-from ...serializers.custom import (
+from core.api.serializers.custom import (
     TagRelatedField,
     OrganizationField,
 )
-from ....models import Event
+from core.models import Event
 
 AOE = datetime.timezone(datetime.timedelta(hours=-12), name="AoE")
 

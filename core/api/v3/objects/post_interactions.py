@@ -10,14 +10,15 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 
+
 from .base import BaseProvider
-from ...serializers.custom import (
+from core.api.serializers.custom import (
     ContentTypeField,
     CommentField,
     SingleUserField,
     LikeField,
 )
-from ....models import Comment, User, Like
+from core.models import Comment, User, Like
 
 typedir: dict[str, str] = {
     "blogpost": "core | blogpost",
