@@ -305,9 +305,11 @@ SPECTACULAR_SETTINGS = {
     "OAUTH2_TOKEN_URL": "/api/auth/token",
     "OAUTH2_REFRESH_URL": "/api/auth/token/refresh",
     "OAUTH2_SCOPES": OAUTH2_PROVIDER["SCOPES"].keys(),
+    "PREPROCESSING_HOOKS": ["core.schema.split_api3_obj"]
     #'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
+
 
 
 # CORS settings

@@ -65,3 +65,10 @@ def dynamic_envelope(serializer_class: Type[Serializer], many=False):
         return wrapped_view
 
     return decorator
+
+def split_api3_obj(endpoints):
+    print(endpoints)
+    # your modifications to the list of operations that are exposed in the schema
+    for (path, path_regex, method, callback) in endpoints:
+        pass
+    return endpoints
