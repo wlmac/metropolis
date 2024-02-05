@@ -190,7 +190,7 @@ class UserProvider(BaseProvider):
         "new": NewSerializer,
         "list": ListSerializer,
         "_": UserSerializer
-    }
+    }    
 
 
     @property

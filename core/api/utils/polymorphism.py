@@ -22,7 +22,7 @@ from core.api.v3.objects.base import BaseProvider
 
 
 
-Item = frozendict.frozendict  # is an instance of frozendict (immutable dict)
+Item = frozendict.frozendict  # frozendict is a class (immutable dict)
 type IgnoredKey = str | Iterable[str]
 type SerializerItems = Dict[str, BaseSerializer]
 class SplitDictResult:
@@ -36,6 +36,7 @@ class SplitDictResult:
         
     def __getitem__(self, key):
         return self.get(key)
+    
 def split_dict_wrapper(ignore: IgnoredKey) -> Callable[[Dict[str, Any]], SplitDictResult]:
     """
     Note: this will fail as the dict must be frozen so LRU cache can hash it
@@ -50,6 +51,7 @@ splitter = split_dict_wrapper("_") # ignore key for serializers
 def serializer_fmt(serializers: SerializerItems):
     items = frozendict.frozendict(serializers)
     return splitter(items)
+
 
 
 providers: Dict[str, BaseProvider] = {  # k = request type (param passed in url), v = provider class
