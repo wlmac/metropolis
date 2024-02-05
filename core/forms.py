@@ -216,6 +216,7 @@ class EventAdminForm(forms.ModelForm):
         timetable_configs = settings.TIMETABLE_FORMATS
 
         self.fields["schedule_format"].initial = "default"
+        self.fields["term"].initial = models.Term.get_current()
 
         if "instance" in kwargs and kwargs["instance"] is not None:
             instance = kwargs["instance"]
