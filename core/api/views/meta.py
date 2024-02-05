@@ -3,26 +3,31 @@ from typing import Dict
 
 from django.conf import settings
 from django.utils import timezone
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiExample
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
+@extend_schema(
+    description="Returns the current API version.",
+    responses={200: {"version": "string"}},
+    examples=[OpenApiExample(name="APIVersion", response_only=True, status_codes=[200], value={"version": "3.2.1"})])
 class APIVersion(APIView):
     """Returns the current API version."""
-
-    def get(self, request):
+    
+    @staticmethod
+    def get(request) -> Dict[str, str]:
         return Response({"version": settings.API_VERSION})
 
 
 class Banners(APIView):
-    noncensored_keys = ("start", "end", "content", "icon_url", "cta_link", "cta_label")
+    uncensored_keys = ("start", "end", "content", "icon_url", "cta_link", "cta_label")
     allowed_blank = ("icon_url", "cta_link", "cta_label")
 
     @classmethod
     def censor(cls, banner: Dict) -> Dict:
         res = {}
-        for key in cls.noncensored_keys:
+        for key in cls.uncensored_keys:
             if key in banner:
                 res[key] = banner[key]
             elif key not in banner and key in cls.allowed_blank:
