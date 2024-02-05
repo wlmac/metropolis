@@ -200,7 +200,7 @@ class Event(models.Model):
     schedule_format = models.CharField(max_length=64, default="default")
     is_instructional = models.BooleanField(
         default=True,
-        help_text="Whether school instruction is taking place during this event. Leave checked if not direct cause.",
+        help_text="Whether this event changes the day's schedule or not. Leave checked if not direct cause. (don't change for presentations, etc.)",
     )
     is_public = models.BooleanField(
         default=True,
