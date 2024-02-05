@@ -3,11 +3,9 @@ import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Final, Literal
 
-from sentry_sdk.integrations.django import DjangoIntegration
-from sentry_sdk.integrations.logging import LoggingIntegration
-from sentry_sdk.integrations.redis import RedisIntegration
+from sentry_sdk.integrations import django as sen_django, logging as sen_logging, redis
 
-from .timetable_formats import *
+from metropolis.timetable_formats import *
 import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -239,6 +237,7 @@ IGNORED_QUERY_PARAMS: List[str] = [
     "search_type",
     "format",
 ]  # query params that are ignored by the API (e.g., for lookups)
+
 LOOKUP_FIELD_REPLACEMENTS: Dict[str, str] = {
     "TextField": "__iexact",
     "CharField": "__iexact",
@@ -274,7 +273,7 @@ with open(os.path.join(os.path.dirname(__file__), "local_rsa_privkey.pem")) as f
 # sentry settings
 
 SENTRY_INTEGRATIONS = [  # https://docs.sentry.io/platforms/python/integrations/logging/#ignoring-a-logger
-    DjangoIntegration(
+    sen_django.DjangoIntegration(
         transaction_style="url",
         # Create spans and track performance of all middleware.
         middleware_spans=True,  # todo disable in a week (2024-02-10)
@@ -283,8 +282,8 @@ SENTRY_INTEGRATIONS = [  # https://docs.sentry.io/platforms/python/integrations/
         # Create spans and track performance of all read operations to configured caches. The spans also include information if the cache access was a hit or a miss.
         cache_spans=True,
     ),
-    RedisIntegration(),
-    LoggingIntegration(
+    redis.RedisIntegration(),
+    sen_logging.LoggingIntegration(
         level=logging.INFO,  # Capture info and above as breadcrumbs
         event_level=logging.WARNING,  # Send records as events
     ),
@@ -406,7 +405,7 @@ PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, "templates", "serviceworker.js"
 
 MAPBOX_APIKEY = "change me"
 
-# Metropolis settings
+# Team settings
 
 METROPOLIS_POSITIONS = (
     ("Project Manager", "Project Manager"),
@@ -499,14 +498,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
-SILENCED_SYSTEM_CHECKS = ["urls.W002"]
-
 HIJACK_PERMISSION_CHECK = "core.utils.hijack.hijack_permissions_check"
 
 ALLOWED_HIJACKERS = [746, 165]  # Jason Cameron & Ken Shibata
-
-
-DEFAULT_TIMEZONE = "America/Toronto"  # default timezone for users
 
 ANNOUNCEMENT_APPROVAL_BCC_LIST = []
 

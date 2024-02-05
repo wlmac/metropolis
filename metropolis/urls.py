@@ -50,7 +50,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("martor/", include("martor.urls")),
     path("select2/", include("django_select2.urls")),
-    path("/<path:url>", include("django.contrib.flatpages.urls")),
+    path("<path:url>", include("django.contrib.flatpages.urls")),
     path("docs", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("docs/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
