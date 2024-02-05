@@ -34,7 +34,7 @@ class BaseProvider(ABC):
             
         # just type checking, doesnt care if value is there or not.    
         for key, value in (additional_attrs | required_attrs).items():
-            if item := getattr(cls, key):
+            if hasattr(cls, key) and (item := getattr(cls, key)):
                 if not isinstance(item, value):
                     raise TypeError(f'{key} must be of type {value}')  
         
