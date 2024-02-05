@@ -18,6 +18,14 @@ class BaseProvider:
     
     def __new__(cls, request):
         from core.api.utils.polymorphism import serializer_fmt as SFMT # noqa
+        if not hasattr(cls, "raw_serializers"):
+            raise AttributeError("raw_serializers must be defined in the class")
+        elif cls.raw_serializers is None and not isinstance(cls.raw_serializers, dict):
+            raise AttributeError("raw_serializers must not be None, and must be a dictionary")
+        for key in cls.raw_serializers:
+            if key not in ("list", "new", "single", "retrieve", "_"):
+                raise AttributeError(f"key {key} is not a valid key for raw_serializers")
+        
         instance = super().__new__(cls)
         instance.serializers = SFMT(cls.raw_serializers)
         return instance
