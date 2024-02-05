@@ -20,10 +20,6 @@ if DEBUG:
         "application/javascript", ".js", True
     )  # fix some browser issues.
 
-    environment_name = f"development-{host_name}"
-else:
-    environment_name = "production"
-
 # Banner config
 now = datetime.now(TZ)
 # BANNER_REFERENCE_TIME =  datetime.strptime("2023-11-14", "%Y-%m-%d").replace(tzinfo=timezone.utc)  # use instead of $now for non-relative banners.
@@ -42,16 +38,20 @@ BANNER3 += [
 ]
 
 
-sentry_sdk.init(
-    # dsn="get this from sentry.io",
-    enable_tracing=True,
-    # Set traces_sample_rate to 1.0 to capture 100% of transactions%
-    traces_sample_rate=0.7,
-    # Set profiles_sample_rate to 1.0 to profile 100%
-    profiles_sample_rate=0.7,
-    include_source_context=True,
-    include_local_variables=True,
-    environment=environment_name,
-    send_default_pii=True,
-    integrations=SENTRY_INTEGRATIONS,
-)
+if not DEBUG:
+    """
+    Only used on production
+    """
+    sentry_sdk.init(
+        # dsn="get this from sentry.io",
+        enable_tracing=True,
+        # Set traces_sample_rate to 1.0 to capture 100% of transactions%
+        traces_sample_rate=0.7,
+        # Set profiles_sample_rate to 1.0 to profile 100%
+        profiles_sample_rate=0.7,
+        include_source_context=True,
+        include_local_variables=True,
+        environment="production",
+        send_default_pii=True,
+        integrations=SENTRY_INTEGRATIONS,
+    )
