@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import sentry_sdk
 
 SECRET_KEY = "change me!"
 DEBUG = True
