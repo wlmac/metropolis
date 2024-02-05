@@ -43,7 +43,7 @@ BANNER3 += [
 
 
 sentry_sdk.init(
-    #dsn="get this from sentry.io",
+    # dsn="get this from sentry.io",
     enable_tracing=True,
     # Set traces_sample_rate to 1.0 to capture 100% of transactions%
     traces_sample_rate=0.7,

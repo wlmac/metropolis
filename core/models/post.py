@@ -336,6 +336,11 @@ class BlogPost(Post):
 
     class Meta:
         ordering = ["-created_date"]
+        indexes = [
+            models.Index(fields=["is_archived"]),
+            models.Index(fields=["is_published"]),
+            models.Index(fields=["created_date"], name="idx_created_date"),
+        ]
 
 
 class Exhibit(Post):
