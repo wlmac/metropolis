@@ -136,16 +136,14 @@ class CommentProvider(BaseProvider):
     model = Comment
     allow_list = False
     allow_new = settings.ALLOW_COMMENTS
+    raw_serializers = {
+        "new": CommentNewSerializer,
+        "_": CommentSerializer
+    }
 
     @property
     def permission_classes(self):
         return [permissions.IsAuthenticated]
-
-    @property
-    def serializer_class(self):
-        return dict(
-            new=CommentNewSerializer,
-        ).get(self.request.kind, CommentSerializer)
 
     @staticmethod
     def get_queryset(request):
@@ -232,6 +230,9 @@ class LikeSerializer(serializers.ModelSerializer):
 class LikeProvider(BaseProvider):
     model = Like
     allow_list = False
+    raw_serializers = {
+        LikeSerializer
+    }
 
     @property
     def permission_classes(self):
@@ -239,10 +240,6 @@ class LikeProvider(BaseProvider):
 
     def get_queryset(self, request):
         return Like.objects.all()
-
-    @property
-    def serializer_class(self):
-        return LikeSerializer
 
     def get_last_modified(self, view):
         return (

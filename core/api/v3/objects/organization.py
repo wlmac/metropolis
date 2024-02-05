@@ -38,7 +38,6 @@ class SupervisorOrExec(permissions.BasePermission):
 
 
 class OrganizationProvider(BaseProvider):
-    serializer_class = Serializer
     model = models.Organization
     allow_new = False
     listing_filters = {
@@ -50,6 +49,9 @@ class OrganizationProvider(BaseProvider):
         "is_open": bool,
     }
     additional_lookup_fields = ["slug"]
+    raw_serializers = {
+        "_": Serializer,
+    }
 
     @property
     def permission_classes(self):

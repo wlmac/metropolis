@@ -25,7 +25,9 @@ class Inner(permissions.BasePermission):
 
 class TagProvider(BaseProvider):
     model = models.Tag
-    serializer_class = Serializer
+    raw_serializers = {
+        "_": Serializer,
+    }
 
     @property
     def permission_classes(self):

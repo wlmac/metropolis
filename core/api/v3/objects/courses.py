@@ -37,10 +37,10 @@ class CourseProvider(BaseProvider):
     model = Course
     allow_single = False
     listing_filters = {"term": int, "position": int}
-
-    @property
-    def serializer_class(self):
-        return CreateSerializer if self.request.kind == "new" else Serializer
+    raw_serializers = {
+        "new": CreateSerializer,
+        "_": Serializer,
+    }
 
     @property
     def permission_classes(self):

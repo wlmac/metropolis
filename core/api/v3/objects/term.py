@@ -25,9 +25,11 @@ class ReadOnly(permissions.BasePermission):
 
 
 class TermProvider(BaseProvider):
-    serializer_class = Serializer
     permission_classes = [ReadOnly]
     model = Term
+    raw_serializers = {
+        "_": Serializer,
+    }
 
     def get_queryset(self, request):
         return Term.objects.filter(

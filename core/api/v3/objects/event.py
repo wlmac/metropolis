@@ -48,11 +48,11 @@ class DetailSerializer(serializers.ModelSerializer):
 class EventProvider(BaseProvider):
     model = Event
     listing_filters_ignore = ["start", "end"]
-
-    @property
-    def serializer_class(self):
-        return DetailSerializer if self.request.detail else SuperficialSerializer
-
+    raw_serializers = {
+        "retrieve": DetailSerializer,
+        "_": SuperficialSerializer,
+    }
+    
     @property
     def permission_classes(self):
         return (

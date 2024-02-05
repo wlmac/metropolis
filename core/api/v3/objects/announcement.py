@@ -152,6 +152,11 @@ class AnnouncementProvider(BaseProvider):
         "organization": int,
         "author": int,
     }
+    raw_serializers = {
+        "single": OneSerializer,
+        "retrieve": OneSerializer,
+        "_": Serializer
+    }
 
     @property
     def permission_classes(self):
@@ -159,12 +164,6 @@ class AnnouncementProvider(BaseProvider):
             [permissions.DjangoModelPermissions, Inner]
             if self.request.mutate
             else [permissions.AllowAny]
-        )
-
-    @property
-    def serializer_class(self):
-        return (
-            OneSerializer if self.request.kind in ("single", "retrieve") else Serializer
         )
 
     @staticmethod

@@ -41,11 +41,12 @@ class TimetableProvider(BaseProvider):
         Identity
     ]  # redundant but in case we make a mistake with the queryset
     model = Timetable
-
-    @property
-    def serializer_class(self):
-        return MutateSerializer if self.request.mutate else ViewSerializer
-
+    raw_serializers = {
+        "new": MutateSerializer,
+        "single": MutateSerializer,
+        "_": ViewSerializer,
+    }
+    
     @staticmethod
     def get_queryset(request):
         if (
