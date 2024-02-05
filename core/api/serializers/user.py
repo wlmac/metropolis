@@ -1,8 +1,11 @@
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from .tag import TagSerializer
 from ..utils.gravatar import gravatar_url
 from ... import models
+from ...models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,12 +15,14 @@ class UserSerializer(serializers.ModelSerializer):
     )
     tags_following = TagSerializer(many=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
-
-    def get_gravatar_url(self, obj):
+    
+    @staticmethod
+    @extend_schema_field(OpenApiTypes.URI)
+    def get_gravatar_url(obj):
         return gravatar_url(obj.email)
 
     class Meta:
-        model = models.User
+        model = User
         fields = [
             "id",
             "username",
@@ -37,11 +42,14 @@ class UserSerializerInternal(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
     gravatar_url = serializers.SerializerMethodField(read_only=True)
 
-    def get_gravatar_url(self, obj):
+    @staticmethod
+    @extend_schema_field(OpenApiTypes.URI)
+    def get_gravatar_url(obj):
         return gravatar_url(obj.email)
 
     class Meta:
-        model = models.User
+        
+        model = User
         fields = [
             "id",
             "username",
@@ -65,12 +73,14 @@ class UserSerializerInternal(serializers.ModelSerializer):
 class UserSerializer3(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=models.Tag.objects.all())
     gravatar_url = serializers.SerializerMethodField(read_only=True)
-
-    def get_gravatar_url(self, obj):
+    
+    @staticmethod
+    @extend_schema_field(OpenApiTypes.URI)
+    def get_gravatar_url(obj):
         return gravatar_url(obj.email)
 
     class Meta:
-        model = models.User
+        model = User
         fields = [
             "id",
             "username",

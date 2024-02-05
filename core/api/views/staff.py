@@ -12,7 +12,7 @@ from core.models import StaffMember
 class StaffSerializer(serializers.ModelSerializer):
     user = SingleUserField()
     bio = serializers.CharField()
-    is_alumni = serializers.ReadOnlyField()
+    is_alumni = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = StaffMember

@@ -3,7 +3,7 @@ import colorsys
 from django.conf import settings
 
 
-def get_tag_color(hue):
+def get_tag_color(hue: int) -> str:
     return "#%02x%02x%02x" % tuple(
         int(i * 255)
         for i in colorsys.hsv_to_rgb(

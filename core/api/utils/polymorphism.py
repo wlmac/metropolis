@@ -3,11 +3,9 @@ from __future__ import annotations
 from json import JSONDecodeError
 from typing import Literal, List, Set, Protocol, Final
 
-from django.conf import settings
 from django.core.exceptions import BadRequest
 from django.db.models import Model, Q
 from django.shortcuts import get_object_or_404
-from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 
 from functools import lru_cache
@@ -81,11 +79,11 @@ def get_provider(provider_name: provider_keys) -> Callable:
         )
     return providers[provider_name]
 
-def extend_schema_with_type(provider: BaseProvider, operation: Operations, **kwargs):
-    def decorator(view_func):
-        serializer = provider.serializers.get(operation)
-        return extend_schema(request=serializer, **kwargs)(view_func)
-    return decorator
+# def extend_schema_with_type(provider: BaseProvider, operation: Operations, **kwargs):
+#     def decorator(view_func):
+#         serializer = provider.serializers.get(operation)
+#         return extend_schema(request=serializer, **kwargs)(view_func)
+#     return decorator
 
 def get_providers_by_operation(
     operation: Operations
