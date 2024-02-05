@@ -32,7 +32,7 @@ class SplitDictResult:
         self.default = default
     
     def get(self, item):
-        return self.new.get(item, self.default)
+        return self.new.get(item, self.old.get(self.default))
         
     def __getitem__(self, key):
         return self.get(key)

@@ -16,6 +16,7 @@ jobs:
         python -m pip install poetry
         poetry config virtualenvs.in-project true
         pip install psycopg[binary]
+        pip install tblib # to see tracebacks in logs
         poetry install
     - name: Make files
       run:  |
