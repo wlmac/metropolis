@@ -1,7 +1,7 @@
 from typing import List, Literal, Dict, Final
 from rest_framework.serializers import BaseSerializer
 from abc import ABC
-from django.db.models import Model, QuerySet
+from django.db.models.base import ModelBase
 
 type SerializerItems = Dict[str, BaseSerializer]
 
@@ -21,22 +21,24 @@ class BaseProvider(ABC):
     @classmethod
     def _run_typechecking(cls):
         get_attrs: Final[str] = ("queryset", )
-        required_attrs: Final[Dict[str, type]] = {"model": Model, "raw_serializers": dict}
-        additional_attrs: Final[Dict[str,type]] = {"additional_lookup_fields": QuerySet}
+        required_attrs: Final[Dict[str, type]] = {"model": ModelBase, "raw_serializers": dict}
+        additional_attrs: Final[Dict[str,type]] = {"additional_lookup_fields": list}
         
         for key in get_attrs:
             if not (hasattr(cls, key) or hasattr(cls, f'get_{key}')): # todo check if callable
                 raise AttributeError(f'{cls} must either define {key} or :meth:get_{key}') 
             
-        for key, type in required_attrs:
+        for key, type in required_attrs.items():
             if not hasattr(cls, key):
                 raise AttributeError(f'{cls} must define attr {key} of type {type}')
             
         # just type checking, doesnt care if value is there or not.    
-        for key, value in (additional_attrs + required_attrs).items():
+        for key, value in (additional_attrs | required_attrs).items():
             if item := getattr(cls, key):
-              if not type(item, value):
-                  raise TypeError(f'{key} must be of type {value}')  
+                print(item, value)
+                print(isinstance(item, value))
+                if not isinstance(item, value):
+                    raise TypeError(f'{key} must be of type {value}')  
         
         cls._check_serializers()
         
