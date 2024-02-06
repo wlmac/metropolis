@@ -13,7 +13,7 @@ urlpatterns = [
     path("", include(router.urls)),
     path("auth/token", TokenObtainPairView.as_view(), name="api_token_obtain_pair"),
     path("auth/token/refresh", TokenRefreshView.as_view(), name="api_token_refresh"),
-    path("notifications/new", notificationsNew, name="api_notification_new"),
+    path("notifications/new", NotificationsNew.as_view(), name="api_notification_new"),
     path("announcements", announcement, name="api_all_announcements"),
     path("announcements/feed", announcementFeed, name="api_announcement_feed"),
     path("organizations", apiOrganizationList, name="api_organization_list"),

@@ -13,10 +13,6 @@ from .. import serializers
 from ... import models
 from ... import tasks
 
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
-from rest_framework.decorators import api_view
-from core.api.serializers.announcement import AnnouncementSerializer
-
 global_notifs = Signal()
 
 
@@ -90,11 +86,8 @@ def serializer(sender, signal=None, orig_sender=None, kwargs=None):
     else:
         return sender, kwargs
 
-@extend_schema(
-    responses={200: AnnouncementSerializer(many=True)},
-)
-@api_view(["GET"])
-def notificationsNew(request, year=None):
+
+class NotificationsNew(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
