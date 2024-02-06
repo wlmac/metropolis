@@ -7,8 +7,15 @@ from .. import serializers
 from ..utils import ListAPIViewWithFallback
 from ... import models
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from rest_framework.decorators import api_view
+from core.api.serializers import EventSerializer
 
-class EventsList(ListAPIViewWithFallback):
+@extend_schema(
+    responses={200: EventSerializer(many=True)},
+)
+@api_view(["GET"])
+def event(request, year=None):
     permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser]
     serializer_class = serializers.EventSerializer

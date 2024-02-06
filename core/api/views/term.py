@@ -13,8 +13,15 @@ from .. import serializers, utils
 from ..utils import GenericAPIViewWithLastModified, ListAPIViewWithFallback
 from ... import models
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from rest_framework.decorators import api_view
+from core.api.serializers.term import TermSerializer
 
-class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
+@extend_schema(
+    responses={200: TermSerializer(many=True)},
+)
+@api_view(["GET"])
+def termList(request, year=None):
     queryset = models.Term.objects.filter(
         end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
     )
@@ -30,23 +37,32 @@ class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
             .action_time
         )
 
-
-class TermDetail(generics.RetrieveAPIView):
+@extend_schema(
+    responses={200: TermSerializer(many=True)},
+)
+@api_view(["GET"])
+def termDetail(request, year=None):
     queryset = models.Term.objects.filter(
         end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
     )
     serializer_class = serializers.TermSerializer
 
-
-class TermSchedule(APIView):
+@extend_schema(
+    responses={200: TermSerializer(many=True)},
+)
+@api_view(["GET"])
+def termSchedule(request, year=None):
     def get(self, request, pk, format=None):
         term = get_object_or_404(models.Term, pk=pk)
         date = utils.parse_date_query_param(request)
 
         return Response(term.day_schedule(target_date=date))
 
-
-class TermScheduleWeek(APIView):
+@extend_schema(
+    responses={200: TermSerializer(many=True)},
+)
+@api_view(["GET"])
+def termScheduleWeek(request, year=None):
     def get(self, request, pk, format=None):
         term = get_object_or_404(models.Term, pk=pk)
         date = utils.parse_date_query_param(request)
@@ -60,8 +76,11 @@ class TermScheduleWeek(APIView):
             }
         )
 
-
-class TermCurrent(APIView):
+@extend_schema(
+    responses={200: TermSerializer(many=True)},
+)
+@api_view(["GET"])
+def termCurrent(request, year=None):
     def get(self, request, format=None):
         term = models.Term.get_current()
 
@@ -71,8 +90,11 @@ class TermCurrent(APIView):
         serializer = serializers.TermSerializer(term)
         return Response(serializer.data)
 
-
-class TermCurrentSchedule(APIView):
+@extend_schema(
+    responses={200: TermSerializer(many=True)},
+)
+@api_view(["GET"])
+def termCurrentSchedule(request, year=None):
     def get(self, request, format=None):
         term = models.Term.get_current()
         date = utils.parse_date_query_param(request)

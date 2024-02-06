@@ -7,18 +7,28 @@ from rest_framework.views import APIView
 
 from .. import serializers, utils
 from ... import models
+
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from rest_framework.decorators import api_view
 from core.models import User
+from core.api.serializers.user import UserSerializer
 
-
-class UserDetail(generics.RetrieveAPIView):
+@extend_schema(
+    responses={200: UserSerializer(many=True)},
+)
+@api_view(["GET"])
+def userDetail(request, year=None):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
     lookup_field = "username__iexact"
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["user"]
 
-
-class UserMe(APIView):
+@extend_schema(
+    responses={200: UserSerializer(many=True)},
+)
+@api_view(["GET"])
+def userMe(request, year=None):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_meta"]
 
@@ -26,8 +36,11 @@ class UserMe(APIView):
         serializer = serializers.UserSerializer(request.user)
         return Response(serializer.data)
 
-
-class UserMeInternal(APIView):
+@extend_schema(
+    responses={200: UserSerializer(many=True)},
+)
+@api_view(["GET"])
+def userMeInternal(request, year=None):
     permission_classes = [TokenHasScope]
     required_scopes = ["me_meta", "internal"]
 
@@ -35,8 +48,11 @@ class UserMeInternal(APIView):
         serializer = serializers.UserSerializerInternal(request.user)
         return Response(serializer.data)
 
-
-class UserMeSchedule(APIView):
+@extend_schema(
+    responses={200: UserSerializer(many=True)},
+)
+@api_view(["GET"])
+def userMeSchedule(request, year=None):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_schedule"]
 
@@ -45,8 +61,11 @@ class UserMeSchedule(APIView):
 
         return Response(request.user.schedule(target_date=date))
 
-
-class UserMeScheduleWeek(APIView):
+@extend_schema(
+    responses={200: UserSerializer(many=True)},
+)
+@api_view(["GET"])
+def userMeScheduleWeek(request, year=None):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_schedule"]
 
@@ -62,8 +81,11 @@ class UserMeScheduleWeek(APIView):
             }
         )
 
-
-class UserMeTimetable(APIView):
+@extend_schema(
+    responses={200: UserSerializer(many=True)},
+)
+@api_view(["GET"])
+def userMeTimetable(request, year=None):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable"]
 

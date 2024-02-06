@@ -10,13 +10,34 @@ from .. import serializers, utils
 from ..utils import ListAPIViewWithFallback
 from ... import models
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from rest_framework.decorators import api_view
+from core.api.serializers.timetable import TimetableSerializer
+
 
 class IsOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
 
-
-class TimetableList(ListAPIViewWithFallback):
+@extend_schema(
+    responses={200: TimetableSerializer(many=True)},
+    parameters=[
+        OpenApiParameter(
+            "limit",
+            int,
+            OpenApiParameter.QUERY,
+            description="Number of results to return per page.",
+        ),
+        OpenApiParameter(
+            "offset",
+            int,
+            OpenApiParameter.QUERY,
+            description="The initial index from which to return the results.",
+        ),
+    ],
+)
+@api_view(["GET"])
+def timetableList(request, year=None):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable"]
     serializer_class = serializers.TimetableSerializer
@@ -27,8 +48,11 @@ class TimetableList(ListAPIViewWithFallback):
             term__end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD),
         )
 
-
-class TimetableSchedule(APIView):
+@extend_schema(
+    responses={200: TimetableSerializer(many=True)},
+)
+@api_view(["GET"])
+def timetableSchedule(request, year=None):
     permissions_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable", "me_schedule"]
 
@@ -42,8 +66,11 @@ class TimetableSchedule(APIView):
 
         return Response(timetable.day_schedule(target_date=date))
 
-
-class TimetableDetails(generics.RetrieveAPIView):
+@extend_schema(
+    responses={200: TimetableSerializer(many=True)},
+)
+@api_view(["GET"])
+def timetableDetails(request, year=None):
     permission_classes = [IsOwner]
     queryset = models.Timetable.objects.filter(
         term__end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)

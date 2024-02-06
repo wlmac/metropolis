@@ -7,7 +7,6 @@ from ... import models
 
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from rest_framework.decorators import api_view
-from core.models import Announcement
 from core.api.serializers.announcement import AnnouncementSerializer
 
 @extend_schema(
@@ -29,8 +28,6 @@ from core.api.serializers.announcement import AnnouncementSerializer
 )
 @api_view(["GET"])
 def announcement(request, year=None):
-    '''Description here'''
-
     permission_classes = [permissions.AllowAny]
     serializer_class = serializers.AnnouncementSerializer
 
@@ -56,8 +53,6 @@ def announcement(request, year=None):
 )
 @api_view(["GET"])
 def announcementFeed(request, year=None):
-    '''Description here'''
-
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_ann"]
     serializer_class = serializers.AnnouncementSerializer
