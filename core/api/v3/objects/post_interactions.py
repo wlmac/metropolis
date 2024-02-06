@@ -136,10 +136,7 @@ class CommentProvider(BaseProvider):
     model = Comment
     allow_list = False
     allow_new = settings.ALLOW_COMMENTS
-    raw_serializers = {
-        "new": CommentNewSerializer,
-        "_": CommentSerializer
-    }
+    raw_serializers = {"new": CommentNewSerializer, "_": CommentSerializer}
 
     @property
     def permission_classes(self):
@@ -230,9 +227,7 @@ class LikeSerializer(serializers.ModelSerializer):
 class LikeProvider(BaseProvider):
     model = Like
     allow_list = False
-    raw_serializers = {
-        LikeSerializer
-    }
+    raw_serializers = {LikeSerializer}
 
     @property
     def permission_classes(self):

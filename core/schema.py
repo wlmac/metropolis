@@ -9,6 +9,7 @@ from logging import getLogger
 
 logger = getLogger(__name__)
 
+
 def metro_extend_schema_serializer(  # modified version of drf_spectacular.utils.extend_schema_serializer
     klass: Type[Serializer],
     many: Optional[bool] = None,
@@ -69,10 +70,17 @@ def dynamic_envelope(serializer_class: Type[Serializer], many=False):
 
     return decorator
 
+
 def split_api3_obj(endpoints):
     # your modifications to the list of operations that are exposed in the schema
-    for (path, path_regex, method, callback) in endpoints:
+    for path, path_regex, method, callback in endpoints:
         print(method, path_regex, end="")
-        print(callback.view_class, callback.initkwargs, callback.cls, callback.view_initkwargs, end="\n\n")
-    
+        print(
+            callback.view_class,
+            callback.initkwargs,
+            callback.cls,
+            callback.view_initkwargs,
+            end="\n\n",
+        )
+
     return endpoints

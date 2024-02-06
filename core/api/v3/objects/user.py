@@ -82,7 +82,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_teacher",
             "is_superuser",
             "is_deleted",
-            "deleted_at"
+            "deleted_at",
         ]
         model = User
 
@@ -189,14 +189,12 @@ class UserProvider(BaseProvider):
     raw_serializers = {
         "new": NewSerializer,
         "list": ListSerializer,
-        "_": UserSerializer
-    }    
-
+        "_": UserSerializer,
+    }
 
     @property
     def permission_classes(self):
         return [Identity] if self.request.mutate else [permissions.IsAuthenticated]
-    
 
     @staticmethod
     def get_queryset(request):

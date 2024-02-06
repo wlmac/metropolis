@@ -168,7 +168,7 @@ class ObjectList(
                 "http://", "https://"
             )
         return response
-    
+
 
 @extend_schema(
     tags=["Objects"],

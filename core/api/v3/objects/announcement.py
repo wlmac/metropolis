@@ -155,7 +155,7 @@ class AnnouncementProvider(BaseProvider):
     raw_serializers = {
         "single": OneSerializer,
         "retrieve": OneSerializer,
-        "_": Serializer
+        "_": Serializer,
     }
 
     @property

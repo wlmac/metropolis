@@ -32,7 +32,7 @@ class Term(models.Model):
     def is_current(self, target_date=None):
         target_date = utils.get_localdate(date=target_date)
         return self.start_date <= target_date < self.end_date
-    
+
     def get_current(self):
         target_date = utils.get_localdate()
         try:

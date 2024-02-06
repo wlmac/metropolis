@@ -20,7 +20,7 @@ class Tag(models.Model):
     def color(self) -> str:
         """
         Returns a random color based on the tag's name and description.
-        
+
         :return: A color in hex format.
         """
         random.seed(self.name + self.description)

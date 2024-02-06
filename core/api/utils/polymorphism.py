@@ -19,56 +19,72 @@ from core.api.v3.objects import *
 from core.api.v3.objects.base import BaseProvider
 
 
-
 Item = frozendict.frozendict  # frozendict is a class (immutable dict)
 type IgnoredKey = str | Iterable[str]
 type SerializerItems = Dict[str, BaseSerializer]
+
+
 class SplitDictResult:
     def __init__(self, new: Item, old: Item, default: IgnoredKey):
         self.new = new
         self.old = old
         self.default = default
-    
+
     def get(self, item):
         return self.new.get(item, self.old.get(self.default))
-        
+
     def __getitem__(self, key):
         return self.get(key)
-    
-def split_dict_wrapper(ignore: IgnoredKey) -> Callable[[Dict[str, Any]], SplitDictResult]:
+
+
+def split_dict_wrapper(
+    ignore: IgnoredKey,
+) -> Callable[[Dict[str, Any]], SplitDictResult]:
     """
     Note: this will fail as the dict must be frozen so LRU cache can hash it
     """
+
     @lru_cache(maxsize=None)
     def split_dict(dictionary: Item) -> SplitDictResult:
-        new = {k: v for k, v in dictionary.items() if (k not in ignore if isinstance(ignore, Iterable) else k != ignore)}
+        new = {
+            k: v
+            for k, v in dictionary.items()
+            if (k not in ignore if isinstance(ignore, Iterable) else k != ignore)
+        }
         return SplitDictResult(new, dictionary, ignore)
+
     return split_dict
 
-splitter = split_dict_wrapper("_") # ignore key for serializers
+
+splitter = split_dict_wrapper("_")  # ignore key for serializers
+
+
 def serializer_fmt(serializers: SerializerItems):
     items = frozendict.frozendict(serializers)
     return splitter(items)
 
 
-
-providers: Dict[str, BaseProvider] = {  # k = request type (param passed in url), v = provider class
-    "announcement": AnnouncementProvider,
-    "blog-post": BlogPostProvider,
-    "exhibit": ExhibitProvider,
-    "event": EventProvider,
-    "organization": OrganizationProvider,
-    "flatpage": FlatPageProvider,
-    "user": UserProvider,
-    "tag": TagProvider,
-    "term": TermProvider,
-    "timetable": TimetableProvider,
-    "comment": CommentProvider,
-    "like": LikeProvider,
-    "course": CourseProvider,
-}
+providers: Dict[str, BaseProvider] = (
+    {  # k = request type (param passed in url), v = provider class
+        "announcement": AnnouncementProvider,
+        "blog-post": BlogPostProvider,
+        "exhibit": ExhibitProvider,
+        "event": EventProvider,
+        "organization": OrganizationProvider,
+        "flatpage": FlatPageProvider,
+        "user": UserProvider,
+        "tag": TagProvider,
+        "term": TermProvider,
+        "timetable": TimetableProvider,
+        "comment": CommentProvider,
+        "like": LikeProvider,
+        "course": CourseProvider,
+    }
+)
 provider_keys = providers.keys()
 type Operations = Final[Literal["single", "new", "list", "retrieve"]]
+
+
 def get_provider(provider_name: provider_keys) -> Callable:
     """
     Gets a provider by type name.
@@ -79,18 +95,18 @@ def get_provider(provider_name: provider_keys) -> Callable:
         )
     return providers[provider_name]
 
+
 # def extend_schema_with_type(provider: BaseProvider, operation: Operations, **kwargs):
 #     def decorator(view_func):
 #         serializer = provider.serializers.get(operation)
 #         return extend_schema(request=serializer, **kwargs)(view_func)
 #     return decorator
 
-def get_providers_by_operation(
-    operation: Operations
-) -> List[str]:
+
+def get_providers_by_operation(operation: Operations) -> List[str]:
     """
     returns a list of provider path names that support the given operation.
-    
+
     Example:
     >>> get_providers_by_operation("single")
     ["announcement", "blog-post", "exhibit", "event", "organization", "flatpage", "user", "tag", "term", "timetable", "comment", "like", "course"]
@@ -100,7 +116,8 @@ def get_providers_by_operation(
         for key, prov in providers.items()
         if getattr(prov, f"allow_{operation}", True) == True
     ]
-    
+
+
 class ObjectAPIView(generics.GenericAPIView):
     def initial(self, *args, **kwargs):
         super().initial(*args, **kwargs)
@@ -247,17 +264,17 @@ class ObjectAPIView(generics.GenericAPIView):
 
         self.response = self.finalize_response(request, response, *args, **kwargs)
         return self.response
-    
+
     def get_serializer_class(self):
         return self.provider.serializer_class
-        
+
 
 class Provider(Protocol):
     allow_list: bool
     allow_new: bool
     kind: Literal["list", "new", "single", "retrieve"]
     listing_filters_ignore: List[str]
-    
+
     serializers: SplitDictResult
-    def __init__(self, request) -> None:
-        ...
+
+    def __init__(self, request) -> None: ...

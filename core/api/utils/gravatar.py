@@ -2,7 +2,6 @@ from hashlib import md5
 from urllib.parse import urlencode
 
 
-
 # return only the URL of the gravatar
 def gravatar_url(email: str) -> str:
     email = email.encode("utf-8")

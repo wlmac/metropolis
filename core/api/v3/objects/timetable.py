@@ -46,7 +46,7 @@ class TimetableProvider(BaseProvider):
         "single": MutateSerializer,
         "_": ViewSerializer,
     }
-    
+
     @staticmethod
     def get_queryset(request):
         if (

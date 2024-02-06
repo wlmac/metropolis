@@ -52,7 +52,7 @@ class EventProvider(BaseProvider):
         "retrieve": DetailSerializer,
         "_": SuperficialSerializer,
     }
-    
+
     @property
     def permission_classes(self):
         return (

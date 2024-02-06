@@ -11,10 +11,18 @@ from rest_framework.views import APIView
 @extend_schema(
     description="Returns the current API version.",
     responses={200: {"version": "string"}},
-    examples=[OpenApiExample(name="APIVersion", response_only=True, status_codes=[200], value={"version": "3.2.1"})])
+    examples=[
+        OpenApiExample(
+            name="APIVersion",
+            response_only=True,
+            status_codes=[200],
+            value={"version": "3.2.1"},
+        )
+    ],
+)
 class APIVersion(APIView):
     """Returns the current API version."""
-    
+
     @staticmethod
     def get(request) -> Dict[str, str]:
         return Response({"version": settings.API_VERSION})
