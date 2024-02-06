@@ -1,7 +1,8 @@
-from typing import List, Literal, Dict, Final
+from typing import List, Dict, Final
 from rest_framework.serializers import BaseSerializer
 from abc import ABC
 from django.db.models.base import ModelBase
+from core.utils.types import APIObjOperations
 
 type SerializerItems = Dict[str, BaseSerializer]
 
@@ -11,7 +12,7 @@ class BaseProvider(ABC):
         True  # Is the view able to list the model's objects. (e.g. /user would list all users
     )
     allow_new: bool = True  # Is the provider able to create a new object.
-    kind: Literal["list", "new", "single", "retrieve"]  # type of view
+    kind: APIObjOperations  # type of view
     listing_filters_ignore: List[str] = []
     raw_serializers: SerializerItems
 

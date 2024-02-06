@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from json import JSONDecodeError
-from typing import Literal, List, Set, Protocol, Final
+from typing import Literal, List, Set, Protocol, Final, Optional
 
 from django.core.exceptions import BadRequest
 from django.db.models import Model, Q
@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 
 from functools import lru_cache
-
+from core.utils.types import APIObjOperations
 import frozendict
 from rest_framework.serializers import BaseSerializer
 
@@ -82,7 +82,6 @@ providers: Dict[str, BaseProvider] = (
     }
 )
 provider_keys = providers.keys()
-type Operations = Final[Literal["single", "new", "list", "retrieve"]]
 
 
 def get_provider(provider_name: provider_keys) -> Callable:
@@ -103,7 +102,9 @@ def get_provider(provider_name: provider_keys) -> Callable:
 #     return decorator
 
 
-def get_providers_by_operation(operation: Operations) -> List[str]:
+def get_providers_by_operation(
+    operation: APIObjOperations, return_provider: Optional[bool] = False
+) -> List[str]:
     """
     returns a list of provider path names that support the given operation.
 
@@ -111,8 +112,9 @@ def get_providers_by_operation(operation: Operations) -> List[str]:
     >>> get_providers_by_operation("single")
     ["announcement", "blog-post", "exhibit", "event", "organization", "flatpage", "user", "tag", "term", "timetable", "comment", "like", "course"]
     """
+
     return [
-        key
+        (prov if return_provider else key)
         for key, prov in providers.items()
         if getattr(prov, f"allow_{operation}", True) == True
     ]

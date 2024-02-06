@@ -1,11 +1,27 @@
+import dataclasses
+from dataclasses import dataclass, Field
 from functools import wraps
-from typing import Optional, Sequence, Callable, Dict, Any, Type
+from typing import (
+    Optional,
+    Sequence,
+    Callable,
+    Dict,
+    Any,
+    Type,
+    Tuple,
+    List,
+    NamedTuple,
+)
 
 from drf_spectacular.drainage import set_override
 from drf_spectacular.utils import F, OpenApiExample
 from rest_framework.serializers import Serializer
 
 from logging import getLogger
+
+from core.api.utils.polymorphism import get_provider, get_providers_by_operation
+from core.api.v3.objects import BaseProvider
+from core.utils.types import APIObjOperations, PathData
 
 logger = getLogger(__name__)
 
@@ -71,16 +87,87 @@ def dynamic_envelope(serializer_class: Type[Serializer], many=False):
     return decorator
 
 
-def split_api3_obj(endpoints):
-    # your modifications to the list of operations that are exposed in the schema
-    for path, path_regex, method, callback in endpoints:
-        print(method, path_regex, end="")
-        print(
-            callback.view_class,
-            callback.initkwargs,
-            callback.cls,
-            callback.view_initkwargs,
-            end="\n\n",
+def run_fixers(result, generator, request, public):
+    fixer = Api3ObjSpliter(result)
+    fixer.run()
+    return fixer.schema
+
+
+@dataclass
+class SingleOperationData:
+    providers: List[BaseProvider]
+    operation: APIObjOperations
+    data: dict
+@dataclass
+class ObjectModificationData:
+    retrieve: Optional[SingleOperationData] = None
+    single: Optional[SingleOperationData] = None
+    list: Optional[SingleOperationData] = None
+    new: Optional[SingleOperationData] = None
+    
+    def __iter__(self):
+        return iter(
+            [
+                ("retrieve", self.retrieve),
+                ("single", self.single),
+                ("list", self.list),
+                ("new", self.new),
+            ]
         )
 
-    return endpoints
+class Api3ObjSpliter:
+    """
+    Split the API3 schema into the different paths based on the object type and provider
+    """
+
+    defaults = {
+        "tags": ["Objects", "V3"],
+    }
+
+    def __init__(self, schema):
+        self.operation_data: ObjectModificationData = ObjectModificationData()
+        self.keys_to_delete: Tuple = ()
+        self.schema = schema
+
+    def run(self):
+        # ObjectModificationData._make
+        paths = self.schema["paths"]
+        self.set_obj_paths(paths)
+        
+        for operation in dataclasses.fields(self.operation_data):
+            self.create_obj_views(operation)
+
+        self.del_obj_paths()
+
+    def del_obj_paths(self) -> None:
+        for path in self.keys_to_delete:
+            del self.schema["paths"][path]
+
+    def set_obj_paths(self, paths: Dict[str, dict]) -> List[Tuple[str, dict]]:
+        PATH_PREFIX = "/api/v3/obj/{type}"
+        _obj_paths = [
+            (path, value)
+            for path, value in paths.items()
+            if path.startswith(PATH_PREFIX)
+        ]
+        self.keys_to_delete = tuple([path for path, _ in _obj_paths])
+        get_name = lambda id: id.split("_")[-1]
+        for _, value in _obj_paths:
+            http_method = list(value.keys())[0]
+            operation_id = value[http_method]["operationId"]
+            name = get_name(operation_id)
+            # set values for ObjectModificationData
+            insertable_value = SingleOperationData(
+                operation=http_method,
+                data=value[http_method],
+                providers=get_providers_by_operation(http_method, return_provider=True),
+            )
+            setattr(self.operation_data, name, insertable_value)
+        if not self.operation_data:
+            raise ValueError("No paths found, API3 obj docs will be broken.")
+
+    def get_providers_from_name(self, enum: List[str]) -> List[BaseProvider]:
+        return [get_provider(key) for key in enum]
+
+    def create_obj_views(self, operation: SingleOperationData):
+        ...
