@@ -38,7 +38,7 @@ class APIVersion(APIView):
         "cta_label": "string",}},
     examples=[
         OpenApiExample(
-            name="Banner",
+            name="Banners",
             response_only=True,
             status_codes=[200],
             value={

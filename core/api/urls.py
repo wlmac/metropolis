@@ -53,7 +53,7 @@ urlpatterns = [
         name="api_term_schedule_week",
     ),
     path("v3/staff", staff, name="api_staff3"),
-    path("v3/feeds", feeds, name="api_feeds3"),
+    path("v3/feeds", Feeds.as_view(), name="api_feeds3"),
     path("v3/obj/user/me/delete", UserDeleteView.as_view(), name="api3_user_delete"),
     path(
         "v3/obj/user/me/restore",
