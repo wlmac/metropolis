@@ -27,7 +27,7 @@ from core.api.serializers.announcement import AnnouncementSerializer
     ],
 )
 @api_view(["GET"])
-def AnnouncementListAll(ListAPIViewWithFallback):
+class AnnouncementListAll(ListAPIViewWithFallback):
     permission_classes = [permissions.AllowAny]
     serializer_class = serializers.AnnouncementSerializer
 
@@ -52,7 +52,7 @@ def AnnouncementListAll(ListAPIViewWithFallback):
     ],
 )
 @api_view(["GET"])
-def AnnouncementListMyFeed(ListAPIViewWithFallback):
+class AnnouncementListMyFeed(ListAPIViewWithFallback):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_ann"]
     serializer_class = serializers.AnnouncementSerializer
