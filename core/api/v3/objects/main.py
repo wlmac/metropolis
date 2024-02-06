@@ -23,6 +23,7 @@ from core.api.utils.polymorphism import get_providers_by_operation, ObjectAPIVie
 
 @extend_schema(
     tags=["Objects"],
+    operation_id="api3_obj_list",
     parameters=[
         OpenApiParameter(
             name="type",
@@ -172,6 +173,7 @@ class ObjectList(
 
 @extend_schema(
     tags=["Objects"],
+    operation_id="api3_obj_new",
     parameters=[
         OpenApiParameter(
             name="type",
@@ -202,6 +204,7 @@ class ObjectNew(ObjectAPIView, LookupField, generics.CreateAPIView):
 
 @extend_schema(
     tags=["Objects"],
+    operation_id="api3_obj_retrieve",
     parameters=[
         OpenApiParameter(
             name="type",
@@ -248,6 +251,7 @@ class ObjectRetrieve(
 
 @extend_schema(
     tags=["Objects"],
+    operation_id="api3_obj_single",
     parameters=[
         OpenApiParameter(
             name="type",
