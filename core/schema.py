@@ -98,13 +98,15 @@ class SingleOperationData:
     providers: List[BaseProvider]
     operation: APIObjOperations
     data: dict
+
+
 @dataclass
 class ObjectModificationData:
     retrieve: Optional[SingleOperationData] = None
     single: Optional[SingleOperationData] = None
     list: Optional[SingleOperationData] = None
     new: Optional[SingleOperationData] = None
-    
+
     def __iter__(self):
         return iter(
             [
@@ -114,6 +116,7 @@ class ObjectModificationData:
                 ("new", self.new),
             ]
         )
+
 
 class Api3ObjSpliter:
     """
@@ -133,7 +136,7 @@ class Api3ObjSpliter:
         # ObjectModificationData._make
         paths = self.schema["paths"]
         self.set_obj_paths(paths)
-        
+
         for operation in dataclasses.fields(self.operation_data):
             self.create_obj_views(operation)
 
@@ -151,23 +154,26 @@ class Api3ObjSpliter:
             if path.startswith(PATH_PREFIX)
         ]
         self.keys_to_delete = tuple([path for path, _ in _obj_paths])
-        get_name = lambda id: id.split("_")[-1]
         for _, value in _obj_paths:
             http_method = list(value.keys())[0]
             operation_id = value[http_method]["operationId"]
-            name = get_name(operation_id)
+            name = self._get_name_from_id(operation_id)
             # set values for ObjectModificationData
             insertable_value = SingleOperationData(
-                operation=http_method,
+                operation=name,
                 data=value[http_method],
-                providers=get_providers_by_operation(http_method, return_provider=True),
+                providers=get_providers_by_operation(name, return_provider=True),
             )
             setattr(self.operation_data, name, insertable_value)
         if not self.operation_data:
             raise ValueError("No paths found, API3 obj docs will be broken.")
 
+    @staticmethod
+    def _get_name_from_id(operation_id: str) -> str:
+
+        return operation_id.split("_")[-1]
+
     def get_providers_from_name(self, enum: List[str]) -> List[BaseProvider]:
         return [get_provider(key) for key in enum]
 
-    def create_obj_views(self, operation: SingleOperationData):
-        ...
+    def create_obj_views(self, operation: SingleOperationData): ...
