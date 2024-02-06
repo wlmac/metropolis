@@ -17,7 +17,7 @@ from core.api.serializers.user import UserSerializer
     responses={200: UserSerializer(many=True)},
 )
 @api_view(["GET"])
-def userDetail(request, year=None):
+def UserDetail(APIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
     lookup_field = "username__iexact"
@@ -28,7 +28,7 @@ def userDetail(request, year=None):
     responses={200: UserSerializer(many=True)},
 )
 @api_view(["GET"])
-def userMe(request, year=None):
+def UserMe(APIView):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_meta"]
 
@@ -40,7 +40,7 @@ def userMe(request, year=None):
     responses={200: UserSerializer(many=True)},
 )
 @api_view(["GET"])
-def userMeInternal(request, year=None):
+def UserMeInternal(APIView):
     permission_classes = [TokenHasScope]
     required_scopes = ["me_meta", "internal"]
 
@@ -52,7 +52,7 @@ def userMeInternal(request, year=None):
     responses={200: UserSerializer(many=True)},
 )
 @api_view(["GET"])
-def userMeSchedule(request, year=None):
+def UserMeSchedule(APIView):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_schedule"]
 
@@ -65,7 +65,7 @@ def userMeSchedule(request, year=None):
     responses={200: UserSerializer(many=True)},
 )
 @api_view(["GET"])
-def userMeScheduleWeek(request, year=None):
+def UserMeScheduleWeek(APIView):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_schedule"]
 
@@ -85,7 +85,7 @@ def userMeScheduleWeek(request, year=None):
     responses={200: UserSerializer(many=True)},
 )
 @api_view(["GET"])
-def userMeTimetable(request, year=None):
+def UserMeTimetable(APIView):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable"]
 

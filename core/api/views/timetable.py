@@ -21,23 +21,9 @@ class IsOwner(permissions.BasePermission):
 
 @extend_schema(
     responses={200: TimetableSerializer(many=True)},
-    parameters=[
-        OpenApiParameter(
-            "limit",
-            int,
-            OpenApiParameter.QUERY,
-            description="Number of results to return per page.",
-        ),
-        OpenApiParameter(
-            "offset",
-            int,
-            OpenApiParameter.QUERY,
-            description="The initial index from which to return the results.",
-        ),
-    ],
 )
 @api_view(["GET"])
-def timetableList(request, year=None):
+class TimetableList(ListAPIViewWithFallback):
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable"]
     serializer_class = serializers.TimetableSerializer
@@ -52,7 +38,7 @@ def timetableList(request, year=None):
     responses={200: TimetableSerializer(many=True)},
 )
 @api_view(["GET"])
-def timetableSchedule(request, year=None):
+class TimetableSchedule(APIView):
     permissions_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable", "me_schedule"]
 
@@ -70,7 +56,7 @@ def timetableSchedule(request, year=None):
     responses={200: TimetableSerializer(many=True)},
 )
 @api_view(["GET"])
-def timetableDetails(request, year=None):
+class TimetableDetails(generics.RetrieveAPIView):
     permission_classes = [IsOwner]
     queryset = models.Timetable.objects.filter(
         term__end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)

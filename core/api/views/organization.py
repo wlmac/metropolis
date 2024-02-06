@@ -27,7 +27,7 @@ from core.api.serializers.organization import OrganizationSerializer
     ],
 )
 @api_view(["GET"])
-def apiOrganizationList(request, year=None):
+class ApiOrganizationList(ListAPIViewWithFallback):
     queryset = (
         models.Organization.objects.filter(is_active=True)
         .annotate(num_members=Count("member"))
@@ -39,6 +39,6 @@ def apiOrganizationList(request, year=None):
     responses={200: OrganizationSerializer(many=True)},
 )
 @api_view(["GET"])
-def organizationDetail(request, year=None):
+class OrganizationDetail(ListAPIViewWithFallback):
     queryset = models.Organization.objects.filter(is_active=True)
     serializer_class = serializers.OrganizationSerializer

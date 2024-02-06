@@ -21,7 +21,7 @@ from core.api.serializers.term import TermSerializer
     responses={200: TermSerializer(many=True)},
 )
 @api_view(["GET"])
-def termList(request, year=None):
+class TermList(GenericAPIViewWithLastModified, ListAPIViewWithFallback):
     queryset = models.Term.objects.filter(
         end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
     )
@@ -41,7 +41,7 @@ def termList(request, year=None):
     responses={200: TermSerializer(many=True)},
 )
 @api_view(["GET"])
-def termDetail(request, year=None):
+class TermDetail(generics.RetrieveAPIView):
     queryset = models.Term.objects.filter(
         end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
     )
@@ -51,7 +51,7 @@ def termDetail(request, year=None):
     responses={200: TermSerializer(many=True)},
 )
 @api_view(["GET"])
-def termSchedule(request, year=None):
+class TermSchedule(APIView):
     def get(self, request, pk, format=None):
         term = get_object_or_404(models.Term, pk=pk)
         date = utils.parse_date_query_param(request)
@@ -62,7 +62,7 @@ def termSchedule(request, year=None):
     responses={200: TermSerializer(many=True)},
 )
 @api_view(["GET"])
-def termScheduleWeek(request, year=None):
+class TermScheduleWeek(APIView):
     def get(self, request, pk, format=None):
         term = get_object_or_404(models.Term, pk=pk)
         date = utils.parse_date_query_param(request)
@@ -80,7 +80,7 @@ def termScheduleWeek(request, year=None):
     responses={200: TermSerializer(many=True)},
 )
 @api_view(["GET"])
-def termCurrent(request, year=None):
+class TermCurrent(APIView):
     def get(self, request, format=None):
         term = models.Term.get_current()
 
@@ -94,7 +94,7 @@ def termCurrent(request, year=None):
     responses={200: TermSerializer(many=True)},
 )
 @api_view(["GET"])
-def termCurrentSchedule(request, year=None):
+class TermCurrentSchedule(APIView):
     def get(self, request, format=None):
         term = models.Term.get_current()
         date = utils.parse_date_query_param(request)
