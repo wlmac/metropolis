@@ -15,7 +15,7 @@ from core.api.serializers import EventSerializer
     responses={200: EventSerializer(many=True)},
 )
 @api_view(["GET"])
-def event(request, year=None):
+def EventsList(ListAPIViewWithFallback):
     permission_classes = [permissions.AllowAny]
     parser_classes = [JSONParser]
     serializer_class = serializers.EventSerializer

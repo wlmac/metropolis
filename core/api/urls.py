@@ -14,8 +14,8 @@ urlpatterns = [
     path("auth/token", TokenObtainPairView.as_view(), name="api_token_obtain_pair"),
     path("auth/token/refresh", TokenRefreshView.as_view(), name="api_token_refresh"),
     path("notifications/new", NotificationsNew.as_view(), name="api_notification_new"),
-    path("announcements", announcement, name="api_all_announcements"),
-    path("announcements/feed", announcementFeed, name="api_announcement_feed"),
+    path("announcements", AnnouncementListAll.as_view(), name="api_all_announcements"),
+    path("announcements/feed", AnnouncementListMyFeed.as_view(), name="api_announcement_feed"),
     path("organizations", ApiOrganizationList.as_view(), name="api_organization_list"),
     path(
         "organization/<int:pk>",
@@ -28,8 +28,7 @@ urlpatterns = [
     path("me/schedule", UserMeSchedule.as_view(), name="api_me_schedule"),
     path("me/schedule/week", UserMeScheduleWeek.as_view(), name="api_me_schedule_week"),
     path("me/timetable", UserMeTimetable.as_view(), name="api_me_timetable"),
-    path("events", event, name="api_event_list"),
-    #path("events", EventsList.as_view(), name="api_event_list"),
+    path("events", EventsList.as_view(), name="api_event_list"),
     path("timetables", TimetableList.as_view(), name="api_timetable_list"),
     path(
         "timetable/<int:pk>/schedule",
