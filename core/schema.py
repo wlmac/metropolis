@@ -154,6 +154,8 @@ class Api3ObjSpliter:
         paths = self.schema["paths"]
         self.set_obj_paths(paths)
 
+        for _,provider in providers.items():
+            print(self._get_data_from_provider(provider))
         for operation in dataclasses.fields(self.operation_data):
             self.create_obj_views(operation)
 
@@ -197,6 +199,30 @@ class Api3ObjSpliter:
                 operations_supported=[],
                 data=dict(),
             )
+
+    @staticmethod
+    def _get_data_from_provider(provider: BaseProvider) -> tuple:
+        """Returns the a tuple of operations supported and the serializers for each
+        e.g. UserProvider {'single': <class 'core.api.v3.objects.user.UserSerializer'>, 'new': <class 'core.api.v3.objects.user.NewSerializer'>, 'list': <class 'core.api.v3.objects.user.ListSerializer'>, 'retrieve': <class 'core.api.v3.objects.user.UserSerializer'>}
+        """
+        supported_operations: dict = {
+            "single": None,
+            "new": None,
+            "list": None,
+            "retrieve": None,
+        }
+        data = provider.raw_serializers.items()
+        for operation, serializer in data:
+            if operation == "_":
+                continue
+            supported_operations[operation] = serializer
+
+        supported_operations = {
+            operation: (provider.raw_serializers["_"] if serializer == None else serializer)
+            for operation, serializer in supported_operations.items()
+
+        }
+        return supported_operations.items()
 
     @staticmethod
     def _get_name_from_id(operation_id: str) -> str:

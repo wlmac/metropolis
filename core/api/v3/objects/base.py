@@ -37,7 +37,7 @@ class BaseProvider(ABC):
                     f"{cls} must either define {key} or :meth:get_{key}"
                 )
 
-        for key, type in required_attrs.items():
+        for key, _ in required_attrs.items():
             if not hasattr(cls, key):
                 raise AttributeError(f"{cls} must define attr {key} of type {type}")
 

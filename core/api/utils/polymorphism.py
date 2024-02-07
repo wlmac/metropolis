@@ -77,6 +77,7 @@ providers: Dict[str, BaseProvider] = (
 )
 provider_keys = providers.keys()
 
+
 def get_provider(provider_name: provider_keys) -> Callable:
     """
     Gets a provider by type name.

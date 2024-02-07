@@ -11,6 +11,7 @@ This script is used to add organizations from a Google Sheets link. It is used t
 Code owned by Phil of metropolis backend team.
 """
 
+
 class Command(BaseCommand):
     help = "Adds organizations from Google Sheets. Does not modify existing organizations. See https://github.com/wlmac/metropolis/issues/247"
 
