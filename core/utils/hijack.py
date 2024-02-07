@@ -1,13 +1,13 @@
 import logging
+from functools import lru_cache
 
-import cachetools
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
 from hijack import signals
 
 
-@cachetools.cached(cache=cachetools.LRUCache(maxsize=4096))
+@lru_cache(maxsize=4096)
 def hijack_permissions_check(*, hijacker, hijacked) -> bool:
     """
     ALLOWED_HIJACKERS may hijack any user, except another ALLOWED_HIJACKER

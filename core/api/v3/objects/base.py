@@ -58,12 +58,12 @@ class BaseProvider(ABC):
                 )
 
     def __new__(cls, request):
-        from core.api.utils.polymorphism import serializer_fmt as SFMT  # noqa
+        from core.api.utils.polymorphism import splitter  # noqa
 
         cls._run_typechecking()
 
         instance = super().__new__(cls)
-        instance.serializers = SFMT(cls.raw_serializers)
+        instance.serializers = splitter(cls.raw_serializers)
         return instance
 
     def __init__(self, request):

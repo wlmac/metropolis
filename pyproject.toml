@@ -49,16 +49,14 @@ django_ical = "1.8.3"
 celery = "*"
 exponent_server_sdk = "*"
 django-hijack = "*"
-frozendict = "^2.4.0"
 drf-spectacular = "0.27.0"
-
+memoization = "^0.4.0"
 psycopg = [
     { version = "^3.1.16", markers = "sys_platform == 'linux'" },
     { extras = ["binary"], version = "^3.1.16", markers = "sys_platform != 'linux'" },
 ]
 gunicorn = "20.1.0"
 sentry-sdk = { extras = ["django", "celery"], version = "^1.40.0" }
-memoization = "^0.4.0"
 #django-stubs = "*"
 black = "*"
 isort = "*"

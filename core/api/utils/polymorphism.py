@@ -1,16 +1,16 @@
 from __future__ import annotations
 
 from json import JSONDecodeError
-from typing import Literal, List, Set, Protocol, Final, Optional
+from typing import Literal, List, Set, Protocol, Optional
 
 from django.core.exceptions import BadRequest
 from django.db.models import Model, Q
 from django.shortcuts import get_object_or_404
+from memoization import cached
 from rest_framework import generics
 
 from functools import lru_cache
 from core.utils.types import APIObjOperations
-import frozendict
 from rest_framework.serializers import BaseSerializer
 
 from typing import Iterable, Any, Dict, Callable
@@ -19,18 +19,17 @@ from core.api.v3.objects import *
 from core.api.v3.objects.base import BaseProvider
 
 
-Item = frozendict.frozendict  # frozendict is a class (immutable dict)
 type IgnoredKey = str | Iterable[str]
 type SerializerItems = Dict[str, BaseSerializer]
 
 
 class SplitDictResult:
-    def __init__(self, new: Item, old: Item, default: IgnoredKey):
+    def __init__(self, new: dict, old: dict, default: IgnoredKey):
         self.new = new
         self.old = old
         self.default = default
 
-    def get(self, item):
+    def get(self, item) -> Any:
         return self.new.get(item, self.old.get(self.default))
 
     def __getitem__(self, key):
@@ -44,8 +43,8 @@ def split_dict_wrapper(
     Note: this will fail as the dict must be frozen so LRU cache can hash it
     """
 
-    @lru_cache(maxsize=None)
-    def split_dict(dictionary: Item) -> SplitDictResult:
+    @cached
+    def split_dict(dictionary: SerializerItems) -> SplitDictResult:
         new = {
             k: v
             for k, v in dictionary.items()
@@ -57,11 +56,6 @@ def split_dict_wrapper(
 
 
 splitter = split_dict_wrapper("_")  # ignore key for serializers
-
-
-def serializer_fmt(serializers: SerializerItems):
-    items = frozendict.frozendict(serializers)
-    return splitter(items)
 
 
 providers: Dict[str, BaseProvider] = (
@@ -82,7 +76,6 @@ providers: Dict[str, BaseProvider] = (
     }
 )
 provider_keys = providers.keys()
-
 
 def get_provider(provider_name: provider_keys) -> Callable:
     """
