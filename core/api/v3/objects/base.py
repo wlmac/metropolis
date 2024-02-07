@@ -58,7 +58,7 @@ class BaseProvider(ABC):
                 )
 
     def __new__(cls, request):
-        from core.api.utils.polymorphism import splitter  # noqa
+        from core.api.utils.polymorphism import splitter
 
         cls._run_typechecking()
 
