@@ -1,5 +1,5 @@
 import dataclasses
-from dataclasses import dataclass, Field
+from dataclasses import dataclass
 from functools import wraps
 from typing import (
     Optional,
@@ -10,20 +10,21 @@ from typing import (
     Type,
     Tuple,
     List,
-    NamedTuple,
 )
 
 from drf_spectacular.drainage import set_override
 from drf_spectacular.utils import F, OpenApiExample
-from rest_framework.serializers import Serializer
+from memoization import cached
+from rest_framework.serializers import Serializer, BaseSerializer
 
-from logging import getLogger
 
-from core.api.utils.polymorphism import get_provider, get_providers_by_operation
+from core.api.utils.polymorphism import (
+    get_provider,
+    get_providers_by_operation,
+    providers,
+)
 from core.api.v3.objects import BaseProvider
-from core.utils.types import APIObjOperations, PathData
-
-logger = getLogger(__name__)
+from core.utils.types import APIObjOperations
 
 
 def metro_extend_schema_serializer(  # modified version of drf_spectacular.utils.extend_schema_serializer
@@ -87,6 +88,7 @@ def dynamic_envelope(serializer_class: Type[Serializer], many=False):
     return decorator
 
 
+@cached
 def run_fixers(result, generator, request, public):
     fixer = Api3ObjSpliter(result)
     fixer.run()
@@ -97,6 +99,20 @@ def run_fixers(result, generator, request, public):
 class SingleOperationData:
     providers: List[BaseProvider]
     operation: APIObjOperations
+    data: dict
+
+
+@dataclass
+class APISerializerOperations:
+    operation: APIObjOperations
+    serializer: BaseSerializer
+    # tags?
+
+
+@dataclass
+class ProviderDetails:
+    provider: BaseProvider
+    operations_supported: List[APISerializerOperations]
     data: dict
 
 
@@ -131,6 +147,7 @@ class Api3ObjSpliter:
         self.operation_data: ObjectModificationData = ObjectModificationData()
         self.keys_to_delete: Tuple = ()
         self.schema = schema
+        self._provider_details: Dict[str, ProviderDetails] = dict()
 
     def run(self):
         # ObjectModificationData._make
@@ -153,12 +170,17 @@ class Api3ObjSpliter:
             for path, value in paths.items()
             if path.startswith(PATH_PREFIX)
         ]
-        self.keys_to_delete = tuple([path for path, _ in _obj_paths])
+        self.keys_to_delete = tuple(
+            [path for path, _ in _obj_paths]
+        )  # designates the api3 obj polymorphic paths to be deleted.
         for _, value in _obj_paths:
             http_method = list(value.keys())[0]
             operation_id = value[http_method]["operationId"]
             name = self._get_name_from_id(operation_id)
             # set values for ObjectModificationData
+            print(f"Setting {name} for {http_method} with OperationID: {operation_id}")
+            ##self._provider_details[name] = ProviderDetails(
+
             insertable_value = SingleOperationData(
                 operation=name,
                 data=value[http_method],
@@ -168,12 +190,21 @@ class Api3ObjSpliter:
         if not self.operation_data:
             raise ValueError("No paths found, API3 obj docs will be broken.")
 
+    def _generate_data(self):
+        for provider_name, provider_obj in providers.items():
+            self._provider_details[provider_name] = ProviderDetails(
+                provider=provider_obj,
+                operations_supported=[],
+                data=dict(),
+            )
+
     @staticmethod
     def _get_name_from_id(operation_id: str) -> str:
 
         return operation_id.split("_")[-1]
 
-    def get_providers_from_name(self, enum: List[str]) -> List[BaseProvider]:
+    @staticmethod
+    def get_providers_from_name(enum: List[str]) -> List[BaseProvider]:
         return [get_provider(key) for key in enum]
 
     def create_obj_views(self, operation: SingleOperationData): ...
