@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.http import FileResponse
 from django.urls import include, path, re_path
+from django.views.decorators.cache import cache_page
 from drf_spectacular.views import (
     SpectacularSwaggerView,
     SpectacularAPIView,
@@ -52,7 +53,9 @@ urlpatterns = [
     path("select2/", include("django_select2.urls")),
     path("<path:url>", include("django.contrib.flatpages.urls")),
     path("docs", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/schema/", cache_page(60 * 30)(SpectacularAPIView.as_view()), name="schema"
+    ),  # cache for 30m
     path("docs/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]
 
