@@ -43,12 +43,17 @@ class Command(BaseCommand):
 
         assert expected_header == next(
             csv_reader
-        ), "Google Sheets layout changed since the last time the script was updated"
+        ), "Google Sheets layout changed since the last time the script was updated, please consult the backend team."
 
         for row in csv_reader:
             organization_is_not_approved = row[1] != "TRUE"
             has_duplicate_owner = len(row[0]) == 0
             if organization_is_not_approved or has_duplicate_owner:
+                self.stdout.write(
+                    self.style.ERROR(
+                        f"Skipping {row[0]} because it is not approved or has a duplicate owner"
+                    )
+                )
                 continue
 
             self.stdout.write(f"New organization: {row[0]}")
@@ -112,7 +117,7 @@ class Command(BaseCommand):
                     name=organization_name,
                     bio="A WLMAC organization",
                     extra_content=time_and_place + "\n\n" + social_links,
-                    slug="".join( 
+                    slug="".join(
                         c.casefold() if c.isalnum() else "-" for c in organization_name
                     ).lower(),
                     show_members=True,
