@@ -6,6 +6,10 @@ from django.db import IntegrityError
 from core.models import User, Organization
 from io import StringIO
 
+"""
+This script is used to add organizations from a Google Sheets link. It is used to add organizations that are not already in the database.
+Code owned by Phil of metropolis backend team.
+"""
 
 class Command(BaseCommand):
     help = "Adds organizations from Google Sheets. Does not modify existing organizations. See https://github.com/wlmac/metropolis/issues/247"
