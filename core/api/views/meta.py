@@ -27,15 +27,19 @@ class APIVersion(APIView):
     def get(request) -> Dict[str, str]:
         return Response({"version": settings.API_VERSION})
 
+
 @extend_schema(
     description="Returns the current banners and upcoming banners for the home page. note: upcoming banners only return the banners for the next day.",
-    responses={200: {
-        "start": "string",
-        "end": "string",
-        "content": "string",
-        "icon_url": "string",
-        "cta_link": "string",
-        "cta_label": "string",}},
+    responses={
+        200: {
+            "start": "string",
+            "end": "string",
+            "content": "string",
+            "icon_url": "string",
+            "cta_link": "string",
+            "cta_label": "string",
+        }
+    },
     examples=[
         OpenApiExample(
             name="Banners",
@@ -47,8 +51,8 @@ class APIVersion(APIView):
                 "content": "Hello! This is a cool banner!",
                 "icon_url": "/static/core/img/logo/logo-maskable-192.png",
                 "cta_link": "https://portfolio-cqctxs.vercel.app/",
-                "cta_label": "Hmmm..."
-            }
+                "cta_label": "Hmmm...",
+            },
         )
     ],
 )
