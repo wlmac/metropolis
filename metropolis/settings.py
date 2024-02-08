@@ -1,12 +1,14 @@
 import logging
 import os
 from datetime import datetime, timedelta
-from typing import Dict, List, Final, Literal
+from typing import Dict, Final, List, Literal
 
-from sentry_sdk.integrations import django as sen_django, logging as sen_logging, redis
+import pytz
+from sentry_sdk.integrations import django as sen_django
+from sentry_sdk.integrations import logging as sen_logging
+from sentry_sdk.integrations import redis
 
 from metropolis.timetable_formats import *
-import pytz
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -6,7 +6,7 @@ import requests
 from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
-from django.db.models import Value, JSONField, Q, Field, F
+from django.db.models import F, Field, JSONField, Q, Value
 from django.db.models.functions.text import Concat
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _l
@@ -20,7 +20,7 @@ from exponent_server_sdk import (
 from oauth2_provider.models import clear_expired
 from requests.exceptions import ConnectionError, HTTPError
 
-from core.models import Announcement, User, Event, BlogPost, Comment
+from core.models import Announcement, BlogPost, Comment, Event, User
 from core.utils.tasks import get_random_username
 from metropolis.celery import app
 

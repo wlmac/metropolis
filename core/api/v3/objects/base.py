@@ -1,7 +1,9 @@
-from typing import List, Dict, Final
-from rest_framework.serializers import BaseSerializer
 from abc import ABC
+from typing import Dict, Final, List
+
 from django.db.models.base import ModelBase
+from rest_framework.serializers import BaseSerializer
+
 from core.utils.types import APIObjOperations
 
 type SerializerItems = Dict[str, BaseSerializer]

@@ -1,9 +1,9 @@
 from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import permissions
 
+from ... import models
 from .. import serializers
 from ..utils import ListAPIViewWithFallback
-from ... import models
 
 
 class AnnouncementListAll(ListAPIViewWithFallback):

@@ -4,10 +4,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 from rest_framework import permissions, serializers
 
-
-from .base import BaseProvider
 from core.api.serializers.course import CourseSerializer, TermSerializer
 from core.models import Timetable
+
+from .base import BaseProvider
 
 
 class ViewSerializer(serializers.ModelSerializer):

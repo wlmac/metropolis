@@ -2,9 +2,9 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
+from core import models
 
 from .base import BaseProvider
-from core import models
 
 
 class Serializer(serializers.ModelSerializer):

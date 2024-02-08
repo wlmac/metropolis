@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from core.utils.mail import send_mail
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -9,18 +8,19 @@ from django.urls import reverse
 from rest_framework import permissions, serializers
 from rest_framework.exceptions import ValidationError
 
-from .base import BaseProvider
-
 from core.api.serializers.custom import (
-    TagRelatedField,
-    SingleUserField,
-    OrganizationField,
     CommentField,
     LikeField,
+    OrganizationField,
+    SingleUserField,
     SupervisorField,
+    TagRelatedField,
 )
 from core.api.utils import ModelAbilityField
 from core.models import Announcement, User
+from core.utils.mail import send_mail
+
+from .base import BaseProvider
 
 
 def exec_validator(value, serializer_field):

@@ -6,14 +6,11 @@ from django.db.models import Q
 from rest_framework import permissions, serializers
 from rest_framework.exceptions import ParseError
 
-from .announcement import Inner
-
-from .base import BaseProvider
-from core.api.serializers.custom import (
-    TagRelatedField,
-    OrganizationField,
-)
+from core.api.serializers.custom import OrganizationField, TagRelatedField
 from core.models import Event
+
+from .announcement import Inner
+from .base import BaseProvider
 
 AOE = datetime.timezone(datetime.timedelta(hours=-12), name="AoE")
 

@@ -1,10 +1,11 @@
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
-from django.conf import settings
-from core.models import (
+
+from core.models import (  # Update 'your_app' with the actual name of your app
     StaffMember,
     User,
-)  # Update 'your_app' with the actual name of your app
+)
 
 
 class Command(BaseCommand):

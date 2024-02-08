@@ -11,6 +11,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
+
 from . import models
 from .forms import (
     AnnouncementAdminForm,
@@ -26,8 +27,8 @@ from .forms import (
 from .models import Comment, StaffMember
 from .utils.actions import *
 from .utils.filters import (
-    OrganizationListFilter,
     BlogPostAuthorListFilter,
+    OrganizationListFilter,
     PostTypeFilter,
 )
 

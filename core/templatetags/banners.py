@@ -1,6 +1,7 @@
 import typing
 
 from django import template
+
 from core.api.views import Banners
 
 register = template.Library()

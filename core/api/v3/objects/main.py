@@ -1,24 +1,21 @@
 from __future__ import annotations
 
-from typing import Dict, Callable, List, Tuple
+from typing import Callable, Dict, List, Tuple
 
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist, BadRequest
+from django.core.exceptions import BadRequest, ObjectDoesNotExist
 from django.db.models import Model, QuerySet
-from django.http import QueryDict, JsonResponse
+from django.http import JsonResponse, QueryDict
 from django.urls import NoReverseMatch, reverse
-from drf_spectacular.utils import (
-    extend_schema,
-    OpenApiParameter,
-)
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import generics
-from core.api.utils.mixins import LookupField
 
 from core.api.utils import GenericAPIViewWithDebugInfo, GenericAPIViewWithLastModified
+from core.api.utils.mixins import LookupField
 
 __all__ = ["ObjectList", "ObjectSingle", "ObjectRetrieve", "ObjectNew"]
 
-from core.api.utils.polymorphism import get_providers_by_operation, ObjectAPIView
+from core.api.utils.polymorphism import ObjectAPIView, get_providers_by_operation
 
 
 @extend_schema(

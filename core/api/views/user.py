@@ -5,9 +5,10 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .. import serializers, utils
-from ... import models
 from core.models import User
+
+from ... import models
+from .. import serializers, utils
 
 
 class UserDetail(generics.RetrieveAPIView):

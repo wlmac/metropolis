@@ -1,22 +1,12 @@
 import dataclasses
 from dataclasses import dataclass
 from functools import wraps
-from typing import (
-    Optional,
-    Sequence,
-    Callable,
-    Dict,
-    Any,
-    Type,
-    Tuple,
-    List,
-)
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
 
 from drf_spectacular.drainage import set_override
 from drf_spectacular.utils import F, OpenApiExample
 from memoization import cached
-from rest_framework.serializers import Serializer, BaseSerializer
-
+from rest_framework.serializers import BaseSerializer, Serializer
 
 from core.api.utils.polymorphism import (
     get_provider,

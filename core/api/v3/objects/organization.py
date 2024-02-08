@@ -1,12 +1,12 @@
-from core.api.serializers.custom import MembersField, TagRelatedField, SingleUserField
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from rest_framework import permissions, serializers
 
+from core import models
+from core.api.serializers.custom import MembersField, SingleUserField, TagRelatedField
 
 from .base import BaseProvider
-from core import models
 
 
 class Serializer(serializers.ModelSerializer):

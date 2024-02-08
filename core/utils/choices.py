@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal, Optional, List, Tuple
+from typing import List, Literal, Optional, Tuple
 
 import pytz
 from django.utils import timezone
