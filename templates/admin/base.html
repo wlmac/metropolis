@@ -1,75 +1,95 @@
 {% load common_tags %}
 {% load settings_tags %}
 {% load static %}
-
-{% load i18n static %}<!DOCTYPE html>
+{% load i18n static %}
+<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
-<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}"
+      dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
     <head>
-        <title>{% block title %}{% endblock %}</title>
-
-
-        <link rel="stylesheet" href="{% static 'css/material-design-iconic-font.min.css' %}">
+        <title>
+            {% block title %}{% endblock %}
+        </title>
+        <link rel="stylesheet"
+              href="{% static 'css/material-design-iconic-font.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/materialize.min.css' %}">
-
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Roboto+Mono&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Roboto+Mono&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"
+              rel="stylesheet">
         <script src="{% static 'js/popper.min.js' %}"></script>
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/materialize.min.js' %}"></script>
         <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-
-
-
-        <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static 'admin/css/base.css' %}{% endblock %}">
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% block stylesheet %}{% static 'admin/css/base.css' %}{% endblock %}">
         {% if not is_popup and is_nav_sidebar_enabled %}
-            <link rel="stylesheet" type="text/css" href="{% static 'admin/css/nav_sidebar.css' %}">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="{% static 'admin/css/nav_sidebar.css' %}">
             <script src="{% static 'admin/js/nav_sidebar.js' %}" defer></script>
         {% endif %}
         {% block extrastyle %}{% endblock %}
-        {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static 'admin/css/rtl.css' %}{% endblock %}">{% endif %}
+        {% if LANGUAGE_BIDI %}
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="{% block stylesheet_rtl %}{% static 'admin/css/rtl.css' %}{% endblock %}">
+        {% endif %}
         {% block extrahead %}{% endblock %}
         {% block responsive %}
-            <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
-            <link rel="stylesheet" type="text/css" href="{% static 'admin/css/responsive.css' %}">
-            {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% static 'admin/css/responsive_rtl.css' %}">{% endif %}
+            <meta name="viewport"
+                  content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+            <link rel="stylesheet"
+                  type="text/css"
+                  href="{% static 'admin/css/responsive.css' %}">
+            {% if LANGUAGE_BIDI %}
+                <link rel="stylesheet"
+                      type="text/css"
+                      href="{% static 'admin/css/responsive_rtl.css' %}">
+            {% endif %}
         {% endblock %}
         {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
-
-        <link rel="stylesheet" type="text/css" href="{% static 'core/css/base.css' %}">
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'core/css/base.css' %}">
         <link rel="stylesheet" href="{% settings_value 'THEME_CSS' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'core/css/admin-secondary.css' %}">
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'core/css/admin-secondary.css' %}">
     </head>
-
     <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
           data-admin-utc-offset="{% now 'Z' %}">
-
-
-
-
-
-
-
         <ul id="dropdownAcc" class="dropdown-content">
             {% if request.user.is_authenticated %}
-                <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
-                <li><a href="{% url 'timetable_list' %}">Timetable</a></li>
+                <li>
+                    <a href="{% url 'profile_redirect' %}">Profile</a>
+                </li>
+                <li>
+                    <a href="{% url 'timetable_list' %}">Timetable</a>
+                </li>
                 {% if user.is_staff %}
-                    <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                    <li>
+                        <a href="{% url 'admin:index' %}">Admin</a>
+                    </li>
                 {% endif %}
-                <li><a href="{% url 'account_logout' %}">Logout</a></li>
+                <li>
+                    <a href="{% url 'account_logout' %}">Logout</a>
+                </li>
             {% else %}
-                <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
-                <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
+                <li>
+                    <a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a>
+                </li>
+                <li>
+                    <a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a>
+                </li>
             {% endif %}
         </ul>
         <ul class="sidenav" id="slide-out">
             {% settings_value "NAVBAR" as navbar %}
             {% for heading, items in navbar.items %}
                 {% if items|gettype == 'str' %}
-                    <li >
+                    <li>
                         <a href="{{ items }}">{{ heading }}</a>
                     </li>
                 {% elif items|gettype == 'dict' %}
@@ -80,31 +100,41 @@
                                 <a href="{{ path }}">{{ item }}</a>
                             </li>
                         {% endfor %}
+                    {% else %}
+                        {{ items|gettype }}
+                    {% endif %}
+                {% endfor %}
+                <li class="divider"></li>
+                {% if request.user.is_authenticated %}
+                    <li>
+                        <a href="{% url 'profile_redirect' %}">Profile</a>
+                    </li>
+                    {% if user.is_staff %}
+                        <li>
+                            <a href="{% url 'admin:index' %}">Admin</a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a href="{% url 'account_logout' %}">Logout</a>
+                    </li>
                 {% else %}
-                    {{ items|gettype }}
+                    <li>
+                        <a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a>
+                    </li>
                 {% endif %}
-            {% endfor %}
-            <li class="divider"></li>
-            {% if request.user.is_authenticated %}
-                <li><a href="{% url 'profile_redirect' %}">Profile</a></li>
-                {% if user.is_staff %}
-                    <li><a href="{% url 'admin:index' %}">Admin</a></li>
-                {% endif %}
-                <li><a href="{% url 'account_logout' %}">Logout</a></li>
-            {% else %}
-                <li><a href="{% url 'account_login' %}?next={{ request.get_full_path }}">Login</a></li>
-                <li><a href="{% url 'account_signup' %}?next={{ request.get_full_path }}">Sign Up</a></li>
-            {% endif %}
-        </ul>
-        <nav>
-            <div class="nav-wrapper">
-                <a href="{% url 'index' %}">
-                    <div class="brand-logo">
-                        <img class="img-logo" src="{% settings_value 'THEME_LOGO' %}"></img>
-                <!-- <span>Metropolis</span> -->
+            </ul>
+            <nav>
+                <div class="nav-wrapper">
+                    <a href="{% url 'index' %}">
+                        <div class="brand-logo">
+                            <img class="img-logo" src="{% settings_value 'THEME_LOGO' %}">
+                        </img>
+                        <!-- <span>Metropolis</span> -->
                     </div>
                 </a>
-
                 <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="zmdi zmdi-menu"></i></a>
                 <ul class="right hide-on-med-and-down">
                     {% settings_value "NAVBAR" as navbar %}
@@ -115,7 +145,9 @@
                             </li>
                         {% elif items|gettype == 'dict' %}
                             <li>
-                                <a class="dropdown-trigger" href="#!" data-target="dropdown{{ heading }}">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
+                                <a class="dropdown-trigger"
+                                   href="#!"
+                                   data-target="dropdown{{ heading }}">{{ heading }}<i class="zmdi zmdi-caret-down"></i></a>
                                 <ul id="dropdown{{ heading }}" class="dropdown-content">
                                     {% for item, path in items.items %}
                                         <li>
@@ -128,14 +160,16 @@
                             {{ items|gettype }}
                         {% endif %}
                     {% endfor %}
-                    <li><a class="dropdown-trigger" href="#!" data-target="dropdownAcc">
-                        {% if request.user.is_authenticated %}
-                            Account
-                        {% else %}
-                            Login/Sign Up
-                        {% endif %}
-                        <i class="zmdi zmdi-caret-down"></i>
-                    </a></li>
+                    <li>
+                        <a class="dropdown-trigger" href="#!" data-target="dropdownAcc">
+                            {% if request.user.is_authenticated %}
+                                Account
+                            {% else %}
+                                Login/Sign Up
+                            {% endif %}
+                            <i class="zmdi zmdi-caret-down"></i>
+                        </a>
+                    </li>
                     <script>
                         $(document).ready(function(){
                             $('.dropdown-trigger').dropdown();
@@ -145,18 +179,10 @@
                 </ul>
             </div>
         </nav>
-
-
-
-
-
-
-
-<!-- Container -->
+        <!-- Container -->
         <div id="container">
-
             {% if not is_popup %}
-    <!-- Header -->
+                <!-- Header -->
                 {% block header %}
                     <div id="header">
                         <div id="branding">
@@ -190,11 +216,11 @@
                         {% block nav-global %}{% endblock %}
                     </div>
                 {% endblock %}
-    <!-- END Header -->
+                <!-- END Header -->
                 {% block breadcrumbs %}
                     <div class="breadcrumbs">
                         <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
-                        {% if title %} &rsaquo; {{ title }}{% endif %}
+                        {% if title %}&rsaquo; {{ title }}{% endif %}
                     </div>
                 {% endblock %}
             {% endif %}
@@ -217,17 +243,24 @@
                 <div class="content">
                     {% block messages %}
                         {% if messages %}
-                            <ul class="messagelist">{% for message in messages %}
-                                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}<i class="zmdi zmdi-close zmdi-hc-lg close-msg"></i></li>
-
-                            {% endfor %}</ul>
+                            <ul class="messagelist">
+                                {% for message in messages %}
+                                    <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>
+                                        {{ message|capfirst }}<i class="zmdi zmdi-close zmdi-hc-lg close-msg"></i>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         {% endif %}
                     {% endblock messages %}
-        <!-- Content -->
+                    <!-- Content -->
                     <div id="content" class="{% block coltype %}colM{% endblock %}">
                         {% block pretitle %}{% endblock %}
-                        {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
-                        {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
+                        {% block content_title %}
+                            {% if title %}<h1>{{ title }}</h1>{% endif %}
+                        {% endblock %}
+                        {% block content_subtitle %}
+                            {% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}
+                        {% endblock %}
                         {% block content %}
                             {% block object-tools %}{% endblock %}
                             {{ content }}
@@ -235,7 +268,7 @@
                         {% block sidebar %}{% endblock %}
                         <br class="clear">
                     </div>
-        <!-- END Content -->
+                    <!-- END Content -->
                     {% block footer %}<div id="footer"></div>{% endblock %}
                 </div>
             </div>
@@ -277,6 +310,6 @@
                 document.getElementById("id_site_0").checked = true;
             </script>
         </div>
-<!-- END Container -->
+        <!-- END Container -->
     </body>
 </html>

@@ -3,15 +3,14 @@
 {% load link_tags %}
 {% load gravatar_tags %}
 {% load static %}
-
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
 {% endblock %}
-
 {% block main %}
     <div class="club">
         <div class="row">
-            <img class="club-banner responsive-img col s12" src="{{ organization.banner.url }}?fmt=webp&w=960"
+            <img class="club-banner responsive-img col s12"
+                 src="{{ organization.banner.url }}?fmt=webp&w=960"
                  alt="banner of organization">
         </div>
         <div class="container">
@@ -19,7 +18,9 @@
                 <div class="row club-header">
                     <div class="col m3 s12">
                         <div class="club-logo">
-                            <img class="circle" src="{{ organization.icon.url }}" alt="{{ organization.name }} logo">
+                            <img class="circle"
+                                 src="{{ organization.icon.url }}"
+                                 alt="{{ organization.name }} logo">
                         </div>
                     </div>
                     <div class="col m5 s12">
@@ -45,42 +46,36 @@
                 </div>
                 <div class="row club-info">
                     <div class="col m8">
-                        <p class="bio">
-                            {{ organization.bio|linebreaksbr }}
-                        </p>
-                        <br><br>
-                        <div class="description">
-                            {{ organization.extra_content|markdown }}
-                        </div>
+                        <p class="bio">{{ organization.bio|linebreaksbr }}</p>
+                        <br>
+                        <br>
+                        <div class="description">{{ organization.extra_content|markdown }}</div>
                     </div>
                     <div class="col m4">
                         <ul class="link-section" style="display: inline">
                             {% for i in organization.links.all %}
-                                <li><i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a
-                                    href="{{ i.url }}" style="word-break: break-word">{{ i.url }}</a></li>
+                                <li>
+                                    <i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i><a href="{{ i.url }}" style="word-break: break-word">{{ i.url }}</a>
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col s12">
                         <section id="executives">
-                            <h4>
-                                Executives
-                            </h4>
+                            <h4>Executives</h4>
                             <hr>
                             <div class="members-list">
                                 {% for i in organization.execs.all %}
                                     <a href="{{ i.username|user_url }}">
                                         <div class="member">
                                             <div class="member-image">
-                                                <img class="circle" src="{{ i.email|gravatar_url:100}}"
+                                                <img class="circle"
+                                                     src="{{ i.email|gravatar_url:100 }}"
                                                      alt="{{ i.get_full_name }} profile picture">
                                             </div>
-                                            <div class="member-text">
-                                                {{ i.get_full_name }}
-                                            </div>
+                                            <div class="member-text">{{ i.get_full_name }}</div>
                                         </div>
                                     </a>
                                 {% empty %}
@@ -90,9 +85,7 @@
                             </div>
                         </section>
                         <section id="members">
-                            <h4>
-                                Members
-                            </h4>
+                            <h4>Members</h4>
                             <hr>
                             {% if organization.show_members %}
                                 <div class="members-list">
@@ -100,23 +93,21 @@
                                         <a href="{{ i.username|user_url }}">
                                             <div class="member">
                                                 <div class="member-image">
-                                                    <img class="circle" src="{{ i.email|gravatar_url:100}}"
+                                                    <img class="circle"
+                                                         src="{{ i.email|gravatar_url:100 }}"
                                                          alt="{{ i.get_full_name }} profile picture">
                                                 </div>
-                                                <div class="member-text">
-                                                    {{ i.get_full_name }}
-                                                </div>
+                                                <div class="member-text">{{ i.get_full_name }}</div>
                                             </div>
                                         </a>
                                     {% empty %}
                                         <br>
-                                        There are no members right now. {% if organization.is_open %}Join us!{% endif %}
+                                        There are no members right now.
+                                        {% if organization.is_open %}Join us!{% endif %}
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                <p>
-                                    This organisation's settings do not allow showing its member list.
-                                </p>
+                                <p>This organisation's settings do not allow showing its member list.</p>
                             {% endif %}
                         </section>
                     </div>

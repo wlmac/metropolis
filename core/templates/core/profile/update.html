@@ -1,16 +1,16 @@
 {% extends 'core/secondary.html' %}
 {% load gravatar_tags %}
 {% load static %}
-
 {% block hd %}
     <link rel="stylesheet" href="{% static 'core/css/profile/detail.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/profile/update.css' %}">
 {% endblock %}
-
 {% block content %}
     <div class="white-bg">
         <div class="header">
-            <img class="circle responsive-img profile-picture" src="{{ profile.email|gravatar_url:100 }}" alt="{{ profile.username }}'s profile picture">
+            <img class="circle responsive-img profile-picture"
+                 src="{{ profile.email|gravatar_url:100 }}"
+                 alt="{{ profile.username }}'s profile picture">
             <div class="name-info">
                 <h5 class="full-name">{{ profile.get_full_name }}</h5>
                 <h6 class="username">{{ profile.username }}</h6>
@@ -19,7 +19,8 @@
         <hr>
         <div class="body">
             <div class="avatar">
-                <a href="https://gravatar.com">Edit profile photo</a><br>
+                <a href="https://gravatar.com">Edit profile photo</a>
+                <br>
             </div>
             <form method="post">
                 {% csrf_token %}
@@ -30,15 +31,18 @@
                         <span>{{ field }}</span>
                     </div>
                 {% endfor %}
-            <!-- <div class="field"> -->
-            <!--     <div class="label">Password</div> -->
-            <!--     <span> -->
-            <!--         <a href={% url 'account_change_password' %}>Change</a> -->
-            <!--     </span> -->
-            <!-- </div> -->
+                <!-- <div class="field"> -->
+                <!--     <div class="label">Password</div> -->
+                <!--     <span> -->
+                <!--         <a href={% url 'account_change_password' %}>Change</a> -->
+                <!--     </span> -->
+                <!-- </div> -->
                 <div>
                     <button type="submit" class="btn">Submit</button>
-                    <a href="{% url 'profile_redirect' %}" class="btn" role="button" aria-pressed="true">Cancel</a>
+                    <a href="{% url 'profile_redirect' %}"
+                       class="btn"
+                       role="button"
+                       aria-pressed="true">Cancel</a>
                 </div>
             </form>
         </div>

@@ -1,106 +1,118 @@
-{% extends 'core/base.html' %} {% load static %} {% block deps %}
-  <link rel="stylesheet" href="{% static 'core/css/map.css' %}" />
-  <link rel="stylesheet" href="{% static 'core/css/club-list.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/mapbox-gl.css' %}" />
-  <link rel="stylesheet" href="{% static 'css/mapbox-gl-geocoder.css' %}" />
-  <script src="{% static 'js/mapbox-gl.js' %}"></script>
-  <script src="{% static 'js/mapbox-gl-geocoder.min.js' %}"></script>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-
-
-  {{ mapbox_apikey|json_script:"mapbox-apikey" }} {% endblock %} {% block main %}
-
-
+{% extends 'core/base.html' %}
+{% load static %}
+{% block deps %}
+    <link rel="stylesheet" href="{% static 'core/css/map.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/club-list.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/mapbox-gl.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/mapbox-gl-geocoder.css' %}" />
+    <script src="{% static 'js/mapbox-gl.js' %}"></script>
+    <script src="{% static 'js/mapbox-gl-geocoder.min.js' %}"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    {{ mapbox_apikey|json_script:"mapbox-apikey" }}
+{% endblock %}
+{% block main %}
     <div class="container">
-      <div class="map-container">
-        <div class="heading">
-      <!-- <div style="width: 80%; height: 3px; background-color: #efefef; margin-bottom: 20px;"></div> -->
-          <div class="legend">
-            <div class="legend-items">
-              <div class="legend-square" style="background-color: #946987"></div>
-              <span>General Spaces</span>
+        <div class="map-container">
+            <div class="heading">
+                <!-- <div style="width: 80%;
+             height: 3px;
+             background-color: #efefef;
+             margin-bottom: 20px"></div> -->
+                <div class="legend">
+                    <div class="legend-items">
+                        <div class="legend-square" style="background-color: #946987"></div>
+                        <span>General Spaces</span>
+                    </div>
+                    <div class="legend-items">
+                        <div class="legend-square" style="background-color: #946469"></div>
+                        <span>Washrooms + Change Rooms</span>
+                    </div>
+                    <div class="legend-items">
+                        <div class="legend-square" style="background-color: #b0a169"></div>
+                        <span>Offices</span>
+                    </div>
+                    <div class="legend-items">
+                        <div class="legend-square" style="background-color: #68936f"></div>
+                        <span>Classrooms + Labs</span>
+                    </div>
+                    <div class="legend-items">
+                        <div class="legend-square" style="background-color: #5d97d1"></div>
+                        <span>Stairways</span>
+                    </div>
+                    <div class="legend-items">
+                        <div class="legend-square" style="background-color: #3774b2"></div>
+                        <span>Hallways</span>
+                    </div>
+                    <div class="legend-items">
+                        <div class="legend-square" style="background-color: #646d78"></div>
+                        <span>Miscellaneous</span>
+                    </div>
+                </div>
             </div>
-            <div class="legend-items">
-              <div class="legend-square" style="background-color: #946469"></div>
-              <span>Washrooms + Change Rooms</span>
+            <div style="margin:0; ">
+                <a href="#help"><i class="small material-icons icon-blue">help</i></a>
             </div>
-            <div class="legend-items">
-              <div class="legend-square" style="background-color: #b0a169"></div>
-              <span>Offices</span>
+            <div>
+                If the map below isn't working (you see a black rectangle, etc),
+                <a href="{% static 'wlmci_schoolmap.pdf' %}">click here</a>
+                to see the PDF version.
             </div>
-            <div class="legend-items">
-              <div class="legend-square" style="background-color: #68936f"></div>
-              <span>Classrooms + Labs</span>
+            <div class="switch-container">
+                <div class="switch" id="floor">
+                    <label style="font-size: 1rem">
+                        Floor One
+                        <input type="checkbox" name="checkbox" id="checkbox" />
+                        <span class="lever"></span>
+                        Floor Two
+                    </label>
+                </div>
             </div>
-            <div class="legend-items">
-              <div class="legend-square" style="background-color: #5d97d1"></div>
-              <span>Stairways</span>
+            <pre id="coordinates" class="coordinates"></pre>
+            <div class="map" id="map"></div>
+            <div class="controls" id="help">
+                <div class="mobile-controls">
+                    <details>
+                        <summary>
+                            <h6>
+                                <strong>Mobile Controls</strong>
+                            </h6>
+                        </summary>
+                        <ul>
+                            <li>
+                                <strong>Pan screen:</strong>1 finger + drag
+                            </li>
+                            <li>
+                                <strong>Zoom In/Out:</strong>2 fingers + pinch screen
+                            </li>
+                            <li>
+                                <strong>Perspective:</strong>2 fingers + drag
+                            </li>
+                        </ul>
+                    </details>
+                </div>
+                <div class="computer-controls">
+                    <details>
+                        <summary>
+                            <h6>
+                                <strong>Computer Controls</strong>
+                            </h6>
+                        </summary>
+                        <ul>
+                            <li>
+                                <strong>Pan screen:</strong>drag screen
+                            </li>
+                            <li>
+                                <strong>Zoom In/Out:</strong>double click OR scroll up or down
+                            </li>
+                            <li>
+                                <strong>Perspective:</strong>Ctrl + drag
+                            </li>
+                        </ul>
+                    </details>
+                </div>
             </div>
-            <div class="legend-items">
-              <div class="legend-square" style="background-color: #3774b2"></div>
-              <span>Hallways</span>
-            </div>
-            <div class="legend-items">
-              <div class="legend-square" style="background-color: #646d78"></div>
-              <span>Miscellaneous</span>
-            </div>
-          </div>
-
         </div>
-        <div style="margin:0; "><a href="#help"><i class="small material-icons icon-blue" >help</i></a></div>
-
-        <div>
-          If the map below isn't working (you see a black rectangle, etc),
-          <a href="{% static 'wlmci_schoolmap.pdf' %}">
-            click here
-          </a>
-          to see the PDF version.
-        </div>
-
-        <div class="switch-container">
-          <div class="switch" id="floor">
-            <label style="font-size: 1rem">
-              Floor One
-              <input type="checkbox" name="checkbox" id="checkbox" />
-              <span class="lever"></span>
-              Floor Two
-            </label>
-          </div>
-        </div>
-    <pre id="coordinates" class="coordinates"></pre>
-        <div class="map" id="map"></div>
-
-        <div class="controls" id="help">
-          <div class="mobile-controls">
-            <details>
-              <summary>
-                <h6><strong> Mobile Controls</strong></h6>
-              </summary>
-              <ul>
-                <li><strong>Pan screen:</strong>1 finger + drag</li>
-                <li><strong>Zoom In/Out:</strong>2 fingers + pinch screen</li>
-                <li><strong>Perspective:</strong>2 fingers + drag</li>
-              </ul>
-            </details>
-          </div>
-          <div class="computer-controls">
-            <details>
-              <summary>
-                <h6><strong> Computer Controls</strong></h6>
-              </summary>
-              <ul>
-                <li><strong>Pan screen:</strong>drag screen</li>
-                <li>
-                  <strong>Zoom In/Out:</strong>double click OR scroll up or down
-                </li>
-                <li><strong>Perspective:</strong>Ctrl + drag</li>
-              </ul>
-            </details>
-          </div>
-        </div>
-      </div>
     </div>
-
     <script src="{% static 'core/js/map/map.js' %}"></script>
-  {% endblock %}
+{% endblock %}

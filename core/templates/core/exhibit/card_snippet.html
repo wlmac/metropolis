@@ -1,23 +1,26 @@
 {% load link_tags %}
 {% load markdown_tags %}
 {% load gravatar_tags %}
-
 <div class="card">
     <div class="card-headers">
-        <img class="card-image" src="{{exhibit.featured_image.url}}">
+        <img class="card-image" src="{{ exhibit.featured_image.url }}">
         <div class="card-text">
             <div class="tag-section">
                 {% for tag in exhibit.tags.all %}
-                    <a href="/blog/tag/{{tag.id}}"><p class="tag" style="background-color:{{tag.color}}">{{tag}}</p></a>
+                    <a href="/blog/tag/{{ tag.id }}">
+                        <p class="tag" style="background-color:{{ tag.color }}">{{ tag }}</p>
+                    </a>
                 {% endfor %}
             </div>
-            <h1 class="title">{{exhibit.title}}</h1>
+            <h1 class="title">{{ exhibit.title }}</h1>
             <div class="card-authors">
                 <div class="card-authors-image">
-                    <a href="{{exhibit.author.username|user_url}}"><img class="circle" src="{{exhibit.author.email|gravatar_url:100}}"></a>
+                    <a href="{{ exhibit.author.username|user_url }}">
+                        <img class="circle" src="{{ exhibit.author.email|gravatar_url:100 }}">
+                    </a>
                 </div>
                 <div class="card-authors-text">
-                    {{exhibit.author.username|user}}
+                    {{ exhibit.author.username|user }}
                     <br>
                     <dot>•</dot> posted {{ exhibit.created_date|date:"M. j, Y" }}{{ exhibit.created_date|date:", g:i A"|lower }}
                     {% if exhibit.last_modified_date != exhibit.created_date %}
@@ -29,7 +32,7 @@
     </div>
     <hr>
     <div class="card-body">
-        <p>{{exhibit.body|markdown|striptags|linebreaksbr}}</p>
+        <p>{{ exhibit.body|markdown|striptags|linebreaksbr }}</p>
     </div>
     <br>
 </div>

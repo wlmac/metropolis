@@ -4,11 +4,9 @@
 {% load gravatar_tags %}
 {% load settings_tags %}
 {% load static %}
-
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/about.css' %}">
 {% endblock %}
-
 {% block main %}
     <div class="container">
         <div class="headers">
@@ -116,155 +114,158 @@
                         <a href="{{ member.user.username|user_url }}">
                             {% if name in member.positions_leading %}
                                 <div class="member branch-lead">
-                            {% else %}
-                                <div class="member">
-                            {% endif %}
-                            <div class="member-name">
-                                <div class="member-image">
-                                    <img class="circle" src="{{ member.user.gravatar_url }}">
-                                </div>
-                                <div class="member-text">
-                                    {{ member.user.first_name }} {{ member.user.last_name }}
-
-                                    {% if name in member.positions_leading %}
-                                        <span class="member-position">
-                                                {% translate 'Lead' %}
-                                            </span>
+                                {% else %}
+                                    <div class="member">
                                     {% endif %}
-                                    {% if member.years %}
-                                        {% if name in member.positions_leading %}
-                                            <span class="member-years" style="margin-left: 0.5rem;">
-                                        {% else %}
-                                            <span class="member-years">
-                                        {% endif %}
-                                    {{ member.years|join:", " }}
-                                    </span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="member-bio">
-                                {{ member.bio }}
-                            </div>
-                            </div>
-                        </a>
-                    {% empty %}
-                        No members under this position.
-                    {% endfor %}
-                {% endfor %}
-            </div>
-            <div class="content" id="content-contact">
-                <h1 class="title">Contact Us</h1>
-                <hr>
-                <p class="text">
-                    If you ever find bugs or problems with the site, or need to be granted the staff status,
-                    feel free to <a class="link" href="mailto:hello@maclyonsden.com" target="_blank">email</a> us
-                    or use the form below.
-                </p>
-                <ul class="link-section">
-                    <div>
-                        <li>
-                            <a class="link" href="mailto:hello@maclyonsden.com" target="_blank">
-                                <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>hello@maclyonsden.com</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="link" href="https://github.com/wlmac" target="_blank">
-                                <i class="zmdi zmdi-github zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>wlmac</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="link" href="https://www.instagram.com/wlmac.sac/" target="_blank">
-                                <i class="zmdi zmdi-instagram zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>@wlmac.sac</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="link" href="https://www.facebook.com/groups/keeptrackofmac" target="_blank">
-                                <i class="zmdi zmdi-facebook-box zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>Keep Track of MAC</p>
-                            </a>
-                        </li>
+                                    <div class="member-name">
+                                        <div class="member-image">
+                                            <img class="circle" src="{{ member.user.gravatar_url }}">
+                                        </div>
+                                        <div class="member-text">
+                                            {{ member.user.first_name }} {{ member.user.last_name }}
+                                            {% if name in member.positions_leading %}
+                                                <span class="member-position">{% translate 'Lead' %}</span>
+                                            {% endif %}
+                                            {% if member.years %}
+                                                {% if name in member.positions_leading %}
+                                                    <span class="member-years" style="margin-left: 0.5rem;">
+                                                    {% else %}
+                                                        <span class="member-years">
+                                                        {% endif %}
+                                                        {{ member.years|join:", " }}
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="member-bio">{{ member.bio }}</div>
+                                    </div>
+                                </a>
+                            {% empty %}
+                                No members under this position.
+                            {% endfor %}
+                        {% endfor %}
                     </div>
-                </ul>
-                <br>
-                <div class="content-embed">
-                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSerD9wL2Sg8AIEVxc7ZPPIYcNPnCBnUuXTxOajhkvv8TMxwAw/viewform?embedded=true"
-                            frameborder="0" marginheight="0" marginwidth="0">
-                        Loading…
-                    </iframe>
-                </div>
-            </div>
-            <div class="content" id="content-school">
-                <h1 class="title">Contact the School</h1>
-                <hr>
-                <p class="text">
-                    Project Metropolis is a site affiliated with William Lyon Mackenzie Collegiate Institute.
-                    To contact the school, please refer to the channels of communication listed below.
-                </p>
-                <ul class="link-section">
-                    <div>
-                        <li>
-                            <a class="link" href="https://wlmac.ca/" target="_blank">
-                                <i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>WLMCI Offical Website</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="link" href="https://goo.gl/maps/WyfTKUqKrbecU4RE9" target="_blank">
-                                <i class="zmdi zmdi-map zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>20 Tillplain Road, North York, ON M3H 5R2</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="link" href="tel:+1-416-395-3330">
-                                <i class="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>416-395-3330</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="link" href="tel:+1-416-395-4453">
-                                <i class="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>416-395-4453 (fax)</p>
-                            </a>
-                        </li>
+                    <div class="content" id="content-contact">
+                        <h1 class="title">Contact Us</h1>
+                        <hr>
+                        <p class="text">
+                            If you ever find bugs or problems with the site, or need to be granted the staff status,
+                            feel free to <a class="link" href="mailto:hello@maclyonsden.com" target="_blank">email</a> us
+                            or use the form below.
+                        </p>
+                        <ul class="link-section">
+                            <div>
+                                <li>
+                                    <a class="link" href="mailto:hello@maclyonsden.com" target="_blank">
+                                        <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>hello@maclyonsden.com</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link" href="https://github.com/wlmac" target="_blank">
+                                        <i class="zmdi zmdi-github zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>wlmac</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link"
+                                       href="https://www.instagram.com/wlmac.sac/"
+                                       target="_blank">
+                                        <i class="zmdi zmdi-instagram zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>@wlmac.sac</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link"
+                                       href="https://www.facebook.com/groups/keeptrackofmac"
+                                       target="_blank">
+                                        <i class="zmdi zmdi-facebook-box zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>Keep Track of MAC</p>
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                        <br>
+                        <div class="content-embed">
+                            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSerD9wL2Sg8AIEVxc7ZPPIYcNPnCBnUuXTxOajhkvv8TMxwAw/viewform?embedded=true"
+                                    frameborder="0"
+                                    marginheight="0"
+                                    marginwidth="0">
+                                Loading…
+                            </iframe>
+                        </div>
                     </div>
-                </ul>
-                <h2 class="subtitle">Admin</h2>
-                <hr>
-                <ul class="link-section">
-                    <div>
-                        <h3 class="section-title">Principal</h3>
-                        <li>
-                            <a class="link" href="mailto:cynthia.nguyen@tdsb.on.ca" target="_blank">
-                                <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>Mrs. Cynthia Nguyen (cynthia.nguyen@tdsb.on.ca)</p>
-                            </a>
-                        </li>
-                        <h3 class="section-title">Vice Principals</h3>
-                        <li>
-                            <a class="link" href="mailto:jyoti.khona@tdsb.on.ca" target="_blank">
-                                <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>Jyoti Khona (jyoti.khona@tdsb.on.ca) (last names A-L)</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="link" href="mailto:barbara.horman@tdsb.on.ca" target="_blank">
-                                <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>Ms. Barbara Horman (barbara.horman@tdsb.on.ca) (last names A-L)</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="link" href="mailto:karim.sukhu@tdsb.on.ca" target="_blank">
-                                <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
-                                <p>Mr. Karim Sukhu (karim.sukhu@tdsb.on.ca) (last names M-Z)</p>
-                            </a>
-                        </li>
-                    </div>
-                </ul>
-                {% comment %}
+                    <div class="content" id="content-school">
+                        <h1 class="title">Contact the School</h1>
+                        <hr>
+                        <p class="text">
+                            Project Metropolis is a site affiliated with William Lyon Mackenzie Collegiate Institute.
+                            To contact the school, please refer to the channels of communication listed below.
+                        </p>
+                        <ul class="link-section">
+                            <div>
+                                <li>
+                                    <a class="link" href="https://wlmac.ca/" target="_blank">
+                                        <i class="zmdi zmdi-link zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>WLMCI Offical Website</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link"
+                                       href="https://goo.gl/maps/WyfTKUqKrbecU4RE9"
+                                       target="_blank">
+                                        <i class="zmdi zmdi-map zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>20 Tillplain Road, North York, ON M3H 5R2</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link" href="tel:+1-416-395-3330">
+                                        <i class="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>416-395-3330</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link" href="tel:+1-416-395-4453">
+                                        <i class="zmdi zmdi-phone zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>416-395-4453 (fax)</p>
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                        <h2 class="subtitle">Admin</h2>
+                        <hr>
+                        <ul class="link-section">
+                            <div>
+                                <h3 class="section-title">Principal</h3>
+                                <li>
+                                    <a class="link" href="mailto:cynthia.nguyen@tdsb.on.ca" target="_blank">
+                                        <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>Mrs. Cynthia Nguyen (cynthia.nguyen@tdsb.on.ca)</p>
+                                    </a>
+                                </li>
+                                <h3 class="section-title">Vice Principals</h3>
+                                <li>
+                                    <a class="link" href="mailto:jyoti.khona@tdsb.on.ca" target="_blank">
+                                        <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>Jyoti Khona (jyoti.khona@tdsb.on.ca) (last names A-L)</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link" href="mailto:barbara.horman@tdsb.on.ca" target="_blank">
+                                        <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>Ms. Barbara Horman (barbara.horman@tdsb.on.ca) (last names A-L)</p>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="link" href="mailto:karim.sukhu@tdsb.on.ca" target="_blank">
+                                        <i class="zmdi zmdi-email zmdi-hc-lg" aria-hidden="true"></i>
+                                        <p>Mr. Karim Sukhu (karim.sukhu@tdsb.on.ca) (last names M-Z)</p>
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                        {% comment %}
             {% if user.is_authenticated %}
             <h2 class="subtitle">Staff</h2>
             <hr>
@@ -286,9 +287,9 @@
                 </div>
             </ul>
             {% endif %}
-            {% endcomment %}
-            </div>
-            <script>
+                        {% endcomment %}
+                    </div>
+                    <script>
                 $(document).ready(function () {
                     var urlParams = new URLSearchParams(window.location.search);
                     $(".content").hide();
@@ -301,7 +302,7 @@
                     $("#" + urlParams.get("tab")).addClass("active");
                     //$(".card-authors-text").find("a").addClass("link");
                 });
-            </script>
-        </div>
-    </div>
-{% endblock %}
+                    </script>
+                </div>
+            </div>
+        {% endblock %}

@@ -4,7 +4,6 @@
 {% load static %}
 {% load settings_tags %}
 {% load timetable_tags %}
-
 {% block main %}
     <div id="content-container">
         {% include 'core/snippets/banner.html' %}
@@ -16,43 +15,47 @@
                             <h4 class="title">{{ blogpost.title }}</h4>
                             <hr>
                             <div class="blog-body markdown-container">
-                                <p>{{ blogpost.body|markdown|striptags|linebreaksbr}}</p>
-                                <a class="full-content-page link" href="{{ blogpost.slug|blogpost_url }}">Read full blog
-                                    post <i
-                                        class='zmdi zmdi-chevron-right'></i></a>
+                                <p>{{ blogpost.body|markdown|striptags|linebreaksbr }}</p>
+                                <a class="full-content-page link"
+                                   href="{{ blogpost.slug|blogpost_url }}">Read full blog
+                                post <i class='zmdi zmdi-chevron-right'></i></a>
                             </div>
                         </div>
                     </div>
-                    <img class="blog-image hide-on-small-and-down col s7" src="{{ blogpost.featured_image.url }}" alt="{{ blogpost.featured_image_description }}" />
+                    <img class="blog-image hide-on-small-and-down col s7"
+                         src="{{ blogpost.featured_image.url }}"
+                         alt="{{ blogpost.featured_image_description }}" />
                 </div>
             {% endif %}
             <div id="recent-events" class="card-list center-align">
                 <div class="cards-container">
                     {% for event in events %}
-                        <div class="event-card card {% if forloop.counter == 3 and 'ia' not in request.user.qltrs2 %} hide-on-med-and-down {% endif %}">
+                        <div class="event-card card {% if forloop.counter == 3 and 'ia' not in request.user.qltrs2 %}hide-on-med-and-down{% endif %}">
                             <div class="event-time right-align valign-wrapper"
                                  style="background-color: {{ event.tags.first.color }}">
                                 <div class="time-container">
                                     {% now "Y-M-d" as today %}
                                     {% if event.start_date|date:"Y-M-D" != today %}
-                                        <span class="date">{{ event.start_date|date }}</span><br>
+                                        <span class="date">{{ event.start_date|date }}</span>
+                                        <br>
                                     {% endif %}
                                     {% if normal or event.start_date|time:"G:i" != "0:00" %}
-                                        <span class="time">{{ event.start_date|time:"g:i A"|lower }}</span><br>
+                                        <span class="time">{{ event.start_date|time:"g:i A"|lower }}</span>
+                                        <br>
                                     {% endif %}
-                                    <span class="intermediate">to</span><br>
+                                    <span class="intermediate">to</span>
+                                    <br>
                                     {% if event.end_date|date:"Y-M-D" != event.start_date|date:"Y-M-D" %}
-                                        <span class="date">{{ event.end_date|date }}</span><br>
+                                        <span class="date">{{ event.end_date|date }}</span>
+                                        <br>
                                     {% endif %}
                                     {% if normal or event.end_date|time:"G:i" != "23:59" %}
-                                        <span class="time">{{ event.end_date|time:"g:i A"|lower }}</span><br>
+                                        <span class="time">{{ event.end_date|time:"g:i A"|lower }}</span>
+                                        <br>
                                     {% endif %}
-
                                     {% if event.is_current %}
                                         <div style="margin-top: 1rem;">
-                                            <span class="chip">
-                                                current
-                                            </span>
+                                            <span class="chip">current</span>
                                         </div>
                                     {% endif %}
                                 </div>
@@ -63,12 +66,12 @@
                                 <div class="authors">
                                     <div class="authors-image">
                                         <a href="{{ event.organization.slug|organization_url }}">
-                                            <img class="circle" src="{{ event.organization.icon.url }}" alt="{{ event.organization.name }} logo">
+                                            <img class="circle"
+                                                 src="{{ event.organization.icon.url }}"
+                                                 alt="{{ event.organization.name }} logo">
                                         </a>
                                     </div>
-                                    <div class="authors-text">
-                                        {{ event.organization.slug|organization }}
-                                    </div>
+                                    <div class="authors-text">{{ event.organization.slug|organization }}</div>
                                 </div>
                             </div>
                         </div>
@@ -76,10 +79,11 @@
                         There are no events at this time.
                     {% endfor %}
                 </div>
-                <a class="full-content-page link" href="{% url 'calendar' %}">View all events <i
-                    class='zmdi zmdi-chevron-right'></i></a>
+                <a class="full-content-page link" href="{% url 'calendar' %}">View all events <i class='zmdi zmdi-chevron-right'></i></a>
             </div>
-            <hr style="margin: 10px calc(2% + 10px); border-top-width: 2.5px; border-color: #d9d9d9;">
+            <hr style="margin: 10px calc(2% + 10px);
+                       border-top-width: 2.5px;
+                       border-color: #d9d9d9">
             <div id="recent-announcements" class="center-align">
                 <div id="announcements" class="cards-container">
                     {% for announcement in announcements %}
@@ -90,12 +94,11 @@
                             </a>
                             <div class="authors">
                                 <div class="authors-image">
-                                    <a href="{{ announcement.organization.slug|organization_url }}"><img class="circle"
-                                                                                                         src="{{ announcement.organization.icon.url }}"></a>
+                                    <a href="{{ announcement.organization.slug|organization_url }}">
+                                        <img class="circle" src="{{ announcement.organization.icon.url }}">
+                                    </a>
                                 </div>
-                                <div class="authors-text">
-                                    {{ announcement.organization.slug|organization }}
-                                </div>
+                                <div class="authors-text">{{ announcement.organization.slug|organization }}</div>
                             </div>
                             <div class="announcement-description markdown-container hide-on-med-and-down">
                                 <p>{{ announcement.body|markdown|striptags|linebreaksbr }}</p>
@@ -105,17 +108,21 @@
                         There are no announcements at this time.
                     {% endfor %}
                 </div>
-                <a class="full-content-page link" href="{% url 'announcement_list' %}">View all announcements <i
-                    class='zmdi zmdi-chevron-right'></i></a>
+                <a class="full-content-page link" href="{% url 'announcement_list' %}">View all announcements <i class='zmdi zmdi-chevron-right'></i></a>
             </div>
         </div>
     </div>
 {% endblock %}
-
 {% block deps %}
-    <link rel="stylesheet" href="{% static 'core/css/index.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% settings_value 'THEME_BANNER_CSS' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'core/css/index-banner.css' %}" type="text/css">
+    <link rel="stylesheet"
+          href="{% static 'core/css/index.css' %}"
+          type="text/css">
+    <link rel="stylesheet"
+          href="{% settings_value 'THEME_BANNER_CSS' %}"
+          type="text/css">
+    <link rel="stylesheet"
+          href="{% static 'core/css/index-banner.css' %}"
+          type="text/css">
     <script src="{% static 'js/luxon.min.js' %}"></script>
     <script src="{% static 'core/js/schedule.js' %}"></script>
     <meta property="og:site_name" content="Mac Lyon's Den">

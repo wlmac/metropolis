@@ -2,27 +2,24 @@
 {% load static %}
 {% load timetable_tags %}
 {% load admin_urls %}
-
 {% block content %}
     <div class="white-bg">
         {% for timetable in timetables %}
             <details class="mb-3">
-                <summary class="card-top" onclick="$('#card-body-{{ forloop.counter }}').toggle(100)">
+                <summary class="card-top"
+                         onclick="$('#card-body-{{ forloop.counter }}').toggle(100)">
                     <span class="card-title"><strong>{{ timetable.term.name }}</strong></span>
                 </summary>
-                <div class="card-body timetable-details" id="card-body-{{ forloop.counter }}" hidden>
-                    <p class="card-text">
-                        {{ timetable|render_timetable }}
-                    </p>
+                <div class="card-body timetable-details"
+                     id="card-body-{{ forloop.counter }}"
+                     hidden>
+                    <p class="card-text">{{ timetable|render_timetable }}</p>
                     <a href="{% url 'timetable_update' timetable.pk %}" class="card-link">Edit timetable</a>
                 </div>
             </details>
-            {% if forloop.counter < timetables|length %}
-                <hr>
-            {% endif %}
+            {% if forloop.counter < timetables|length %}<hr>{% endif %}
         {% endfor %}
         <br>
-
         <div class="timetable-add-container">
             <div class="card-body">
                 <form method="post">
@@ -31,8 +28,13 @@
                     {% csrf_token %}
                     {{ form }}
                     <div class="mt-3">
-                        <button type="submit" id="continue-button" class="btn btn-primary mr-2" style="letter-spacing: 0">Continue</button>
-                        <a href="{% url 'profile_redirect' %}" class="btn btn-primary" role="button"
+                        <button type="submit"
+                                id="continue-button"
+                                class="btn btn-primary mr-2"
+                                style="letter-spacing: 0">Continue</button>
+                        <a href="{% url 'profile_redirect' %}"
+                           class="btn btn-primary"
+                           role="button"
                            aria-pressed="true">Cancel</a>
                     </div>
                 </form>
@@ -40,8 +42,7 @@
         </div>
     </div>
 {% endblock %}
-
 {% block hd %}
-    <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}"/>
-    <link rel="stylesheet" href="{% static 'core/css/timetable/list.css' %}"/>
+    <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/timetable/list.css' %}" />
 {% endblock %}
