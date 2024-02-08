@@ -35,9 +35,7 @@ class Profile(LoginRequiredMixin, DetailView, mixins.TitleMixin):
         if context["object"] == self.request.user and obj_org_exists:
             context["following"] = context["object"].organizations.all()
         elif obj_org_exists:
-            context["following"] = context["object"].organizations.filter(
-                show_members=True
-            )
+            context["following"] = context["object"].organizations.filter(show_members=True)
         return context
 
 

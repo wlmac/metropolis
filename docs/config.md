@@ -9,17 +9,17 @@ This section contains the configuration for the banners that appear on the main 
 ```py
 BANNER_REFERENCE_TIME = datetime.strptime("2023-11-14", "%Y-%m-%d").replace(tzinfo=timezone.utc)
 # ^ not required, but recommended to set to whatever the start date/time
-BANNER3 += [ 
+BANNER3 += [
        dict(
            start=BANNER_REFERENCE_TIME, # when to start displaying the banner
            end=BANNER_REFERENCE_TIME + timedelta(days=5), # when to stop displaying the banner (e.g. 5 days after start)
            content="Hello Hey!", # banner text
            icon_url="/static/core/img/logo/logo-maskable-192.png", # optional, displays an icon on the left of the banner
-           cta_link="https://jasoncameron.dev", # optional 
+           cta_link="https://jasoncameron.dev", # optional
            cta_label="wow! go visit this cool site!", # optional (but required if cta_link is present)
        )
 ]
-``` 
+```
 the final result will look something like this (depending on the theme)
 ![img.png](images/banner-example.png)
 
@@ -27,7 +27,7 @@ the final result will look something like this (depending on the theme)
 ### Themes
 This section contains the configuration for the themes that appear on the main site. The format is as follows:
 
-The options are as follows 
+The options are as follows
 - spring
 - summer
 - autumn
@@ -49,9 +49,9 @@ CURRENT_THEME = "halloween" # or any of the other options
 ##### Step 1: Create the theme css & logo
 1. CSS
    1. Go to `core/static/core/css/themes`
-   2. Write your css & create a new css file with the name of the theme (e.g. `halloween-theme.css`) 
+   2. Write your css & create a new css file with the name of the theme (e.g. `halloween-theme.css`)
    3. go to ./banners and add your css for the banner (e.g. `halloween-banner.css`)
-2. Images 
+2. Images
    1. go to `core/static/core/img/themes/banners`
    2. add your banner image (e.g. `halloween.jpg`)
    3. go to `core/static/core/img/themes/logos`
@@ -60,7 +60,7 @@ CURRENT_THEME = "halloween" # or any of the other options
 
 <sub>*settings.py*</sub>
 
-find the THEMES dictionary & add your theme to the list 
+find the THEMES dictionary & add your theme to the list
 e.g.
 ```py
  "halloween": {

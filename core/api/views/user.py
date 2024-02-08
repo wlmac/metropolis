@@ -57,9 +57,7 @@ class UserMeScheduleWeek(APIView):
         return Response(
             {
                 target_date.isoformat(): request.user.schedule(target_date=target_date)
-                for target_date in [
-                    date + datetime.timedelta(days=days) for days in range(7)
-                ]
+                for target_date in [date + datetime.timedelta(days=days) for days in range(7)]
             }
         )
 

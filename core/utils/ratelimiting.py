@@ -26,9 +26,7 @@ def get_key_expiration(key: str, human_readable: bool = True):
         expiration_unix_timestamp = cache._expire_info.get(cache.make_key(key))
         if expiration_unix_timestamp is None:
             return 0 if not human_readable else "Now"
-        expiration_date_time = datetime.datetime.fromtimestamp(
-            expiration_unix_timestamp
-        )
+        expiration_date_time = datetime.datetime.fromtimestamp(expiration_unix_timestamp)
 
     now = datetime.datetime.now()
 
@@ -53,9 +51,7 @@ def admin_action_rate_limit(
         @wraps(action_func)
         def wrapper(modeladmin, request, queryset, *args, **kwargs):
             if must_be_staff and not request.user.is_staff:
-                raise PermissionDenied(
-                    "You must be a staff member to perform this action."
-                )
+                raise PermissionDenied("You must be a staff member to perform this action.")
             if scope == "user":
                 key = f"admin_rate_limit_{request.user.pk}_{action_func.__name__}"
             else:

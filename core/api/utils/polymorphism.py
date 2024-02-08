@@ -54,33 +54,30 @@ def split_dict_wrapper(
 splitter = split_dict_wrapper("_")  # ignore key for serializers
 
 
-providers: Dict[str, BaseProvider] = (
-    {  # k = request type (param passed in url), v = provider class
-        "announcement": AnnouncementProvider,
-        "blog-post": BlogPostProvider,
-        "exhibit": ExhibitProvider,
-        "event": EventProvider,
-        "organization": OrganizationProvider,
-        "flatpage": FlatPageProvider,
-        "user": UserProvider,
-        "tag": TagProvider,
-        "term": TermProvider,
-        "timetable": TimetableProvider,
-        "comment": CommentProvider,
-        "like": LikeProvider,
-        "course": CourseProvider,
-    }
-)
+providers: Dict[str, BaseProvider] = {  # k = request type (param passed in url), v = provider class
+    "announcement": AnnouncementProvider,
+    "blog-post": BlogPostProvider,
+    "exhibit": ExhibitProvider,
+    "event": EventProvider,
+    "organization": OrganizationProvider,
+    "flatpage": FlatPageProvider,
+    "user": UserProvider,
+    "tag": TagProvider,
+    "term": TermProvider,
+    "timetable": TimetableProvider,
+    "comment": CommentProvider,
+    "like": LikeProvider,
+    "course": CourseProvider,
+}
 provider_keys = providers.keys()
+
 
 def get_provider(provider_name: provider_keys) -> Callable:
     """
     Gets a provider by type name.
     """
     if provider_name not in provider_keys:
-        raise BadRequest(
-            "Object type not found. Valid types are: " + ", ".join(providers) + "."
-        )
+        raise BadRequest("Object type not found. Valid types are: " + ", ".join(providers) + ".")
     return providers[provider_name]
 
 
@@ -134,9 +131,7 @@ class ObjectAPIView(generics.GenericAPIView):
             self.provider, "additional_lookup_fields", []
         )
         allowed_fields.extend(settings.GLOBAL_LOOKUPS)
-        return set(
-            allowed_fields
-        )  # use a set for better memory performance & no duplicates.
+        return set(allowed_fields)  # use a set for better memory performance & no duplicates.
 
     @property
     def lookup_field(self) -> str:

@@ -1,5 +1,5 @@
 from os import environ
-from typing import TYPE_CHECKING, Iterable, List, Optional, Tuple
+from typing import Iterable, List, Optional, Tuple
 
 from django.db import connection
 from django.db.models import Model

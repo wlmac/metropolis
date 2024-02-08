@@ -43,9 +43,17 @@ urlpatterns = [
         TimetableUpdate.as_view(),
         name="timetable_update",
     ),
-    path("course/add/term/<int:pk>", CourseCreate.as_view(), name="course_create"),
+    path(
+        "course/add/term/<int:pk>",
+        CourseCreate.as_view(),
+        name="course_create",
+    ),
     path("accounts/profile", ProfileRedirect.as_view(), name="profile_redirect"),
-    path("accounts/profile/update", ProfileUpdate.as_view(), name="profile_update"),
+    path(
+        "accounts/profile/update",
+        ProfileUpdate.as_view(),
+        name="profile_update",
+    ),
     path("user/<str:slug>", Profile.as_view(), name="profile_detail"),
     path("clubs", OrganizationList.as_view(), name="organization_list"),
     path(
@@ -68,7 +76,11 @@ urlpatterns = [
     path("gallery", ExhibitList.as_view(), name="exhibit_list"),
     path("blog", BlogPostList.as_view(), name="blogpost_list"),
     path("blog/<str:slug>", BlogPostDetail.as_view(), name="blogpost_detail"),
-    path("blog/tag/<int:tag>", BlogPostTagList.as_view(), name="blogpost_tag_list"),
+    path(
+        "blog/tag/<int:tag>",
+        BlogPostTagList.as_view(),
+        name="blogpost_tag_list",
+    ),
     path("calendar", CalendarView.as_view(), name="calendar"),
     path("calendar.ics", CalendarFeed(), name="calendar_ical"),
     path("map", MapView.as_view(), name="map"),

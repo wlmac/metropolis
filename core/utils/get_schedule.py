@@ -56,9 +56,7 @@ def get_week_schedule(user) -> dict:
     if user.is_authenticated:
         return {
             target_date.isoformat(): get_day_schedule(user, target_date)
-            for target_date in [
-                date + datetime.timedelta(days=days) for days in range(7)
-            ]
+            for target_date in [date + datetime.timedelta(days=days) for days in range(7)]
         }
     return {
         target_date.isoformat(): generic_day_schedule(
@@ -74,9 +72,7 @@ def get_week_schedule_info(user) -> WeekScheduleInfo:
     current_term = models.Term.get_current()
     return WeekScheduleInfo(
         json_data=mark_safe(json.dumps(data, cls=JSONEncoder)),
-        nudge_add_timetable=not all(
-            day_schedule.is_personal for day_schedule in data.values()
-        ),
+        nudge_add_timetable=not all(day_schedule.is_personal for day_schedule in data.values()),
         logged_in=user.is_authenticated,
         current_term_id=current_term.id if current_term else None,
     )

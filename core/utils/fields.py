@@ -37,11 +37,7 @@ class MonthDayFormField(DateField):
             return None
         try:
             month, day = value.split("/")
-            return (
-                (y := timezone.now())
-                .replace(year=y.year, month=int(month), day=int(day))
-                .date()
-            )
+            return (y := timezone.now()).replace(year=y.year, month=int(month), day=int(day)).date()
         except ValueError:
             raise ValidationError(_("Invalid date format (must be MM/DD)"))
 
@@ -107,11 +103,7 @@ class MonthDayField(models.DateField):
             return None
         try:
             month, day = value.split("/")
-            return (
-                (y := timezone.now())
-                .replace(year=y.year, month=int(month), day=int(day))
-                .date()
-            )
+            return (y := timezone.now()).replace(year=y.year, month=int(month), day=int(day)).date()
         except ValueError:
             raise ValidationError(_("Invalid date format (must be MM/DD)"))
 
@@ -213,6 +205,7 @@ if "sqlite" in settings.DATABASES["default"]["ENGINE"]:
         def value_to_string(self, obj):
             return self.value_from_object(obj)
 
+    @extend_schema_field({"type": "array", "items": {"type": ["string", "number"]}})
     class ArrayField(JSONField):
         def __init__(self, base_field, size=None, **kwargs):
             """Care for DjangoArrayField's kwargs."""

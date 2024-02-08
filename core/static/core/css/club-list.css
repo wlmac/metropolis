@@ -153,7 +153,7 @@ hr {
 }
 
 .circle {
-    height: 100px; 
+    height: 100px;
     width: 100px;
 }
 
@@ -191,7 +191,7 @@ hr {
         font-size: 1.5rem;
     }
     .circle{
-        height: 57px; 
+        height: 57px;
         width: 57px;
     }
     .club-logo {
@@ -220,4 +220,3 @@ hr {
                 transform: scale(0.8);
     }
 }
-

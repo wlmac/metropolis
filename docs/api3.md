@@ -75,7 +75,7 @@ e.g. `?lookup=username` if you want to filter by username instead of ID for `Use
 `shrink_last_modified_before`ts modified before supplied time will just have a pk in place of the object.
 
 Pagination (`limit` and `offset`; both **mandatory**): control what data to return.
-**Note** using one of `limit` and `offset` causes undefined behaviour. 
+**Note** using one of `limit` and `offset` causes undefined behaviour.
 **Note**
 `limit` is the maximum number of items to return.
 `offset` is the starting position of the items to return.
@@ -174,7 +174,7 @@ You can use the following filters:
 
 - `tags`: a tag ID to filter by.
 - `author`: an author ID to filter by
-- `organization`: an organization ID to filter by. 
+- `organization`: an organization ID to filter by.
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://maclyonsden.com/api/v3/schema/announcement.json
@@ -387,11 +387,11 @@ properties:
 ## User
 
 `username` can be used for the lookup query string to filter by username.
-                                   
+
 #### Listing filters
-- organizations: The id of the organization to get members of. 
+- organizations: The id of the organization to get members of.
 - organizations_leading: The id of the organization to get execs of.  
-- organizations_owning: The id of the organization to get the owner of. 
+- organizations_owning: The id of the organization to get the owner of.
 - organizations_supervising: The id of the organization to get supervisors of.
 ```yaml
 $schema: https://json-schema.org/draft/2020-12/schema
@@ -600,4 +600,4 @@ properties:
 
 Do `OPTIONS v3/notif/token` for docs.
 
-[^1]: check object specific documentation to see supported args. 
+[^1]: check object specific documentation to see supported args.

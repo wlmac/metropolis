@@ -14,8 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="user",
             name="qltrs",
-            field=core.utils.fields.SetField(
-                null=True, verbose_name="Qualified Trials"
-            ),
+            field=core.utils.fields.SetField(null=True, verbose_name="Qualified Trials"),
         ),
     ]

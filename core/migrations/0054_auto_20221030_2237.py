@@ -31,9 +31,7 @@ class Migration(migrations.Migration):
                 ("page_lose", models.CharField(max_length=128)),
                 (
                     "codes_win",
-                    core.utils.fields.SetField(
-                        blank=True, null=True, verbose_name="Winning Codes"
-                    ),
+                    core.utils.fields.SetField(blank=True, null=True, verbose_name="Winning Codes"),
                 ),
             ],
         ),
@@ -64,8 +62,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="user",
             name="qltrs",
-            field=core.utils.fields.SetField(
-                blank=True, null=True, verbose_name="Qualified Trials"
-            ),
+            field=core.utils.fields.SetField(blank=True, null=True, verbose_name="Qualified Trials"),
         ),
     ]

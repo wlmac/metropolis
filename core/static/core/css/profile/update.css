@@ -9,20 +9,20 @@ label {
 }
 
 .bio textarea {
-    margin-top: 1rem; 
+    margin-top: 1rem;
     height: auto;
-    resize: none; 
+    resize: none;
 }
 
 .bio {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
         -ms-flex-direction: column;
-            flex-direction: column; 
-} 
+            flex-direction: column;
+}
 
 .avatar {
-    margin-bottom: 1rem; 
+    margin-bottom: 1rem;
 }
 
 button {

@@ -7,9 +7,7 @@ from ... import models
 
 
 class AnnouncementSerializer(serializers.ModelSerializer):
-    author = PrimaryKeyAndSlugRelatedField(
-        slug_field="username", queryset=models.User.objects.all()
-    )
+    author = PrimaryKeyAndSlugRelatedField(slug_field="username", queryset=models.User.objects.all())
     organization = PrimaryKeyAndSlugRelatedField(
         slug_field="slug", queryset=models.Organization.objects.all()
     )

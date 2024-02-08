@@ -57,7 +57,14 @@ class APIVersion(APIView):
     ],
 )
 class Banners(APIView):
-    uncensored_keys = ("start", "end", "content", "icon_url", "cta_link", "cta_label")
+    uncensored_keys = (
+        "start",
+        "end",
+        "content",
+        "icon_url",
+        "cta_link",
+        "cta_label",
+    )
     allowed_blank = ("icon_url", "cta_link", "cta_label")
 
     @classmethod
@@ -83,7 +90,8 @@ class Banners(APIView):
         current = filter(lambda b: b["start"] <= now < b["end"], settings.BANNER3)
         current = list(map(Banners.censor, current))
         upcoming = filter(
-            lambda b: now < b["start"] > now + timedelta(days=1), settings.BANNER3
+            lambda b: now < b["start"] > now + timedelta(days=1),
+            settings.BANNER3,
         )
         upcoming = list(map(Banners.censor, upcoming))
         return dict(current=current, upcoming=upcoming)

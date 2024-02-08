@@ -36,9 +36,7 @@ class Term(models.Model):
     def get_current(self):
         target_date = utils.get_localdate()
         try:
-            return self.objects.get(
-                start_date__lte=target_date, end_date__gt=target_date
-            )
+            return self.objects.get(start_date__lte=target_date, end_date__gt=target_date)
         except self.DoesNotExist:
             return None
         except MultipleObjectsReturned:
@@ -62,9 +60,7 @@ class Term(models.Model):
             "calendar_days": self.__day_num_calendar_days,
         }
         target_date = utils.get_localdate(date=target_date, time=[23, 59, 59])
-        if not self.is_current(target_date.date()) or not self.day_is_instructional(
-            target_date
-        ):
+        if not self.is_current(target_date.date()) or not self.day_is_instructional(target_date):
             return None
         return methods[tf.get("day_num_method", "consecutive")](tf, target_date)
 
@@ -74,9 +70,7 @@ class Term(models.Model):
         Gets the day number from if the calendar day is even (day 2) or odd (day 1).
         """
         if tf["cycle"]["length"] != 2:
-            raise TypeError(
-                "calendar_days cannot be used in formats where cycle length != 2"
-            )
+            raise TypeError("calendar_days cannot be used in formats where cycle length != 2")
         even, odd = 0, 1
         return {even: 2, odd: 1}[target_date.day % 2]
 
@@ -103,13 +97,9 @@ class Term(models.Model):
 
     def day_schedule_format(self, target_date=None):
         tds = utils.get_localdate(date=target_date, time=[0, 0, 0])  # target date start
-        tde = utils.get_localdate(
-            date=target_date, time=[23, 59, 59]
-        )  # target date end
+        tde = utils.get_localdate(date=target_date, time=[23, 59, 59])  # target date end
 
-        schedule_formats = settings.TIMETABLE_FORMATS[self.timetable_format][
-            "schedules"
-        ]
+        schedule_formats = settings.TIMETABLE_FORMATS[self.timetable_format]["schedules"]
         schedule_format_set = set(
             self.events.filter(start_date__lte=tde, end_date__gte=tds).values_list(
                 "schedule_format", flat=True
@@ -132,15 +122,11 @@ class Term(models.Model):
 
         result = []
 
-        for i in timetable_config["schedules"][
-            self.day_schedule_format(target_date=target_date)
-        ]:
+        for i in timetable_config["schedules"][self.day_schedule_format(target_date=target_date)]:
             start_time = timezone.make_aware(
                 dt.datetime.combine(target_date, dt.time(*i["time"][0]))
             )
-            end_time = timezone.make_aware(
-                dt.datetime.combine(target_date, dt.time(*i["time"][1]))
-            )
+            end_time = timezone.make_aware(dt.datetime.combine(target_date, dt.time(*i["time"][1])))
 
             result.append(
                 {
@@ -165,9 +151,7 @@ class Term(models.Model):
         target_date = utils.get_localdate(date=target_date)
 
         try:
-            return cls.objects.get(
-                start_date__lte=target_date, end_date__gt=target_date
-            )
+            return cls.objects.get(start_date__lte=target_date, end_date__gt=target_date)
         except cls.DoesNotExist:
             return None
         except MultipleObjectsReturned:
@@ -181,7 +165,10 @@ class Course(models.Model):
     position = models.PositiveSmallIntegerField()
 
     submitter = models.ForeignKey(
-        settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
     )
 
     def __str__(self):
@@ -244,12 +231,8 @@ class Event(models.Model):
     def save(self, *args, **kwargs):
         if not timezone.is_aware(self.end_date):
             # Convert naive datetime to aware datetime
-            self.end_date = timezone.make_aware(
-                self.end_date, timezone.get_current_timezone()
-            )
+            self.end_date = timezone.make_aware(self.end_date, timezone.get_current_timezone())
         if not timezone.is_aware(self.start_date):
             # Convert naive datetime to aware datetime
-            self.start_date = timezone.make_aware(
-                self.start_date, timezone.get_current_timezone()
-            )
+            self.start_date = timezone.make_aware(self.start_date, timezone.get_current_timezone())
         super().save(*args, **kwargs)

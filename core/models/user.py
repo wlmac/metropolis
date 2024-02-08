@@ -32,10 +32,16 @@ class User(AbstractUser):
     )
     is_teacher = models.BooleanField(default=False)
     organizations = models.ManyToManyField(
-        "Organization", blank=True, related_name="members", related_query_name="member"
+        "Organization",
+        blank=True,
+        related_name="members",
+        related_query_name="member",
     )
     tags_following = models.ManyToManyField(
-        "Tag", blank=True, related_name="followers", related_query_name="follower"
+        "Tag",
+        blank=True,
+        related_name="followers",
+        related_query_name="follower",
     )
     qltrs = SetField("Qualified Trials", null=True, blank=True)
     saved_blogs = models.ManyToManyField("BlogPost", blank=True)
@@ -95,9 +101,7 @@ class User(AbstractUser):
     def get_feed(self):
         return (
             post.Announcement.get_approved()
-            .filter(
-                Q(is_public=True, tags__follower=self) | Q(organization__member=self)
-            )
+            .filter(Q(is_public=True, tags__follower=self) | Q(organization__member=self))
             .distinct()
         )
 
@@ -180,9 +184,7 @@ class StaffMember(models.Model):
         null=True,
         base_field=CharField(
             choices=[
-                (key, val)
-                for key, val in settings.METROPOLIS_POSITIONS
-                if key != "Project Manager"
+                (key, val) for key, val in settings.METROPOLIS_POSITIONS if key != "Project Manager"
             ]
         ),
     )

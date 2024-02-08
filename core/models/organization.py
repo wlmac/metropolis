@@ -27,11 +27,11 @@ class Organization(models.Model):
         related_name="organizations_owning",
     )
     supervisors = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True, related_name="organizations_supervising"
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name="organizations_supervising",
     )
-    execs = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="organizations_leading"
-    )
+    execs = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="organizations_leading")
 
     name = models.CharField(max_length=64)
     bio = models.TextField(blank=True)
@@ -44,15 +44,14 @@ class Organization(models.Model):
     is_open = models.BooleanField(default=True)
     applications_open = models.BooleanField(default=False)
     tags = models.ManyToManyField(
-        "Tag", blank=True, related_name="organizations", related_query_name="org"
+        "Tag",
+        blank=True,
+        related_name="organizations",
+        related_query_name="org",
     )
 
-    banner = models.ImageField(
-        upload_to=banner_file_path_generator, default="banners/default.png"
-    )
-    icon = models.ImageField(
-        upload_to=icon_file_path_generator, default="icons/default.png"
-    )
+    banner = models.ImageField(upload_to=banner_file_path_generator, default="banners/default.png")
+    icon = models.ImageField(upload_to=icon_file_path_generator, default="icons/default.png")
 
     def __str__(self):
         return self.name
@@ -81,9 +80,7 @@ class Organization(models.Model):
 
 
 class OrganizationURL(models.Model):
-    organization = models.ForeignKey(
-        Organization, on_delete=models.CASCADE, related_name="links"
-    )
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="links")
     url = models.URLField()
 
     def __str__(self):
@@ -142,7 +139,7 @@ def manage_org_execs(sender, instance, action, reverse, model, pk_set, **kwargs)
 
 
 @receiver(m2m_changed, sender=Organization.supervisors.through)
-def manage_org_execs(sender, instance, action, reverse, model, pk_set, **kwargs):
+def manage_org_sups(sender, instance, action, reverse, model, pk_set, **kwargs):
     supervisors_group, _ = Group.objects.get_or_create(name="Supervisors")
     if action == "post_add":
         for user_pk in pk_set:

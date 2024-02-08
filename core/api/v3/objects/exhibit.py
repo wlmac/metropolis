@@ -49,18 +49,14 @@ class ExhibitProvider(BaseProvider):
     @property
     def permission_classes(self):
         return (
-            [permissions.DjangoModelPermissions]
-            if self.request.mutate
-            else [permissions.AllowAny]
+            [permissions.DjangoModelPermissions] if self.request.mutate else [permissions.AllowAny]
         )
 
     def get_queryset(self, request):
         if request.user.has_perm("core.exhibit.view") or request.user.is_superuser:
             return Exhibit.objects.all()
         else:
-            return Exhibit.objects.filter(
-                is_published=True, show_after__lte=timezone.now()
-            )
+            return Exhibit.objects.filter(is_published=True, show_after__lte=timezone.now())
 
     @staticmethod
     def get_last_modified(view):

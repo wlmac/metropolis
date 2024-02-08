@@ -45,7 +45,9 @@ class ContentTypeField(serializers.ChoiceField):
             return ContentType.objects.get(app_label="core", model=data)
         except ObjectDoesNotExist:
             self.fail(
-                "does_not_exist", slug_name=self.slug_field, value=smart_str(data)
+                "does_not_exist",
+                slug_name=self.slug_field,
+                value=smart_str(data),
             )
         except (TypeError, ValueError):
             self.fail("invalid")
@@ -138,7 +140,9 @@ class SingleUserField(ChoiceField):
             return User.objects.get(id=data)
         except ObjectDoesNotExist:
             self.fail(
-                "does_not_exist", slug_name=self.slug_field, value=smart_str(data)
+                "does_not_exist",
+                slug_name=self.slug_field,
+                value=smart_str(data),
             )
         except (TypeError, ValueError):
             self.fail("invalid")
@@ -171,7 +175,8 @@ class MembersField(serializers.Field):
             missing_ids = set(data) - set(users)
             for missing_id in missing_ids:
                 self.fail(
-                    "invalid", message=f"User with ID {missing_id} does not exist."
+                    "invalid",
+                    message=f"User with ID {missing_id} does not exist.",
                 )
         return User.objects.filter(id__in=data)
 
@@ -196,9 +201,7 @@ class OrganizationField(ChoiceField):
             value_list=("id", self.slug_field),
             db_filter=dict(is_active=True),
         )
-        default_error_messages = {
-            "does_not_exist": "Organization '{value}' does not exist."
-        }
+        default_error_messages = {"does_not_exist": "Organization '{value}' does not exist."}
         super().__init__(choices, **kwargs)
         self.default_error_messages.update(default_error_messages)
 
@@ -207,7 +210,9 @@ class OrganizationField(ChoiceField):
             return Organization.objects.get(pk=data)
         except ObjectDoesNotExist:
             self.fail(
-                "does_not_exist", slug_name=self.slug_field, value=smart_str(data)
+                "does_not_exist",
+                slug_name=self.slug_field,
+                value=smart_str(data),
             )
         except (TypeError, ValueError):
             self.fail("invalid")
@@ -226,9 +231,7 @@ class UserOrganizationField(OrganizationField):
         if not isinstance(data, list):
             raise serializers.ValidationError("Expected a list of organization IDs.")
 
-        organizations = Organization.objects.filter(id__in=data).values_list(
-            "id", flat=True
-        )
+        organizations = Organization.objects.filter(id__in=data).values_list("id", flat=True)
         if len(organizations) != len(data):
             missing_ids = set(data) - set(organizations)
             for missing_id in missing_ids:
@@ -270,7 +273,8 @@ class TagRelatedField(MultipleChoiceField):
             missing_ids = set(data) - set(tags)
             for missing_id in missing_ids:
                 self.fail(
-                    "invalid", message=f"Tag with ID {missing_id} does not exist."
+                    "invalid",
+                    message=f"Tag with ID {missing_id} does not exist.",
                 )
 
         return Tag.objects.filter(id__in=data)

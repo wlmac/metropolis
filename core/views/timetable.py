@@ -43,9 +43,7 @@ class TimetableList(LoginRequiredMixin, ListView, FormMixin, mixins.TitleMixin):
         return kwargs
 
 
-class TimetableCreate(
-    LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin
-):
+class TimetableCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin):
     template_name = "core/timetable/add.html"
     title = "Add a Timetable"
     model = models.Timetable
@@ -79,9 +77,7 @@ class TimetableCreate(
         return context
 
 
-class TimetableUpdate(
-    LoginRequiredMixin, UserPassesTestMixin, UpdateView, mixins.TitleMixin
-):
+class TimetableUpdate(LoginRequiredMixin, UserPassesTestMixin, UpdateView, mixins.TitleMixin):
     template_name = "core/timetable/edit.html"
     title = "Edit Timetable"
     model = models.Timetable
@@ -92,9 +88,7 @@ class TimetableUpdate(
         return self.get_object().owner == self.request.user
 
 
-class CourseCreate(
-    LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin
-):
+class CourseCreate(LoginRequiredMixin, UserPassesTestMixin, CreateView, mixins.TitleMixin):
     template_name = "core/course/add.html"
     title = "Add a Course"
     model = models.Course

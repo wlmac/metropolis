@@ -47,9 +47,7 @@ class Serializer(serializers.ModelSerializer):
         if user in obj.organization.supervisors.all():
             obj.supervisor = user
             if obj.status not in {"d", "p"} and user != obj.author:
-                obj.message = (
-                    f"Successfully marked announcement as {obj.get_status_display()}."
-                )
+                obj.message = f"Successfully marked announcement as {obj.get_status_display()}."
         else:
             if obj.status not in ("d", "p"):
                 notify_supervisors = True
@@ -109,9 +107,7 @@ class OneSerializer(Serializer):
         super().__init__(*args, **kwargs)
         user = self.context["request"].user
         # these HiddenFields should never be used to set values
-        self.status = serializers.HiddenField(
-            default="", validators=[always_fail_validator]
-        )
+        self.status = serializers.HiddenField(default="", validators=[always_fail_validator])
         self.rejection_reason = serializers.HiddenField(
             default="", validators=[always_fail_validator]
         )
@@ -122,7 +118,8 @@ class OneSerializer(Serializer):
                     "edit", queryset=User.objects.filter(is_teacher=True)
                 )
                 self.status = ModelAbilityField(
-                    "approve", model_field=Announcement()._meta.get_field("status")
+                    "approve",
+                    model_field=Announcement()._meta.get_field("status"),
                 )
                 self.rejection_reason = ModelAbilityField(
                     "approve",
@@ -178,9 +175,7 @@ class AnnouncementProvider(BaseProvider):
     def get_last_modified_queryset():
         return (
             LogEntry.objects.filter(
-                content_type=ContentType.objects.get(
-                    app_label="core", model="announcement"
-                )
+                content_type=ContentType.objects.get(app_label="core", model="announcement")
             )
             .latest("action_time")
             .action_time

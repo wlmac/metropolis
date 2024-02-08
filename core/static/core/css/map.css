@@ -76,13 +76,13 @@ textarea.materialize-textarea {
 /* .legend-container{
     display: flex;
     flex-direction: row;
-    width:80%; 
+    width:80%;
     height: 10vh;
 }
 
 .legend{
-    flex: 1; 
-    padding: 1vh 20px 20px 20px; 
+    flex: 1;
+    padding: 1vh 20px 20px 20px;
     text-align: center;
     /* align-items: center; */
 /* justify-content: center;
@@ -111,7 +111,7 @@ textarea.materialize-textarea {
   display: flex;
   flex-direction: row;
   width: 80%;
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 .mobile-controls {
@@ -135,7 +135,7 @@ textarea.materialize-textarea {
   justify-content: center;
   width: 100%;
   background-color: #efefef;
-  padding: 1.5vh; 
+  padding: 1.5vh;
 }
 
 .legend-items {
@@ -170,7 +170,7 @@ details > summary {
     border-radius: 10px;
     text-align: center;
   }
-  
+
   details > p {
     background-color: #eeeeee;
     padding: 10px;

@@ -47,9 +47,7 @@ class OrganizationListFilter(admin.SimpleListFilter):
         qs = models.Organization.objects.all()
         if not request.user.is_superuser:
             qs = qs.filter(
-                Q(owner=request.user)
-                | Q(supervisors=request.user)
-                | Q(execs=request.user)
+                Q(owner=request.user) | Q(supervisors=request.user) | Q(execs=request.user)
             ).distinct()
         for org in qs:
             yield (org.slug, org.name)
