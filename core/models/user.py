@@ -2,16 +2,15 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Q, CharField
+from django.db.models import CharField, Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 
-from core.models import graduating_year_choices, course, post
+from core.models import course, graduating_year_choices, post
 from core.utils.choices import calculate_years
-from core.utils.fields import SetField, ChoiceArrayField
+from core.utils.fields import ChoiceArrayField, SetField
 from core.utils.mail import send_mail
-
 
 # Create your models here.
 

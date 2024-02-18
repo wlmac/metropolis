@@ -1,12 +1,13 @@
-from core.api.utils.github import get_model_choices
-from core.api.utils.gravatar import gravatar_url
-from core.models import Tag, User, Organization, Comment
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import smart_str
 from rest_framework import serializers
-from rest_framework.fields import Field, MultipleChoiceField, ChoiceField
+from rest_framework.fields import ChoiceField, Field, MultipleChoiceField
+
+from core.api.utils.github import get_model_choices
+from core.api.utils.gravatar import gravatar_url
+from core.models import Comment, Organization, Tag, User
 
 
 class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):

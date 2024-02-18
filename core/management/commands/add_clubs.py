@@ -1,10 +1,11 @@
 import csv
-import requests
+from io import StringIO
 
+import requests
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
-from core.models import User, Organization
-from io import StringIO
+
+from core.models import Organization, User
 
 """
 This script is used to add organizations from a Google Sheets link. It is used to add organizations that are not already in the database.

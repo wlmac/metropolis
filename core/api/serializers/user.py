@@ -2,10 +2,10 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from .tag import TagSerializer
-from ..utils.gravatar import gravatar_url
 from ... import models
 from ...models import User
+from ..utils.gravatar import gravatar_url
+from .tag import TagSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):

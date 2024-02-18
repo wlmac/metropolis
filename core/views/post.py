@@ -12,9 +12,10 @@ from django.views.generic.base import TemplateView
 from rest_framework.exceptions import ValidationError
 
 from core.templatetags.markdown_tags import markdown
-from . import mixins
+
 from .. import models
 from ..models import Exhibit
+from . import mixins
 
 
 def custom_feed(request, pk: int, limit: Optional[int] = None):

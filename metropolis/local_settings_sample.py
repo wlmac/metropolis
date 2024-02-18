@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+
 import sentry_sdk
 
 SECRET_KEY = "change me!"
@@ -7,8 +8,8 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # to emails ju
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".ngrok.io", ".ngrok-free.app"]
 
 if DEBUG:
-    import socket  # only if you haven't already imported this
     import mimetypes
+    import socket  # only if you haven't already imported this
 
     host_name, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [

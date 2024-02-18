@@ -21,11 +21,11 @@ from django.http import FileResponse
 from django.urls import include, path, re_path
 from django.views.decorators.cache import cache_page
 from drf_spectacular.views import (
-    SpectacularSwaggerView,
     SpectacularAPIView,
     SpectacularRedocView,
+    SpectacularSwaggerView,
 )
-from oauth2_provider.urls import base_urlpatterns, app_name
+from oauth2_provider.urls import app_name, base_urlpatterns
 from pwa.views import manifest, offline
 
 

@@ -1,18 +1,17 @@
 import base64
 import hashlib
 
-from django.http import JsonResponse
-
-from core.api.serializers.custom import UserOrganizationField
 from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
-from rest_framework import permissions, serializers, validators, status
+from django.http import JsonResponse
+from rest_framework import permissions, serializers, status, validators
 
-
-from .base import BaseProvider
+from core.api.serializers.custom import UserOrganizationField
 from core.api.utils.gravatar import gravatar_url
 from core.models import User, graduating_year_choices
+
+from .base import BaseProvider
 
 
 class UserSerializer(serializers.ModelSerializer):

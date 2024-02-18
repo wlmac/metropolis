@@ -3,7 +3,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.flatpages.models import FlatPage
 from rest_framework import permissions, serializers
 
-
 from .base import BaseProvider
 
 

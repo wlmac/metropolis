@@ -1,4 +1,4 @@
-from typing import Final, Literal, NamedTuple, TYPE_CHECKING
+from typing import TYPE_CHECKING, Final, Literal, NamedTuple
 
 if TYPE_CHECKING:
     from core.api.v3.objects import BaseProvider

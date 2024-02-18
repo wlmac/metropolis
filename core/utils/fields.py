@@ -1,23 +1,20 @@
 from __future__ import annotations
 
+import json
 from datetime import datetime
 
+from django import forms
 from django.conf import settings
+from django.contrib.postgres.fields import ArrayField as DjangoArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Field
+from django.db.models import JSONField as DjangoJSONField
 from django.db.models.fields import PositiveIntegerRelDbTypeMixin, SmallIntegerField
-from django.forms import DateInput, DateField
+from django.forms import DateField, DateInput
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
-import json
-
-from django import forms
-from django.db.models import JSONField as DjangoJSONField
-from django.contrib.postgres.fields import (
-    ArrayField as DjangoArrayField,
-)
-from django.db.models import Field
 
 
 class MonthDayFormField(DateField):

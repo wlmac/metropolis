@@ -1,22 +1,12 @@
 import dataclasses
 from dataclasses import dataclass
 from functools import wraps
-from typing import (
-    Optional,
-    Sequence,
-    Callable,
-    Dict,
-    Any,
-    Type,
-    Tuple,
-    List,
-)
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
 
 from drf_spectacular.drainage import set_override
 from drf_spectacular.utils import F, OpenApiExample
 from memoization import cached
-from rest_framework.serializers import Serializer, BaseSerializer
-
+from rest_framework.serializers import BaseSerializer, Serializer
 
 from core.api.utils.polymorphism import (
     get_provider,
@@ -154,7 +144,7 @@ class Api3ObjSpliter:
         paths = self.schema["paths"]
         self.set_obj_paths(paths)
 
-        for _,provider in providers.items():
+        for _, provider in providers.items():
             print(self._get_data_from_provider(provider))
         for operation in dataclasses.fields(self.operation_data):
             self.create_obj_views(operation)
@@ -202,7 +192,7 @@ class Api3ObjSpliter:
 
     @staticmethod
     def _get_data_from_provider(provider: BaseProvider) -> tuple:
-        """Returns the a tuple of operations supported and the serializers for each
+        """Returns a tuple of operations supported and the serializers for each
         e.g. UserProvider {'single': <class 'core.api.v3.objects.user.UserSerializer'>, 'new': <class 'core.api.v3.objects.user.NewSerializer'>, 'list': <class 'core.api.v3.objects.user.ListSerializer'>, 'retrieve': <class 'core.api.v3.objects.user.UserSerializer'>}
         """
         supported_operations: dict = {
@@ -218,9 +208,10 @@ class Api3ObjSpliter:
             supported_operations[operation] = serializer
 
         supported_operations = {
-            operation: (provider.raw_serializers["_"] if serializer == None else serializer)
+            operation: (
+                provider.raw_serializers["_"] if serializer is None else serializer
+            )
             for operation, serializer in supported_operations.items()
-
         }
         return supported_operations.items()
 

@@ -3,7 +3,7 @@ from typing import Dict
 
 from django.conf import settings
 from django.utils import timezone
-from drf_spectacular.utils import extend_schema, OpenApiExample
+from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
