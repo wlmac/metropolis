@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from functools import lru_cache
 from json import JSONDecodeError
-from typing import Any, Callable, Dict, Iterable, List, Literal, Optional, Protocol, Set
+from typing import Any, Callable, Dict, Iterable, List, Optional, Protocol, Set
 
 from django.core.exceptions import BadRequest
 from django.db.models import Model, Q
@@ -13,7 +12,7 @@ from rest_framework.serializers import BaseSerializer
 
 from core.api.v3.objects import *
 from core.api.v3.objects.base import BaseProvider
-from core.utils.types import APIObjOperations
+from core.utils.types import APIObjOperations, APISerializerOperations, ProviderDetails
 
 type IgnoredKey = str | Iterable[str]
 type SerializerItems = Dict[str, BaseSerializer]
@@ -52,6 +51,14 @@ def split_dict_wrapper(
 
 
 splitter = split_dict_wrapper("_")  # ignore key for serializers
+
+
+def get_path_by_provider(provider: BaseProvider) -> str:
+    return [
+        provider_key
+        for provider_key, provider in providers.items()
+        if provider == provider
+    ][0]
 
 
 providers: Dict[str, BaseProvider] = (
@@ -94,7 +101,7 @@ def get_provider(provider_name: provider_keys) -> Callable:
 
 def get_providers_by_operation(
     operation: APIObjOperations, return_provider: Optional[bool] = False
-) -> List[str]:
+) -> List[str] | List[BaseProvider]:
     """
     returns a list of provider path names that support the given operation.
 
@@ -102,12 +109,29 @@ def get_providers_by_operation(
     >>> get_providers_by_operation("single")
     ["announcement", "blog-post", "exhibit", "event", "organization", "flatpage", "user", "tag", "term", "timetable", "comment", "like", "course"]
     """
-
+    operation = operation.lower()
     return [
         (prov if return_provider else key)
         for key, prov in providers.items()
         if getattr(prov, f"allow_{operation}", True) == True
     ]
+
+
+def get_operations_by_provider(provider: BaseProvider) -> ProviderDetails:
+    """
+    Returns a list of operations supported by the given provider.
+    """
+    options = set()
+    for operation in provider.supported_operations():
+        data = APISerializerOperations(
+            operation=operation,
+            serializer=provider.raw_serializers.get(
+                operation, provider.raw_serializers.get("_")
+            ),
+        )
+        options.add(data)
+
+    return options
 
 
 class ObjectAPIView(generics.GenericAPIView):
@@ -264,7 +288,7 @@ class ObjectAPIView(generics.GenericAPIView):
 class Provider(Protocol):
     allow_list: bool
     allow_new: bool
-    kind: Literal["list", "new", "single", "retrieve"]
+    kind: APIObjOperations
     listing_filters_ignore: List[str]
 
     serializers: SplitDictResult

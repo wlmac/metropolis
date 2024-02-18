@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Dict, Final, List
+from typing import Dict, Final, List, Tuple
 
 from django.db.models.base import ModelBase
 from rest_framework.serializers import BaseSerializer
@@ -70,3 +70,11 @@ class BaseProvider(ABC):
 
     def __init__(self, request):
         self.request = request
+
+    @classmethod
+    def supported_operations(cls) -> Tuple[str]:
+        if not issubclass(cls, BaseProvider):
+            raise TypeError("This method can only be ran on subclasses of BaseProvider")
+        if "_" in cls.raw_serializers.keys():
+            return "list", "new", "single", "retrieve"
+        return tuple(cls.raw_serializers.keys())
