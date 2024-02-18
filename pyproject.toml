@@ -18,17 +18,17 @@ documentation = "https://docs.maclyonsden.com"
 
 
 [tool.poetry.dependencies]
-python = "^3.12.1"
+python = "~3.12"
 asgiref = "^3.7.2"
-bleach = "^4.1.0"
+bleach = "~4"
 certifi = "*"
 cffi = "*"
 charset-normalizer = "*"
 cryptography = "42.0.0"
 defusedxml = "^0.7.1"
 Django = "5.0"
-django-allauth = "^0.58.1"
-django-cors-headers = "^3.10.0"
+django-allauth = "~0.61"
+django-cors-headers = "~3"
 django-crispy-forms = "*"
 django-oauth-toolkit = "*"
 django-pwa = "*"
@@ -41,19 +41,19 @@ martor = "*"
 oauthlib = "^3.2.2"
 pillow = "^10.2.0"
 pytz = "*"
-redis = "4.4.4"
+redis = "^4.4.4"
 requests = "*"
 requests-oauthlib = "*"
 urllib3 = "*"
-django_ical = "1.8.3"
+django_ical = "~1.8"
 celery = "*"
 exponent_server_sdk = "*"
 django-hijack = "*"
 drf-spectacular = "0.27.0"
 memoization = "^0.4.0"
 psycopg = [
-    { version = "^3.1.16", markers = "sys_platform == 'linux'" },
-    { extras = ["binary"], version = "^3.1.16", markers = "sys_platform != 'linux'" },
+    { version = "~3.1", markers = "sys_platform == 'linux'" },
+    { extras = ["binary"], version = "~3.1", markers = "sys_platform != 'linux'" },
 ]
 gunicorn = "20.1.0"
 sentry-sdk = { extras = ["django", "celery"], version = "^1.40.0" }
