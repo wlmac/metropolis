@@ -1,18 +1,30 @@
+# db
+
 db.sqlite3
+db.sqlite3-journal
+# build files
 *.pyc
 /.venv
 _build
 /.direnv
 node_modules/
+celerybeat-schedule
+media/martor/*
+
+# test files
 /test-results/
 /playwright-report/
 /playwright/.cache/
-celerybeat-schedule
+# other potentially grouped projects
 /mobile
 /doodle
+
 # editors
 /.idea
 .vscode/*
+
 # django stuff
 local_settings.py
 *.log
+
+*.pem
