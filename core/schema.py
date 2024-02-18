@@ -80,9 +80,14 @@ def dynamic_envelope(serializer_class: Type[Serializer], many=False):
 
 @cached
 def run_fixers(result, generator, request, public):
-    fixer = Api3ObjSpliter(result)
-    fixer.run()
-    return fixer.schema
+    fixers = [Api3ObjSpliter]
+    if fixers is None:
+        raise ValueError("No fixers found, API3 obj docs will be broken.")
+    for fixer_obj in fixers:
+        fixer = fixer_obj(result)
+        fixer.run()
+        result = fixer.schema
+    return result
 
 
 @dataclass
