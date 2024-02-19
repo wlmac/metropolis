@@ -12,17 +12,6 @@ type PathData = NamedTuple[str, "BaseProvider", dict]
 
 
 @dataclass
-class APISerializerOperations:
-    operation: APIObjOperations
-    serializer: BaseSerializer
-
-    def __hash__(self):
-        return hash(self.operation.__class__.__name__)
-
-    # tags?
-
-
-@dataclass
 class SingleOperationData:
     providers: List["BaseProvider"]
     operation: APIObjOperations
@@ -32,9 +21,8 @@ class SingleOperationData:
 @dataclass
 class ProviderDetails:
     provider: "BaseProvider"
-    operations_supported: List[APISerializerOperations]
+    operations_supported: Dict[APIObjOperations, BaseSerializer]
     url: Optional[str] = None
-    data: Optional[Dict] = None
 
     def __hash__(self):
         return hash(self.provider.__class__.__name__)

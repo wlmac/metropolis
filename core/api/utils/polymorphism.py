@@ -12,7 +12,7 @@ from rest_framework.serializers import BaseSerializer
 
 from core.api.v3.objects import *
 from core.api.v3.objects.base import BaseProvider
-from core.utils.types import APIObjOperations, APISerializerOperations, ProviderDetails
+from core.utils.types import APIObjOperations
 
 type IgnoredKey = str | Iterable[str]
 type SerializerItems = Dict[str, BaseSerializer]
@@ -115,23 +115,6 @@ def get_providers_by_operation(
         for key, prov in providers.items()
         if getattr(prov, f"allow_{operation}", True) == True
     ]
-
-
-def get_operations_by_provider(provider: BaseProvider) -> ProviderDetails:
-    """
-    Returns a list of operations supported by the given provider.
-    """
-    options = set()
-    for operation in provider.supported_operations():
-        data = APISerializerOperations(
-            operation=operation,
-            serializer=provider.raw_serializers.get(
-                operation, provider.raw_serializers.get("_")
-            ),
-        )
-        options.add(data)
-
-    return options
 
 
 class ObjectAPIView(generics.GenericAPIView):

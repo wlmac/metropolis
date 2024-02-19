@@ -1,6 +1,6 @@
 import dataclasses
 from functools import wraps
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
+from typing import Any, Callable, Dict, Final, List, Optional, Sequence, Tuple, Type
 
 from drf_spectacular.drainage import set_override
 from drf_spectacular.generators import SchemaGenerator
@@ -9,7 +9,6 @@ from memoization import cached
 from rest_framework.serializers import Serializer
 
 from core.api.utils.polymorphism import (
-    get_operations_by_provider,
     get_path_by_provider,
     get_provider,
     get_providers_by_operation,
@@ -164,8 +163,7 @@ class Api3ObjSpliter:
         for provider_name, provider_obj in providers.items():
             self._provider_details[provider_name] = ProviderDetails(
                 provider=provider_obj,
-                operations_supported=[],
-                data=dict(),
+                operations_supported=dict(),
             )
 
     @staticmethod
@@ -225,8 +223,7 @@ class MetroSchemaGenerator(SchemaGenerator):
                     obj3.add(
                         ProviderDetails(
                             provider=provider,
-                            operations_supported=get_operations_by_provider(provider),
-                            data=data,
+                            operations_supported=data,
                             url=path.replace(
                                 "{type}",
                                 get_path_by_provider(provider),
@@ -234,10 +231,37 @@ class MetroSchemaGenerator(SchemaGenerator):
                         )
                     )
 
-        print(f"obj3: {obj3}")
-        formatted_obj3 = list()
-        for provider in obj3:
-            ...
+        # print(f"obj3: {obj3}")
+        formatted_obj3 = self._generate_endpoints(obj3)
 
         view_endpoints.extend(formatted_obj3)
+        print(f"View Endpoints: {formatted_obj3}")
         return view_endpoints
+
+    def _generate_endpoints(
+        self, obj_data: List[ProviderDetails]
+    ) -> List[Tuple[str, str, str, Any]]:
+        """
+        Generate the endpoints for the API3 objects
+        Takes in a list of ProviderDetails and returns a list of tuples in the fmt of (path, path_regex, method, view)
+        """
+        CONVERTER: Final = {
+            "list": ["GET"],
+            "new": ["POST"],
+            "retrieve": ["GET"],
+            "single": ["PUT", "PATCH", "DELETE"],
+        }
+        endpoints = []
+        for obj in obj_data:
+            for operation, serializer in obj.operations_supported:
+                for method in CONVERTER[operation]:
+                    endpoints.append(
+                        (
+                            obj.url,
+                            obj.url,
+                            method,
+                            obj.provider,
+                        )
+                    )
+
+        return endpoints

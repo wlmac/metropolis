@@ -9,7 +9,7 @@ from core.utils.types import APIObjOperations
 type SerializerItems = Dict[str, BaseSerializer]
 
 
-class BaseProvider(ABC):
+class BaseProvider(ABC, object):
     allow_list: bool = (
         True  # Is the view able to list the model's objects. (e.g. /user would list all users
     )

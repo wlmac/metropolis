@@ -270,7 +270,7 @@ class ObjectSingle(
     detail = None
     kind = "single"
 
-    def check_allow_single(self):
+    def check_allow_single(self) -> JsonResponse | None:
         allow_single = getattr(self.provider, "allow_single", True)
         if not allow_single:
             return JsonResponse({"detail": "editing/deletion not allowed"}, status=422)
