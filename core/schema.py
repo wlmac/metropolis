@@ -214,16 +214,18 @@ class MetroSchemaGenerator(SchemaGenerator):
         obj3 = set()
         view_endpoints = super()._get_paths_and_endpoints()
         for path, subpath, method, view in view_endpoints:
-            if path.startswith("/api/v3/obj/"):
+            if path.startswith("/api/v3/obj/") and "{type}" in path:
                 name = view.__class__.__name__.lstrip("Object").casefold()
                 print(f"Found path: {name}")
                 for provider in get_providers_by_operation(name, return_provider=True):
                     provider: BaseProvider
                     data = Api3ObjSpliter._get_data_from_provider(provider)  # noqa
+                    print(path.replace("{type}", get_path_by_provider(provider)))
                     obj3.add(
                         ProviderDetails(
                             provider=provider,
                             operations_supported=data,
+                            view=view,
                             url=path.replace(
                                 "{type}",
                                 get_path_by_provider(provider),
@@ -255,12 +257,13 @@ class MetroSchemaGenerator(SchemaGenerator):
         for obj in obj_data:
             for operation, serializer in obj.operations_supported:
                 for method in CONVERTER[operation]:
+                    print(f"Operation: {operation} Method: {method}")
                     endpoints.append(
                         (
                             obj.url,
                             obj.url,
                             method,
-                            obj.provider,
+                            obj.view,
                         )
                     )
 

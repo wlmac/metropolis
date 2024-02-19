@@ -55,9 +55,7 @@ splitter = split_dict_wrapper("_")  # ignore key for serializers
 
 def get_path_by_provider(provider: BaseProvider) -> str:
     return [
-        provider_key
-        for provider_key, provider in providers.items()
-        if provider == provider
+        provider_key for provider_key, prov in providers.items() if prov == provider
     ][0]
 
 

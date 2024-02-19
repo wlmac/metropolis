@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Dict, Final, List, Literal, NamedTuple, Option
 from rest_framework.serializers import BaseSerializer
 
 if TYPE_CHECKING:
+    from core.api.utils.polymorphism import ObjectAPIView
     from core.api.v3.objects import BaseProvider
 
 type APIObjOperations = Final[Literal["single", "new", "list", "retrieve"]]
@@ -23,6 +24,7 @@ class ProviderDetails:
     provider: "BaseProvider"
     operations_supported: Dict[APIObjOperations, BaseSerializer]
     url: Optional[str] = None
+    view: Optional["ObjectAPIView"] = None
 
     def __hash__(self):
         return hash(self.provider.__class__.__name__)
