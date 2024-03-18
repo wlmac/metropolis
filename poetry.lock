@@ -901,17 +901,18 @@ referencing = ">=0.31.0"
 
 [[package]]
 name = "jwcrypto"
-version = "1.5.3"
+version = "1.5.6"
 description = "Implementation of JOSE Web standards"
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "jwcrypto-1.5.3.tar.gz", hash = "sha256:3af84bb6ed78fb29325308d4eca55e2842f1583010cb6c09207375a4ecea151f"},
+    {file = "jwcrypto-1.5.6-py3-none-any.whl", hash = "sha256:150d2b0ebbdb8f40b77f543fb44ffd2baeff48788be71f67f03566692fd55789"},
+    {file = "jwcrypto-1.5.6.tar.gz", hash = "sha256:771a87762a0c081ae6166958a954f80848820b2ab066937dc8b8379d65b1b039"},
 ]
 
 [package.dependencies]
 cryptography = ">=3.4"
-typing_extensions = "*"
+typing-extensions = ">=4.5.0"
 
 [[package]]
 name = "kombu"
