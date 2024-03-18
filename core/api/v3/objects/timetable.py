@@ -21,6 +21,11 @@ class ViewSerializer(serializers.ModelSerializer):
 
 
 class MutateSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        validated_data["owner"] = self.context["request"].user
+        return super().create(validated_data)
+
     class Meta:
         model = Timetable
         ordering = ["-term__start_date"]
