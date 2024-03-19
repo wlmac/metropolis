@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from .tag import TagSerializer
-from ..utils.gravatar import gravatar_url
 from ... import models
+from ..utils.gravatar import gravatar_url
+from .tag import TagSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):

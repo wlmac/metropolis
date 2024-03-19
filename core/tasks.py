@@ -6,7 +6,7 @@ import requests
 from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
-from django.db.models import Value, JSONField, Q
+from django.db.models import JSONField, Q, Value
 from django.utils.translation import gettext_lazy as _l
 from django.utils.translation import ngettext
 from exponent_server_sdk import (
@@ -17,7 +17,7 @@ from exponent_server_sdk import (
 )
 from requests.exceptions import ConnectionError, HTTPError
 
-from core.models import Announcement, User, Event, BlogPost
+from core.models import Announcement, BlogPost, Event, User
 from metropolis.celery import app
 
 logger = get_task_logger(__name__)

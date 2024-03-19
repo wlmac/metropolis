@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from core.api.serializers.custom import PrimaryKeyAndSlugRelatedField
 from core.api.serializers.tag import TagSerializer
+
 from ... import models
 
 

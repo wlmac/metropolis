@@ -1,6 +1,5 @@
 from pathlib import Path
 
-
 _using_docker_config = True  # intended for allow changing config *in dev*
 
 BASE_DIR = Path(__file__).resolve().parent.parent

@@ -8,7 +8,7 @@ from rest_framework import serializers
 from rest_framework.fields import Field
 
 from core.api.utils.gravatar import gravatar_url
-from core.models import Tag, User, Organization, Comment
+from core.models import Comment, Organization, Tag, User
 
 
 class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):

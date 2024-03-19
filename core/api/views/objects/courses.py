@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
 from core.models import Course
+
 from .base import BaseProvider
 
 

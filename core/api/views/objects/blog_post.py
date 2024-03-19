@@ -2,9 +2,9 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
-from .base import BaseProvider
-from ...serializers.custom import TagRelatedField, CommentField, LikeField, AuthorField
 from ....models import BlogPost
+from ...serializers.custom import AuthorField, CommentField, LikeField, TagRelatedField
+from .base import BaseProvider
 
 
 class Serializer(serializers.ModelSerializer):

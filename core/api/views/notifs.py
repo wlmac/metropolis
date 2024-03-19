@@ -9,9 +9,8 @@ from rest_framework import permissions, response
 from rest_framework import serializers as serializers2
 from rest_framework.views import APIView
 
+from ... import models, tasks
 from .. import serializers
-from ... import models
-from ... import tasks
 
 global_notifs = Signal()
 

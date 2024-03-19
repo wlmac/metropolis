@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 
 from metropolis import settings
+
 from . import models
 from .forms import (
     AnnouncementAdminForm,
@@ -25,8 +26,8 @@ from .forms import (
 from .models import Comment
 from .utils.actions import *
 from .utils.filters import (
-    OrganizationListFilter,
     BlogPostAuthorListFilter,
+    OrganizationListFilter,
     PostTypeFilter,
 )
 

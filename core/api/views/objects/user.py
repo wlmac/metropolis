@@ -6,9 +6,9 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers, validators
 
-from .base import BaseProvider
-from ...utils.gravatar import gravatar_url
 from ....models import User, graduating_year_choices
+from ...utils.gravatar import gravatar_url
+from .base import BaseProvider
 
 
 class Serializer(serializers.ModelSerializer):

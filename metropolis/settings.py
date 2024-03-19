@@ -59,7 +59,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.contrib.flatpages.middleware.FlatpageFallbackMiddleware",
-    "core.middleware.TimezoneMiddleware",
     "core.middleware.CustomRedirectFallbackTemporaryMiddleware",
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
     "hijack.middleware.HijackUserMiddleware",
@@ -417,7 +416,7 @@ THEMES = {
     },
 }
 
-CURRENT_THEME = "winter" # should be changed in local_settings.py
+CURRENT_THEME = "winter"  # should be changed in local_settings.py
 
 # Lazy Loading
 
@@ -504,12 +503,13 @@ def is_aware(d: datetime) -> bool:
 def check_banner3(banner: Dict) -> None:
     assert is_aware(banner["start"])
     assert is_aware(banner["end"])
-    assert bool(banner.get("cta_link")) == bool(banner.get("cta_label")) # both or neither, not one or the other
+    assert bool(banner.get("cta_link")) == bool(
+        banner.get("cta_label")
+    )  # both or neither, not one or the other
 
 
 for banner in BANNER3:
     check_banner3(banner)
-
 
 
 try:

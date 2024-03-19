@@ -5,11 +5,10 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 
+from ..utils.fields import SetField
 from .choices import graduating_year_choices, timezone_choices
 from .course import Term
 from .post import Announcement
-from ..utils.fields import SetField
-
 
 # Create your models here.
 
@@ -20,9 +19,6 @@ def get_default_user_timezone():
 
 class User(AbstractUser):
     bio = models.TextField(blank=True)
-    timezone = models.CharField(
-        max_length=50, choices=timezone_choices, default=get_default_user_timezone
-    )
     graduating_year = models.PositiveSmallIntegerField(
         blank=True, null=True, choices=graduating_year_choices
     )

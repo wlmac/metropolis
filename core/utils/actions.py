@@ -10,10 +10,11 @@ from django.db.models import QuerySet
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _, ngettext
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ngettext
 
-from core.models import Post, User, Organization, Announcement
-from core.tasks import notif_single, notif_events_singleday
+from core.models import Announcement, Organization, Post, User
+from core.tasks import notif_events_singleday, notif_single
 from core.utils.mail import send_mail
 from core.utils.ratelimiting import admin_action_rate_limit
 
