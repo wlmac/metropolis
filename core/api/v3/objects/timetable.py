@@ -24,6 +24,12 @@ class MutateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data["owner"] = self.context["request"].user
+        if self.Meta.model.objects.filter(
+            owner=validated_data["owner"], term=validated_data["term"]
+        ).exists():
+            raise serializers.ValidationError(
+                "You already have a timetable for this term"
+            )
         return super().create(validated_data)
 
     class Meta:
