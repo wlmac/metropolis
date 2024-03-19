@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Dict, Final, List
+from typing import Dict, Final, List, Tuple
 
 from django.db.models.base import ModelBase
 from rest_framework.serializers import BaseSerializer
@@ -9,7 +9,7 @@ from core.utils.types import APIObjOperations
 type SerializerItems = Dict[str, BaseSerializer]
 
 
-class BaseProvider(ABC):
+class BaseProvider(ABC, object):
     allow_list: bool = (
         True  # Is the view able to list the model's objects. (e.g. /user would list all users
     )
@@ -35,7 +35,7 @@ class BaseProvider(ABC):
             if not (hasattr(cls, key) or hasattr(cls, f"get_{key}")):  # todo check if callable
                 raise AttributeError(f"{cls} must either define {key} or :meth:get_{key}")
 
-        for key, type in required_attrs.items():
+        for key, _ in required_attrs.items():
             if not hasattr(cls, key):
                 raise AttributeError(f"{cls} must define attr {key} of type {type}")
 
@@ -64,3 +64,11 @@ class BaseProvider(ABC):
 
     def __init__(self, request):
         self.request = request
+
+    @classmethod
+    def supported_operations(cls) -> Tuple[str]:
+        if not issubclass(cls, BaseProvider):
+            raise TypeError("This method can only be ran on subclasses of BaseProvider")
+        if "_" in cls.raw_serializers.keys():
+            return "list", "new", "single", "retrieve"
+        return tuple(cls.raw_serializers.keys())

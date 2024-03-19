@@ -21,6 +21,11 @@ class ViewSerializer(serializers.ModelSerializer):
 
 
 class MutateSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        validated_data["owner"] = self.context["request"].user
+        return super().create(validated_data)
+
     class Meta:
         model = Timetable
         ordering = ["-term__start_date"]
@@ -39,6 +44,11 @@ class Identity(permissions.BasePermission):
 class TimetableProvider(BaseProvider):
     permission_classes = [Identity]  # redundant but in case we make a mistake with the queryset
     model = Timetable
+    listing_filters = {
+        # "owner": int, since we're using the user's own timetables, we don't need this
+        "term": int,
+        "courses": int,
+    }
     raw_serializers = {
         "new": MutateSerializer,
         "single": MutateSerializer,
@@ -48,11 +58,12 @@ class TimetableProvider(BaseProvider):
     @staticmethod
     def get_queryset(request):
         if request.user.is_anonymous:  # it's up to the client to check if the user is logged in
+
             return Timetable.objects.none()
-        return Timetable.objects.filter(
-            owner=request.user,
-            term__end_date__gte=timezone.now() - settings.TERM_GRACE_PERIOD,
-        )
+        # elif request.user.is_superuser:
+        #     return Timetable.objects.all()
+        else:  # it's up to the client to check if the user is logged in
+            return Timetable.objects.filter(owner=request.user)
 
     def get_last_modified(self, view):
         return (

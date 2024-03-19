@@ -1,20 +1,27 @@
 import dataclasses
-from dataclasses import dataclass
 from functools import wraps
-from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple, Type
+from typing import Any, Callable, Dict, Final, List, Optional, Sequence, Tuple, Type
+
 
 from drf_spectacular.drainage import set_override
+from drf_spectacular.generators import SchemaGenerator
 from drf_spectacular.utils import F, OpenApiExample
 from memoization import cached
-from rest_framework.serializers import BaseSerializer, Serializer
+from rest_framework.serializers import Serializer
+
 
 from core.api.utils.polymorphism import (
+    get_path_by_provider,
     get_provider,
     get_providers_by_operation,
     providers,
 )
 from core.api.v3.objects import BaseProvider
-from core.utils.types import APIObjOperations
+from core.utils.types import (
+    ObjectModificationData,
+    ProviderDetails,
+    SingleOperationData,
+)
 
 
 def metro_extend_schema_serializer(  # modified version of drf_spectacular.utils.extend_schema_serializer
@@ -78,48 +85,19 @@ def dynamic_envelope(serializer_class: Type[Serializer], many=False):
 
 @cached
 def run_fixers(result, generator, request, public):
-    fixer = Api3ObjSpliter(result)
-    fixer.run()
-    return fixer.schema
+    """
+    Run fixers on the schema to ensure that the API docs are properly formatted.
 
-
-@dataclass
-class SingleOperationData:
-    providers: List[BaseProvider]
-    operation: APIObjOperations
-    data: dict
-
-
-@dataclass
-class APISerializerOperations:
-    operation: APIObjOperations
-    serializer: BaseSerializer
-    # tags?
-
-
-@dataclass
-class ProviderDetails:
-    provider: BaseProvider
-    operations_supported: List[APISerializerOperations]
-    data: dict
-
-
-@dataclass
-class ObjectModificationData:
-    retrieve: Optional[SingleOperationData] = None
-    single: Optional[SingleOperationData] = None
-    list: Optional[SingleOperationData] = None
-    new: Optional[SingleOperationData] = None
-
-    def __iter__(self):
-        return iter(
-            [
-                ("retrieve", self.retrieve),
-                ("single", self.single),
-                ("list", self.list),
-                ("new", self.new),
-            ]
-        )
+    Note: this should ALWAYS return the same result for the same input as it's cached to improve performance.
+    """
+    fixers = [Api3ObjSpliter]
+    if fixers is None:
+        raise ValueError("No fixers found, API3 obj docs will be broken.")
+    for fixer_obj in fixers:
+        fixer = fixer_obj(result)
+        fixer.run()
+        result = fixer.schema
+    return result
 
 
 class Api3ObjSpliter:
@@ -132,7 +110,7 @@ class Api3ObjSpliter:
     }
 
     def __init__(self, schema):
-        self.operation_data: ObjectModificationData = ObjectModificationData()
+        self.operation_data = ObjectModificationData()
         self.keys_to_delete: Tuple = ()
         self.schema = schema
         self._provider_details: Dict[str, ProviderDetails] = {}
@@ -142,6 +120,9 @@ class Api3ObjSpliter:
         paths = self.schema["paths"]
         self.set_obj_paths(paths)
 
+        for _, provider in providers.items():
+            ...
+            # print(self._get_data_from_provider(provider))
         for operation in dataclasses.fields(self.operation_data):
             self.create_obj_views(operation)
 
@@ -178,9 +159,33 @@ class Api3ObjSpliter:
         for provider_name, provider_obj in providers.items():
             self._provider_details[provider_name] = ProviderDetails(
                 provider=provider_obj,
-                operations_supported=[],
-                data=dict(),
+                operations_supported=dict(),
             )
+
+    @staticmethod
+    def _get_data_from_provider(provider: BaseProvider) -> tuple:
+        """Returns a tuple of operations supported and the serializers for each
+        e.g. UserProvider {'single': <class 'core.api.v3.objects.user.UserSerializer'>, 'new': <class 'core.api.v3.objects.user.NewSerializer'>, 'list': <class 'core.api.v3.objects.user.ListSerializer'>, 'retrieve': <class 'core.api.v3.objects.user.UserSerializer'>}
+        """
+        supported_operations: dict = {
+            "single": None,
+            "new": None,
+            "list": None,
+            "retrieve": None,
+        }
+        data = provider.raw_serializers.items()
+        for operation, serializer in data:
+            if operation == "_":
+                continue
+            supported_operations[operation] = serializer
+
+        supported_operations = {
+            operation: (
+                provider.raw_serializers["_"] if serializer is None else serializer
+            )
+            for operation, serializer in supported_operations.items()
+        }
+        return supported_operations.items()
 
     @staticmethod
     def _get_name_from_id(operation_id: str) -> str:
@@ -192,3 +197,70 @@ class Api3ObjSpliter:
         return [get_provider(key) for key in enum]
 
     def create_obj_views(self, operation: SingleOperationData): ...
+
+
+class MetroSchemaGenerator(SchemaGenerator):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def _get_paths_and_endpoints(self):
+        """
+        Generate (path, method, view) given (path, method, callback) for paths.
+        """
+        obj3 = set()
+        view_endpoints = super()._get_paths_and_endpoints()
+        for path, subpath, method, view in view_endpoints:
+            if path.startswith("/api/v3/obj/") and "{type}" in path:
+                name = view.__class__.__name__.lstrip("Object").casefold()
+                print(f"Found path: {name}")
+                for provider in get_providers_by_operation(name, return_provider=True):
+                    provider: BaseProvider
+                    data = Api3ObjSpliter._get_data_from_provider(provider)  # noqa
+                    print(path.replace("{type}", get_path_by_provider(provider)))
+                    obj3.add(
+                        ProviderDetails(
+                            provider=provider,
+                            operations_supported=data,
+                            view=view,
+                            url=path.replace(
+                                "{type}",
+                                get_path_by_provider(provider),
+                            ),
+                        )
+                    )
+
+        # print(f"obj3: {obj3}")
+        formatted_obj3 = self._generate_endpoints(obj3)
+
+        view_endpoints.extend(formatted_obj3)
+        print(f"View Endpoints: {formatted_obj3}")
+        return view_endpoints
+
+    def _generate_endpoints(
+        self, obj_data: List[ProviderDetails]
+    ) -> List[Tuple[str, str, str, Any]]:
+        """
+        Generate the endpoints for the API3 objects
+        Takes in a list of ProviderDetails and returns a list of tuples in the fmt of (path, path_regex, method, view)
+        """
+        CONVERTER: Final = {
+            "list": ["GET"],
+            "new": ["POST"],
+            "retrieve": ["GET"],
+            "single": ["PUT", "PATCH", "DELETE"],
+        }
+        endpoints = []
+        for obj in obj_data:
+            for operation, serializer in obj.operations_supported:
+                for method in CONVERTER[operation]:
+                    print(f"Operation: {operation} Method: {method}")
+                    endpoints.append(
+                        (
+                            obj.url,
+                            obj.url,
+                            method,
+                            obj.view,
+                        )
+                    )
+
+        return endpoints

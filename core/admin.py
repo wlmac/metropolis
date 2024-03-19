@@ -712,6 +712,7 @@ class CommentAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(models.Timetable, TimetableAdmin)
 admin.site.register(models.Term, TermAdmin)
+admin.site.register(models.Course)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)

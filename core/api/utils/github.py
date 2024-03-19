@@ -1,6 +1,7 @@
 from os import environ
 from typing import Iterable, List, Optional, Tuple
 
+from django.apps import apps
 from django.db import connection
 from django.db.models import Model
 from memoization import cached
@@ -11,6 +12,9 @@ def table_exists(model: Model) -> bool:
     Check if the database table corresponding to the model exists.
     """
     # Check if the corresponding database table exists
+    if not apps.ready:  # don't make a database query if the app registry isn't ready
+        return False
+
     table_name = model._meta.db_table
     return table_name in connection.introspection.table_names()
 

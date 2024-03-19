@@ -3,7 +3,6 @@ from __future__ import annotations
 from functools import lru_cache
 from json import JSONDecodeError
 from typing import Any, Callable, Dict, Iterable, List, Literal, Optional, Protocol, Set
-
 from django.core.exceptions import BadRequest
 from django.db.models import Model, Q
 from django.shortcuts import get_object_or_404
@@ -54,21 +53,30 @@ def split_dict_wrapper(
 splitter = split_dict_wrapper("_")  # ignore key for serializers
 
 
-providers: Dict[str, BaseProvider] = {  # k = request type (param passed in url), v = provider class
-    "announcement": AnnouncementProvider,
-    "blog-post": BlogPostProvider,
-    "exhibit": ExhibitProvider,
-    "event": EventProvider,
-    "organization": OrganizationProvider,
-    "flatpage": FlatPageProvider,
-    "user": UserProvider,
-    "tag": TagProvider,
-    "term": TermProvider,
-    "timetable": TimetableProvider,
-    "comment": CommentProvider,
-    "like": LikeProvider,
-    "course": CourseProvider,
-}
+def get_path_by_provider(provider: BaseProvider) -> str:
+    return [
+        provider_key for provider_key, prov in providers.items() if prov == provider
+    ][0]
+
+
+providers: Dict[str, BaseProvider] = (
+    {  # k = request type (param passed in url), v = provider class
+        "announcement": AnnouncementProvider,
+        "blog-post": BlogPostProvider,
+        "exhibit": ExhibitProvider,
+        "event": EventProvider,
+        "organization": OrganizationProvider,
+        "flatpage": FlatPageProvider,
+        "user": UserProvider,
+        "tag": TagProvider,
+        "term": TermProvider,
+        "timetable": TimetableProvider,
+        "comment": CommentProvider,
+        "like": LikeProvider,
+        "course": CourseProvider,
+    }
+)
+  
 provider_keys = providers.keys()
 
 
@@ -90,7 +98,7 @@ def get_provider(provider_name: provider_keys) -> Callable:
 
 def get_providers_by_operation(
     operation: APIObjOperations, return_provider: Optional[bool] = False
-) -> List[str]:
+) -> List[str] | List[BaseProvider]:
     """
     returns a list of provider path names that support the given operation.
 
@@ -98,7 +106,7 @@ def get_providers_by_operation(
     >>> get_providers_by_operation("single")
     ["announcement", "blog-post", "exhibit", "event", "organization", "flatpage", "user", "tag", "term", "timetable", "comment", "like", "course"]
     """
-
+    operation = operation.lower()
     return [
         (prov if return_provider else key)
         for key, prov in providers.items()
@@ -258,7 +266,7 @@ class ObjectAPIView(generics.GenericAPIView):
 class Provider(Protocol):
     allow_list: bool
     allow_new: bool
-    kind: Literal["list", "new", "single", "retrieve"]
+    kind: APIObjOperations
     listing_filters_ignore: List[str]
 
     serializers: SplitDictResult

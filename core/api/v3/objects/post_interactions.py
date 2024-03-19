@@ -215,7 +215,7 @@ class LikeSerializer(serializers.ModelSerializer):
 class LikeProvider(BaseProvider):
     model = Like
     allow_list = False
-    raw_serializers = {LikeSerializer}
+    raw_serializers = {"_": LikeSerializer}
 
     @property
     def permission_classes(self):

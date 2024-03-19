@@ -9,8 +9,10 @@ from io import StringIO
 import requests
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
+from core.models import Organization, User
 
 from core.models import Organization, User
+
 
 
 class Command(BaseCommand):

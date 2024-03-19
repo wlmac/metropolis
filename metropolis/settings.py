@@ -306,8 +306,9 @@ SPECTACULAR_SETTINGS = {
     "OAUTH2_AUTHORIZATION_URL": "/authorize",
     "OAUTH2_TOKEN_URL": "/api/auth/token",
     "OAUTH2_REFRESH_URL": "/api/auth/token/refresh",
+    "DEFAULT_GENERATOR_CLASS": "core.schema.MetroSchemaGenerator",
     "OAUTH2_SCOPES": OAUTH2_PROVIDER["SCOPES"].keys(),
-    "POSTPROCESSING_HOOKS": ["core.schema.run_fixers"],
+    # "POSTPROCESSING_HOOKS": ["core.schema.run_fixers"],
     #'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
