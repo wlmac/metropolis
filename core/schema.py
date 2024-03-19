@@ -2,11 +2,13 @@ import dataclasses
 from functools import wraps
 from typing import Any, Callable, Dict, Final, List, Optional, Sequence, Tuple, Type
 
+
 from drf_spectacular.drainage import set_override
 from drf_spectacular.generators import SchemaGenerator
 from drf_spectacular.utils import F, OpenApiExample
 from memoization import cached
 from rest_framework.serializers import Serializer
+
 
 from core.api.utils.polymorphism import (
     get_path_by_provider,
@@ -65,9 +67,7 @@ def dynamic_envelope(serializer_class: Type[Serializer], many=False):
     def decorator(view_func):
         @wraps(view_func)
         def wrapped_view(*args, **kwargs):
-            component_name = (
-                f'Enveloped{serializer_class.__name__.replace("Serializer", "")}'
-            )
+            component_name = f'Enveloped{serializer_class.__name__.replace("Serializer", "")}'
             component_name += "List" if many else ""
 
             metro_extend_schema_serializer(
@@ -113,7 +113,7 @@ class Api3ObjSpliter:
         self.operation_data = ObjectModificationData()
         self.keys_to_delete: Tuple = ()
         self.schema = schema
-        self._provider_details: Dict[str, ProviderDetails] = dict()
+        self._provider_details: Dict[str, ProviderDetails] = {}
 
     def run(self):
         # ObjectModificationData._make
@@ -134,11 +134,7 @@ class Api3ObjSpliter:
 
     def set_obj_paths(self, paths: Dict[str, dict]) -> List[Tuple[str, dict]]:
         PATH_PREFIX = "/api/v3/obj/{type}"
-        _obj_paths = [
-            (path, value)
-            for path, value in paths.items()
-            if path.startswith(PATH_PREFIX)
-        ]
+        _obj_paths = [(path, value) for path, value in paths.items() if path.startswith(PATH_PREFIX)]
         self.keys_to_delete = tuple(
             [path for path, _ in _obj_paths]
         )  # designates the api3 obj polymorphic paths to be deleted.
@@ -148,7 +144,7 @@ class Api3ObjSpliter:
             name = self._get_name_from_id(operation_id)
             # set values for ObjectModificationData
             print(f"Setting {name} for {http_method} with OperationID: {operation_id}")
-            ##self._provider_details[name] = ProviderDetails(
+            # self._provider_details[name] = ProviderDetails(
 
             insertable_value = SingleOperationData(
                 operation=name,

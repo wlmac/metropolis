@@ -1,0 +1,5 @@
+[flake8]
+ignore = F403,F405,E501
+max-line-length = 101
+exclude = docs/*
+max-complexity = 10

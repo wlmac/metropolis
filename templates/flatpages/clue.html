@@ -2,31 +2,28 @@
 {% load markdown_tags %}
 {% load static %}
 {% load settings_tags %}
-
 {% block deps %}
-    <meta name="robots" content="noindex, nofollow"/>
-<!--meta http-equiv="refresh" content="0; url=/sacmas2021/scavenger/welcome"/>
+    <meta name="robots" content="noindex, nofollow" />
+    <!--meta http-equiv="refresh" content="0; url=/sacmas2021/scavenger/welcome"/>
 <script>
     window.location.href = location.origin+"/sacmas2021/scavenger/welcome";
-</script-->
-    <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/flatpage.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/scavengerhunt.css' %}">
-    <script src="{% static 'core/js/scavengerhunt.js' %}"></script>
+</script -->
+<link rel="stylesheet" href="{% static 'core/css/base.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/flatpage.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/scavengerhunt.css' %}">
+<script src="{% static 'core/js/scavengerhunt.js' %}"></script>
 {% endblock %}
-
 {% block main %}
-    <div class="container">
-        <div class="content">
-            <h1 class="title">{{ flatpage.title }}</h1>
-            <hr>
-            <div class="content-body">{{ flatpage.content|markdown }}</div>
-        </div>
-        <script>addQR("{{ flatpage.url }}");</script>
-        <div class="btn-wrapper">
-            <a class="btn" href="/sacmas2021/scavenger/welcome">Home</a>
-        </div>
-    </div>
+<div class="container">
+<div class="content">
+<h1 class="title">{{ flatpage.title }}</h1>
+<hr>
+<div class="content-body">{{ flatpage.content|markdown }}</div>
+</div>
+<script>addQR("{{ flatpage.url }}");</script>
+<div class="btn-wrapper">
+<a class="btn" href="/sacmas2021/scavenger/welcome">Home</a>
+</div>
+</div>
 {% endblock %}
-
 {% block title %}{{ flatpage.title }}{% endblock %}

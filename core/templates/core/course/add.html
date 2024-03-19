@@ -1,7 +1,6 @@
 {% extends 'core/secondary.html' %}
 {% load static %}
 {% load link_tags %}
-
 {% block content %}
     <div class="white-bg">
         <form method="post">
@@ -10,18 +9,16 @@
             {{ form }}
             <div class="mt-3">
                 <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                <a href="
-
-
-                         {% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'timetable_list' %}{% endif %}"
-                   class="btn btn-primary" role="button" aria-pressed="true">Cancel</a>
+                <a href="   {% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'timetable_list' %}{% endif %}"
+                   class="btn btn-primary"
+                   role="button"
+                   aria-pressed="true">Cancel</a>
             </div>
         </form>
     </div>
 {% endblock %}
-
 {% block hd %}
-    <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}"/>
+    <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}" />
     <style>
         form label {
             font-size: 100%;

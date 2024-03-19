@@ -15,13 +15,16 @@ class MetropolisBaseTests(TestCase):
         self.assertEqual(User.objects.count(), 0)  # Assuming no users initially
 
         User.objects.create_superuser(
-            username="testuser", email="testing@maclyonsden.com", password="verysecure"
+            username="testuser",
+            email="testing@maclyonsden.com",
+            password="verysecure",
         )
 
         # Check if the user has been created
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(
-            User.objects.get(username="testuser").email, "testing@maclyonsden.com"
+            User.objects.get(username="testuser").email,
+            "testing@maclyonsden.com",
         )
         # test login
         self.assertTrue(self.client.login(username="testuser", password="verysecure"))
@@ -29,9 +32,7 @@ class MetropolisBaseTests(TestCase):
     def test_sanity(self):
         response = self.client.get(reverse("index"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response, "Metropolis"
-        )  # Changed assertRegex to assertContains
+        self.assertContains(response, "Metropolis")  # Changed assertRegex to assertContains
 
     def test_check_ok(self):
         urls = [

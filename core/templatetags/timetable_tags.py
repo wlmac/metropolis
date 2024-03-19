@@ -36,9 +36,7 @@ def render_timetable(timetable):
                         (
                             (
                                 (
-                                    courses[
-                                        position_day.intersection(courses.keys()).pop()
-                                    ]
+                                    courses[position_day.intersection(courses.keys()).pop()]
                                     if position_day.intersection(courses.keys())
                                     else "-"
                                 ),

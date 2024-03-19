@@ -1,0 +1,57 @@
+name: CI
+
+# Enable Buildkit and let compose use it to speed up image building
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+on:
+  pull_request:
+    branches: [ 'master', 'main' ]
+    paths-ignore: [ 'docs/**' ]
+
+  push:
+    branches: [ 'develop', 'main' ]
+    paths-ignore: [ 'docs/**' ]
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # Consider using pre-commit.ci for open source project
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+  test:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Dependencies
+        run: |
+          python -m pip install poetry
+          poetry config virtualenvs.in-project true
+          pip install psycopg[binary]
+          pip install tblib # to see tracebacks in logs
+          poetry install
+      - name: Make files
+        run: |
+          make metropolis/local_rsa_privkey.pem
+          make metropolis/local_settings.py
+      - name: Migrations
+        run: .venv/bin/python -Wa manage.py migrate
+      - name: Django Tests
+        run: .venv/bin/python -Wa manage.py test --parallel

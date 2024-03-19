@@ -22,7 +22,12 @@ def send_mail(
         fail_silently=fail_silently,
     )
     mail = EmailMultiAlternatives(
-        subject, message, from_email, recipient_list, connection=connection, bcc=bcc
+        subject,
+        message,
+        from_email,
+        recipient_list,
+        connection=connection,
+        bcc=bcc,
     )
     if html_message:
         mail.attach_alternative(html_message, "text/html")

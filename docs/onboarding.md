@@ -1,10 +1,10 @@
 # Metropolis (Backend)
 Make sure you have python 3.10–3.12 installed;
-Ideally, you use python 3.12 
+Ideally, you use python 3.12
 
 ## Running Locally
 
-### Nix 
+### Nix
 Install [Nix](https://nixos.org/download) and [direnv](https://direnv.net) and run:
 ###### if using direnv
 ```sh
@@ -25,7 +25,7 @@ If you do not want to use Nix:
 ```
 python -m pip install poetry
 poetry install
-make # can remove for windows 
+make # can remove for windows
 poetry run python ./manage.py migrate
 poetry run python ./manage.py runserver
 ```
@@ -35,7 +35,7 @@ poetry run python ./manage.py runserver
 - `pip install psycopg2-binary` and try again (pip or pip3 not poetry add)
 #### Windows
 ###### poetry ModuleNotFoundError: No module named 'charset_normalizer'
-reinstall poetry and run poetry install in an elevated (admin) terminal 
+reinstall poetry and run poetry install in an elevated (admin) terminal
 #### OpenSSL isn't found
 Git installs it, so you can add git's programs to your path
 - add git's path (defualt: C:\Program Files\Git\usr\bin\) to your user path

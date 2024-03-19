@@ -6,6 +6,7 @@ import requests
 from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
+
 from django.db.models import F, Field, JSONField, Q, Value
 from django.db.models.functions.text import Concat
 from django.utils import timezone
@@ -38,9 +39,7 @@ for m in ("get", "options", "head", "post", "put", "patch", "delete"):
     setattr(
         session,
         m,
-        functools.partial(
-            getattr(session, m), timeout=settings.NOTIF_EXPO_TIMEOUT_SECS
-        ),
+        functools.partial(getattr(session, m), timeout=settings.NOTIF_EXPO_TIMEOUT_SECS),
     )
 
 
@@ -62,7 +61,8 @@ def setup_periodic_tasks(sender, **kwargs):
 def delete_expired_users():
     """Scrub user data from inactive accounts that have not logged in for 14 days. (marked deleted)"""
     queryset = User.objects.filter(
-        is_deleted=True, last_login__lt=dt.datetime.now() - dt.timedelta(days=14)
+        is_deleted=True,
+        last_login__lt=dt.datetime.now() - dt.timedelta(days=14),
     )
     comments = Comment.objects.filter(author__in=queryset)
     comments.update(
@@ -99,17 +99,14 @@ def notif_broker_announcement(obj_id):
     try:
         ann = Announcement.objects.get(id=obj_id)
     except Announcement.DoesNotExist:
-        logger.warning(
-            f"notif_broker_announcement: announcement {obj_id} does not exist"
-        )
+        logger.warning(f"notif_broker_announcement: announcement {obj_id} does not exist")
         return
     affected = users_with_token()
     if ann.organization.id in settings.ANNOUNCEMENTS_NOTIFY_FEEDS:
         category = "ann.public"
     else:
         affected = affected.filter(
-            Q(tags_following__in=ann.tags.all())
-            | Q(organizations__in=[ann.organization])
+            Q(tags_following__in=ann.tags.all()) | Q(organizations__in=[ann.organization])
         )
         category = "ann.personal"
     for u in affected.all():
@@ -200,10 +197,7 @@ def notif_single(self, recipient_id: int, msg_kwargs):
     for token, options in recipient.expo_notif_tokens.items():
         if options is not None:
             allowlist = options.get("allow")
-            if (
-                isinstance(allowlist, dict)
-                and msg_kwargs["category"] not in allowlist.keys()
-            ):
+            if isinstance(allowlist, dict) and msg_kwargs["category"] not in allowlist.keys():
                 logger.info(
                     f"notif_single (category {msg_kwargs['category']}) not allowed to {recipient} (allowlist {allowlist}) ({recipient.expo_notif_tokens}): {msg_kwargs}"
                     + ("(dry run)" if settings.NOTIF_DRY_RUN else "")

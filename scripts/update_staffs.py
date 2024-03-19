@@ -10,7 +10,21 @@ METROPOLIS_STAFFS = {
     "Backend Developer": {1, 20, 165, 746, 156},
     "App Developer": {21, 56, 66, 799},
     "Graphic Designer": {5, 13, 267, 18, 347, 62, 35, 78},
-    "Content Creator": {8, 14, 103, 145, 183, 57, 414, 235, 157, 677, 659, 729, 843},
+    "Content Creator": {
+        8,
+        14,
+        103,
+        145,
+        183,
+        57,
+        414,
+        235,
+        157,
+        677,
+        659,
+        729,
+        843,
+    },
     "Game Developer": {475, 61},
     "Alumnus": {3, 4, 6, 16, 32, 33, 98, 297},
 }
@@ -29,14 +43,10 @@ for i, entry in enumerate(data):
     assert len(entry["roles"]) == 1
     role = entry["roles"][0]
     if role != "Alumnus":
-        r2 = requests.get(
-            f"https://maclyonsden.com/api/v3/obj/user/retrieve/{entry['user']}"
-        )
+        r2 = requests.get(f"https://maclyonsden.com/api/v3/obj/user/retrieve/{entry['user']}")
         r2.raise_for_status()
         data = r2.json()
-        role = (
-            "Alumnus" if data["graduating_year"] == current_year else entry["roles"][0]
-        )
+        role = "Alumnus" if data["graduating_year"] == current_year else entry["roles"][0]
     staffs[role].add(entry["user"])
 
 staffs = dict(staffs)

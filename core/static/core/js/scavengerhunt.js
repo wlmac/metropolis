@@ -78,7 +78,7 @@ function setMsg(dict) {
         count = `${count} QR code.`
     } else if (count == 15) {
         $('#form-btn').empty();
-        $('#form-btn').append('<a class="btn" href="https://forms.gle/Bo7Mfqzcx6eXLAyP8" target="_blank">Submit Answer</a>'); 
+        $('#form-btn').append('<a class="btn" href="https://forms.gle/Bo7Mfqzcx6eXLAyP8" target="_blank">Submit Answer</a>');
         count = 'all the QR codes.'
     } else {
         count = `${count} QR codes.`

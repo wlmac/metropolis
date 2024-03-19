@@ -9,9 +9,9 @@ import core.models.post
 
 def reset_description(apps, schema_editor):
     BlogPost = apps.get_model("core", "BlogPost")
-    BlogPost.objects.filter(
-        featured_image_description="This image has no description."
-    ).update(featured_image_description="")
+    BlogPost.objects.filter(featured_image_description="This image has no description.").update(
+        featured_image_description=""
+    )
 
 
 def delete_recurrencerule(apps, schema_editor):
@@ -160,15 +160,11 @@ class Migration(migrations.Migration):
                 ("created", models.DateTimeField(auto_now_add=True)),
                 (
                     "object_id",
-                    models.PositiveIntegerField(
-                        help_text="The id of the object this comment is on"
-                    ),
+                    models.PositiveIntegerField(help_text="The id of the object this comment is on"),
                 ),
                 (
                     "author",
-                    models.ForeignKey(
-                        on_delete=models.SET(None), to=settings.AUTH_USER_MODEL
-                    ),
+                    models.ForeignKey(on_delete=models.SET(None), to=settings.AUTH_USER_MODEL),
                 ),
                 (
                     "content_type",
@@ -198,9 +194,7 @@ class Migration(migrations.Migration):
                 ("created", models.DateTimeField(auto_now_add=True)),
                 (
                     "object_id",
-                    models.PositiveIntegerField(
-                        help_text="The id of the object this comment is on"
-                    ),
+                    models.PositiveIntegerField(help_text="The id of the object this comment is on"),
                 ),
                 ("body", models.TextField(max_length=512, default="Hello!")),
                 (
@@ -209,9 +203,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "author",
-                    models.ForeignKey(
-                        on_delete=models.SET(None), to=settings.AUTH_USER_MODEL
-                    ),
+                    models.ForeignKey(on_delete=models.SET(None), to=settings.AUTH_USER_MODEL),
                 ),
                 (
                     "content_type",
@@ -282,9 +274,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="comment",
             name="last_modified",
-            field=models.DateTimeField(
-                auto_now_add=True, default=django.utils.timezone.now
-            ),
+            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
             preserve_default=False,
         ),
         migrations.AlterField(

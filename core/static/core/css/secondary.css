@@ -38,11 +38,11 @@
 @media screen and (max-width: 1000px) {
     .secondnav-trigger{
         display: block;
-        position: absolute; 
+        position: absolute;
         margin: 10px 0 0 10px;
     }
     .secondary-nav-wrapper {
-        display: none; 
+        display: none;
     }
     .white-bg {
         width: 100%;

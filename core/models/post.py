@@ -48,9 +48,7 @@ class PostInteraction(models.Model):
         on_delete=models.CASCADE,
         help_text="The type of object this comment is on (core | blog post or core | announcement)",
     )
-    object_id = models.PositiveIntegerField(
-        help_text="The id of the object this comment is on"
-    )
+    object_id = models.PositiveIntegerField(help_text="The id of the object this comment is on")
     content_object = GenericForeignKey("content_type", "object_id")
 
     # --- Generic Foreign Key --- #
@@ -63,9 +61,7 @@ class PostInteraction(models.Model):
         self, obj: "PostInteraction", **kwargs
     ):  # get ken to check this in accordance with get
         content_type = ContentType.objects.get_for_model(obj)
-        return self.__class__.objects.filter(
-            content_type=content_type, object_id=obj.id, **kwargs
-        )
+        return self.__class__.objects.filter(content_type=content_type, object_id=obj.id, **kwargs)
 
     class Meta:
         abstract = True
@@ -213,7 +209,10 @@ class Post(models.Model):
     title = models.CharField(max_length=64)
     body = models.TextField()
     tags = models.ManyToManyField(
-        "Tag", blank=True, related_name="%(class)ss", related_query_name="%(class)s"
+        "Tag",
+        blank=True,
+        related_name="%(class)ss",
+        related_query_name="%(class)s",
     )
 
     @property
@@ -252,9 +251,7 @@ class Announcement(Post):
         on_delete=models.SET_NULL,
         related_name="announcements_approved",
     )
-    status = models.CharField(
-        max_length=1, choices=announcement_status_choices, default="p"
-    )
+    status = models.CharField(max_length=1, choices=announcement_status_choices, default="p")
     rejection_reason = models.CharField(
         max_length=140,
         blank=True,
@@ -319,7 +316,8 @@ class BlogPost(Post):
     is_published = models.BooleanField(default=False)
     views = models.PositiveIntegerField(default=0)
     is_archived = models.BooleanField(
-        default=False, help_text="Archived posts are not shown on the blog page."
+        default=False,
+        help_text="Archived posts are not shown on the blog page.",
     )
 
     @classmethod

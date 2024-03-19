@@ -18,9 +18,7 @@ class CaseInsensitiveUsernameMixin:
             .exclude(pk=self.instance.pk)
             .exists()
         ):
-            raise forms.ValidationError(
-                _("The username ‘{}’ is already in use.".format(username))
-            )
+            raise forms.ValidationError(_("The username ‘{}’ is already in use.".format(username)))
         return username
 
 

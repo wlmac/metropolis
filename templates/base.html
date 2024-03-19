@@ -1,25 +1,24 @@
 {% load static %}
 {% load settings_tags %}
 {% load pwa %}
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{% block title %}{% endblock %}</title>
+        <title>
+            {% block title %}{% endblock %}
+        </title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <link rel="stylesheet" href="{% static 'css/material-design-iconic-font.min.css' %}">
+        <link rel="stylesheet"
+              href="{% static 'css/material-design-iconic-font.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/materialize.min.css' %}">
-
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Roboto+Mono&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Roboto+Mono&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"
+              rel="stylesheet">
         <script src="{% static 'js/popper.min.js' %}"></script>
         <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
         <script src="{% static 'js/materialize.min.js' %}"></script>
-
         <script src="{% static 'js/quicklink.umd.js' %}"></script>
         <script>
             window.addEventListener('load', () => {
@@ -32,15 +31,10 @@
                 });
             });
         </script>
-
         {% progressive_web_app_meta %}
-
-        {% block head %}
-        {% endblock %}
+        {% block head %}{% endblock %}
     </head>
-
     <body>
-        {% block body %}
-        {% endblock %}
+        {% block body %}{% endblock %}
     </body>
 </html>

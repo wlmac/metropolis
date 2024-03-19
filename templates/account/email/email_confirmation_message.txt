@@ -3,15 +3,15 @@
 
 Dear {% user_display user %},
 
-You're nearly finished registration! 
+You're nearly finished registration!
 
-Please click or copy and paste the following link to finish creating your Metropolis account. 
+Please click or copy and paste the following link to finish creating your Metropolis account.
 
-{{ activate_url }} 
+{{ activate_url }}
 
-If you didn't create a Metropolis account, someone may have entered your email address by accident. Feel free to ignore this message. 
+If you didn't create a Metropolis account, someone may have entered your email address by accident. Feel free to ignore this message.
 
-Sincerely, 
+Sincerely,
 Metropolis Team
 
-This email is automated. Please send us an email at {% settings_value 'DEFAULT_FROM_EMAIL' %} for any concerns. 
+This email is automated. Please send us an email at {% settings_value 'DEFAULT_FROM_EMAIL' %} for any concerns.

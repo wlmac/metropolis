@@ -19,9 +19,7 @@ from . import mixins
 
 
 def custom_feed(request, pk: int, limit: Optional[int] = None):
-    assert models.Organization.objects.filter(
-        pk=pk
-    ).exists(), "pk for feed doesn't exist"
+    assert models.Organization.objects.filter(pk=pk).exists(), "pk for feed doesn't exist"
     custom_feed_organization = models.Organization.objects.get(pk=pk)
     feed = custom_feed_organization.get_feed(user=request.user)
     return (
@@ -84,26 +82,18 @@ class AnnouncementList(TemplateView, mixins.TitleMixin):
 
         context["feed_all"] = models.Announcement.get_all(user=self.request.user)
         if settings.LAZY_LOADING:
-            context["feed_all"] = context["feed_all"][
-                : settings.LAZY_LOADING["initial_limit"]
-            ]
+            context["feed_all"] = context["feed_all"][: settings.LAZY_LOADING["initial_limit"]]
 
         if self.request.user.is_authenticated:
             context["feed_my"] = self.request.user.get_feed()
             if settings.LAZY_LOADING:
-                context["feed_my"] = context["feed_my"][
-                    : settings.LAZY_LOADING["initial_limit"]
-                ]
+                context["feed_my"] = context["feed_my"][: settings.LAZY_LOADING["initial_limit"]]
 
         context["feeds_custom"] = [
             custom_feed(
                 self.request,
                 pk,
-                limit=(
-                    settings.LAZY_LOADING["initial_limit"]
-                    if settings.LAZY_LOADING
-                    else None
-                ),
+                limit=(settings.LAZY_LOADING["initial_limit"] if settings.LAZY_LOADING else None),
             )
             for pk in settings.ANNOUNCEMENTS_CUSTOM_FEEDS
         ]
@@ -152,9 +142,9 @@ class AnnouncementTagList(TemplateView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["feed_tag"] = models.Announcement.get_all(
-            user=self.request.user
-        ).filter(tags=context["tag"])
+        context["feed_tag"] = models.Announcement.get_all(user=self.request.user).filter(
+            tags=context["tag"]
+        )
         context["tag"] = models.Tag.objects.get(id=context["tag"])
         return context
 
@@ -255,9 +245,7 @@ class BlogPostList(TemplateView, mixins.TitleMixin):
 
         context["feed_all"] = models.BlogPost.public()
         if settings.LAZY_LOADING:
-            context["feed_all"] = context["feed_all"][
-                : settings.LAZY_LOADING["initial_limit"]
-            ]
+            context["feed_all"] = context["feed_all"][: settings.LAZY_LOADING["initial_limit"]]
         return context
 
 
@@ -312,7 +300,5 @@ class ExhibitList(TemplateView, mixins.TitleMixin):
 
         context["feed_all"] = models.Exhibit.objects.filter(is_published=True)
         if settings.LAZY_LOADING:
-            context["feed_all"] = context["feed_all"][
-                : settings.LAZY_LOADING["initial_limit"]
-            ]
+            context["feed_all"] = context["feed_all"][: settings.LAZY_LOADING["initial_limit"]]
         return context

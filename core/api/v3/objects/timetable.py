@@ -42,9 +42,7 @@ class Identity(permissions.BasePermission):
 
 
 class TimetableProvider(BaseProvider):
-    permission_classes = [
-        Identity
-    ]  # redundant but in case we make a mistake with the queryset
+    permission_classes = [Identity]  # redundant but in case we make a mistake with the queryset
     model = Timetable
     listing_filters = {
         # "owner": int, since we're using the user's own timetables, we don't need this
@@ -59,7 +57,8 @@ class TimetableProvider(BaseProvider):
 
     @staticmethod
     def get_queryset(request):
-        if request.user.is_anonymous:
+        if request.user.is_anonymous:  # it's up to the client to check if the user is logged in
+
             return Timetable.objects.none()
         # elif request.user.is_superuser:
         #     return Timetable.objects.all()
@@ -69,9 +68,7 @@ class TimetableProvider(BaseProvider):
     def get_last_modified(self, view):
         return (
             LogEntry.objects.filter(
-                content_type=ContentType.objects.get(
-                    app_label="core", model="timetable"
-                )
+                content_type=ContentType.objects.get(app_label="core", model="timetable")
             )
             .filter(object_id=str(view.get_object().pk))
             .latest("action_time")
@@ -81,9 +78,7 @@ class TimetableProvider(BaseProvider):
     def get_last_modified_queryset(self):
         return (
             LogEntry.objects.filter(
-                content_type=ContentType.objects.get(
-                    app_label="core", model="timetable"
-                )
+                content_type=ContentType.objects.get(app_label="core", model="timetable")
             )
             .latest("action_time")
             .action_time

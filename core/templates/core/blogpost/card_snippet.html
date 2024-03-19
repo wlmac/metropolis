@@ -1,23 +1,26 @@
 {% load link_tags %}
 {% load markdown_tags %}
 {% load gravatar_tags %}
-
 <div class="card">
     <div class="card-headers">
-        <img class="card-image" src="{{blogpost.featured_image.url}}">
+        <img class="card-image" src="{{ blogpost.featured_image.url }}">
         <div class="card-text">
             <div class="tag-section">
                 {% for tag in blogpost.tags.all %}
-                    <a href="/blog/tag/{{tag.id}}"><p class="tag" style="background-color:{{tag.color}}">{{tag}}</p></a>
+                    <a href="/blog/tag/{{ tag.id }}">
+                        <p class="tag" style="background-color:{{ tag.color }}">{{ tag }}</p>
+                    </a>
                 {% endfor %}
             </div>
-            <h1 class="title">{{blogpost.title}}</h1>
+            <h1 class="title">{{ blogpost.title }}</h1>
             <div class="card-authors">
                 <div class="card-authors-image">
-                    <a href="{{blogpost.author.username|user_url}}"><img class="circle" src="{{blogpost.author.email|gravatar_url:100}}"></a>
+                    <a href="{{ blogpost.author.username|user_url }}">
+                        <img class="circle" src="{{ blogpost.author.email|gravatar_url:100 }}">
+                    </a>
                 </div>
                 <div class="card-authors-text">
-                    {{blogpost.author.username|user}}
+                    {{ blogpost.author.username|user }}
                     <br>
                     <dot>•</dot> posted {{ blogpost.created_date|date:"M. j, Y" }}{{ blogpost.created_date|date:", g:i A"|lower }}
                     <!-- see https://github.com/wlmac/metropolis/pull/75#discussion_r721886692
@@ -31,8 +34,8 @@
     </div>
     <hr>
     <div class="card-body">
-        <p>{{blogpost.body|markdown|striptags|linebreaksbr}}</p>
+        <p>{{ blogpost.body|markdown|striptags|linebreaksbr }}</p>
     </div>
     <br>
-    <a class="link" href="{{blogpost.slug|blogpost_url}}">Read full blog post <i class='zmdi zmdi-chevron-right'></i></a>
+    <a class="link" href="{{ blogpost.slug|blogpost_url }}">Read full blog post <i class='zmdi zmdi-chevron-right'></i></a>
 </div>

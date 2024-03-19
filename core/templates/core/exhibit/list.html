@@ -1,11 +1,9 @@
 {% extends 'core/base.html' %}
 {% load link_tags %}
 {% load static %}
-
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/exhibit-list.css' %}">
 {% endblock %}
-
 {% block main %}
     <div class="container">
         <div class="card-container">
@@ -17,4 +15,4 @@
                 {% endfor %}
             </div>
         </div>
-{% endblock %}
+    {% endblock %}

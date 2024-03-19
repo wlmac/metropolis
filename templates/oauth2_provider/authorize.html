@@ -1,50 +1,41 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% load i18n %}
-
-{% block title %}{% trans "Authorize" %} {{ application.name }}{% endblock %}
-
+{% block title %}
+    {% trans "Authorize" %} {{ application.name }}
+{% endblock %}
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/oauth2_provider/authorize.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'core/css/oauth2_provider/authorize.css' %}">
 {% endblock %}
-
 {% block main %}
     <div class="container">
         <div class="card-container">
             {% if not error %}
                 <form id="authorizationForm" method="post">
-                    <h1 class="title">
-                        {% trans "Authorize" %} {{ application.name }}?
-                    </h1>
+                    <h1 class="title">{% trans "Authorize" %} {{ application.name }}?</h1>
                     {% csrf_token %}
-
                     {% for field in form %}
-                        {% if field.is_hidden %}
-                            {{ field }}
-                        {% endif %}
+                        {% if field.is_hidden %}{{ field }}{% endif %}
                     {% endfor %}
-
                     <p>{% trans "Application requires the following permissions" %}</p>
                     <ul class="permissions">
-                        {% for scope in scopes_descriptions %}
-                            <li>{{ scope }}</li>
-                        {% endfor %}
+                        {% for scope in scopes_descriptions %}<li>{{ scope }}</li>{% endfor %}
                     </ul>
-
                     {{ form.errors }}
                     {{ form.non_field_errors }}
-
                     <div class="control-group">
                         <div class="controls">
-                            <input type="submit" class="btn cancel" value="Cancel"/>
-                            <input type="submit" class="btn" name="allow" value="Authorize"/>
+                            <input type="submit" class="btn cancel" value="Cancel" />
+                            <input type="submit" class="btn" name="allow" value="Authorize" />
                         </div>
                     </div>
                 </form>
-
             {% else %}
-                <h1 class="title">Error: <code>{{ error.error }}</code></h1>
+                <h1 class="title">
+                    Error: <code>{{ error.error }}</code>
+                </h1>
                 <p>{{ error.description }}</p>
                 <p>Please report this to the developer of the application.</p>
             {% endif %}

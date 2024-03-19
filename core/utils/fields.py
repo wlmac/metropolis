@@ -15,6 +15,8 @@ from django.forms import DateField, DateInput
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from django.utils.translation import gettext_lazy as _
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 
 
 class MonthDayFormField(DateField):
@@ -35,11 +37,7 @@ class MonthDayFormField(DateField):
             return None
         try:
             month, day = value.split("/")
-            return (
-                (y := timezone.now())
-                .replace(year=y.year, month=int(month), day=int(day))
-                .date()
-            )
+            return (y := timezone.now()).replace(year=y.year, month=int(month), day=int(day)).date()
         except ValueError:
             raise ValidationError(_("Invalid date format (must be MM/DD)"))
 
@@ -105,11 +103,7 @@ class MonthDayField(models.DateField):
             return None
         try:
             month, day = value.split("/")
-            return (
-                (y := timezone.now())
-                .replace(year=y.year, month=int(month), day=int(day))
-                .date()
-            )
+            return (y := timezone.now()).replace(year=y.year, month=int(month), day=int(day)).date()
         except ValueError:
             raise ValidationError(_("Invalid date format (must be MM/DD)"))
 
@@ -211,6 +205,7 @@ if "sqlite" in settings.DATABASES["default"]["ENGINE"]:
         def value_to_string(self, obj):
             return self.value_from_object(obj)
 
+    @extend_schema_field({"type": "array", "items": {"type": ["string", "number"]}})
     class ArrayField(JSONField):
         def __init__(self, base_field, size=None, **kwargs):
             """Care for DjangoArrayField's kwargs."""

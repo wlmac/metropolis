@@ -18,12 +18,8 @@ class UserSerializer(serializers.ModelSerializer):
     email_hash = serializers.SerializerMethodField(read_only=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
     username = serializers.CharField(required=False)
-    password = serializers.CharField(
-        required=False, write_only=True, trim_whitespace=False
-    )
-    old_password = serializers.CharField(
-        required=False, write_only=True, trim_whitespace=False
-    )
+    password = serializers.CharField(required=False, write_only=True, trim_whitespace=False)
+    old_password = serializers.CharField(required=False, write_only=True, trim_whitespace=False)
     organizations = UserOrganizationField()
     organizations_leading = UserOrganizationField()
 
@@ -33,15 +29,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_email_hash(obj):
-        return base64.standard_b64encode(
-            hashlib.md5(obj.email.encode("utf-8")).digest()
-        )
+        return base64.standard_b64encode(hashlib.md5(obj.email.encode("utf-8")).digest())
 
     def validate(self, data):
         if ("password" in data) != ("old_password" in data):
-            raise serializers.ValidationError(
-                "password and old_password must be in pairs"
-            )
+            raise serializers.ValidationError("password and old_password must be in pairs")
         return data
 
     def validate_old_password(self, value):
@@ -96,9 +88,7 @@ class ListSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_email_hash(obj):
-        return base64.standard_b64encode(
-            hashlib.md5(obj.email.encode("utf-8")).digest()
-        )
+        return base64.standard_b64encode(hashlib.md5(obj.email.encode("utf-8")).digest())
 
     class Meta:
         model = User
@@ -124,9 +114,7 @@ def tdsb_email(value):
 class NewSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(max_length=30, required=True)
     last_name = serializers.CharField(max_length=30, required=True)
-    graduating_year = serializers.ChoiceField(
-        choices=graduating_year_choices, required=True
-    )
+    graduating_year = serializers.ChoiceField(choices=graduating_year_choices, required=True)
     email = serializers.EmailField(
         validators=[
             tdsb_email,
@@ -218,7 +206,5 @@ class UserProvider(BaseProvider):
         """Respond with correct endpoint for deleting a user."""
         return JsonResponse(
             status=status.HTTP_304_NOT_MODIFIED,
-            data={
-                "detail": "Not allowed, Please read the docs for the correct endpoint."
-            },
+            data={"detail": "Not allowed, Please read the docs for the correct endpoint."},
         )

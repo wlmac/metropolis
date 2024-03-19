@@ -13,15 +13,15 @@ def get_default_timetable_format():
 
 class Timetable(models.Model):
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="timetables"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="timetables",
     )
     term = models.ForeignKey(Term, on_delete=models.RESTRICT, related_name="timetables")
     courses = models.ManyToManyField(Course, related_name="timetables")
 
     def __str__(self):
-        return (
-            f"{self.owner.get_full_name()} ({self.owner})'s Timetable for {self.term}"
-        )
+        return f"{self.owner.get_full_name()} ({self.owner})'s Timetable for {self.term}"
 
     def day_schedule(self, target_date=None):
         target_date = utils.get_localdate(date=target_date)
@@ -36,9 +36,7 @@ class Timetable(models.Model):
             course_positions = result[i]["position"]
 
             try:
-                course_code = courses[
-                    course_positions.intersection(set(courses.keys())).pop()
-                ].code
+                course_code = courses[course_positions.intersection(set(courses.keys())).pop()].code
             except KeyError:
                 course_code = None
 
@@ -64,6 +62,7 @@ class Timetable(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["owner", "term"], name="unique_timetable_owner_and_term"
+                fields=["owner", "term"],
+                name="unique_timetable_owner_and_term",
             )
         ]

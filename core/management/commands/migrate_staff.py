@@ -20,9 +20,7 @@ class Command(BaseCommand):
                     try:
                         user = User.objects.get(pk=user_id)
                     except User.DoesNotExist:
-                        self.stdout.write(
-                            self.style.ERROR(f"User {user_id} does not exist")
-                        )
+                        self.stdout.write(self.style.ERROR(f"User {user_id} does not exist"))
                         continue
                     try:
                         bio = settings.METROPOLIS_STAFF_BIO.get(user_id, "")
@@ -46,14 +44,11 @@ class Command(BaseCommand):
                     except IntegrityError as e:
                         self.stdout.write(
                             self.style.WARNING(
-                                f"StaffMember for user {user_id} already exists: "
-                                + str(e)
+                                f"StaffMember for user {user_id} already exists: " + str(e)
                             )
                         )
 
         except AttributeError:
-            self.stdout.write(
-                self.style.SUCCESS("METROPOLIS_STAFFS does not exist anymore")
-            )
+            self.stdout.write(self.style.SUCCESS("METROPOLIS_STAFFS does not exist anymore"))
 
         self.stdout.write(self.style.SUCCESS("Command completed successfully"))

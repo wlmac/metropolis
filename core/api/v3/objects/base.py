@@ -32,12 +32,8 @@ class BaseProvider(ABC, object):
         additional_attrs: Final[Dict[str, type]] = {"additional_lookup_fields": list}
 
         for key in get_attrs:
-            if not (
-                hasattr(cls, key) or hasattr(cls, f"get_{key}")
-            ):  # todo check if callable
-                raise AttributeError(
-                    f"{cls} must either define {key} or :meth:get_{key}"
-                )
+            if not (hasattr(cls, key) or hasattr(cls, f"get_{key}")):  # todo check if callable
+                raise AttributeError(f"{cls} must either define {key} or :meth:get_{key}")
 
         for key, _ in required_attrs.items():
             if not hasattr(cls, key):
@@ -55,9 +51,7 @@ class BaseProvider(ABC, object):
     def _check_serializers(cls):
         for key in cls.raw_serializers:
             if key not in ("list", "new", "single", "retrieve", "_"):
-                raise AttributeError(
-                    f"key {key} is not a valid key for raw_serializers"
-                )
+                raise AttributeError(f"key {key} is not a valid key for raw_serializers")
 
     def __new__(cls, request):
         from core.api.utils.polymorphism import splitter

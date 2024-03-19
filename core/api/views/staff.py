@@ -39,7 +39,14 @@ class StaffSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StaffMember
-        fields = ["user", "bio", "positions", "positions_leading", "years", "is_alumni"]
+        fields = [
+            "user",
+            "bio",
+            "positions",
+            "positions_leading",
+            "years",
+            "is_alumni",
+        ]
 
 
 @extend_schema(

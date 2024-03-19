@@ -1,12 +1,10 @@
 {% extends 'core/base.html' %}
 {% load markdown_tags %}
 {% load static %}
-
 {% block deps %}
     <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/flatpage.css' %}">
 {% endblock %}
-
 {% block main %}
     <div class="container">
         <div class="content">
@@ -16,5 +14,4 @@
         </div>
     </div>
 {% endblock %}
-
 {% block title %}{{ flatpage.title }}{% endblock %}

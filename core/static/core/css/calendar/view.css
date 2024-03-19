@@ -159,7 +159,7 @@ hr {
     width: 100%;
 }
 .fc-scrollgrid a {
-    color: var(--dark-grey) !important; 
+    color: var(--dark-grey) !important;
 }
 .fc-scrollgrid a[selected]{
     color: white !important;

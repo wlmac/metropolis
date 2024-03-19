@@ -1,24 +1,17 @@
 {% extends "admin/base_site.html" %}
 {% load i18n static %}
-
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
-
-{% block coltype %}colMS{% endblock %}
-
-{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
-
-{% block nav-sidebar %}{% endblock %}
-
-{% block content %}
-    <div id="content-main">
-        {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
-    </div>
-    <style>
-    </style>
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">
 {% endblock %}
-
+{% block coltype %}colMS{% endblock %}
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content %}
+    <div id="content-main">{% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}</div>
+    <style></style>
+{% endblock %}
 {% block sidebar %}
     <div id="content-related">
         <div class="module" id="recent-actions-module">
@@ -39,7 +32,11 @@
                             {% endif %}
                             <br>
                             {% if entry.content_type %}
-                                <span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>
+                                <span class="mini quiet">
+                                    {% filter capfirst %}
+                                        {{ entry.content_type.name }}
+                                    {% endfilter %}
+                                </span>
                             {% else %}
                                 <span class="mini quiet">{% translate 'Unknown content' %}</span>
                             {% endif %}

@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from functools import lru_cache
 from json import JSONDecodeError
-from typing import Any, Callable, Dict, Iterable, List, Optional, Protocol, Set
-
+from typing import Any, Callable, Dict, Iterable, List, Literal, Optional, Protocol, Set
 from django.core.exceptions import BadRequest
 from django.db.models import Model, Q
 from django.shortcuts import get_object_or_404
@@ -76,6 +76,7 @@ providers: Dict[str, BaseProvider] = (
         "course": CourseProvider,
     }
 )
+  
 provider_keys = providers.keys()
 
 
@@ -84,9 +85,7 @@ def get_provider(provider_name: provider_keys) -> Callable:
     Gets a provider by type name.
     """
     if provider_name not in provider_keys:
-        raise BadRequest(
-            "Object type not found. Valid types are: " + ", ".join(providers) + "."
-        )
+        raise BadRequest("Object type not found. Valid types are: " + ", ".join(providers) + ".")
     return providers[provider_name]
 
 
@@ -140,9 +139,7 @@ class ObjectAPIView(generics.GenericAPIView):
             self.provider, "additional_lookup_fields", []
         )
         allowed_fields.extend(settings.GLOBAL_LOOKUPS)
-        return set(
-            allowed_fields
-        )  # use a set for better memory performance & no duplicates.
+        return set(allowed_fields)  # use a set for better memory performance & no duplicates.
 
     @property
     def lookup_field(self) -> str:

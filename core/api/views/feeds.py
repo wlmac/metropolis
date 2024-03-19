@@ -12,7 +12,10 @@ from rest_framework.views import APIView
             name="Feeds",
             response_only=True,
             status_codes=[200],
-            value=[{"announcement1": "placeholder"}, {"announcement2": "placeholder"}],
+            value=[
+                {"announcement1": "placeholder"},
+                {"announcement2": "placeholder"},
+            ],
         )
     ],
 )
