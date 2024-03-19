@@ -26,7 +26,9 @@ class CreateSerializer(Serializer):
         fields = ["id", "code", "description", "position", "term"]
 
     def create(self, validated_data):
-        if Course.objects.filter(code=validated_data["code"], term=validated_data["term"]).exists():
+        if Course.objects.filter(
+            code=validated_data["code"], term=validated_data["term"]
+        ).exists():
             raise serializers.ValidationError("Course already exists")
         return super().create(validated_data)
 

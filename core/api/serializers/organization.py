@@ -7,7 +7,9 @@ from .tag import TagSerializer
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
-    owner = PrimaryKeyAndSlugRelatedField(slug_field="username", queryset=models.User.objects.all())
+    owner = PrimaryKeyAndSlugRelatedField(
+        slug_field="username", queryset=models.User.objects.all()
+    )
     supervisors = PrimaryKeyAndSlugRelatedField(
         slug_field="username", many=True, queryset=models.User.objects.all()
     )

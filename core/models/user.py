@@ -101,7 +101,9 @@ class User(AbstractUser):
     def get_feed(self):
         return (
             post.Announcement.get_approved()
-            .filter(Q(is_public=True, tags__follower=self) | Q(organization__member=self))
+            .filter(
+                Q(is_public=True, tags__follower=self) | Q(organization__member=self)
+            )
             .distinct()
         )
 
@@ -184,7 +186,9 @@ class StaffMember(models.Model):
         null=True,
         base_field=CharField(
             choices=[
-                (key, val) for key, val in settings.METROPOLIS_POSITIONS if key != "Project Manager"
+                (key, val)
+                for key, val in settings.METROPOLIS_POSITIONS
+                if key != "Project Manager"
             ]
         ),
     )

@@ -58,7 +58,9 @@ class ObjectList(
     def get_admin_url(self):
         model: Model = self.provider.model
         try:
-            return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist")
+            return reverse(
+                f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+            )
         except NoReverseMatch:
             return None
 
@@ -70,7 +72,10 @@ class ObjectList(
         """
         k_filters = []
         for key, value in query_params.lists():
-            if key in settings.IGNORED_QUERY_PARAMS + self.provider.listing_filters_ignore:
+            if (
+                key
+                in settings.IGNORED_QUERY_PARAMS + self.provider.listing_filters_ignore
+            ):
                 continue
             if key not in self.listing_filters:
                 raise BadRequest(
@@ -163,7 +168,9 @@ class ObjectList(
         if response.data["next"]:
             response.data["next"] = response.data["next"].replace("http://", "https://")
         if response.data["previous"]:
-            response.data["previous"] = response.data["previous"].replace("http://", "https://")
+            response.data["previous"] = response.data["previous"].replace(
+                "http://", "https://"
+            )
         return response
 
 
@@ -229,7 +236,9 @@ class ObjectRetrieve(
     def get_admin_url(self):
         model: Model = self.provider.model
         try:
-            return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist")
+            return reverse(
+                f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+            )
         except NoReverseMatch:
             return None
 
@@ -256,7 +265,9 @@ class ObjectRetrieve(
         ),
     ],
 )
-class ObjectSingle(ObjectAPIView, LookupField, generics.DestroyAPIView, generics.UpdateAPIView):
+class ObjectSingle(
+    ObjectAPIView, LookupField, generics.DestroyAPIView, generics.UpdateAPIView
+):
     """
     Endpoint for editing objects with support for lookups.
     """
@@ -291,7 +302,9 @@ class ObjectSingle(ObjectAPIView, LookupField, generics.DestroyAPIView, generics
     def get_admin_url(self):
         model: Model = self.provider.model
         try:
-            return reverse(f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist")
+            return reverse(
+                f"admin:{model._meta.app_label}_{model._meta.model_name}_changelist"
+            )
         except NoReverseMatch:
             return None
 

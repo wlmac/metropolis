@@ -7,7 +7,9 @@ from .tag import TagSerializer
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
-    author = PrimaryKeyAndSlugRelatedField(slug_field="username", queryset=models.User.objects.all())
+    author = PrimaryKeyAndSlugRelatedField(
+        slug_field="username", queryset=models.User.objects.all()
+    )
     tags = TagSerializer(many=True)
 
     class Meta:

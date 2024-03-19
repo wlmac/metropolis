@@ -18,7 +18,9 @@ def create_user() -> User:
 
 
 def create_announcement(org: Organization, status: str, title: str) -> Announcement:
-    ann = Announcement(organization=org, status=status, title=title, show_after=timezone.now())
+    ann = Announcement(
+        organization=org, status=status, title=title, show_after=timezone.now()
+    )
     ann.save()
     return ann
 

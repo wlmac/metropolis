@@ -32,7 +32,9 @@ class TermProvider(BaseProvider):
     }
 
     def get_queryset(self, request):
-        return Term.objects.filter(end_date__gte=timezone.now() - settings.TERM_GRACE_PERIOD)
+        return Term.objects.filter(
+            end_date__gte=timezone.now() - settings.TERM_GRACE_PERIOD
+        )
 
     def get_last_modified(self, view):
         return (

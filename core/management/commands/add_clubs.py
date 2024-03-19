@@ -9,10 +9,8 @@ from io import StringIO
 import requests
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
-from core.models import Organization, User
 
 from core.models import Organization, User
-
 
 
 class Command(BaseCommand):
@@ -89,7 +87,9 @@ class Command(BaseCommand):
                 )
 
                 skip_entry = False
-                self.stdout.write("\tIf you have the correct email, please enter it here:")
+                self.stdout.write(
+                    "\tIf you have the correct email, please enter it here:"
+                )
                 while True:
                     try:
                         print("\t", end="")
@@ -111,7 +111,9 @@ class Command(BaseCommand):
                 if skip_entry:
                     self.stdout.write(f"\tSkipped creation of {organization_name}")
                     continue
-            self.stdout.write(self.style.SUCCESS(f"\tFound a match for {owner_name}'s email"))
+            self.stdout.write(
+                self.style.SUCCESS(f"\tFound a match for {owner_name}'s email")
+            )
 
             try:
                 # Consider using get_or_create() if it happens to be more useful?
@@ -137,5 +139,7 @@ class Command(BaseCommand):
                     )
                 )
             except IntegrityError:
-                self.stdout.write(self.style.ERROR("\tDuplicate slug detected. Skipping..."))
+                self.stdout.write(
+                    self.style.ERROR("\tDuplicate slug detected. Skipping...")
+                )
             self.stdout.write()

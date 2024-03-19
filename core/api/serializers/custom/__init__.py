@@ -201,7 +201,9 @@ class OrganizationField(ChoiceField):
             value_list=("id", self.slug_field),
             db_filter=dict(is_active=True),
         )
-        default_error_messages = {"does_not_exist": "Organization '{value}' does not exist."}
+        default_error_messages = {
+            "does_not_exist": "Organization '{value}' does not exist."
+        }
         super().__init__(choices, **kwargs)
         self.default_error_messages.update(default_error_messages)
 
@@ -231,7 +233,9 @@ class UserOrganizationField(OrganizationField):
         if not isinstance(data, list):
             raise serializers.ValidationError("Expected a list of organization IDs.")
 
-        organizations = Organization.objects.filter(id__in=data).values_list("id", flat=True)
+        organizations = Organization.objects.filter(id__in=data).values_list(
+            "id", flat=True
+        )
         if len(organizations) != len(data):
             missing_ids = set(data) - set(organizations)
             for missing_id in missing_ids:

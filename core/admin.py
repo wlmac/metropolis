@@ -82,7 +82,9 @@ class TagAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
-                kwargs["queryset"] = models.Organization.objects.filter(execs=request.user)
+                kwargs["queryset"] = models.Organization.objects.filter(
+                    execs=request.user
+                )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -148,7 +150,9 @@ class OrganizationAdmin(admin.ModelAdmin):
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "supervisors" and not request.user.is_superuser:
-            kwargs["queryset"] = models.User.objects.filter(is_teacher=True).order_by("username")
+            kwargs["queryset"] = models.User.objects.filter(is_teacher=True).order_by(
+                "username"
+            )
         if db_field.name == "execs":
             kwargs["queryset"] = models.User.objects.all().order_by("username")
         if db_field.name == "tags":
@@ -209,7 +213,8 @@ class AnnouncementAdmin(PostAdmin):
             return qs
         return (
             qs.filter(
-                Q(organization__supervisors=request.user) | Q(organization__execs=request.user)
+                Q(organization__supervisors=request.user)
+                | Q(organization__execs=request.user)
             )
             .distinct()
             .filter(organization__is_active=True)
@@ -380,7 +385,9 @@ class AnnouncementAdmin(PostAdmin):
                     .distinct()
                     .order_by("name")
                 )
-        elif db_field.name in {"author", "supervisor"} and not request.user.is_superuser:
+        elif (
+            db_field.name in {"author", "supervisor"} and not request.user.is_superuser
+        ):
             orgs = models.Organization.objects.filter(
                 Q(supervisors=request.user) | Q(execs=request.user)
             )
@@ -404,7 +411,9 @@ class AnnouncementAdmin(PostAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "tags":
             kwargs["queryset"] = (
-                models.Tag.objects.filter(Q(organization=None) | Q(organization__execs=request.user))
+                models.Tag.objects.filter(
+                    Q(organization=None) | Q(organization__execs=request.user)
+                )
                 .distinct()
                 .order_by("name")
             )
@@ -442,7 +451,9 @@ class AnnouncementAdmin(PostAdmin):
                 if (not change) or obj.status not in ("d", "p"):
                     notify_supervisors = True
 
-                    self.message_user(request, f"Successfully sent announcement for review.")
+                    self.message_user(
+                        request, f"Successfully sent announcement for review."
+                    )
                 obj.status = "p" if obj.status != "d" else "d"
 
         super().save_model(request, obj, form, change)
@@ -505,7 +516,9 @@ class BlogPostAdmin(PostAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "tags":
             kwargs["queryset"] = (
-                models.Tag.objects.filter(Q(organization=None) | Q(organization__execs=request.user))
+                models.Tag.objects.filter(
+                    Q(organization=None) | Q(organization__execs=request.user)
+                )
                 .distinct()
                 .order_by("name")
             )
@@ -539,7 +552,9 @@ class ExhibitAdmin(PostAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "tags":
             kwargs["queryset"] = (
-                models.Tag.objects.filter(Q(organization=None)).distinct().order_by("name")
+                models.Tag.objects.filter(Q(organization=None))
+                .distinct()
+                .order_by("name")
             )
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Tag.objects.all().order_by("name")
@@ -570,7 +585,9 @@ class EventAdmin(admin.ModelAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "tags":
             kwargs["queryset"] = (
-                models.Tag.objects.filter(Q(organization=None) | Q(organization__execs=request.user))
+                models.Tag.objects.filter(
+                    Q(organization=None) | Q(organization__execs=request.user)
+                )
                 .distinct()
                 .order_by("name")
             )
@@ -581,9 +598,9 @@ class EventAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "organization":
             if not request.user.is_superuser:
-                kwargs["queryset"] = models.Organization.objects.filter(execs=request.user).order_by(
-                    "name"
-                )
+                kwargs["queryset"] = models.Organization.objects.filter(
+                    execs=request.user
+                ).order_by("name")
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Organization.objects.all().order_by("name")
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
@@ -600,7 +617,9 @@ class EventAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not all(
             map(
-                lambda date: obj.term.start_datetime() <= date <= obj.term.end_datetime(),
+                lambda date: obj.term.start_datetime()
+                <= date
+                <= obj.term.end_datetime(),
                 [obj.start_date, obj.end_date],
             )
         ):
@@ -641,7 +660,8 @@ class UserAdmin(DjangoUserAdmin):
 
     def has_view_permission(self, request, obj=None):
         if obj is None and (
-            request.user.organizations_owning.exists() or request.user.organizations_leading.exists()
+            request.user.organizations_owning.exists()
+            or request.user.organizations_leading.exists()
         ):
             return True
 

@@ -16,11 +16,15 @@ class UserDeleteView(APIView):
         elif user.is_deleted:
             return JsonResponse(
                 status=status.HTTP_406_NOT_ACCEPTABLE,
-                data={"error": "User is already deleted, Please use the restore endpoint."},
+                data={
+                    "error": "User is already deleted, Please use the restore endpoint."
+                },
             )
         else:
             user.mark_deleted()
-            return JsonResponse(status=status.HTTP_200_OK, data={"message": "User deleted."})
+            return JsonResponse(
+                status=status.HTTP_200_OK, data={"message": "User deleted."}
+            )
 
 
 class UserRestoreView(APIView):

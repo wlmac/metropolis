@@ -31,7 +31,9 @@ class Organization(models.Model):
         blank=True,
         related_name="organizations_supervising",
     )
-    execs = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="organizations_leading")
+    execs = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="organizations_leading"
+    )
 
     name = models.CharField(max_length=64)
     bio = models.TextField(blank=True)
@@ -50,8 +52,12 @@ class Organization(models.Model):
         related_query_name="org",
     )
 
-    banner = models.ImageField(upload_to=banner_file_path_generator, default="banners/default.png")
-    icon = models.ImageField(upload_to=icon_file_path_generator, default="icons/default.png")
+    banner = models.ImageField(
+        upload_to=banner_file_path_generator, default="banners/default.png"
+    )
+    icon = models.ImageField(
+        upload_to=icon_file_path_generator, default="icons/default.png"
+    )
 
     def __str__(self):
         return self.name
@@ -80,7 +86,9 @@ class Organization(models.Model):
 
 
 class OrganizationURL(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="links")
+    organization = models.ForeignKey(
+        Organization, on_delete=models.CASCADE, related_name="links"
+    )
     url = models.URLField()
 
     def __str__(self):

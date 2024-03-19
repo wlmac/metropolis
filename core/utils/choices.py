@@ -28,7 +28,8 @@ def calculate_student_years() -> List[Tuple[int | str, int | None]]:
     if current_month >= 9:
         current_year += 1
     year_ranges = [
-        (year, year) for year in range(current_year, current_year + 4)  # generate next years to
+        (year, year)
+        for year in range(current_year, current_year + 4)  # generate next years to
     ]
     year_ranges.insert(0, (None, "Does not apply"))
     return year_ranges

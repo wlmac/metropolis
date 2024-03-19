@@ -17,7 +17,9 @@ def populate_bios(apps, schema_editor):
                 try:
                     user = User.objects.get(pk=user_id)
                     bio = settings.METROPOLIS_STAFF_BIO.get(user_id, "")
-                    staff_member, created = StaffMember.objects.get_or_create(user=user, bio=bio)
+                    staff_member, created = StaffMember.objects.get_or_create(
+                        user=user, bio=bio
+                    )
                     staff_member.positions = list(staff_member.positions) + [position]
                     staff_member.save()
                 except User.DoesNotExist:
@@ -59,7 +61,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "bio",
-                    models.TextField(help_text="The users staff bio (displayed on the staff page)."),
+                    models.TextField(
+                        help_text="The users staff bio (displayed on the staff page)."
+                    ),
                 ),
                 (
                     "positions",
@@ -131,7 +135,9 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name="staffmember",
-            constraint=models.UniqueConstraint(fields=("user",), name="unique_staff_member"),
+            constraint=models.UniqueConstraint(
+                fields=("user",), name="unique_staff_member"
+            ),
         ),
         migrations.RunPython(populate_bios, reversed_pop),
     ]

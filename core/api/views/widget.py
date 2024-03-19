@@ -35,7 +35,9 @@ class MartorImageUpload(APIView):
             return Response({"status": 400, "error": "Invalid image format."})
 
         file_path = default_storage.save(
-            file_upload_path_generator(settings.MARTOR_UPLOAD_MEDIA_DIR)(image, image.name),
+            file_upload_path_generator(settings.MARTOR_UPLOAD_MEDIA_DIR)(
+                image, image.name
+            ),
             image,
         )
 

@@ -13,8 +13,12 @@ class Command(BaseCommand):
     help = "Imports courses as specified in the JSON file provided"
 
     def add_arguments(self, parser):
-        parser.add_argument("term_id", type=int, help="ID of the Term object to add courses to")
-        parser.add_argument("json_file", type=str, help="JSON file to import courses from")
+        parser.add_argument(
+            "term_id", type=int, help="ID of the Term object to add courses to"
+        )
+        parser.add_argument(
+            "json_file", type=str, help="JSON file to import courses from"
+        )
         parser.add_argument(
             "--dry-run",
             action="store_true",
@@ -53,7 +57,9 @@ class Command(BaseCommand):
                     if not isinstance(course_json["code"], str) or not isinstance(
                         course_json["position"], int
                     ):
-                        raise InvalidCourseJSONFileError("code and/or position wrong type")
+                        raise InvalidCourseJSONFileError(
+                            "code and/or position wrong type"
+                        )
 
                     data.append(
                         {
@@ -82,7 +88,9 @@ class Command(BaseCommand):
                 if course.position == course_position:
                     num_courses_unmodified += 1
 
-                    self.stdout.write(self.style.NOTICE(f"Skipped course {course_code}"))
+                    self.stdout.write(
+                        self.style.NOTICE(f"Skipped course {course_code}")
+                    )
                 else:
                     course_previous_position = course.position
 

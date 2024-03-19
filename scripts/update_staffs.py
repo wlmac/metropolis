@@ -43,10 +43,14 @@ for i, entry in enumerate(data):
     assert len(entry["roles"]) == 1
     role = entry["roles"][0]
     if role != "Alumnus":
-        r2 = requests.get(f"https://maclyonsden.com/api/v3/obj/user/retrieve/{entry['user']}")
+        r2 = requests.get(
+            f"https://maclyonsden.com/api/v3/obj/user/retrieve/{entry['user']}"
+        )
         r2.raise_for_status()
         data = r2.json()
-        role = "Alumnus" if data["graduating_year"] == current_year else entry["roles"][0]
+        role = (
+            "Alumnus" if data["graduating_year"] == current_year else entry["roles"][0]
+        )
     staffs[role].add(entry["user"])
 
 staffs = dict(staffs)

@@ -32,7 +32,9 @@ class IsOwnerOrSuperuser(BasePermission):
 
     def has_permission(self, request, view):
         return bool(
-            request.user and request.user.is_superuser or request.user == view.get_object().author
+            request.user
+            and request.user.is_superuser
+            or request.user == view.get_object().author
         )
 
 
@@ -63,7 +65,9 @@ class CommentSerializer(serializers.ModelSerializer):
     def update(self, instance: Comment, validated_data) -> Comment:
         if instance.deleted:
             raise ValidationError("This comment has been deleted.")
-        if instance.body != validated_data.get("body", instance.body):  # if change is  to body.
+        if instance.body != validated_data.get(
+            "body", instance.body
+        ):  # if change is  to body.
             instance.last_modified = timezone.now()
             # contains_profanity: bool = bool(
             #    profanity_check.predict([validated_data["body"]])
@@ -106,7 +110,9 @@ class CommentNewSerializer(CommentSerializer):
             # profanity_check.predict([validated_data["body"]])
         )
         com = Comment(**validated_data)
-        if self.context["request"].user.is_superuser:  # bypass content moderation if user is an SU.
+        if self.context[
+            "request"
+        ].user.is_superuser:  # bypass content moderation if user is an SU.
             com.live = True
         else:
             com.live = False  # not contains_profanity
@@ -137,7 +143,10 @@ class CommentProvider(BaseProvider):
 
     @staticmethod
     def get_queryset(request):
-        if request.user.has_perm("core.comment.view_flagged") or request.user.is_superuser:
+        if (
+            request.user.has_perm("core.comment.view_flagged")
+            or request.user.is_superuser
+        ):
             return Comment.objects.all()
         return Comment.objects.filter(live=True)
 
@@ -165,7 +174,9 @@ class LikeSerializer(serializers.ModelSerializer):
     content_type = ContentTypeField()
 
     def update(self, instance, validated_data):
-        raise NotImplementedError("You cannot update a like, if you wish to delete. do so.")
+        raise NotImplementedError(
+            "You cannot update a like, if you wish to delete. do so."
+        )
 
     def destroy(self, instance: Like, validated_data):
         if instance.author != self.context["request"].user:
@@ -174,9 +185,9 @@ class LikeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data) -> Like:
         obj_name = validated_data["content_type"].name.lower().replace(" ", "")
-        if (self.context["request"].user != validated_data["author"]) and not self.context[
-            "request"
-        ].user.is_superuser:
+        if (
+            self.context["request"].user != validated_data["author"]
+        ) and not self.context["request"].user.is_superuser:
             raise ValidationError("You cannot like as another user.")
 
         if obj_name not in settings.POST_CONTENT_TYPES:  # is the object type valid?

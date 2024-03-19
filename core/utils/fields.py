@@ -37,7 +37,11 @@ class MonthDayFormField(DateField):
             return None
         try:
             month, day = value.split("/")
-            return (y := timezone.now()).replace(year=y.year, month=int(month), day=int(day)).date()
+            return (
+                (y := timezone.now())
+                .replace(year=y.year, month=int(month), day=int(day))
+                .date()
+            )
         except ValueError:
             raise ValidationError(_("Invalid date format (must be MM/DD)"))
 
@@ -103,7 +107,11 @@ class MonthDayField(models.DateField):
             return None
         try:
             month, day = value.split("/")
-            return (y := timezone.now()).replace(year=y.year, month=int(month), day=int(day)).date()
+            return (
+                (y := timezone.now())
+                .replace(year=y.year, month=int(month), day=int(day))
+                .date()
+            )
         except ValueError:
             raise ValidationError(_("Invalid date format (must be MM/DD)"))
 

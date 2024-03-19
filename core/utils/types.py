@@ -3,9 +3,6 @@ from typing import TYPE_CHECKING, Dict, Final, List, Literal, NamedTuple, Option
 
 from rest_framework.serializers import BaseSerializer
 
-from typing import TYPE_CHECKING, Final, Literal, NamedTuple
-
-
 if TYPE_CHECKING:
     from core.api.utils.polymorphism import ObjectAPIView
     from core.api.v3.objects import BaseProvider

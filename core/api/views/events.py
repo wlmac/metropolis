@@ -25,23 +25,33 @@ class EventsList(ListAPIViewWithFallback):
             if self.request.data.get("end"):
                 end = self.request.data.get("end")
                 events = (
-                    models.Event.objects.filter(end_date__gte=start, start_date__lte=end)
-                    .filter(Q(is_public=True) | Q(organization__member=self.request.user.id))
+                    models.Event.objects.filter(
+                        end_date__gte=start, start_date__lte=end
+                    )
+                    .filter(
+                        Q(is_public=True) | Q(organization__member=self.request.user.id)
+                    )
                     .distinct()
                     .order_by("start_date")
                 )
             elif self.request.query_params.get("end"):
                 end = self.request.query_params.get("end")
                 events = (
-                    models.Event.objects.filter(end_date__gte=start, start_date__lte=end)
-                    .filter(Q(is_public=True) | Q(organization__member=self.request.user.id))
+                    models.Event.objects.filter(
+                        end_date__gte=start, start_date__lte=end
+                    )
+                    .filter(
+                        Q(is_public=True) | Q(organization__member=self.request.user.id)
+                    )
                     .distinct()
                     .order_by("start_date")
                 )
             else:
                 events = (
                     models.Event.objects.filter(end_date__gte=start)
-                    .filter(Q(is_public=True) | Q(organization__member=self.request.user.id))
+                    .filter(
+                        Q(is_public=True) | Q(organization__member=self.request.user.id)
+                    )
                     .distinct()
                     .order_by("start_date")
                 )
@@ -57,8 +67,8 @@ class EventsList(ListAPIViewWithFallback):
                     end_date__gte=start, start_date__lte=end, is_public=True
                 ).order_by("start_date")
             else:
-                events = models.Event.objects.filter(end_date__gte=start, is_public=True).order_by(
-                    "start_date"
-                )
+                events = models.Event.objects.filter(
+                    end_date__gte=start, is_public=True
+                ).order_by("start_date")
 
         return events

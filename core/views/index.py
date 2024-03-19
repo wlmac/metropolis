@@ -25,7 +25,9 @@ class Index(TemplateView, mixins.TitleMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["announcements"] = models.Announcement.get_all(user=self.request.user)[:3]
+        context["announcements"] = models.Announcement.get_all(user=self.request.user)[
+            :3
+        ]
 
         datetime_now = timezone.localtime()
         events1 = (
@@ -89,10 +91,18 @@ class CalendarFeed(ICalFeed, View):
         return None
 
     def item_start_datetime(self, item):
-        return item.start_date if self._is_hms(item.start_date, 0, 0, 0) else item.start_date.date()
+        return (
+            item.start_date
+            if self._is_hms(item.start_date, 0, 0, 0)
+            else item.start_date.date()
+        )
 
     def item_end_datetime(self, item):
-        return item.end_date if self._is_hms(item.end_date, 23, 59, 0) else item.end_date.date()
+        return (
+            item.end_date
+            if self._is_hms(item.end_date, 23, 59, 0)
+            else item.end_date.date()
+        )
 
     def item_link(self, item):
         return reverse("calendar") + f"?pk={item.pk}"  # NOTE: workaround for UID
@@ -133,10 +143,14 @@ class AboutView(TemplateView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        members_data = StaffSerializer(StaffMember.objects.filter(is_active=True), many=True).data
+        members_data = StaffSerializer(
+            StaffMember.objects.filter(is_active=True), many=True
+        ).data
 
         # Group members based on positions and alumni status
-        grouped_members = {position: [] for _, position in settings.METROPOLIS_POSITIONS}
+        grouped_members = {
+            position: [] for _, position in settings.METROPOLIS_POSITIONS
+        }
         grouped_members["Alumni"] = []
 
         # Sort positions to ensure that lead positions come first

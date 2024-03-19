@@ -21,7 +21,9 @@ class Timetable(models.Model):
     courses = models.ManyToManyField(Course, related_name="timetables")
 
     def __str__(self):
-        return f"{self.owner.get_full_name()} ({self.owner})'s Timetable for {self.term}"
+        return (
+            f"{self.owner.get_full_name()} ({self.owner})'s Timetable for {self.term}"
+        )
 
     def day_schedule(self, target_date=None):
         target_date = utils.get_localdate(date=target_date)
@@ -36,7 +38,9 @@ class Timetable(models.Model):
             course_positions = result[i]["position"]
 
             try:
-                course_code = courses[course_positions.intersection(set(courses.keys())).pop()].code
+                course_code = courses[
+                    course_positions.intersection(set(courses.keys())).pop()
+                ].code
             except KeyError:
                 course_code = None
 

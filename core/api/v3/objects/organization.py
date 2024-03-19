@@ -73,7 +73,9 @@ class OrganizationProvider(BaseProvider):
     def get_last_modified(self, view):
         return (
             LogEntry.objects.filter(
-                content_type=ContentType.objects.get(app_label="core", model="organization")
+                content_type=ContentType.objects.get(
+                    app_label="core", model="organization"
+                )
             )
             .filter(object_id=str(view.get_object().pk))
             .latest("action_time")
@@ -83,7 +85,9 @@ class OrganizationProvider(BaseProvider):
     def get_last_modified_queryset(self):
         return (
             LogEntry.objects.filter(
-                content_type=ContentType.objects.get(app_label="core", model="organization")
+                content_type=ContentType.objects.get(
+                    app_label="core", model="organization"
+                )
             )
             .latest("action_time")
             .action_time

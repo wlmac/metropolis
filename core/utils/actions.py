@@ -17,7 +17,9 @@ from core.utils.ratelimiting import admin_action_rate_limit
 
 
 # Clubs
-@admin.action(permissions=["change"], description=_("Set the selected clubs to unactive"))
+@admin.action(
+    permissions=["change"], description=_("Set the selected clubs to unactive")
+)
 def set_club_unactive(modeladmin, request, queryset: QuerySet[Organization]):
     queryset.update(is_active=False)
 

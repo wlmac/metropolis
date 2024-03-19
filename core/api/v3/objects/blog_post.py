@@ -59,7 +59,9 @@ class BlogPostProvider(BaseProvider):
     @property
     def permission_classes(self):
         return (
-            [permissions.DjangoModelPermissions] if self.request.mutate else [permissions.AllowAny]
+            [permissions.DjangoModelPermissions]
+            if self.request.mutate
+            else [permissions.AllowAny]
         )
 
     def get_queryset(self, request):
