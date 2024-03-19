@@ -1,47 +1,14 @@
-default_stages: [ commit ]
-
 default_language_version:
-  python: python3.12
+  python: python
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
-      - id: trailing-whitespace
-        args: [ --markdown-linebreak-ext=md ]
-      - id: end-of-file-fixer
-      - id: check-json
-        exclude: "\\.geojson$|manifest\\.json$"
-      - id: check-toml
-      - id: check-xml
-        exclude: "\\.svg$"
-      - id: check-yaml
-      - id: debug-statements
-      - id: check-case-conflict
-      - id: check-symlinks
-      - id: check-docstring-first
-      - id: detect-private-key
   - repo: https://github.com/psf/black
-    rev: 24.1.1
+    rev: 24.2.0
     hooks:
       - id: black
-        args: [ --line-length=101 ]
-
-  - repo: https://github.com/PyCQA/isort
+  - repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
       - id: isort
-
-#  - repo: https://github.com/PyCQA/flake8
-#    rev: 7.0.0
-#    hooks:
-#      - id: flake8
-
-  - repo: https://github.com/Riverside-Healthcare/djLint
-    rev: v1.34.1
-    hooks:
-      - id: djlint-reformat-django
-#      - id: djlint-django fix errors first lo
-
   - repo: local
     hooks:
       - id: make-requirements
@@ -49,10 +16,3 @@ repos:
         entry: make
         language: system
         args: [ "requirements.txt" ]
-
-
-# sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
-ci:
-  autoupdate_schedule: weekly
-  skip: [ ]
-  submodules: false
