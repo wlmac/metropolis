@@ -559,16 +559,18 @@ def fetch_calendar_events():
             start_time = response[event.gcal_id][0]
             end_time = response[event.gcal_id][1]
             event_format = response[event.gcal_id][2]
-            Event
+            
+            tz = timezone.get_current_timezone()
+
             if start_time is not None:
                 start_time = dt.datetime.strptime(start_time, "%H:%M")
                 event.start_date = event.start_date.replace(
-                    hour=start_time.hour, minute=start_time.minute
+                    hour=start_time.hour, minute=start_time.minute, tzinfo=tz
                 )
             if end_time is not None:
                 end_time = dt.datetime.strptime(end_time, "%H:%M")
                 event.end_date = event.end_date.replace(
-                    hour=end_time.hour, minute=end_time.minute
+                    hour=end_time.hour, minute=end_time.minute, tzinfo=tz
                 )
 
             event.schedule_format = event_format
