@@ -25,7 +25,20 @@ import gspread
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 
-from core.models import Announcement, BlogPost, Comment, Event, User, DailyAnnouncement
+from google import genai
+from json import dumps, loads
+
+from core.models import (
+    Announcement,
+    BlogPost,
+    Comment,
+    Event,
+    Term,
+    User,
+    Organization,
+    DailyAnnouncement,
+    Tag,
+)
 from core.utils.tasks import get_random_username
 from metropolis.celery import app
 
@@ -65,6 +78,8 @@ def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(
         crontab(hour=8, minute=0, day_of_week="mon-fri"), fetch_announcements
     )
+
+    sender.add_periodic_task(crontab(hour=4, minute=0), fetch_calendar_events)
 
 
 @app.task
@@ -359,3 +374,215 @@ def fetch_announcements():
                     )
 
         row_counter += 1
+
+
+@app.task
+def fetch_calendar_events():
+    try:
+        url = f"https://www.googleapis.com/calendar/v3/calendars/{"wlmacci@gmail.com"}/events"
+        url += "?fields=items(id,status,summary,description,start,end)"
+        params = {
+            "key": settings.GCAL_API_KEY,
+            "orderBy": "startTime",
+            "timeMin": dt.datetime.now(dt.UTC).isoformat(),
+            "timeMax": (dt.datetime.now(dt.UTC) + dt.timedelta(days=150)).isoformat(),
+            "eventTypes": "default",
+            "singleEvents": "True",
+            "showDeleted": "True",
+        }
+
+        response = requests.get(url, params=params)
+
+        if response.status_code != 200:
+            raise Exception(
+                f"{str(response.status_code)} - Failed to fetch calendar events"
+            )
+
+        gcal_eventlist = response.json().get("items", [])
+
+    except Exception:
+        logger.warning(
+            "core.tasks.fetch_calendar_events: Failed to fetch Google Calendar event data"
+        )
+        return
+
+    events = []
+
+    for gcal_event in gcal_eventlist:
+        if gcal_event.get("summary").strip().lower() in ["day 1", "day 2"]:
+            continue
+
+        try:
+            event = Event.objects.filter(gcal_id=gcal_event.get("id")).first()
+            status = gcal_event.get("status")
+
+            if event is not None and (status is None or status == "cancelled"):
+                event.delete()
+
+            elif status == "confirmed":
+                all_day_event = gcal_event.get("start").get("dateTime") is None
+
+                if all_day_event:
+                    start_date = timezone.make_aware(
+                        dt.datetime.combine(
+                            dt.date.fromisoformat(gcal_event.get("start").get("date")),
+                            dt.time(8, 0),
+                        )
+                    )
+                    end_date = timezone.make_aware(
+                        dt.datetime.combine(
+                            dt.date.fromisoformat(gcal_event.get("end").get("date"))
+                            + dt.timedelta(days=-1),
+                            dt.time(16, 30),
+                        )
+                    )
+                else:
+                    start_date = dt.datetime.fromisoformat(
+                        gcal_event.get("start").get("dateTime")
+                    )
+                    end_date = dt.datetime.fromisoformat(
+                        gcal_event.get("end").get("dateTime")
+                    )
+
+                event_data = {
+                    "name": gcal_event.get("summary").strip(),
+                    "organization": Organization.objects.get(pk=2),
+                    "term": Term.get_current(start_date),
+                    "description": gcal_event.get("description") or "",
+                    "start_date": start_date,
+                    "end_date": end_date,
+                    "schedule_format": "default",
+                    "is_public": True,
+                }
+
+                events.append(
+                    (
+                        Event.objects.update_or_create(
+                            gcal_id=gcal_event.get("id"),
+                            defaults=event_data,
+                        )[0],
+                        all_day_event,
+                    )
+                )
+
+        except Exception:
+            logger.warning(
+                f"core.tasks.fetch_calendar_events: Failed to parse Google Calendar event data for event {gcal_event.get("summary")}"
+            )
+
+    client = genai.Client(api_key=settings.GEMINI_API_KEY)
+    model = "models/gemini-2.0-flash"
+
+    past_events = Event.objects.filter(
+        end_date__lte=dt.datetime.now(dt.UTC) + dt.timedelta(days=-1)
+    )[:100]
+
+    data_for_llm = {
+        "past_events": [],
+        "available_tags": [tag.name for tag in Tag.objects.all()],
+        "new_events": [],
+        "available_schedule_formats": list(
+            settings.TIMETABLE_FORMATS[events[0].term.timetable_format][
+                "schedules"
+            ].keys()
+        ),
+    }
+
+    for past_event in past_events:
+        tags = [tag.name for tag in past_event.tags.all()]
+        name = past_event.name
+        description = past_event.description
+
+        data_for_llm["past_events"].append(
+            {
+                "event": name,
+                "description": description,
+                "tags": tags,
+            }
+        )
+
+    for event, _ in events:
+        data_for_llm["new_events"].append(
+            {"event": event.name, "description": event.description, "id": event.gcal_id}
+        )
+
+    prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately categorize digital calendar events by placing tags on them. Accuracy and consistency are paramount. You will be provided an array of events below to be tagged. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available tags for tagging the events will be provided below to you in the format of an array (E.g. ['tag 1', 'tag 2', 'tag 3', ... ]). You are only allowed to use the provided tags to tag the events. {"" if data_for_llm["past_events"] == [] else "To help with your job, you will be provided below with an array of past events that have already be properly tagged. Each element of the array will be in the format of a json object, containing the name, description and tags for the event. You can reference past events to help guide your decision process in tagging the new events. "}When outputting, output a single json object. The keys of the json object will match an id of an event that needed tagging and the value will be an array of all the tags relevant. Do not output anything besides the tags.\n\nAvailable Tags: {data_for_llm["available_tags"]}\n{"" if data_for_llm["past_events"] == [] else "Past events: " + dumps(data_for_llm["past_events"])}\nEvents to be tagged: {dumps(data_for_llm["new_events"])}"
+
+    try:
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+        )
+
+        response = response.text.replace("```json", "").replace("```", "")
+        response = loads(response)
+
+        tags = {}
+
+    except Exception:
+        logger.warning(
+            "core.tasks.fetch_calendar_events: Failed to get valid response from gemini for tags"
+        )
+
+    for event, _ in events:
+        try:
+            for tag in response[event.gcal_id]:
+                if tag not in tags:
+                    tags[tag] = Tag.objects.get(name=tag)
+
+                event.tags.add(tags[tag])
+
+            event.save()
+        except Exception:
+            logger.warning(
+                f"core.tasks.fetch_calendar_events: Failed to tag event with gcal_id of {event.gcal_id}"
+            )
+
+    model = "models/gemini-1.5-flash"
+
+    prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately set the start and ending time for events based on the information in the title or description of the event. In addition, you will also set the schedule format (E.g pa days, holidays, etc).  Accuracy and consistency are paramount. You will be provided an array of events below. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available schedule formats will be provided as an array below. You can only choose from the the array provided. All day will be referring to the entire school day (9:00 to 15:15). Holidays, P.A days, late starts and similar events will last all day. Period 1 (P1) lasts from 9:00 to 10:20. Period 2 (P2) lasts from 10:25 to 11:40. Period 3 (P3) lasts from 12:40 to 13:55. Period 4 (P4) lasts from 14:00 to 15:15. The latest that any event finish at is 18:00 unless directly specified in the event. When outputting, output a single json object. The keys of the json object will match an id of an event that needs to have their time set and the value will be an array with three values, the starting, ending time and schedule format. Use 24h hour format for time. If the event title and description does not provide enough information to determine the starting or ending time, set both to be null. Default to default for the schedule format if you do not think any other schedule format is applicable. Do not output anything besides the tags.\nAvailable Schedule Formats: {data_for_llm['available_schedule_formats']} \nEvents: {dumps(data_for_llm['new_events'])}"
+
+    try:
+        response = client.models.generate_content(
+            model=model,
+            contents=prompt,
+        )
+
+        response = response.text.replace("```json", "").replace("```", "")
+        response = loads(response)
+
+    except Exception:
+        logger.warning(
+            "core.tasks.fetch_calendar_events: Failed to get valid response from gemini for time and schedule format"
+        )
+
+    for event, all_day_event in events:
+        if not all_day_event:
+            continue
+
+        try:
+            start_time = response[event.gcal_id][0]
+            end_time = response[event.gcal_id][1]
+            event_format = response[event.gcal_id][2]
+
+            tz = timezone.get_current_timezone()
+
+            if start_time is not None:
+                start_time = dt.datetime.strptime(start_time, "%H:%M")
+                event.start_date = event.start_date.replace(
+                    hour=start_time.hour, minute=start_time.minute, tzinfo=tz
+                )
+            if end_time is not None:
+                end_time = dt.datetime.strptime(end_time, "%H:%M")
+                event.end_date = event.end_date.replace(
+                    hour=end_time.hour, minute=end_time.minute, tzinfo=tz
+                )
+
+            event.schedule_format = event_format
+
+            event.save()
+
+        except Exception:
+            logger.warning(
+                f"core.tasks.fetch_calendar_events: Failed to set time or schedule format for event with gcal_id of {event.gcal_id}"
+            )
