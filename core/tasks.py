@@ -426,14 +426,14 @@ def fetch_calendar_events():
                     start_date = timezone.make_aware(
                         dt.datetime.combine(
                             dt.date.fromisoformat(gcal_event.get("start").get("date")),
-                            dt.time(8, 0),
+                            dt.time(0, 0),
                         )
                     )
                     end_date = timezone.make_aware(
                         dt.datetime.combine(
                             dt.date.fromisoformat(gcal_event.get("end").get("date"))
                             + dt.timedelta(days=-1),
-                            dt.time(16, 30),
+                            dt.time(23, 59),
                         )
                     )
                 else:
