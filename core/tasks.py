@@ -482,7 +482,7 @@ def fetch_calendar_events():
         "available_tags": [tag.name for tag in Tag.objects.all()],
         "new_events": [],
         "available_schedule_formats": list(
-            settings.TIMETABLE_FORMATS[events[0].term.timetable_format][
+            settings.TIMETABLE_FORMATS[events[0][0].term.timetable_format][
                 "schedules"
             ].keys()
         ),
