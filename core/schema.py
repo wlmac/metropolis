@@ -66,7 +66,7 @@ def dynamic_envelope(serializer_class: Type[Serializer], many=False):
         @wraps(view_func)
         def wrapped_view(*args, **kwargs):
             component_name = (
-                f'Enveloped{serializer_class.__name__.replace("Serializer", "")}'
+                f"Enveloped{serializer_class.__name__.replace('Serializer', '')}"
             )
             component_name += "List" if many else ""
 

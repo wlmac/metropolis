@@ -64,7 +64,7 @@ class NotificationStream:
     def __next__(self):
         sender, kwargs = self.q.get()
         event_name, data = self.serializer(sender, **kwargs)
-        return f"event: {event_name}\n" f"data: {json.dumps(data)}\n"
+        return f"event: {event_name}\ndata: {json.dumps(data)}\n"
 
 
 def serializer(sender, signal=None, orig_sender=None, kwargs=None):

@@ -105,7 +105,7 @@ class ObjectList(
                 return True
             else:
                 raise BadRequest(
-                    f'Invalid value for boolean filter: {lookup_value}. Accepted values for True are {" or ".join(self.TRUE_VALUES)} and for False they are {" or ".join(self.FALSE_VALUES)}'
+                    f"Invalid value for boolean filter: {lookup_value}. Accepted values for True are {' or '.join(self.TRUE_VALUES)} and for False they are {' or '.join(self.FALSE_VALUES)}"
                 )
         if isinstance(lookup_type, list):
             """

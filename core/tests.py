@@ -59,7 +59,7 @@ class MetropolisBaseTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         tokens = response.json()
-        headers = {"Authorization": f'Bearer {tokens["access"]}'}
+        headers = {"Authorization": f"Bearer {tokens['access']}"}
         return headers
 
     def test_token_auth(self):
@@ -106,7 +106,7 @@ class MetropolisBaseTests(TestCase):
             {"type": "course"},
         ]
         for case in cases:
-            response = self.client.get(f'/api/v3/obj/{case["type"]}', **headers)
+            response = self.client.get(f"/api/v3/obj/{case['type']}", **headers)
             self.assertEqual(response.status_code, 200)  # Added assertion
 
 

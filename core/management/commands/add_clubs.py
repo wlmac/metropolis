@@ -73,9 +73,9 @@ class Command(BaseCommand):
             "SOCIAL LINKS",
         ]
 
-        assert (
-            expected_header == next(csv_reader)
-        ), "Google Sheets layout changed since the last time the script was updated, please consult the backend team."
+        assert expected_header == next(csv_reader), (
+            "Google Sheets layout changed since the last time the script was updated, please consult the backend team."
+        )
 
         skipped_orgs = []
         for row in csv_reader:

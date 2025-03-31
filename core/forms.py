@@ -123,7 +123,7 @@ class TimetableSelectCoursesForm(forms.ModelForm):
             > settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]
         ):
             raise forms.ValidationError(
-                f'There are only {settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]} courses in this term.'
+                f"There are only {settings.TIMETABLE_FORMATS[self.term.timetable_format]['courses']} courses in this term."
             )
         position_set = set()
         for i in courses:
