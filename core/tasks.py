@@ -379,7 +379,7 @@ def fetch_announcements():
 @app.task
 def fetch_calendar_events():
     try:
-        url = f"https://www.googleapis.com/calendar/v3/calendars/{"wlmacci@gmail.com"}/events"
+        url = f"https://www.googleapis.com/calendar/v3/calendars/{'wlmacci@gmail.com'}/events"
         url += "?fields=items(id,status,summary,description,start,end)"
         params = {
             "key": settings.GCAL_API_KEY,
@@ -467,7 +467,7 @@ def fetch_calendar_events():
 
         except Exception:
             logger.warning(
-                f"core.tasks.fetch_calendar_events: Failed to parse Google Calendar event data for event {gcal_event.get("summary")}"
+                f"core.tasks.fetch_calendar_events: Failed to parse Google Calendar event data for event {gcal_event.get('summary')}"
             )
 
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
@@ -506,7 +506,7 @@ def fetch_calendar_events():
             {"event": event.name, "description": event.description, "id": event.gcal_id}
         )
 
-    prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately categorize digital calendar events by placing tags on them. Accuracy and consistency are paramount. You will be provided an array of events below to be tagged. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available tags for tagging the events will be provided below to you in the format of an array (E.g. ['tag 1', 'tag 2', 'tag 3', ... ]). You are only allowed to use the provided tags to tag the events. {"" if data_for_llm["past_events"] == [] else "To help with your job, you will be provided below with an array of past events that have already be properly tagged. Each element of the array will be in the format of a json object, containing the name, description and tags for the event. You can reference past events to help guide your decision process in tagging the new events. "}When outputting, output a single json object. The keys of the json object will match an id of an event that needed tagging and the value will be an array of all the tags relevant. Do not output anything besides the tags.\n\nAvailable Tags: {data_for_llm["available_tags"]}\n{"" if data_for_llm["past_events"] == [] else "Past events: " + dumps(data_for_llm["past_events"])}\nEvents to be tagged: {dumps(data_for_llm["new_events"])}"
+    prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately categorize digital calendar events by placing tags on them. Accuracy and consistency are paramount. You will be provided an array of events below to be tagged. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available tags for tagging the events will be provided below to you in the format of an array (E.g. ['tag 1', 'tag 2', 'tag 3', ... ]). You are only allowed to use the provided tags to tag the events. {'' if data_for_llm['past_events'] == [] else 'To help with your job, you will be provided below with an array of past events that have already be properly tagged. Each element of the array will be in the format of a json object, containing the name, description and tags for the event. You can reference past events to help guide your decision process in tagging the new events. '}When outputting, output a single json object. The keys of the json object will match an id of an event that needed tagging and the value will be an array of all the tags relevant. Do not output anything besides the tags.\n\nAvailable Tags: {data_for_llm['available_tags']}\n{'' if data_for_llm['past_events'] == [] else 'Past events: ' + dumps(data_for_llm['past_events'])}\nEvents to be tagged: {dumps(data_for_llm['new_events'])}"
 
     try:
         response = client.models.generate_content(

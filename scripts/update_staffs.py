@@ -39,7 +39,7 @@ data = r.json()
 print(len(data))
 staffs = defaultdict(set)
 for i, entry in enumerate(data):
-    print(f"entry {i+1:02d}\t{entry['user']}")
+    print(f"entry {i + 1:02d}\t{entry['user']}")
     assert len(entry["roles"]) == 1
     role = entry["roles"][0]
     if role != "Alumnus":

@@ -139,8 +139,8 @@ class Term(models.Model):
                         "end": end_time,
                     },
                     "position": i["position"][day_num - 1],
-                    "cycle": f'{timetable_config["cycle"]["duration"].title()} {day_num}',
-                    "course": f'{timetable_config["cycle"]["duration"].title()} {day_num} {i["description"]["course"]}',
+                    "cycle": f"{timetable_config['cycle']['duration'].title()} {day_num}",
+                    "course": f"{timetable_config['cycle']['duration'].title()} {day_num} {i['description']['course']}",
                 }
             )
 

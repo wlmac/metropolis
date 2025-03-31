@@ -38,7 +38,7 @@ class Command(BaseCommand):
         try:
             term = models.Term.objects.get(pk=options["term_id"])
         except models.Term.DoesNotExist:
-            raise CommandError(f'Term #{options["term_id"]} does not exist')
+            raise CommandError(f"Term #{options['term_id']} does not exist")
 
         try:
             with open(options["json_file"], "r") as f:
