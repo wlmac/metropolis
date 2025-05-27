@@ -678,18 +678,18 @@ hiredis = ["redis[hiredis] (>=3,!=4.0.0,!=4.0.1)"]
 
 [[package]]
 name = "django-select2"
-version = "8.2.1"
+version = "8.4.1"
 description = "This is a Django_ integration of Select2_."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "django_select2-8.2.1-py3-none-any.whl", hash = "sha256:2d7f52b5cd362c4d0b1bf4caca8ad8463ae269b252eebbab4afabd762d08baf5"},
-    {file = "django_select2-8.2.1.tar.gz", hash = "sha256:dc03524c1cf7ef970e8b3ab2de76ce3179e414254fa812d8e2d2f0ba6fa487ba"},
+    {file = "django_select2-8.4.1-py3-none-any.whl", hash = "sha256:1df5e6788cc032795c1be0f2e2a2ea7a5a1dd89878575217a2c23f25d7301fbf"},
+    {file = "django_select2-8.4.1.tar.gz", hash = "sha256:e6cdc0ae647b91b1bed610628893d10dea50a96fffba8e83af27f35dd6003572"},
 ]
 
 [package.dependencies]
-django = ">=3.2"
+django = ">=4.2"
 django-appconf = ">=0.6.0"
 
 [package.extras]
