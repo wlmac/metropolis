@@ -117,10 +117,10 @@ class ChoicesTests(TestCase):
         )  # August 1, 2024
         self.expected = [
             (None, "Does not apply"),
-            (2025, 2025),
             (2026, 2026),
             (2027, 2027),
             (2028, 2028),
+            (2029, 2029),
         ]
 
     def test_calculate_graduating_year_choices(self):
