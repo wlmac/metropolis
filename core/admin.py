@@ -709,7 +709,7 @@ class EventAdmin(CustomTimeMixin, admin.ModelAdmin):
 
 
 class UserAdmin(DjangoUserAdmin):
-    list_display = ["username", "is_superuser", "is_staff", "is_teacher"]
+    list_display = ["username", "email", "is_superuser", "is_staff", "is_teacher"]
     list_filter = [
         "is_superuser",
         "is_staff",
@@ -722,6 +722,7 @@ class UserAdmin(DjangoUserAdmin):
         "username",
         "first_name",
         "last_name",
+        "email",
         "saved_blogs__title",
         "saved_announcements__title",
     ]
