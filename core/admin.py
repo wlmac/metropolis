@@ -12,6 +12,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
+from reversion.admin import VersionAdmin
 
 from . import models
 from .forms import (
@@ -86,7 +87,7 @@ class StaffMemberInline(admin.StackedInline):
     verbose_name_plural = "Staff Member Info"
 
 
-class TermAdmin(admin.ModelAdmin):
+class TermAdmin(VersionAdmin):
     inlines = [
         CourseInline,
     ]
@@ -97,7 +98,7 @@ class TermAdmin(admin.ModelAdmin):
     form = TermAdminForm
 
 
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(VersionAdmin):
     form = TagAdminForm
     readonly_fields = ["color"]
     list_display = ["name", "organization", "color"]
@@ -137,7 +138,7 @@ class OrganizationURLInline(admin.StackedInline):
     extra = 0
 
 
-class OrganizationAdmin(admin.ModelAdmin):
+class OrganizationAdmin(VersionAdmin):
     list_display = ["name", "show_members", "is_open", "is_active", "owner"]
     list_filter = ["is_open", "show_members", "tags", "is_active"]
     fields = [
@@ -566,7 +567,7 @@ class ExhibitAdmin(PostAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
-class EventAdmin(CustomTimeMixin, admin.ModelAdmin):
+class EventAdmin(CustomTimeMixin, VersionAdmin):
     list_display = ["name", "organization", "start_date", "end_date"]
     list_filter = [OrganizationListFilter]
     ordering = ["-start_date", "-end_date"]
@@ -708,7 +709,7 @@ class EventAdmin(CustomTimeMixin, admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-class UserAdmin(DjangoUserAdmin):
+class UserAdmin(VersionAdmin, DjangoUserAdmin):
     list_display = ["username", "email", "is_superuser", "is_staff", "is_teacher"]
     list_filter = [
         "is_superuser",

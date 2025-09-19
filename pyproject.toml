@@ -50,6 +50,7 @@ gunicorn = "^23.0.0"
 sentry-sdk = { extras = ["django", "celery"], version = "^2.8.0" }
 gspread = "^6.1.4"
 google-genai = "^1.0.0"
+django-reversion = "^5.1.0"
 
 [tool.poetry.group.dev.dependencies]
 django-stubs = "*"

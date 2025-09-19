@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "hijack",
     "hijack.contrib.admin",  # show a hijack button on admin.
     "drf_spectacular",
+    "reversion",
 ]
 
 MIDDLEWARE = [
