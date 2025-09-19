@@ -72,7 +72,7 @@ def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
     sender.add_periodic_task(crontab(day_of_month=1), run_group_migrations)
     sender.add_periodic_task(
-        crontab(hour=1, minute=0), clear_expired
+        crontab(hour=1, minute=0), oauth2_clear_expired
     )  # Delete expired oauth2 tokens from db everyday at 1am
 
     sender.add_periodic_task(
@@ -305,6 +305,11 @@ def load_client() -> tuple[gspread.Client | None, str | None, bool]:
 
     else:
         return (None, "No file to load client from", True)
+
+
+@app.task
+def oauth2_clear_expired():
+    clear_expired()
 
 
 @app.task
