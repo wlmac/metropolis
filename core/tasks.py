@@ -384,13 +384,13 @@ def fetch_announcements():
 @app.task
 def fetch_calendar_events():
     try:
-        url = f"https://www.googleapis.com/calendar/v3/calendars/{'wlmacci@gmail.com'}/events"
+        url = f"https://www.googleapis.com/calendar/v3/calendars/{settings.GCAL_CID}/events"
         url += "?fields=items(id,status,summary,description,start,end)"
         params = {
             "key": settings.GCAL_API_KEY,
             "orderBy": "startTime",
-            "timeMin": dt.datetime.now(dt.UTC).isoformat(),
-            "timeMax": (dt.datetime.now(dt.UTC) + dt.timedelta(days=150)).isoformat(),
+            "timeMin": (dt.datetime.now(dt.UTC) + dt.timedelta(days=-30)).isoformat(),
+            "timeMax": (dt.datetime.now(dt.UTC) + dt.timedelta(days=60)).isoformat(),
             "eventTypes": "default",
             "singleEvents": "True",
             "showDeleted": "True",
@@ -542,8 +542,6 @@ def fetch_calendar_events():
             logger.warning(
                 f"core.tasks.fetch_calendar_events: Failed to tag event with gcal_id of {event.gcal_id}"
             )
-
-    model = "models/gemini-1.5-flash"
 
     prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately set the start and ending time for events based on the information in the title or description of the event. In addition, you will also set the schedule format (E.g pa days, holidays, etc).  Accuracy and consistency are paramount. You will be provided an array of events below. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available schedule formats will be provided as an array below. You can only choose from the the array provided. All day will be referring to the entire school day (9:00 to 15:15). Holidays, P.A days, late starts and similar events will last all day. Period 1 (P1) lasts from 9:00 to 10:20. Period 2 (P2) lasts from 10:25 to 11:40. Period 3 (P3) lasts from 12:40 to 13:55. Period 4 (P4) lasts from 14:00 to 15:15. The latest that any event finish at is 18:00 unless directly specified in the event. When outputting, output a single json object. The keys of the json object will match an id of an event that needs to have their time set and the value will be an array with three values, the starting, ending time and schedule format. Use 24h hour format for time. If the event title and description does not provide enough information to determine the starting or ending time, set both to be null. Default to default for the schedule format if you do not think any other schedule format is applicable. Do not output anything besides the tags.\nAvailable Schedule Formats: {data_for_llm['available_schedule_formats']} \nEvents: {dumps(data_for_llm['new_events'])}"
 
