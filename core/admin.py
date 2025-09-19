@@ -41,6 +41,8 @@ from .utils.actions import (
     set_post_archived,
     set_post_unarchived,
     unapprove_comments,
+    set_event_hidden,
+    set_event_visible,
 )
 from .utils.admin import generic_post_formfield_for_manytomany
 from .utils.announcements import request_announcement_approval
@@ -566,6 +568,7 @@ class EventAdmin(CustomTimeMixin, VersionAdmin):
     list_filter = [OrganizationListFilter]
     ordering = ["-start_date", "-end_date"]
     search_fields = ["name"]
+    actions = [set_event_hidden, set_event_visible]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

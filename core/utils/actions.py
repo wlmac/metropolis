@@ -7,12 +7,14 @@ from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as __
 from django.utils.translation import ngettext
 
-from core.models import Announcement, Organization, Post, User
+from core.models import Announcement, Organization, Post, User, Event
 from core.tasks import notif_events_singleday, notif_single
 from core.utils.announcements import request_announcement_approval
 from core.utils.ratelimiting import admin_action_rate_limit
 
 __all__ = [
+    "set_event_hidden",
+    "set_event_visible",
     "set_club_open",
     "set_club_unactive",
     "set_club_active",
@@ -27,6 +29,23 @@ __all__ = [
     "approve_comments",
     "unapprove_comments",
 ]
+
+
+# Events
+@admin.action(
+    permissions=["change"],
+    description=__("Set the selected events to be hidden from public"),
+)
+def set_event_hidden(modeladmin, request, queryset: QuerySet[Event]):
+    queryset.update(is_public=False)
+
+
+@admin.action(
+    permissions=["change"],
+    description=__("Set the selected events to be visible to public"),
+)
+def set_event_visible(modeladmin, request, queryset: QuerySet[Event]):
+    queryset.update(is_public=True)
 
 
 # Clubs
