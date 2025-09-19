@@ -43,6 +43,7 @@ from .utils.actions import (
     unapprove_comments,
     set_event_hidden,
     set_event_visible,
+    normalize_late_start,
 )
 from .utils.admin import generic_post_formfield_for_manytomany
 from .utils.announcements import request_announcement_approval
@@ -564,11 +565,18 @@ class ExhibitAdmin(PostAdmin):
 
 
 class EventAdmin(CustomTimeMixin, VersionAdmin):
-    list_display = ["name", "organization", "start_date", "end_date"]
-    list_filter = [OrganizationListFilter]
+    list_display = [
+        "name",
+        "is_public",
+        "organization",
+        "start_date",
+        "end_date",
+        "schedule_format",
+    ]
+    list_filter = [OrganizationListFilter, "schedule_format", "is_public"]
     ordering = ["-start_date", "-end_date"]
     search_fields = ["name"]
-    actions = [set_event_hidden, set_event_visible]
+    actions = [set_event_hidden, set_event_visible, normalize_late_start]
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

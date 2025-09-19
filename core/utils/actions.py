@@ -15,6 +15,7 @@ from core.utils.ratelimiting import admin_action_rate_limit
 __all__ = [
     "set_event_hidden",
     "set_event_visible",
+    "normalize_late_start",
     "set_club_open",
     "set_club_unactive",
     "set_club_active",
@@ -46,6 +47,12 @@ def set_event_hidden(modeladmin, request, queryset: QuerySet[Event]):
 )
 def set_event_visible(modeladmin, request, queryset: QuerySet[Event]):
     queryset.update(is_public=True)
+
+
+@admin.action(permissions=["change"], description=__("Normalize Late Start events"))
+def normalize_late_start(modeladmin, request, queryset: QuerySet[Event]):
+    queryset = queryset.filter(name__icontains="late start")
+    queryset.update(name="Late Start")
 
 
 # Clubs
