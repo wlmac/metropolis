@@ -143,10 +143,10 @@ class OrganizationAdmin(VersionAdmin):
         "bio",
         "extra_content",
         "slug",
-        "show_members",
-        "is_open",
+        # "show_members",
+        # "is_open",
         "is_active",
-        "applications_open",
+        # "applications_open",
         "tags",
         "owner",
         "supervisors",
@@ -176,10 +176,12 @@ class OrganizationAdmin(VersionAdmin):
         return qs.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
 
     def get_readonly_fields(self, request, obj=None):
-        if obj is None or request.user.is_superuser or request.user == obj.owner:
+        if obj is None or request.user.is_superuser:
             return []
-        else:
-            return ["owner", "supervisors", "execs", "is_active"]
+        elif request.user == obj.owner:
+            return ["owner", "slug", "supervisors", "is_active"]
+        else:  # NOTE: do we also want execs to not be able to edit bio/content?
+            return ["owner", "slug", "supervisors", "execs", "is_active"]
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "supervisors" and not request.user.is_superuser:
