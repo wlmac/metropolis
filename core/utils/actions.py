@@ -1,35 +1,29 @@
 import datetime as dt
 import json
+from functools import wraps
 
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as __
 from django.utils.translation import ngettext
+from django.core.exceptions import PermissionDenied
 
 from core.models import Announcement, Organization, Post, User, Event
 from core.tasks import notif_events_singleday, notif_single
 from core.utils.announcements import request_announcement_approval
 from core.utils.ratelimiting import admin_action_rate_limit
 
-__all__ = [
-    "set_event_hidden",
-    "set_event_visible",
-    "normalize_late_start",
-    "set_club_open",
-    "set_club_unactive",
-    "set_club_active",
-    "reset_club_president",
-    "reset_club_execs",
-    "set_post_archived",
-    "set_post_unarchived",
-    "resend_approval_email",
-    "send_test_notif",
-    "send_notif_singleday",
-    "archive_page",
-    "approve_comments",
-    "unapprove_comments",
-]
+
+def superuser_only(func):
+    @wraps(func)
+    def wrapper(modeladmin, request, queryset):
+        if request.user.is_superuser:
+            return func(modeladmin, request, queryset)
+        else:
+            raise PermissionDenied  # NOTE: for now, action is still visible to non-superusers
+
+    return wrapper
 
 
 # Events
@@ -56,31 +50,31 @@ def normalize_late_start(modeladmin, request, queryset: QuerySet[Event]):
 
 
 # Clubs
-@admin.action(
-    permissions=["change"], description=__("Set the selected clubs to inactive")
-)
+@admin.action(description=__("Set the selected clubs to inactive"))
+@superuser_only
 def set_club_unactive(modeladmin, request, queryset: QuerySet[Organization]):
     queryset.update(is_active=False)
 
 
-@admin.action(
-    permissions=["change"], description=__("Set the selected clubs to active")
-)
+@admin.action(description=__("Set the selected clubs to active"))
+@superuser_only
 def set_club_active(modeladmin, request, queryset: QuerySet[Organization]):
     queryset.update(is_active=True)
 
 
 @admin.action(
-    permissions=["change"], description=__("Set the selected clubs to open membership")
+    description=__("Set the selected clubs to closed+hidden membership"),
 )
-def set_club_open(modeladmin, request, queryset: QuerySet[Organization]):
-    queryset.update(is_open=True, applications_open=True)
+@superuser_only
+def set_club_closed(modeladmin, request, queryset: QuerySet[Organization]):
+    queryset.update(is_open=False, applications_open=False, show_members=False)
 
 
 @admin.action(
     permissions=["change"],
     description=__("Set selected club's president to a temp user."),
 )
+@superuser_only
 def reset_club_president(modeladmin, request, queryset: QuerySet[Organization]):
     queryset.update(owner=User.objects.get(id=970))  # temp user, not a real person.
 

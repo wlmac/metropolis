@@ -38,6 +38,7 @@ from .utils.actions import (
     send_test_notif,
     set_club_active,
     set_club_unactive,
+    set_club_closed,
     set_post_archived,
     set_post_unarchived,
     unapprove_comments,
@@ -164,6 +165,7 @@ class OrganizationAdmin(VersionAdmin):
     actions = [
         set_club_unactive,
         set_club_active,
+        set_club_closed,
         reset_club_president,
         reset_club_execs,
     ]
