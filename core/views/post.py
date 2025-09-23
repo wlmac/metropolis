@@ -20,9 +20,9 @@ from . import mixins
 
 
 def custom_feed(request, pk: int, limit: Optional[int] = None):
-    assert models.Organization.objects.filter(
-        pk=pk
-    ).exists(), "pk for feed doesn't exist"
+    assert models.Organization.objects.filter(pk=pk).exists(), (
+        "pk for feed doesn't exist"
+    )
     custom_feed_organization = models.Organization.objects.get(pk=pk)
     feed = custom_feed_organization.get_feed(user=request.user)
     return (

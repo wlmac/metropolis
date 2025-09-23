@@ -31,7 +31,8 @@ def create_user() -> User:
 
 
 def create_school_org(user: User) -> Organization:
-    school_org = Organization(owners=[user])
+    school_org = Organization.objects.create(name="School Org")
+    school_org.owners.set([user])
     school_org.save()
     return school_org
 

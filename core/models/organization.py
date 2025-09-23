@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
@@ -109,13 +108,10 @@ def manage_org_roles(sender, instance, action, reverse, model, pk_set, **kwargs)
 
     match sender:
         case Organization.owners.through:
-            role = "owner"
             groups = [owner_group, execs_group]
         case Organization.execs.through:
-            role = "exec"
             groups = [execs_group]
         case Organization.supervisors.through:
-            role = "supervisor"
             groups = [supervisors_group]
         case _:
             return
