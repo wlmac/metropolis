@@ -20,9 +20,9 @@ from . import mixins
 
 
 def custom_feed(request, pk: int, limit: Optional[int] = None):
-    assert models.Organization.objects.filter(pk=pk).exists(), (
-        "pk for feed doesn't exist"
-    )
+    assert models.Organization.objects.filter(
+        pk=pk
+    ).exists(), "pk for feed doesn't exist"
     custom_feed_organization = models.Organization.objects.get(pk=pk)
     feed = custom_feed_organization.get_feed(user=request.user)
     return (
@@ -179,7 +179,7 @@ class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
                 return True
         if self.request.user.is_superuser:
             return True
-        if self.request.user == announcement.organization.owner:
+        if announcement.organization.owners.filter(pk=self.request.user.pk).exists():
             return True
         if self.request.user in announcement.organization.supervisors.all():
             return True

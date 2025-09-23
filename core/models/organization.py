@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.signals import m2m_changed, post_save
+from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from django.urls import reverse
 
@@ -21,9 +22,8 @@ def icon_file_path_generator(instance, file_name):
 
 
 class Organization(models.Model):
-    owner = models.ForeignKey(
+    owners = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
         related_name="organizations_owning",
     )
     supervisors = models.ManyToManyField(
@@ -99,70 +99,59 @@ class OrganizationURL(models.Model):
         verbose_name_plural = "Club URLs"
 
 
-@receiver(post_save, sender=Organization)
-def manage_org_owner(sender, instance, created, raw, update_fields, **kwargs):
-    owner_group, _ = Group.objects.get_or_create(name="Org Owners")
-    instance.owner.groups.add(owner_group)
-
-    if instance.owner.organizations_owning.exists():
-        instance.owner.is_staff = True
-        instance.owner.save()
-    else:
-        if all(
-            [
-                instance.owner.is_staff,
-                not instance.owner.is_superuser,
-                not instance.owner.is_teacher,
-            ]
-        ):
-            instance.owner.is_staff = False
-            instance.owner.save()
-
-
+@receiver(m2m_changed, sender=Organization.owners.through)
 @receiver(m2m_changed, sender=Organization.execs.through)
-def manage_org_execs(sender, instance, action, reverse, model, pk_set, **kwargs):
-    execs_group, _ = Group.objects.get_or_create(name="Execs")
-    if action == "post_add":
-        for user_pk in pk_set:
-            user = User.objects.get(pk=user_pk)
-            user.groups.add(execs_group)
-            if not user.is_staff:
-                user.is_staff = True
-                user.save()
-
-    elif action == "post_remove":
-        for user_pk in pk_set:
-            user = User.objects.get(pk=user_pk)
-            if user.organizations_leading.count() == 0:
-                user.groups.remove(execs_group)
-                if all(
-                    [
-                        instance.owner.is_staff,
-                        not instance.owner.is_superuser,
-                        not instance.owner.is_teacher,
-                    ]
-                ):
-                    instance.owner.is_staff = False
-                    instance.owner.save()
-
-
 @receiver(m2m_changed, sender=Organization.supervisors.through)
-def manage_org_sups(sender, instance, action, reverse, model, pk_set, **kwargs):
+def manage_org_roles(sender, instance, action, reverse, model, pk_set, **kwargs):
+    owner_group, _ = Group.objects.get_or_create(name="Org Owners")
+    execs_group, _ = Group.objects.get_or_create(name="Execs")
     supervisors_group, _ = Group.objects.get_or_create(name="Supervisors")
+
+    match sender:
+        case Organization.owners.through:
+            role = "owner"
+            groups = [owner_group, execs_group]
+        case Organization.execs.through:
+            role = "exec"
+            groups = [execs_group]
+        case Organization.supervisors.through:
+            role = "supervisor"
+            groups = [supervisors_group]
+        case _:
+            return
+
+    users = User.objects.filter(pk__in=pk_set)
+
     if action == "post_add":
-        for user_pk in pk_set:
-            user = User.objects.get(pk=user_pk)
-            if not user.is_teacher:
-                continue
-            user.groups.add(supervisors_group)
+        for user in users:
+            for group in groups:
+                user.groups.add(group)
             if not user.is_staff:
                 user.is_staff = True
-                user.save()
+                user.save(update_fields=["is_staff"])
 
     elif action == "post_remove":
-        for user_pk in pk_set:
-            user = User.objects.get(pk=user_pk)
-            if not user.is_teacher:
-                continue
-            if user.organizations_supervising.count() == 0:
+        for user in users:
+            is_still_org_owner = user.organizations_owning.exists()
+            is_still_org_exec = user.organizations_leading.exists()
+            is_still_org_supervisor = user.organizations_supervising.exists()
+
+            if owner_group in groups and not is_still_org_owner:
+                user.groups.remove(owner_group)
+            if execs_group in groups and not is_still_org_exec:
+                user.groups.remove(execs_group)
+            if supervisors_group in groups and not is_still_org_supervisor:
                 user.groups.remove(supervisors_group)
+
+            if all(
+                [
+                    user.is_staff,
+                    not user.is_superuser,
+                    not user.is_teacher,
+                    not is_still_org_owner,
+                    not is_still_org_exec,
+                    not is_still_org_supervisor,
+                ]
+            ):
+                user.is_staff = False
+                user.save(update_fields=["is_staff"])

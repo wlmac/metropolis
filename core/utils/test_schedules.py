@@ -31,7 +31,7 @@ def create_user() -> User:
 
 
 def create_school_org(user: User) -> Organization:
-    school_org = Organization(owner=user)
+    school_org = Organization(owners=[user])
     school_org.save()
     return school_org
 

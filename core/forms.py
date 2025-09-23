@@ -187,13 +187,17 @@ class OrganizationAdminForm(forms.ModelForm):
             "extra_content": AdminMartorWidget,
         }
 
+    # TODO: refactor and/or move to org m2m_changed signal
     def clean(self):
         cleaned_data = super().clean()
-        owner = cleaned_data.get("owner")
+        owners = cleaned_data.get("owners")
         execs = cleaned_data.get("execs")
 
-        if owner is not None and execs is not None and owner not in execs:
-            raise forms.ValidationError({"execs": "The owner must also be an exec."})
+        for owner in owners:
+            if owner is not None and execs is not None and owner not in execs:
+                raise forms.ValidationError(
+                    {"execs": "The owner must also be an exec."}
+                )
 
 
 class TermAdminForm(forms.ModelForm):

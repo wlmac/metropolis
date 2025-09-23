@@ -137,7 +137,7 @@ class OrganizationURLInline(admin.StackedInline):
 
 
 class OrganizationAdmin(VersionAdmin):
-    list_display = ["name", "show_members", "is_open", "is_active", "owner"]
+    list_display = ["name", "show_members", "is_open", "is_active", "display_owners"]
     list_filter = ["is_open", "show_members", "tags", "is_active"]
     fields = [
         "name",
@@ -149,14 +149,14 @@ class OrganizationAdmin(VersionAdmin):
         "is_active",
         # "applications_open",
         "tags",
-        "owner",
+        "owners",
         "supervisors",
         "execs",
         "banner",
         "icon",
     ]
-    autocomplete_fields = ["owner", "supervisors", "execs"]
-    search_fields = ["name", "owner__username"]
+    autocomplete_fields = ["owners", "supervisors", "execs"]
+    search_fields = ["name", "owners__username"]
     filter_horizontal = ("execs",)
     inlines = [
         TagInline,
@@ -171,6 +171,23 @@ class OrganizationAdmin(VersionAdmin):
     ]
     form = OrganizationAdminForm
 
+    @admin.display(description="Owners")
+    def display_owners(self, obj):
+        def get_name_from_email(email: str) -> str:
+            """
+            peter.griffin@tdsb.on.ca -> Peter Griffin
+            """
+            return email.split("@")[0].replace(".", " ").title()
+
+        return ", ".join(
+            [
+                get_name_from_email(owner.email)
+                or f"{owner.first_name} {owner.last_name}".strip()
+                or owner.username
+                for owner in obj.owners.all()
+            ]
+        )
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
@@ -180,10 +197,10 @@ class OrganizationAdmin(VersionAdmin):
     def get_readonly_fields(self, request, obj=None):
         if obj is None or request.user.is_superuser:
             return []
-        elif request.user == obj.owner:
-            return ["owner", "slug", "supervisors", "is_active"]
+        elif obj.owners.filter(pk=request.user.pk).exists():
+            return ["owners", "slug", "supervisors", "is_active"]
         else:  # NOTE: do we also want execs to not be able to edit bio/content?
-            return ["owner", "slug", "supervisors", "execs", "is_active"]
+            return ["owners", "slug", "supervisors", "execs", "is_active"]
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == "supervisors" and not request.user.is_superuser:
@@ -657,6 +674,16 @@ class UserAdmin(VersionAdmin, DjangoUserAdmin):
     actions = [send_test_notif, send_notif_singleday]
     form = UserAdminForm
     add_form = UserCreationAdminForm
+    fieldsets = DjangoUserAdmin.fieldsets + (
+        (
+            "Other",
+            {
+                "fields": [
+                    "is_teacher",
+                ]
+            },
+        ),
+    )
 
     def get_inline_instances(self, request, obj=None):
         if obj and StaffMember.objects.filter(user=obj).exists():

@@ -76,11 +76,10 @@ def set_club_closed(modeladmin, request, queryset: QuerySet[Organization]):
 )
 @superuser_only
 def reset_club_president(modeladmin, request, queryset: QuerySet[Organization]):
-    queryset.update(
-        owner=User.objects.get(pk=970)
-    )  # 970 = temp user, not a real person.
     for club in queryset:
+        club.owners.set([User.objects.get(pk=970)])
         club.execs.set([User.objects.get(pk=970)])
+        # 970 = temp user, not a real person.
 
 
 @admin.action(

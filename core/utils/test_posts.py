@@ -7,7 +7,7 @@ from core.models import Announcement, BlogPost, Comment, Organization, Post
 
 
 def create_school_org(user: User) -> Organization:
-    school_org = Organization(owner=user)
+    school_org = Organization(owners=[user])
     school_org.save()
     return school_org
 
@@ -65,13 +65,13 @@ class TestAnnouncement(TestCase):
 
 class TestComments(TestCase):
     def test_get_approved(self):
-        org = create_school_org(create_user())
+        org = create_school_org([create_user()])
         ann = create_announcement(org, "a", "hello")
-        blog = create_blog_post(author=org.owner, title="hello")
-        create_comment(org.owner, ann, "hello")
-        create_comment(org.owner, ann, "goodbye")
-        create_comment(org.owner, blog, "hello")
-        create_comment(org.owner, blog, "goodbye")
-        create_comment(org.owner, blog, "sah dude")
+        blog = create_blog_post(author=org.owners.first(), title="hello")
+        create_comment(org.owners.first(), ann, "hello")
+        create_comment(org.owners.first(), ann, "goodbye")
+        create_comment(org.owners.first(), blog, "hello")
+        create_comment(org.owners.first(), blog, "goodbye")
+        create_comment(org.owners.first(), blog, "sah dude")
         self.assertTrue(ann.comments.count() == 2)
         self.assertTrue(blog.comments.count() == 3)
