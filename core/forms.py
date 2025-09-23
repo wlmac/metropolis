@@ -193,6 +193,9 @@ class OrganizationAdminForm(forms.ModelForm):
         owners = cleaned_data.get("owners")
         execs = cleaned_data.get("execs")
 
+        if owners is None:
+            return
+
         for owner in owners:
             if owner is not None and execs is not None and owner not in execs:
                 raise forms.ValidationError(

@@ -192,7 +192,7 @@ class OrganizationAdmin(VersionAdmin):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(Q(owner=request.user) | Q(execs=request.user)).distinct()
+        return qs.filter(Q(owners=request.user) | Q(execs=request.user)).distinct()
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None or request.user.is_superuser:
