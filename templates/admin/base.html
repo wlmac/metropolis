@@ -171,9 +171,9 @@
                         </a>
                     </li>
                     <script>
-                        $(document).ready(function(){
-                            $('.dropdown-trigger').dropdown();
-                            $('.sidenav').sidenav();
+                        $(document).ready(function(){                              
+                            M.Sidenav.init($('.sidenav'));
+                            M.Dropdown.init($('.dropdown-trigger'));
                         });
                     </script>
                 </ul>
