@@ -4,7 +4,7 @@ from django.db.models import Count
 from rest_framework import permissions, serializers
 
 from core import models
-from core.api.serializers.custom import MembersField, SingleUserField, TagRelatedField
+from core.api.serializers.custom import MembersField, TagRelatedField
 
 from .base import BaseProvider
 
@@ -14,7 +14,7 @@ class Serializer(serializers.ModelSerializer):
     members = MembersField()
     execs = MembersField()
     supervisors = MembersField()
-    owner = SingleUserField()
+    owners = MembersField()
 
     links = serializers.SlugRelatedField(
         slug_field="url",
@@ -44,7 +44,7 @@ class OrganizationProvider(BaseProvider):
     allow_new = False
     listing_filters = {
         "tags": int,
-        "owner": int,
+        "owners": int,
         "supervisors": int,
         "execs": int,
         "is_active": bool,
