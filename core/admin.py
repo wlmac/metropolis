@@ -137,7 +137,14 @@ class OrganizationURLInline(admin.StackedInline):
 
 
 class OrganizationAdmin(VersionAdmin):
-    list_display = ["name", "show_members", "is_open", "is_active", "display_owners"]
+    list_display = [
+        "name",
+        "slug",
+        "show_members",
+        "is_open",
+        "is_active",
+        "display_owners",
+    ]
     list_filter = ["is_open", "show_members", "tags", "is_active"]
     fields = [
         "name",
