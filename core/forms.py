@@ -190,10 +190,17 @@ class OrganizationAdminForm(forms.ModelForm):
     # TODO: refactor and/or move to org m2m_changed signal
     def clean(self):
         cleaned_data = super().clean()
-        owners = models.Organization.objects.get(pk=self.instance.pk).owners
+
+        if self.instance.pk is None:
+            owners = cleaned_data.get("owners")
+        else:
+            owners = cleaned_data.get("owners") or self.instance.owners.all()
         execs = cleaned_data.get("execs")
 
-        for owner in owners.all():
+        if owners is None:
+            return
+
+        for owner in owners:
             if execs is not None and owner not in execs:
                 raise forms.ValidationError(
                     {"execs": "The owner must also be an exec."}
