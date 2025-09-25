@@ -101,6 +101,15 @@ def reset_club_sups(modeladmin, request, queryset: QuerySet[Organization]):
         club.supervisors.clear()
 
 
+@admin.action(
+    permissions=["change"],
+    description=__("Replace club bios with placeholder text"),
+)
+@superuser_only
+def wipe_club_bios(modeladmin, request, queryset: QuerySet[Organization]):
+    queryset.update(bio="A WLMAC organization", extra_content="")
+
+
 # Posts
 @admin.action(
     permissions=["change"],

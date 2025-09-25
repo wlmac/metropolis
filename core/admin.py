@@ -45,6 +45,7 @@ from .utils.actions import (
     set_event_hidden,
     set_event_visible,
     normalize_late_start,
+    wipe_club_bios,
 )
 from .utils.admin import generic_post_formfield_for_manytomany
 from .utils.announcements import request_announcement_approval
@@ -175,6 +176,7 @@ class OrganizationAdmin(VersionAdmin):
         set_club_closed,
         reset_club_president,
         reset_club_execs,
+        wipe_club_bios,
     ]
     form = OrganizationAdminForm
 
