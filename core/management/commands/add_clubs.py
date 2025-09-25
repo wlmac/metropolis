@@ -15,6 +15,7 @@ import re
 import requests
 from django.core.management.base import BaseCommand
 from django.db import IntegrityError
+from django.db.models import Q
 
 from core.models import Organization, User
 
@@ -61,91 +62,131 @@ class Command(BaseCommand):
         csv_reader = csv.reader(StringIO(requests.get(sheets_url).text))
 
         expected_header = [
-            "CLUB NAME",
-            "APPROVED & MAILED",
-            "SAF PAID",
-            "PRESIDENT(S)",
-            "PRESIDENT(S) EMAIL",
-            "STAFF SUPERVISOR(S)",
-            "STAFF(S) EMAIL",
-            "BUDGET REQUEST",
-            "TIME + PLACE",
-            "SOCIAL LINKS",
+            "Timestamp",
+            "Email Address",
+            "Club/Council Name",
+            "President(s) - include grade",
+            "All Paid Activity Fee?",
+            "President(s) Email",
+            "Confirmation that all club/council executives have paid the mandatory student registration fee.",
+            "Staff Supervisor(s)",
+            "Staff Supervisor(s) Email",
+            "Description of Club/Council",
+            "Time + Place of Club/Council Meetings",
+            "Major Initiatives/Events",
+            "Social Media Links/Usernames",
+            "Approximate Budget Requested (include allocation + reasoning)",
+            "Declaration that this prospective club/council is willing to participate in Student Council Events.",
+            "President's Username",
+            "Supervisor's Username",
         ]
 
-        assert expected_header == next(csv_reader), (
+        header = next(csv_reader)
+
+        assert expected_header == header, (
             "Google Sheets layout changed since the last time the script was updated, please consult the backend team."
         )
 
-        skipped_orgs = []
+        skipped_data = []
         for row in csv_reader:
-            organization_is_not_approved = row[1] != "TRUE"
-            has_duplicate_owner = len(row[0]) == 0
-            if has_duplicate_owner:
-                # self.error(f"Skipping a row because it is a duplicate owner of the previously added club\n") # logging this is probably not necessary
-                continue
-            elif organization_is_not_approved:
-                self.error(f"Skipping {row[0]} because it is not approved\n")
-                continue
-
-            self.success(f"\nNew organization: {row[0]}")
             row = [token.strip() for token in row]
             (
+                _,
+                submitter_email,
                 organization_name,
                 _,
+                saf_paid,
+                owner_emails,
                 _,
-                owner_name,
-                owner_email,
-                staff_name,
-                staff_email,
                 _,
+                staff_emails,
+                description,
                 time_and_place,
+                _,
                 social_links,
+                _,
+                _,
+                owner_usernames,
+                staff_usernames,
             ) = row
 
-            club_owner = self.get_user_by_email(owner_name, owner_email)
-            if club_owner == "skipped":  # prevent a repeat of the same error message
-                skipped_orgs.append(organization_name)
+            if len(organization_name) == 0 or saf_paid != "YES":
+                self.warn(
+                    f"Skipping {organization_name} as it is either not a club or has not paid the SAF."
+                )
                 continue
 
-            supervisor_user = self.get_user_by_email(staff_name, staff_email)
+            self.success(f"\nNew organization: {organization_name}")
 
-            user_statuses = ""
+            owner_emails = self.extract_emails(owner_emails)
+            staff_emails = self.extract_emails(staff_emails)
 
-            if club_owner == "skipped":
-                user_statuses += "owner"
-            elif supervisor_user == "skipped":
-                user_statuses += "supervisor"
+            owner_users = []
+            supervisor_users = []
 
-            if user_statuses != "":
+            for owner_email in owner_emails:
+                user = self.get_user_by_email(owner_email, owner_usernames)
+                if user == "skipped":
+                    skipped_data.append(
+                        f"President user `{owner_email}` not found in club `{organization_name}`"
+                    )
+                    continue
+                owner_users.append(user)
+
+            for staff_email in staff_emails:
+                user = self.get_user_by_email(staff_email, staff_usernames)
+                if user == "skipped":
+                    skipped_data.append(
+                        f"Supervisor user `{staff_email}` not found in club `{organization_name}`"
+                    )
+                    continue
+                supervisor_users.append(user)
+
+            skip = False
+
+            if len(owner_users) == 0:
                 self.error(
-                    f"Skipping {organization_name} as {user_statuses} is not found\n"
+                    f"Skipping `{organization_name}` as there are no owners with emails `{owner_emails}`"
                 )
-                skipped_orgs.append(organization_name)
+                skipped_data.append(
+                    f"Skipped `{organization_name}` as there are no owners with emails `{owner_emails}`"
+                )
+                skip = True
+
+            if len(supervisor_users) == 0:
+                skipped_data.append(
+                    f"`{organization_name}` has no staff supervisor accounts with emails `{staff_emails}`"
+                )
+
+            if skip:
                 continue
 
             try:
-                # Consider updating the google sheets table so we can automatically fill out bio and slug and stuff - NOTE: (json) Planned by Crystal for the upcoming 25-26 school year.
-                # fmt: off
                 defaults = {
-                        "owner": club_owner,
-                        "name": organization_name,
-                        "extra_content": time_and_place + "\n\n" + social_links,
-                        "show_members": True,
-                        "is_active": True,
-                        "is_open": True,
-                        "applications_open": True,
-                    } # this singular comma gave me a run for my money. i have lost my family, my wealth, my sanity, and my soul from the inclusion of this character. 
-                # fmt: on
+                    "owners": owner_users,
+                    "name": organization_name,
+                    "extra_content": description + "\n\n" + time_and_place,
+                    "show_members": True,
+                    "is_active": True,
+                    "is_open": False,
+                    "applications_open": False,
+                }
 
-                # remove all non-alphanumeric or whitespace characters (a-z, A-Z, 0-9, space) and then replace spaces with dashes
-                slug = re.sub(
-                    r"[^a-zA-Z0-9\s]", "", organization_name.strip().casefold()
-                ).replace(" ", "-")
+                possible_slugs = self.get_slugs_from_name(organization_name)
 
-                if not Organization.objects.filter(slug=slug).exists():
-                    slug = self.get_corrected_slug_or_not(organization_name, slug)
+                slug = next(
+                    (
+                        Organization.objects.filter(slug=slug).first().slug
+                        for slug in set(possible_slugs)
+                        if Organization.objects.filter(slug=slug).exists()
+                    ),
+                    None,
+                )
 
+                slug = slug or self.get_corrected_slug_or_not(
+                    possible_slugs, organization_name
+                )
+                continue
                 if not options["dry_run"]:
                     club, created = Organization.objects.update_or_create(
                         slug=slug,
@@ -155,54 +196,83 @@ class Command(BaseCommand):
                             "bio": "A WLMAC organization",
                         },
                     )
-                    club.execs.add(club_owner)
-                    club.supervisors.add(supervisor_user)
+                    club.execs.add(owner_users)
+                    club.supervisors.add(supervisor_users)
 
                     status = "added" if created else "updated"
                 else:
                     status = "(dry-run | would have added)"
                 self.success(
-                    f"\tSuccessfully {status} '{organization_name}' organization (slug={slug}), owned by {owner_name}"
+                    f"\tSuccessfully {status} '{organization_name}' organization (slug={slug}), owned by {owner_users}, supervised by {supervisor_users}"
                 )
             except IntegrityError as IE:
                 self.error(IE.__traceback__)
             self.stdout.write()
 
-        self.warn(
-            f"Skipped {len(skipped_orgs)} organizations: \n\t{'\n\t'.join(skipped_orgs)}"
-        )
+        self.warn(f"Job finished with {len(skipped_data)} warnings:")
+        for warning in skipped_data:
+            self.warn(warning)
         self.success("Done!")
 
     type Status = "skipped"  # noqa: F821
 
-    def get_user_by_email(self, name: str, email: str) -> User | Status:
+    def extract_emails(self, emails: str) -> list[str]:
+        email_pattern = r"\S+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
+        return re.findall(email_pattern, emails)
+
+    def get_slugs_from_name(self, organization_name: str) -> list[str]:
+        # set to lowercase, remove all non-alphanumeric or whitespace characters (a-z 0-9, space) and then replace spaces with dashes
+        slugs = []
+        slug_lower = organization_name.strip().casefold()
+        slug = re.sub(r"[^a-zA-Z0-9\s]", "", slug_lower).replace(" ", "-")
+        slugs.append(slug)
+
+        # without "club" in name
+        slug = slug_lower.replace("club", "").replace("  ", " ").strip()
+        slug = re.sub(r"[^a-zA-Z0-9\s]", "", slug).replace(" ", "-")
+        slugs.append(slug)
+
+        return slugs
+
+    def get_user_by_email(self, email: str, fallback_data: str) -> User | Status:
         try:
-            return User.objects.get(email__iexact=email)
+            user = User.objects.get(email__iexact=email)
+            self.success(f"\tUser with email ({email}) found!")
+            return user
         except User.DoesNotExist:
             self.error(
-                f"\t{name}'s email ({email}) not found! Are you sure they registered a metro account with this email?"
+                f"\tEmail ({email}) not found! Are you sure they registered a metro account with this email?"
             )
+            self.stdout.write(f"\tData: {fallback_data}")
 
             self.stdout.write(
-                "\tIf you have the correct email, please enter it here (type 'skip' to skip this entry):"
+                "\tIf you have the correct email OR username, please enter it here (type 'skip' to skip this entry):"
             )
             while True:
                 try:
                     print("\t", end="")
-                    email = input().casefold()
-                    return User.objects.get(email=email)
+                    inp = input().casefold()
+                    return User.objects.get(
+                        Q(email__iexact=inp) | Q(username__iexact=inp)
+                    )
                 except User.DoesNotExist:
-                    if email == "skip":
+                    if inp == "skip":
                         return "skipped"
                     self.error(
-                        "\tUser not found. Did you make a typo? (type 'skip' to skip this entry)"
+                        "\tUser not found. Did you make a typo? (type 'skip' to skip this user)"
                     )
 
                     self.stdout.write("\tPlease re-enter email:")
 
-    def get_corrected_slug_or_not(self, organization_name: str, slug: str) -> str:
+    def get_corrected_slug_or_not(
+        self, possible_slugs: list[str], organization_name: str
+    ) -> str:
         self.warn(
-            f"\tCould not find '{organization_name}' with the slug '{slug}'. Please enter the correct slug if the organization exists or leave blank to create club"
+            f"\tCould not find '{organization_name}' with the any of the slugs: {set(possible_slugs)}. "
+        )
+
+        self.stdout.write(
+            f"\tPlease enter the correct slug if the organization exists or leave blank to create club with slug {possible_slugs[0]}:"
         )
 
         while True:
@@ -210,7 +280,7 @@ class Command(BaseCommand):
             new_slug = input()
 
             if new_slug == "":
-                return slug
+                return possible_slugs[0]
             elif Organization.objects.filter(slug=new_slug).exists():
                 return new_slug
             else:
