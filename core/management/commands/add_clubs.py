@@ -163,7 +163,6 @@ class Command(BaseCommand):
 
             try:
                 defaults = {
-                    "owners": owner_users,
                     "name": organization_name,
                     "extra_content": description + "\n\n" + time_and_place,
                     "show_members": True,
@@ -196,8 +195,10 @@ class Command(BaseCommand):
                             "bio": "A WLMAC organization",
                         },
                     )
-                    club.execs.add(owner_users)
-                    club.supervisors.add(supervisor_users)
+                    club.owners.set(owner_users)
+                    club.execs.set(owner_users)
+                    if len(supervisor_users) > 0:
+                        club.supervisors.set(supervisor_users)
 
                     status = "added" if created else "updated"
                 else:
@@ -254,9 +255,13 @@ class Command(BaseCommand):
                     inp = input().casefold()
                     if len(inp) == 0 or inp == "skip":
                         return "skipped"
-                    return User.objects.get(
+                    user = User.objects.get(
                         Q(email__iexact=inp) | Q(username__iexact=inp)
                     )
+                    self.success(
+                        f"\tUser with email/username ({user.email} | {user.username}) found!"
+                    )
+                    return user
                 except User.DoesNotExist:
                     self.error(
                         "\tUser not found. Did you make a typo? (type 'skip' to skip this user)"
