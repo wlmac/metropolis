@@ -186,7 +186,7 @@ class Command(BaseCommand):
                 slug = slug or self.get_corrected_slug_or_not(
                     possible_slugs, organization_name
                 )
-                continue
+
                 if not options["dry_run"]:
                     club, created = Organization.objects.update_or_create(
                         slug=slug,
@@ -252,12 +252,12 @@ class Command(BaseCommand):
                 try:
                     print("\t", end="")
                     inp = input().casefold()
+                    if len(inp) == 0 or inp == "skip":
+                        return "skipped"
                     return User.objects.get(
                         Q(email__iexact=inp) | Q(username__iexact=inp)
                     )
                 except User.DoesNotExist:
-                    if inp == "skip":
-                        return "skipped"
                     self.error(
                         "\tUser not found. Did you make a typo? (type 'skip' to skip this user)"
                     )
