@@ -42,7 +42,16 @@ const baseUrl = "https://docs.google.com/presentation/d/e/2PACX-1vQNq8m65FMtqEoG
 function setSlide() {
     i %= clubs.length;
     let club = clubs[i]
+    let slideIndex = clubOrder.indexOf(club.id);
     console.log("Club: ", club)
+    if (slideIndex < 0) {
+        console.warn(`Skipping: No slide mapping for club ${club.name} (${club.id})`);
+        i++
+        clearTimeout(timeout);
+        clearTimeout(timeout2);
+        setSlide()
+        return
+    }
 
     // Name + Logo
     document.getElementById("club-logo").src = club.icon
@@ -64,12 +73,7 @@ function setSlide() {
     document.getElementById("extra-content").innerHTML = DOMPurify.sanitize(marked.parse(club.extra_content))
 
     // Google slides map
-    let slideIndex = clubOrder.indexOf(club.id.toString());
-    if (slideIndex >= 0) {
-        document.getElementById("map").src = baseUrl + "&delayms=" + slideDelayMs + "&slide=" + (slideIndex + 1);
-    } else {
-        console.warn(`No slide mapping for club ${club.id}`);
-    }
+    document.getElementById("map").src = baseUrl + "&delayms=" + slideDelayMs + "&slide=" + (slideIndex + 1);
 
     // QR Code
     setQR(club.id)
