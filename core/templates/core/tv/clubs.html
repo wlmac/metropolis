@@ -25,8 +25,10 @@
                         </div>
                     </div>
                     <div class="club-header-text">
-                        <h2 id="club-name"></h2>
-                        <div id="tag-section"></div>
+                        <div>
+                            <h2 id="club-name"></h2>
+                            <div id="tag-section"></div>
+                        </div>
                     </div>
                 </div>
                 <p id="bio"></p>
@@ -34,18 +36,23 @@
                 <hr>
                 <div class="club-execs scrollable" id="scrollable1"></div> -->
                 <div class="scrollable" id="extra-content"></div>
-                <div id="qrcode" alt="QR code for the club"></div>
             </div>
-            <div class="club-detail">
-                <iframe id="map" src="" frameborder="0" height="535" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
-
+            <div class="right">
+                <iframe id="map" src="" frameborder="0" allowfullscreen="false" mozallowfullscreen="false" webkitallowfullscreen="false"></iframe>
+                
                 <!--<div class="description scrollable" id="scrollable2"></div>-->
                 <!-- <div class="location">
                     <object id="location"
-                            type="image/svg+xml"
-                            data="{% static 'core/img/tv/gen-map.svg' %}"></object>
+                    type="image/svg+xml"
+                    data="{% static 'core/img/tv/gen-map.svg' %}"></object>
                 </div> -->
-                <img id="made-by" src="{% static 'core/img/tv/made-by.png' %}" />
+                <div id="bottom-container">
+                    <div>
+                        <p id="qrcode-text">Club QR Code</p>
+                        <div id="qrcode" alt="QR code for the club"></div>
+                    </div>
+                    <img id="made-by" src="{% static 'core/img/tv/made-by.png' %}" />
+                </div>
             </div>
         </div>
     </div>
