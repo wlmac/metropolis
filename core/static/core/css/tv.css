@@ -11,14 +11,10 @@
     display: none;
 }
 .content {
-    display: flex;
-    height: calc(100vh - 50px);
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    height: 100vh;
     background-color: white;
-}
-#qrcode {
-    position: absolute;
-    left: 50%;
-    bottom: 2em;
 }
 .scrollable::-webkit-scrollbar {
     display: none;
@@ -26,42 +22,46 @@
 .scrollable {
     -ms-overflow-style: none;
     scrollbar-width: none;
-    /* overflow: auto; */
     overflow-wrap: anywhere;
-    height: 100%;
+    margin: 0 2rem;
 }
+
 .club-detail {
-    width: 50%;
-    margin-top: 20px;
-    margin: 50px;
-    overflow: auto;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.right {
+    width: 100%;
+    padding: 10px;
     display: flex;
     flex-direction: column;
+    height: 100vh;
 }
-.club-detail:nth-child(odd) {
-    margin-right: 25px;
-}
-.club-detail:nth-child(even) {
-    margin-left: 25px;
-}
+
 .club-header {
-    display: -webkit-box;
-    display: -ms-flexbox;
+    height: 30vh;
     display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    margin-bottom: 50px;
+    align-items: center;
 }
 .club-header-img {
-    width: 160px;
-    height: 160px;
+    width: 150px;
+    height: 150px;
+    margin-left: 12.5px;
     margin-right: 25px;
 }
+
+.club-header-text {
+    flex: 1;
+    height: 100%;
+
+    display: grid;
+    place-content: center left;;
+}
+
 .club-logo {
     overflow: visible;
     position: relative;
-    padding-bottom: 100%;
 }
 .club-logo img {
     -o-object-fit: cover;
@@ -69,8 +69,10 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 100%;
-    height: 100%;
+
+    height: 150px;
+    width: 150px;
+
     vertical-align: middle;
     -webkit-box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
             box-shadow: 0 2px 2px 0 rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%), 0 1px 5px 0 rgb(0 0 0 / 20%);
@@ -80,6 +82,7 @@
     font-weight: bold;
     font-size: calc(16px + 2vw);
     overflow-wrap: anywhere;
+    margin-top: 0;
 }
 #tag-section {
     display: -webkit-box;
@@ -109,10 +112,11 @@
 #bio {
     padding-left: 4%;
     border-left: black 3px solid;
-    margin: 0;
+    margin: 0 2rem;
     margin-bottom: 25px;
     font-size: 1.5em;
 }
+
 h3 {
     font-size: calc(16px + 0.8vw);
 }
@@ -146,9 +150,46 @@ hr {
 #exec-title {
     font-weight: 600;
 }
+
 #made-by {
+    width: 30em;
     object-fit: contain;
-    width: 20em;
-    margin-top: auto;
-    margin-left: auto;
+}
+
+#qrcode {
+    margin-left: 1rem;
+    height: 100%;
+}
+
+#qrcode svg {
+    height: 100%;
+    width: 100%;
+}
+
+#map {
+    width: 100%;
+    aspect-ratio: 9016 / 5380;   
+}
+
+#bottom-container {
+    margin-top: 10px;
+    flex: 1;
+    display: flex;
+    height: 0%; 
+
+    justify-content: space-around;
+    align-items: center;
+}
+
+#bottom-container > div {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+#qrcode-text {
+    font-size: calc(16px + 1.5vw);
+    font-weight: bold;
+    width: min-content;
+    text-align: center;
 }
