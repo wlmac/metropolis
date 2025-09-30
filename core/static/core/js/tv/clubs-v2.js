@@ -37,7 +37,7 @@ let prevClub
 let timeout;
 let timeout2;
 const slideDelayMs = 15 * 1000
-const baseUrl = "https://docs.google.com/presentation/d/e/2PACX-1vQNq8m65FMtqEoG_KuMvbEz9cXJgPpru5Nnkw-ymUuhxUIUw1T7-NDiAt31ypQhTvdsnurDxG_lTkA0/pubembed?start=false&loop=false"
+const baseUrl = "https://docs.google.com/presentation/d/e/2PACX-1vQNq8m65FMtqEoG_KuMvbEz9cXJgPpru5Nnkw-ymUuhxUIUw1T7-NDiAt31ypQhTvdsnurDxG_lTkA0/pubembed?start=false&loop=false&rm=minimal"
 
 function setSlide() {
     i %= clubs.length;
