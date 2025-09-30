@@ -26,7 +26,8 @@
 .scrollable {
     -ms-overflow-style: none;
     scrollbar-width: none;
-    overflow: auto;
+    /* overflow: auto; */
+    overflow-wrap: anywhere;
     height: 100%;
 }
 .club-detail {
