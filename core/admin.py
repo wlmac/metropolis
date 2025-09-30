@@ -140,6 +140,7 @@ class OrganizationURLInline(admin.StackedInline):
 class OrganizationAdmin(VersionAdmin):
     list_display = [
         "name",
+        "id",
         "slug",
         "show_members",
         "is_open",
