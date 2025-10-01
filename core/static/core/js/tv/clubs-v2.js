@@ -31,6 +31,17 @@ function setQR(clubId) {
     qrCode.append(document.getElementById("qrcode"));
 }
 
+function setProgressBar() {
+    let bar = document.getElementById("progress-bar");
+    bar.style.transition = "none";
+    bar.style.width = "100%";
+
+    void bar.offsetWidth;
+
+    bar.style.transition = `width ${slideDelayMs/1000}s linear`;
+    bar.style.width = "0%";
+}
+
 let clubs
 let i = 0
 let prevClub
@@ -52,6 +63,8 @@ function setSlide() {
         setSlide()
         return
     }
+
+    setProgressBar()
 
     // Name + Logo
     document.getElementById("club-logo").src = club.icon
