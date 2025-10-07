@@ -1,5 +1,6 @@
 import datetime
 
+from django.shortcuts import get_object_or_404
 from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -13,9 +14,14 @@ from ..utils.parse_date import parse_date_query_param
 class UserDetail(generics.RetrieveAPIView):
     queryset = models.User.objects.all()
     serializer_class = serializers.UserSerializer
-    lookup_field = "username__iexact"
+    lookup_field = "username"
     permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["user"]
+
+    def get_object(self):
+        username = self.kwargs.get(self.lookup_field)
+        obj = get_object_or_404(self.queryset, username__iexact=username)
+        return obj
 
 
 class UserMe(APIView):
