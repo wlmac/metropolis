@@ -165,10 +165,7 @@ class Command(BaseCommand):
                 defaults = {
                     "name": organization_name,
                     "extra_content": description + "\n\n" + time_and_place,
-                    "show_members": False,
                     "is_active": True,
-                    "is_open": False,
-                    "applications_open": False,
                 }
 
                 possible_slugs = self.get_slugs_from_name(organization_name)

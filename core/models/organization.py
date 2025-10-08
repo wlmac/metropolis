@@ -40,10 +40,7 @@ class Organization(models.Model):
     slug = models.SlugField(unique=True)
 
     registered_date = models.DateTimeField(auto_now_add=True)
-    show_members = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
-    is_open = models.BooleanField(default=True)
-    applications_open = models.BooleanField(default=False)
     tags = models.ManyToManyField(
         "Tag",
         blank=True,

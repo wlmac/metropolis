@@ -63,14 +63,6 @@ def set_club_active(modeladmin, request, queryset: QuerySet[Organization]):
 
 
 @admin.action(
-    description=__("Set the selected clubs to closed+hidden membership"),
-)
-@superuser_only
-def set_club_closed(modeladmin, request, queryset: QuerySet[Organization]):
-    queryset.update(is_open=False, applications_open=False, show_members=False)
-
-
-@admin.action(
     permissions=["change"],
     description=__("Set selected club's president to a temp user."),
 )

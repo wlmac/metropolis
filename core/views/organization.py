@@ -33,7 +33,7 @@ class OrganizationDetail(DetailView, mixins.TitleMixin):
         return self.get_object().name
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated or not self.get_object().is_open:
+        if not request.user.is_authenticated:
             return HttpResponseForbidden()
         if self.get_object() in request.user.organizations.all():
             request.user.organizations.remove(self.get_object())

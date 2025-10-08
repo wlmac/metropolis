@@ -434,10 +434,7 @@ properties:
   extra_content: { type: string }
   slug: { type: string }
   registered_date: { type: string, format: date-time }
-  show_members: { type: boolean }
   is_active: { type: boolean }
-  is_open: { type: boolean }
-  applications_open: { type: boolean }
   tags:
     type: array
     items:

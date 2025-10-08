@@ -48,7 +48,6 @@ class OrganizationProvider(BaseProvider):
         "supervisors": int,
         "execs": int,
         "is_active": bool,
-        "is_open": bool,
     }
     additional_lookup_fields = ["slug"]
     raw_serializers = {

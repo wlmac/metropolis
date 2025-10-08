@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="col m4 s12">
-                        {% if user.is_authenticated and organization.is_open %}
+                        {% if user.is_authenticated %}
                             <form method="POST" class="member-button">
                                 {% csrf_token %}
                                 {% if organization not in request.user.organizations.all %}
@@ -84,10 +84,11 @@
                                 {% endfor %}
                             </div>
                         </section>
+                        <!-- TODO -->
                         <section id="members">
-                            <h4>Members</h4>
+                            <!-- <h4>Members</h4> -->
                             <hr>
-                            {% if organization.show_members %}
+                            {% if False %} 
                                 <div class="members-list">
                                     {% for i in organization.members.all %}
                                         <a href="{{ i.username|user_url }}">
@@ -107,7 +108,7 @@
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                <p>This organisation's settings do not allow showing its member list.</p>
+                                <!-- <p>This organisation's settings do not allow showing its member list.</p> -->
                             {% endif %}
                         </section>
                     </div>
