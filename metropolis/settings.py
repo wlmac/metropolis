@@ -341,6 +341,7 @@ MARTOR_MARKDOWN_EXTENSIONS = [
     "markdown.extensions.fenced_code",
     "martor.extensions.escape_html",
     "martor.extensions.urlize",
+    "martor.extensions.mdx_video",
     "core.markdown.embed",
     "core.markdown.emoji",
 ]
