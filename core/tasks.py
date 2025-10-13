@@ -4,7 +4,6 @@ from pathlib import Path
 
 import pytz
 import requests
-from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.db.models import F, JSONField, Q, Value
@@ -64,22 +63,6 @@ for m in ("get", "options", "head", "post", "put", "patch", "delete"):
 
 def users_with_token():
     return User.objects.exclude(Q(expo_notif_tokens=Value({}, JSONField())))
-
-
-@app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(crontab(hour=0, minute=0), delete_expired_users)
-    sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
-    sender.add_periodic_task(crontab(day_of_month=1), run_group_migrations)
-    sender.add_periodic_task(
-        crontab(hour=1, minute=0), oauth2_clear_expired
-    )  # Delete expired oauth2 tokens from db everyday at 1am
-
-    sender.add_periodic_task(
-        crontab(hour=8, minute=0, day_of_week="mon-fri"), fetch_announcements
-    )
-
-    sender.add_periodic_task(crontab(hour=4, minute=0), fetch_calendar_events)
 
 
 @app.task
@@ -383,6 +366,7 @@ def fetch_announcements():
 
 @app.task
 def fetch_calendar_events():
+    raise Exception
     try:
         url = f"https://www.googleapis.com/calendar/v3/calendars/{settings.GCAL_CID}/events"
         url += "?fields=items(id,status,summary,description,start,end)"

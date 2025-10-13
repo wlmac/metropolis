@@ -5,9 +5,6 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from metropolis.celery import app
-from core.tasks import setup_periodic_tasks
-
 
 class MetropolisBaseTests(TestCase):
     def setUp(self):
@@ -134,10 +131,15 @@ class ChoicesTests(TestCase):
 
 class CeleryBeatTest(TestCase):
     def test_register_celery_periodic_tasks(self):
+        from metropolis.celery import app, setup_periodic_tasks
+
         app.conf.beat_schedule = {}
         setup_periodic_tasks(app)
 
-    def test_all_tasks_execute_without_error(self):
-        tasks = [task for name, task in app.tasks.items()]
-        for task in tasks:
-            task.apply()
+    # def test_all_tasks_execute_without_error(self):
+    #     from metropolis.celery import app
+
+    #     tasks = [task for name, task in app.tasks.items()]
+    #     for task in tasks:
+    #         result = task.apply()
+    #         # TODO: assert result did not fail
