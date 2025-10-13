@@ -15,8 +15,9 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    import core.tasks as tasks
     from celery.schedules import crontab
+
+    import core.tasks as tasks
 
     sender.add_periodic_task(crontab(hour=0, minute=0), tasks.delete_expired_users)
     sender.add_periodic_task(crontab(hour=18, minute=0), tasks.notif_events_singleday)

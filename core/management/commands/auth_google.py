@@ -1,8 +1,10 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
-from core.tasks import load_client
 from pathlib import Path
+
 import gspread
+from django.conf import settings
+from django.core.management.base import BaseCommand, CommandError
+
+from core.tasks import load_client
 
 
 class Command(BaseCommand):

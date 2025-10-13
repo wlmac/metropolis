@@ -1,7 +1,9 @@
 import datetime as dt
 import functools
+from json import dumps, loads
 from pathlib import Path
 
+import gspread
 import pytz
 import requests
 from celery.utils.log import get_task_logger
@@ -17,26 +19,22 @@ from exponent_server_sdk import (
     PushMessage,
     PushTicketError,
 )
+from google import genai
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 from oauth2_provider.models import clear_expired
 from requests.exceptions import ConnectionError, HTTPError
-
-import gspread
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
-
-from google import genai
-from json import dumps, loads
 
 from core.models import (
     Announcement,
     BlogPost,
     Comment,
+    DailyAnnouncement,
     Event,
+    Organization,
+    Tag,
     Term,
     User,
-    Organization,
-    DailyAnnouncement,
-    Tag,
 )
 from core.utils.tasks import get_random_username
 from metropolis.celery import app

@@ -9,8 +9,8 @@ Usage:
 from __future__ import annotations
 
 import csv
-from io import StringIO
 import re
+from io import StringIO
 
 import requests
 from django.core.management.base import BaseCommand
