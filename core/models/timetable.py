@@ -11,6 +11,10 @@ def get_default_timetable_format():
     return settings.DEFAULT_TIMETABLE_FORMAT
 
 
+def default_courses():
+    return [f"Period {i+1}" for i in range(4)]
+
+
 class Timetable(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -19,11 +23,20 @@ class Timetable(models.Model):
     )
     term = models.ForeignKey(Term, on_delete=models.RESTRICT, related_name="timetables")
     courses = models.ManyToManyField(Course, related_name="timetables")
+    title = models.CharField(max_length=64, blank=False, default="New timetable")
+    courses_str = models.JSONField(blank=True, default=default_courses)
 
     def __str__(self):
         return (
             f"{self.owner.get_full_name()} ({self.owner})'s Timetable for {self.term}"
         )
+
+    def save(self, *args, **kwargs):
+        # TODO: Drop timetable if owner makes too many?
+        self.title = f"{self.term}"
+        if self.pk:
+            self.courses_str = list(self.courses.values_list("code", flat=True))
+        super().save(*args, **kwargs)
 
     def day_schedule(self, target_date=None):
         target_date = utils.get_localdate(date=target_date)
