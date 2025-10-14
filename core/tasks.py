@@ -18,7 +18,6 @@ from exponent_server_sdk import (
     PushMessage,
     PushTicketError,
 )
-from oauth2_provider.models import clear_expired
 from requests.exceptions import ConnectionError, HTTPError
 
 import gspread
@@ -309,6 +308,8 @@ def load_client() -> tuple[gspread.Client | None, str | None, bool]:
 
 @app.task
 def oauth2_clear_expired():
+    from oauth2_provider.models import clear_expired
+
     clear_expired()
 
 
