@@ -65,7 +65,7 @@ def users_with_token():
     return User.objects.exclude(Q(expo_notif_tokens=Value({}, JSONField())))
 
 
-@app.on_after_configure.connect
+@app.on_after_finalize.connect
 def setup_periodic_tasks(sender, **kwargs):
     sender.add_periodic_task(crontab(hour=0, minute=0), delete_expired_users)
     sender.add_periodic_task(crontab(hour=18, minute=0), notif_events_singleday)
