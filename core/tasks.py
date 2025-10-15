@@ -452,29 +452,41 @@ def fetch_calendar_events():
 
                 event_data = {
                     "name": gcal_event.get("summary").strip(),
-                    "organization": Organization.objects.get(pk=2),
                     "term": Term.get_current(start_date),
                     "description": gcal_event.get("description") or "",
                     "start_date": start_date,
                     "end_date": end_date,
-                    "schedule_format": "default",
-                    "is_public": True,
                 }
 
-                events.append(
-                    (
-                        Event.objects.update_or_create(
-                            gcal_id=gcal_event.get("id"),
-                            defaults=event_data,
-                        )[0],
-                        all_day_event,
-                    )
+                event_create_data = event_data | {
+                    "organization": Organization.objects.get(
+                        pk=2
+                    ),  # SAC: https://maclyonsden.com/c/2
+                    "is_public": True,
+                    "schedule_format": "default",
+                }
+
+                event, created = Event.objects.update_or_create(
+                    gcal_id=gcal_event.get("id"),
+                    create_defaults=event_create_data,
+                    defaults=event_data,
                 )
+
+                if created:
+                    events.append(
+                        (
+                            event,
+                            all_day_event,
+                        )
+                    )
 
         except Exception:
             logger.warning(
                 f"core.tasks.fetch_calendar_events: Failed to parse Google Calendar event data for event {gcal_event.get('summary')}"
             )
+
+    if len(events) == 0:
+        return
 
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
     model = "models/gemini-2.0-flash"
@@ -488,9 +500,7 @@ def fetch_calendar_events():
         "available_tags": [tag.name for tag in Tag.objects.all()],
         "new_events": [],
         "available_schedule_formats": list(
-            settings.TIMETABLE_FORMATS[events[0][0].term.timetable_format][
-                "schedules"
-            ].keys()
+            settings.TIMETABLE_FORMATS["2024-2025"]["schedules"].keys()
         ),
     }
 
