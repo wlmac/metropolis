@@ -384,6 +384,8 @@ def fetch_announcements():
 
 @app.task
 def fetch_calendar_events():
+    import traceback
+
     try:
         url = f"https://www.googleapis.com/calendar/v3/calendars/{settings.GCAL_CID}/events"
         url += "?fields=items(id,status,summary,description,start,end)"
@@ -406,10 +408,8 @@ def fetch_calendar_events():
 
         gcal_eventlist = response.json().get("items", [])
 
-    except Exception:
-        logger.warning(
-            "core.tasks.fetch_calendar_events: Failed to fetch Google Calendar event data"
-        )
+    except Exception as exc:
+        logger.warning(f"Fetch Calendar Events: {exc}")
         return
 
     events = []
@@ -482,7 +482,8 @@ def fetch_calendar_events():
 
         except Exception:
             logger.warning(
-                f"core.tasks.fetch_calendar_events: Failed to parse Google Calendar event data for event {gcal_event.get('summary')}"
+                f"core.tasks.fetch_calendar_events: Failed to process event {gcal_event.get('id')}"
+                + f"\n{traceback.format_exc()}"
             )
 
     if len(events) == 0:
@@ -536,9 +537,7 @@ def fetch_calendar_events():
         tags = {}
 
     except Exception:
-        logger.warning(
-            "core.tasks.fetch_calendar_events: Failed to get valid response from gemini for tags"
-        )
+        logger.warning(traceback.format_exc())
 
     for event, _ in events:
         try:
@@ -550,9 +549,7 @@ def fetch_calendar_events():
 
             event.save()
         except Exception:
-            logger.warning(
-                f"core.tasks.fetch_calendar_events: Failed to tag event with gcal_id of {event.gcal_id}"
-            )
+            logger.warning(traceback.format_exc())
 
     prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately set the start and ending time for events based on the information in the title or description of the event. In addition, you will also set the schedule format (E.g pa days, holidays, etc).  Accuracy and consistency are paramount. You will be provided an array of events below. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available schedule formats will be provided as an array below. You can only choose from the the array provided. All day will be referring to the entire school day (9:00 to 15:15). Holidays, P.A days, late starts and similar events will last all day. Period 1 (P1) lasts from 9:00 to 10:20. Period 2 (P2) lasts from 10:25 to 11:40. Period 3 (P3) lasts from 12:40 to 13:55. Period 4 (P4) lasts from 14:00 to 15:15. The latest that any event finish at is 18:00 unless directly specified in the event. When outputting, output a single json object. The keys of the json object will match an id of an event that needs to have their time set and the value will be an array with three values, the starting, ending time and schedule format. Use 24h hour format for time. If the event title and description does not provide enough information to determine the starting or ending time, set both to be null. Default to default for the schedule format if you do not think any other schedule format is applicable. Do not output anything besides the tags.\nAvailable Schedule Formats: {data_for_llm['available_schedule_formats']} \nEvents: {dumps(data_for_llm['new_events'])}"
 
@@ -566,9 +563,7 @@ def fetch_calendar_events():
         response = loads(response)
 
     except Exception:
-        logger.warning(
-            "core.tasks.fetch_calendar_events: Failed to get valid response from gemini for time and schedule format"
-        )
+        logger.warning(traceback.format_exc())
 
     for event, all_day_event in events:
         if not all_day_event:
@@ -597,6 +592,4 @@ def fetch_calendar_events():
             event.save()
 
         except Exception:
-            logger.warning(
-                f"core.tasks.fetch_calendar_events: Failed to set time or schedule format for event with gcal_id of {event.gcal_id}"
-            )
+            logger.warning(traceback.format_exc())
