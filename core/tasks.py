@@ -455,13 +455,13 @@ def fetch_calendar_events():
             all_day_event = gcal_start.get("dateTime") is None
 
             if all_day_event:
-                start_date = timezone.make_aware(
+                start_dtime = timezone.make_aware(
                     dt.datetime.combine(
                         dt.date.fromisoformat(gcal_start.get("date")),
                         dt.time(0, 0),
                     )
                 )
-                end_date = timezone.make_aware(
+                end_dtime = timezone.make_aware(
                     dt.datetime.combine(
                         dt.date.fromisoformat(gcal_end.get("date"))
                         + dt.timedelta(days=-1),
@@ -469,8 +469,8 @@ def fetch_calendar_events():
                     )
                 )
             else:
-                start_date = dt.datetime.fromisoformat(gcal_start.get("dateTime"))
-                end_date = dt.datetime.fromisoformat(gcal_end.get("dateTime"))
+                start_dtime = dt.datetime.fromisoformat(gcal_start.get("dateTime"))
+                end_dtime = dt.datetime.fromisoformat(gcal_end.get("dateTime"))
 
             event_term = next(
                 (
@@ -478,8 +478,8 @@ def fetch_calendar_events():
                     for term in terms
                     if (
                         term.start_date
-                        <= start_date.date()
-                        <= end_date.date()
+                        <= start_dtime.date()
+                        <= end_dtime.date()
                         <= term.end_date
                     )
                 ),
@@ -509,6 +509,8 @@ def fetch_calendar_events():
                     gcal_id=gcal_id,
                     **event_data,
                     organization=school_org,
+                    start_date=start_dtime,
+                    end_date=end_dtime,
                     is_public=False,  # whitelist in admin
                     schedule_format="default",
                 )
