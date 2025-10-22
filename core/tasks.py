@@ -389,11 +389,13 @@ def fetch_calendar_events():
     try:
         url = f"https://www.googleapis.com/calendar/v3/calendars/{settings.GCAL_CID}/events"
         url += "?fields=items(id,status,summary,description,start,end)"
+        timeMin = dt.datetime.now(dt.UTC) + dt.timedelta(days=-30)
+        timeMax = dt.datetime.now(dt.UTC) + dt.timedelta(days=60)
         params = {
             "key": settings.GCAL_API_KEY,
             "orderBy": "startTime",
-            "timeMin": (dt.datetime.now(dt.UTC) + dt.timedelta(days=-30)).isoformat(),
-            "timeMax": (dt.datetime.now(dt.UTC) + dt.timedelta(days=60)).isoformat(),
+            "timeMin": timeMin.isoformat(),
+            "timeMax": timeMax.isoformat(),
             "eventTypes": "default",
             "singleEvents": "True",
             "showDeleted": "True",
@@ -412,79 +414,134 @@ def fetch_calendar_events():
         logger.warning(f"Fetch Calendar Events: {exc}")
         return
 
-    events = []
+    school_org = Organization.objects.get(pk=2)  # SAC: https://maclyonsden.com/c/2
+
+    existing_events = {
+        event.gcal_id: event
+        for event in Event.objects.filter(
+            gcal_id__isnull=False,
+            start_date__gte=timeMin.isoformat(),
+            end_date__lte=timeMax.isoformat(),
+        )
+    }
+    terms = list(
+        Term.objects.filter(
+            end_date__gte=timeMin.date().isoformat(),
+            start_date__lte=timeMax.date().isoformat(),
+        )
+    )
+
+    events_to_create = []
+    events_to_update = []
+    events_to_delete = []
 
     for gcal_event in gcal_eventlist:
         if gcal_event.get("summary").strip().lower() in ["day 1", "day 2"]:
             continue
 
         try:
-            event = Event.objects.filter(gcal_id=gcal_event.get("id")).first()
+            gcal_id = gcal_event.get("id")
             status = gcal_event.get("status")
+            existing_event = existing_events.get(gcal_id)
 
-            if event is not None and (status is None or status == "cancelled"):
-                event.delete()
+            if existing_event is not None and (status is None or status == "cancelled"):
+                events_to_delete.append(existing_event)
 
-            elif status == "confirmed":
-                all_day_event = gcal_event.get("start").get("dateTime") is None
+            if status != "confirmed":
+                continue
 
-                if all_day_event:
-                    start_date = timezone.make_aware(
-                        dt.datetime.combine(
-                            dt.date.fromisoformat(gcal_event.get("start").get("date")),
-                            dt.time(0, 0),
-                        )
+            gcal_start = gcal_event.get("start")
+            gcal_end = gcal_event.get("end")
+            all_day_event = gcal_start.get("dateTime") is None
+
+            if all_day_event:
+                start_date = timezone.make_aware(
+                    dt.datetime.combine(
+                        dt.date.fromisoformat(gcal_start.get("date")),
+                        dt.time(0, 0),
                     )
-                    end_date = timezone.make_aware(
-                        dt.datetime.combine(
-                            dt.date.fromisoformat(gcal_event.get("end").get("date"))
-                            + dt.timedelta(days=-1),
-                            dt.time(23, 59),
-                        )
-                    )
-                else:
-                    start_date = dt.datetime.fromisoformat(
-                        gcal_event.get("start").get("dateTime")
-                    )
-                    end_date = dt.datetime.fromisoformat(
-                        gcal_event.get("end").get("dateTime")
-                    )
-
-                event_data = {
-                    "name": gcal_event.get("summary").strip(),
-                    "term": Term.get_current(start_date),
-                    "description": gcal_event.get("description") or "",
-                    "start_date": start_date,
-                    "end_date": end_date,
-                }
-
-                event_create_data = event_data | {
-                    "organization": Organization.objects.get(
-                        pk=2
-                    ),  # SAC: https://maclyonsden.com/c/2
-                    "is_public": True,
-                    "schedule_format": "default",
-                }
-
-                event, created = Event.objects.update_or_create(
-                    gcal_id=gcal_event.get("id"),
-                    create_defaults=event_create_data,
-                    defaults=event_data,
                 )
-
-                if created:
-                    events.append(
-                        (
-                            event,
-                            all_day_event,
-                        )
+                end_date = timezone.make_aware(
+                    dt.datetime.combine(
+                        dt.date.fromisoformat(gcal_end.get("date"))
+                        + dt.timedelta(days=-1),
+                        dt.time(23, 59),
                     )
+                )
+            else:
+                start_date = dt.datetime.fromisoformat(gcal_start.get("dateTime"))
+                end_date = dt.datetime.fromisoformat(gcal_end.get("dateTime"))
+
+            event_term = next(
+                (
+                    term
+                    for term in terms
+                    if (
+                        term.start_date
+                        <= start_date.date()
+                        <= end_date.date()
+                        <= term.end_date
+                    )
+                ),
+                None,
+            )
+
+            event_data = {
+                "name": gcal_event.get("summary").strip(),
+                "term": event_term,
+                "description": gcal_event.get("description") or "",
+            }
+
+            if "late start" in event_data["name"].lower():
+                event_data["name"] = "Late Start"
+
+            if existing_event is not None:
+                changed = any(
+                    getattr(existing_event, field) != value
+                    for field, value in event_data.items()
+                )
+                if changed:
+                    for field, value in event_data.items():
+                        setattr(existing_event, field, value)
+                    events_to_update.append(existing_event)
+            else:
+                event = Event(
+                    gcal_id=gcal_id,
+                    **event_data,
+                    organization=school_org,
+                    is_public=False,  # whitelist in admin
+                    schedule_format="default",
+                )
+                events_to_create.append(event)
 
         except Exception:
             logger.warning(
                 f"core.tasks.fetch_calendar_events: Failed to process event {gcal_event.get('id')}"
                 + f"\n{traceback.format_exc()}"
             )
+
+    from django.db import transaction
+
+    with transaction.atomic():
+        if events_to_delete:
+            Event.objects.filter(id__in=[e.id for e in events_to_delete]).delete()
+
+        if events_to_update:
+            Event.objects.bulk_update(events_to_update, list(event_data.keys()))
+
+        if events_to_create:
+            # Event.objects.bulk_create(events_to_create, ignore_conflicts=True) # no logging? *megamind peeking*
+            for event in events_to_create:
+                try:
+                    event.save()
+                except Exception:
+                    events_to_create.remove(event)
+                    logger.warning(
+                        f"core.tasks.fetch_calendar_events: Failed to create event {event.name}"
+                        + f"\n{traceback.format_exc()}"
+                    )
+
+    events = events_to_create + events_to_update
 
     if len(events) == 0:
         return
