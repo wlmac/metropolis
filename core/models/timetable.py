@@ -12,7 +12,7 @@ def get_default_timetable_format():
 
 
 def default_courses():
-    return [f"Period {i+1}" for i in range(4)]
+    return [f"Period {i + 1}" for i in range(4)]
 
 
 class Timetable(models.Model):
