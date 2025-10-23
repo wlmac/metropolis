@@ -31,7 +31,7 @@ from .views.timetable import (
     CourseCreate,
     TimetableCreate,
     TimetableList,
-    TimetableUpdate,
+    TimetableEditor,
 )
 from .views.tv import TVClubView, TVView
 from .views.user import Profile, ProfileRedirect, ProfileUpdate
@@ -54,13 +54,18 @@ urlpatterns = [
     path("api/", include("core.api.urls")),
     path("timetable", TimetableList.as_view(), name="timetable_list"),
     path(
+        "timetable/new/",
+        TimetableEditor.as_view(),
+        name="timetable_new",
+    ),
+    path(
         "timetable/add/term/<int:pk>",
         TimetableCreate.as_view(),
         name="timetable_create",
     ),
     path(
         "timetable/edit/<int:pk>",
-        TimetableUpdate.as_view(),
+        TimetableEditor.as_view(),
         name="timetable_update",
     ),
     path(

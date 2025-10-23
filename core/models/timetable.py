@@ -12,7 +12,7 @@ def get_default_timetable_format():
 
 
 def default_courses():
-    return [f"Period {i + 1}" for i in range(4)]
+    return ["" for i in range(4)]
 
 
 class Timetable(models.Model):
@@ -27,15 +27,10 @@ class Timetable(models.Model):
     courses_str = models.JSONField(blank=True, default=default_courses)
 
     def __str__(self):
-        return (
-            f"{self.owner.get_full_name()} ({self.owner})'s Timetable for {self.term}"
-        )
+        return f"{self.owner.get_full_name()} ({self.owner})'s Timetable '{self.title}'"
 
     def save(self, *args, **kwargs):
         # TODO: Drop timetable if owner makes too many?
-        self.title = f"{self.term}"
-        if self.pk:
-            self.courses_str = list(self.courses.values_list("code", flat=True))
         super().save(*args, **kwargs)
 
     def day_schedule(self, target_date=None):

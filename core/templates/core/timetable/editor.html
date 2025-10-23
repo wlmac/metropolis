@@ -1,0 +1,47 @@
+{% extends 'core/secondary.html' %}
+{% load static %}
+{% load timetable_tags %}
+{% load admin_urls %}
+{% block content %}
+    <div class="white-bg">
+        <div class="card-body">
+            <form method="post">
+                <h5 class="card-title">
+                    <strong>Edit Timetable</strong>
+                </h5>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <span class="card-title"><strong>{{ timetable.term.name }}</strong></span>
+                    <div class="card-body timetable-details"
+                        id="card-body-{{ forloop.counter }}"
+                        hidden>
+                        <p>Hello World</p>
+                    </div>
+                </div>
+                {{ form.as_p }}
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary mr-2">
+                        {% if is_edit %}Update{% else %}Create{% endif %}
+                    </button>
+                    <a href="{% url 'timetable_list' %}"
+                       class="btn btn-primary"
+                       role="button"
+                       aria-pressed="true">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block hd %}
+    <link rel="stylesheet" href="{% static 'core/css/timetable/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/timetable/edit.css' %}" />
+    <!-- <script>
+        $(function(){
+            $("#id_courses").attr("data-minimum-input-length", 0).select2({
+                minimumInputLength: 0
+            })
+        })
+    </script> -->
+    {{ form.media.css }}
+    <!-- {{ form.media.js }} -->
+{% endblock %}

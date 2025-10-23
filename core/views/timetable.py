@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, FormView
 from django.views.generic.edit import CreateView, FormMixin, UpdateView
 
 from core import models
@@ -10,6 +10,7 @@ from core.forms import (
     AddCourseForm,
     AddTimetableSelectTermForm,
     TimetableSelectCoursesForm,
+    TimetableCreateOrUpdateForm,
 )
 
 from . import mixins
@@ -41,6 +42,45 @@ class TimetableList(LoginRequiredMixin, ListView, FormMixin, mixins.TitleMixin):
         kwargs = super().get_form_kwargs()
         kwargs["user"] = self.request.user
         return kwargs
+
+
+class TimetableEditor(
+    LoginRequiredMixin, UserPassesTestMixin, FormView, mixins.TitleMixin
+):
+    template_name = "core/timetable/editor.html"
+    title = "Timetable Editor"
+    form_class = TimetableCreateOrUpdateForm
+    success_url = reverse_lazy("timetable_list")
+
+    def get_object(self):
+        pk = self.kwargs.get("pk")
+        if not pk:
+            return None
+        return get_object_or_404(models.Timetable, pk=pk, owner=self.request.user)
+
+    def test_func(self):
+        return True
+        # obj = self.get_object()
+        # return obj is None or obj.owner == self.request.user
+
+    def form_valid(self, form):
+        timetable = form.save(commit=False)
+        timetable.owner = self.request.user
+        timetable.save()
+
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        instance = self.get_object()
+        if instance:
+            kwargs["instance"] = instance
+        return kwargs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_edit"] = self.get_object() is not None
+        return context
 
 
 class TimetableCreate(

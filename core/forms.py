@@ -70,6 +70,45 @@ class MetropolisSignupForm(SignupForm, CaseInsensitiveUsernameMixin):
         return graduating_year
 
 
+class TimetableCreateOrUpdateForm(forms.ModelForm):
+    class Meta:
+        model = models.Timetable
+        fields = ["title"]
+        widgets = {
+            "title": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "autofocus": True,
+                    "placeholder": "Title",
+                }
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(TimetableCreateOrUpdateForm, self).__init__(*args, **kwargs)
+
+        for i in range(4):
+            self.fields[f"course_{i + 1}"] = forms.CharField(
+                initial=f"{self.instance.courses_str[i]}",
+                widget=forms.TextInput(
+                    attrs={
+                        "class": "form-control",
+                        "placeholder": f"Period {i + 1} Class",
+                    }
+                ),
+            )
+
+    def clean(self, *args, **kwargs):
+        cleaned_data = super().clean(*args, **kwargs)
+        courses_str = [cleaned_data[f"course_{i + 1}"].strip() for i in range(4)]
+        cleaned_data["courses_str"] = courses_str
+        return cleaned_data
+
+    def save(self, commit=True):
+        self.instance.courses_str = self.cleaned_data["courses_str"]
+        return super(TimetableCreateOrUpdateForm, self).save(commit)
+
+
 class AddTimetableSelectTermForm(forms.Form):
     term = forms.ModelChoiceField(queryset=models.Term.objects.none())
 

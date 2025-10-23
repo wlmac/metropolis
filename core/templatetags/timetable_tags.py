@@ -36,11 +36,10 @@ def render_timetable(timetable):
                         (
                             (
                                 (
-                                    courses[
-                                        position_day.intersection(courses.keys()).pop()
+                                    timetable.courses_str[
+                                        position_day.intersection({1, 2, 3, 4}).pop()
+                                        - 1
                                     ]
-                                    if position_day.intersection(courses.keys())
-                                    else "-"
                                 ),
                             )
                             for position_day in schedule_day["position"]

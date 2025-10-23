@@ -22,7 +22,12 @@
         <br>
         <div class="timetable-add-container">
             <div class="card-body">
-                <form method="post">
+                <div class="mt-3">
+                    <a href="{% url 'timetable_new' %}"
+                       class="btn mr-2"
+                       style="letter-spacing: 0">New timetable</a>
+                </div>
+                <!-- <form method="post">
                     <h5 class="card-title">Add timetable</h5>
                     <hr>
                     {% csrf_token %}
@@ -37,7 +42,7 @@
                            role="button"
                            aria-pressed="true">Cancel</a>
                     </div>
-                </form>
+                </form> -->
             </div>
         </div>
     </div>
