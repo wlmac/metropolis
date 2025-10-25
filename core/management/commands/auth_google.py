@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from core.tasks import load_client
 from pathlib import Path
 import gspread
+
+from core.tasks import load_creds
 
 
 class Command(BaseCommand):
@@ -14,9 +15,9 @@ class Command(BaseCommand):
         CLIENT_PATH = SECRETS_PATH + "/client_secret.json"
         AUTHORIZED_PATH = SECRETS_PATH + "/authorized_user.json"
 
-        client, error_msg, client_path_exists = load_client()
+        creds, error_msg, client_path_exists = load_creds()
 
-        if client is None:
+        if creds is None:
             if not client_path_exists:
                 raise CommandError(error_msg)
             elif Path(AUTHORIZED_PATH).is_file():
@@ -29,7 +30,7 @@ class Command(BaseCommand):
                 Path(AUTHORIZED_PATH).unlink()
 
             try:
-                scopes = gspread.auth.READONLY_SCOPES
+                scopes = settings.GOOGLE_SCOPES
 
                 gspread.oauth(
                     credentials_filename=CLIENT_PATH,
