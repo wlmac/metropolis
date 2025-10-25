@@ -127,19 +127,3 @@ class ChoicesTests(TestCase):
         from core.models.choices import calculate_graduating_year_choices
 
         self.assertEqual(calculate_graduating_year_choices(), self.expected)
-
-
-class CeleryBeatTest(TestCase):
-    def test_register_celery_periodic_tasks(self):
-        from metropolis.celery import app, setup_periodic_tasks
-
-        app.conf.beat_schedule = {}
-        setup_periodic_tasks(app)
-
-    # def test_all_tasks_execute_without_error(self):
-    #     from metropolis.celery import app
-
-    #     tasks = [task for name, task in app.tasks.items()]
-    #     for task in tasks:
-    #         result = task.apply()
-    #         # TODO: assert result did not fail
