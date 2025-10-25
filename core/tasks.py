@@ -544,6 +544,10 @@ def fetch_calendar_events():
                     )
 
     events = events_to_create + events_to_update
+    del existing_events
+    del events_to_create
+    del events_to_update
+    del events_to_delete
 
     if len(events) == 0:
         return
@@ -577,7 +581,7 @@ def fetch_calendar_events():
             }
         )
 
-    for event, _ in events:
+    for event in events:
         data_for_llm["new_events"].append(
             {"event": event.name, "description": event.description, "id": event.gcal_id}
         )
@@ -598,7 +602,7 @@ def fetch_calendar_events():
     except Exception:
         logger.warning(traceback.format_exc())
 
-    for event, _ in events:
+    for event in events:
         try:
             for tag in response[event.gcal_id]:
                 if tag not in tags:
@@ -624,7 +628,8 @@ def fetch_calendar_events():
     except Exception:
         logger.warning(traceback.format_exc())
 
-    for event, all_day_event in events:
+    for event in events:
+        all_day_event = event.start_date == start_dtime and event.end_date == end_dtime
         if not all_day_event:
             continue
 
