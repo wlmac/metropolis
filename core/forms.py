@@ -90,6 +90,7 @@ class TimetableCreateOrUpdateForm(forms.ModelForm):
         for i in range(4):
             self.fields[f"course_{i + 1}"] = forms.CharField(
                 initial=f"{self.instance.courses_str[i]}",
+                max_length=24,
                 widget=forms.TextInput(
                     attrs={
                         "class": "form-control",
@@ -98,10 +99,14 @@ class TimetableCreateOrUpdateForm(forms.ModelForm):
                 ),
             )
 
+    def courses_str(self):
+        return [self[f"course_{i + 1}"] for i in range(4)]
+
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean(*args, **kwargs)
-        courses_str = [cleaned_data[f"course_{i + 1}"].strip() for i in range(4)]
-        cleaned_data["courses_str"] = courses_str
+        cleaned_data["courses_str"] = [
+            cleaned_data[f"course_{i + 1}"] for i in range(4)
+        ]
         return cleaned_data
 
     def save(self, commit=True):

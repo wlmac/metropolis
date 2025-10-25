@@ -7,18 +7,32 @@
         <div class="card-body">
             <form method="post">
                 <h5 class="card-title">
-                    <strong>Edit Timetable</strong>
+                    <strong>{% if is_edit %}Edit{% else %}Add{% endif %} Timetable</strong>
                 </h5>
                 {% csrf_token %}
                 <div class="mb-3">
                     <span class="card-title"><strong>{{ timetable.term.name }}</strong></span>
-                    <div class="card-body timetable-details"
-                        id="card-body-{{ forloop.counter }}"
-                        hidden>
-                        <p>Hello World</p>
-                    </div>
                 </div>
-                {{ form.as_p }}
+
+                <div class="fieldWrapper">
+                    {{ form.title.label_tag }}
+                    {{ form.title }}
+                    {{ form.title.errors }}
+                </div>
+
+                <h5>
+                    <strong>Courses</strong>
+                </h5>
+                <p>Enter your course names or course codes for a Day 1 schedule</p>
+
+                {% for course in form.courses_str %}
+                    <div class="fieldWrapper">
+                        {{ course.label_tag }}
+                        {{ course }}
+                        {{ course.errors }}
+                    </div>
+                {% endfor %}
+
                 <div class="mt-3">
                     <button type="submit" class="btn btn-primary mr-2">
                         {% if is_edit %}Update{% else %}Create{% endif %}

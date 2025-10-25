@@ -29,6 +29,11 @@ class Timetable(models.Model):
     def __str__(self):
         return f"{self.owner.get_full_name()} ({self.owner})'s Timetable '{self.title}'"
 
+    def clean(self, *args, **kwargs):
+        if len(self.courses_str) != 4:
+            raise ValueError("Timetable must have 4 periods")
+        self.courses_str = [course.strip() for course in self.courses_str]
+
     def save(self, *args, **kwargs):
         # TODO: Drop timetable if owner makes too many?
         super().save(*args, **kwargs)

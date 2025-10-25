@@ -44,9 +44,7 @@ class TimetableList(LoginRequiredMixin, ListView, FormMixin, mixins.TitleMixin):
         return kwargs
 
 
-class TimetableEditor(
-    LoginRequiredMixin, UserPassesTestMixin, FormView, mixins.TitleMixin
-):
+class TimetableEditor(LoginRequiredMixin, FormView, mixins.TitleMixin):
     template_name = "core/timetable/editor.html"
     title = "Timetable Editor"
     form_class = TimetableCreateOrUpdateForm
@@ -57,11 +55,6 @@ class TimetableEditor(
         if not pk:
             return None
         return get_object_or_404(models.Timetable, pk=pk, owner=self.request.user)
-
-    def test_func(self):
-        return True
-        # obj = self.get_object()
-        # return obj is None or obj.owner == self.request.user
 
     def form_valid(self, form):
         timetable = form.save(commit=False)
