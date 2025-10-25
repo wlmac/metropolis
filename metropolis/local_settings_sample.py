@@ -6,6 +6,7 @@ import sentry_sdk
 
 GOOGLE_SHEET_ID = ""
 SECRETS_PATH = ""
+GOOGLE_SCOPES = []
 
 # ruff: noqa: F821
 

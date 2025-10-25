@@ -257,13 +257,14 @@ def notif_single(self, recipient_id: int, msg_kwargs):
         u.save()
 
 
-def load_client() -> tuple[gspread.Client | None, str | None, bool]:
+def load_creds() -> tuple[Credentials | None, str | None, bool]:
     """
-    Returns a client from authorized_user.json file
+    Returns credentials from authorized_user.json file
 
-    :returns: Tuple with the client, error message and
+    :returns: Tuple with the creds, error message and
     whether the client secret file exists
     """
+
     CLIENT_PATH = settings.SECRETS_PATH + "/client_secret.json"
     AUTHORIZED_PATH = settings.SECRETS_PATH + "/authorized_user.json"
 
@@ -273,8 +274,7 @@ def load_client() -> tuple[gspread.Client | None, str | None, bool]:
     if not Path(CLIENT_PATH).is_file():
         return (None, f"{CLIENT_PATH} does not exist", False)
 
-    client = None
-    scopes = gspread.auth.READONLY_SCOPES
+    scopes = settings.GOOGLE_SCOPES
 
     if Path(AUTHORIZED_PATH).is_file():
         creds = None
@@ -293,12 +293,7 @@ def load_client() -> tuple[gspread.Client | None, str | None, bool]:
             with open(AUTHORIZED_PATH, "w") as f:
                 f.write(creds.to_json())
 
-        try:
-            client = gspread.authorize(creds)
-        except Exception:
-            return (None, "Failed to authorize credentials", True)
-
-        return (client, None, True)
+        return (creds, None, True)
 
     else:
         return (None, "No file to load client from", True)
@@ -313,24 +308,25 @@ def oauth2_clear_expired():
 
 @app.task
 def fetch_announcements():
-    if settings.GOOGLE_SHEET_KEY == "" or settings.GOOGLE_SHEET_KEY is None:
-        logger.warning("Fetch Announcements: GOOGLE_SHEET_KEY is empty")
+    if settings.GOOGLE_SHEET_ID == "" or settings.GOOGLE_SHEET_ID is None:
+        logger.warning("Fetch Announcements: GOOGLE_SHEET_ID is empty")
         return
 
-    client, error_msg, client_path_exists = load_client()
+    creds, error_msg, client_path_exists = load_creds()
 
-    if client is None:
+    if creds is None:
         if client_path_exists:
             logger.warning(f"Fetch Announcements: {error_msg} - Run auth_google to fix")
         else:
             logger.warning(f"Fetch Announcements: {error_msg}")
 
         return
-
+    
+    client = gspread.authorize(creds)
     worksheet = None
 
     try:
-        worksheet = client.open_by_key(settings.GOOGLE_SHEET_KEY).sheet1
+        worksheet = client.open_by_key(settings.GOOGLE_SHEET_ID).sheet1
     except Exception:
         logger.warning("Fetch Announcements: Failed to open google sheet")
         return
@@ -352,10 +348,12 @@ def fetch_announcements():
                 "Today's Date",
                 "Student Name (First and Last Name), if applicable.",
                 "Staff Advisor",
-                "Club",
-                "Start Date announcement is to be read (max. 3 consecutive school days).",
-                "End Date announcement is to be read",
+                "Club", 
+                "Start Date",
+                "End Date",
                 "Announcement to be read (max 75 words)",
+                "Metro Link",
+                "Title"
             ]:
                 logger.warning("Fetch Announcements: Header row does not match")
                 break
@@ -365,20 +363,36 @@ def fetch_announcements():
             else:
                 try:
                     parsed_data = {
-                        "organization": data[5],
-                        "start_date": dt.datetime.strptime(data[6], "%m/%d/%Y"),
-                        "end_date": dt.datetime.strptime(data[7], "%m/%d/%Y"),
-                        "content": data[8],
+                        "body": data[8],
+                        "title": data[10],
+                        "status": "a"
                     }
 
-                    DailyAnnouncement.objects.get_or_create(**parsed_data)
-                except Exception:
+                    if (data[9] == "N/A"):
+                        parsed_data["organization"] = Organization.objects.get(name='SAC')
+                    else:
+                        slug = data[9].split(f"{settings.SITE_URL}/club/")[1]
+                        organization = Organization.objects.get(slug=slug)
+                        
+                        parsed_data["organization"] = organization
+
+                    author = User.objects.filter(email=data[1]).first()
+
+                    if author is None:
+                        author = parsed_data["organization"].owners.first()
+
+                    parsed_data["author"] = author
+
+                    show_after = timezone.make_aware(dt.datetime.strptime(data[6], "%m/%d/%Y"))
+                    parsed_data["show_after"] = show_after
+                    
+                    Announcement.objects.get_or_create(**parsed_data)
+                except Exception as e:
                     logger.warning(
                         f"Fetch Announcements: Failed to parse or create object for row {row_counter}"
                     )
 
         row_counter += 1
-
 
 @app.task
 def fetch_calendar_events():
