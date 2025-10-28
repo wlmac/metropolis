@@ -266,7 +266,7 @@ class PostAdmin(admin.ModelAdmin):
 
 
 class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
-    list_display = ["__str__", "organization", "status"]
+    list_display = ["__str__", "organization", "organization_string", "status"]
     list_filter = [OrganizationListFilter, "status"]
     ordering = ["-show_after"]
     actions = [resend_approval_email]
@@ -302,7 +302,7 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
 
         all_fields = [
             "organization",
-            "author",
+            "organization_stringauthor",
             "title",
             "body",
             "tags",
@@ -319,6 +319,7 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
                 {
                     "author",
                     "organization",
+                    "organization_string",
                     "title",
                     "tags",
                     "is_public",
@@ -327,6 +328,7 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
                 {
                     "author",
                     "organization",
+                    "organization_string",
                     "title",
                     "tags",
                     "is_public",
@@ -335,6 +337,7 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
                 {
                     "author",
                     "organization",
+                    "organization_string",
                     "title",
                     "body",
                     "tags",
@@ -346,6 +349,7 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
                 {
                     "author",
                     "organization",
+                    "organization_string",
                     "title",
                     "body",
                     "tags",
@@ -356,11 +360,18 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
                 },
             ],
             [
-                {"author", "organization", "supervisor"},
-                {"author", "organization", "status", "supervisor"},
+                {"author", "organization", "organization_string", "supervisor"},
                 {
                     "author",
                     "organization",
+                    "organization_string",
+                    "status",
+                    "supervisor",
+                },
+                {
+                    "author",
+                    "organization",
+                    "organization_string",
                     "status",
                     "show_after",
                     "supervisor",
@@ -368,6 +379,7 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
                 {
                     "author",
                     "organization",
+                    "organization_string",
                     "status",
                     "supervisor",
                     "rejection_reason",
@@ -389,6 +401,7 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
     def get_fields(self, request, obj=None):
         all_fields = [
             "organization",
+            "organization_string",
             "author",
             "title",
             "body",
@@ -424,6 +437,7 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
             "body",
             "tags",
             "organization",
+            "organization_string",
             "is_public",
             "supervisor",
             "status",

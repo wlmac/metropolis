@@ -12,6 +12,7 @@ from django.db.models.functions.text import Concat
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _l
 from django.utils.translation import ngettext
+from django.core.exceptions import ObjectDoesNotExist
 from exponent_server_sdk import (
     DeviceNotRegisteredError,
     PushClient,
@@ -24,7 +25,6 @@ import gspread
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 
-from google import genai
 from json import dumps, loads
 
 from core.models import (
@@ -35,10 +35,10 @@ from core.models import (
     Term,
     User,
     Organization,
-    DailyAnnouncement,
     Tag,
 )
 from core.utils.tasks import get_random_username
+from core.utils.ai import prompt_gemini
 from metropolis.celery import app
 
 logger = get_task_logger(__name__)
@@ -323,7 +323,7 @@ def fetch_announcements():
             logger.warning(f"Fetch Announcements: {error_msg}")
 
         return
-    
+
     client = gspread.authorize(creds)
     worksheet = None
 
@@ -334,6 +334,9 @@ def fetch_announcements():
         return
 
     row_counter = 1
+
+    row_data = []
+
     while True:
         data = []
 
@@ -350,12 +353,10 @@ def fetch_announcements():
                 "Today's Date",
                 "Student Name (First and Last Name), if applicable.",
                 "Staff Advisor",
-                "Club", 
-                "Start Date",
-                "End Date",
+                "Club",
+                "Start Date announcement is to be read (max. 3 consecutive school days).",
+                "End Date announcement is to be read (NOTE: if announcement is to be read ONE DAY only, please enter the same date)",
                 "Announcement to be read (max 75 words)",
-                "Metro Link",
-                "Title"
             ]:
                 logger.warning("Fetch Announcements: Header row does not match")
                 break
@@ -364,37 +365,62 @@ def fetch_announcements():
                 break
             else:
                 try:
-                    parsed_data = {
-                        "body": data[8],
-                        "title": data[10],
-                        "status": "a"
-                    }
-
-                    if (data[9] == "N/A"):
-                        parsed_data["organization"] = Organization.objects.get(name='SAC')
-                    else:
-                        slug = data[9].split(f"{settings.SITE_URL}/club/")[1]
-                        organization = Organization.objects.get(slug=slug)
-                        
-                        parsed_data["organization"] = organization
+                    parsed_data = {"body": data[8], "club_name": data[5], "status": "a"}
 
                     author = User.objects.filter(email=data[1]).first()
 
-                    if author is None:
-                        author = parsed_data["organization"].owners.first()
-
                     parsed_data["author"] = author
 
-                    show_after = timezone.make_aware(dt.datetime.strptime(data[6], "%m/%d/%Y"))
+                    show_after = timezone.make_aware(
+                        dt.datetime.strptime(data[6], "%m/%d/%Y")
+                    )
                     parsed_data["show_after"] = show_after
-                    
-                    Announcement.objects.get_or_create(**parsed_data)
-                except Exception as e:
+
+                    row_data.append(parsed_data)
+                except Exception:
                     logger.warning(
-                        f"Fetch Announcements: Failed to parse or create object for row {row_counter}"
+                        f"Fetch Announcements: Failed to parse row {row_counter}"
                     )
 
         row_counter += 1
+
+    prompt_data = []
+    organizations = (
+        [organization.name for organization in Organization.objects.all()],
+    )
+
+    for parsed in row_data:
+        prompt_data.append({"body": parsed["body"], "club_name": parsed["club_name"]})
+
+    prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately assign titles to announcements and figure out which club that announcement belongs to. Accuracy and consistency are paramount. The titles should be no more than 64 characters long. It should be descriptive of the announcement itself. Do not go over the limit. You will be provided an array of announcements. Each element in the array will contain the data for one announcement. The element will be in the format of a json object containing the body (what will be announced out) and the club_name (students may mistype clubs names, etc so you will need to pick which one you think they were trying to reference). The available names of all the clubs of the school will be provided below to you in the format of an array (E.g. ['club name 1', 'club name 2', 'club name 3', ... ]). \nWhen outputting, output a single array object. The array order must match the order of the one provided to you. DO NOT CHANGE THE ORDER UNDER ANY CIRCUMSTANCE. The array format should be the same as announcements array given to you. Each element are to be a json object, one key will be the title and the other will be the club name. Should no club match the one the student was trying to pick, then and ONLY then will you put down whatever they have listed as the club as the club name (MAKE SURE THE OUTPUT FOR THE CLUB NAME IN THIS CASE IS IN PASCAL CASE). If you do find a club name in the club name array that matches the one the student was trying to write, it should be EXACTLY the same during output. Do not output anything besides the array.\nClub names: {organizations}\nAnnouncements to be titled: {dumps(prompt_data)}"
+
+    try:
+        response = prompt_gemini(prompt)
+        response = response.text.replace("```json", "").replace("```", "")
+        response = loads(response)
+    except Exception:
+        logger.warning("Fetch Announcement: Something went wrong with the AI")
+
+    try:
+        for index, el in enumerate(response):
+            data = row_data[index]
+
+            try:
+                org = Organization.objects.get(name=el["club_name"])
+                data["organization"] = org
+
+                if data["author"] is None:
+                    data["author"] = org.owners.all()[0]
+            except ObjectDoesNotExist:
+                data["organization_string"] = el["club_name"]
+
+            data["title"] = el["title"]
+            del data["club_name"]
+
+            Announcement.objects.get_or_create(body=data["body"], defaults=data)
+    except Exception:
+        logger.warning("Fetch Announcement: Something went wrong creating the object")
+
 
 @app.task
 def fetch_calendar_events():
@@ -561,9 +587,6 @@ def fetch_calendar_events():
     if len(events) == 0:
         return
 
-    client = genai.Client(api_key=settings.GEMINI_API_KEY)
-    model = "models/gemini-2.0-flash"
-
     past_events = Event.objects.filter(
         end_date__lte=dt.datetime.now(dt.UTC) + dt.timedelta(days=-1)
     )[:100]
@@ -598,11 +621,7 @@ def fetch_calendar_events():
     prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately categorize digital calendar events by placing tags on them. Accuracy and consistency are paramount. You will be provided an array of events below to be tagged. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available tags for tagging the events will be provided below to you in the format of an array (E.g. ['tag 1', 'tag 2', 'tag 3', ... ]). You are only allowed to use the provided tags to tag the events. {'' if data_for_llm['past_events'] == [] else 'To help with your job, you will be provided below with an array of past events that have already be properly tagged. Each element of the array will be in the format of a json object, containing the name, description and tags for the event. You can reference past events to help guide your decision process in tagging the new events. '}When outputting, output a single json object. The keys of the json object will match an id of an event that needed tagging and the value will be an array of all the tags relevant. Do not output anything besides the tags.\n\nAvailable Tags: {data_for_llm['available_tags']}\n{'' if data_for_llm['past_events'] == [] else 'Past events: ' + dumps(data_for_llm['past_events'])}\nEvents to be tagged: {dumps(data_for_llm['new_events'])}"
 
     try:
-        response = client.models.generate_content(
-            model=model,
-            contents=prompt,
-        )
-
+        response = prompt_gemini(prompt)
         response = response.text.replace("```json", "").replace("```", "")
         response = loads(response)
 
@@ -630,10 +649,7 @@ def fetch_calendar_events():
     prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately set the start and ending time for events based on the information in the title or description of the event. In addition, you will also set the schedule format (E.g pa days, holidays, etc).  Accuracy and consistency are paramount. You will be provided an array of events below. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available schedule formats will be provided as an array below. You can only choose from the the array provided. All day will be referring to the entire school day (9:00 to 15:15). Holidays, P.A days, late starts and similar events will last all day. Periods are usually detailed in the name of the event (E.g. Period 1, Per 1, P1). Period 1 lasts from 9:00 to 10:20. Period 2 lasts from 10:25 to 11:40. Period 3 lasts from 12:40 to 13:55. Period 4 lasts from 14:00 to 15:15. The latest that any event finish at is 18:00 unless directly specified in the event. When outputting, output a single json object. The keys of the json object will match an id of an event that needs to have their time set and the value will be an array with three values, the starting, ending time and schedule format. Use 24h hour format for time, in the format of HH:MM. If the event title and description does not provide enough information to determine the starting or ending time, set both to be null. Default to default for the schedule format if you do not think any other schedule format is applicable. Do not output anything besides the tags.\nAvailable Schedule Formats: {data_for_llm['available_schedule_formats']} \nEvents: {dumps(data_for_llm['new_events'])}"
 
     try:
-        response = client.models.generate_content(
-            model=model,
-            contents=prompt,
-        )
+        response = prompt_gemini(prompt)
 
         response = response.text.replace("```json", "").replace("```", "")
         response = loads(response)
