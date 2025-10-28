@@ -259,7 +259,11 @@ class Announcement(Post):
         on_delete=models.CASCADE,
         related_name="announcements",
         related_query_name="announcement",
+        blank=True,
+        null=True,
     )
+
+    organization_string = models.CharField(max_length=64, blank=True, null=True)
 
     is_public = models.BooleanField(
         default=True,
@@ -317,6 +321,15 @@ class Announcement(Post):
         if user is None:
             return False
         return self.organization.supervisors.filter(user=user).exists()
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                name="organization_or_organization_string_required",
+                check=models.Q(organization__isnull=False)
+                | models.Q(organization_string__isnull=False),
+            )
+        ]
 
 
 def featured_image_file_path_generator(instance, file_name):

@@ -8,6 +8,8 @@ GOOGLE_SHEET_ID = ""
 SECRETS_PATH = ""
 GOOGLE_SCOPES = []
 
+GEMINI_MODEL = ""
+
 # ruff: noqa: F821
 
 SECRET_KEY = "change me!"
