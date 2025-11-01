@@ -1,11 +1,10 @@
 import datetime as dt
 import functools
-from json import dumps, loads
 from pathlib import Path
 
-import gspread
 import pytz
 import requests
+from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.db.models import F, JSONField, Q, Value
@@ -20,20 +19,23 @@ from exponent_server_sdk import (
     PushMessage,
     PushTicketError,
 )
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from oauth2_provider.models import clear_expired
 from requests.exceptions import ConnectionError, HTTPError
+
+import gspread
+from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
+
+from json import dumps, loads
 
 from core.models import (
     Announcement,
     BlogPost,
     Comment,
     Event,
-    Organization,
-    Tag,
     Term,
     User,
+    Organization,
+    Tag,
 )
 from core.utils.tasks import get_random_username
 from core.utils.ai import prompt_gemini
@@ -301,6 +303,8 @@ def load_creds() -> tuple[Credentials | None, str | None, bool]:
 
 @app.task
 def oauth2_clear_expired():
+    from oauth2_provider.models import clear_expired
+
     clear_expired()
 
 
@@ -350,8 +354,8 @@ def fetch_announcements():
                 "Student Name (First and Last Name), if applicable.",
                 "Staff Advisor",
                 "Club",
-                "Start Date",
-                "End Date",
+                "Start Date announcement is to be read (max. 3 consecutive school days).",
+                "End Date announcement is to be read (NOTE: if announcement is to be read ONE DAY only, please enter the same date)",
                 "Announcement to be read (max 75 words)",
             ]:
                 logger.warning("Fetch Announcements: Header row does not match")
