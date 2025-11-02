@@ -191,6 +191,12 @@ hr {
     color: var(--link-colour);
     font-weight: bold;
 }
+
+.authors-text-string {
+    color: var(--near-black);
+    font-weight: bold;
+}
+
 #recent-announcements{
     padding: 2%;
 }

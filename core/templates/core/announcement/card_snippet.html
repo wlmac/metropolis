@@ -20,12 +20,9 @@
             {% endif %}
             <div class="card-authors-text">
                 {% if announcement.organization %}
-                    {{ announcement.organization.slug|organization }},
+                    {{ announcement.organization.slug|organization }}
                 {% else %}
-                    {{ announcement.organization_string }},
-                {% endif %}
-                {% if announcement.author %}
-                    {{ announcement.author.username|user }}
+                    <span class="card-authors-text-string">{{ announcement.organization_string }}</span>{% endif %}{% if announcement.author %}, {{ announcement.author.username|user }}
                 {% endif %}
                 <br>
                 <dot>•</dot> {{ announcement.created_date|date:"M. j, Y" }}{{ announcement.created_date|date:", g:i A"|lower }}

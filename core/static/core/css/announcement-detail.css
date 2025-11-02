@@ -75,6 +75,12 @@
 .card-authors a {
     font-weight: bold;
 }
+
+.card-authors-text-string {
+    color: var(--near-black);
+    font-weight: bold;
+}
+
 hr {
     border: 0px solid var(--light-grey);
     border-top-width: 2px;
