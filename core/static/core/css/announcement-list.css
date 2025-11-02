@@ -122,6 +122,12 @@
 .card-authors-text br {
     display: none;
 }
+
+.card-authors-text-string {
+    color: var(--near-black);
+    font-weight: bold;
+}
+
 .circle {
     -o-object-fit: cover;
        object-fit: cover;

@@ -50,10 +50,7 @@
                     {% if announcement.organization %}
                         {{ announcement.organization.slug|organization }},
                     {% else %}
-                        {{ announcement.organization_string }},
-                    {% endif %}
-                    {% if announcement.author %}
-                        {{ announcement.author.username|user }}
+                        <span class="card-authors-text-string">{{ announcement.organization_string }}</span>{% endif %}{% if announcement.author %}, {{ announcement.author.username|user }}
                     {% endif %}
                     <br>
                     <dot>•</dot> {{ announcement.last_modified_date }}
