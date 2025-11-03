@@ -428,13 +428,13 @@ def fetch_calendar_events():
     try:
         url = f"https://www.googleapis.com/calendar/v3/calendars/{settings.GCAL_CID}/events"
         url += "?fields=items(id,status,summary,description,start,end)"
-        timeMin = dt.datetime.now(dt.UTC) + dt.timedelta(days=-30)
-        timeMax = dt.datetime.now(dt.UTC) + dt.timedelta(days=60)
+        time_min = dt.datetime.now(dt.UTC) + dt.timedelta(days=-60)
+        time_max = dt.datetime.now(dt.UTC) + dt.timedelta(days=60)
         params = {
             "key": settings.GCAL_API_KEY,
             "orderBy": "startTime",
-            "timeMin": timeMin.isoformat(),
-            "timeMax": timeMax.isoformat(),
+            "timeMin": time_min.isoformat(),
+            "timeMax": time_max.isoformat(),
             "eventTypes": "default",
             "singleEvents": "True",
             "showDeleted": "True",
@@ -459,14 +459,15 @@ def fetch_calendar_events():
         event.gcal_id: event
         for event in Event.objects.filter(
             gcal_id__isnull=False,
-            start_date__gte=timeMin.isoformat(),
-            end_date__lte=timeMax.isoformat(),
+            # Google calendar API returns events that overlap the time range, not just those that are within the range
+            end_date__gte=time_min.isoformat(),
+            start_date__lte=time_max.isoformat(),
         )
     }
     terms = list(
         Term.objects.filter(
-            end_date__gte=timeMin.date().isoformat(),
-            start_date__lte=timeMax.date().isoformat(),
+            end_date__gte=time_min.date().isoformat(),
+            start_date__lte=time_max.date().isoformat(),
         )
     )
 
@@ -535,14 +536,7 @@ def fetch_calendar_events():
                 event_data["name"] = "Late Start"
 
             if existing_event is not None:
-                changed = any(
-                    getattr(existing_event, field) != value
-                    for field, value in event_data.items()
-                )
-                if changed:
-                    for field, value in event_data.items():
-                        setattr(existing_event, field, value)
-                    events_to_update.append(existing_event)
+                events_to_update.append(existing_event)
             else:
                 event = Event(
                     gcal_id=gcal_id,
@@ -563,26 +557,27 @@ def fetch_calendar_events():
 
     from django.db import transaction
 
-    with transaction.atomic():
-        if events_to_delete:
-            Event.objects.filter(id__in=[e.id for e in events_to_delete]).delete()
-
-        if events_to_update:
-            Event.objects.bulk_update(events_to_update, list(event_data.keys()))
-
-        if events_to_create:
+    if events_to_create:
+        with transaction.atomic():
             # Event.objects.bulk_create(events_to_create, ignore_conflicts=True) # no logging? *megamind peeking*
             for event in events_to_create:
                 try:
-                    event.save()
+                    with transaction.atomic():
+                        event.save()
                 except Exception:
-                    events_to_create.remove(event)
-                    logger.warning(
-                        f"core.tasks.fetch_calendar_events: Failed to create event {event.name}"
-                        + f"\n{traceback.format_exc()}"
+                    logger.exception(
+                        f"Unexpected error while saving event '{event.name}' (id={event.id})"
                     )
 
+    if events_to_update:
+        with transaction.atomic():
+            Event.objects.bulk_update(events_to_update, list(event_data.keys()))
+
+    if events_to_delete:
+        Event.objects.filter(id__in=[e.id for e in events_to_delete]).delete()
+
     events = events_to_create + events_to_update
+
     del existing_events
     del events_to_create
     del events_to_update
@@ -638,7 +633,11 @@ def fetch_calendar_events():
         try:
             for tag in response[event.gcal_id]:
                 if tag not in tags:
-                    tags[tag] = Tag.objects.get(name=tag)
+                    tags[tag] = Tag.objects.filter(name__iexact=tag).first()
+
+                    if tags[tag] is None:
+                        logger.warning(f"Tag '{tag}' does not exist")
+                        continue
 
                 event.tags.add(tags[tag])
 
@@ -646,7 +645,7 @@ def fetch_calendar_events():
         except Exception:
             logger.warning(traceback.format_exc())
 
-    prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately set the start and ending time for events based on the information in the title or description of the event. In addition, you will also set the schedule format (E.g pa days, holidays, etc).  Accuracy and consistency are paramount. You will be provided an array of events below. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available schedule formats will be provided as an array below. You can only choose from the the array provided. All day will be referring to the entire school day (9:00 to 15:15). Holidays, P.A days, late starts and similar events will last all day. Period 1 (P1) lasts from 9:00 to 10:20. Period 2 (P2) lasts from 10:25 to 11:40. Period 3 (P3) lasts from 12:40 to 13:55. Period 4 (P4) lasts from 14:00 to 15:15. The latest that any event finish at is 18:00 unless directly specified in the event. When outputting, output a single json object. The keys of the json object will match an id of an event that needs to have their time set and the value will be an array with three values, the starting, ending time and schedule format. Use 24h hour format for time. If the event title and description does not provide enough information to determine the starting or ending time, set both to be null. Default to default for the schedule format if you do not think any other schedule format is applicable. Do not output anything besides the tags.\nAvailable Schedule Formats: {data_for_llm['available_schedule_formats']} \nEvents: {dumps(data_for_llm['new_events'])}"
+    prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately set the start and ending time for events based on the information in the title or description of the event. In addition, you will also set the schedule format (E.g pa days, holidays, etc).  Accuracy and consistency are paramount. You will be provided an array of events below. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available schedule formats will be provided as an array below. You can only choose from the the array provided. All day will be referring to the entire school day (9:00 to 15:15). Holidays, P.A days, late starts and similar events will last all day. Periods are usually detailed in the name of the event (E.g. Period 1, Per 1, P1). Period 1 lasts from 9:00 to 10:20. Period 2 lasts from 10:25 to 11:40. Period 3 lasts from 12:40 to 13:55. Period 4 lasts from 14:00 to 15:15. The latest that any event finish at is 18:00 unless directly specified in the event. When outputting, output a single json object. The keys of the json object will match an id of an event that needs to have their time set and the value will be an array with three values, the starting, ending time and schedule format. Use 24h hour format for time. If the event title and description does not provide enough information to determine the starting or ending time, set both to be null. Default to default for the schedule format if you do not think any other schedule format is applicable. Do not output anything besides the tags.\nAvailable Schedule Formats: {data_for_llm['available_schedule_formats']} \nEvents: {dumps(data_for_llm['new_events'])}"
 
     try:
         response = prompt_gemini(prompt)
@@ -658,14 +657,22 @@ def fetch_calendar_events():
         logger.warning(traceback.format_exc())
 
     for event in events:
-        all_day_event = event.start_date == start_dtime and event.end_date == end_dtime
+        all_day_event = event.start_date == timezone.make_aware(
+            dt.datetime.combine(
+                dt.date.fromisoformat(gcal_start.get("date")),
+                dt.time(0, 0),
+            )
+        ) and event.end_date == timezone.make_aware(
+            dt.datetime.combine(
+                dt.date.fromisoformat(gcal_end.get("date")),
+                dt.time(23, 59),
+            )
+        )
         if not all_day_event:
             continue
 
         try:
-            start_time = response[event.gcal_id][0]
-            end_time = response[event.gcal_id][1]
-            event_format = response[event.gcal_id][2]
+            start_time, end_time, event_format = response[event.gcal_id]
 
             tz = timezone.get_current_timezone()
 
