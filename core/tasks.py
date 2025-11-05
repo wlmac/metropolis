@@ -639,8 +639,8 @@ def fetch_calendar_events():
                 dt.time(23, 59),
             )
         )
-        # if not all_day_event:
-        #     continue
+        if not all_day_event:
+            continue
 
         try:
             start_time, end_time, event_format = response[event.gcal_id]
