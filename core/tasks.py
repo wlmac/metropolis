@@ -74,9 +74,9 @@ def setup_periodic_tasks(sender, **kwargs):
         crontab(hour=1, minute=0), oauth2_clear_expired
     )  # Delete expired oauth2 tokens from db everyday at 1am
 
-    # sender.add_periodic_task(
-    #     crontab(hour=8, minute=0, day_of_week="mon-fri"), fetch_announcements
-    # )
+    sender.add_periodic_task(
+        crontab(hour=8, minute=0, day_of_week="mon-fri"), fetch_announcements
+    )
 
     sender.add_periodic_task(crontab(hour=4, minute=0), fetch_calendar_events)
 
