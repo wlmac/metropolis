@@ -7,6 +7,8 @@ from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from ...models import Banner
+
 
 @extend_schema(
     description="Returns the current API version.",
@@ -57,28 +59,6 @@ class APIVersion(APIView):
     ],
 )
 class Banners(APIView):
-    uncensored_keys = (
-        "start",
-        "end",
-        "content",
-        "icon_url",
-        "cta_link",
-        "cta_label",
-    )
-    allowed_blank = ("icon_url", "cta_link", "cta_label")
-
-    @classmethod
-    def censor(cls, banner: Dict) -> Dict:
-        res = {}
-        for key in cls.uncensored_keys:
-            if key in banner:
-                res[key] = banner[key]
-            elif key not in banner and key in cls.allowed_blank:
-                pass
-            else:
-                raise KeyError(f"Required Key {key} not found in banner {banner}")
-        return res
-
     @staticmethod
     def get(request):
         """Returns the current banners and upcoming banners for the home page. note: upcoming banners only return the banners for the next day"""
@@ -87,11 +67,14 @@ class Banners(APIView):
     @classmethod
     def calculate_banners(cls):
         now = timezone.now()
-        current = filter(lambda b: b["start"] <= now < b["end"], settings.BANNER3)
-        current = list(map(Banners.censor, current))
-        upcoming = filter(
-            lambda b: now < b["start"] > now + timedelta(days=1),
-            settings.BANNER3,
+
+        fields = [f.name for f in Banner._meta.fields if f.name != "name"]
+
+        current = Banner.objects.filter(start_date__lte=now, end_date__gt=now).values(
+            *fields
         )
-        upcoming = list(map(Banners.censor, upcoming))
-        return dict(current=current, upcoming=upcoming)
+        upcoming = Banner.objects.filter(
+            start_date__gt=now, start_date__lt=now + timedelta(days=1)
+        ).values(*fields)
+
+        return dict(current=list(current), upcoming=list(upcoming))

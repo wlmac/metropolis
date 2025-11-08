@@ -35,24 +35,6 @@ if DEBUG:
         "application/javascript", ".js", True
     )  # fix some browser issues.
 
-# Banner config
-now = datetime.now(TZ)
-# BANNER_REFERENCE_TIME =  datetime.strptime("2023-11-14", "%Y-%m-%d").replace(tzinfo=timezone.utc)  # use instead of $now for non-relative banners.
-
-BANNER3 += [
-    dict(
-        start=now,  # when to start displaying the banner
-        end=now + timedelta(days=5),
-        # when to stop displaying the banner (e.g. 5 days after start)
-        content="Hello Hey!",  # banner text
-        icon_url="/static/core/img/logo/logo-maskable-192.png",
-        # optionally, displays an icon on the left of the banner
-        cta_link="https://jasoncameron.dev",  # optional
-        cta_label="wow! go visit this cool site!",  # optional (but required if cta_link is present)
-    )
-]
-
-
 if not DEBUG:
     """
     Only used on production
