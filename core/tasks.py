@@ -86,7 +86,7 @@ def delete_expired_users():
     """Scrub user data from inactive accounts that have not logged in for 14 days. (marked deleted)"""
     queryset = User.objects.filter(
         is_deleted=True,
-        last_login__lt=dt.datetime.now() - dt.timedelta(days=14),
+        last_login__lt=timezone.make_aware(dt.datetime.now() - dt.timedelta(days=14)),
     )
     comments = Comment.objects.filter(author__in=queryset)
     comments.update(
@@ -97,7 +97,7 @@ def delete_expired_users():
         last_name="User",
         username=get_random_username(),
         bio="",
-        timezone="",
+        # timezone="",
         graduating_year=None,
         is_teacher=False,
         organizations=[],

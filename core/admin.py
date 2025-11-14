@@ -302,7 +302,8 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
 
         all_fields = [
             "organization",
-            "organization_stringauthor",
+            "organization_string",
+            "author",
             "title",
             "body",
             "tags",

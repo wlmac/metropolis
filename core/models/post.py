@@ -291,7 +291,7 @@ class Announcement(Post):
 
     @classmethod
     def get_approved(cls) -> QuerySet:
-        return cls.objects.filter(status="a").filter(show_after__lte=timezone.now())
+        return cls.objects.filter(status="a").filter(show_after__lte=timezone.now()).order_by("-show_after")
 
     @classmethod
     def get_all(cls, user=None) -> QuerySet:

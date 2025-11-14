@@ -96,6 +96,7 @@ class Serializer(serializers.ModelSerializer):
             "rejection_reason",
             "author",
             "organization",
+            "organization_string",
             "supervisor",
             "tags",
             "likes",
