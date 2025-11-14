@@ -3,7 +3,7 @@ from django.conf import settings
 from pathlib import Path
 import gspread
 
-from core.tasks import load_creds
+from core.utils.google_oauth import load_creds
 
 
 class Command(BaseCommand):
