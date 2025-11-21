@@ -23,7 +23,7 @@
                     {{ announcement.organization.slug|organization }}{% else %}<span class="card-authors-text-string">{{ announcement.organization_string }}</span>{% endif %}{% if announcement.author %}, {{ announcement.author.username|user }}
                 {% endif %}
                 <br>
-                <dot>•</dot> {{ announcement.created_date|date:"M. j, Y" }}{{ announcement.created_date|date:", g:i A"|lower }}
+                <dot>•</dot> {{ announcement.show_after|date:"M. j, Y" }}{{ announcement.show_after|date:", g:i A"|lower }}
                 <!--{% if announcement.last_modified_date != announcement.created_date %}
                 (Edited)
                 {% endif %}-->
