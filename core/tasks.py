@@ -326,11 +326,14 @@ def fetch_announcements():
 
                     show_after = timezone.make_aware(
                         dt.datetime.strptime(data[6], "%m/%d/%Y")
-                    ) + dt.timedelta(hours=8)
-
+                    ) + dt.timedelta(
+                        hours=timezone.now()
+                        .astimezone(timezone.get_current_timezone())
+                        .hour
+                    )
                     parsed_data["show_after"] = show_after
 
-                    if timezone.now() >= show_after:
+                    if show_after <= timezone.now() < show_after + dt.timedelta(days=1):
                         row_data.append(parsed_data)
 
                 except Exception:
@@ -359,7 +362,7 @@ def fetch_announcements():
         prompt_data.append({"body": parsed["body"], "club_name": parsed["club_name"]})
 
     prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately assign titles to announcements and figure out which club that announcement belongs to. Accuracy and consistency are paramount. The titles should be no more than 64 characters long. It should be descriptive of the announcement itself. Do not go over the limit. You will be provided an array of announcements. Each element in the array will contain the data for one announcement. The element will be in the format of a json object containing the body (what will be announced out) and the club_name (students may mistype clubs names, etc so you will need to pick which one you think they were trying to reference). The available names of all the clubs of the school will be provided below to you in the format of an array (E.g. ['club name 1', 'club name 2', 'club name 3', ... ]). \nWhen outputting, output a single array object. The array order must match the order of the one provided to you. DO NOT CHANGE THE ORDER UNDER ANY CIRCUMSTANCE. The array format should be the same as announcements array given to you. Each element are to be a json object, one key will be the title and the other will be the club name. Should no club match the one the student was trying to pick, then and ONLY then will you put down the club name they have listed. In this scenario, please output it in pascal case and remove any unnecessary information that is not relating to the club name itself. For example, if it's written as 'CLUB NAME (OTHER INFORMATION)', it should be outputted as just 'Club Name'. If you do find a club name in the club name array that matches the one the student was trying to write, it should be EXACTLY the same during output. Do not output anything besides the array.\nClub names: {organizations}\nAnnouncements to be titled: {dumps(prompt_data)}"
-    response = prompt_gemini(prompt, model="models/gemini-2.0-flash")
+    response = prompt_gemini(prompt, model="models/gemini-2.5-flash")
     response = response.text.replace("```json", "").replace("```", "")
     response = loads(response)
 
@@ -375,10 +378,7 @@ def fetch_announcements():
                     data["author"] in org_details["execs"]
                     or data["author"] in org_details["supervisors"]
                 ):
-                    logger.warning(
-                        f"Fetch Announcements: {data['author']} is not a supervisor or exec of {org_details['organization']}"
-                    )
-                    continue
+                    data["author"] = None
             except KeyError:
                 data["organization_string"] = el["club_name"]
 
@@ -388,7 +388,7 @@ def fetch_announcements():
             Announcement.objects.get_or_create(body=data["body"], defaults=data)
         except Exception:
             logger.warning(
-                f"core.tasks.fetch_calendar_events: Failed to create announcement for row {index + 2}"
+                f"Fetch Announcements: Failed to create announcement for row {index + 2}"
                 + f"\n{traceback.format_exc()}"
             )
 
