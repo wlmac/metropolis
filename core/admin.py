@@ -781,6 +781,13 @@ class CommentAdmin(admin.ModelAdmin):
     content_object.short_description = "Associated Post"
 
 
+class BannerAdmin(admin.ModelAdmin):
+    list_display = ["name", "start_date", "end_date"]
+    search_fields = ["name"]
+
+    list_filter = ["start_date", "end_date"]
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(models.Timetable, TimetableAdmin)
 admin.site.register(models.Term, TermAdmin)
@@ -795,6 +802,7 @@ admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
 admin.site.register(models.Raffle, RaffleAdmin)
 admin.site.register(models.StaffMember)
+admin.site.register(models.Banner, BannerAdmin)
 
 admin.site.unregister(FlatPage)
 admin.site.register(FlatPage, CustomFlatPageAdmin)

@@ -7,3 +7,4 @@ from .raffle import *
 from .tag import *
 from .timetable import *
 from .user import *
+from .banner import *

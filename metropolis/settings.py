@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Dict, Final, List, Literal
 
 import pytz
@@ -531,16 +531,6 @@ STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
 
 MAINTENANCE_MODE: Literal["", False, "pre", "post", "in"] = ""
 PRE = ""
-BANNER3: List = [
-    #   dict(
-    #       start=BANNER_REFERENCE_TIME,
-    #       end=BANNER_REFERENCE_TIME + timedelta(days=5),
-    #       content="This is some banner :)",
-    #       icon_url="...", # optional
-    #       cta_link="https://nyiyui.ca", # optional
-    #       cta_label="some shameless plug to nowhere amirite", # optional (but required if cta_link is present)
-    #   ),
-]
 
 CELERY_TIMEZONE = "America/Toronto"
 
@@ -552,22 +542,6 @@ ANNOUNCEMENTS_NOTIFY_FEEDS = []  # list of PKs of organizations
 EVENTS_NOTIFY_FEEDS = []  # list of PKs of organizations
 NOTIF_DRY_RUN = True
 NOTIFICATIONS_ENABLED = False
-
-
-def is_aware(d: datetime) -> bool:
-    return d.tzinfo is not None and d.tzinfo.utcoffset(d) is not None
-
-
-def check_banner3(banner: Dict) -> None:
-    assert is_aware(banner["start"])
-    assert is_aware(banner["end"])
-    assert bool(banner.get("cta_link")) == bool(
-        banner.get("cta_label")
-    )  # both or neither, not one or the other
-
-
-for banner in BANNER3:
-    check_banner3(banner)
 
 try:
     with open(os.path.join(os.path.dirname(__file__), "./local_settings.py")) as f:

@@ -330,7 +330,7 @@ class Announcement(Post):
         constraints = [
             models.CheckConstraint(
                 name="organization_or_organization_string_required",
-                check=models.Q(organization__isnull=False)
+                condition=models.Q(organization__isnull=False)
                 | models.Q(organization_string__isnull=False),
             )
         ]
