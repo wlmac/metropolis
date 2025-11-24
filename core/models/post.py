@@ -216,6 +216,7 @@ class DailyAnnouncement(models.Model):
 class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
+        blank=True,
         null=True,
         on_delete=models.SET_NULL,
         related_name="%(class)ss_authored",
