@@ -351,9 +351,9 @@ def fetch_announcements():
             "supervisors": set(organization.supervisors.all()),
             "organization": organization,
         }
-        for organization in Organization.objects.prefetch_related(
-            "execs", "supervisors"
-        )
+        for organization in Organization.objects.filter(
+            is_active=True
+        ).prefetch_related("execs", "supervisors")
     }
 
     organizations = list(organizations_dict.keys())
