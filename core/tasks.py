@@ -362,7 +362,7 @@ def fetch_announcements():
         prompt_data.append({"body": parsed["body"], "club_name": parsed["club_name"]})
 
     prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately assign titles to announcements and figure out which club that announcement belongs to. Accuracy and consistency are paramount. The titles should be no more than 64 characters long. It should be descriptive of the announcement itself. Do not go over the limit. You will be provided an array of announcements. Each element in the array will contain the data for one announcement. The element will be in the format of a json object containing the body (what will be announced out) and the club_name (students may mistype clubs names, etc so you will need to pick which one you think they were trying to reference). The available names of all the clubs of the school will be provided below to you in the format of an array (E.g. ['club name 1', 'club name 2', 'club name 3', ... ]). \nWhen outputting, output a single array object. The array order must match the order of the one provided to you. DO NOT CHANGE THE ORDER UNDER ANY CIRCUMSTANCE. The array format should be the same as announcements array given to you. Each element are to be a json object, one key will be the title and the other will be the club name. Should no club match the one the student was trying to pick, then and ONLY then will you put down the club name they have listed. In this scenario, please output it in pascal case and remove any unnecessary information that is not relating to the club name itself. For example, if it's written as 'CLUB NAME (OTHER INFORMATION)', it should be outputted as just 'Club Name'. If you do find a club name in the club name array that matches the one the student was trying to write, it should be EXACTLY the same during output. Do not output anything besides the array.\nClub names: {organizations}\nAnnouncements to be titled: {dumps(prompt_data)}"
-    for _ in range(5):
+    for _ in range(3):
         try:
             response = prompt_gemini(prompt, model="models/gemini-2.5-flash")
             response = response.text.replace("```json", "").replace("```", "")
@@ -411,36 +411,34 @@ def fetch_announcements():
 def fetch_calendar_events():
     import traceback
 
-    try:
-        url = f"https://www.googleapis.com/calendar/v3/calendars/{settings.GCAL_CID}/events"
-        url += "?fields=items(id,status,summary,description,start,end)"
-        time_min = dt.datetime.now(dt.UTC) + dt.timedelta(days=-60)
-        time_max = dt.datetime.now(dt.UTC) + dt.timedelta(days=60)
-        params = {
-            "key": settings.GCAL_API_KEY,
-            "orderBy": "startTime",
-            "timeMin": time_min.isoformat(),
-            "timeMax": time_max.isoformat(),
-            "eventTypes": "default",
-            "singleEvents": "True",
-            "showDeleted": "True",
-        }
+    url = f"https://www.googleapis.com/calendar/v3/calendars/{settings.GCAL_CID}/events"
+    url += "?fields=items(id,status,summary,description,start,end)"
+    time_min = dt.datetime.now(dt.UTC) + dt.timedelta(days=-60)
+    time_max = dt.datetime.now(dt.UTC) + dt.timedelta(days=60)
+    params = {
+        "key": settings.GCAL_API_KEY,
+        "orderBy": "startTime",
+        "timeMin": time_min.isoformat(),
+        "timeMax": time_max.isoformat(),
+        "eventTypes": "default",
+        "singleEvents": "True",
+        "showDeleted": "True",
+    }
 
-        response = requests.get(url, params=params)
+    response = requests.get(url, params=params)
+    if settings.DEBUG:
+        print(response.status_code)
 
-        if response.status_code != 200:
-            raise Exception(
-                f"{str(response.status_code)} - Failed to fetch calendar events"
-            )
+    if response.status_code != 200:
+        raise Exception(
+            f"{str(response.status_code)} - Failed to fetch calendar events"
+        )
 
-        gcal_eventlist = response.json().get("items", [])
-
-    except Exception as exc:
-        logger.warning(f"Fetch Calendar Events: {exc}")
-        return
+    gcal_eventlist = response.json().get("items", [])
+    if settings.DEBUG:
+        print(len(gcal_eventlist), gcal_eventlist)
 
     school_org = Organization.objects.get(pk=2)  # SAC: https://maclyonsden.com/c/2
-
     existing_events = {
         event.gcal_id: event
         for event in Event.objects.filter(
@@ -457,12 +455,9 @@ def fetch_calendar_events():
         )
     )
 
-    events_to_create = []
-    events_to_update = []
-    events_to_delete = []
-
+    events = []
     for gcal_event in gcal_eventlist:
-        if gcal_event.get("summary").strip().lower() in ["day 1", "day 2"]:
+        if (gcal_event.get("summary") or "").strip().lower() in ["day 1", "day 2"]:
             continue
 
         try:
@@ -471,7 +466,8 @@ def fetch_calendar_events():
             existing_event = existing_events.get(gcal_id)
 
             if existing_event is not None and (status is None or status == "cancelled"):
-                events_to_delete.append(existing_event)
+                existing_event.delete()
+                continue
 
             if status != "confirmed":
                 continue
@@ -513,27 +509,56 @@ def fetch_calendar_events():
             )
 
             event_data = {
-                "name": gcal_event.get("summary").strip(),
+                "name": (gcal_event.get("summary") or "").strip(),
                 "term": event_term,
                 "description": gcal_event.get("description") or "",
+                "start_date": start_dtime,
+                "end_date": end_dtime,
             }
 
             if "late start" in event_data["name"].lower():
                 event_data["name"] = "Late Start"
 
             if existing_event is not None:
-                events_to_update.append(existing_event)
+                if all(
+                    [
+                        existing_event.name == event_data["name"],
+                        existing_event.term == event_data["term"],
+                        existing_event.description == event_data["description"],
+                        existing_event.start_date.astimezone().date()
+                        == event_data["start_date"].date(),
+                        existing_event.end_date.astimezone().date()
+                        == event_data["end_date"].date(),
+                    ]
+                ):
+                    continue
+
+                try:
+                    for key, value in event_data.items():
+                        setattr(existing_event, key, value)
+
+                    existing_event.save()
+                    events.append(existing_event)
+                except Exception:
+                    logger.exception(
+                        f"Unexpected error while updating event '{existing_event.name}' (id={existing_event.id})"
+                    )
             else:
                 event = Event(
                     gcal_id=gcal_id,
                     **event_data,
                     organization=school_org,
-                    start_date=start_dtime,
-                    end_date=end_dtime,
                     is_public=False,  # whitelist in admin
                     schedule_format="default",
                 )
-                events_to_create.append(event)
+
+                try:
+                    event.save()
+                    events.append(event)
+                except Exception:
+                    logger.exception(
+                        f"Unexpected error while saving event '{event.name}' (id={event.id})"
+                    )
 
         except Exception:
             logger.warning(
@@ -541,36 +566,10 @@ def fetch_calendar_events():
                 + f"\n{traceback.format_exc()}"
             )
 
-    from django.db import transaction
-
-    if events_to_create:
-        with transaction.atomic():
-            # Event.objects.bulk_create(events_to_create, ignore_conflicts=True) # no logging? *megamind peeking*
-            for event in events_to_create:
-                try:
-                    with transaction.atomic():
-                        event.save()
-                except Exception:
-                    logger.exception(
-                        f"Unexpected error while saving event '{event.name}' (id={event.id})"
-                    )
-
-    if events_to_update:
-        with transaction.atomic():
-            Event.objects.bulk_update(events_to_update, list(event_data.keys()))
-
-    if events_to_delete:
-        Event.objects.filter(id__in=[e.id for e in events_to_delete]).delete()
-
-    events = events_to_create + events_to_update
-
-    del existing_events
-    del events_to_create
-    del events_to_update
-    del events_to_delete
-
     if len(events) == 0:
         return
+
+    return
 
     past_events = Event.objects.filter(
         end_date__lte=dt.datetime.now(dt.UTC) + dt.timedelta(days=-1)
@@ -605,77 +604,64 @@ def fetch_calendar_events():
 
     prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately categorize digital calendar events by placing tags on them. Accuracy and consistency are paramount. You will be provided an array of events below to be tagged. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available tags for tagging the events will be provided below to you in the format of an array (E.g. ['tag 1', 'tag 2', 'tag 3', ... ]). You are only allowed to use the provided tags to tag the events. {'' if data_for_llm['past_events'] == [] else 'To help with your job, you will be provided below with an array of past events that have already be properly tagged. Each element of the array will be in the format of a json object, containing the name, description and tags for the event. You can reference past events to help guide your decision process in tagging the new events. '}When outputting, output a single json object. The keys of the json object will match an id of an event that needed tagging and the value will be an array of all the tags relevant. Do not output anything besides the tags.\n\nAvailable Tags: {data_for_llm['available_tags']}\n{'' if data_for_llm['past_events'] == [] else 'Past events: ' + dumps(data_for_llm['past_events'])}\nEvents to be tagged: {dumps(data_for_llm['new_events'])}"
 
-    try:
-        response = prompt_gemini(prompt)
-        response = response.text.replace("```json", "").replace("```", "")
-        response = loads(response)
-
-        tags = {}
-
-    except Exception:
-        logger.warning(traceback.format_exc())
-
-    for event in events:
+    for _ in range(3):
         try:
-            for tag in response[event.gcal_id]:
-                if tag not in tags:
-                    tags[tag] = Tag.objects.filter(name__iexact=tag).first()
-
-                    if tags[tag] is None:
-                        logger.warning(f"Tag '{tag}' does not exist")
-                        continue
-
-                event.tags.add(tags[tag])
-
-            event.save()
+            response = prompt_gemini(prompt)
+            response = response.text.replace("```json", "").replace("```", "")
+            response = loads(response)
         except Exception:
-            logger.warning(traceback.format_exc())
+            response = None
+
+    if response is None:
+        logger.warning(traceback.format_exc())
+    else:
+        tags = {}
+        for event in events:
+            try:
+                for tag in response[event.gcal_id]:
+                    if tag not in tags:
+                        tags[tag] = Tag.objects.filter(name__iexact=tag).first()
+
+                        if tags[tag] is None:
+                            logger.warning(f"Tag '{tag}' does not exist")
+                            continue
+
+                    event.tags.add(tags[tag])
+
+                event.save()
+            except Exception:
+                logger.warning(traceback.format_exc())
 
     prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately set the start and ending time for events based on the information in the title or description of the event. In addition, you will also set the schedule format (E.g pa days, holidays, etc).  Accuracy and consistency are paramount. You will be provided an array of events below. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available schedule formats will be provided as an array below. You can only choose from the the array provided. All day will be referring to the entire school day (9:00 to 15:15). Holidays, P.A days, late starts and similar events will last all day. Periods are usually detailed in the name of the event (E.g. Period 1, Per 1, P1). Period 1 lasts from 9:00 to 10:20. Period 2 lasts from 10:25 to 11:40. Period 3 lasts from 12:40 to 13:55. Period 4 lasts from 14:00 to 15:15. The latest that any event finish at is 18:00 unless directly specified in the event. When outputting, output a single json object. The keys of the json object will match an id of an event that needs to have their time set and the value will be an array with three values, the starting, ending time and schedule format. Use 24h hour format for time, in the format of HH:MM. If the event title and description does not provide enough information to determine the starting or ending time, set both to be null. Default to default for the schedule format if you do not think any other schedule format is applicable. Do not output anything besides the tags.\nAvailable Schedule Formats: {data_for_llm['available_schedule_formats']} \nEvents: {dumps(data_for_llm['new_events'])}"
 
-    try:
-        response = prompt_gemini(prompt)
-
-        response = response.text.replace("```json", "").replace("```", "")
-        response = loads(response)
-
-    except Exception:
-        logger.warning(traceback.format_exc())
-
-    for event in events:
-        all_day_event = event.start_date == timezone.make_aware(
-            dt.datetime.combine(
-                dt.date.fromisoformat(gcal_start.get("date")),
-                dt.time(0, 0),
-            )
-        ) and event.end_date == timezone.make_aware(
-            dt.datetime.combine(
-                dt.date.fromisoformat(gcal_end.get("date")),
-                dt.time(23, 59),
-            )
-        )
-        if not all_day_event:
-            continue
-
+    for _ in range(3):
         try:
-            start_time, end_time, event_format = response[event.gcal_id]
-
-            tz = timezone.get_current_timezone()
-
-            if start_time is not None:
-                start_time = dt.datetime.strptime(start_time, "%H:%M")
-                event.start_date = event.start_date.astimezone(tz).replace(
-                    hour=start_time.hour, minute=start_time.minute
-                )
-            if end_time is not None:
-                end_time = dt.datetime.strptime(end_time, "%H:%M")
-                event.end_date = event.end_date.astimezone(tz).replace(
-                    hour=end_time.hour, minute=end_time.minute
-                )
-
-            event.schedule_format = event_format
-
-            event.save()
-
+            response = prompt_gemini(prompt)
+            response = response.text.replace("```json", "").replace("```", "")
+            response = loads(response)
         except Exception:
-            logger.warning(traceback.format_exc())
+            response = None
+
+    if response is None:
+        logger.warning(traceback.format_exc())
+    else:
+        for event in events:
+            try:
+                start_time, end_time, event_format = response[event.gcal_id]
+
+                if start_time is not None:
+                    start_time = dt.datetime.strptime(start_time, "%H:%M")
+                    event.start_date = event.start_date.astimezone().replace(
+                        hour=start_time.hour, minute=start_time.minute
+                    )
+                if end_time is not None:
+                    end_time = dt.datetime.strptime(end_time, "%H:%M")
+                    event.end_date = event.end_date.astimezone().replace(
+                        hour=end_time.hour, minute=end_time.minute
+                    )
+
+                event.schedule_format = event_format
+
+                event.save()
+            except Exception:
+                logger.warning(traceback.format_exc())
