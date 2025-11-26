@@ -288,19 +288,44 @@ def fetch_announcements():
 
     row_counter = 1
 
-    row_data = []
+    """
+    
+    all_announcement_data -> List of dicts where every element is a row scraped from the spreadsheet
+        Current Format Of Each Element:
+            {
+                "author": <User object>,
+                "body": A string with the content of the announcement,
+                "club_name": A string with the club name scraped from the google sheet,
+                "show_after" A datetime that is timezone aware of when to display the announcement,
+                "status": 'a' (For auto approving the announcement)
+            }
+    row_values -> List of strings containing the value of one row of the spreadsheet
+        Current Format Of List (Matches the Google Sheet):
+            Index 0: Timestamp (of when the form was submitted)
+            Index 1: Email Address (of the person submitting it)
+            Index 2: Date (of when the form was submitted)
+            Index 3: Student Name (of the student who submitted the form)
+            Index 4: Staff Advisor (of the club)
+            Index 5: Club (club name)
+            Index 6: Start Date (of when the announcement should be read)
+            Index 7: End Date (of the last date the announcement should be read)
+            Index 8: Announcement (the announcement to be read)
+
+    """
+
+    all_announcement_data = []
 
     while True:
-        data = []
+        row_values = []
 
         try:
-            data = [value.strip() for value in worksheet.row_values(row_counter)]
+            row_values = [value.strip() for value in worksheet.row_values(row_counter)]
         except Exception:
             logger.warning(f"Fetch Announcements: Failed to read row {row_counter}")
             break
 
         if row_counter == 1:
-            if data != [
+            if row_values != [
                 "Timestamp",
                 "Email Address",
                 "Today's Date",
@@ -314,18 +339,22 @@ def fetch_announcements():
                 logger.warning("Fetch Announcements: Header row does not match")
                 return
         else:
-            if data == []:
+            if row_values == []:
                 break
             else:
                 try:
-                    parsed_data = {"body": data[8], "club_name": data[5], "status": "a"}
+                    parsed_data = {
+                        "body": row_values[8],
+                        "club_name": row_values[5],
+                        "status": "a",
+                    }
 
-                    author = User.objects.filter(email=data[1]).first()
+                    author = User.objects.filter(email=row_values[1]).first()
 
                     parsed_data["author"] = author
 
                     show_after = timezone.make_aware(
-                        dt.datetime.strptime(data[6], "%m/%d/%Y")
+                        dt.datetime.strptime(row_values[6], "%m/%d/%Y")
                     ) + dt.timedelta(
                         hours=timezone.now()
                         .astimezone(timezone.get_current_timezone())
@@ -334,7 +363,7 @@ def fetch_announcements():
                     parsed_data["show_after"] = show_after
 
                     if show_after <= timezone.now() < show_after + dt.timedelta(days=1):
-                        row_data.append(parsed_data)
+                        all_announcement_data.append(parsed_data)
 
                 except Exception:
                     logger.warning(
@@ -358,7 +387,7 @@ def fetch_announcements():
 
     organizations = list(organizations_dict.keys())
 
-    for parsed in row_data:
+    for parsed in all_announcement_data:
         prompt_data.append({"body": parsed["body"], "club_name": parsed["club_name"]})
 
     prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately assign titles to announcements and figure out which club that announcement belongs to. Accuracy and consistency are paramount. The titles should be no more than 64 characters long. It should be descriptive of the announcement itself. Do not go over the limit. You will be provided an array of announcements. Each element in the array will contain the data for one announcement. The element will be in the format of a json object containing the body (what will be announced out) and the club_name (students may mistype clubs names, etc so you will need to pick which one you think they were trying to reference). The available names of all the clubs of the school will be provided below to you in the format of an array (E.g. ['club name 1', 'club name 2', 'club name 3', ... ]). \nWhen outputting, output a single array object. The array order must match the order of the one provided to you. DO NOT CHANGE THE ORDER UNDER ANY CIRCUMSTANCE. The array format should be the same as announcements array given to you. Each element are to be a json object, one key will be the title and the other will be the club name. Should no club match the one the student was trying to pick, then and ONLY then will you put down the club name they have listed. In this scenario, please output it in pascal case and remove any unnecessary information that is not relating to the club name itself. For example, if it's written as 'CLUB NAME (OTHER INFORMATION)', it should be outputted as just 'Club Name'. If you do find a club name in the club name array that matches the one the student was trying to write, it should be EXACTLY the same during output. Do not output anything besides the array.\nClub names: {organizations}\nAnnouncements to be titled: {dumps(prompt_data)}"
@@ -369,7 +398,12 @@ def fetch_announcements():
             response = loads(response)
 
             assert isinstance(response, list) and all(
-                isinstance(item, str) for item in response
+                isinstance(item, dict)
+                and "title" in item
+                and "club_name" in item
+                and isinstance(item["title"], str)
+                and isinstance(item["club_name"], str)
+                for item in response
             )
 
             break
@@ -382,24 +416,26 @@ def fetch_announcements():
 
     for index, el in enumerate(response):
         try:
-            data = row_data[index]
+            announcement_data = all_announcement_data[index]
 
             try:
                 org_details = organizations_dict[el["club_name"]]
-                data["organization"] = org_details["organization"]
+                announcement_data["organization"] = org_details["organization"]
 
-                if data["author"] is not None and not (
-                    data["author"] in org_details["execs"]
-                    or data["author"] in org_details["supervisors"]
+                if announcement_data["author"] is not None and not (
+                    announcement_data["author"] in org_details["execs"]
+                    or announcement_data["author"] in org_details["supervisors"]
                 ):
-                    data["author"] = None
+                    announcement_data["author"] = None
             except KeyError:
-                data["organization_string"] = el["club_name"]
+                announcement_data["organization_string"] = el["club_name"]
 
-            data["title"] = el["title"]
-            del data["club_name"]
+            announcement_data["title"] = el["title"]
+            del announcement_data["club_name"]
 
-            Announcement.objects.get_or_create(body=data["body"], defaults=data)
+            Announcement.objects.get_or_create(
+                body=announcement_data["body"], defaults=announcement_data
+            )
         except Exception:
             logger.warning(
                 f"Fetch Announcements: Failed to create announcement for row {index + 2}"
@@ -568,8 +604,6 @@ def fetch_calendar_events():
 
     if len(events) == 0:
         return
-
-    return
 
     past_events = Event.objects.filter(
         end_date__lte=dt.datetime.now(dt.UTC) + dt.timedelta(days=-1)
