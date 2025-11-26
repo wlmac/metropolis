@@ -295,7 +295,7 @@ class Announcement(Post):
         return (
             cls.objects.filter(status="a")
             .filter(show_after__lte=timezone.now())
-            .order_by("-show_after")
+            .order_by("-show_after", "-pk")
         )
 
     @classmethod
