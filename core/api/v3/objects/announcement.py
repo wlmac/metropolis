@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from django.conf import settings
-from django.contrib.admin.models import LogEntry
-from django.contrib.contenttypes.models import ContentType
 from django.template.loader import render_to_string
 from django.urls import reverse
 from rest_framework import permissions, serializers
 from rest_framework.exceptions import ValidationError
+from django.utils import timezone
 
 from core.api.serializers.custom import (
     CommentField,
@@ -153,6 +152,10 @@ class AnnouncementProvider(BaseProvider):
         "tags": [(int, ""), (str, "name")],
         "organization": int,
         "author": int,
+        "last_modified_date__gt": str,
+        "last_modified_date__gte": str,
+        "last_modified_date__lt": str,
+        "last_modified_date__lte": str,
     }
     raw_serializers = {
         "single": OneSerializer,
@@ -178,12 +181,11 @@ class AnnouncementProvider(BaseProvider):
 
     @staticmethod
     def get_last_modified_queryset():
-        return (
-            LogEntry.objects.filter(
-                content_type=ContentType.objects.get(
-                    app_label="core", model="announcement"
-                )
-            )
-            .latest("action_time")
-            .action_time
+        last_modified_date = (
+            Announcement.objects.all().order_by("-last_modified_date", "id").first()
         )
+
+        if last_modified_date:
+            return last_modified_date.last_modified_date
+        else:
+            return timezone.now()
