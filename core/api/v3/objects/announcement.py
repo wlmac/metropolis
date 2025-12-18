@@ -186,6 +186,6 @@ class AnnouncementProvider(BaseProvider):
         )
 
         if last_modified_date:
-            return last_modified_date.last_modified_date
+            return timezone.localtime(last_modified_date.last_modified_date)
         else:
-            return timezone.now()
+            return timezone.localtime(timezone.now())

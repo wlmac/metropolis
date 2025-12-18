@@ -72,7 +72,7 @@ def setup_periodic_tasks(sender, **kwargs):
     )  # Delete expired oauth2 tokens from db everyday at 1am
 
     sender.add_periodic_task(
-        crontab(hour=8, minute=0, day_of_week="mon-fri"), fetch_announcements
+        crontab(hour=8, minute=30, day_of_week="mon-fri"), fetch_announcements
     )
 
     sender.add_periodic_task(crontab(hour=4, minute=0), fetch_calendar_events)
@@ -368,6 +368,7 @@ def fetch_announcements():
                 except Exception:
                     logger.warning(
                         f"Fetch Announcements: Failed to parse row {row_counter}"
+                        + f"\n{traceback.format_exc()}"
                     )
 
         row_counter += 1
