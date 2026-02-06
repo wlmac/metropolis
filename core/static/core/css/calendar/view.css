@@ -1,3 +1,14 @@
+#iframe-parent {
+    display: flex;
+    justify-content: center;
+}
+
+#iframe-cal {
+    border: solid 1px var(--dark-colour);
+    width: 100%;
+    border-radius: 5px;
+}
+
 #calendar {
     padding: 3%;
     background-color: white;

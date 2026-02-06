@@ -10,6 +10,21 @@
           type="text/css">
     <script src="{% static 'core/js/calendar/view.js' %}"></script>
 {% endblock %}
+
+{% block main %}
+    <div class="container" id="iframe-parent">
+        <iframe 
+            id="iframe-cal"
+            frameborder="0"
+            scrolling="no"
+            loa
+            src="https://calendar.google.com/calendar/u/0/embed?wkst=1&ctz=America/Toronto&showPrint=0&src=dGRzYi5vbi5jYV9scXNjdGFrb2hlc24xaDZpODZuY2RrNzlvNEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t">
+        </iframe>
+    </div>
+{% endblock %}
+
+{# Hopefully some day we will bring this back #}
+{% comment %}
 {% block main %}
     <div class="container">
         <div id="inlineContainer">
@@ -49,3 +64,4 @@
         </table>
     </template>
 {% endblock %}
+{% endcomment %}
