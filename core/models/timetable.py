@@ -15,6 +15,49 @@ def default_courses():
     return ["" for i in range(4)]
 
 
+class SchedulePattern(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    description = models.TextField(blank=True)
+
+    p1_start = models.TimeField()
+    p1_end = models.TimeField()
+
+    p2_start = models.TimeField()
+    p2_end = models.TimeField()
+
+    p3_start = models.TimeField()
+    p3_end = models.TimeField()
+
+    p4_start = models.TimeField()
+    p4_end = models.TimeField()
+
+    def __str__(self):
+        return self.name
+
+    def as_dict(self):
+        return {
+            "name": self.name,
+            "description": self.description,
+            "p1_start": self.p1_start,
+            "p1_end": self.p1_end,
+            "p2_start": self.p2_start,
+            "p2_end": self.p2_end,
+            "p3_start": self.p3_start,
+            "p3_end": self.p3_end,
+            "p4_start": self.p4_start,
+            "p4_end": self.p4_end,
+        }
+
+
+class ScheduleOverride(models.Model):
+    date = models.DateField()
+    pattern = models.ForeignKey(SchedulePattern, on_delete=models.CASCADE)
+    notes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.date} - {self.pattern.name}"
+
+
 class Timetable(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,

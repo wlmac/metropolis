@@ -57,27 +57,33 @@ function setup() {
 function update() {
     let currentCourse;
     let description;
-    let todayData;
-    let todayScheduleIsPersonal = false;
+    let todayScheduleData;
+    let todaySchedule;
+    let todayCycle;
+    let scheduleIsPersonal;
 
     const now = getDateTimeNow();
 
     if (now.toISODate() in scheduleData) {
-        let todayScheduleData = scheduleData[now.toISODate()];
-        todayData = todayScheduleData.schedule;
-        todayScheduleIsPersonal = todayScheduleData.is_personal;
-
+        todayScheduleData = scheduleData[now.toISODate()];
+        todaySchedule = todayScheduleData.schedule;
+        todayCycle = "Day " + todayScheduleData.cycle;
+        scheduleIsPersonal = todayScheduleData.is_personal;
         let courseData;
 
-        for (const course of todayData) {
-            if (course.course && now <= DateTime.fromISO(course.time.end)) {
+        for (const course of todaySchedule) {
+            if (course.description.course && now <= DateTime.fromISO(course.time.end)) {
                 courseData = course;
                 break;
             }
         }
 
         if (courseData) {
-            currentCourse = courseData.course;
+            if (!scheduleIsPersonal) {
+                currentCourse = todayCycle + " " + courseData.description.course;
+            } else {
+                currentCourse = courseData.description.course;
+            }
 
             if (now < DateTime.fromISO(courseData.time.start)) {
                 description = `Starting in ${formatTimeIntervalDuration(now, DateTime.fromISO(courseData.time.start))}`;
@@ -85,7 +91,7 @@ function update() {
                 description = `Ending in ${formatTimeIntervalDuration(now, DateTime.fromISO(courseData.time.end))}`;
             }
         } else {
-            if (todayData.length > 0) {
+            if (todaySchedule.length > 0) {
                 currentCourse = 'School Over';
                 description = 'Enjoy your evening!';
             } else {
@@ -101,23 +107,23 @@ function update() {
     $(".schedule-course").text(currentCourse);
     $(".schedule-description").text(description);
 
-    if (todayData) {
-        if (todayData.length > 0) {
-            $(".schedule-cycle").text(todayData[0].cycle);
+    if (todaySchedule) {
+        if (todaySchedule.length > 0) {
+            $(".schedule-cycle").text(todayCycle);
         } else {
-            $(".schedule-cycle").empty()
+            $(".schedule-cycle").empty();
         }
         let todayCoursesEl = $(".schedule-today-courses").empty();
-        for (let i = 0; i < todayData.length; i++) {
-            if (todayData[i].course) {
+        for (let i = 0; i < todaySchedule.length; i++) {
+            if (todaySchedule[i].description.course) {
                 let courseDescription;
-                if (todayScheduleIsPersonal) courseDescription = `${todayData[i].description.course} - ${todayData[i].course}`;
-                else courseDescription = `${todayData[i].description.course}`;
+                if (scheduleIsPersonal) courseDescription = `${todaySchedule[i].description.course} - ${todaySchedule[i].course}`;
+                else courseDescription = `${todaySchedule[i].description.course}`;
 
                 let courseEl = $("<span class='schedule-today-course'></span>").text(courseDescription);
-                if (todayData[i].course === currentCourse) courseEl.attr("data-active", true);
+                if (todaySchedule[i].course === currentCourse) courseEl.attr("data-active", true);
                 todayCoursesEl.append(courseEl);
-                if (i < todayData.length) todayCoursesEl.append($("<br>"));
+                if (i < todaySchedule.length) todayCoursesEl.append($("<br>"));
             }
         }
     }
