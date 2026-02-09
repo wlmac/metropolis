@@ -252,8 +252,10 @@ class PostAdmin(admin.ModelAdmin):
     def comments(self, obj):
         objs = list(
             map(
-                lambda obj: '<a target="_blank" href="/admin/core/comment/%s">%s</a>'
-                % (obj.pk, obj.body[:10]),
+                lambda obj: (
+                    '<a target="_blank" href="/admin/core/comment/%s">%s</a>'
+                    % (obj.pk, obj.body[:10])
+                ),
                 obj.comments.all(),
             )
         )
@@ -657,9 +659,9 @@ class EventAdmin(CustomTimeMixin, VersionAdmin):
     def save_model(self, request, obj, form, change):
         if not all(
             map(
-                lambda date: obj.term.start_datetime()
-                <= date
-                <= obj.term.end_datetime(),
+                lambda date: (
+                    obj.term.start_datetime() <= date <= obj.term.end_datetime()
+                ),
                 [obj.start_date, obj.end_date],
             )
         ):
