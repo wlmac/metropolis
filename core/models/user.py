@@ -85,19 +85,6 @@ class User(AbstractUser):
         except ObjectDoesNotExist:
             return None
 
-    def schedule(self, target_date=None):
-        if target_date is None:
-            target_date = timezone.localdate()
-
-        result = []
-
-        for timetable in self.timetables.all():
-            result.extend(timetable.day_schedule(target_date=target_date))
-
-        result.sort(key=lambda x: (x["time"]["start"], x["time"]["end"]))
-
-        return result
-
     def get_feed(self):
         return (
             post.Announcement.get_approved()

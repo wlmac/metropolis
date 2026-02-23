@@ -69,8 +69,8 @@
                        href="{% url 'profile_redirect' %}">Profile</a>
                 </li>
                 <li>
-                    {% url 'timetable_list' as timetable %}
-                    <a class="link{% if request.path == timetable %} current{% endif %}"
+                    {% url 'timetable_list' as timetable_list %}
+                    <a class="link{% if request.path == timetable_list %} current{% endif %}"
                        href="{% url 'timetable_list' %}">Timetable</a>
                 </li>
                 <hr>

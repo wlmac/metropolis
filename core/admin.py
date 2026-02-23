@@ -725,8 +725,8 @@ class UserAdmin(VersionAdmin, DjangoUserAdmin):
 
 
 class TimetableAdmin(admin.ModelAdmin):
-    list_display = ["__str__", "term"]
-    list_filter = ["term"]
+    list_display = ["__str__"]
+    # list_filter = ["term"]
 
 
 class CustomFlatPageAdmin(FlatPageAdmin):

@@ -8,8 +8,6 @@ from sentry_sdk.integrations import django as sen_django
 from sentry_sdk.integrations import logging as sen_logging
 from sentry_sdk.integrations import redis
 
-from metropolis.timetable_formats import TIMETABLE_FORMATS  # noqa: F401
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

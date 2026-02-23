@@ -79,11 +79,7 @@ function update() {
         }
 
         if (courseData) {
-            if (!scheduleIsPersonal) {
-                currentCourse = todayCycle + " " + courseData.description.course;
-            } else {
-                currentCourse = courseData.description.course;
-            }
+            currentCourse = courseData.description.course;
 
             if (now < DateTime.fromISO(courseData.time.start)) {
                 description = `Starting in ${formatTimeIntervalDuration(now, DateTime.fromISO(courseData.time.start))}`;
@@ -104,7 +100,11 @@ function update() {
         description = "We were unable to fetch your schedule.";
     }
 
-    $(".schedule-course").text(currentCourse);
+    if(scheduleIsPersonal) {
+        $(".schedule-course").text(currentCourse);
+    } else {
+        $(".schedule-course").text(todayCycle + " " + currentCourse);
+    }
     $(".schedule-description").text(description);
 
     if (todaySchedule) {
@@ -116,12 +116,10 @@ function update() {
         let todayCoursesEl = $(".schedule-today-courses").empty();
         for (let i = 0; i < todaySchedule.length; i++) {
             if (todaySchedule[i].description.course) {
-                let courseDescription;
-                if (scheduleIsPersonal) courseDescription = `${todaySchedule[i].description.course} - ${todaySchedule[i].course}`;
-                else courseDescription = `${todaySchedule[i].description.course}`;
+                let courseDescription = `${todaySchedule[i].description.course} : ${todaySchedule[i].description.time}`;
 
                 let courseEl = $("<span class='schedule-today-course'></span>").text(courseDescription);
-                if (todaySchedule[i].course === currentCourse) courseEl.attr("data-active", true);
+                if (todaySchedule[i].description.course === currentCourse) courseEl.attr("data-active", true);
                 todayCoursesEl.append(courseEl);
                 if (i < todaySchedule.length) todayCoursesEl.append($("<br>"));
             }

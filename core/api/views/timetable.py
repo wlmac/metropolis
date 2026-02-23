@@ -46,7 +46,5 @@ class TimetableSchedule(APIView):
 
 class TimetableDetails(generics.RetrieveAPIView):
     permission_classes = [IsOwner]
-    queryset = models.Timetable.objects.filter(
-        term__end_date__gte=(timezone.now() - settings.TERM_GRACE_PERIOD)
-    )
+    queryset = models.Timetable.objects
     serializer_class = serializers.TimetableSerializer

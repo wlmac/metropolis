@@ -1,35 +1,26 @@
 from django import template
-from django.conf import settings
 from django.utils.html import format_html, format_html_join
+
+from core.utils import get_day_schedule
 
 register = template.Library()
 
 
 @register.filter
 def render_timetable(timetable):
-    timetable_format = timetable.term.timetable_format
-    timetable_config = settings.TIMETABLE_FORMATS[timetable_format]
-
-    courses = {}
-    for i in timetable.courses.all():
-        courses[i.position] = i
-
     html = format_html(
         '<table class="table"><thead><tr><th scope="col">Period</th>{}</tr></thead><tbody>{}</tbody></table>',
         format_html_join(
             "",
             '<th scope="col">{} {}</th>',
-            (
-                (timetable_config["cycle"]["duration"].title(), schedule_cycle)
-                for schedule_cycle in range(1, timetable_config["cycle"]["length"] + 1)
-            ),
+            (("Day", cycle + 1) for cycle in range(2)),
         ),
         format_html_join(
             "",
             '<tr><th scope="row">{}</th>{}</tr>',
             (
                 (
-                    schedule_day["description"]["time"].lower(),
+                    schedule["description"]["time"].lower(),
                     format_html_join(
                         "",
                         "<td>{}</td>",
@@ -37,18 +28,25 @@ def render_timetable(timetable):
                             (
                                 (
                                     timetable.courses_str[
-                                        position_day.intersection({1, 2, 3, 4}).pop()
+                                        (
+                                            # this code mogs
+                                            period
+                                            if not (day == 2 and period in [3, 4])
+                                            else 4
+                                            if (day, period) == (2, 3)
+                                            else 3
+                                        )
                                         - 1
                                     ]
                                 ),
                             )
-                            for position_day in schedule_day["position"]
+                            for day in range(1, 3)
                         ),
                     ),
                 )
-                for schedule_day in timetable_config["schedules"][
-                    timetable.term.day_schedule_format()
-                ]
+                for period, schedule in enumerate(
+                    get_day_schedule(None, timetable.owner)["schedule"], start=1
+                )
             ),
         ),
     )

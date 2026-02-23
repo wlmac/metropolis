@@ -5,7 +5,6 @@ from django.contrib.auth.forms import UserChangeForm as ContribUserChangeForm
 from django.contrib.auth.forms import (
     AdminUserCreationForm as ContribAdminUserCreationForm,
 )
-from django.utils import timezone
 from django_select2 import forms as s2forms
 from martor.widgets import AdminMartorWidget
 
@@ -114,115 +113,10 @@ class TimetableCreateOrUpdateForm(forms.ModelForm):
         return super(TimetableCreateOrUpdateForm, self).save(commit)
 
 
-class AddTimetableSelectTermForm(forms.Form):
-    term = forms.ModelChoiceField(queryset=models.Term.objects.none())
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop("user")
-        super(AddTimetableSelectTermForm, self).__init__(*args, **kwargs)
-        self.fields["term"].queryset = (
-            models.Term.objects.filter(
-                end_date__gte=timezone.now() - settings.TERM_GRACE_PERIOD
-            )
-            .exclude(timetables__owner=user)
-            .order_by("-start_date")
-        )
-
-
 class SelectCoursesWidget(s2forms.ModelSelect2MultipleWidget):
     search_fields = [
         "code__icontains",
     ]
-
-
-class TimetableSelectCoursesForm(forms.ModelForm):
-    class Meta:
-        model = models.Timetable
-        fields = ["courses"]
-        widgets = {
-            "courses": SelectCoursesWidget(
-                attrs={
-                    "data-minimum-input-length": 0,
-                    "width": "100%",
-                    "data-placeholder": "Start typing course code...",
-                }
-            )
-        }
-
-    def __init__(self, *args, **kwargs):
-        if kwargs["instance"] is not None:
-            self.term = kwargs["instance"].term
-        else:
-            self.term = kwargs.pop("term")
-        super(TimetableSelectCoursesForm, self).__init__(*args, **kwargs)
-        self.fields["courses"].queryset = models.Course.objects.filter(
-            term=self.term
-        ).order_by("code")
-
-    def clean(self):
-        courses = self.cleaned_data["courses"]
-        if (
-            courses.count()
-            > settings.TIMETABLE_FORMATS[self.term.timetable_format]["courses"]
-        ):
-            raise forms.ValidationError(
-                f"There are only {settings.TIMETABLE_FORMATS[self.term.timetable_format]['courses']} courses in this term."
-            )
-        position_set = set()
-        for i in courses:
-            if i.position in position_set:
-                raise forms.ValidationError(
-                    "There are two or more conflicting courses."
-                )
-            else:
-                position_set.add(i.position)
-
-
-class AddCourseForm(forms.ModelForm):
-    position = forms.ChoiceField(widget=forms.RadioSelect())
-
-    class Meta:
-        model = models.Course
-        fields = ["code", "position"]
-
-    def __init__(self, *args, **kwargs):
-        self.term = kwargs.pop("term")
-        super(AddCourseForm, self).__init__(*args, **kwargs)
-
-        self.fields["position"].label = settings.TIMETABLE_FORMATS[
-            self.term.timetable_format
-        ]["question"]["prompt"]
-        self.fields["position"].choices = settings.TIMETABLE_FORMATS[
-            self.term.timetable_format
-        ]["question"]["choices"]
-
-        term_courses = self.term.courses.order_by("?")
-        if term_courses:
-            self.fields["code"].widget.attrs["placeholder"] = (
-                f"Ex. {term_courses[0].code}"
-            )
-
-        self.position_set = list(
-            settings.TIMETABLE_FORMATS[self.term.timetable_format]["positions"]
-        )
-        self.position_set.sort()
-
-    def clean_code(self):
-        code = self.cleaned_data["code"]
-        courses = self.term.courses.filter(code=code)
-        if courses:
-            raise forms.ValidationError(
-                "A course with the same code exists for the selected term."
-            )
-        return code
-
-    def clean_position(self):
-        position = int(self.cleaned_data["position"])
-        if position not in self.position_set:
-            raise forms.ValidationError(
-                "Must be one of " + ", ".join([str(i) for i in self.position_set]) + "."
-            )
-        return position
 
 
 class OrganizationAdminForm(forms.ModelForm):

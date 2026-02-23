@@ -19,6 +19,7 @@
 
 .overlay-container{
     position: absolute;
+    flex-direction: column;
     top: 0;
     left: 0;
     width: 100%;
@@ -54,14 +55,18 @@
     position: absolute;
     left: 0;
     bottom: 10px;
+}
+
+.schedule-today-overlay-container{
     padding-left: 50px;
     padding-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .schedule-today-overlay .schedule-cycle{
     color: var(--banner-darker);
     font-weight: bolder;
-    margin-bottom: 0;
 }
 
 .schedule-today-courses{
@@ -77,21 +82,28 @@
 }
 
 @media screen and (max-width: 992px){
+    .banner .next-class {
+        padding-inline: 20px;
+        padding-block: 10px;
+    }
+
     .next-class .schedule-course{
+        overflow: hidden;
+        text-overflow: ellipsis;
         font-size: 4em;
     }
+
     .schedule-today-overlay .schedule-cycle{
         font-size: 1.8em;
     }
     .schedule-today-overlay{
         left: 0;
         right: 0;
+        position: relative;
     }
     .schedule-today-overlay-container{
-        padding-left: 0;
-        padding-right: 0;
-        margin-left: auto;
-        margin-right: auto;
+        padding-inline: 20px;
+        padding-block: 10px;
         width: fit-content;
         display: flex;
         flex-direction: row;

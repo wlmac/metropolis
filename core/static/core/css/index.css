@@ -212,9 +212,6 @@ hr {
     .announcement-card {
         width: calc(50% - 20px);
     }
-    .banner {
-        height: 300px;
-    }
 }
 
 @media screen and (max-width: 600px){

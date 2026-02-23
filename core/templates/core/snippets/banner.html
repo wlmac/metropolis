@@ -5,12 +5,20 @@
         <img alt="" src="{% settings_value 'THEME_BANNER' %}?fmt=webp&w=1920" />
     </div>
     <div class="overlay-container valign-wrapper">
-        <div class="next-class center-align">
-            <h4 class="schedule-course"></h4>
-            <span class="schedule-description"></span>
-        </div>
+        <!-- <div class="schedule-container"> -->
+            <div class="next-class center-align">
+                <h4 class="schedule-course"></h4>
+                <span class="schedule-description"></span>
+            </div>
+            <div class="schedule-today-overlay show-on-med-and-down">
+                <div class="schedule-today-overlay-container">
+                    <h4 class="schedule-cycle"></h4>
+                    <div class="schedule-today-courses"></div>
+                </div>
+            </div>
+        <!-- </div> -->
     </div>
-    <div class="schedule-today-overlay hide-on-small-and-down">
+    <div class="schedule-today-overlay hide-on-med-and-down">
         <div class="schedule-today-overlay-container">
             <h4 class="schedule-cycle"></h4>
             <div class="schedule-today-courses"></div>
@@ -25,7 +33,7 @@
                     {% elif not banner_data.logged_in %}
                         <a href="{% url 'account_signup' %}">Sign up</a> and add your timetable to see a personalized schedule here.
                     {% elif banner_data.nudge_add_timetable %}
-                        <a href="{% url 'timetable_create' banner_data.current_term_id %}">Add your timetable</a> to see a personalized schedule here.
+                        <a href="{% url 'timetable_edit' %}">Add your timetable</a> to see a personalized schedule here.
                     {% endif %}
                 </span>
             </div>

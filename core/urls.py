@@ -28,8 +28,6 @@ from .views.post import (
 )
 from .views.raffle import RaffleRedirect
 from .views.timetable import (
-    CourseCreate,
-    TimetableCreate,
     TimetableList,
     TimetableEditor,
 )
@@ -54,24 +52,9 @@ urlpatterns = [
     path("api/", include("core.api.urls")),
     path("timetable", TimetableList.as_view(), name="timetable_list"),
     path(
-        "timetable/new/",
+        "timetable/edit/",
         TimetableEditor.as_view(),
-        name="timetable_new",
-    ),
-    path(
-        "timetable/add/term/<int:pk>",
-        TimetableCreate.as_view(),
-        name="timetable_create",
-    ),
-    path(
-        "timetable/edit/<int:pk>",
-        TimetableEditor.as_view(),
-        name="timetable_update",
-    ),
-    path(
-        "course/add/term/<int:pk>",
-        CourseCreate.as_view(),
-        name="course_create",
+        name="timetable_edit",
     ),
     path("accounts/profile", ProfileRedirect.as_view(), name="profile_redirect"),
     path(
