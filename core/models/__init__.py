@@ -1,6 +1,6 @@
 # ruff: noqa: F403
 from .choices import *
-from .course import *
+from .event import *
 from .organization import *
 from .post import *
 from .raffle import *
