@@ -29,15 +29,6 @@ implemented)
 
 **Returns** a list of all `Staff`.
 
-## Get Terms
-
-- `GET terms`
-
-**Cache Until**: 24 hours after last fetch
-**Note** has `Last-Modified` header.
-
-**Returns** a list of all `Term`s.
-
 ## Objects
 
 **Base URL**: `v3/obj/<type>`
@@ -500,40 +491,6 @@ properties:
   id: { type: integer }
   name: { type: string }
   color: { type: string }
-```
-
-## Course
-
-`term` and `position` can be used when listing in the query string to filter by them. (
-e.g. `GET /api/v3/obj/course?term=1&position=1`
-
-**NOTE:** `term` is the term *id*, not the term *position*.
-
-```yaml
-$schema: https://json-schema.org/draft/2020-12/schema
-$id: https://maclyonsden.com/api/v3/schema/course.json
-type: object
-properties:
-  id: { type: integer }
-  code: { type: string }
-  description: { type: string }
-  position: { type: integer }
-```
-
-## Term
-
-```yaml
-$schema: https://json-schema.org/draft/2020-12/schema
-$id: https://maclyonsden.com/api/v3/schema/term.json
-type: object
-properties:
-  id: { type: integer }
-  name: { type: string }
-  description: { type: string }
-  timetable_format: { type: string }
-  start_date: { type: string, format: date-time }
-  end_date: { type: string, format: date-time }
-  is_frozen: { type: boolean }
 ```
 
 ## Timetable

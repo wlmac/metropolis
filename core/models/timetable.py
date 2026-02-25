@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db import models
 
-from .course import Course
 from ..utils import get_day_schedule
 
 # Create your models here.
@@ -64,7 +63,6 @@ class Timetable(models.Model):
         on_delete=models.CASCADE,
         related_name="timetable",
     )
-    courses = models.ManyToManyField(Course, related_name="timetables")
     title = models.CharField(max_length=64, blank=False, default="New timetable")
     courses_str = models.JSONField(blank=True, default=default_courses)
 

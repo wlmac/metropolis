@@ -15,14 +15,12 @@ from core.api.v3.objects import (
     AnnouncementProvider,
     BlogPostProvider,
     CommentProvider,
-    CourseProvider,
     EventProvider,
     ExhibitProvider,
     FlatPageProvider,
     LikeProvider,
     OrganizationProvider,
     TagProvider,
-    TermProvider,
     TimetableProvider,
     UserProvider,
 )
@@ -85,11 +83,9 @@ providers: Dict[
     "flatpage": FlatPageProvider,
     "user": UserProvider,
     "tag": TagProvider,
-    "term": TermProvider,
     "timetable": TimetableProvider,
     "comment": CommentProvider,
     "like": LikeProvider,
-    "course": CourseProvider,
 }
 
 provider_keys = providers.keys()
@@ -121,7 +117,7 @@ def get_providers_by_operation(
 
     Example:
     >>> get_providers_by_operation("single")
-    ["announcement", "blog-post", "exhibit", "event", "organization", "flatpage", "user", "tag", "term", "timetable", "comment", "like", "course"]
+    ["announcement", "blog-post", "exhibit", "event", "organization", "flatpage", "user", "tag", "timetable", "comment", "like"]
     """
     operation = operation.lower()
     return [

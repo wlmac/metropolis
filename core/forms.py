@@ -145,58 +145,13 @@ class OrganizationAdminForm(forms.ModelForm):
                 )
 
 
-class TermAdminForm(forms.ModelForm):
-    timetable_format = forms.ChoiceField(widget=forms.Select())
-
-    def __init__(self, *args, **kwargs):
-        super(TermAdminForm, self).__init__(*args, **kwargs)
-        self.fields["timetable_format"].choices = [
-            (timetable_format, timetable_format)
-            for timetable_format in settings.TIMETABLE_FORMATS
-        ]
-
-
 class EventAdminForm(forms.ModelForm):
-    schedule_format = forms.ChoiceField(widget=forms.Select())
-
     def __init__(self, *args, **kwargs):
         super(EventAdminForm, self).__init__(*args, **kwargs)
-        timetable_configs = settings.TIMETABLE_FORMATS
 
-        self.fields["schedule_format"].initial = "default"
-        self.fields["term"].initial = models.Term.get_current()
-        self.fields["is_instructional"].disabled = True
-
-        if "instance" in kwargs and kwargs["instance"] is not None:
-            instance = kwargs["instance"]
-            self.fields["schedule_format"].choices = [
-                (timetable_format, timetable_format)
-                for timetable_format in timetable_configs[
-                    instance.term.timetable_format
-                ]["schedules"]
-            ]
-        else:
-            schedule_format_set = set()
-            for timetable_config in timetable_configs.values():
-                schedule_format_set.update(set(timetable_config["schedules"].keys()))
-            self.fields["schedule_format"].choices = [
-                (schedule_format, schedule_format)
-                for schedule_format in schedule_format_set
-            ]
-
-    def clean(self):
-        cleaned_data = super().clean()
-        term = cleaned_data.get("term")
-        schedule_format = cleaned_data.get("schedule_format")
-
-        if not term:
-            raise TypeError("term not defined")
-
-        timetable_configs = settings.TIMETABLE_FORMATS
-        if schedule_format not in timetable_configs[term.timetable_format]["schedules"]:
-            raise forms.ValidationError(
-                f'Schedule format "{schedule_format}" is not a valid day schedule in Term {term.name}.'
-            )
+        # TODO: settings.TIMETABLE_FORMAT or whatever is gone now,
+        #       so switch to some other reliable method
+        # self.fields["is_instructional"].disabled = True
 
 
 class TagSuperuserAdminForm(forms.ModelForm):

@@ -29,7 +29,6 @@ from core.models import (
     BlogPost,
     Comment,
     Event,
-    Term,
     User,
     Organization,
     Tag,
@@ -485,12 +484,6 @@ def fetch_calendar_events():
             start_date__lte=time_max.isoformat(),
         )
     }
-    terms = list(
-        Term.objects.filter(
-            end_date__gte=time_min.date().isoformat(),
-            start_date__lte=time_max.date().isoformat(),
-        )
-    )
 
     events = []
     for gcal_event in gcal_eventlist:
@@ -531,23 +524,8 @@ def fetch_calendar_events():
                 start_dtime = dt.datetime.fromisoformat(gcal_start.get("dateTime"))
                 end_dtime = dt.datetime.fromisoformat(gcal_end.get("dateTime"))
 
-            event_term = next(
-                (
-                    term
-                    for term in terms
-                    if (
-                        term.start_date
-                        <= start_dtime.date()
-                        <= end_dtime.date()
-                        <= term.end_date
-                    )
-                ),
-                None,
-            )
-
             event_data = {
                 "name": (gcal_event.get("summary") or "").strip(),
-                "term": event_term,
                 "description": gcal_event.get("description") or "",
                 "start_date": start_dtime,
                 "end_date": end_dtime,
@@ -560,7 +538,6 @@ def fetch_calendar_events():
                 if all(
                     [
                         existing_event.name == event_data["name"],
-                        existing_event.term == event_data["term"],
                         existing_event.description == event_data["description"],
                         existing_event.start_date.astimezone().date()
                         == event_data["start_date"].date(),
@@ -614,9 +591,6 @@ def fetch_calendar_events():
         "past_events": [],
         "available_tags": [tag.name for tag in Tag.objects.all()],
         "new_events": [],
-        "available_schedule_formats": list(
-            settings.TIMETABLE_FORMATS["2024-2025"]["schedules"].keys()
-        ),
     }
 
     for past_event in past_events:
@@ -667,7 +641,7 @@ def fetch_calendar_events():
             except Exception:
                 logger.warning(traceback.format_exc())
 
-    prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately set the start and ending time for events based on the information in the title or description of the event. In addition, you will also set the schedule format (E.g pa days, holidays, etc).  Accuracy and consistency are paramount. You will be provided an array of events below. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. The available schedule formats will be provided as an array below. You can only choose from the the array provided. All day will be referring to the entire school day (9:00 to 15:15). Holidays, P.A days, late starts and similar events will last all day. Periods are usually detailed in the name of the event (E.g. Period 1, Per 1, P1). Period 1 lasts from 9:00 to 10:20. Period 2 lasts from 10:25 to 11:40. Period 3 lasts from 12:40 to 13:55. Period 4 lasts from 14:00 to 15:15. The latest that any event finish at is 18:00 unless directly specified in the event. When outputting, output a single json object. The keys of the json object will match an id of an event that needs to have their time set and the value will be an array with three values, the starting, ending time and schedule format. Use 24h hour format for time, in the format of HH:MM. If the event title and description does not provide enough information to determine the starting or ending time, set both to be null. Default to default for the schedule format if you do not think any other schedule format is applicable. Do not output anything besides the tags.\nAvailable Schedule Formats: {data_for_llm['available_schedule_formats']} \nEvents: {dumps(data_for_llm['new_events'])}"
+    prompt = f"You are a meticulous and organized secretary at a Canadian high school. Your job is to accurately set the start and ending time for events based on the information in the title or description of the event.  Accuracy and consistency are paramount. You will be provided an array of events below. Each element in the array will contain the data for one event. The element will be in the format of a json object containing the name, description of the event as well as a id to identify the event. When outputting, output a single json object. The keys of the json object will match an id of an event that needs to have their time set and the value will be an array with three values, the starting, ending time and schedule format. Use 24h hour format for time, in the format of HH:MM. If the event title and description does not provide enough information to determine the starting or ending time, set both to be null. Default to default for the schedule format if you do not think any other schedule format is applicable. Do not output anything besides the tags. \nEvents: {dumps(data_for_llm['new_events'])}"
 
     for _ in range(3):
         try:
@@ -694,8 +668,6 @@ def fetch_calendar_events():
                     event.end_date = event.end_date.astimezone().replace(
                         hour=end_time.hour, minute=end_time.minute
                     )
-
-                event.schedule_format = event_format
 
                 event.save()
             except Exception:

@@ -10,10 +10,7 @@
                     <strong>{% if is_edit %}Edit{% else %}Add{% endif %} Timetable</strong>
                 </h5>
                 {% csrf_token %}
-                <div class="mb-3">
-                    <span class="card-title"><strong>{{ timetable.term.name }}</strong></span>
-                </div>
-
+                
                 <div class="fieldWrapper">
                     {{ form.title.label_tag }}
                     {{ form.title }}

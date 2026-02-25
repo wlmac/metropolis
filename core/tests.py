@@ -101,9 +101,7 @@ class MetropolisBaseTests(TestCase):
             {"type": "organization"},
             {"type": "user"},
             {"type": "tag"},
-            {"type": "term"},
             {"type": "timetable"},
-            {"type": "course"},
         ]
         for case in cases:
             response = self.client.get(f"/api/v3/obj/{case['type']}", **headers)

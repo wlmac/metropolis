@@ -2,37 +2,25 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
-from core.api.serializers.course import CourseSerializer, TermSerializer
 from core.models import Timetable
 
 from .base import BaseProvider
 
 
 class ViewSerializer(serializers.ModelSerializer):
-    term = TermSerializer()
-    courses = CourseSerializer(many=True)
-
     class Meta:
         model = Timetable
-        ordering = ["-term__start_date"]
-        fields = ["term", "courses"]
 
 
 class MutateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["owner"] = self.context["request"].user
-        if self.Meta.model.objects.filter(
-            owner=validated_data["owner"], term=validated_data["term"]
-        ).exists():
-            raise serializers.ValidationError(
-                "You already have a timetable for this term"
-            )
+        if self.Meta.model.objects.filter(owner=validated_data["owner"]).exists():
+            raise serializers.ValidationError("You already have a timetable")
         return super().create(validated_data)
 
     class Meta:
         model = Timetable
-        ordering = ["-term__start_date"]
-        fields = ["term", "courses"]
 
 
 class Identity(permissions.BasePermission):
@@ -51,8 +39,6 @@ class TimetableProvider(BaseProvider):
     model = Timetable
     listing_filters = {
         # "owner": int, since we're using the user's own timetables, we don't need this
-        "term": int,
-        "courses": int,
     }
     raw_serializers = {
         "new": MutateSerializer,

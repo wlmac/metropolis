@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 
-from core.models import course, graduating_year_choices, post
+from core.models import graduating_year_choices, post
 from core.utils.choices import calculate_years
 from core.utils.fields import ChoiceArrayField, SetField
 from core.utils.mail import send_mail
@@ -75,13 +75,9 @@ class User(AbstractUser):
             return name in self.qltrs
         return False
 
-    def get_current_timetable(self):
-        current_term = course.Term.get_current()
-        if current_term is None:
-            return None
-
+    def get_timetable(self):
         try:
-            return self.timetables.get(term=current_term)
+            return self.timetable
         except ObjectDoesNotExist:
             return None
 

@@ -1,6 +1,6 @@
 import django.db
 from django import forms
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.flatpages.admin import FlatPageAdmin
@@ -22,7 +22,6 @@ from .forms import (
     OrganizationAdminForm,
     TagAdminForm,
     TagSuperuserAdminForm,
-    TermAdminForm,
     UserAdminForm,
     UserCreationAdminForm,
     DailyAnnouncementAdminForm,
@@ -69,31 +68,10 @@ class CustomTimeMixin:
         js = ("js/admin-custom-times.min.js",)
 
 
-class CourseInline(admin.TabularInline):
-    formfield_overrides = {
-        django.db.models.TextField: {"widget": Textarea(attrs={"rows": 1})},
-    }
-    fields = ["code", "position", "description"]
-    ordering = ["code"]
-    model = models.Course
-    extra = 0
-
-
 class StaffMemberInline(admin.StackedInline):
     model = models.StaffMember
     can_delete = False
     verbose_name_plural = "Staff Member Info"
-
-
-class TermAdmin(VersionAdmin):
-    inlines = [
-        CourseInline,
-    ]
-    list_display = ["name", "timetable_format", "start_date", "end_date", "is_frozen"]
-    list_filter = ["timetable_format", "is_frozen"]
-    ordering = ["is_frozen", "-start_date", "-end_date"]
-
-    form = TermAdminForm
 
 
 class TagAdmin(VersionAdmin):
@@ -656,22 +634,6 @@ class EventAdmin(CustomTimeMixin, VersionAdmin):
             return False
         return super().has_change_permission(request, obj)
 
-    def save_model(self, request, obj, form, change):
-        if not all(
-            map(
-                lambda date: (
-                    obj.term.start_datetime() <= date <= obj.term.end_datetime()
-                ),
-                [obj.start_date, obj.end_date],
-            )
-        ):
-            self.message_user(
-                request,
-                _("Event timeframe does not overlap term timeframe."),
-                level=messages.ERROR,
-            )
-        super().save_model(request, obj, form, change)
-
 
 class UserAdmin(VersionAdmin, DjangoUserAdmin):
     list_display = ["username", "email", "is_superuser", "is_staff", "is_teacher"]
@@ -726,7 +688,6 @@ class UserAdmin(VersionAdmin, DjangoUserAdmin):
 
 class TimetableAdmin(admin.ModelAdmin):
     list_display = ["__str__"]
-    # list_filter = ["term"]
 
 
 class CustomFlatPageAdmin(FlatPageAdmin):
@@ -792,8 +753,6 @@ class BannerAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(models.Timetable, TimetableAdmin)
-admin.site.register(models.Term, TermAdmin)
-admin.site.register(models.Course)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.DailyAnnouncement, DailyAnnouncementAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)

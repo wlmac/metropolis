@@ -17,7 +17,7 @@ class TimetableList(LoginRequiredMixin, TemplateView, mixins.TitleMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["timetable"] = getattr(self.request.user, "timetable", None)
+        context["timetable"] = self.request.user.get_timetable()
         return context
 
 
@@ -28,8 +28,7 @@ class TimetableEditor(LoginRequiredMixin, FormView, mixins.TitleMixin):
     success_url = reverse_lazy("timetable_list")
 
     def get_object(self):
-        obj = getattr(self.request.user, "timetable", None)
-        return obj
+        return self.request.user.get_timetable()
 
     def form_valid(self, form):
         timetable = form.save(commit=False)
