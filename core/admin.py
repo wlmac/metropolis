@@ -690,6 +690,14 @@ class TimetableAdmin(admin.ModelAdmin):
     list_display = ["__str__"]
 
 
+class SchedulePatternAdmin(admin.ModelAdmin):
+    list_display = ["__str__"]
+
+
+class ScheduleOverrideAdmin(admin.ModelAdmin):
+    list_display = ["__str__"]
+
+
 class CustomFlatPageAdmin(FlatPageAdmin):
     formfield_overrides = {
         django.db.models.TextField: {"widget": AdminMartorWidget},
@@ -753,6 +761,8 @@ class BannerAdmin(admin.ModelAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.register(models.Timetable, TimetableAdmin)
+admin.site.register(models.SchedulePattern, SchedulePatternAdmin)
+admin.site.register(models.ScheduleOverride, ScheduleOverrideAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.DailyAnnouncement, DailyAnnouncementAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)

@@ -36,42 +36,50 @@ class JSONEncoder(rest_framework.utils.encoders.JSONEncoder):
 
 
 def generic_day_schedule(date=None, user=None):
-    return get_day_schedule(date=date, user=user, generic=True)
+    return get_day_schedule(date, user, generic=True)
 
 
 def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
     date = get_localdate(date)
-
-    if not generic and (date.weekday() >= 5 or 7 <= date.month <= 8):
-        return {"schedule": [], "cycle": 0, "is_personal": True}
-
     tz = timezone.get_current_timezone()
 
-    def t(h, m):
-        return datetime.datetime.combine(date, datetime.time(h, m, tzinfo=tz))
+    default_pattern = models.SchedulePattern.objects.filter(
+        name__iexact="Default"
+    ).first()
 
-    schedule = [
-        (t(9, 0), t(10, 20)),
-        (t(10, 25), t(11, 40)),
-        (t(12, 40), t(13, 55)),
-        (t(14, 0), t(15, 15)),
-    ]
+    if default_pattern:
+        schedule = [
+            (
+                getattr(default_pattern, f"p{i + 1}_start"),
+                getattr(default_pattern, f"p{i + 1}_end"),
+            )
+            for i in range(4)
+        ]
+    else:
+
+        def t(h, m):
+            return datetime.datetime.combine(date, datetime.time(h, m, tzinfo=tz))
+
+        schedule = [
+            (t(9, 0), t(10, 20)),
+            (t(10, 25), t(11, 40)),
+            (t(12, 40), t(13, 55)),
+            (t(14, 0), t(15, 15)),
+        ]
 
     if not generic:
-        override = (
-            models.ScheduleOverride.objects.filter(date=date)
-            .select_related("pattern")
-            .first()
-        )
+        override = models.ScheduleOverride.objects.filter(date=date).first()
+
         if override:
-            pattern = override.pattern._meta
             schedule = [
                 (
-                    pattern.get_field(f"p{i + 1}_start"),
-                    pattern.get_field(f"p{i + 1}_end"),
+                    getattr(override.pattern, f"p{i + 1}_start"),
+                    getattr(override.pattern, f"p{i + 1}_end"),
                 )
                 for i in range(4)
             ]
+        elif date.weekday() >= 5 or 7 <= date.month <= 8:
+            return {"schedule": [], "cycle": 0, "is_personal": True}
 
     is_personal = (
         user is not None and user.is_authenticated and hasattr(user, "timetable")
@@ -104,7 +112,7 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
 def get_week_schedule(user) -> dict:
     date = timezone.localdate()
     return {
-        target_date.isoformat(): get_day_schedule(target_date, user)
+        target_date.isoformat(): get_day_schedule(date, user)
         for target_date in [date + datetime.timedelta(days=days) for days in range(7)]
     }
 
