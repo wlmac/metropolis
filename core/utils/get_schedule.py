@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 import rest_framework.utils.encoders
 from django.utils import timezone
+from django.utils.formats import time_format
 from django.utils.safestring import SafeString, mark_safe
 
 from .. import models
@@ -94,7 +95,7 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
         "schedule": [
             {
                 "description": {
-                    "time": f"{period_start.strftime('%-I:%M %p')} - {period_end.strftime('%-I:%M %p')}",
+                    "time": f"{time_format(period_start, 'g:i A')} - {time_format(period_end, 'g:i A')}",
                     "course": f"Period {i + 1}"
                     if not is_personal
                     else courses.get(i + 1, {}).get("name") or f"Period {i + 1}",
