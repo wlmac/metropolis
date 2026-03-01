@@ -1,13 +1,14 @@
 from django import template
 from django.utils.html import format_html, format_html_join
 
-from core.utils import get_day_schedule
+from core.utils import generic_day_schedule
 
 register = template.Library()
 
 
 @register.filter
 def render_timetable(timetable):
+    schedule = generic_day_schedule(user=timetable.owner)["schedule"]
     html = format_html(
         '<table class="table"><thead><tr><th scope="col">Period</th>{}</tr></thead><tbody>{}</tbody></table>',
         format_html_join(
@@ -20,14 +21,14 @@ def render_timetable(timetable):
             '<tr><th scope="row">{}</th>{}</tr>',
             (
                 (
-                    schedule["description"]["time"].lower(),
+                    course["description"]["time"].lower(),
                     format_html_join(
                         "",
                         "<td>{}</td>",
                         (
                             (
                                 (
-                                    timetable.courses_str[
+                                    schedule[
                                         (
                                             # this code mogs
                                             period
@@ -37,16 +38,14 @@ def render_timetable(timetable):
                                             else 3
                                         )
                                         - 1
-                                    ]
+                                    ]["description"]["course"]
                                 ),
                             )
                             for day in range(1, 3)
                         ),
                     ),
                 )
-                for period, schedule in enumerate(
-                    get_day_schedule(None, timetable.owner)["schedule"], start=1
-                )
+                for period, course in enumerate(schedule, start=1)
             ),
         ),
     )

@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='timetable',
             name='courses_str',
-            field=models.JSONField(blank=True, default=core.models.timetable.default_courses),
+            field=models.JSONField(blank=True, default={}),
         ),
         migrations.AddField(
             model_name='timetable',

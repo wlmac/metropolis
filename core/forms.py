@@ -69,6 +69,53 @@ class MetropolisSignupForm(SignupForm, CaseInsensitiveUsernameMixin):
         return graduating_year
 
 
+class CourseForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+
+        def filled(field):
+            return field in self.cleaned_data and self.cleaned_data[field]
+
+        if not filled("name") and (filled("room") or filled("teacher")):
+            raise forms.ValidationError(
+                "A course must have a name if it has a room or teacher."
+            )
+
+        return cleaned_data
+
+    def is_empty(self):
+        return not any(
+            [self.cleaned_data.get(field) for field in ["name", "room", "teacher"]]
+        )
+
+    class Meta:
+        model = models.Course
+        fields = ["name", "room", "teacher"]
+        labels = {
+            "name": "Course",
+        }
+        widgets = {
+            "name": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Course name or code"}
+            ),
+            "room": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "(optional)"}
+            ),
+            "teacher": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "(optional)"}
+            ),
+        }
+
+
+CourseFormSet = forms.inlineformset_factory(
+    models.Timetable,
+    models.Course,
+    form=CourseForm,
+    extra=0,
+    can_delete=False,
+)
+
+
 class TimetableCreateOrUpdateForm(forms.ModelForm):
     class Meta:
         model = models.Timetable
@@ -82,35 +129,6 @@ class TimetableCreateOrUpdateForm(forms.ModelForm):
                 }
             ),
         }
-
-    def __init__(self, *args, **kwargs):
-        super(TimetableCreateOrUpdateForm, self).__init__(*args, **kwargs)
-
-        for i in range(4):
-            self.fields[f"course_{i + 1}"] = forms.CharField(
-                initial=f"{self.instance.courses_str[i]}",
-                max_length=24,
-                widget=forms.TextInput(
-                    attrs={
-                        "class": "form-control",
-                        "placeholder": f"Period {i + 1} Class",
-                    }
-                ),
-            )
-
-    def courses_str(self):
-        return [self[f"course_{i + 1}"] for i in range(4)]
-
-    def clean(self, *args, **kwargs):
-        cleaned_data = super().clean(*args, **kwargs)
-        cleaned_data["courses_str"] = [
-            cleaned_data[f"course_{i + 1}"] for i in range(4)
-        ]
-        return cleaned_data
-
-    def save(self, commit=True):
-        self.instance.courses_str = self.cleaned_data["courses_str"]
-        return super(TimetableCreateOrUpdateForm, self).save(commit)
 
 
 class SelectCoursesWidget(s2forms.ModelSelect2MultipleWidget):

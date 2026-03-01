@@ -8,6 +8,37 @@
     font-weight: bold;
 }
 
+.card-period {
+    padding: 15px;
+    background-color: hsl(0, 0%, 97%);
+    border-radius: 10px;
+    margin-block: 20px;
+}
+
+.card-period .card-body {
+    display: grid;
+    gap: 10px;
+}
+
+.card-period .card-body .full-span {
+    grid-column: 1 / span 2;
+}
+
+.card-period .card-body .field-wrapper {
+    grid-row: auto;
+}
+
+@media screen and (max-width: 600px) {
+    .card-period .card-body{
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+    }
+
+    .card-period .card-body .field-wrapper {
+        grid-column: 1 / span 2;
+    }
+}
+
 .select2{
     width: 100% !important;
 }

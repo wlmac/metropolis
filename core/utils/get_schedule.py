@@ -35,6 +35,10 @@ class JSONEncoder(rest_framework.utils.encoders.JSONEncoder):
         return super().default(obj)
 
 
+def generic_day_schedule(date=None, user=None):
+    return get_day_schedule(date=date, user=user, generic=True)
+
+
 def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
     date = get_localdate(date)
 
@@ -53,27 +57,28 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
         (t(14, 0), t(15, 15)),
     ]
 
-    override = (
-        models.ScheduleOverride.objects.filter(date=date)
-        .select_related("pattern")
-        .first()
-    )
-    if override:
-        pattern = override.pattern.as_dict()
-        schedule = [
-            (
-                pattern.get(f"p{i + 1}_start"),
-                pattern.get(f"p{i + 1}_end"),
-            )
-            for i in range(4)
-        ]
+    if not generic:
+        override = (
+            models.ScheduleOverride.objects.filter(date=date)
+            .select_related("pattern")
+            .first()
+        )
+        if override:
+            pattern = override.pattern._meta
+            schedule = [
+                (
+                    pattern.get_field(f"p{i + 1}_start"),
+                    pattern.get_field(f"p{i + 1}_end"),
+                )
+                for i in range(4)
+            ]
 
     is_personal = (
         user is not None and user.is_authenticated and hasattr(user, "timetable")
     )
 
     if is_personal:
-        timetable = user.timetable
+        courses = user.timetable.get_courses_as_dict()
 
     return {
         "cycle": 1 if date.day % 2 == 1 else 2,
@@ -84,7 +89,7 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
                     "time": f"{period_start.strftime('%-I:%M %p')} - {period_end.strftime('%-I:%M %p')}",
                     "course": f"Period {i + 1}"
                     if not is_personal
-                    else timetable.courses_str[i],
+                    else courses.get(i + 1, {}).get("name") or f"Period {i + 1}",
                 },
                 "time": {
                     "start": period_start,
