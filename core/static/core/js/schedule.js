@@ -102,6 +102,8 @@ function update() {
 
     if(scheduleIsPersonal) {
         $(".schedule-course").text(currentCourse);
+    } else if(currentCourse === "School Over" || currentCourse === "No School") {
+        $(".schedule-course").text(currentCourse);
     } else {
         $(".schedule-course").text(todayCycle + " " + currentCourse);
     }

@@ -49,7 +49,7 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
     ).first()
 
     if default_pattern:
-        schedule = [
+        schedule_times = [
             (
                 getattr(default_pattern, f"p{i + 1}_start"),
                 getattr(default_pattern, f"p{i + 1}_end"),
@@ -61,7 +61,7 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
         def t(h, m):
             return datetime.datetime.combine(date, datetime.time(h, m, tzinfo=tz))
 
-        schedule = [
+        schedule_times = [
             (t(9, 0), t(10, 20)),
             (t(10, 25), t(11, 40)),
             (t(12, 40), t(13, 55)),
@@ -72,7 +72,7 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
         override = models.ScheduleOverride.objects.filter(date=date).first()
 
         if override:
-            schedule = [
+            schedule_times = [
                 (
                     getattr(override.pattern, f"p{i + 1}_start"),
                     getattr(override.pattern, f"p{i + 1}_end"),
@@ -96,16 +96,20 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
             {
                 "description": {
                     "time": f"{time_format(period_start, 'g:i A')} - {time_format(period_end, 'g:i A')}",
-                    "course": f"Period {i + 1}"
+                    "course": f"Period {period_num}"
                     if not is_personal
-                    else courses.get(i + 1, {}).get("name") or f"Period {i + 1}",
+                    else courses.get(period_num, {}).get("name") or f"Period {period_num}",
                 },
                 "time": {
                     "start": period_start,
                     "end": period_end,
                 },
             }
-            for i, (period_start, period_end) in enumerate(schedule)
+            for i, period_num, (period_start, period_end) in zip(
+                range(4),
+                [1, 2, 4, 3] if date.weekday() % 2 == 0 else [1, 2, 3, 4],
+                schedule_times,
+            )
         ],
     }
 

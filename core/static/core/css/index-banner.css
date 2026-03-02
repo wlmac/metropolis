@@ -43,7 +43,6 @@
     font-size: 5em;
     font-weight: bold;
     color: var(--banner-text);
-    margin-bottom: 0;
 }
 
 .next-class .schedule-description{
@@ -85,6 +84,10 @@
     .banner .next-class {
         padding-inline: 20px;
         padding-block: 10px;
+    }
+
+    .padder {
+        padding-top: 100px;
     }
 
     .next-class .schedule-course{
