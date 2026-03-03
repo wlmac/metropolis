@@ -98,7 +98,8 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
                     "time": f"{time_format(period_start, 'g:i A')} - {time_format(period_end, 'g:i A')}",
                     "course": f"Period {period_num}"
                     if not is_personal
-                    else courses.get(period_num, {}).get("name") or f"Period {period_num}",
+                    else courses.get(period_num, {}).get("name")
+                    or f"Period {period_num}",
                 },
                 "time": {
                     "start": period_start,
