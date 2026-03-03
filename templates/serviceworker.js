@@ -2,12 +2,15 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox
 
 workbox.core.setCacheNameDetails({
     prefix: 'metropolis',
-    suffix: 'v3'
+    suffix: 'v4'
 });
 
 workbox.routing.setDefaultHandler(
     new workbox.strategies.NetworkOnly()
 );
+
+self.skipWaiting();
+workbox.core.clientsClaim();
 
 workbox.precaching.precacheAndRoute([
     {url: '/static/js/jquery-3.6.0.min.js', revision: '3.6.0'},
@@ -44,4 +47,6 @@ workbox.recipes.offlineFallback({
 
 workbox.recipes.googleFontsCache();
 
-workbox.core.clientsClaim();
+workbox.serviceWorker.addEventListener('waiting', () => {
+  window.location.reload();
+});
