@@ -54,6 +54,8 @@
     position: absolute;
     left: 0;
     bottom: 10px;
+
+    width: 100%;
 }
 
 .schedule-today-overlay-container{
@@ -73,6 +75,12 @@
     padding-left: 10px;
     border-left: solid var(--banner-darker) 3px;
     font-weight: normal;
+
+    overflow: hidden;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 95%;
 }
 
 .schedule-today-courses [data-active]{
@@ -104,13 +112,14 @@
         right: 0;
         position: relative;
     }
+
     .schedule-today-overlay-container{
         padding-inline: 20px;
         padding-block: 10px;
-        width: fit-content;
-        display: flex;
+
+        /* display: flex;
         flex-direction: row;
-        flex-wrap: nowrap;
+        flex-wrap: nowrap; */
     }
     .schedule-today-overlay .schedule-cycle{
         margin-right: 15px;

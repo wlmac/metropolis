@@ -29,6 +29,10 @@
     border-bottom: 1px solid var(--line-grey);
 }
 
+#card-body {
+    overflow-x: auto;
+}
+
 .card-body label {
     color: var(--link-colour) !important;
     font-size: 110%;

@@ -118,7 +118,7 @@ function update() {
         let todayCoursesEl = $(".schedule-today-courses").empty();
         for (let i = 0; i < todaySchedule.length; i++) {
             if (todaySchedule[i].description.course) {
-                let courseDescription = `${todaySchedule[i].description.course} : ${todaySchedule[i].description.time}`;
+                let courseDescription = `${todaySchedule[i].description.time} : ${todaySchedule[i].description.course}`;
 
                 let courseEl = $("<span class='schedule-today-course'></span>").text(courseDescription);
                 if (todaySchedule[i].description.course === currentCourse) courseEl.attr("data-active", true);
