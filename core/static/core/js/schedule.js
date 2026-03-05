@@ -38,7 +38,7 @@ function getDateTimeNow() {
 
 function setup() {
     // load schedule data differently depending on whether the user is offline
-    indexPageData = $("#index-page-data").text()
+    let indexPageData = $("#index-page-data").text()
     if (indexPageData) {
         // not offline: load data from index page
         scheduleData = JSON.parse(indexPageData);

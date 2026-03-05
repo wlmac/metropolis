@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // If val = something like 10.2, assume it means 10:20
                 let hours = Math.floor(val);
                 let raw_minutes = Math.round((val - hours) * 100);
-                console.log(raw_minutes)
                 d = new Date(1970, 1, 1, hours, raw_minutes, 0, 0);
             }
             else {

@@ -28,7 +28,7 @@ workbox.precaching.precacheAndRoute([
     {url: '/static/js/luxon.min.js', revision: '2.0.2'},
     {url: '/static/js/popper.min.js', revision: '2.9.2'},
     {url: '/static/core/css/index-banner.css', revision: '8.0.2'},
-    {url: '/static/core/js/schedule.js', revision: '5.0.2'},
+    {url: '/static/core/js/schedule.js', revision: '5.0.3'},
     {url: '/static/css/material-design-iconic-font.min.css', revision: '2.2.0'},
     {url: '/static/fonts/Material-Design-Iconic-Font.woff2', revision: '2.2.0'},
 ], {

@@ -200,7 +200,7 @@ function placeCards(eventsToday, date) {
 
 function initializeCard(curEvent, date, working = null) {
     // if the working card is null, then we must create a new card
-    if (working == null) working = document.querySelector("#card").content.cloneNode(true)
+    if (working == null) working = document.querySelector("#card").content.cloneNode(true);
 
     // get the start and end dates for the current event
     let eventStart = new Date(curEvent.start_date);

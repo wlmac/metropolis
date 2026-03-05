@@ -15,7 +15,7 @@ window.addEventListener('load', (event) => {
     document.getElementById('install-popup-button').addEventListener('click', async (e) => {
         $(installPopupClass).hide();
         deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
+        // const { outcome } = await deferredPrompt.userChoice;
         deferredPrompt = null;
     });
 });

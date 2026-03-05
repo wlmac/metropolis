@@ -12,21 +12,21 @@ let alive = true;
 let won = false;
 
 window.onload = function () {
-    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
     if (vw < 400) {
         cellSide = 7;
     }
     $(".display-metropolis").click(function () {
-        $(this).fadeOut(100)
+        $(this).fadeOut(100);
         $(".result-display").stop().hide();
         let canvas = $("#game-canvas")[0];
         $(canvas).attr("width", "" + (cellSide * cols));
         $(canvas).attr("height", "" + (cellSide * rows));
 
-        $("#up-button").css("width", "" + (cellSide * cols))
-        $("#down-button").css("width", "" + (cellSide * cols))
-        $("#left-button").css("height", "" + (cellSide * rows))
-        $("#right-button").css("height", "" + (cellSide * rows))
+        $("#up-button").css("width", "" + (cellSide * cols));
+        $("#down-button").css("width", "" + (cellSide * cols));
+        $("#left-button").css("height", "" + (cellSide * rows));
+        $("#right-button").css("height", "" + (cellSide * rows));
 
         $(".game-container").stop().fadeIn(300, function () {
             context = canvas.getContext("2d");
@@ -38,30 +38,30 @@ window.onload = function () {
                 else if ((e.key === 'a' || e.key === 'ArrowLeft') && !crashes(0, -1)) dir = "left";
                 else if ((e.key === 's' || e.key === 'ArrowDown') && !crashes(1, 0)) dir = 'down';
                 else if ((e.key === 'd' || e.key === 'ArrowRight') && !crashes(0, 1)) dir = 'right';
-            })
+            });
             $("#up-button").click(function () {
                 if (!crashes(-1, 0)) {
-                    dir = "up"
+                    dir = "up";
                 }
-            })
+            });
             $("#left-button").click(function () {
                 if (!crashes(0, -1)) {
-                    dir = "left"
+                    dir = "left";
                 }
-            })
+            });
             $("#right-button").click(function () {
                 if (!crashes(0, 1)) {
-                    dir = "right"
+                    dir = "right";
                 }
-            })
+            });
             $("#down-button").click(function () {
                 if (!crashes(1, 0)) {
-                    dir = "down"
+                    dir = "down";
                 }
-            })
-        })
-    })
-}
+            });
+        });
+    });
+};
 
 function crashes(rDiff, cDiff) {
     let length = snakeR.length;
@@ -80,7 +80,7 @@ function reset() {
     dir = "right";
     alive = true;
     won = false;
-    $(".result-display").stop().fadeOut()
+    $(".result-display").stop().fadeOut();
 }
 
 function restart() {
