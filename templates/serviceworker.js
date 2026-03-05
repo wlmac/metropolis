@@ -2,7 +2,7 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox
 
 workbox.core.setCacheNameDetails({
     prefix: 'metropolis',
-    suffix: 'v4'
+    suffix: 'v4.1'
 });
 
 workbox.routing.setDefaultHandler(
@@ -46,7 +46,3 @@ workbox.recipes.offlineFallback({
 });
 
 workbox.recipes.googleFontsCache();
-
-workbox.serviceWorker.addEventListener('waiting', () => {
-  window.location.reload();
-});

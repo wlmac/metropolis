@@ -139,4 +139,12 @@
     <meta name="og:image" content="/static/core/img/logo/logo-any-192.png">
     <meta name="theme-color" content="#073763">
     <script id="index-page-data" type="application/json">{{ banner_data.json_data }}</script>
+    <script>
+        var refreshing;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if(refreshing) return;
+            refreshing = true;
+            window.location.reload();
+        });
+    </script>
 {% endblock %}
