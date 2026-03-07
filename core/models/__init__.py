@@ -1,4 +1,5 @@
 # ruff: noqa: F403
+from .banner import *
 from .choices import *
 from .event import *
 from .organization import *
@@ -8,4 +9,3 @@ from .schedule import *
 from .tag import *
 from .timetable import *
 from .user import *
-from .banner import *

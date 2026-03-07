@@ -1,10 +1,10 @@
 from allauth.account.forms import SignupForm
 from django import forms
 from django.conf import settings
-from django.contrib.auth.forms import UserChangeForm as ContribUserChangeForm
 from django.contrib.auth.forms import (
     AdminUserCreationForm as ContribAdminUserCreationForm,
 )
+from django.contrib.auth.forms import UserChangeForm as ContribUserChangeForm
 from django_select2 import forms as s2forms
 from martor.widgets import AdminMartorWidget
 

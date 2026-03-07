@@ -44,7 +44,9 @@ drf-spectacular = "0.27.0"
 memoization = "^0.4.0"
 psycopg = [
     { version = "~3.1", markers = "sys_platform == 'linux'" },
-    { extras = ["binary"], version = "~3.1", markers = "sys_platform != 'linux'" },
+    { extras = [
+        "binary",
+    ], version = "~3.1", markers = "sys_platform != 'linux'" },
 ]
 gunicorn = "^23.0.0"
 sentry-sdk = { extras = ["django", "celery"], version = "^2.8.0" }
@@ -55,16 +57,21 @@ django-reversion = "^5.1.0"
 [tool.poetry.group.dev.dependencies]
 django-stubs = "*"
 ruff = "^0.6.3"
-isort = "*"
 
 [tool.poetry.requires-plugins]
 poetry-plugin-export = ">=1.8"
 
 [tool.ruff]
-exclude = [
-    "core/migrations",
-    ".gitignore"
+exclude = ["core/migrations", ".gitignore"]
+
+[tool.ruff.lint]
+select = [ # https://docs.astral.sh/ruff/rules/
+    "E",
+    "F",
+    "I",
 ]
+ignore = ["E501"]
+
 [tool.ruff.format]
 docstring-code-format = true
 

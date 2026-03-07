@@ -3,9 +3,9 @@ from __future__ import annotations
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import permissions, serializers
 from rest_framework.exceptions import ValidationError
-from django.utils import timezone
 
 from core.api.serializers.custom import (
     CommentField,

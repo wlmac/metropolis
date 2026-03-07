@@ -1,7 +1,9 @@
 import datetime as dt
 import functools
+from json import dumps, loads
 from pathlib import Path
 
+import gspread
 import pytz
 import requests
 from celery.schedules import crontab
@@ -20,21 +22,17 @@ from exponent_server_sdk import (
 )
 from requests.exceptions import ConnectionError, HTTPError
 
-import gspread
-
-from json import dumps, loads
-
 from core.models import (
     Announcement,
     BlogPost,
     Comment,
     Event,
-    User,
     Organization,
     Tag,
+    User,
 )
-from core.utils.tasks import get_random_username
 from core.utils.ai import prompt_gemini
+from core.utils.tasks import get_random_username
 from metropolis.celery import app
 
 logger = get_task_logger(__name__)

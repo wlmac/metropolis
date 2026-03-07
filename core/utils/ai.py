@@ -1,5 +1,5 @@
-from google import genai
 from django.conf import settings
+from google import genai
 
 
 def prompt_gemini(prompt, model=None):

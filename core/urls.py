@@ -28,8 +28,8 @@ from .views.post import (
 )
 from .views.raffle import RaffleRedirect
 from .views.timetable import (
-    TimetableList,
     TimetableEditor,
+    TimetableList,
 )
 from .views.tv import TVClubView, TVView
 from .views.user import Profile, ProfileRedirect, ProfileUpdate

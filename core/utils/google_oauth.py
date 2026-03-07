@@ -1,9 +1,8 @@
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
-
 from pathlib import Path
 
 from django.conf import settings
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 
 
 def load_creds() -> tuple[Credentials | None, str | None, bool]:
