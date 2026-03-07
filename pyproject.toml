@@ -57,6 +57,9 @@ django-stubs = "*"
 ruff = "^0.6.3"
 isort = "*"
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
 [tool.ruff]
 exclude = [
     "core/migrations",
