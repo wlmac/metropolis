@@ -56,7 +56,8 @@ django-reversion = "^5.1.0"
 
 [tool.poetry.group.dev.dependencies]
 django-stubs = "*"
-ruff = "^0.6.3"
+pre-commit = "^4.5.1"
+ruff = "0.15.4"
 
 [tool.poetry.requires-plugins]
 poetry-plugin-export = ">=1.8"

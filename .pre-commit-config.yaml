@@ -16,3 +16,11 @@ repos:
         entry: make
         language: system
         args: [ "requirements.txt" ]
+  - repo: local
+    hooks:
+      - id: sync-ruff-version
+        name: "Set ruff version in pyproject.toml to .pre-commit-config.yaml"
+        entry: make
+        language: system
+        args: [ "sync-ruff-version" ]
+        pass_filenames: false
