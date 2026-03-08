@@ -1,5 +1,3 @@
-from typing import Dict, List, Union
-
 from django.conf import settings
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
@@ -129,12 +127,12 @@ class MapView(TemplateView, mixins.TitleMixin):
         return context
 
 
-UserType = Dict[str, Union[int, str, bool, List[str]]]
-PositionType = Dict[str, Union[UserType, str, List[str], bool]]  # str being None
+UserType = dict[str, int | str | bool | list[str]]
+PositionType = dict[str, UserType | str | list[str] | bool]  # str being None
 
-TeamData = Dict[
+TeamData = dict[
     str,  # Team role (e.g., "Project Manager", "Frontend Developer", etc.)
-    List[PositionType],  # List of positions and associated details
+    list[PositionType],  # List of positions and associated details
 ]
 
 

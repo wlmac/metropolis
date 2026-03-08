@@ -137,7 +137,7 @@ class SetField(models.TextField):
     __token = " "
 
     def __init__(self, *args, **kwargs):
-        super(SetField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def to_python(self, value) -> list | tuple | None:
         if not value:
@@ -185,7 +185,7 @@ class ArrayField(DjangoArrayField):
             "choices": self.base_field.choices,
         }
         defaults.update(kwargs)
-        return super(ArrayField, self).formfield(**defaults)
+        return super().formfield(**defaults)
 
 
 if "sqlite" in settings.DATABASES["default"]["ENGINE"]:

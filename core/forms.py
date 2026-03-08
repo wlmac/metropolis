@@ -37,7 +37,7 @@ class MetropolisSignupForm(SignupForm, CaseInsensitiveUsernameMixin):
     ]
 
     def save(self, request):
-        user = super(MetropolisSignupForm, self).save(request)
+        user = super().save(request)
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
         user.graduating_year = self.cleaned_data["graduating_year"]
@@ -47,14 +47,14 @@ class MetropolisSignupForm(SignupForm, CaseInsensitiveUsernameMixin):
         return user
 
     def __init__(self, *args, **kwargs):
-        super(MetropolisSignupForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         del self.fields["email"].widget.attrs["placeholder"]
         del self.fields["username"].widget.attrs["placeholder"]
         del self.fields["password1"].widget.attrs["placeholder"]
         del self.fields["password2"].widget.attrs["placeholder"]
 
     def clean_email(self):
-        email = super(MetropolisSignupForm, self).clean_email()
+        email = super().clean_email()
         if not (
             email.endswith(settings.STUDENT_EMAIL_SUFFIX)
             or email.endswith(settings.TEACHER_EMAIL_SUFFIX)
@@ -165,7 +165,7 @@ class OrganizationAdminForm(forms.ModelForm):
 
 class EventAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(EventAdminForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # TODO: settings.TIMETABLE_FORMAT or whatever is gone now,
         #       so switch to some other reliable method

@@ -1,5 +1,4 @@
 from datetime import timedelta
-from typing import Dict
 
 from django.conf import settings
 from django.utils import timezone
@@ -26,7 +25,7 @@ class APIVersion(APIView):
     """Returns the current API version."""
 
     @staticmethod
-    def get(request) -> Dict[str, str]:
+    def get(request) -> dict[str, str]:
         return Response({"version": settings.API_VERSION})
 
 

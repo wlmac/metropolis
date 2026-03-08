@@ -24,7 +24,7 @@ cleaner = sanitizer.Cleaner(
         "br",
         "p",
         "img",
-        *["h{}".format(i) for i in range(1, 7)],
+        *[f"h{i}" for i in range(1, 7)],
         "hr",
         "iframe",
         "ol",

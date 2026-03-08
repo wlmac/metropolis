@@ -4,8 +4,6 @@ from urllib.parse import urlencode
 
 # return only the URL of the gravatar
 def gravatar_url(email: str) -> str:
-    email = email.encode("utf-8")
-    return "https://www.gravatar.com/avatar/%s?%s" % (
-        md5(email.lower()).hexdigest(),
-        urlencode({"d": "retro"}),
-    )
+    email_hash = md5(email.encode("utf-8").lower()).hexdigest()
+    query_string = urlencode({"d": "retro"})
+    return f"https://www.gravatar.com/avatar/{email_hash}?{query_string}"

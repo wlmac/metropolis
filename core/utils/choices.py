@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Literal, Optional, Tuple
+from typing import Literal
 
 import pytz
 from django.utils import timezone
@@ -20,7 +20,7 @@ announcement_status_initial_choices = [
 ]
 
 
-def calculate_student_years() -> List[Tuple[int | str, int | None]]:
+def calculate_student_years() -> list[tuple[int | str, int | None]]:
     current_year = timezone.now().year
     current_month = timezone.now().month
 
@@ -39,8 +39,8 @@ graduating_year_choices = calculate_student_years()
 
 
 def calculate_years(
-    fmt: Literal["generate", "is_alumni"], user_years: Optional[List] = None
-) -> List[Tuple[str, str]] | bool:
+    fmt: Literal["generate", "is_alumni"], user_years: list | None = None
+) -> list[tuple[str, str]] | bool:
     if fmt == "is_alumni" and user_years is None:
         raise ValueError("user_years must be provided when fmt is is_alumni")
 

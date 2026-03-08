@@ -1,4 +1,4 @@
-with open("databooths.txt", "r") as d, open("booths.txt", "w") as geojson:
+with open("databooths.txt") as d, open("booths.txt", "w") as geojson:
     data = d.read()
     data_list = data.split("\n")
 

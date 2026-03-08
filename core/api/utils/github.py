@@ -1,5 +1,5 @@
+from collections.abc import Iterable
 from os import environ
-from typing import Iterable, List, Optional, Tuple
 
 from django.apps import apps
 from django.db import connection
@@ -22,16 +22,16 @@ def table_exists(model: Model) -> bool:
 @cached(max_size=512)
 def get_model_choices(
     model: Model,
-    value_list: Tuple[str, str],
-    db_filter: Optional[dict] = None,
-) -> List:
+    value_list: tuple[str, str],
+    db_filter: dict | None = None,
+) -> list:
     """
     Get choices for a model with optional filtering.
     """
     if not table_exists(model):
         return []
 
-    options: List
+    options: list
     if db_filter is None:
         options = list(model.objects.all().values_list(*value_list))
     else:

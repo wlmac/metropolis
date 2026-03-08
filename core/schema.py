@@ -1,6 +1,7 @@
 import dataclasses
+from collections.abc import Callable, Sequence
 from functools import wraps
-from typing import Any, Callable, Dict, Final, List, Optional, Sequence, Tuple, Type
+from typing import Any, Final
 
 from drf_spectacular.drainage import set_override
 from drf_spectacular.generators import SchemaGenerator
@@ -23,13 +24,13 @@ from core.utils.types import (
 
 
 def metro_extend_schema_serializer(  # modified version of drf_spectacular.utils.extend_schema_serializer
-    klass: Type[Serializer],
-    many: Optional[bool] = None,
-    exclude_fields: Optional[Sequence[str]] = None,
-    deprecate_fields: Optional[Sequence[str]] = None,
-    examples: Optional[Sequence[OpenApiExample]] = None,
-    extensions: Optional[Dict[str, Any]] = None,
-    component_name: Optional[str] = None,
+    klass: type[Serializer],
+    many: bool | None = None,
+    exclude_fields: Sequence[str] | None = None,
+    deprecate_fields: Sequence[str] | None = None,
+    examples: Sequence[OpenApiExample] | None = None,
+    extensions: dict[str, Any] | None = None,
+    component_name: str | None = None,
 ) -> Callable[[F], F]:
     """
     Function for modifying the behavior of a serializer class. Intended for overriding default serializer
@@ -61,7 +62,7 @@ def metro_extend_schema_serializer(  # modified version of drf_spectacular.utils
     return klass
 
 
-def dynamic_envelope(serializer_class: Type[Serializer], many=False):
+def dynamic_envelope(serializer_class: type[Serializer], many=False):
     def decorator(view_func):
         @wraps(view_func)
         def wrapped_view(*args, **kwargs):
@@ -111,9 +112,9 @@ class Api3ObjSpliter:
 
     def __init__(self, schema):
         self.operation_data = ObjectModificationData()
-        self.keys_to_delete: Tuple = ()
+        self.keys_to_delete: tuple = ()
         self.schema = schema
-        self._provider_details: Dict[str, ProviderDetails] = {}
+        self._provider_details: dict[str, ProviderDetails] = {}
 
     def run(self):
         # ObjectModificationData._make
@@ -132,7 +133,7 @@ class Api3ObjSpliter:
         for path in self.keys_to_delete:
             del self.schema["paths"][path]
 
-    def set_obj_paths(self, paths: Dict[str, dict]) -> List[Tuple[str, dict]]:
+    def set_obj_paths(self, paths: dict[str, dict]) -> list[tuple[str, dict]]:
         PATH_PREFIX = "/api/v3/obj/{type}"
         _obj_paths = [
             (path, value)
@@ -196,7 +197,7 @@ class Api3ObjSpliter:
         return operation_id.split("_")[-1]
 
     @staticmethod
-    def get_providers_from_name(enum: List[str]) -> List[BaseProvider]:
+    def get_providers_from_name(enum: list[str]) -> list[BaseProvider]:
         return [get_provider(key) for key in enum]
 
     def create_obj_views(self, operation: SingleOperationData): ...
@@ -240,8 +241,8 @@ class MetroSchemaGenerator(SchemaGenerator):
         return view_endpoints
 
     def _generate_endpoints(
-        self, obj_data: List[ProviderDetails]
-    ) -> List[Tuple[str, str, str, Any]]:
+        self, obj_data: list[ProviderDetails]
+    ) -> list[tuple[str, str, str, Any]]:
         """
         Generate the endpoints for the API3 objects
         Takes in a list of ProviderDetails and returns a list of tuples in the fmt of (path, path_regex, method, view)

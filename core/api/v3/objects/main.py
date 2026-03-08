@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, Dict, List, Tuple
+from collections.abc import Callable
 
 from django.conf import settings
 from django.core.exceptions import BadRequest, ObjectDoesNotExist
@@ -67,7 +67,7 @@ class ObjectList(
         except NoReverseMatch:
             return None
 
-    def __convert_query_params__(self, query_params: QueryDict) -> List[Tuple]:
+    def __convert_query_params__(self, query_params: QueryDict) -> list[tuple]:
         """
         Removes non-filter params from query_params and converts them to the correct type.
         :param query_params: QueryDict
@@ -124,7 +124,7 @@ class ObjectList(
         return lookup_type(lookup_value)
 
     @staticmethod
-    def __compile_filters__(query_params: List) -> Dict:
+    def __compile_filters__(query_params: list) -> dict:
         filters = {}
         if not query_params:
             # No query params, return None to avoid wastefully filtering.

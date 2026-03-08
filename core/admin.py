@@ -230,8 +230,7 @@ class PostAdmin(admin.ModelAdmin):
         objs = list(
             map(
                 lambda obj: (
-                    '<a target="_blank" href="/admin/core/comment/%s">%s</a>'
-                    % (obj.pk, obj.body[:10])
+                    f'<a target="_blank" href="/admin/core/comment/{obj.pk}">{obj.body[:10]}</a>'
                 ),
                 obj.comments.all(),
             )

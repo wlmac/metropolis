@@ -1,19 +1,19 @@
 from abc import ABC
-from typing import Dict, Final, List, Tuple
+from typing import Final
 
 from django.db.models.base import ModelBase
 from rest_framework.serializers import BaseSerializer
 
 from core.utils.types import APIObjOperations
 
-type SerializerItems = Dict[str, BaseSerializer]
+type SerializerItems = dict[str, BaseSerializer]
 
 
-class BaseProvider(ABC, object):
+class BaseProvider(ABC):
     allow_list: bool = True  # Is the view able to list the model's objects. (e.g. /user would list all users
     allow_new: bool = True  # Is the provider able to create a new object.
     kind: APIObjOperations  # type of view
-    listing_filters_ignore: List[str] = []
+    listing_filters_ignore: list[str] = []
     raw_serializers: SerializerItems
 
     @property
@@ -23,11 +23,11 @@ class BaseProvider(ABC, object):
     @classmethod
     def _run_typechecking(cls):
         get_attrs: Final[str] = ("queryset",)
-        required_attrs: Final[Dict[str, type]] = {
+        required_attrs: Final[dict[str, type]] = {
             "model": ModelBase,
             "raw_serializers": dict,
         }
-        additional_attrs: Final[Dict[str, type]] = {"additional_lookup_fields": list}
+        additional_attrs: Final[dict[str, type]] = {"additional_lookup_fields": list}
 
         for key in get_attrs:
             if not (
@@ -70,7 +70,7 @@ class BaseProvider(ABC, object):
         self.request = request
 
     @classmethod
-    def supported_operations(cls) -> Tuple[str]:
+    def supported_operations(cls) -> tuple[str]:
         if not issubclass(cls, BaseProvider):
             raise TypeError("This method can only be ran on subclasses of BaseProvider")
         if "_" in cls.raw_serializers.keys():

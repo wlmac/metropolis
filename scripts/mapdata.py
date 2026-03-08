@@ -5,7 +5,6 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 5:  # 3.5+
 
 import json
 import re
-from typing import Dict, Union
 
 quote_keys_pattern = re.compile(
     r"([\{ ])([a-z]+):"
@@ -30,7 +29,7 @@ def strip(line: str) -> str:
     return line.strip().strip(",")
 
 
-def to_feature(data: Dict[str, Union[float, str]]) -> Dict:
+def to_feature(data: dict[str, float | str]) -> dict:
     """
     Converts the data from data.txt in dict format to geojson feature format (in a dict).
     :param data: data from data.txt
@@ -52,7 +51,7 @@ def to_feature(data: Dict[str, Union[float, str]]) -> Dict:
     }
 
 
-def process_line(line: str) -> Dict:
+def process_line(line: str) -> dict:
     # operations spread over muliple statements over nesting because makes it easier to add/remove steps
     # clean input
     line = strip(line)

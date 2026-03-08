@@ -11,11 +11,9 @@ register = template.Library()
 # TEMPLATE USE:  {{ email|gravatar_url:150 }}
 @register.filter
 def gravatar_url(email, size=40):
-    email = email.encode("utf-8")
-    return "https://www.gravatar.com/avatar/%s?%s" % (
-        hashlib.md5(email.lower()).hexdigest(),
-        urllib.parse.urlencode({"d": "retro", "s": str(size)}),
-    )
+    email_hash = hashlib.md5(email.encode("utf-8").lower()).hexdigest()
+    query_string = urllib.parse.urlencode({"d": "retro", "s": str(size)})
+    return f"https://www.gravatar.com/avatar/{email_hash}?{query_string}"
 
 
 # return an image tag with the gravatar
@@ -23,4 +21,4 @@ def gravatar_url(email, size=40):
 @register.filter
 def gravatar(email, size=40):
     url = gravatar_url(email, size)
-    return mark_safe('<img src="%s" width="%d" height="%d">' % (url, size, size))
+    return mark_safe(f'<img src="{url}" width="{size}" height="{size}">')

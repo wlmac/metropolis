@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.syndication.views import Feed
@@ -19,7 +17,7 @@ from ..models import Exhibit
 from . import mixins
 
 
-def custom_feed(request, pk: int, limit: Optional[int] = None):
+def custom_feed(request, pk: int, limit: int | None = None):
     assert models.Organization.objects.filter(pk=pk).exists(), (
         "pk for feed doesn't exist"
     )

@@ -33,7 +33,7 @@ class PostInteraction(models.Model):
 
     """
 
-    author: "User" | str = models.ForeignKey(
+    author: User | str = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,
         blank=True,
@@ -60,7 +60,7 @@ class PostInteraction(models.Model):
         return self.created_at is None
 
     def get_object(
-        self, obj: "PostInteraction", **kwargs
+        self, obj: PostInteraction, **kwargs
     ):  # get ken to check this in accordance with get
         content_type = ContentType.objects.get_for_model(obj)
         return self.__class__.objects.filter(

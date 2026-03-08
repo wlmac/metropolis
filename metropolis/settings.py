@@ -1,7 +1,7 @@
 import logging
 import os
 from datetime import timedelta
-from typing import Dict, Final, List, Literal
+from typing import Final, Literal
 
 import pytz
 from sentry_sdk.integrations import django as sen_django
@@ -228,17 +228,17 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
-GLOBAL_LOOKUPS: Final[List[str]] = [
+GLOBAL_LOOKUPS: Final[list[str]] = [
     "id"
 ]  # lookups allowed for all providers, first value will be the default if not specified
-IGNORED_QUERY_PARAMS: List[str] = [
+IGNORED_QUERY_PARAMS: list[str] = [
     "limit",
     "offset",
     "search_type",
     "format",
 ]  # query params that are ignored by the API (e.g., for lookups)
 
-LOOKUP_FIELD_REPLACEMENTS: Dict[str, str] = {
+LOOKUP_FIELD_REPLACEMENTS: dict[str, str] = {
     "TextField": "__iexact",
     "CharField": "__iexact",
 }
@@ -518,7 +518,7 @@ SIMPLE_JWT = {
 ICAL_PADDING = timedelta(days=4 * 7)  # iCalendar Feed
 
 # Qualified Trials
-QLTR: Dict[str, Dict] = {
+QLTR: dict[str, dict] = {
     "ia": dict(
         title="Cumulative Minor Changes to Index",
     ),
@@ -544,7 +544,7 @@ NOTIFICATIONS_ENABLED = False
 try:
     with open(os.path.join(os.path.dirname(__file__), "./local_settings.py")) as f:
         exec(f.read(), globals())
-except IOError:
+except OSError:
     os.listdir(os.path.dirname(__file__))
     raise FileNotFoundError(
         "local_settings.py not found, please consult docs for setup instructions"

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Callable, Iterable
 from json import JSONDecodeError
-from typing import Any, Callable, Dict, Iterable, List, Optional, Protocol, Set
+from typing import Any, Protocol
 
 from django.conf import settings
 from django.core.exceptions import BadRequest
@@ -28,7 +29,7 @@ from core.api.v3.objects.base import BaseProvider
 from core.utils.types import APIObjOperations
 
 type IgnoredKey = str | Iterable[str]
-type SerializerItems = Dict[str, BaseSerializer]
+type SerializerItems = dict[str, BaseSerializer]
 
 
 class SplitDictResult:
@@ -46,7 +47,7 @@ class SplitDictResult:
 
 def split_dict_wrapper(
     ignore: IgnoredKey,
-) -> Callable[[Dict[str, Any]], SplitDictResult]:
+) -> Callable[[dict[str, Any]], SplitDictResult]:
     """
     Note: this will fail as the dict must be frozen so LRU cache can hash it
     """
@@ -72,7 +73,7 @@ def get_path_by_provider(provider: BaseProvider) -> str:
     ][0]
 
 
-providers: Dict[
+providers: dict[
     str, BaseProvider
 ] = {  # k = request type (param passed in url), v = provider class
     "announcement": AnnouncementProvider,
@@ -110,8 +111,8 @@ def get_provider(provider_name: provider_keys) -> Callable:
 
 
 def get_providers_by_operation(
-    operation: APIObjOperations, return_provider: Optional[bool] = False
-) -> List[str] | List[BaseProvider]:
+    operation: APIObjOperations, return_provider: bool | None = False
+) -> list[str] | list[BaseProvider]:
     """
     returns a list of provider path names that support the given operation.
 
@@ -144,11 +145,11 @@ class ObjectAPIView(generics.GenericAPIView):
             getattr(provider, "listing_filter", {"id": int, "pk": int}),
         )  # NOTE: better to have the following if after initial, but this is easier
 
-    def _compile_lookup_fields(self) -> Set[str]:
+    def _compile_lookup_fields(self) -> set[str]:
         """
         Compiles the additional lookup fields + the two required into one clean set.
         """
-        allowed_fields: List = getattr(  # the lookup fields allowed for the provider
+        allowed_fields: list = getattr(  # the lookup fields allowed for the provider
             self.provider, "additional_lookup_fields", []
         )
         allowed_fields.extend(settings.GLOBAL_LOOKUPS)
@@ -282,7 +283,7 @@ class Provider(Protocol):
     allow_list: bool
     allow_new: bool
     kind: APIObjOperations
-    listing_filters_ignore: List[str]
+    listing_filters_ignore: list[str]
 
     serializers: SplitDictResult
 

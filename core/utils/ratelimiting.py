@@ -38,7 +38,7 @@ def get_key_expiration(key: str, human_readable: bool = True):
     # give me the seconds left till the key expires
     delta = expiration_date_time - now
     if human_readable:
-        return "{:0>8}".format(str(datetime.timedelta(seconds=delta.seconds)))
+        return f"{str(datetime.timedelta(seconds=delta.seconds)):0>8}"
     else:
         return delta.seconds
 

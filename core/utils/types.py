@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Dict, Final, List, Literal, NamedTuple, Optional
+from typing import TYPE_CHECKING, Final, Literal, NamedTuple, Optional
 
 from rest_framework.serializers import BaseSerializer
 
@@ -14,7 +14,7 @@ type PathData = NamedTuple[str, "BaseProvider", dict]
 
 @dataclass
 class SingleOperationData:
-    providers: List["BaseProvider"]
+    providers: list["BaseProvider"]
     operation: APIObjOperations
     data: dict
 
@@ -22,8 +22,8 @@ class SingleOperationData:
 @dataclass
 class ProviderDetails:
     provider: "BaseProvider"
-    operations_supported: Dict[APIObjOperations, BaseSerializer]
-    url: Optional[str] = None
+    operations_supported: dict[APIObjOperations, BaseSerializer]
+    url: str | None = None
     view: Optional["ObjectAPIView"] = None
 
     def __hash__(self):
@@ -32,10 +32,10 @@ class ProviderDetails:
 
 @dataclass
 class ObjectModificationData:
-    retrieve: Optional[SingleOperationData] = None
-    single: Optional[SingleOperationData] = None
-    list: Optional[SingleOperationData] = None
-    new: Optional[SingleOperationData] = None
+    retrieve: SingleOperationData | None = None
+    single: SingleOperationData | None = None
+    list: SingleOperationData | None = None
+    new: SingleOperationData | None = None
 
     def __iter__(self):
         return iter(
