@@ -73,8 +73,10 @@ select = [ # https://docs.astral.sh/ruff/rules/
     "UP",
     "B",
     "SIM",
+    "C4",
+    # "FIX",
 ]
-ignore = ["E501"]
+ignore = ["E501", "C408"]
 
 [tool.ruff.format]
 docstring-code-format = true

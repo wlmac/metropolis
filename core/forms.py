@@ -85,7 +85,7 @@ class CourseForm(forms.ModelForm):
 
     def is_empty(self):
         return not any(
-            [self.cleaned_data.get(field) for field in ["name", "room", "teacher"]]
+            self.cleaned_data.get(field) for field in ["name", "room", "teacher"]
         )
 
     class Meta:

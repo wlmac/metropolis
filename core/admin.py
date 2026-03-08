@@ -224,14 +224,10 @@ class PostAdmin(admin.ModelAdmin):
     save_count.short_description = "Save Count"
 
     def comments(self, obj):
-        objs = list(
-            map(
-                lambda obj: (
-                    f'<a target="_blank" href="/admin/core/comment/{obj.pk}">{obj.body[:10]}</a>'
-                ),
-                obj.comments.all(),
-            )
-        )
+        objs = [
+            f'<a target="_blank" href="/admin/core/comment/{comment.pk}">{comment.body[:10]}</a>'
+            for comment in obj.comments.all()
+        ]
         return mark_safe(",".join(objs))
 
     comments.short_description = "Comments"
