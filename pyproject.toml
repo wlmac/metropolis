@@ -71,6 +71,7 @@ select = [ # https://docs.astral.sh/ruff/rules/
     "F",
     "I",
     "UP",
+    "B",
 ]
 ignore = ["E501"]
 

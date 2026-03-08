@@ -18,7 +18,7 @@ def justinian_slam():
         rand = randint(0, now) + 5
     elif now > 21:
         rand = randint(0, now - 21) + 2
-    for i in range(rand):
+    for _ in range(rand):
         a = randint(0, length - 1)
         b = randint(0, length - 1)
         out[a], out[b] = out[b], out[a]

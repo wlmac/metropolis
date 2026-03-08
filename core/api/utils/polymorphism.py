@@ -267,8 +267,8 @@ class ObjectAPIView(generics.GenericAPIView):
             kwargs.pop("type")
             response = handler(request, *args, **kwargs)
 
-        except (JSONDecodeError, UnicodeDecodeError):
-            raise BadRequest("Invalid JWT, token is malformed.")
+        except (JSONDecodeError, UnicodeDecodeError) as exc:
+            raise BadRequest("Invalid JWT, token is malformed.") from exc
         except Exception as exc:
             response = self.handle_exception(exc)
 

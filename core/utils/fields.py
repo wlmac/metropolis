@@ -44,8 +44,8 @@ class MonthDayFormField(DateField):
                 .replace(year=y.year, month=int(month), day=int(day))
                 .date()
             )
-        except ValueError:
-            raise ValidationError(_("Invalid date format (must be MM/DD)"))
+        except ValueError as exc:
+            raise ValidationError(_("Invalid date format (must be MM/DD)")) from exc
 
     def prepare_value(self, value) -> str:
         """
@@ -114,8 +114,8 @@ class MonthDayField(models.DateField):
                 .replace(year=y.year, month=int(month), day=int(day))
                 .date()
             )
-        except ValueError:
-            raise ValidationError(_("Invalid date format (must be MM/DD)"))
+        except ValueError as exc:
+            raise ValidationError(_("Invalid date format (must be MM/DD)")) from exc
 
 
 class PositiveOneSmallIntegerField(PositiveIntegerRelDbTypeMixin, SmallIntegerField):

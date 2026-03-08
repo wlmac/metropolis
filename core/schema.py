@@ -121,7 +121,7 @@ class Api3ObjSpliter:
         paths = self.schema["paths"]
         self.set_obj_paths(paths)
 
-        for _, provider in providers.items():
+        for _, _provider in providers.items():
             ...
             # print(self._get_data_from_provider(provider))
         for operation in dataclasses.fields(self.operation_data):
@@ -213,7 +213,7 @@ class MetroSchemaGenerator(SchemaGenerator):
         """
         obj3 = set()
         view_endpoints = super()._get_paths_and_endpoints()
-        for path, subpath, method, view in view_endpoints:
+        for path, _subpath, _method, view in view_endpoints:
             if path.startswith("/api/v3/obj/") and "{type}" in path:
                 name = view.__class__.__name__.lstrip("Object").casefold()
                 # print(f"Found path: {name}")
@@ -255,7 +255,7 @@ class MetroSchemaGenerator(SchemaGenerator):
         }
         endpoints = []
         for obj in obj_data:
-            for operation, serializer in obj.operations_supported:
+            for operation, _serializer in obj.operations_supported:
                 for method in CONVERTER[operation]:
                     print(f"Operation: {operation} Method: {method}")
                     endpoints.append(

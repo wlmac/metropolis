@@ -110,6 +110,7 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
                 range(4),
                 [1, 2, 4, 3] if date.weekday() % 2 == 0 else [1, 2, 3, 4],
                 schedule_times,
+                strict=False,
             )
         ],
     }

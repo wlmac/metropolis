@@ -38,7 +38,7 @@ class Command(BaseCommand):
                     authorized_user_filename=AUTHORIZED_PATH,
                     scopes=scopes,
                 )
-            except Exception:
-                raise CommandError("Failed to authenticate")
+            except Exception as exc:
+                raise CommandError("Failed to authenticate") from exc
 
         self.stdout.write(self.style.SUCCESS("Successfully authenticated"))

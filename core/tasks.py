@@ -239,13 +239,13 @@ def notif_single(self, recipient_id: int, msg_kwargs):
                 PushMessage(to=f"ExponentPushToken[{token}]", **msg_kwargs)
             )
         except (ConnectionError, HTTPError) as exc:
-            raise self.retry(exc=exc)
+            raise self.retry(exc=exc) from exc
         try:
             resp.validate_response()
         except DeviceNotRegisteredError:
             notreg_tokens.add(token)
         except PushTicketError as exc:
-            raise self.retry(exc=exc)
+            raise self.retry(exc=exc) from exc
     if notreg_tokens:
         u = User.objects.filter(id=recipient_id).first()
         for token in notreg_tokens:
@@ -286,7 +286,7 @@ def fetch_announcements():
     row_counter = 1
 
     """
-    
+
     all_announcement_data -> List of dicts where every element is a row scraped from the spreadsheet
         Current Format Of Each Element:
             {

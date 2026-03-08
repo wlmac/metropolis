@@ -76,7 +76,7 @@ class EventProvider(BaseProvider):
                     d -= datetime.timedelta(days=1)
                 return d
             except ValueError as e:
-                raise ParseError(detail=f"parse {name}: {e}")
+                raise ParseError(detail=f"parse {name}: {e}") from e
 
         start, end = parse("start"), parse("end")
         if start:

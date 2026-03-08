@@ -55,7 +55,7 @@ def calculate_years(
             f"{year}-{str(year + 1)}"
             for year in range(2021, current_year + 2)  # generate next years to
         ]
-        years = zip(year_ranges, year_ranges)
+        years = zip(year_ranges, year_ranges, strict=False)
         return list(years)
     elif fmt == "is_alumni":
         current_year_range = f"{current_year}-{str(current_year + 1)}"

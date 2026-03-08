@@ -544,11 +544,11 @@ NOTIFICATIONS_ENABLED = False
 try:
     with open(os.path.join(os.path.dirname(__file__), "./local_settings.py")) as f:
         exec(f.read(), globals())
-except OSError:
+except OSError as exc:
     os.listdir(os.path.dirname(__file__))
     raise FileNotFoundError(
         "local_settings.py not found, please consult docs for setup instructions"
-    )
+    ) from exc
 
 if SECRET_KEY == "Change me":
     raise TypeError("override SECRET_KEY")
