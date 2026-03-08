@@ -56,11 +56,12 @@ def migrate_groups():
                 user.groups.add(owner_group)
                 count["owner"]["added"] += 1
         else:
-            if user.organizations_leading.count() == 0:
-                if all([user.is_staff, not user.is_superuser, not user.is_teacher]):
-                    user.is_staff = False
-                    user.save()
-                    count["staff"]["removed"] += 1
+            if user.organizations_leading.count() == 0 and all(
+                [user.is_staff, not user.is_superuser, not user.is_teacher]
+            ):
+                user.is_staff = False
+                user.save()
+                count["staff"]["removed"] += 1
             if user.groups.filter(name="Org Owners").exists():
                 user.groups.remove(owner_group)
                 count["owner"]["removed"] += 1

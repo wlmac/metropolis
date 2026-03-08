@@ -43,9 +43,12 @@ class BaseProvider(ABC):
 
         # just type checking, doesnt care if value is there or not.
         for key, value in (additional_attrs | required_attrs).items():
-            if hasattr(cls, key) and (item := getattr(cls, key)):
-                if not isinstance(item, value):
-                    raise TypeError(f"{key} must be of type {value}")
+            if (
+                hasattr(cls, key)
+                and (item := getattr(cls, key))
+                and not isinstance(item, value)
+            ):
+                raise TypeError(f"{key} must be of type {value}")
 
         cls._check_serializers()
 
@@ -73,6 +76,6 @@ class BaseProvider(ABC):
     def supported_operations(cls) -> tuple[str]:
         if not issubclass(cls, BaseProvider):
             raise TypeError("This method can only be ran on subclasses of BaseProvider")
-        if "_" in cls.raw_serializers.keys():
+        if "_" in cls.raw_serializers:
             return "list", "new", "single", "retrieve"
         return tuple(cls.raw_serializers.keys())

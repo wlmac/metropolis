@@ -18,9 +18,7 @@ class Inner(permissions.BasePermission):
     def has_object_permission(self, request, view, tag):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user.can_edit(tag):
-            return True
-        return False
+        return request.user.can_edit(tag)
 
 
 class TagProvider(BaseProvider):

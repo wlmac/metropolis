@@ -173,9 +173,7 @@ class Identity(permissions.BasePermission):
     def has_object_permission(self, request, view, user):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user == user:
-            return True
-        return False
+        return request.user == user
 
 
 class UserProvider(BaseProvider):

@@ -13,7 +13,7 @@ def hijack_permissions_check(*, hijacker, hijacked) -> bool:
     ALLOWED_HIJACKERS may hijack any user, except another ALLOWED_HIJACKER
     You cannot hijack a non-active user as the db will not unlock.
     """
-    if all(
+    return all(
         [
             hijacker.id in settings.ALLOWED_HIJACKERS,
             not hijacked.is_superuser,
@@ -21,9 +21,7 @@ def hijack_permissions_check(*, hijacker, hijacked) -> bool:
             hijacked.is_active,
             hijacked is not None,
         ]
-    ):
-        return True
-    return False
+    )
 
 
 def print_hijack_started(sender, hijacker, hijacked, request, **kwargs):

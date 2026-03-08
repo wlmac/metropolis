@@ -141,9 +141,7 @@ class Inner(permissions.BasePermission):
     def has_object_permission(self, request, view, ann):
         if request.method in permissions.SAFE_METHODS:
             return True
-        if request.user.can_edit(ann):
-            return True
-        return False
+        return request.user.can_edit(ann)
 
 
 class AnnouncementProvider(BaseProvider):

@@ -51,9 +51,9 @@ class CommentSerializer(serializers.ModelSerializer):
         """
         if self.context["request"].user.is_anonymous:
             raise serializers.ValidationError("You must be logged in to comment.")
-        if parent := attrs.get("parent", None):
-            if parent.id == attrs.get("id", None):
-                raise ValidationError("A Comment cannot be a parent of itself.")
+        parent = attrs.get("parent", None)
+        if parent and parent.id == attrs.get("id", None):
+            raise ValidationError("A Comment cannot be a parent of itself.")
 
         return super().validate(attrs)
 

@@ -1,3 +1,4 @@
+import contextlib
 from urllib.parse import urlparse
 
 from django import http
@@ -29,12 +30,11 @@ class CustomRedirectFallbackTemporaryMiddleware(RedirectFallbackMiddleware):
         current_site = get_current_site(request)
 
         r = None
-        try:
+        with contextlib.suppress(Redirect.DoesNotExist):
             r = Redirect.objects.get(site=current_site, old_path=full_path.rstrip("/"))
-        except Redirect.DoesNotExist:
-            pass
+
         if r is None and settings.APPEND_SLASH and not request.path.endswith("/"):
-            try:
+            with contextlib.suppress(Redirect.DoesNotExist):
                 if parsed_url is not None:
                     r = Redirect.objects.get(
                         site=current_site,
@@ -45,8 +45,6 @@ class CustomRedirectFallbackTemporaryMiddleware(RedirectFallbackMiddleware):
                         site=current_site,
                         old_path=request.get_full_path(force_append_slash=True),
                     )
-            except Redirect.DoesNotExist:
-                pass
 
         if r is not None:
             if r.new_path == "":

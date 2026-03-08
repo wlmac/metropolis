@@ -41,9 +41,7 @@ class ModelAbilityField(serializers.ModelField):
         key = f"can_{self.ability}"
         if not hasattr(user, key):
             return False
-        if getattr(user, key)(instance) or user.is_superuser:
-            return True
-        return False
+        return getattr(user, key)(instance) or user.is_superuser
 
 
 class PrimaryKeyRelatedAbilityField(serializers.PrimaryKeyRelatedField):
@@ -59,6 +57,4 @@ class PrimaryKeyRelatedAbilityField(serializers.PrimaryKeyRelatedField):
         key = f"can_{self.ability}"
         if not hasattr(user, key):
             return False
-        if getattr(user, key)(instance) or user.is_superuser:
-            return True
-        return False
+        return getattr(user, key)(instance) or user.is_superuser

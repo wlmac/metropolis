@@ -161,10 +161,11 @@ class AboutView(TemplateView, mixins.TitleMixin):
                 continue
 
             for position in positions:
-                if (pol := member.get("positions_leading", None)) is not None:
-                    if pol.__contains__(position):
-                        grouped_members[position].insert(0, member)
-                        continue
+                if (
+                    pol := member.get("positions_leading", None)
+                ) is not None and pol.__contains__(position):
+                    grouped_members[position].insert(0, member)
+                    continue
                 grouped_members[position].append(member)
 
         context["members"] = grouped_members

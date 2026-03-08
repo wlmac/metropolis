@@ -168,7 +168,7 @@ class ObjectAPIView(generics.GenericAPIView):
         field_type = self.provider.model._meta.get_field(
             lookup
         ).get_internal_type()  # get value like CharField
-        if field_type in settings.LOOKUP_FIELD_REPLACEMENTS.keys():
+        if field_type in settings.LOOKUP_FIELD_REPLACEMENTS:
             lookup += settings.LOOKUP_FIELD_REPLACEMENTS[field_type]
         return lookup
 
@@ -192,11 +192,10 @@ class ObjectAPIView(generics.GenericAPIView):
 
         q = Q()
         raw = {self.lookup_field: self.kwargs.get("lookup")}
-        if self.lookup_field == "id":
-            if not raw[self.lookup_field][0].isdigit():
-                raise BadRequest(
-                    "ID must be an integer, if you want to use a different lookup, refer to the docs for the supported lookups."
-                )
+        if self.lookup_field == "id" and not raw[self.lookup_field][0].isdigit():
+            raise BadRequest(
+                "ID must be an integer, if you want to use a different lookup, refer to the docs for the supported lookups."
+            )
         if self.lookup_field in raw:
             if (
                 self.lookup_field in ("id", "pk") and raw[self.lookup_field][0] == "0"

@@ -225,10 +225,7 @@ def notif_single(self, recipient_id: int, msg_kwargs):
     for token, options in recipient.expo_notif_tokens.items():
         if options is not None:
             allowlist = options.get("allow")
-            if (
-                isinstance(allowlist, dict)
-                and msg_kwargs["category"] not in allowlist.keys()
-            ):
+            if isinstance(allowlist, dict) and msg_kwargs["category"] not in allowlist:
                 logger.info(
                     f"notif_single (category {msg_kwargs['category']}) not allowed to {recipient} (allowlist {allowlist}) ({recipient.expo_notif_tokens}): {msg_kwargs}"
                     + ("(dry run)" if settings.NOTIF_DRY_RUN else "")

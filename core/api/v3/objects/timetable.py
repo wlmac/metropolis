@@ -27,9 +27,7 @@ class Identity(permissions.BasePermission):
     def has_object_permission(self, request, view, timetable):
         if request.method in ("GET", "HEAD", "OPTIONS"):
             return True
-        if request.user == timetable.owner:
-            return True
-        return False
+        return request.user == timetable.owner
 
 
 class TimetableProvider(BaseProvider):

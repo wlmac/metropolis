@@ -68,15 +68,14 @@ def main(input_path: str = "data.txt", output_path: str = "data.geojson") -> Non
     """
     Runs the main program: use the data form input_path, convert it to a geojson format and save it to output_path
     """
-    with open(input_path) as input_file:
-        # usually points to metropolis/core/static/core/js/map/data.txt
-        with open(output_path, "w") as output_file:
-            # open both files at the same time to show that they are both being used
-            data = {
-                "type": "FeatureCollection",
-                "features": list(map(process_line, input_file)),
-            }
-            json.dump(data, output_file)
+    # input_path usually points to metropolis/core/static/core/js/map/data.txt
+    with open(input_path) as input_file, open(output_path, "w") as output_file:
+        # open both files at the same time to show that they are both being used
+        data = {
+            "type": "FeatureCollection",
+            "features": list(map(process_line, input_file)),
+        }
+        json.dump(data, output_file)
 
 
 if __name__ == "__main__":

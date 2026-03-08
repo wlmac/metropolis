@@ -39,7 +39,7 @@ class Command(BaseCommand):
                         staff_member.positions = (
                             (list(staff_member.positions) + [position])
                             if staff_member.positions is not None
-                            else [position] or ["Backend Developer"]
+                            else [position]
                         )
 
                         staff_member.save()

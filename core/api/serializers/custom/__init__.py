@@ -122,7 +122,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class SingleUserField(ChoiceField):
     def __init__(self, **kwargs):
         self.slug_field = "username"
-        choices = kwargs.get("choices", None) or get_model_choices(
+        choices = kwargs.get("choices") or get_model_choices(
             model=User,
             value_list=("id", self.slug_field),
             db_filter=dict(is_active=True),
