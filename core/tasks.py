@@ -72,7 +72,7 @@ def setup_periodic_tasks(sender, **kwargs):
         crontab(hour=8, minute=30, day_of_week="mon-fri"), fetch_announcements
     )
 
-    sender.add_periodic_task(crontab(hour=4, minute=0), fetch_calendar_events)
+    # sender.add_periodic_task(crontab(hour=4, minute=0), fetch_calendar_events)
 
 
 @app.task
@@ -86,6 +86,8 @@ def delete_expired_users():
     comments.update(
         body=None, last_modified=timezone.now()
     )  # if body is None "deleted on %last_modified% would be shown
+    for user in queryset:
+        user.organizations.clear()
     queryset.update(  # We need to object to not break posts or comments
         first_name="Deleted",
         last_name="User",
@@ -94,7 +96,6 @@ def delete_expired_users():
         # timezone="",
         graduating_year=None,
         is_teacher=False,
-        organizations=[],
         tags_following=[],
         qltrs=None,
         saved_blogs=[],
