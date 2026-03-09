@@ -21,6 +21,7 @@ sync-ruff-version:
 	RUFF_POETRY_VERSION=$$(poetry show ruff --no-ansi 2>/dev/null | awk '$$1=="version" {print $$3}' | tr -d '\r'); \
 	if [ -z "$$RUFF_POETRY_VERSION" ]; then \
 		echo "Could not find ruff version in poetry"; \
+		exit 0; \
 	else \
 		echo "Found poetry ruff version: $$RUFF_POETRY_VERSION"; \
 	fi; \
