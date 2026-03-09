@@ -3,6 +3,7 @@ import json
 from dataclasses import dataclass
 
 import rest_framework.utils.encoders
+from django.conf import settings
 from django.utils import timezone
 from django.utils.formats import time_format
 from django.utils.safestring import SafeString, mark_safe
@@ -36,14 +37,13 @@ class JSONEncoder(rest_framework.utils.encoders.JSONEncoder):
         return super().default(obj)
 
 
-def generic_day_schedule(date=None, user=None):
-    return get_day_schedule(date, user, generic=True)
+def generic_day_schedule(date=None, user=None) -> DaySchedule:
+    return get_day_schedule(date, user, is_generic=True)
 
 
-def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
-    date = get_localdate(date)
-    tz = timezone.get_current_timezone()
-
+def get_period_datetimes(
+    date, is_generic
+) -> list[tuple[datetime.datetime, datetime.datetime]] | list:
     default_pattern = models.SchedulePattern.objects.filter(
         name__iexact="Default"
     ).first()
@@ -58,8 +58,8 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
         ]
     else:
 
-        def t(h, m):
-            return datetime.datetime.combine(date, datetime.time(h, m, tzinfo=tz))
+        def t(h: int, m: int) -> datetime.time:
+            return datetime.time(h, m, tzinfo=settings.TZ)
 
         schedule_times = [
             (t(9, 0), t(10, 20)),
@@ -68,19 +68,50 @@ def get_day_schedule(date=None, user=None, generic=False) -> DaySchedule:
             (t(14, 0), t(15, 15)),
         ]
 
-    if not generic:
+    if not is_generic:
         override = models.ScheduleOverride.objects.filter(date=date).first()
 
-        if override:
+        is_weekend = date.weekday() >= 5
+        is_summer = 7 <= date.month <= 8
+        is_no_school_override = (
+            override and override.pattern.p1_start == override.pattern.p4_end
+        )
+
+        if any(
+            [
+                is_weekend,
+                is_summer,
+                is_no_school_override,
+            ]
+        ):
+            schedule_times = []
+        elif override:
+            pattern = override.pattern
             schedule_times = [
                 (
-                    getattr(override.pattern, f"p{i + 1}_start"),
-                    getattr(override.pattern, f"p{i + 1}_end"),
+                    getattr(pattern, f"p{i + 1}_start"),
+                    getattr(pattern, f"p{i + 1}_end"),
                 )
                 for i in range(4)
             ]
-        elif date.weekday() >= 5 or 7 <= date.month <= 8:
-            return {"schedule": [], "cycle": 0, "is_personal": True}
+
+    def dt(date: datetime.date, t: datetime.time) -> datetime.datetime:
+        return datetime.datetime.combine(date, t, tzinfo=settings.TZ)
+
+    schedule_datetimes = [
+        (dt(date, p_start), dt(date, p_end)) for (p_start, p_end) in schedule_times
+    ]
+
+    return schedule_datetimes
+
+
+def get_day_schedule(date=None, user=None, is_generic=False) -> DaySchedule:
+    date = get_localdate(date)
+
+    schedule_times = get_period_datetimes(date, is_generic)
+
+    if not schedule_times:
+        return {"schedule": [], "cycle": 0, "is_personal": True}
 
     is_personal = (
         user is not None and user.is_authenticated and hasattr(user, "timetable")
