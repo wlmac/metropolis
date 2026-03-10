@@ -137,9 +137,8 @@ def get_day_schedule(date=None, user=None, is_generic=False) -> DaySchedule:
                     "end": period_end,
                 },
             }
-            for i, period_num, (period_start, period_end) in zip(
-                range(4),
-                [1, 2, 4, 3] if date.weekday() % 2 == 0 else [1, 2, 3, 4],
+            for period_num, (period_start, period_end) in zip(
+                [1, 2, 4, 3] if date.day % 2 == 0 else [1, 2, 3, 4],
                 schedule_times,
                 strict=False,
             )
