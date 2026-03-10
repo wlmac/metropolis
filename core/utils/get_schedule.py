@@ -117,8 +117,7 @@ def get_day_schedule(date=None, user=None, is_generic=False) -> DaySchedule:
         user is not None and user.is_authenticated and hasattr(user, "timetable")
     )
 
-    if is_personal:
-        courses = user.timetable.get_courses_as_dict()
+    courses = user.timetable.get_courses_as_dict() if is_personal else {}
 
     return {
         "cycle": 1 if date.day % 2 == 1 else 2,
@@ -127,10 +126,10 @@ def get_day_schedule(date=None, user=None, is_generic=False) -> DaySchedule:
             {
                 "description": {
                     "time": f"{time_format(period_start, 'g:i A')} - {time_format(period_end, 'g:i A')}",
-                    "course": f"Period {period_num}"
-                    if not is_personal
-                    else courses.get(period_num, {}).get("name")
+                    "course": courses.get(period_num, {}).get("name")
                     or f"Period {period_num}",
+                    "room": courses.get(period_num, {}).get("room") or "",
+                    "teacher": courses.get(period_num, {}).get("teacher") or "",
                 },
                 "time": {
                     "start": period_start,
