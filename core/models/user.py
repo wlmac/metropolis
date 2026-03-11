@@ -10,6 +10,7 @@ from django.utils import timezone
 from core.models import graduating_year_choices, post
 from core.utils.choices import calculate_years
 from core.utils.fields import ChoiceArrayField, SetField
+from core.utils.get_schedule import get_day_schedule
 from core.utils.mail import send_mail
 
 # Create your models here.
@@ -80,6 +81,12 @@ class User(AbstractUser):
             return self.timetable
         except ObjectDoesNotExist:
             return None
+
+    def get_schedule(self, target_date=None):
+        timetable = self.get_timetable()
+        if timetable:
+            schedule = get_day_schedule(date=target_date, user=self)
+            return {k: v for k, v in schedule.items() if k in ["cycle", "schedule"]}
 
     def get_feed(self):
         return (

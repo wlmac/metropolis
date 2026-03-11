@@ -1,10 +1,10 @@
-import datetime
-
 from django.shortcuts import get_object_or_404
 from oauth2_provider.contrib.rest_framework import TokenHasScope
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from core import utils
 
 from ... import models
 from .. import serializers
@@ -51,7 +51,7 @@ class UserMeSchedule(APIView):
     def get(self, request, format=None):
         date = parse_date_query_param(request)
 
-        return Response(request.user.schedule(target_date=date))
+        return Response(request.user.get_schedule(target_date=date))
 
 
 class UserMeScheduleWeek(APIView):
@@ -62,14 +62,7 @@ class UserMeScheduleWeek(APIView):
     def get(request, format=None):
         date = parse_date_query_param(request)
 
-        return Response(
-            {
-                target_date.isoformat(): request.user.schedule(target_date=target_date)
-                for target_date in [
-                    date + datetime.timedelta(days=days) for days in range(7)
-                ]
-            }
-        )
+        return Response(utils.get_schedule.get_week_schedule(date, request.user))
 
 
 class UserMeTimetable(APIView):
@@ -78,10 +71,10 @@ class UserMeTimetable(APIView):
 
     @staticmethod
     def get(request, format=None):
-        current_timetable = request.user.get_current_timetable()
+        timetable = request.user.get_timetable()
 
-        if current_timetable is None:
+        if timetable is None:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = serializers.TimetableSerializer(current_timetable)
+        serializer = serializers.TimetableSerializer(timetable)
         return Response(serializer.data)

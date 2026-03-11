@@ -145,16 +145,16 @@ def get_day_schedule(date=None, user=None, is_generic=False) -> DaySchedule:
     }
 
 
-def get_week_schedule(user) -> dict:
-    date = timezone.localdate()
+def get_week_schedule(date=None, user=None) -> dict:
+    date = date or timezone.localdate()
     return {
-        target_date.isoformat(): get_day_schedule(date, user)
+        target_date.isoformat(): get_day_schedule(target_date, user)
         for target_date in [date + datetime.timedelta(days=days) for days in range(7)]
     }
 
 
 def get_week_schedule_info(user) -> WeekScheduleInfo:
-    data = get_week_schedule(user)
+    data = get_week_schedule(date=None, user=user)
     return WeekScheduleInfo(
         json_data=mark_safe(json.dumps(data, cls=JSONEncoder)),
         nudge_add_timetable=not all(
