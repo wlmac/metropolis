@@ -344,9 +344,9 @@ def fetch_announcements():
                         "status": "a",
                     }
 
-                    author = User.objects.filter(email=row_values[1]).first()
-
-                    parsed_data["author"] = author
+                    # No point in including the author since it's an automated process
+                    # author = User.objects.filter(email=row_values[1]).first()
+                    # parsed_data["author"] = author
 
                     show_after = timezone.make_aware(
                         dt.datetime.strptime(row_values[6], "%m/%d/%Y")
