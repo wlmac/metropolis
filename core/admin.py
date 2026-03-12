@@ -688,6 +688,11 @@ class SchedulePatternAdmin(admin.ModelAdmin):
 class ScheduleOverrideAdmin(admin.ModelAdmin):
     list_display = ["__str__"]
 
+    def get_changeform_initial_data(self, request):
+        from django.utils import timezone
+
+        return {"date": timezone.localdate()}
+
 
 class CustomFlatPageAdmin(FlatPageAdmin):
     formfield_overrides = {
