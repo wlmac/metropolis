@@ -1,16 +1,13 @@
 import datetime
 import json
 from dataclasses import dataclass
-from zoneinfo import ZoneInfo
 
 import rest_framework.utils.encoders
-from django.conf import settings
 from django.utils import timezone
 from django.utils.formats import time_format
 from django.utils.safestring import SafeString, mark_safe
 
 from .. import models
-from .local_date import get_localdate
 
 
 @dataclass
@@ -48,7 +45,6 @@ def get_period_datetimes(
     default_pattern = models.SchedulePattern.objects.filter(
         name__iexact="Default"
     ).first()
-    tz = ZoneInfo(settings.TIME_ZONE)
 
     if default_pattern:
         schedule_times = [
@@ -61,7 +57,7 @@ def get_period_datetimes(
     else:
 
         def t(h: int, m: int) -> datetime.time:
-            return datetime.time(h, m, tzinfo=tz)
+            return datetime.time(h, m)
 
         schedule_times = [
             (t(9, 0), t(10, 20)),
@@ -97,8 +93,8 @@ def get_period_datetimes(
                 for i in range(4)
             ]
 
-    def dt(date: datetime.date, t: datetime.time) -> datetime.datetime:
-        return datetime.datetime.combine(date, t, tzinfo=tz)
+    def dt(d: datetime.date, t: datetime.time) -> datetime.datetime:
+        return timezone.make_aware(datetime.datetime.combine(d, t))
 
     schedule_datetimes = [
         (dt(date, p_start), dt(date, p_end)) for (p_start, p_end) in schedule_times
@@ -108,7 +104,7 @@ def get_period_datetimes(
 
 
 def get_day_schedule(date=None, user=None, is_generic=False) -> DaySchedule:
-    date = get_localdate(date)
+    date = date or timezone.localdate()
 
     schedule_times = get_period_datetimes(date, is_generic)
 
