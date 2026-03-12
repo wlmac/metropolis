@@ -55,12 +55,13 @@ function setup() {
 }
 
 function update() {
-    let currentCourse;
+    let bannerCourse;
     let description;
     let todayScheduleData;
     let todaySchedule;
     let todayCycle;
     let scheduleIsPersonal;
+    let currentCourse;
 
     const now = getDateTimeNow();
 
@@ -69,43 +70,46 @@ function update() {
         todaySchedule = todayScheduleData.schedule;
         todayCycle = "Day " + todayScheduleData.cycle;
         scheduleIsPersonal = todayScheduleData.is_personal;
-        let courseData;
+        let bannerCourseData;
 
         for (const course of todaySchedule) {
             if (course.description.course && now <= DateTime.fromISO(course.time.end)) {
-                courseData = course;
+                bannerCourseData = course;
+                if (DateTime.fromISO(course.time.start) <= now && now <= DateTime.fromISO(course.time.end)) {
+                    currentCourse = course.description.course;
+                }
                 break;
             }
         }
 
-        if (courseData) {
-            currentCourse = courseData.description.course;
+        if (bannerCourseData) {
+            bannerCourse = bannerCourseData.description.course;
 
-            if (now < DateTime.fromISO(courseData.time.start)) {
-                description = `Starting in ${formatTimeIntervalDuration(now, DateTime.fromISO(courseData.time.start))}`;
+            if (now < DateTime.fromISO(bannerCourseData.time.start)) {
+                description = `Starting in ${formatTimeIntervalDuration(now, DateTime.fromISO(bannerCourseData.time.start))}`;
             } else {
-                description = `Ending in ${formatTimeIntervalDuration(now, DateTime.fromISO(courseData.time.end))}`;
+                description = `Ending in ${formatTimeIntervalDuration(now, DateTime.fromISO(bannerCourseData.time.end))}`;
             }
         } else {
             if (todaySchedule.length > 0) {
-                currentCourse = 'School Over';
+                bannerCourse = 'School Over';
                 description = 'Enjoy your evening!';
             } else {
-                currentCourse = 'No School';
+                bannerCourse = 'No School';
                 description = 'Enjoy your day!';
             }
         }
     } else {
-        currentCourse = "Unknown";
+        bannerCourse = "Unknown";
         description = "We were unable to fetch your schedule.";
     }
 
-    if(scheduleIsPersonal) {
-        $(".schedule-course").text(currentCourse);
-    } else if(currentCourse === "School Over" || currentCourse === "No School") {
-        $(".schedule-course").text(currentCourse);
+    if (scheduleIsPersonal) {
+        $(".schedule-course").text(bannerCourse);
+    } else if (bannerCourse === "School Over" || bannerCourse === "No School") {
+        $(".schedule-course").text(bannerCourse);
     } else {
-        $(".schedule-course").text(todayCycle + " " + currentCourse);
+        $(".schedule-course").text(todayCycle + " " + bannerCourse);
     }
     $(".schedule-description").text(description);
 
