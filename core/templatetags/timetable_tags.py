@@ -1,3 +1,5 @@
+from datetime import date
+
 from django import template
 from django.utils.html import format_html, format_html_join
 
@@ -8,7 +10,7 @@ register = template.Library()
 
 @register.filter
 def render_timetable(timetable):
-    schedule = generic_day_schedule(user=timetable.owner)["schedule"]
+    schedule = generic_day_schedule(date(2000, 1, 1), user=timetable.owner)["schedule"]
     html = format_html(
         '<table class="table"><thead><tr><th scope="col">Period</th>{}</tr></thead><tbody>{}</tbody></table>',
         format_html_join(
