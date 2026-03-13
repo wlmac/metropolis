@@ -3,7 +3,6 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
 
 from core.api.serializers.custom import (
-    CommentField,
     LikeField,
     SingleUserField,
     TagRelatedField,
@@ -15,7 +14,6 @@ from .base import BaseProvider
 
 class Serializer(serializers.ModelSerializer):
     likes = LikeField()
-    comments = CommentField()
     author = SingleUserField()
     tags = TagRelatedField()
 
@@ -44,7 +42,6 @@ class Serializer(serializers.ModelSerializer):
             "is_published",
             "tags",
             "likes",
-            "comments",
         ]
 
 

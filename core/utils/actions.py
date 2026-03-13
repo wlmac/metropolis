@@ -7,7 +7,6 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as __
-from django.utils.translation import ngettext
 
 from core.models import Announcement, Event, Organization, Post, User
 from core.tasks import notif_events_singleday, notif_single
@@ -177,38 +176,3 @@ def archive_page(modeladmin, request, queryset):
         )
     response.write(json.dumps(data))
     return response
-
-
-# Comments
-@admin.action(
-    permissions=["change"],
-    description=__("Approve the selected comments for the main site."),
-)
-def approve_comments(self, request, queryset):
-    count = queryset.update(live=True)
-    self.message_user(
-        request,
-        ngettext(
-            "%d comment successfully approved.",
-            "%d comments successfully approved.",
-            count,
-        )
-        % count,
-    )
-
-
-@admin.action(
-    permissions=["change"],
-    description=__("Unapprove the selected comments for the main site."),
-)
-def unapprove_comments(self, modeladmin, request, queryset):
-    count = queryset.update(live=False)
-    self.message_user(
-        request,
-        ngettext(
-            "%d comment successfully unapproved.",
-            "%d comments successfully unapproved.",
-            count,
-        )
-        % count,
-    )

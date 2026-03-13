@@ -15,7 +15,6 @@ from rest_framework.serializers import BaseSerializer
 from core.api.v3.objects import (
     AnnouncementProvider,
     BlogPostProvider,
-    CommentProvider,
     EventProvider,
     ExhibitProvider,
     FlatPageProvider,
@@ -85,7 +84,6 @@ providers: dict[
     "user": UserProvider,
     "tag": TagProvider,
     "timetable": TimetableProvider,
-    "comment": CommentProvider,
     "like": LikeProvider,
 }
 
@@ -118,7 +116,7 @@ def get_providers_by_operation(
 
     Example:
     >>> get_providers_by_operation("single")
-    ["announcement", "blog-post", "exhibit", "event", "organization", "flatpage", "user", "tag", "timetable", "comment", "like"]
+    ["announcement", "blog-post", "exhibit", "event", "organization", "flatpage", "user", "tag", "timetable", "like"]
     """
     operation = operation.lower()
     return [

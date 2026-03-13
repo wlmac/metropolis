@@ -4,7 +4,6 @@ from .choices import *
 from .event import *
 from .organization import *
 from .post import *
-from .raffle import *
 from .schedule import *
 from .tag import *
 from .timetable import *

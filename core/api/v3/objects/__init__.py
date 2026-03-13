@@ -4,7 +4,7 @@ from .event import EventProvider
 from .exhibit import ExhibitProvider
 from .flatpage import FlatPageProvider
 from .organization import OrganizationProvider
-from .post_interactions import CommentProvider, LikeProvider
+from .post_interactions import LikeProvider
 from .tag import TagProvider
 from .timetable import TimetableProvider
 from .user import UserProvider
@@ -18,7 +18,6 @@ __all__ = [
     "TagProvider",
     "TimetableProvider",
     "UserProvider",
-    "CommentProvider",
     "LikeProvider",
     "FlatPageProvider",
 ]

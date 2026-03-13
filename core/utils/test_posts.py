@@ -1,9 +1,8 @@
-from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 from django.utils import timezone
 
 from core.admin import User
-from core.models import Announcement, BlogPost, Comment, Organization, Post
+from core.models import Announcement, BlogPost, Organization
 
 
 def create_school_org(user: User) -> Organization:
@@ -38,18 +37,6 @@ def create_blog_post(author: User, title: str) -> BlogPost:
     return blog
 
 
-def create_comment(user: User, post: Post, body: str) -> Comment:
-    com = Comment.objects.create(
-        content_type=ContentType.objects.get_for_model(post),
-        object_id=post.id,
-        author=user,
-        body=body,
-        parent=None,
-    )
-    com.save()
-    return com
-
-
 class TestAnnouncement(TestCase):
     def test_get_approved(self):
         org = create_school_org(create_user())
@@ -62,17 +49,3 @@ class TestAnnouncement(TestCase):
         create_announcement(org, "r", "good")
         approved = sorted(ann.title for ann in Announcement.get_approved())
         self.assertEqual(approved, ["abc", "bar", "foo"])
-
-
-class TestComments(TestCase):
-    def test_get_approved(self):
-        org = create_school_org(create_user())
-        ann = create_announcement(org, "a", "hello")
-        blog = create_blog_post(author=org.owners.first(), title="hello")
-        create_comment(org.owners.first(), ann, "hello")
-        create_comment(org.owners.first(), ann, "goodbye")
-        create_comment(org.owners.first(), blog, "hello")
-        create_comment(org.owners.first(), blog, "goodbye")
-        create_comment(org.owners.first(), blog, "sah dude")
-        self.assertEqual(ann.comments.count(), 2)
-        self.assertEqual(blog.comments.count(), 3)

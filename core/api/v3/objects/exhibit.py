@@ -2,7 +2,6 @@ from django.utils import timezone
 from rest_framework import permissions, serializers
 
 from core.api.serializers.custom import (
-    CommentField,
     LikeField,
     SingleUserField,
     TagRelatedField,
@@ -14,7 +13,6 @@ from .base import BaseProvider
 
 class Serializer(serializers.ModelSerializer):
     likes = LikeField()
-    comments = CommentField()
     tags = TagRelatedField()
     author = SingleUserField()
 
@@ -34,7 +32,6 @@ class Serializer(serializers.ModelSerializer):
             "show_after",
             "tags",
             "likes",
-            "comments",
         ]
 
 

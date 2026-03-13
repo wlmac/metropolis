@@ -8,7 +8,6 @@ from rest_framework import permissions, serializers
 from rest_framework.exceptions import ValidationError
 
 from core.api.serializers.custom import (
-    CommentField,
     LikeField,
     OrganizationField,
     SingleUserField,
@@ -33,7 +32,6 @@ def always_fail_validator(value, serializer_field):
 
 class Serializer(serializers.ModelSerializer):
     message = serializers.CharField(read_only=True)
-    comments = CommentField()
     likes = LikeField()
     tags = TagRelatedField()
     author = SingleUserField()
@@ -99,7 +97,6 @@ class Serializer(serializers.ModelSerializer):
             "supervisor",
             "tags",
             "likes",
-            "comments",
             "message",
         ]
 

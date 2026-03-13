@@ -7,7 +7,7 @@ from rest_framework.fields import ChoiceField, Field, MultipleChoiceField
 
 from core.api.utils.github import get_model_choices
 from core.api.utils.gravatar import gravatar_url
-from core.models import Comment, Organization, Tag, User
+from core.models import Organization, Tag, User
 
 
 class PrimaryKeyAndSlugRelatedField(serializers.SlugRelatedField):
@@ -90,33 +90,6 @@ class LikeField(Field):
             "count": obj.likes.count(),
             "liked": obj.likes.filter(author=self.context["request"].user).exists(),
         }
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    author = SingleUserSerializer()
-    has_children = serializers.SerializerMethodField(read_only=True)
-    edited = serializers.SerializerMethodField(read_only=True)
-    likes = LikeField()
-
-    @staticmethod
-    def get_edited(obj: Comment) -> bool:
-        return obj.last_modified != obj.created_at
-
-    @staticmethod
-    def get_has_children(obj: Comment) -> bool:
-        return obj.children.exists()
-
-    class Meta:
-        model = Comment
-        fields = [
-            "id",
-            "body",
-            "author",
-            "has_children",
-            "created_at",
-            "edited",
-            "likes",
-        ]
 
 
 class SingleUserField(ChoiceField):
@@ -282,12 +255,3 @@ class TagRelatedField(MultipleChoiceField):
                 )
 
         return Tag.objects.filter(id__in=data)
-
-
-class CommentField(Field):
-    def __init__(self, **kwargs):
-        kwargs["read_only"] = True
-        super().__init__(**kwargs)
-
-    def to_representation(self, obj):
-        return CommentSerializer(obj, many=True).data

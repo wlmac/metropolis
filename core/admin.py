@@ -7,9 +7,6 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.db.models import Q, TimeField
 from django.forms import Textarea
-from django.urls import reverse
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 from reversion.admin import VersionAdmin
@@ -26,9 +23,8 @@ from .forms import (
     UserAdminForm,
     UserCreationAdminForm,
 )
-from .models import Comment, StaffMember
+from .models import StaffMember
 from .utils.actions import (
-    approve_comments,
     archive_page,
     normalize_late_start,
     resend_approval_email,
@@ -42,7 +38,6 @@ from .utils.actions import (
     set_event_visible,
     set_post_archived,
     set_post_unarchived,
-    unapprove_comments,
     wipe_club_bios,
 )
 from .utils.admin import generic_post_formfield_for_manytomany
@@ -50,7 +45,6 @@ from .utils.announcements import request_announcement_approval
 from .utils.filters import (
     BlogPostAuthorListFilter,
     OrganizationListFilter,
-    PostTypeFilter,
 )
 
 User = get_user_model()
@@ -207,8 +201,8 @@ class DailyAnnouncementAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    readonly_fields = ["like_count", "save_count", "comments"]
-    fields = ["like_count", "save_count", "comments"]
+    readonly_fields = ["like_count", "save_count"]
+    fields = ["like_count", "save_count"]
 
     def like_count(self, obj) -> int:
         return obj.like_count
@@ -222,15 +216,6 @@ class PostAdmin(admin.ModelAdmin):
         return 0
 
     save_count.short_description = "Save Count"
-
-    def comments(self, obj):
-        objs = [
-            f'<a target="_blank" href="/admin/core/comment/{comment.pk}">{comment.body[:10]}</a>'
-            for comment in obj.comments.all()
-        ]
-        return mark_safe(",".join(objs))
-
-    comments.short_description = "Comments"
 
     class Meta:
         abstract = True
@@ -714,40 +699,6 @@ class CustomFlatPageAdmin(FlatPageAdmin):
     )
 
 
-class RaffleAdmin(admin.ModelAdmin):
-    list_display = ["__str__", "open_start", "open_end"]
-
-
-class CommentAdmin(admin.ModelAdmin):
-    formfield_overrides = {
-        django.db.models.TextField: {"widget": AdminMartorWidget},
-    }
-    list_display = ["author", "content_object", "created_at"]
-    search_fields = ["author__username", "body"]
-    actions = [approve_comments, unapprove_comments]
-    readonly_fields = ["created_at", "likes"]
-    list_filter = ["live", PostTypeFilter]
-    actions_on_top = True
-    actions_on_bottom = True
-    date_hierarchy = "created_at"
-
-    @staticmethod
-    def likes(obj: Comment):
-        return obj.like_count
-
-    def get_queryset(self, request):
-        return Comment.objects.filter(author__isnull=False).order_by("-created_at")
-
-    def content_object(self, obj):
-        url = reverse(
-            f"admin:{obj.content_type.app_label}_{obj.content_type.model}_change",
-            args=[obj.object_id],
-        )
-        return format_html('<a href="{}">{}</a>', url, str(obj.content_object))
-
-    content_object.short_description = "Associated Post"
-
-
 class BannerAdmin(admin.ModelAdmin):
     list_display = ["name", "start_date", "end_date"]
     search_fields = ["name"]
@@ -760,14 +711,11 @@ admin.site.register(models.Timetable, TimetableAdmin)
 admin.site.register(models.SchedulePattern, SchedulePatternAdmin)
 admin.site.register(models.ScheduleOverride, ScheduleOverrideAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
-admin.site.register(models.DailyAnnouncement, DailyAnnouncementAdmin)
 admin.site.register(models.Announcement, AnnouncementAdmin)
 admin.site.register(models.BlogPost, BlogPostAdmin)
 admin.site.register(models.Exhibit, ExhibitAdmin)
-# admin.site.register(models.Comment, CommentAdmin) atm it's not used, so we don't need it
 admin.site.register(models.Tag, TagAdmin)
 admin.site.register(models.Event, EventAdmin)
-admin.site.register(models.Raffle, RaffleAdmin)
 admin.site.register(models.StaffMember)
 admin.site.register(models.Banner, BannerAdmin)
 

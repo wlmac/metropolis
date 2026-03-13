@@ -25,7 +25,6 @@ from requests.exceptions import ConnectionError, HTTPError
 from core.models import (
     Announcement,
     BlogPost,
-    Comment,
     Event,
     Organization,
     Tag,
@@ -82,10 +81,6 @@ def delete_expired_users():
         is_deleted=True,
         last_login__lt=timezone.make_aware(dt.datetime.now() - dt.timedelta(days=14)),
     )
-    comments = Comment.objects.filter(author__in=queryset)
-    comments.update(
-        body=None, last_modified=timezone.now()
-    )  # if body is None "deleted on %last_modified% would be shown
     for user in queryset:
         user.organizations.clear()
     queryset.update(  # We need to object to not break posts or comments
