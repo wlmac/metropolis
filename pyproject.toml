@@ -1,13 +1,19 @@
-[tool.poetry]
+[project]
 name = "metropolis"
 version = "2.3"
 description = "William Lyon Mackenzie's online hub for announcements, calendar events, clubs, and timetables"
-license = "AGPLv3"
-authors = ["nyiyui <+@nyiyui.ca>", "Jason Cameron <jason@jasoncameron.dev>"]
 readme = "README.md"
+license = "AGPL-3.0-or-later"
+authors = [
+    { name = "nyiyui", email = "+@nyiyui.ca"},
+    { name = "Jason Cameron", email = "jason@jasoncameron.dev"},
+]
+dynamic = ["dependencies", "requires-python"]
+
+[project.urls]
+homepage = "https://maclyonsden.com/"
 repository = "https://github.com/wlmac/metropolis"
 documentation = "https://docs.maclyonsden.com"
-
 
 [tool.poetry.dependencies]
 python = "~3.12"
