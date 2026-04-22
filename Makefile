@@ -12,27 +12,23 @@ requirements.txt: poetry.lock
 	poetry export --without-hashes --format=requirements.txt > $@
 
 sync-ruff-version:
-	@RUFF_VERSION=$$(awk '$$0 ~ /astral-sh\/ruff-pre-commit/ {found=1} found && $$1=="rev:" {gsub(/^v/, "", $$2); print $$2; exit}' .pre-commit-config.yaml | tr -d '\r'); \
+	@command -v poetry >/dev/null 2>&1 || { \
+		echo "poetry not found, skipping sync"; \
+		exit 0; \
+	}; \
+	RUFF_VERSION=$$(awk '$$0 ~ /astral-sh\/ruff-pre-commit/ {found=1} found && $$1=="rev:" {gsub(/^v/, "", $$2); print $$2; exit}' .pre-commit-config.yaml | tr -d '\r'); \
 	if [ -z "$$RUFF_VERSION" ]; then \
-		echo "WARNING: Could not find ruff version or pre-commit hook in .pre-commit-config.yaml"; \
+		echo "could not find ruff version in .pre-commit-config.yaml"; \
 		exit 0; \
 	fi; \
-	echo "Found pre-commit ruff version: $$RUFF_VERSION"; \
-	RUFF_POETRY_VERSION=$$(poetry show ruff --no-ansi 2>/dev/null | awk '$$1=="version" {print $$3}' | tr -d '\r'); \
-	if [ -z "$$RUFF_POETRY_VERSION" ]; then \
-		echo "Could not find ruff version in poetry"; \
-		exit 0; \
-	else \
-		echo "Found poetry ruff version: $$RUFF_POETRY_VERSION"; \
-	fi; \
-	if [ "$$RUFF_VERSION" == "$$RUFF_POETRY_VERSION" ]; then \
-		echo "Ruff versions match: nothing to do, exiting..."; \
+	CURRENT=$$(poetry run python -c "import importlib.metadata as m; print(m.version('ruff'))" 2>/dev/null | tr -d '\r'); \
+	if [ "$$CURRENT" == "$$RUFF_VERSION" ]; then \
+		echo "ruff version already matches: nothing to do, exiting..."; \
 		exit 0; \
 	fi; \
-	echo "Syncing ruff version in poetry"; \
 	poetry add --group dev ruff==$$RUFF_VERSION >/dev/null; \
-	echo "Ruff version updated in poetry to $$RUFF_VERSION"; echo "Please stage the changes and re-run commit."; \
-	exit 1; \
+	echo "Poetry synced to ruff==$$RUFF_VERSION"; echo "Please stage the changes and re-run commit."; \
+	exit 1;
 
 test:
 	cd tests && docker compose up --build
