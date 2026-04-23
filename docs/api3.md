@@ -38,7 +38,7 @@ user of the library)
 
 For `organization`:
 
-**Returns**: The results sorted by `member count` in *descending* order
+**Returns**: The results sorted by `follower count` in *descending* order
 
 ## Get Objects
 
@@ -380,7 +380,7 @@ properties:
 `username` can be used for the lookup query string to filter by username.
 
 #### Listing filters
-- organizations: The id of the organization to get members of.
+- organizations: The id of the organization to get followers of.
 - organizations_leading: The id of the organization to get execs of.  
 - organizations_owning: The id of the organization to get the owner of.
 - organizations_supervising: The id of the organization to get supervisors of.
@@ -399,7 +399,6 @@ properties:
   graduating_year: { type: integer }
   organizations: { type: array, items: { type: integer } }
   organizations_leading: { type: array, items: { type: integer } }
-  tags_following: { type: array, items: { type: integer } }
   gravatar_url: { type: string, format: url }
   saved_blogs: { type: array, items: { type: integer } }
   saved_announcements: { type: array, items: { type: integer } }
@@ -419,7 +418,7 @@ properties:
   owner: { type: integer }
   supervisors: { type: array, items: { type: integer } }
   execs: { type: array, items: { type: integer } }
-  members: { type: array, items: { type: integer } }
+  followers: { type: array, items: { type: integer } }
   name: { type: string }
   bio: { type: string }
   extra_content: { type: string }

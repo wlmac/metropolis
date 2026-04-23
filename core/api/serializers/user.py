@@ -5,7 +5,6 @@ from rest_framework import serializers
 from ... import models
 from ...models import User
 from ..utils.gravatar import gravatar_url
-from .tag import TagSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,7 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
         many=True,
         queryset=models.Organization.objects.all(),
     )
-    tags_following = TagSerializer(many=True)
     gravatar_url = serializers.SerializerMethodField(read_only=True)
 
     @staticmethod
@@ -33,7 +31,6 @@ class UserSerializer(serializers.ModelSerializer):
             "bio",
             "graduating_year",
             "organizations",
-            "tags_following",
             "gravatar_url",
             "saved_blogs",
             "saved_announcements",
@@ -65,7 +62,6 @@ class UserSerializerInternal(serializers.ModelSerializer):
             "graduating_year",
             "is_teacher",
             "organizations",
-            "tags_following",
             "qltrs",
             "gravatar_url",
         ]
@@ -91,6 +87,5 @@ class UserSerializer3(serializers.ModelSerializer):
             "bio",
             "graduating_year",
             "organizations",
-            "tags_following",
             "gravatar_url",
         ]

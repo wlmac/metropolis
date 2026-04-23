@@ -76,7 +76,6 @@ class UserSerializer(serializers.ModelSerializer):
             "organizations",
             "organizations_leading",
             "organizations_supervising",
-            "tags_following",
             "gravatar_url",
             "saved_blogs",
             "saved_announcements",

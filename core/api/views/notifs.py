@@ -21,7 +21,7 @@ def announcement_change(sender, **kwargs):
     if not kwargs["created"]:
         return  # only send notifs on new announcements
 
-    # todo add additonal checks for approve/club members ect..
+    # TODO add additonal checks for approve/club followers etc
 
     if not settings.NOTIF_DRY_RUN:
         tasks.notif_broker_announcement.delay(kwargs["instance"].id)

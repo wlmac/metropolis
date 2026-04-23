@@ -57,7 +57,7 @@ class Event(models.Model):
     def get_events(cls, user=None):
         events = cls.objects.filter(is_public=True)
         if user is not None and user.is_authenticated:
-            events = (events | events.filter(organization__member=user)).distinct()
+            events = (events | events.filter(organization__follower=user)).distinct()
 
         return events
 

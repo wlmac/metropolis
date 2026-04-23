@@ -30,7 +30,7 @@ class EventsList(ListAPIViewWithFallback):
         if not self.request.user.is_anonymous:
             events = events.filter(
                 Q(is_public=True)
-                | Q(organization__member=self.request.user.id)
+                | Q(organization__follower=self.request.user.id)
                 | Q(organization__supervisors=self.request.user.id)
                 | Q(organization__execs=self.request.user.id)
             ).distinct()

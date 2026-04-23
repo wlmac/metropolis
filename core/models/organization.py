@@ -65,13 +65,13 @@ class Organization(models.Model):
     def get_absolute_url(self):
         return reverse("organization_detail", args=[self.slug])
 
-    def member_count(self):
+    def follower_count(self):
         return User.objects.filter(organizations=self).count()
 
     def get_feed(self, user=None):
         org_feed = Announcement.get_approved().filter(organization=self)
 
-        if user is None or user not in self.members.all():
+        if user is None or user not in self.followers.all():
             org_feed = org_feed.filter(is_public=True)
 
         return org_feed

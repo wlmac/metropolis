@@ -89,7 +89,7 @@ class EventProvider(BaseProvider):
             q = q.filter(is_public=True)
         else:
             q = q.filter(
-                Q(is_public=True) | Q(organization__member=self.request.user.id)
+                Q(is_public=True) | Q(organization__follower=self.request.user.id)
             )
         return q.distinct()
 

@@ -86,11 +86,11 @@
                         </section>
                         <!-- TODO -->
                         <section id="members">
-                            <!-- <h4>Members</h4> -->
                             <hr>
-                            {% if False %} 
+                            {% if True %}
+                             <h4>Followers</h4>
                                 <div class="members-list">
-                                    {% for i in organization.members.all %}
+                                    {% for i in organization.followers.all %}
                                         <a href="{{ i.username|user_url }}">
                                             <div class="member">
                                                 <div class="member-image">
@@ -103,7 +103,7 @@
                                         </a>
                                     {% empty %}
                                         <br>
-                                        There are no members right now.
+                                        There are no followers right now.
                                         {% if organization.is_open %}Join us!{% endif %}
                                     {% endfor %}
                                 </div>

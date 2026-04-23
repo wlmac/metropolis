@@ -11,7 +11,7 @@ from .base import BaseProvider
 
 class Serializer(serializers.ModelSerializer):
     tags = TagRelatedField()
-    members = MembersField()
+    followers = MembersField()
     execs = MembersField()
     supervisors = MembersField()
     owners = MembersField()
@@ -63,8 +63,8 @@ class OrganizationProvider(BaseProvider):
     def get_queryset(self, request):
         return (
             models.Organization.objects.filter(is_active=True)
-            .annotate(num_members=Count("member"))
-            .order_by("-num_members")
+            .annotate(num_followers=Count("follower"))
+            .order_by("-num_followers")
         )
 
     def get_last_modified(self, view):

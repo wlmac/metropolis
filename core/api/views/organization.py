@@ -9,8 +9,8 @@ from ..utils.fallback import ListAPIViewWithFallback
 class ApiOrganizationList(ListAPIViewWithFallback):
     queryset = (
         models.Organization.objects.filter(is_active=True)
-        .annotate(num_members=Count("member"))
-        .order_by("-num_members")
+        .annotate(num_followers=Count("follower"))
+        .order_by("-num_followers")
     )
     serializer_class = serializers.OrganizationSerializer
 

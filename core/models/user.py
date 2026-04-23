@@ -35,12 +35,6 @@ class User(AbstractUser):
     organizations = models.ManyToManyField(
         "Organization",
         blank=True,
-        related_name="members",
-        related_query_name="member",
-    )
-    tags_following = models.ManyToManyField(
-        "Tag",
-        blank=True,
         related_name="followers",
         related_query_name="follower",
     )
@@ -91,9 +85,7 @@ class User(AbstractUser):
     def get_feed(self):
         return (
             post.Announcement.get_approved()
-            .filter(
-                Q(is_public=True, tags__follower=self) | Q(organization__member=self)
-            )
+            .filter(Q(is_public=True) | Q(organization__follower=self))
             .distinct()
         )
 

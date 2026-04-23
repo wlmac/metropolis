@@ -91,7 +91,6 @@ def delete_expired_users():
         # timezone="",
         graduating_year=None,
         is_teacher=False,
-        tags_following=[],
         qltrs=None,
         saved_blogs=[],
         saved_announcements=[],
@@ -123,10 +122,7 @@ def notif_broker_announcement(obj_id):
     if ann.organization.id in settings.ANNOUNCEMENTS_NOTIFY_FEEDS:
         category = "ann.public"
     else:
-        affected = affected.filter(
-            Q(tags_following__in=ann.tags.all())
-            | Q(organizations__in=[ann.organization])
-        )
+        affected = affected.filter(Q(organizations__in=[ann.organization]))
         category = "ann.personal"
     for u in affected.all():
         notif_single.delay(

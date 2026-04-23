@@ -173,7 +173,7 @@ class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
         if announcement.status == "a":
             if (
                 announcement.organization
-                and self.request.user in announcement.organization.members.all()
+                and self.request.user in announcement.organization.followers.all()
             ):
                 return True
             if announcement.is_public:
