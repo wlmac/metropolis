@@ -1,3 +1,5 @@
+import random
+
 from django.db.models import Count
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
@@ -19,6 +21,13 @@ class OrganizationList(ListView, mixins.TitleMixin):
             .annotate(num_follower=Count("follower"))
             .order_by("-num_follower")
         )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        orgs = list(context.get("organizations"))
+
+        context["featured_orgs"] = random.sample(orgs, min(len(orgs), 2))
+        return context
 
 
 class OrganizationDetail(DetailView, mixins.TitleMixin):
