@@ -8,6 +8,31 @@
 {% block main %}
 <div class="container">
     <div class="card-container">
+        {% if featured_orgs %}
+            <h2>Featured Clubs</h2>
+            <div class="cards">
+                {% for organization in featured_orgs %}
+                <div class="card">
+                    <div class="valign-wrapper">
+                        <div class="club-logo">
+                            <img class="circle" src="{{ organization.icon.url }}?fmt=webp&w=200">
+                        </div>
+                        <h1 class="title link">{{ organization.slug|organization }}</h1>
+                    </div>
+                    <hr>
+                    <div class="club-description">
+                        <p>{{ organization.bio }}</p>
+                    </div>
+                    <div class="tag-section">
+                        {% for tag in organization.tags.all %}
+                        <p class="tag" style="background-color:{{ tag.color }}">{{ tag }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}    
+            </div>
+        {% endif %}
+        <h2>All Clubs</h2>
         <div class="cards">
             {% for organization in organizations %}
             <div class="card">
