@@ -18,7 +18,7 @@ documentation = "https://docs.maclyonsden.com"
 [tool.poetry.dependencies]
 python = "~3.12"
 asgiref = "^3.7.2"
-bleach = "~4"
+bleach = "~6"
 certifi = "*"
 cffi = "*"
 charset-normalizer = "*"
