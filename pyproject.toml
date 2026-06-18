@@ -22,7 +22,7 @@ bleach = "~6"
 certifi = "*"
 cffi = "*"
 charset-normalizer = "*"
-cryptography = "^46.0.7"
+cryptography = "^48.0.1"
 defusedxml = "^0.7.1"
 Django = "^5.2.14"
 django-allauth = "~65.14"
@@ -63,7 +63,7 @@ django-reversion = "^5.1.0"
 [tool.poetry.group.dev.dependencies]
 django-stubs = "*"
 pre-commit = "^4.5.1"
-ruff = "0.15.13"
+ruff = "0.15.17"
 
 [tool.poetry.requires-plugins]
 poetry-plugin-export = ">=1.8"
