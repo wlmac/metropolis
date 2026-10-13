@@ -1,4 +1,5 @@
 import datetime
+from unittest import mock
 
 import pytz
 from django.contrib.auth import get_user_model
@@ -111,8 +112,8 @@ class MetropolisBaseTests(TestCase):
 class ChoicesTests(TestCase):
     def setUp(self):
         self.datetime = datetime.datetime(
-            2024, 8, 1, 0, 0, 0, 0, pytz.utc
-        )  # August 1, 2024
+            2025, 8, 1, 0, 0, 0, 0, pytz.utc
+        )  # August 1, 2025
         self.expected = [
             (None, "Does not apply"),
             (2026, 2026),
@@ -124,4 +125,6 @@ class ChoicesTests(TestCase):
     def test_calculate_graduating_year_choices(self):
         from core.models.choices import calculate_graduating_year_choices
 
-        self.assertEqual(calculate_graduating_year_choices(), self.expected)
+        with mock.patch("core.models.choices.datetime") as mock_datetime:
+            mock_datetime.datetime.now.return_value = self.datetime
+            self.assertEqual(calculate_graduating_year_choices(), self.expected)

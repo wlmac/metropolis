@@ -50,7 +50,6 @@ cleaner = sanitizer.Cleaner(
         ],
         "img": ["alt", "src"],
     },
-    styles=["markdown-embed"],
     protocols=[
         "http",
         "https",
