@@ -1394,9 +1394,10 @@ map.addControl(geocoder);
 // map.touchZoomRotate.disableRotation();
 
 map.on("load", () => {
+  // *-web.jpg are FloorOne/FloorTwo.jpg shrunk to 4096px (the max WebGL texture size on many phones); regenerate them when the originals change
   map.addSource("floorOne", {
     type: "image",
-    url: "../static/core/img/FloorOne.jpg",
+    url: "../static/core/img/FloorOne-web.jpg",
     coordinates: [
       [-79.46270547634776, 43.75413886166868], //TL
       [-79.46072668772469, 43.75413886166868], //TR
@@ -1407,23 +1408,12 @@ map.on("load", () => {
 
   map.addSource("floorTwo", {
     type: "image",
-    url: "../static/core/img/FloorTwo.jpg",
+    url: "../static/core/img/FloorTwo-web.jpg",
     coordinates: [
       [-79.46270547634776, 43.75413886166868], //TL
       [-79.46072668772469, 43.75413886166868], //TR
       [-79.46072668772469, 43.75274955916902], //BR
       [-79.46270547634776, 43.75274955916902], //BL
-    ],
-  });
-
-  map.addSource("outline", {
-    type: "image",
-    url: "../static/core/img/booths/booths.jpg",
-    coordinates: [
-      [-79.46155542041252, 43.7538999252219], //TL
-      [-79.46100243451043, 43.75394902268886], //TR
-      [-79.46092763227323, 43.7535715308978], //BR
-      [-79.46146639944199, 43.75351043643877], //BL
     ],
   });
 
@@ -1469,16 +1459,6 @@ map.on("load", () => {
   map.addLayer({
     id: "floorTwo",
     source: "floorTwo",
-    type: "raster",
-    layout: {
-      // Make the layer visible by default.
-      visibility: "none",
-    },
-  });
-
-  map.addLayer({
-    id: "outline",
-    source: "outline",
     type: "raster",
     layout: {
       // Make the layer visible by default.
@@ -2568,12 +2548,6 @@ map.on("mouseleave", "mactoberfest", () => {
   // .setLngLat([-79.46101097724825,43.75363977606122])
   // .addTo(map);
 
-  var checkbox = document.querySelector("input[name=checkbox]");
-
-  checkbox.addEventListener("change", function () {
-    setFloor(this.checked ? 2 : 1);
-  });
-
   geocoder.on("result", ({ result }) => {
     setFloor(result.properties.floor);
   });
@@ -2626,8 +2600,11 @@ let clubPopup = null;
 function setFloor(floor) {
   currentFloor = floor;
   document.querySelector("input[name=checkbox]").checked = floor == 2;
-  map.setLayoutProperty("floorOne", "visibility", floor == 1 ? "visible" : "none");
-  map.setLayoutProperty("floorTwo", "visibility", floor == 2 ? "visible" : "none");
+  // before the map's load event the layers don't exist yet; initClubSchedule applies the floor then
+  if (map.getLayer("floorOne")) {
+    map.setLayoutProperty("floorOne", "visibility", floor == 1 ? "visible" : "none");
+    map.setLayoutProperty("floorTwo", "visibility", floor == 2 ? "visible" : "none");
+  }
   for (const layer of CLUB_ROOM_LAYERS) {
     if (map.getLayer(layer.id)) map.setFilter(layer.id, floorFilter(layer.filter));
   }
@@ -2781,7 +2758,7 @@ function setDay(day) {
   });
 
   const rooms = roomsForDay(day).filter((r) => r.coordinates);
-  map.getSource("club-rooms").setData({
+  map.getSource("club-rooms")?.setData({
     type: "FeatureCollection",
     features: rooms
       .filter((room) => ROOM_OUTLINES[room.title])
@@ -2826,12 +2803,9 @@ function initClubSchedule() {
     map.getCanvas().style.cursor = "";
   });
 
-  document.querySelectorAll(".day-tab").forEach((tab) => {
-    tab.addEventListener("click", () => setDay(tab.dataset.day));
-  });
-  const toggle = document.getElementById("club-toggle");
-  toggle.addEventListener("change", () => setClubsVisible(toggle.checked));
-  setClubsVisible(toggle.checked);
+  // apply whatever was picked while the map was still loading
+  setFloor(currentFloor);
+  setClubsVisible(clubsVisible);
 }
 
 function setClubsVisible(visible) {
@@ -2839,11 +2813,24 @@ function setClubsVisible(visible) {
   document.getElementById("club-controls").hidden = !visible;
   document.getElementById("club-list").hidden = !visible;
   for (const layer of CLUB_ROOM_LAYERS) {
-    map.setLayoutProperty(layer.id, "visibility", visible ? "visible" : "none");
+    if (map.getLayer(layer.id)) map.setLayoutProperty(layer.id, "visibility", visible ? "visible" : "none");
   }
   if (!visible && clubPopup) clubPopup.remove();
   setDay(currentDay);
 }
+
+// Controls work straight away; the map layers catch up in initClubSchedule once the map loads.
+document.querySelectorAll(".day-tab").forEach((tab) => {
+  tab.addEventListener("click", () => setDay(tab.dataset.day));
+});
+const clubToggle = document.getElementById("club-toggle");
+clubToggle.addEventListener("change", () => setClubsVisible(clubToggle.checked));
+document
+  .querySelector("input[name=checkbox]")
+  .addEventListener("change", (e) => setFloor(e.target.checked ? 2 : 1));
+// the browser may restore checkbox state on reload
+currentFloor = document.querySelector("input[name=checkbox]").checked ? 2 : 1;
+setClubsVisible(clubToggle.checked);
 
 // const marker2 = new mapboxgl.Marker({
 // })

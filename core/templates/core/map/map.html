@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block deps %}
-    <link rel="stylesheet" href="{% static 'core/css/map.css' %}" />
+    <link rel="stylesheet" href="{% static 'core/css/map.css' %}?v=2" />
     <link rel="stylesheet" href="{% static 'core/css/club-list.css' %}" />
     <link rel="stylesheet" href="{% static 'css/mapbox-gl.css' %}" />
     <link rel="stylesheet" href="{% static 'css/mapbox-gl-geocoder.css' %}" />
@@ -59,7 +59,7 @@
             </div>
             <div>
                 If the map below isn't working (you see a black rectangle, etc),
-                <a href="{% static 'wlmci_schoolmap.pdf' %}">click here</a>
+                <a href="{% static 'wlmci_schoolmap.pdf' %}" noprefetch>click here</a>
                 to see the PDF version.
             </div>
             <div class="switch club-toggle">
@@ -139,7 +139,7 @@
             </div>
         </div>
     </div>
-    <script src="{% static 'core/js/map/club-schedule.js' %}"></script>
-    <script src="{% static 'core/js/map/room-outlines.js' %}"></script>
-    <script src="{% static 'core/js/map/map.js' %}"></script>
+    <script src="{% static 'core/js/map/club-schedule.js' %}?v=2"></script>
+    <script src="{% static 'core/js/map/room-outlines.js' %}?v=2"></script>
+    <script src="{% static 'core/js/map/map.js' %}?v=2"></script>
 {% endblock %}
