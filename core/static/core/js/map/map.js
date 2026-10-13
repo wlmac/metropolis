@@ -1350,46 +1350,6 @@ const customData = {
   type: "FeatureCollection",
 };
 
-function forwardGeocoder(query) {
-  const matchingFeatures = [];
-  for (const feature of customData.features) {
-    // Handle queries with different capitalization
-    // than the source data by calling toLowerCase().
-    if (feature.properties.title.toLowerCase().includes(query.toLowerCase())) {
-      // Add a tree emoji as a prefix for custom
-      // data results using carmen geojson format:
-      // https://github.com/mapbox/carmen/blob/master/carmen-geojson.md
-      feature["place_name"] = `${feature.properties.title}`;
-      feature["center"] = feature.geometry.coordinates;
-      matchingFeatures.push(feature);
-    }
-  }
-  return matchingFeatures;
-}
-
-var level = false;
-
-const geocoder = new MapboxGeocoder({
-  accessToken: mapboxgl.accessToken,
-  localGeocoder: forwardGeocoder,
-  localGeocoderOnly: true,
-  zoom: 19,
-  placeholder: "Search School",
-  marker: {
-    color: "red",
-  },
-  mapboxgl: mapboxgl,
-  render: function (item) {
-    // extract the item's maki icon or use a default
-    return `<div class='geocoder-dropdown-item'>
-    <span class='geocoder-dropdown-text'>
-    ${item.properties.title}
-    </span>
-    </div>`;
-  },
-});
-
-map.addControl(geocoder);
 // map.dragRotate.disable();
 // map.touchZoomRotate.disableRotation();
 
@@ -2548,10 +2508,6 @@ map.on("mouseleave", "mactoberfest", () => {
   // .setLngLat([-79.46101097724825,43.75363977606122])
   // .addTo(map);
 
-  geocoder.on("result", ({ result }) => {
-    setFloor(result.properties.floor);
-  });
-
   initClubSchedule();
 });
 
@@ -2579,27 +2535,41 @@ const CLUB_ROOM_LAYERS = [
     type: "fill",
     paint: {
       "fill-color": "#f2b705",
-      "fill-opacity": ["case", ["get", "regular"], 0.4, 0.15],
+      "fill-opacity": ["case", ["get", "dim"], 0.05, ["get", "regular"], 0.4, 0.15],
     },
   },
   {
     id: "club-rooms-outline",
     type: "line",
     filter: ["get", "regular"],
-    paint: { "line-color": "#e0a800", "line-width": 3 },
+    paint: { "line-color": "#e0a800", "line-width": 3, "line-opacity": ["case", ["get", "dim"], 0.25, 1] },
   },
   {
     id: "club-rooms-outline-occasional",
     type: "line",
     filter: ["!", ["get", "regular"]],
-    paint: { "line-color": "#e0a800", "line-width": 3, "line-dasharray": [2, 1.5] },
+    paint: {
+      "line-color": "#e0a800",
+      "line-width": 3,
+      "line-dasharray": [2, 1.5],
+      "line-opacity": ["case", ["get", "dim"], 0.25, 1],
+    },
   },
 ];
 let clubPopup = null;
+let selectedClub = null; // picked in the search; other clubs' rooms fade
+
+function isDimmed(room) {
+  return !!selectedClub && !room.meetings.some((m) => m.club == selectedClub);
+}
 
 function setFloor(floor) {
   currentFloor = floor;
-  document.querySelector("input[name=checkbox]").checked = floor == 2;
+  document.querySelectorAll("[data-floor]").forEach((tab) => {
+    const active = tab.dataset.floor == floor;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", active);
+  });
   // before the map's load event the layers don't exist yet; initClubSchedule applies the floor then
   if (map.getLayer("floorOne")) {
     map.setLayoutProperty("floorOne", "visibility", floor == 1 ? "visible" : "none");
@@ -2608,6 +2578,7 @@ function setFloor(floor) {
   for (const layer of CLUB_ROOM_LAYERS) {
     if (map.getLayer(layer.id)) map.setFilter(layer.id, floorFilter(layer.filter));
   }
+  if (map.getLayer("search-room")) map.setFilter("search-room", floorFilter());
   renderCountMarkers();
 }
 
@@ -2705,7 +2676,8 @@ function renderCountMarkers() {
   for (const room of numberedRoomsForDay(currentDay)) {
     if (!room.coordinates || room.floor != currentFloor) continue;
     const el = document.createElement("button");
-    el.className = "club-count" + (room.regular ? "" : " club-count-occasional");
+    el.className =
+      "club-count" + (isDimmed(room) ? " club-count-dim" : "");
     el.textContent = room.number;
     el.title = `${room.number}. ${roomDisplayName(room.title)}`;
     el.addEventListener("click", (e) => {
@@ -2729,9 +2701,9 @@ function renderClubList() {
       if (room.coordinates) where = roomDisplayName(room.title);
       else if (room.title) where = `${escapeHtml(room.title)} <span class="club-list-floor">Not on map</span>`;
       else where = `Location not given`;
-      return `<div class="club-list-room${room.coordinates ? " clickable" : ""}" data-index="${i}">
+      return `<div class="club-list-room${room.coordinates ? " clickable" : ""}${isDimmed(room) ? " dim" : ""}" data-index="${i}">
           <div class="club-list-where">${
-            room.number ? `<span class="club-count${room.regular ? "" : " club-count-occasional"}">${room.number}</span>` : ""
+            room.number ? `<span class="club-count">${room.number}</span>` : ""
           }${where}</div>
           <ul>${meetingsHtml(room.meetings)}</ul>
         </div>`;
@@ -2742,7 +2714,7 @@ function renderClubList() {
       if (e.target.closest("a")) return; // club name links go to the clubs list
       const room = rooms[el.dataset.index];
       setFloor(room.floor);
-      map.flyTo({ center: room.coordinates, zoom: 19.5 });
+      map.flyTo({ center: room.coordinates, zoom: 19.5, padding: panelPadding() });
       showRoomPopup(room);
       document.getElementById("map").scrollIntoView({ behavior: "smooth", block: "center" });
     });
@@ -2751,7 +2723,7 @@ function renderClubList() {
 
 function setDay(day) {
   currentDay = day;
-  document.querySelectorAll(".day-tab").forEach((tab) => {
+  document.querySelectorAll("[data-day]").forEach((tab) => {
     const active = tab.dataset.day == day;
     tab.classList.toggle("active", active);
     tab.setAttribute("aria-selected", active);
@@ -2765,17 +2737,9 @@ function setDay(day) {
       .map((room) => ({
         type: "Feature",
         geometry: { type: "Polygon", coordinates: [ROOM_OUTLINES[room.title]] },
-        properties: { title: room.title, floor: room.floor, regular: room.regular },
+        properties: { title: room.title, floor: room.floor, regular: room.regular, dim: isDimmed(room) },
       })),
   });
-
-  for (const floor of [1, 2]) {
-    const count = rooms
-      .filter((r) => r.floor == floor)
-      .reduce((n, r) => n + r.meetings.length, 0);
-    document.getElementById(`floor-${floor}-count`).textContent =
-      clubsVisible && count ? `(${count})` : "";
-  }
 
   if (clubPopup) clubPopup.remove();
   renderCountMarkers();
@@ -2790,6 +2754,15 @@ function initClubSchedule() {
   for (const layer of CLUB_ROOM_LAYERS) {
     map.addLayer({ ...layer, source: "club-rooms", filter: floorFilter(layer.filter) });
   }
+
+  map.addSource("search-room", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
+  map.addLayer({
+    id: "search-room",
+    type: "line",
+    source: "search-room",
+    filter: floorFilter(),
+    paint: { "line-color": "#d32f2f", "line-width": 4 },
+  });
 
   map.on("click", "club-rooms", (e) => {
     const title = e.features[0].properties.title;
@@ -2820,17 +2793,223 @@ function setClubsVisible(visible) {
 }
 
 // Controls work straight away; the map layers catch up in initClubSchedule once the map loads.
-document.querySelectorAll(".day-tab").forEach((tab) => {
+document.querySelectorAll("[data-day]").forEach((tab) => {
   tab.addEventListener("click", () => setDay(tab.dataset.day));
 });
+document.querySelectorAll("[data-floor]").forEach((tab) => {
+  tab.addEventListener("click", () => setFloor(Number(tab.dataset.floor)));
+});
 const clubToggle = document.getElementById("club-toggle");
-clubToggle.addEventListener("change", () => setClubsVisible(clubToggle.checked));
-document
-  .querySelector("input[name=checkbox]")
-  .addEventListener("change", (e) => setFloor(e.target.checked ? 2 : 1));
-// the browser may restore checkbox state on reload
-currentFloor = document.querySelector("input[name=checkbox]").checked ? 2 : 1;
+clubToggle.addEventListener("change", () => {
+  if (!clubToggle.checked && selectedClub) selectClub(null);
+  setClubsVisible(clubToggle.checked);
+});
 setClubsVisible(clubToggle.checked);
+
+// ---- Search: rooms, portables and clubs ----
+
+// other names people search by
+const SEARCH_ALIASES = {
+  "MSC (Mackenzie Science Club)": ["Mackenzie Science Club"],
+  "Model United Nations": ["Model UN", "MUN"],
+  "large gym (127)": ["gymnasium"],
+  "small gym (124)": ["gymnasium"],
+  "cafeteria/cafetorium": ["cafe"],
+};
+// suggested before anything is typed
+const POPULAR_CLUBS = ["MSC (Mackenzie Science Club)", "HOSA", "MCPT", "Model United Nations"];
+
+// "Room 113", "rm 113" and "113" all become "113"
+function normalizeSearch(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/^(room|rm) /, "");
+}
+
+const SEARCH_ENTRIES = [
+  ...customData.features
+    .filter((f) => !f.properties.title.startsWith("Booth")) // old Mactoberfest booths
+    .map((f) => ({
+      type: f.properties.title.startsWith("Portable") ? "Portable" : "Room",
+      name: f.properties.title,
+      feature: f,
+    })),
+  ...[...new Set(DAYS.flatMap((d) => CLUB_SCHEDULE[d].map((m) => m.club)))].map((name) => ({ type: "Club", name })),
+].map((entry) => ({ ...entry, keys: [entry.name, ...(SEARCH_ALIASES[entry.name] || [])].map(normalizeSearch) }));
+
+// 0 exact, 1 starts with, 2 a word starts with, 3 contains; Infinity = no match
+function matchScore(keys, q) {
+  let best = Infinity;
+  for (const key of keys) {
+    if (key == q) best = Math.min(best, 0);
+    else if (key.startsWith(q)) best = Math.min(best, 1);
+    else if (key.split(" ").some((w) => w.startsWith(q))) best = Math.min(best, 2);
+    else if (key.includes(q)) best = Math.min(best, 3);
+  }
+  return best;
+}
+
+function searchMap(query) {
+  const q = normalizeSearch(query);
+  if (!q) return POPULAR_CLUBS.map((name) => SEARCH_ENTRIES.find((e) => e.name == name)).filter(Boolean);
+  return SEARCH_ENTRIES.map((entry) => ({ entry, score: matchScore(entry.keys, q) }))
+    .filter((r) => r.score < Infinity)
+    .sort((a, b) => a.score - b.score || a.entry.name.localeCompare(b.entry.name, undefined, { numeric: true }))
+    .slice(0, 8)
+    .map((r) => r.entry);
+}
+
+function clubMeetsOn(club, day) {
+  const month = new Date().getMonth() + 1;
+  return CLUB_SCHEDULE[day].some((m) => m.club == club && (!m.months || m.months.includes(month)));
+}
+
+function setSearchRoom(feature) {
+  const ring = feature && ROOM_OUTLINES[feature.properties.title];
+  map.getSource("search-room")?.setData({
+    type: "FeatureCollection",
+    features: ring
+      ? [{ type: "Feature", geometry: { type: "Polygon", coordinates: [ring] }, properties: { floor: feature.properties.floor } }]
+      : [],
+  });
+}
+
+// keeps zoomed-to rooms out from under the floating panel (beside it on wide maps, below it on narrow ones)
+function panelPadding() {
+  const panel = document.querySelector(".map-panel");
+  return map.getContainer().clientWidth < 600
+    ? { top: panel.offsetHeight + 30, bottom: 60, left: 30, right: 30 }
+    : { top: 50, bottom: 60, left: panel.offsetWidth + 40, right: 50 };
+}
+
+function selectRoom(feature) {
+  if (selectedClub) selectClub(null);
+  const title = feature.properties.title;
+  setFloor(feature.properties.floor);
+  setSearchRoom(feature);
+  map.flyTo({ center: feature.geometry.coordinates, zoom: 20, padding: panelPadding() });
+  const room = clubsVisible && roomsForDay(currentDay).find((r) => r.title == title);
+  if (room) return showRoomPopup(room);
+  if (clubPopup) clubPopup.remove();
+  clubPopup = new mapboxgl.Popup({ className: "club-popup" })
+    .setLngLat(feature.geometry.coordinates)
+    .setHTML(`<div class="club-popup-room">${escapeHtml(roomDisplayName(title))}</div>`)
+    .addTo(map);
+}
+
+function selectClub(club) {
+  selectedClub = club;
+  document.getElementById("club-chip").hidden = !club;
+  document.querySelectorAll("[data-day]").forEach((tab) => {
+    tab.classList.toggle("club-day", !!club && clubMeetsOn(club, tab.dataset.day));
+  });
+  if (!club) return setDay(currentDay);
+
+  setSearchRoom(null);
+  // today if the club meets today, otherwise its next meeting day (weekends roll over to Monday)
+  const today = new Date().getDay() - 1;
+  const days = DAYS.filter((d) => clubMeetsOn(club, d));
+  currentDay = days.find((d) => DAYS.indexOf(d) >= today) || days[0] || currentDay;
+  clubToggle.checked = true;
+  setClubsVisible(true);
+
+  const onMap = roomsForDay(currentDay).filter((r) => r.coordinates && r.meetings.some((m) => m.club == club));
+  document.getElementById("club-chip-name").textContent = onMap.length ? club : `${club} · not on the map`;
+  if (!onMap.length) return;
+  const floor = onMap.some((r) => r.floor == 1) ? 1 : 2;
+  setFloor(floor);
+  const bounds = new mapboxgl.LngLatBounds();
+  for (const room of onMap.filter((r) => r.floor == floor)) {
+    for (const point of ROOM_OUTLINES[room.title] || [room.coordinates]) bounds.extend(point);
+  }
+  map.fitBounds(bounds, { padding: panelPadding(), maxZoom: 20 });
+}
+
+const searchInput = document.getElementById("map-search");
+const searchList = document.getElementById("map-search-results");
+let searchResults = [];
+let activeResult = -1;
+
+function renderSearch() {
+  searchList.innerHTML = searchResults
+    .map(
+      (entry, i) =>
+        `<li role="option" id="map-search-${i}" data-index="${i}" aria-selected="${i == activeResult}">
+          <span>${escapeHtml(entry.type == "Club" ? entry.name : roomDisplayName(entry.name))}</span>
+          <span class="map-search-type">${entry.type}</span></li>`
+    )
+    .join("");
+  searchList.hidden = !searchResults.length;
+  searchInput.setAttribute("aria-expanded", !searchList.hidden);
+  searchInput.setAttribute("aria-activedescendant", activeResult >= 0 ? `map-search-${activeResult}` : "");
+}
+
+function closeSearch() {
+  searchList.hidden = true;
+  searchInput.setAttribute("aria-expanded", false);
+}
+
+function chooseResult(entry) {
+  searchInput.value = entry.type == "Club" ? entry.name : roomDisplayName(entry.name);
+  closeSearch();
+  searchInput.blur(); // closes the keyboard on phones
+  if (entry.type == "Club") selectClub(entry.name);
+  else selectRoom(entry.feature);
+}
+
+searchInput.addEventListener("focus", () => {
+  searchResults = searchMap(searchInput.value);
+  activeResult = -1;
+  renderSearch();
+});
+searchInput.addEventListener("input", (e) => {
+  const typed = searchInput.value;
+  searchResults = searchMap(typed);
+  activeResult = searchResults.length ? 0 : -1;
+  renderSearch();
+  // autofill the rest of the top match, selected so the next keystroke replaces it
+  const top = searchResults[0];
+  if (top && e.inputType == "insertText" && top.name.toLowerCase().startsWith(typed.toLowerCase())) {
+    searchInput.value = top.name;
+    searchInput.setSelectionRange(typed.length, top.name.length);
+  }
+});
+searchInput.addEventListener("keydown", (e) => {
+  if (e.key == "ArrowDown" || e.key == "ArrowUp") {
+    e.preventDefault();
+    if (!searchResults.length) return;
+    activeResult = (activeResult + (e.key == "ArrowDown" ? 1 : -1) + searchResults.length) % searchResults.length;
+    renderSearch();
+  } else if (e.key == "Enter") {
+    e.preventDefault();
+    if (searchResults.length) chooseResult(searchResults[Math.max(activeResult, 0)]);
+  } else if (e.key == "Escape") {
+    closeSearch();
+  }
+});
+searchInput.addEventListener("blur", closeSearch);
+// mousedown, not click: it runs before the input's blur hides the list
+searchList.addEventListener("mousedown", (e) => {
+  const item = e.target.closest("li");
+  if (!item) return;
+  e.preventDefault();
+  chooseResult(searchResults[item.dataset.index]);
+});
+document.getElementById("club-chip-clear").addEventListener("click", () => {
+  searchInput.value = "";
+  selectClub(null);
+});
+
+// self-check for the search matching
+console.assert(searchMap("113")[0]?.name == "Room 113", "search: room number");
+console.assert(searchMap("rm 113")[0]?.name == "Room 113", "search: rm prefix");
+console.assert(searchMap("hosa")[0]?.name == "HOSA", "search: club");
+console.assert(searchMap("msc")[0]?.name == "MSC (Mackenzie Science Club)", "search: club acronym");
+console.assert(searchMap("model un")[0]?.name == "Model United Nations", "search: alias");
+console.assert(searchMap("gymnasium").some((e) => e.name == "large gym (127)"), "search: gym alias");
+console.assert(searchMap("zzzz").length == 0, "search: no match");
 
 // const marker2 = new mapboxgl.Marker({
 // })

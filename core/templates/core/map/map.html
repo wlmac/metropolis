@@ -1,12 +1,10 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block deps %}
-    <link rel="stylesheet" href="{% static 'core/css/map.css' %}?v=2" />
+    <link rel="stylesheet" href="{% static 'core/css/map.css' %}?v=4" />
     <link rel="stylesheet" href="{% static 'core/css/club-list.css' %}" />
     <link rel="stylesheet" href="{% static 'css/mapbox-gl.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/mapbox-gl-geocoder.css' %}" />
     <script src="{% static 'js/mapbox-gl.js' %}"></script>
-    <script src="{% static 'js/mapbox-gl-geocoder.min.js' %}"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
@@ -18,128 +16,85 @@
 {% block main %}
     <div class="container">
         <div class="map-container">
-            <div class="heading">
-                <!-- <div style="width: 80%;
-             height: 3px;
-             background-color: #efefef;
-             margin-bottom: 20px"></div> -->
-                <div class="legend">
-                    <div class="legend-items">
-                        <div class="legend-square" style="background-color: #946987"></div>
-                        <span>General Spaces</span>
+            <div class="map-wrap">
+                <div class="map" id="map"></div>
+                <div class="map-overlay map-panel">
+                    <div class="map-search">
+                        <input type="search"
+                               class="browser-default"
+                               id="map-search"
+                               placeholder="Search rooms or clubs"
+                               aria-label="Search rooms or clubs"
+                               autocomplete="off"
+                               role="combobox"
+                               aria-autocomplete="both"
+                               aria-expanded="false"
+                               aria-controls="map-search-results" />
+                        <ul class="map-search-results" id="map-search-results" role="listbox" hidden></ul>
                     </div>
-                    <div class="legend-items">
-                        <div class="legend-square" style="background-color: #946469"></div>
-                        <span>Washrooms + Change Rooms</span>
+                    <div class="day-tabs" role="tablist" aria-label="Floor">
+                        <button type="button" class="day-tab active" role="tab" data-floor="1" aria-selected="true">
+                            Floor 1
+                        </button>
+                        <button type="button" class="day-tab" role="tab" data-floor="2" aria-selected="false">
+                            Floor 2
+                        </button>
                     </div>
-                    <div class="legend-items">
-                        <div class="legend-square" style="background-color: #b0a169"></div>
-                        <span>Offices</span>
+                    <div class="switch club-toggle">
+                        <label>
+                            <input type="checkbox" id="club-toggle" />
+                            <span class="lever"></span>
+                            Club meeting rooms
+                        </label>
                     </div>
-                    <div class="legend-items">
-                        <div class="legend-square" style="background-color: #68936f"></div>
-                        <span>Classrooms + Labs</span>
-                    </div>
-                    <div class="legend-items">
-                        <div class="legend-square" style="background-color: #5d97d1"></div>
-                        <span>Stairways</span>
-                    </div>
-                    <div class="legend-items">
-                        <div class="legend-square" style="background-color: #3774b2"></div>
-                        <span>Hallways</span>
-                    </div>
-                    <div class="legend-items">
-                        <div class="legend-square" style="background-color: #646d78"></div>
-                        <span>Miscellaneous</span>
+                    <div class="club-controls" id="club-controls" hidden>
+                        <div class="day-tabs" role="tablist" aria-label="Day of the week">
+                            <button type="button" class="day-tab" role="tab" data-day="mon">Mon</button>
+                            <button type="button" class="day-tab" role="tab" data-day="tue">Tue</button>
+                            <button type="button" class="day-tab" role="tab" data-day="wed">Wed</button>
+                            <button type="button" class="day-tab" role="tab" data-day="thu">Thu</button>
+                            <button type="button" class="day-tab" role="tab" data-day="fri">Fri</button>
+                        </div>
+                        <div class="club-chip" id="club-chip" hidden>
+                            <span id="club-chip-name"></span>
+                            <button type="button" id="club-chip-clear" aria-label="Clear selected club">&times;</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div style="margin:0; ">
-                <a href="#help"><i class="small material-icons icon-blue">help</i></a>
-            </div>
-            <div>
-                If the map below isn't working (you see a black rectangle, etc),
-                <a href="{% static 'wlmci_schoolmap.pdf' %}" noprefetch>click here</a>
-                to see the PDF version.
-            </div>
-            <div class="switch club-toggle">
-                <label>
-                    <input type="checkbox" id="club-toggle" />
-                    <span class="lever"></span>
-                    Show club meetings dates and locations
-                </label>
-            </div>
-            <div class="club-controls" id="club-controls" hidden>
-            <div class="day-tabs" role="tablist" aria-label="Day of the week">
-                <button type="button" class="day-tab" role="tab" data-day="mon">Mon</button>
-                <button type="button" class="day-tab" role="tab" data-day="tue">Tue</button>
-                <button type="button" class="day-tab" role="tab" data-day="wed">Wed</button>
-                <button type="button" class="day-tab" role="tab" data-day="thu">Thu</button>
-                <button type="button" class="day-tab" role="tab" data-day="fri">Fri</button>
-            </div>
-            <div class="club-legend">
-                <span><span class="club-legend-dot"></span>Weekly at lunch</span>
-                <span><span class="club-legend-dot club-legend-ring"></span>Every other week, monthly, occasional or after school</span>
-            </div>
-            </div>
-            <div class="switch-container">
-                <div class="switch" id="floor">
-                    <label style="font-size: 1rem">
-                        Floor One <span class="floor-count" id="floor-1-count"></span>
-                        <input type="checkbox" name="checkbox" id="checkbox" />
-                        <span class="lever"></span>
-                        Floor Two <span class="floor-count" id="floor-2-count"></span>
-                    </label>
-                </div>
+                <details class="map-overlay map-legend-box">
+                    <summary>Legend</summary>
+                    <div class="legend">
+                        <div class="legend-items"><div class="legend-square" style="background-color: #946987"></div><span>General Spaces</span></div>
+                        <div class="legend-items"><div class="legend-square" style="background-color: #946469"></div><span>Washrooms + Change Rooms</span></div>
+                        <div class="legend-items"><div class="legend-square" style="background-color: #b0a169"></div><span>Offices</span></div>
+                        <div class="legend-items"><div class="legend-square" style="background-color: #68936f"></div><span>Classrooms + Labs</span></div>
+                        <div class="legend-items"><div class="legend-square" style="background-color: #5d97d1"></div><span>Stairways</span></div>
+                        <div class="legend-items"><div class="legend-square" style="background-color: #3774b2"></div><span>Hallways</span></div>
+                        <div class="legend-items"><div class="legend-square" style="background-color: #646d78"></div><span>Miscellaneous</span></div>
+                    </div>
+                    <div class="club-legend">
+                        <span><span class="club-legend-dot"></span>Weekly at lunch</span>
+                        <span><span class="club-legend-dot club-legend-ring"></span>Every other week, monthly, occasional or after school</span>
+                    </div>
+                </details>
+                <details class="map-overlay map-help" id="help">
+                    <summary aria-label="Help"><i class="material-icons">help</i></summary>
+                    <ul>
+                        <li><strong>Move:</strong> drag (1 finger on mobile)</li>
+                        <li><strong>Zoom:</strong> scroll or double click (pinch on mobile)</li>
+                        <li><strong>Tilt:</strong> Ctrl + drag (2 fingers + drag on mobile)</li>
+                    </ul>
+                    <p>
+                        Map not working (black rectangle, etc)?
+                        <a href="{% static 'wlmci_schoolmap.pdf' %}" noprefetch>Open the PDF version</a>
+                    </p>
+                </details>
             </div>
             <pre id="coordinates" class="coordinates"></pre>
-            <div class="map" id="map"></div>
             <div class="club-list" id="club-list" hidden></div>
-            <div class="controls" id="help">
-                <div class="mobile-controls">
-                    <details>
-                        <summary>
-                            <h6>
-                                <strong>Mobile Controls</strong>
-                            </h6>
-                        </summary>
-                        <ul>
-                            <li>
-                                <strong>Pan screen:</strong>1 finger + drag
-                            </li>
-                            <li>
-                                <strong>Zoom In/Out:</strong>2 fingers + pinch screen
-                            </li>
-                            <li>
-                                <strong>Perspective:</strong>2 fingers + drag
-                            </li>
-                        </ul>
-                    </details>
-                </div>
-                <div class="computer-controls">
-                    <details>
-                        <summary>
-                            <h6>
-                                <strong>Computer Controls</strong>
-                            </h6>
-                        </summary>
-                        <ul>
-                            <li>
-                                <strong>Pan screen:</strong>drag screen
-                            </li>
-                            <li>
-                                <strong>Zoom In/Out:</strong>double click OR scroll up or down
-                            </li>
-                            <li>
-                                <strong>Perspective:</strong>Ctrl + drag
-                            </li>
-                        </ul>
-                    </details>
-                </div>
-            </div>
         </div>
     </div>
-    <script src="{% static 'core/js/map/club-schedule.js' %}?v=2"></script>
-    <script src="{% static 'core/js/map/room-outlines.js' %}?v=2"></script>
-    <script src="{% static 'core/js/map/map.js' %}?v=2"></script>
+    <script src="{% static 'core/js/map/club-schedule.js' %}?v=4"></script>
+    <script src="{% static 'core/js/map/room-outlines.js' %}?v=4"></script>
+    <script src="{% static 'core/js/map/map.js' %}?v=4"></script>
 {% endblock %}

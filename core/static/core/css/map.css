@@ -21,40 +21,19 @@
 .map {
   width: 100%;
   height: 80vh;
+  min-height: 480px; /* room for the floating controls */
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-}
-
-.switch-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  padding: 20px;
 }
 
 .switch > label {
   font-size: 1.4rem !important;
   font-family: "Poppins", sans-serif !important;
   color: #073763 !important;
-}
-
-@media screen and (max-width: 600px) {
-  .switch-container {
-    padding: 20px;
-  }
-  .switch > label {
-    font-size: 1.2rem !important;
-  }
 }
 
 input:not([type]),
@@ -95,35 +74,6 @@ textarea.materialize-textarea {
   background-color: var(--status-yellow);
   margin: 6px;
   border-radius: 20%;
-}
-
-.heading {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  padding-top:3vh;
-  /* width: 70%; */
-}
-
-.controls {
-  display: flex;
-  flex-direction: row;
-  width: 80%;
-  margin-top: 20px;
-}
-
-.mobile-controls {
-  text-align: left;
-  padding: 0 5vw 0 2vw;
-  margin-left: 2vw;
-  flex: 1;
-}
-.computer-controls {
-  text-align: left;
-  padding: 0 2vw 2vw 2vw;
-  flex: 1;
 }
 
 .legend {
@@ -193,14 +143,6 @@ details > summary {
 
 /* ---- Club meetings by weekday ---- */
 
-.club-toggle {
-  margin-top: 24px;
-}
-
-.club-toggle > label {
-  font-size: 1.2rem !important;
-}
-
 .club-controls {
   display: flex;
   flex-direction: column;
@@ -215,21 +157,19 @@ details > summary {
 .day-tabs {
   display: flex;
   gap: 4px;
-  margin-top: 8px;
-  padding: 4px;
+  padding: 3px;
   background-color: #efefef;
   border-radius: 10px;
 }
 
 .day-tab {
-  min-width: 64px;
-  padding: 8px 14px;
+  padding: 6px 10px;
   border: none;
   border-radius: 8px;
   background: transparent;
   color: #073763;
   font-family: "Poppins", sans-serif;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
 }
 
@@ -273,10 +213,6 @@ details > summary {
   background-color: rgba(242, 183, 5, 0.15);
 }
 
-.floor-count {
-  font-size: 0.9em;
-  color: #3a6a96;
-}
 
 /* count badge on each highlighted room; matches the bold Roboto room numbers on the floor plans */
 .club-count {
@@ -293,10 +229,6 @@ details > summary {
   line-height: 18px;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.club-count.club-count-occasional {
-  background-color: #3a6a96;
 }
 
 /* the same badge, shown at the start of the room's card */
@@ -392,9 +324,202 @@ a.club-name:focus-visible {
   color: #434343;
 }
 
-@media screen and (max-width: 600px) {
-  .day-tab {
-    min-width: 0;
-    padding: 8px 10px;
+
+/* ---- Controls floating on the map ---- */
+
+.map-wrap {
+  position: relative;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.map-overlay {
+  position: absolute;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.map-panel {
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 8px 10px;
+}
+
+.map-panel .switch > label {
+  font-size: 1rem !important;
+}
+
+.map-panel .switch label .lever {
+  margin: 0 10px;
+}
+
+/* bottom corners sit above the Mapbox logo and attribution */
+.map-legend-box {
+  bottom: 30px;
+  left: 10px;
+  max-width: calc(100% - 80px);
+}
+
+.map-help {
+  bottom: 30px;
+  right: 10px;
+  max-width: min(320px, calc(100% - 20px));
+}
+
+.map-legend-box > summary,
+.map-help > summary {
+  padding: 6px 12px;
+}
+
+.map-help > summary {
+  display: flex;
+  justify-content: center;
+}
+
+.map-legend-box[open],
+.map-help[open] {
+  padding-bottom: 8px;
+}
+
+.map-legend-box .legend {
+  background-color: transparent;
+  justify-content: flex-start;
+  padding: 6px 8px 0;
+  font-size: 0.85rem;
+}
+
+.map-legend-box .legend-square {
+  height: 14px;
+  width: 14px;
+  margin: 4px;
+}
+
+.map-legend-box .club-legend {
+  justify-content: flex-start;
+  margin: 6px 12px 0;
+  font-size: 0.85rem;
+}
+
+.map-help ul,
+.map-help p {
+  margin: 8px 12px 0;
+  font-size: 0.9rem;
+}
+
+@media screen and (max-width: 768px) {
+  .map-panel .switch > label {
+    font-size: 0.9rem !important;
   }
+
+  .day-tab {
+    padding: 5px 7px;
+  }
+}
+
+/* ---- Search ---- */
+
+.map-search {
+  position: relative;
+  width: 260px;
+  max-width: calc(100vw - 80px);
+}
+
+.map-search input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #c4c4c4;
+  border-radius: 8px;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.95rem;
+}
+
+.map-search input:focus {
+  outline: 2px solid #3a6a96;
+  border-color: transparent;
+}
+
+.map-search-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 3;
+  margin: 0;
+  padding: 4px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-family: "Roboto", sans-serif;
+}
+
+.map-search-results[hidden] {
+  display: none;
+}
+
+.map-search-results li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.map-search-results li[aria-selected="true"],
+.map-search-results li:hover {
+  background-color: #e7f2fb;
+}
+
+.map-search-type {
+  color: #6b6b6b;
+  font-size: 0.8rem;
+}
+
+.club-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 2px 4px 2px 10px;
+  border-radius: 14px;
+  background-color: #073763;
+  color: white;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.85rem;
+}
+
+.club-chip[hidden] {
+  display: none;
+}
+
+.club-chip button {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* days the selected club meets */
+.day-tab.club-day::after {
+  content: "";
+  display: block;
+  width: 5px;
+  height: 5px;
+  margin: 2px auto 0;
+  border-radius: 50%;
+  background-color: #e0a800;
+}
+
+.club-count.club-count-dim,
+.club-list-room.dim {
+  opacity: 0.35;
 }
