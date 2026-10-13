@@ -1,9 +1,24 @@
 mapboxgl.accessToken = JSON.parse(
   document.getElementById("mapbox-apikey").textContent
 )["apikey"];
+// Without a real API key (local dev), fall back to a plain background so the floor plans still render.
+const hasMapboxKey =
+  mapboxgl.accessToken && mapboxgl.accessToken !== "change me";
 const map = new mapboxgl.Map({
   container: "map", // container ID
-  style: "mapbox://styles/nikisu/cktk76xy90rgm17s7q7pg0g55", // style URL
+  style: hasMapboxKey
+    ? "mapbox://styles/nikisu/cktk76xy90rgm17s7q7pg0g55" // style URL
+    : {
+        version: 8,
+        sources: {},
+        layers: [
+          {
+            id: "background",
+            type: "background",
+            paint: { "background-color": "#dde5df" },
+          },
+        ],
+      },
   center: [-79.46155348420591, 43.753374130758445], // starting position [lng, lat]
   zoom: 19, // starting zoom
 });
@@ -81,10 +96,21 @@ const customData = {
       type: "Feature",
       geometry: {
         type: "Point",
-        coordinates: [-79.46256102100658, 43.75326634251712],
+        coordinates: [-79.46234560663818, 43.752886330082404],
       },
       properties: {
         title: "Portable 7",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46215462170524, 43.752906750712775],
+      },
+      properties: {
+        title: "Portable 8",
         floor: 1,
       },
     },
@@ -150,7 +176,7 @@ const customData = {
         coordinates: [-79.46207609586855, 43.75347184182684],
       },
       properties: {
-        title: "fitness centre (124c)",
+        title: "fitness room (124c)",
         floor: 1,
       },
     },
@@ -293,7 +319,7 @@ const customData = {
         coordinates: [-79.46145355825836, 43.753934020553146],
       },
       properties: {
-        title: "dance room",
+        title: "dance studio (144)",
         floor: 1,
       },
     },
@@ -964,7 +990,7 @@ const customData = {
         coordinates: [-79.46100506863056, 43.75350601053009],
       },
       properties: {
-        title: "library room A",
+        title: "Library A",
         floor: 1,
       },
     },
@@ -975,7 +1001,7 @@ const customData = {
         coordinates: [-79.46098927243114, 43.753440973854964],
       },
       properties: {
-        title: "library room B",
+        title: "Library B",
         floor: 1,
       },
     },
@@ -2545,34 +2571,279 @@ map.on("mouseleave", "mactoberfest", () => {
   var checkbox = document.querySelector("input[name=checkbox]");
 
   checkbox.addEventListener("change", function () {
-    if (this.checked) {
-      console.log("Checkbox is checked..");
-      map.setLayoutProperty("floorTwo", "visibility", "visible");
-      map.setLayoutProperty("floorOne", "visibility", "none");
-      map.setLayoutProperty("booths", "visibility", "none");
-    } else {
-      console.log("Checkbox is not checked..");
-      map.setLayoutProperty("floorOne", "visibility", "visible");
-      map.setLayoutProperty("floorTwo", "visibility", "none");
-      map.setLayoutProperty("booths", "visibility", "visible");
-    }
+    setFloor(this.checked ? 2 : 1);
   });
 
   geocoder.on("result", ({ result }) => {
-    console.log(result.properties.title);
-    if (result.properties.floor == 1) {
-      checkbox.checked = false;
-      map.setLayoutProperty("floorOne", "visibility", "visible");
-      map.setLayoutProperty("floorTwo", "visibility", "none");
-      map.setLayoutProperty("booths", "visibility", "visible");
-    } else {
-      checkbox.checked = true;
-      map.setLayoutProperty("floorTwo", "visibility", "visible");
-      map.setLayoutProperty("floorOne", "visibility", "none");
-      map.setLayoutProperty("booths", "visibility", "none");
-    }
+    setFloor(result.properties.floor);
   });
+
+  initClubSchedule();
 });
+
+// ---- Club meetings by weekday ----
+
+const DAYS = ["mon", "tue", "wed", "thu", "fri"];
+const FREQ_LABELS = {
+  weekly: "Weekly",
+  biweekly: "Every other week",
+  monthly: "Monthly",
+  occasional: "Occasionally",
+};
+const roomsByTitle = Object.fromEntries(
+  customData.features.map((f) => [f.properties.title, f])
+);
+let currentFloor = 1;
+let currentDay = DAYS[new Date().getDay() - 1] || "mon";
+let clubsVisible = false;
+const CLUBS_URL = JSON.parse(document.getElementById("clubs-url").textContent);
+let countMarkers = [];
+// fill for every highlighted room, solid outline for regular meetings, dashed for the rest
+const CLUB_ROOM_LAYERS = [
+  {
+    id: "club-rooms",
+    type: "fill",
+    paint: {
+      "fill-color": "#f2b705",
+      "fill-opacity": ["case", ["get", "regular"], 0.4, 0.15],
+    },
+  },
+  {
+    id: "club-rooms-outline",
+    type: "line",
+    filter: ["get", "regular"],
+    paint: { "line-color": "#e0a800", "line-width": 3 },
+  },
+  {
+    id: "club-rooms-outline-occasional",
+    type: "line",
+    filter: ["!", ["get", "regular"]],
+    paint: { "line-color": "#e0a800", "line-width": 3, "line-dasharray": [2, 1.5] },
+  },
+];
+let clubPopup = null;
+
+function setFloor(floor) {
+  currentFloor = floor;
+  document.querySelector("input[name=checkbox]").checked = floor == 2;
+  map.setLayoutProperty("floorOne", "visibility", floor == 1 ? "visible" : "none");
+  map.setLayoutProperty("floorTwo", "visibility", floor == 2 ? "visible" : "none");
+  for (const layer of CLUB_ROOM_LAYERS) {
+    if (map.getLayer(layer.id)) map.setFilter(layer.id, floorFilter(layer.filter));
+  }
+  renderCountMarkers();
+}
+
+function floorFilter(filter) {
+  const onFloor = ["==", ["get", "floor"], currentFloor];
+  return filter ? ["all", onFloor, filter] : onFloor;
+}
+
+// north-east corner of the room outline, where the club count badge sits
+function badgeCorner(title, fallback) {
+  const ring = ROOM_OUTLINES[title];
+  if (!ring) return fallback;
+  return ring.reduce((best, p) =>
+    p[0] * Math.cos((p[1] * Math.PI) / 180) + p[1] >
+    best[0] * Math.cos((best[1] * Math.PI) / 180) + best[1]
+      ? p
+      : best
+  );
+}
+
+function roomDisplayName(title) {
+  return title
+    .replace(/^Room /, "Rm ")
+    .replace(/\b[a-z]/g, (c) => c.toUpperCase());
+}
+
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// Group the day's meetings by room: { title, floor, coordinates, meetings, regular }
+function roomsForDay(day) {
+  const rooms = new Map();
+  const month = new Date().getMonth() + 1;
+  for (const meeting of CLUB_SCHEDULE[day]) {
+    if (meeting.months && !meeting.months.includes(month)) continue;
+    const key = meeting.room || "";
+    if (!rooms.has(key)) {
+      const feature = roomsByTitle[meeting.room];
+      rooms.set(key, {
+        title: meeting.room,
+        floor: feature ? feature.properties.floor : null,
+        coordinates: feature ? feature.geometry.coordinates : null,
+        meetings: [],
+        regular: false,
+      });
+    }
+    const room = rooms.get(key);
+    room.meetings.push(meeting);
+    if (meeting.freq == "weekly" && meeting.time == "lunch") room.regular = true;
+  }
+  return [...rooms.values()];
+}
+
+function meetingsHtml(meetings) {
+  return meetings
+    .map((m) => {
+      const details = [m.time == "lunch" ? "Lunch" : "After school", FREQ_LABELS[m.freq]];
+      if (m.note) details.push(m.note);
+      return `<li><a class="club-name" href="${CLUBS_URL}">${escapeHtml(m.club)}</a>
+        <span class="club-details">${escapeHtml(details.join(" · "))}</span></li>`;
+    })
+    .join("");
+}
+
+function showRoomPopup(room, lngLat = room.coordinates) {
+  if (clubPopup) clubPopup.remove();
+  clubPopup = new mapboxgl.Popup({ className: "club-popup", maxWidth: "280px" })
+    .setLngLat(lngLat)
+    .setHTML(
+      `<div class="club-popup-room">${escapeHtml(roomDisplayName(room.title))}</div>
+       <ul>${meetingsHtml(room.meetings)}</ul>`
+    )
+    .addTo(map);
+}
+
+// The day's rooms in list order; rooms on the map get a number shared by their map badge and card.
+function numberedRoomsForDay(day) {
+  const rooms = roomsForDay(day).sort((a, b) => {
+    // rooms on the map first (floor 1 then 2, numbered rooms before named spaces), then off-map locations
+    const rank = (r) => (r.coordinates ? r.floor * 2 + (/^Room /.test(r.title) ? 0 : 1) : 9);
+    return rank(a) - rank(b) || (a.title || "~").localeCompare(b.title || "~", undefined, { numeric: true });
+  });
+  let number = 0;
+  for (const room of rooms) room.number = room.coordinates ? ++number : null;
+  return rooms;
+}
+
+function renderCountMarkers() {
+  countMarkers.forEach((m) => m.remove());
+  countMarkers = [];
+  if (!clubsVisible) return;
+  for (const room of numberedRoomsForDay(currentDay)) {
+    if (!room.coordinates || room.floor != currentFloor) continue;
+    const el = document.createElement("button");
+    el.className = "club-count" + (room.regular ? "" : " club-count-occasional");
+    el.textContent = room.number;
+    el.title = `${room.number}. ${roomDisplayName(room.title)}`;
+    el.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showRoomPopup(room);
+    });
+    countMarkers.push(
+      new mapboxgl.Marker({ element: el, offset: [-4, 4] })
+        .setLngLat(badgeCorner(room.title, room.coordinates))
+        .addTo(map)
+    );
+  }
+}
+
+function renderClubList() {
+  const list = document.getElementById("club-list");
+  const rooms = numberedRoomsForDay(currentDay);
+  list.innerHTML = rooms
+    .map((room, i) => {
+      let where;
+      if (room.coordinates) where = roomDisplayName(room.title);
+      else if (room.title) where = `${escapeHtml(room.title)} <span class="club-list-floor">Not on map</span>`;
+      else where = `Location not given`;
+      return `<div class="club-list-room${room.coordinates ? " clickable" : ""}" data-index="${i}">
+          <div class="club-list-where">${
+            room.number ? `<span class="club-count${room.regular ? "" : " club-count-occasional"}">${room.number}</span>` : ""
+          }${where}</div>
+          <ul>${meetingsHtml(room.meetings)}</ul>
+        </div>`;
+    })
+    .join("");
+  list.querySelectorAll(".club-list-room.clickable").forEach((el) => {
+    el.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return; // club name links go to the clubs list
+      const room = rooms[el.dataset.index];
+      setFloor(room.floor);
+      map.flyTo({ center: room.coordinates, zoom: 19.5 });
+      showRoomPopup(room);
+      document.getElementById("map").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
+}
+
+function setDay(day) {
+  currentDay = day;
+  document.querySelectorAll(".day-tab").forEach((tab) => {
+    const active = tab.dataset.day == day;
+    tab.classList.toggle("active", active);
+    tab.setAttribute("aria-selected", active);
+  });
+
+  const rooms = roomsForDay(day).filter((r) => r.coordinates);
+  map.getSource("club-rooms").setData({
+    type: "FeatureCollection",
+    features: rooms
+      .filter((room) => ROOM_OUTLINES[room.title])
+      .map((room) => ({
+        type: "Feature",
+        geometry: { type: "Polygon", coordinates: [ROOM_OUTLINES[room.title]] },
+        properties: { title: room.title, floor: room.floor, regular: room.regular },
+      })),
+  });
+
+  for (const floor of [1, 2]) {
+    const count = rooms
+      .filter((r) => r.floor == floor)
+      .reduce((n, r) => n + r.meetings.length, 0);
+    document.getElementById(`floor-${floor}-count`).textContent =
+      clubsVisible && count ? `(${count})` : "";
+  }
+
+  if (clubPopup) clubPopup.remove();
+  renderCountMarkers();
+  renderClubList();
+}
+
+function initClubSchedule() {
+  map.addSource("club-rooms", {
+    type: "geojson",
+    data: { type: "FeatureCollection", features: [] },
+  });
+  for (const layer of CLUB_ROOM_LAYERS) {
+    map.addLayer({ ...layer, source: "club-rooms", filter: floorFilter(layer.filter) });
+  }
+
+  map.on("click", "club-rooms", (e) => {
+    const title = e.features[0].properties.title;
+    const room = roomsForDay(currentDay).find((r) => r.title == title);
+    if (room) showRoomPopup(room, e.lngLat);
+  });
+  map.on("mouseenter", "club-rooms", () => {
+    map.getCanvas().style.cursor = "pointer";
+  });
+  map.on("mouseleave", "club-rooms", () => {
+    map.getCanvas().style.cursor = "";
+  });
+
+  document.querySelectorAll(".day-tab").forEach((tab) => {
+    tab.addEventListener("click", () => setDay(tab.dataset.day));
+  });
+  const toggle = document.getElementById("club-toggle");
+  toggle.addEventListener("change", () => setClubsVisible(toggle.checked));
+  setClubsVisible(toggle.checked);
+}
+
+function setClubsVisible(visible) {
+  clubsVisible = visible;
+  document.getElementById("club-controls").hidden = !visible;
+  document.getElementById("club-list").hidden = !visible;
+  for (const layer of CLUB_ROOM_LAYERS) {
+    map.setLayoutProperty(layer.id, "visibility", visible ? "visible" : "none");
+  }
+  if (!visible && clubPopup) clubPopup.remove();
+  setDay(currentDay);
+}
 
 // const marker2 = new mapboxgl.Marker({
 // })

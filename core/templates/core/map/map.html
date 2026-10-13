@@ -9,7 +9,11 @@
     <script src="{% static 'js/mapbox-gl-geocoder.min.js' %}"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+          rel="stylesheet">
     {{ mapbox_apikey|json_script:"mapbox-apikey" }}
+    {% url 'organization_list' as clubs_url %}
+    {{ clubs_url|json_script:"clubs-url" }}
 {% endblock %}
 {% block main %}
     <div class="container">
@@ -58,18 +62,39 @@
                 <a href="{% static 'wlmci_schoolmap.pdf' %}">click here</a>
                 to see the PDF version.
             </div>
+            <div class="switch club-toggle">
+                <label>
+                    <input type="checkbox" id="club-toggle" />
+                    <span class="lever"></span>
+                    Show club meetings dates and locations
+                </label>
+            </div>
+            <div class="club-controls" id="club-controls" hidden>
+            <div class="day-tabs" role="tablist" aria-label="Day of the week">
+                <button type="button" class="day-tab" role="tab" data-day="mon">Mon</button>
+                <button type="button" class="day-tab" role="tab" data-day="tue">Tue</button>
+                <button type="button" class="day-tab" role="tab" data-day="wed">Wed</button>
+                <button type="button" class="day-tab" role="tab" data-day="thu">Thu</button>
+                <button type="button" class="day-tab" role="tab" data-day="fri">Fri</button>
+            </div>
+            <div class="club-legend">
+                <span><span class="club-legend-dot"></span>Weekly at lunch</span>
+                <span><span class="club-legend-dot club-legend-ring"></span>Every other week, monthly, occasional or after school</span>
+            </div>
+            </div>
             <div class="switch-container">
                 <div class="switch" id="floor">
                     <label style="font-size: 1rem">
-                        Floor One
+                        Floor One <span class="floor-count" id="floor-1-count"></span>
                         <input type="checkbox" name="checkbox" id="checkbox" />
                         <span class="lever"></span>
-                        Floor Two
+                        Floor Two <span class="floor-count" id="floor-2-count"></span>
                     </label>
                 </div>
             </div>
             <pre id="coordinates" class="coordinates"></pre>
             <div class="map" id="map"></div>
+            <div class="club-list" id="club-list" hidden></div>
             <div class="controls" id="help">
                 <div class="mobile-controls">
                     <details>
@@ -114,5 +139,7 @@
             </div>
         </div>
     </div>
+    <script src="{% static 'core/js/map/club-schedule.js' %}"></script>
+    <script src="{% static 'core/js/map/room-outlines.js' %}"></script>
     <script src="{% static 'core/js/map/map.js' %}"></script>
 {% endblock %}

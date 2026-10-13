@@ -34,3 +34,12 @@ secrets/*
 
 # media
 media
+
+# local tooling
+PRODUCT.md
+DESIGN.md
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+.mcp.json
+.impeccable/

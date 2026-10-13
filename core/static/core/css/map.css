@@ -190,3 +190,211 @@ details > summary {
   i.icon-blue {
     color: #073763;
 }
+
+/* ---- Club meetings by weekday ---- */
+
+.club-toggle {
+  margin-top: 24px;
+}
+
+.club-toggle > label {
+  font-size: 1.2rem !important;
+}
+
+.club-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.club-controls[hidden],
+.club-list[hidden] {
+  display: none;
+}
+
+.day-tabs {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  padding: 4px;
+  background-color: #efefef;
+  border-radius: 10px;
+}
+
+.day-tab {
+  min-width: 64px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #073763;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.day-tab:hover {
+  background-color: #e0e0e0;
+}
+
+.day-tab.active {
+  background-color: #073763;
+  color: white;
+}
+
+.club-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 20px;
+  margin-top: 12px;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.9rem;
+  color: #434343;
+}
+
+.club-legend > span {
+  display: flex;
+  align-items: center;
+}
+
+.club-legend-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  border: 2px solid #e0a800;
+  border-radius: 3px;
+  background-color: rgba(242, 183, 5, 0.4);
+}
+
+.club-legend-dot.club-legend-ring {
+  border-style: dashed;
+  background-color: rgba(242, 183, 5, 0.15);
+}
+
+.floor-count {
+  font-size: 0.9em;
+  color: #3a6a96;
+}
+
+/* count badge on each highlighted room; matches the bold Roboto room numbers on the floor plans */
+.club-count {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border: 2px solid white;
+  border-radius: 11px;
+  background-color: #073763;
+  color: white;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.club-count.club-count-occasional {
+  background-color: #3a6a96;
+}
+
+/* the same badge, shown at the start of the room's card */
+.club-list-where .club-count {
+  display: inline-block;
+  margin-right: 8px;
+  text-align: center;
+  cursor: inherit;
+  box-shadow: none;
+  align-self: center;
+}
+
+.club-popup .mapboxgl-popup-content {
+  padding: 12px 14px;
+  border-left: 6px solid #073763;
+  border-radius: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.club-popup-room {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.club-popup ul,
+.club-list ul {
+  margin: 0;
+}
+
+.club-popup li,
+.club-list li {
+  margin-bottom: 6px;
+}
+
+.club-name {
+  display: block;
+  font-weight: 700;
+  color: #0b0b0b;
+}
+
+a.club-name:hover,
+a.club-name:focus-visible {
+  color: #3a6a96;
+  text-decoration: underline;
+}
+
+.club-details {
+  display: block;
+  font-weight: 300;
+  font-size: 0.85rem;
+  color: #434343;
+}
+
+.club-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin-top: 16px;
+  font-family: "Roboto", sans-serif;
+}
+
+.club-list-room {
+  padding: 12px 14px;
+  border-left: 6px solid #073763;
+  border-radius: 0;
+  background-color: #efefef;
+}
+
+.club-list-room.clickable {
+  cursor: pointer;
+}
+
+.club-list-room.clickable:hover {
+  background-color: #e7f2fb;
+}
+
+.club-list-where {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #073763;
+}
+
+.club-list-floor {
+  margin-left: 6px;
+  font-weight: 300;
+  font-size: 0.85rem;
+  color: #434343;
+}
+
+@media screen and (max-width: 600px) {
+  .day-tab {
+    min-width: 0;
+    padding: 8px 10px;
+  }
+}
