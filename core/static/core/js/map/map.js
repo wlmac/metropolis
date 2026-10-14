@@ -2933,7 +2933,7 @@ let searchResults = [];
 let activeResult = -1;
 
 function renderSearch() {
-  searchList.innerHTML = searchResults
+  const items = searchResults
     .map(
       (entry, i) =>
         `<li role="option" id="map-search-${i}" data-index="${i}" aria-selected="${i == activeResult}">
@@ -2941,6 +2941,11 @@ function renderSearch() {
           <span class="map-search-type">${entry.type}</span></li>`
     )
     .join("");
+  // an empty box shows POPULAR_CLUBS
+  const header = normalizeSearch(searchInput.value)
+    ? ""
+    : '<li class="map-search-header" role="presentation">Example clubs</li>';
+  searchList.innerHTML = header + items;
   searchList.hidden = !searchResults.length;
   searchInput.setAttribute("aria-expanded", !searchList.hidden);
   searchInput.setAttribute("aria-activedescendant", activeResult >= 0 ? `map-search-${activeResult}` : "");
@@ -2992,7 +2997,7 @@ searchInput.addEventListener("keydown", (e) => {
 searchInput.addEventListener("blur", closeSearch);
 // mousedown, not click: it runs before the input's blur hides the list
 searchList.addEventListener("mousedown", (e) => {
-  const item = e.target.closest("li");
+  const item = e.target.closest("li[data-index]");
   if (!item) return;
   e.preventDefault();
   chooseResult(searchResults[item.dataset.index]);

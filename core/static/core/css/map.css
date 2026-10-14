@@ -477,6 +477,19 @@ a.club-name:focus-visible {
   background-color: #e7f2fb;
 }
 
+.map-search-results li.map-search-header {
+  padding: 4px 8px 2px;
+  color: #6b6b6b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: default;
+}
+
+.map-search-results li.map-search-header:hover {
+  background-color: transparent;
+}
+
 .map-search-type {
   color: #6b6b6b;
   font-size: 0.8rem;
