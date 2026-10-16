@@ -16,6 +16,8 @@ repos:
         entry: make
         language: system
         args: [ "requirements.txt" ]
+        files: ^(pyproject\.toml|poetry\.lock)$
+        pass_filenames: false
   - repo: local
     hooks:
       - id: sync-ruff-version
@@ -23,4 +25,5 @@ repos:
         entry: make
         language: system
         args: [ "sync-ruff-version" ]
+        files: ^(\.pre-commit-config\.yaml|pyproject\.toml)$
         pass_filenames: false

@@ -152,7 +152,7 @@ def load_rooms() -> list[dict]:
     """Reads the room points out of the customData object literal in map.js."""
     src = MAP_JS.read_text()
     block = src[
-        src.index("const customData = ") : src.index("function forwardGeocoder")
+        src.index("const customData = ") : src.index("// map.dragRotate.disable();")
     ]
     rooms = []
     for feature in re.split(r'type: "Feature",', block)[1:]:

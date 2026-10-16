@@ -96,7 +96,7 @@ const customData = {
       type: "Feature",
       geometry: {
         type: "Point",
-        coordinates: [-79.46234560663818, 43.752886330082404],
+        coordinates: [-79.46252867509723, 43.753229918133435],
       },
       properties: {
         title: "Portable 7",
@@ -111,6 +111,17 @@ const customData = {
       },
       properties: {
         title: "Portable 8",
+        floor: 1,
+      },
+    },
+    {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [-79.46234560663818, 43.752886330082404],
+      },
+      properties: {
+        title: "Portable 9",
         floor: 1,
       },
     },
@@ -1357,7 +1368,7 @@ map.on("load", () => {
   // *-web.jpg are FloorOne/FloorTwo.jpg shrunk to 4096px (the max WebGL texture size on many phones); regenerate them when the originals change
   map.addSource("floorOne", {
     type: "image",
-    url: "../static/core/img/FloorOne-web.jpg",
+    url: "../static/core/img/FloorOne-web.jpg?v=2",
     coordinates: [
       [-79.46270547634776, 43.75413886166868], //TL
       [-79.46072668772469, 43.75413886166868], //TR
