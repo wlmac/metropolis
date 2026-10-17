@@ -13,7 +13,7 @@ const map = L.map("map", {
 // streets-web.webp: the blocks around the school, rendered once from OpenFreeMap's positron style with MapLibre
 // (4096px, zoom 18, these bounds), so there are no tile requests to rate-limit or block
 L.imageOverlay(
-  "/static/core/img/streets-web.webp",
+  "/static/core/img/streets-web.webp?v=1",
   [ll([-79.46700000000018, 43.74960778107982]), ll([-79.45650000000033, 43.7571921717859])],
   { pane: "tilePane", attribution: '<a href="https://openfreemap.org">OpenFreeMap</a> &copy; <a href="https://www.openmaptiles.org/">OpenMapTiles</a> Data from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }
 ).addTo(map);
@@ -1450,7 +1450,7 @@ function setFloor(floor) {
     tab.setAttribute("aria-selected", active);
   });
   if (floor == 2 && !floorTwo)
-    floorTwo = L.imageOverlay("/static/core/img/FloorTwo-web.webp?v=2", FLOOR_BOUNDS, { pane: "floors" });
+    floorTwo = L.imageOverlay("/static/core/img/FloorTwo-web.webp?v=3", FLOOR_BOUNDS, { pane: "floors" });
   if (floor == 1) floorOne.addTo(map);
   else floorOne.remove();
   if (floorTwo && floor == 2) floorTwo.addTo(map);
