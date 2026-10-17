@@ -24,9 +24,11 @@
         </script>
     </div>
     <div class="card-container">
+        {% if user.is_staff %}
         <div class="admin">
             <a class="link" href="{% url 'admin:core_announcement_change' object_id=announcement.id %}">Edit</a>
         </div>
+        {% endif %}
         <div class="tag-section">
             {% if announcement.status != 'a' %}
             <p class="tag" style="background-color:{% tag_color 0 %}">Unpublished</p>
@@ -46,13 +48,11 @@
             {% endif %}
             <div class="card-authors-text">
                 {% if announcement.organization %}
-                {{ announcement.organization.slug|organization }}{% else %}<span class="card-authors-text-string">{{
-                    announcement.organization_string }}</span>{% endif %}{% if announcement.author %}, {{
-                announcement.author.username|user }}
+                {# keep each variable tag on one line: Django prints a wrapped tag as raw text #}
+                {{ announcement.organization.slug|organization }}{% else %}<span class="card-authors-text-string">{{ announcement.organization_string }}</span>{% endif %}{% if announcement.author %}, {{ announcement.author.username|user }}
                 {% endif %}
                 <br>
-                <dot>•</dot> {{ announcement.show_after|date:"M. j, Y" }}{{ announcement.show_after|date:", g:i A"|lower
-                }}
+                <dot>•</dot> {{ announcement.show_after|date:"M. j, Y" }}{{ announcement.show_after|date:", g:i A"|lower }}
                 <!--{% if announcement.last_modified_date != announcement.created_date %}
                 (Edited)
                 {% endif %}-->

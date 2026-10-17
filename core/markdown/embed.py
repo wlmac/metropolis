@@ -3,7 +3,7 @@ from xml.etree.ElementTree import Element
 from markdown.extensions import Extension
 from markdown.inlinepatterns import Pattern
 
-EMBED_RE = r"\{(https?://.+)\}"
+EMBED_RE = r"\{(https?://[^\s}]+)\}"
 
 
 class EmbedPattern(Pattern):

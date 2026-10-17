@@ -128,3 +128,37 @@ class ChoicesTests(TestCase):
         with mock.patch("core.models.choices.datetime") as mock_datetime:
             mock_datetime.datetime.now.return_value = self.datetime
             self.assertEqual(calculate_graduating_year_choices(), self.expected)
+
+
+class AnnouncementPageTests(TestCase):
+    def setUp(self):
+        from django.utils import timezone
+
+        from core.models import Announcement
+
+        self.announcement = Announcement.objects.create(
+            title="Test",
+            body="{https://open.spotify.com/embed/x} {https://evil.example/x}\x0b",
+            organization_string="Some Club",
+            show_after=timezone.now() - datetime.timedelta(hours=1),
+            status="a",
+        )
+
+    def test_detail_renders_all_tags(self):
+        response = self.client.get(f"/announcement/{self.announcement.pk}")
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "announcement.")  # no raw template tags
+        self.assertContains(response, "Some Club")
+        self.assertNotContains(response, "/admin/")  # Edit link is staff-only
+
+    def test_iframe_allowlist(self):
+        response = self.client.get(f"/announcement/{self.announcement.pk}")
+        self.assertContains(response, 'src="https://open.spotify.com/embed/x"')
+        self.assertNotContains(response, "evil.example")
+
+    def test_rss_feed(self):
+        self.assertEqual(self.client.get("/announcements/feed").status_code, 200)
+
+    def test_cards_unknown_club(self):
+        response = self.client.get("/announcements/cards?page=1&feed=999999")
+        self.assertEqual(response.status_code, 404)

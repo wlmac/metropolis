@@ -1,4 +1,5 @@
 import re
+from urllib.parse import urlsplit
 
 import bleach.sanitizer as sanitizer
 from django import template
@@ -14,6 +15,30 @@ bodge_pattern = re.compile(r"\[([^]]*)]\(/")
 
 def bodge_replace(match):
     return f"[{match.group(1)}]({settings.ROOT}/"
+
+
+# hosts already embedded on the site; add one here to allow a new embed source
+IFRAME_HOSTS = {
+    "open.spotify.com",
+    "w.soundcloud.com",
+    "www.youtube.com",
+    "www.youtube-nocookie.com",
+}
+IFRAME_ATTRS = {
+    "frameborder",
+    "class",
+    "title",
+    "allow",
+    "allowfullscreen",
+    "width",
+    "height",
+}
+
+
+def iframe_attr(tag, name, value):
+    if name == "src":
+        return urlsplit(value).hostname in IFRAME_HOSTS
+    return name in IFRAME_ATTRS
 
 
 # https://github.com/mozilla/bleach/blob/main/bleach/sanitizer.py#L13
@@ -38,16 +63,7 @@ cleaner = sanitizer.Cleaner(
     ],
     attributes={
         **sanitizer.ALLOWED_ATTRIBUTES,
-        "iframe": [
-            "src",
-            "frameborder",
-            "class",
-            "title",
-            "allow",
-            "allowfullscreen",
-            "width",
-            "height",
-        ],
+        "iframe": iframe_attr,
         "img": ["alt", "src"],
     },
     protocols=[

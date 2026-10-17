@@ -359,6 +359,9 @@ def fetch_announcements():
 
         row_counter += 1
 
+    if not all_announcement_data:
+        return
+
     prompt_data = []
 
     organizations_dict = {
@@ -405,16 +408,10 @@ def fetch_announcements():
         try:
             announcement_data = all_announcement_data[index]
 
-            try:
-                org_details = organizations_dict[el["club_name"]]
+            org_details = organizations_dict.get(el["club_name"])
+            if org_details:
                 announcement_data["organization"] = org_details["organization"]
-
-                if announcement_data["author"] is not None and not (
-                    announcement_data["author"] in org_details["execs"]
-                    or announcement_data["author"] in org_details["supervisors"]
-                ):
-                    announcement_data["author"] = None
-            except KeyError:
+            else:
                 announcement_data["organization_string"] = el["club_name"]
 
             announcement_data["title"] = el["title"]

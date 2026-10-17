@@ -1,3 +1,5 @@
+import re
+
 from django.conf import settings
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.syndication.views import Feed
@@ -18,10 +20,7 @@ from . import mixins
 
 
 def custom_feed(request, pk: int, limit: int | None = None):
-    assert models.Organization.objects.filter(pk=pk).exists(), (
-        "pk for feed doesn't exist"
-    )
-    custom_feed_organization = models.Organization.objects.get(pk=pk)
+    custom_feed_organization = get_object_or_404(models.Organization, pk=pk)
     feed = custom_feed_organization.get_feed(user=request.user)
     return (
         custom_feed_organization,
@@ -127,11 +126,14 @@ class AnnouncementFeed(Feed):
     def items(self):
         return models.Announcement.get_all()
 
+    # XML 1.0 rejects control characters, which pasted form text sometimes has
+    xml_bad_chars = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f]")
+
     def item_description(self, item):
-        return markdown(item.body)
+        return self.xml_bad_chars.sub("", markdown(item.body))
 
     def item_title(self, item):
-        return item.title
+        return self.xml_bad_chars.sub("", item.title)
 
     def item_pubdate(self, item):
         return item.show_after
@@ -140,7 +142,9 @@ class AnnouncementFeed(Feed):
         return item.last_modified_date
 
     def item_category(self, item):
-        return [item.organization.name] + item.tags.values_list("name", flat=True)
+        tags = list(item.tags.values_list("name", flat=True))
+        org = item.organization.name if item.organization else item.organization_string
+        return [org, *tags] if org else tags
 
 
 class AnnouncementTagList(TemplateView, mixins.TitleMixin):
