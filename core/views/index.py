@@ -121,11 +121,6 @@ class MapView(TemplateView, mixins.TitleMixin):
     template_name = "core/map/map.html"
     title = "Map"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["mapbox_apikey"] = {"apikey": settings.MAPBOX_APIKEY}
-        return context
-
 
 UserType = dict[str, int | str | bool | list[str]]
 PositionType = dict[str, UserType | str | list[str] | bool]  # str being None

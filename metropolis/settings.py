@@ -404,9 +404,6 @@ PWA_APP_LANG = "en-CA"
 PWA_APP_DEBUG_MODE = False
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, "templates", "serviceworker.js")
 
-# Mapbox settings
-
-MAPBOX_APIKEY = "change me"
 
 # Team settings
 

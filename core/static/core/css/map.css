@@ -241,11 +241,38 @@ details > summary {
   align-self: center;
 }
 
-.club-popup .mapboxgl-popup-content {
-  padding: 12px 14px;
+.club-popup .leaflet-popup-content-wrapper {
   border-left: 6px solid #073763;
   border-radius: 0;
+}
+
+.club-popup .leaflet-popup-content {
+  margin: 12px 14px;
   font-family: "Roboto", sans-serif;
+}
+
+/* keeps Leaflet's pane z-indexes (400+) under the floating panel, legend and help */
+.map {
+  isolation: isolate;
+}
+
+/* the badge's centre sits 4px left of and below the room corner */
+.club-count-marker .club-count {
+  transform: translate(calc(-50% - 4px), calc(-50% + 4px));
+}
+
+.map-locate {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  background: white;
+  cursor: pointer;
+}
+
+.map-locate .material-icons {
+  font-size: 20px;
+  line-height: 30px;
 }
 
 .club-popup-room {
@@ -359,7 +386,7 @@ a.club-name:focus-visible {
   margin: 0 10px;
 }
 
-/* bottom corners sit above the Mapbox logo and attribution */
+/* bottom corners sit above the map attribution */
 .map-legend-box {
   bottom: 30px;
   left: 10px;
