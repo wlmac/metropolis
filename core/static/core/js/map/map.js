@@ -1,24 +1,20 @@
 mapboxgl.accessToken = JSON.parse(
   document.getElementById("mapbox-apikey").textContent
 )["apikey"];
-// Without a real API key (local dev), fall back to a plain background so the floor plans still render.
-const hasMapboxKey =
-  mapboxgl.accessToken && mapboxgl.accessToken !== "change me";
+// Plain background instead of a Mapbox-hosted street style: the floor plans cover the view, and it skips the style/tile requests to Mapbox.
 const map = new mapboxgl.Map({
   container: "map", // container ID
-  style: hasMapboxKey
-    ? "mapbox://styles/nikisu/cktk76xy90rgm17s7q7pg0g55" // style URL
-    : {
-        version: 8,
-        sources: {},
-        layers: [
-          {
-            id: "background",
-            type: "background",
-            paint: { "background-color": "#dde5df" },
-          },
-        ],
+  style: {
+    version: 8,
+    sources: {},
+    layers: [
+      {
+        id: "background",
+        type: "background",
+        paint: { "background-color": "#dde5df" },
       },
+    ],
+  },
   center: [-79.46155348420591, 43.753374130758445], // starting position [lng, lat]
   zoom: 19, // starting zoom
 });
@@ -1364,28 +1360,30 @@ const customData = {
 // map.dragRotate.disable();
 // map.touchZoomRotate.disableRotation();
 
-map.on("load", () => {
-  // *-web.jpg are FloorOne/FloorTwo.jpg shrunk to 4096px (the max WebGL texture size on many phones); regenerate them when the originals change
-  map.addSource("floorOne", {
-    type: "image",
-    url: "../static/core/img/FloorOne-web.jpg?v=2",
-    coordinates: [
-      [-79.46270547634776, 43.75413886166868], //TL
-      [-79.46072668772469, 43.75413886166868], //TR
-      [-79.46072668772469, 43.75274955916902], //BR
-      [-79.46270547634776, 43.75274955916902], //BL
-    ],
-  });
+// *-web.webp are FloorOne/FloorTwo.jpg shrunk to 4096px (the max WebGL texture size on many phones), WebP quality 85; regenerate them when the originals change
+const FLOOR_IMAGE_COORDS = [
+  [-79.46270547634776, 43.75413886166868], //TL
+  [-79.46072668772469, 43.75413886166868], //TR
+  [-79.46072668772469, 43.75274955916902], //BR
+  [-79.46270547634776, 43.75274955916902], //BL
+];
 
+// floor two is only downloaded the first time someone switches to it
+function addFloorTwo() {
   map.addSource("floorTwo", {
     type: "image",
-    url: "../static/core/img/FloorTwo-web.jpg",
-    coordinates: [
-      [-79.46270547634776, 43.75413886166868], //TL
-      [-79.46072668772469, 43.75413886166868], //TR
-      [-79.46072668772469, 43.75274955916902], //BR
-      [-79.46270547634776, 43.75274955916902], //BL
-    ],
+    url: "../static/core/img/FloorTwo-web.webp",
+    coordinates: FLOOR_IMAGE_COORDS,
+  });
+  // under floorOne (hidden while on floor 2) so it stays below the room and club layers
+  map.addLayer({ id: "floorTwo", source: "floorTwo", type: "raster" }, "floorOne");
+}
+
+map.on("load", () => {
+  map.addSource("floorOne", {
+    type: "image",
+    url: "../static/core/img/FloorOne-web.webp",
+    coordinates: FLOOR_IMAGE_COORDS,
   });
 
   // const marker1 = new mapboxgl.Marker({})
@@ -1424,16 +1422,6 @@ map.on("load", () => {
     layout: {
       // Make the layer visible by default.
       visibility: "visible",
-    },
-  });
-
-  map.addLayer({
-    id: "floorTwo",
-    source: "floorTwo",
-    type: "raster",
-    layout: {
-      // Make the layer visible by default.
-      visibility: "none",
     },
   });
 
@@ -2584,7 +2572,8 @@ function setFloor(floor) {
   // before the map's load event the layers don't exist yet; initClubSchedule applies the floor then
   if (map.getLayer("floorOne")) {
     map.setLayoutProperty("floorOne", "visibility", floor == 1 ? "visible" : "none");
-    map.setLayoutProperty("floorTwo", "visibility", floor == 2 ? "visible" : "none");
+    if (floor == 2 && !map.getLayer("floorTwo")) addFloorTwo();
+    if (map.getLayer("floorTwo")) map.setLayoutProperty("floorTwo", "visibility", floor == 2 ? "visible" : "none");
   }
   for (const layer of CLUB_ROOM_LAYERS) {
     if (map.getLayer(layer.id)) map.setFilter(layer.id, floorFilter(layer.filter));
