@@ -522,7 +522,8 @@ QLTR: dict[str, dict] = {
 }
 
 TEACHER_EMAIL_SUFFIX = "@tdsb.on.ca"
-STUDENT_EMAIL_SUFFIX = "@student.tdsb.on.ca"
+# tuple so str.endswith accepts both; TDSB moved students from @student.tdsb.on.ca to @tdsb.ca
+STUDENT_EMAIL_SUFFIX = ("@tdsb.ca", "@student.tdsb.on.ca")
 
 MAINTENANCE_MODE: Literal["", False, "pre", "post", "in"] = ""
 PRE = ""
