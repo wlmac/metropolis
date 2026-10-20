@@ -49,6 +49,7 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_old_password(self, value):
         if not self.instance.check_password(value):
             raise serializers.ValidationError("old_password is wrong")
+        return value
 
     def save(self, **kwargs):
         set_new_password = (

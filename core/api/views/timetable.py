@@ -27,7 +27,7 @@ class TimetableList(ListAPIViewWithFallback):
 
 
 class TimetableSchedule(APIView):
-    permissions_classes = [permissions.IsAuthenticated | TokenHasScope]
+    permission_classes = [permissions.IsAuthenticated | TokenHasScope]
     required_scopes = ["me_timetable", "me_schedule"]
 
     def get(self, request, pk):

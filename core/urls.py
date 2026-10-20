@@ -26,7 +26,6 @@ from .views.post import (
     BlogPostTagList,
     ExhibitList,
 )
-from .views.raffle import RaffleRedirect
 from .views.timetable import (
     TimetableEditor,
     TimetableList,
@@ -99,7 +98,6 @@ urlpatterns = [
     path("tv", TVView.as_view(), name="tv"),
     path("tv/clubs", TVClubView.as_view(), name="tvclub"),
     path("c/<int:pk>", OrganizationShort.as_view(), name="organization_short"),
-    path("raffle", RaffleRedirect.as_view(), name="raffle"),
     path("hijack/", include("hijack.urls")),
 ]
 

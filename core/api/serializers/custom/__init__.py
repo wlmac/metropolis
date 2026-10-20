@@ -86,9 +86,10 @@ class LikeField(Field):
         super().__init__(**kwargs)
 
     def to_representation(self, obj):
+        user = self.context["request"].user
         return {
-            "count": obj.likes.count(),
-            "liked": obj.likes.filter(author=self.context["request"].user).exists(),
+            "count": obj.count(),
+            "liked": user.is_authenticated and obj.filter(author=user).exists(),
         }
 
 

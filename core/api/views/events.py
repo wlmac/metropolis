@@ -1,11 +1,26 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db.models import Q
 from django.utils import timezone
 from rest_framework import permissions
+from rest_framework.exceptions import ValidationError
 from rest_framework.parsers import JSONParser
 
 from ... import models
 from .. import serializers
 from ..utils.fallback import ListAPIViewWithFallback
+
+
+def _parse_datetime(name, value):
+    if not isinstance(value, str):
+        return value
+    field = models.Event._meta.get_field("end_date")
+    # a "+" in a query string decodes to a space ("...T10:00:00 08:00")
+    for candidate in (value, value.replace(" ", "+")):
+        try:
+            return field.to_python(candidate)
+        except DjangoValidationError:
+            pass
+    raise ValidationError({name: "Invalid date/time."})
 
 
 class EventsList(ListAPIViewWithFallback):
@@ -21,6 +36,9 @@ class EventsList(ListAPIViewWithFallback):
             or timezone.now()
         )
         end = self.request.data.get("end") or self.request.query_params.get("end")
+
+        start = _parse_datetime("start", start)
+        end = end and _parse_datetime("end", end)
 
         events = models.Event.objects.filter(end_date__gte=start)
 

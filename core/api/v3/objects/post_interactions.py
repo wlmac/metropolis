@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import permissions, serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import MethodNotAllowed, ValidationError
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from core.api.serializers.custom import (
@@ -33,6 +33,15 @@ class IsOwnerOrSuperuser(BasePermission):
         )
 
 
+class IsLikeAuthorOrSuperuser(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return (
+            request.method in permissions.SAFE_METHODS
+            or request.user.is_superuser
+            or obj.author == request.user
+        )
+
+
 # ====================================================================================================
 # -------------------------------------------  LIKES  -------------------------------------------
 # ====================================================================================================
@@ -42,8 +51,9 @@ class LikeSerializer(serializers.ModelSerializer):
     content_type = ContentTypeField()
 
     def update(self, instance, validated_data):
-        raise NotImplementedError(
-            "You cannot update a like, if you wish to delete. do so."
+        raise MethodNotAllowed(
+            self.context["request"].method,
+            detail="You cannot update a like, if you wish to delete. do so.",
         )
 
     def destroy(self, instance: Like, validated_data):
@@ -53,6 +63,9 @@ class LikeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data) -> Like:
         obj_name = validated_data["content_type"].name.lower().replace(" ", "")
+        validated_data["author"] = (
+            validated_data.get("author") or self.context["request"].user
+        )
         if (
             self.context["request"].user != validated_data["author"]
         ) and not self.context["request"].user.is_superuser:
@@ -98,7 +111,7 @@ class LikeProvider(BaseProvider):
 
     @property
     def permission_classes(self):
-        return [permissions.IsAuthenticated]
+        return [permissions.IsAuthenticated, IsLikeAuthorOrSuperuser]
 
     def get_queryset(self, request):
         return Like.objects.all()

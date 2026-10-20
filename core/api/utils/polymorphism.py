@@ -151,10 +151,8 @@ class ObjectAPIView(generics.GenericAPIView):
         allowed_fields: list = getattr(  # the lookup fields allowed for the provider
             self.provider, "additional_lookup_fields", []
         )
-        allowed_fields.extend(settings.GLOBAL_LOOKUPS)
-        return set(
-            allowed_fields
-        )  # use a set for better memory performance & no duplicates.
+        # build a new set: extending the provider's class-level list grew it every request
+        return {*allowed_fields, *settings.GLOBAL_LOOKUPS}
 
     @property
     def lookup_field(self) -> str:

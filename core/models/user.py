@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,7 +15,7 @@ from core.utils.fields import ChoiceArrayField, SetField
 from core.utils.get_schedule import get_day_schedule
 from core.utils.mail import send_mail
 
-# Create your models here.
+logger = logging.getLogger(__name__)
 
 
 class CaseInsensitiveUserManager(UserManager):
@@ -63,7 +65,7 @@ class User(AbstractUser):
 
     @property
     def qltrs2(self):
-        return set(self.qltrs.split(" "))
+        return set(self.qltrs.split(" ")) if self.qltrs else set()
 
     def in_qltr(self, name: str):
         if self.qltrs:
@@ -104,21 +106,23 @@ class User(AbstractUser):
             "deleted_at": timezone.now() + timezone.timedelta(days=14),
             "restore_link": settings.SITE_URL + reverse("api3_user_restore"),
         }
-        print("hiosas", email_template_context)
 
-        send_mail(  # todo: frontend needs to make a page for this
-            "[ACTION REQUIRED] Your account has been marked for deletion.",
-            render_to_string(
-                "core/email/user/deleted.txt",
-                email_template_context,
-            ),
-            None,
-            [self.email],
-            html_message=render_to_string(
-                "core/email/user/deleted.html",
-                email_template_context,
-            ),
-        )
+        try:
+            send_mail(  # todo: frontend needs to make a page for this
+                "[ACTION REQUIRED] Your account has been marked for deletion.",
+                render_to_string(
+                    "core/email/user/deleted.txt",
+                    email_template_context,
+                ),
+                None,
+                [self.email],
+                html_message=render_to_string(
+                    "core/email/user/deleted.html",
+                    email_template_context,
+                ),
+            )
+        except Exception:  # the deletion is already saved, don't 500 over the email
+            logger.exception("Could not send deletion email to user %s", self.pk)
 
     def mark_restored(self):
         self.is_deleted = False

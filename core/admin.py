@@ -205,7 +205,7 @@ class PostAdmin(admin.ModelAdmin):
     fields = ["like_count", "save_count"]
 
     def like_count(self, obj) -> int:
-        return obj.like_count
+        return obj.likes.count()
 
     like_count.short_description = "Like count"
 
@@ -401,8 +401,8 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
             "rejection_reason",
         }
         fields_matrix = [
-            [{"supervisor"}, {"rejection_reason"}, {}],
-            [{"supervisor", "rejection_reason"}, {"rejection_reason"}, {}],
+            [{"supervisor"}, {"rejection_reason"}, {}, {}],
+            [{"supervisor", "rejection_reason"}, {"rejection_reason"}, {}, {}],
         ]
 
         if request.user in obj.organization.supervisors.all():
@@ -417,6 +417,7 @@ class AnnouncementAdmin(CustomTimeMixin, PostAdmin):
             if request.user.is_superuser:
                 kwargs["queryset"] = models.Organization.objects.all().order_by("name")
             else:
+                kwargs["required"] = True  # save_model needs an organization
                 kwargs["queryset"] = (
                     models.Organization.objects.filter(
                         Q(supervisors=request.user) | Q(execs=request.user)

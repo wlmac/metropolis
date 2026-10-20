@@ -29,4 +29,4 @@ class ClubsSitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return Organization.active()
+        return Organization.active().order_by("pk")

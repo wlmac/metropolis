@@ -76,7 +76,7 @@ class Like(PostInteraction):
         """
         if kwargs.get("force", False):
             return super().delete(using=using, keep_parents=keep_parents)
-        self.user = None
+        self.author = None
         self.save()
 
 
@@ -106,6 +106,15 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def likes(self):
+        # soft-deleted (unliked) likes have no author
+        return Like.objects.filter(
+            content_type=ContentType.objects.get_for_model(self),
+            object_id=self.pk,
+            author__isnull=False,
+        )
 
     class Meta:
         abstract = True
@@ -183,9 +192,9 @@ class Announcement(Post):
         return user in org.supervisors.all() | org.execs.all()
 
     def approvable(self, user=None):
-        if user is None:
+        if user is None or self.organization is None:
             return False
-        return self.organization.supervisors.filter(user=user).exists()
+        return self.organization.supervisors.filter(pk=user.pk).exists()
 
     class Meta:
         constraints = [
