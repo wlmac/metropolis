@@ -128,7 +128,6 @@ def get_providers_by_operation(
 
 class ObjectAPIView(generics.GenericAPIView):
     def initial(self, *args, **kwargs):
-        super().initial(*args, **kwargs)
         self.request.mutate = self.mutate
         self.request.kind = self.kind
         self.request.detail = self.detail
@@ -142,6 +141,8 @@ class ObjectAPIView(generics.GenericAPIView):
             "listing_filters",
             getattr(provider, "listing_filter", {"id": int, "pk": int}),
         )  # NOTE: better to have the following if after initial, but this is easier
+        # permission_classes is set above, so DRF's permission checks must run last
+        super().initial(*args, **kwargs)
 
     def _compile_lookup_fields(self) -> set[str]:
         """

@@ -35,4 +35,6 @@ class Tag(models.Model):
     def editable(self, user=None):
         if user is None:
             return False
-        return user in (org := self.organization).supervisors.all() | org.execs.all()
+        if (org := self.organization) is None:
+            return False
+        return user in org.supervisors.all() | org.execs.all()

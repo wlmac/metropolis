@@ -9,8 +9,7 @@ import requests
 from celery.schedules import crontab
 from celery.utils.log import get_task_logger
 from django.conf import settings
-from django.db.models import F, JSONField, Q, Value
-from django.db.models.functions.text import Concat
+from django.db.models import JSONField, Q, Value
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _l
 from django.utils.translation import ngettext
@@ -76,27 +75,28 @@ def setup_periodic_tasks(sender, **kwargs):
 
 @app.task
 def delete_expired_users():
-    """Scrub user data from inactive accounts that have not logged in for 14 days. (marked deleted)"""
+    """Scrub user data from accounts marked deleted more than 14 days ago."""
     queryset = User.objects.filter(
         is_deleted=True,
-        last_login__lt=timezone.make_aware(dt.datetime.now() - dt.timedelta(days=14)),
+        is_active=True,  # scrubbed accounts are deactivated, so only scrub once
+        deleted_at__lt=timezone.now() - dt.timedelta(days=14),
     )
     for user in queryset:
         user.organizations.clear()
-    queryset.update(  # We need to object to not break posts or comments
-        first_name="Deleted",
-        last_name="User",
-        username=get_random_username(),
-        bio="",
-        # timezone="",
-        graduating_year=None,
-        is_teacher=False,
-        qltrs=None,
-        saved_blogs=[],
-        saved_announcements=[],
-        expo_notif_tokens={},
-    )
-    queryset.update(email=Concat(F("random_username"), Value("@maclyonsden.com")))
+        user.saved_blogs.clear()
+        user.saved_announcements.clear()
+        user.first_name = "Deleted"  # We need the object to not break posts or comments
+        user.last_name = "User"
+        user.username = get_random_username()
+        user.email = f"{user.username}@maclyonsden.com"
+        user.bio = ""
+        user.graduating_year = None
+        user.is_teacher = False
+        user.qltrs = None
+        user.expo_notif_tokens = {}
+        user.is_active = False  # can't log in or be restored
+        user.set_unusable_password()
+        user.save()
 
 
 @app.task
@@ -118,8 +118,12 @@ def notif_broker_announcement(obj_id):
             f"notif_broker_announcement: announcement {obj_id} does not exist"
         )
         return
+    if ann.status != "a" or ann.show_after > timezone.now():
+        return  # unapproved, or the show_after change moved it later
     affected = users_with_token()
-    if ann.organization.id in settings.ANNOUNCEMENTS_NOTIFY_FEEDS:
+    if ann.organization is None or ann.organization.id in (
+        settings.ANNOUNCEMENTS_NOTIFY_FEEDS
+    ):
         category = "ann.public"
     else:
         affected = affected.filter(Q(organizations__in=[ann.organization]))

@@ -174,7 +174,7 @@ class AnnouncementDetail(UserPassesTestMixin, DetailView, mixins.TitleMixin):
 
     def test_func(self):
         announcement = self.get_object()
-        if announcement.status == "a":
+        if announcement.status == "a" and announcement.show_after <= timezone.now():
             if (
                 announcement.organization
                 and self.request.user in announcement.organization.followers.all()

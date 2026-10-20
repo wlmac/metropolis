@@ -49,6 +49,14 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
+    def editable(self, user=None):
+        if user is None:
+            return False
+        if user.is_superuser:
+            return True
+        org = self.organization
+        return user in org.supervisors.all() | org.execs.all()
+
     def is_current(self):
         today = timezone.localtime()
         return self.start_date <= today < self.end_date

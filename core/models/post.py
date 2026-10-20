@@ -174,11 +174,13 @@ class Announcement(Post):
         return feed
 
     def editable(self, user=None):
-        if user.is_superuser:
-            return True
         if user is None:
             return False
-        return user in (org := self.organization).supervisors.all() | org.execs.all()
+        if user.is_superuser:
+            return True
+        if (org := self.organization) is None:  # imported, only organization_string
+            return False
+        return user in org.supervisors.all() | org.execs.all()
 
     def approvable(self, user=None):
         if user is None:

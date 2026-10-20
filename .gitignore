@@ -34,3 +34,6 @@ secrets/*
 
 # media
 media
+
+# local-only tests
+core/tests_local.py

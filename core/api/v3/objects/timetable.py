@@ -24,6 +24,11 @@ class MutateSerializer(serializers.ModelSerializer):
 
 
 class Identity(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.method in permissions.SAFE_METHODS or (
+            request.user.is_authenticated
+        )
+
     def has_object_permission(self, request, view, timetable):
         if request.method in ("GET", "HEAD", "OPTIONS"):
             return True

@@ -5,54 +5,88 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import permissions, serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from core.api.serializers.custom import (
     LikeField,
     OrganizationField,
     SingleUserField,
-    SupervisorField,
     TagRelatedField,
 )
-from core.api.utils.last_modified import ModelAbilityField
-from core.models import Announcement, User
+from core.models import Announcement
 from core.utils.mail import send_mail
 
 from .base import BaseProvider
 
 
-def exec_validator(value, serializer_field):
+def exec_validator(value):
     if value not in {"d", "p"}:
         raise ValidationError("only draft or pending allowed", code="exec")
 
 
-def always_fail_validator(value, serializer_field):
-    raise ValidationError("always fail", code="exec")
+class OrgAccessMixin:
+    """Creating or moving an item needs rights on the target organization."""
+
+    def validate(self, attrs):
+        user = self.context["request"].user
+        if user.is_superuser:
+            return super().validate(attrs)
+        if self.instance is None or "organization" in attrs:
+            org = attrs.get("organization")
+            if org is None or user not in (
+                org.owners.all() | org.execs.all() | org.supervisors.all()
+            ):  # no organization (global) is superuser only
+                raise PermissionDenied("not allowed to post for this organization")
+        if "author" in attrs:
+            old = getattr(self.instance, "author", None)
+            if attrs["author"] != (old if self.instance else user):
+                raise PermissionDenied("author must be yourself")
+        return super().validate(attrs)
 
 
-class Serializer(serializers.ModelSerializer):
+class Serializer(OrgAccessMixin, serializers.ModelSerializer):
     message = serializers.CharField(read_only=True)
     likes = LikeField()
     tags = TagRelatedField()
     author = SingleUserField()
     organization = OrganizationField()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self._is_supervisor():
+            # only supervisors may reject or assign a supervisor
+            self.fields["supervisor"].read_only = True
+            self.fields["rejection_reason"].read_only = True
+
+    def _is_supervisor(self, org=None):
+        user = self.context["request"].user
+        if isinstance(
+            self.instance, Announcement
+        ):  # always the instance's org, not the incoming
+            org = self.instance.organization
+        return user.is_superuser or (org is not None and user in org.supervisors.all())
+
     def save(self, **kwargs):
         notify_supervisors = False
-        obj: Announcement = super().save(**kwargs)
         user = self.context["request"].user
-        if user in obj.organization.supervisors.all():
-            obj.supervisor = user
+        incoming_status = self.validated_data.get(
+            "status", getattr(self.instance, "status", "p")
+        )
+        is_supervisor = self._is_supervisor(self.validated_data.get("organization"))
+        if not is_supervisor:  # only supervisors can approve/reject, so persist d or p
+            kwargs["status"] = "d" if incoming_status == "d" else "p"
+        if is_supervisor:
+            kwargs["supervisor"] = user
+        obj: Announcement = super().save(**kwargs)
+        if is_supervisor:
             if obj.status not in {"d", "p"} and user != obj.author:
                 obj.message = (
                     f"Successfully marked announcement as {obj.get_status_display()}."
                 )
-        else:
-            if obj.status not in ("d", "p"):
-                notify_supervisors = True
-                if obj.status != "a":
-                    obj.message = "Successfully sent announcement for review."
-            obj.status = "p" if obj.status != "d" else "d"
+        elif incoming_status not in ("d", "p"):
+            notify_supervisors = True
+            if incoming_status != "a":
+                obj.message = "Successfully sent announcement for review."
 
         if notify_supervisors:
             for teacher in obj.organization.supervisors.all():
@@ -104,34 +138,8 @@ class Serializer(serializers.ModelSerializer):
 class OneSerializer(Serializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        user = self.context["request"].user
-        # these HiddenFields should never be used to set values
-        self.status = serializers.HiddenField(
-            default="", validators=[always_fail_validator]
-        )
-        self.rejection_reason = serializers.HiddenField(
-            default="", validators=[always_fail_validator]
-        )
-        instance = self.instance
-        if instance:
-            if user in instance.organization.supervisors.all():
-                self.supervisor = SupervisorField(
-                    "edit", queryset=User.objects.filter(is_teacher=True)
-                )
-                self.status = ModelAbilityField(
-                    "approve",
-                    model_field=Announcement()._meta.get_field("status"),
-                )
-                self.rejection_reason = ModelAbilityField(
-                    "approve",
-                    model_field=Announcement()._meta.get_field("rejection_reason"),
-                )
-            elif user in instance.organization.execs.all():
-                self.supervisor = SupervisorField(
-                    "edit", queryset=User.objects.filter(is_teacher=True)
-                )
-                self.status = serializers.CharField(validators=[exec_validator])
-                self.rejection_reason = serializers.CharField(read_only=True)
+        if not self._is_supervisor():
+            self.fields["status"].validators.append(exec_validator)
 
 
 class Inner(permissions.BasePermission):

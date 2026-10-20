@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db.models import signals
 from django.dispatch import Signal, receiver
 from django.http import StreamingHttpResponse
+from django.utils import timezone
 from rest_framework import permissions, response
 from rest_framework import serializers as serializers2
 from rest_framework.views import APIView
@@ -15,22 +16,36 @@ from .. import serializers
 global_notifs = Signal()
 
 
+@receiver(signals.pre_save, sender=models.Announcement)
+def announcement_pre_save(sender, instance, **kwargs):
+    instance._was_approved = (
+        instance.pk is not None
+        and models.Announcement.objects.filter(pk=instance.pk, status="a").exists()
+    )
+
+
 @receiver(signals.post_save, sender=models.Announcement)
 def announcement_change(sender, **kwargs):
-    global_notifs.send("announcement_change", orig_sender=sender, kwargs=kwargs)
-    if not kwargs["created"]:
-        return  # only send notifs on new announcements
+    ann = kwargs["instance"]
+    # the stream is anonymous: only broadcast what an anonymous user could already see
+    if ann.status == "a" and ann.is_public and ann.show_after <= timezone.now():
+        global_notifs.send("announcement_change", orig_sender=sender, kwargs=kwargs)
+    if ann.status != "a" or getattr(ann, "_was_approved", False):
+        return  # push once, when the announcement becomes approved
 
     # TODO add additonal checks for approve/club followers etc
 
     if not settings.NOTIF_DRY_RUN:
-        tasks.notif_broker_announcement.delay(kwargs["instance"].id)
+        # a future show_after is pushed at that time (the task re-checks it)
+        tasks.notif_broker_announcement.apply_async(
+            (ann.id,), eta=max(ann.show_after, timezone.now())
+        )
 
 
 @receiver(signals.post_save, sender=models.BlogPost)
 def blogpost_change(sender, **kwargs):
-    if not kwargs["created"]:
-        return  # only send notifs on new blogposts
+    if not kwargs["created"] or not kwargs["instance"].is_published:
+        return  # only send notifs on new, published blogposts
 
     global_notifs.send("blogpost_change", orig_sender=sender, kwargs=kwargs)
     if not settings.NOTIF_DRY_RUN:

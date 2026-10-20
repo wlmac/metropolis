@@ -25,8 +25,9 @@ class UserSerializer(serializers.ModelSerializer):
         required=False, write_only=True, trim_whitespace=False
     )
     organizations = UserOrganizationField()
-    organizations_leading = UserOrganizationField()
-    organizations_supervising = UserOrganizationField()
+    # declared fields ignore Meta.read_only_fields; these grant org powers so must be read-only
+    organizations_leading = UserOrganizationField(read_only=True)
+    organizations_supervising = UserOrganizationField(read_only=True)
 
     @staticmethod
     def get_gravatar_url(obj):
@@ -79,6 +80,13 @@ class UserSerializer(serializers.ModelSerializer):
             "gravatar_url",
             "saved_blogs",
             "saved_announcements",
+            "is_teacher",
+            "is_superuser",
+            "is_deleted",
+            "deleted_at",
+        ]
+        # privilege and account state must never be client-writable
+        read_only_fields = [
             "is_teacher",
             "is_superuser",
             "is_deleted",

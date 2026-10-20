@@ -9,13 +9,13 @@ from rest_framework.exceptions import ParseError
 from core.api.serializers.custom import OrganizationField, TagRelatedField
 from core.models import Event
 
-from .announcement import Inner
+from .announcement import Inner, OrgAccessMixin
 from .base import BaseProvider
 
 AOE = datetime.timezone(datetime.timedelta(hours=-12), name="AoE")
 
 
-class SuperficialSerializer(serializers.ModelSerializer):
+class SuperficialSerializer(OrgAccessMixin, serializers.ModelSerializer):
     tags = TagRelatedField()
     organization = OrganizationField()
 
@@ -33,7 +33,7 @@ class SuperficialSerializer(serializers.ModelSerializer):
         ]
 
 
-class DetailSerializer(serializers.ModelSerializer):
+class DetailSerializer(OrgAccessMixin, serializers.ModelSerializer):
     tags = TagRelatedField()
     organization = OrganizationField()
 

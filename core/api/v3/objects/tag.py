@@ -4,10 +4,11 @@ from rest_framework import permissions, serializers
 
 from core import models
 
+from .announcement import OrgAccessMixin
 from .base import BaseProvider
 
 
-class Serializer(serializers.ModelSerializer):
+class Serializer(OrgAccessMixin, serializers.ModelSerializer):
     class Meta:
         model = models.Tag
         fields = ["id", "name", "color", "organization"]
@@ -18,7 +19,7 @@ class Inner(permissions.BasePermission):
     def has_object_permission(self, request, view, tag):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return request.user.can_edit(tag)
+        return request.user.is_superuser or request.user.can_edit(tag)
 
 
 class TagProvider(BaseProvider):
@@ -30,7 +31,7 @@ class TagProvider(BaseProvider):
     @property
     def permission_classes(self):
         return (
-            [permissions.DjangoModelPermissions | Inner]
+            [permissions.DjangoModelPermissions, Inner]
             if self.request.mutate
             else [permissions.AllowAny]
         )
