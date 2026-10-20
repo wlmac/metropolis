@@ -37,6 +37,11 @@ class MetropolisBaseTests(TestCase):
             response, "Metropolis"
         )  # Changed assertRegex to assertContains
 
+    def test_index_regular_user(self):
+        get_user_model().objects.create_user(username="student", password="pw")
+        self.client.login(username="student", password="pw")
+        self.assertEqual(self.client.get(reverse("index")).status_code, 200)
+
     def test_check_ok(self):
         urls = [
             "/api/version",

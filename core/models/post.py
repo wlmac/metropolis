@@ -167,7 +167,7 @@ class Announcement(Post):
         if user is not None and user.is_authenticated:
             feed_all = (
                 feed_all
-                | approved_announcements.filter(organization__member=user)
+                | approved_announcements.filter(organization__follower=user)
                 | cls.objects.filter(organization__execs__in=[user])
             ).distinct()
         feed = feed_all
