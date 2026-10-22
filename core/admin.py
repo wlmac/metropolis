@@ -7,6 +7,8 @@ from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.models import FlatPage
 from django.db.models import Q, TimeField
 from django.forms import Textarea
+from django.utils.html import format_html, format_html_join
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from martor.widgets import AdminMartorWidget
 from reversion.admin import VersionAdmin
@@ -46,6 +48,7 @@ from .utils.filters import (
     BlogPostAuthorListFilter,
     OrganizationListFilter,
 )
+from .utils.rooms import ROOM_CHOICES
 
 User = get_user_model()
 
@@ -104,6 +107,52 @@ class OrganizationURLInline(admin.StackedInline):
     extra = 0
 
 
+class RoomInput(forms.TextInput):
+    """Text box with native autocomplete over ROOM_CHOICES; the model still validates."""
+
+    def render(self, name, value, attrs=None, renderer=None):
+        # fixed id: admin's "add another" JS only rewrites id/name/for, so a per-row id breaks new rows
+        attrs = {**(attrs or {}), "list": "room-choices"}
+        options = format_html_join(
+            "", '<option value="{}">', ((r,) for r in ROOM_CHOICES)
+        )
+        # browsers match datalist text anywhere ("2" -> Room 121); narrow it to word starts so "2" -> Room 2xx
+        return super().render(name, value, attrs, renderer) + format_html(
+            '<datalist id="room-choices">{}</datalist>{}',
+            options,
+            mark_safe(ROOM_FILTER_JS),
+        )
+
+
+ROOM_FILTER_JS = """<script>
+if (!window.roomFilter) {
+  window.roomFilter = true;
+  const all = [...document.getElementById("room-choices").options].map((o) => o.value)
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  document.addEventListener("input", (e) => {
+    if (e.target.getAttribute("list") != "room-choices") return;
+    const q = e.target.value.trim().toLowerCase();
+    e.target.list.replaceChildren(...all
+      .filter((r) => !q || r.toLowerCase().split(/[^a-z0-9]+/).some((w) => w.startsWith(q)) || r.toLowerCase().startsWith(q))
+      .map((r) => new Option(r)));
+  });
+}
+</script>"""
+
+
+class ClubMeetingForm(forms.ModelForm):
+    class Meta:
+        model = models.ClubMeeting
+        fields = ["day", "time", "freq", "room", "note"]
+        widgets = {"room": RoomInput}
+
+
+class ClubMeetingInline(admin.TabularInline):
+    form = ClubMeetingForm
+    model = models.ClubMeeting
+    extra = 0
+
+
 class OrganizationAdmin(VersionAdmin):
     list_display = [
         "name",
@@ -132,6 +181,7 @@ class OrganizationAdmin(VersionAdmin):
     inlines = [
         TagInline,
         OrganizationURLInline,
+        ClubMeetingInline,
     ]
     actions = [
         set_club_unactive,
@@ -141,6 +191,10 @@ class OrganizationAdmin(VersionAdmin):
         wipe_club_bios,
     ]
     form = OrganizationAdminForm
+
+    class Media:
+        css = {"all": ("core/css/admin-club-form.css",)}
+        js = ("core/js/admin-club-form.js",)
 
     @admin.display(description="Owners")
     def display_owners(self, obj):

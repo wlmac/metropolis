@@ -167,3 +167,33 @@ class AnnouncementPageTests(TestCase):
     def test_cards_unknown_club(self):
         response = self.client.get("/announcements/cards?page=1&feed=999999")
         self.assertEqual(response.status_code, 404)
+
+
+class ClubMeetingTests(TestCase):
+    def test_room_validated_and_map_gets_meetings(self):
+        from core.admin import ClubMeetingForm
+        from core.models import ClubMeeting, Organization
+
+        org = Organization.objects.create(name="Test Club", slug="test-club")
+        data = {"day": "mon", "time": "lunch", "freq": "weekly", "note": ""}
+        assert not ClubMeetingForm({**data, "room": "Room 9999"}).is_valid()
+        form = ClubMeetingForm({**data, "room": "Room 202"})
+        assert form.is_valid()
+        form.instance.organization = org
+        form.save()
+        assert ClubMeeting.objects.count() == 1
+
+        context = Client().get(reverse("map")).context
+        assert context["db_schedule"]["mon"][0]["room"] == "Room 202"
+        assert "Test Club" in context["org_names"]
+
+
+class MarkdownListTests(TestCase):
+    def test_adjacent_lists_stay_separate(self):
+        from core.templatetags.markdown_tags import markdown
+
+        html = markdown("1. one\n2. two\n\n* bullet\n    * nested")
+        self.assertIn("<ol>", html)
+        self.assertIn("<ul>", html)
+        self.assertNotIn("<li>\n<p>bullet", html)  # bullet not swallowed into the <ol>
+        self.assertEqual(markdown("1. a\n2. b").count("<ol>"), 1)

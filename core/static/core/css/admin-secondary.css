@@ -295,3 +295,26 @@ textarea {
   position: inherit;
   opacity: 1;
 }
+
+/* Django recolours the selected option's background but not its text, so the browser's white text shows up on pale yellow */
+form .aligned select option:checked {
+  color: var(--body-fg);
+}
+
+/* martor's admin CSS turns text white in dark mode for a dark admin; ours stays light, so put the text back */
+@media (prefers-color-scheme: dark) {
+  body {
+    color: var(--body-fg) !important;
+  }
+  body h1,
+  body h3,
+  body h5 {
+    color: inherit !important;
+  }
+  .modal-help-guide .modal-content {
+    background: #fff !important;
+  }
+  .modal-help-guide .table.markdown-reference {
+    color: var(--body-fg);
+  }
+}

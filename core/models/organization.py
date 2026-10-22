@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 
 from ..utils.file_upload import file_upload_path_generator
+from ..utils.rooms import ROOM_CHOICES
 from .post import Announcement
 from .user import User
 
@@ -93,6 +94,46 @@ class OrganizationURL(models.Model):
     class Meta:
         verbose_name = "Club URL"
         verbose_name_plural = "Club URLs"
+
+
+class ClubMeeting(models.Model):
+    organization = models.ForeignKey(
+        Organization, on_delete=models.CASCADE, related_name="meetings"
+    )
+    day = models.CharField(
+        max_length=3,
+        choices=[
+            ("mon", "Monday"),
+            ("tue", "Tuesday"),
+            ("wed", "Wednesday"),
+            ("thu", "Thursday"),
+            ("fri", "Friday"),
+        ],
+    )
+    time = models.CharField(
+        max_length=12, choices=[("lunch", "Lunch"), ("after school", "After school")]
+    )
+    freq = models.CharField(
+        max_length=10,
+        choices=[
+            ("weekly", "Weekly"),
+            ("biweekly", "Every other week"),
+            ("monthly", "Monthly"),
+            ("occasional", "Occasionally"),
+        ],
+        default="weekly",
+    )
+    room = models.CharField(
+        max_length=64, blank=True, choices=[(r, r) for r in ROOM_CHOICES]
+    )
+    note = models.CharField(max_length=64, blank=True)
+
+    def __str__(self):
+        return f"{self.organization} ({self.day})"
+
+    class Meta:
+        verbose_name = "Club meeting"
+        verbose_name_plural = "Club meetings"
 
 
 @receiver(m2m_changed, sender=Organization.owners.through)

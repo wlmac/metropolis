@@ -17,6 +17,29 @@ def bodge_replace(match):
     return f"[{match.group(1)}]({settings.ROOT}/"
 
 
+list_marker = re.compile(r"(\d+\.|[*+-]) ")
+
+
+def split_adjacent_lists(text):
+    """Python-Markdown merges a numbered list and a bulleted list that follow each other
+    into one list; an invisible paragraph between them keeps them apart.
+    shortcut: also applies inside fenced code blocks, fine until someone writes list-like code."""
+    out, last = [], None
+    for line in text.split("\n"):
+        m = list_marker.match(line)
+        if m:
+            kind = "ol" if m.group(1)[0].isdigit() else "ul"
+            if last and last != kind:
+                if out and out[-1].strip():
+                    out.append("")
+                out += ["\u200b", ""]
+            last = kind
+        elif line.strip() and not line[0].isspace():
+            last = None
+        out.append(line)
+    return "\n".join(out)
+
+
 # hosts already embedded on the site; add one here to allow a new embed source
 IFRAME_HOSTS = {
     "open.spotify.com",
@@ -60,6 +83,13 @@ cleaner = sanitizer.Cleaner(
         "blockquote",
         "pre",
         "code",
+        # the "tables" markdown extension is on; no attributes allowed, so these stay inert
+        "table",
+        "thead",
+        "tbody",
+        "tr",
+        "th",
+        "td",
     ],
     attributes={
         **sanitizer.ALLOWED_ATTRIBUTES,
@@ -79,5 +109,9 @@ cleaner = sanitizer.Cleaner(
 @stringfilter
 def markdown(field_name):
     return mark_safe(
-        cleaner.clean(markdownify(re.sub(bodge_pattern, bodge_replace, field_name)))
+        cleaner.clean(
+            markdownify(
+                split_adjacent_lists(re.sub(bodge_pattern, bodge_replace, field_name))
+            )
+        )
     )

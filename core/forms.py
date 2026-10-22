@@ -6,7 +6,6 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth.forms import UserChangeForm as ContribUserChangeForm
 from django_select2 import forms as s2forms
-from martor.widgets import AdminMartorWidget
 
 from core import models
 from core.views.mixins import CaseInsensitiveUsernameMixin
@@ -137,10 +136,23 @@ class SelectCoursesWidget(s2forms.ModelSelect2MultipleWidget):
     ]
 
 
+TOAST = "https://cdn.jsdelivr.net/npm/@toast-ui/editor@3.2.2/"  # the npm dist/*.js are not browser-standalone, so JS loads via +esm
+
+
+class WysiwygWidget(forms.Textarea):
+    """Plain textarea (hidden) that admin-club-form.js swaps for a Toast UI WYSIWYG editor; the value stays Markdown."""
+
+    def __init__(self, attrs=None):
+        super().__init__({"class": "wysiwyg-md", **(attrs or {})})
+
+    class Media:
+        css = {"all": (TOAST + "dist/toastui-editor.min.css",)}
+
+
 class OrganizationAdminForm(forms.ModelForm):
     class Meta:
         widgets = {
-            "extra_content": AdminMartorWidget,
+            "extra_content": WysiwygWidget,
         }
 
     # TODO: refactor and/or move to org m2m_changed signal

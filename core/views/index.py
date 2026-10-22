@@ -12,7 +12,7 @@ from core.utils import get_week_schedule_info
 
 from .. import models
 from ..api.views.staff import StaffSerializer
-from ..models import StaffMember
+from ..models import ClubMeeting, Organization, StaffMember
 from . import mixins
 
 
@@ -120,6 +120,27 @@ class CalendarFeed(ICalFeed, View):
 class MapView(TemplateView, mixins.TitleMixin):
     template_name = "core/map/map.html"
     title = "Map"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        orgs = Organization.active()
+        context["org_names"] = list(orgs.values_list("name", flat=True))
+        schedule = {d: [] for d in ("mon", "tue", "wed", "thu", "fri")}
+        for m in ClubMeeting.objects.filter(organization__in=orgs).select_related(
+            "organization"
+        ):
+            schedule[m.day].append(
+                {
+                    "club": m.organization.name,
+                    "url": m.organization.get_absolute_url(),
+                    "room": m.room or None,
+                    "time": m.time,
+                    "freq": m.freq,
+                    "note": m.note,
+                }
+            )
+        context["db_schedule"] = schedule
+        return context
 
 
 UserType = dict[str, int | str | bool | list[str]]

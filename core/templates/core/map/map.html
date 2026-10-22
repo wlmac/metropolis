@@ -11,6 +11,8 @@
           rel="stylesheet">
     {% url 'organization_list' as clubs_url %}
     {{ clubs_url|json_script:"clubs-url" }}
+    {{ org_names|json_script:"org-names" }}
+    {{ db_schedule|json_script:"db-schedule" }}
 {% endblock %}
 {% block main %}
     <div class="container">
@@ -94,5 +96,5 @@
     </div>
     <script src="{% static 'core/js/map/club-schedule.js' %}?v=5"></script>
     <script src="{% static 'core/js/map/room-outlines.js' %}?v=6"></script>
-    <script src="{% static 'core/js/map/map.js' %}?v=12"></script>
+    <script src="{% static 'core/js/map/map.js' %}?v=13"></script>
 {% endblock %}

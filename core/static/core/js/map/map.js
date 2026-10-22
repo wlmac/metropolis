@@ -1404,6 +1404,13 @@ let currentDay = DAYS[new Date().getDay() - 1] || "mon";
 let clubsVisible = false;
 const CLUBS_URL = JSON.parse(document.getElementById("clubs-url").textContent);
 let countMarkers = [];
+// clubs with a page on the site are managed by their execs, the rest stay in club-schedule.js
+const ORG_NAMES = new Set(JSON.parse(document.getElementById("org-names").textContent).map((n) => n.toLowerCase()));
+const DB_SCHEDULE = JSON.parse(document.getElementById("db-schedule").textContent);
+for (const d of DAYS)
+  CLUB_SCHEDULE[d] = CLUB_SCHEDULE[d]
+    .filter((m) => m.months || !ORG_NAMES.has(m.club.toLowerCase()))
+    .concat(DB_SCHEDULE[d]);
 // fill for every highlighted room, solid outline for regular meetings, dashed for the rest
 const onCurrentFloor = (feature) => feature.properties.floor == currentFloor;
 const clubRoomsLayer = L.geoJSON(null, {
@@ -1513,7 +1520,7 @@ function meetingsHtml(meetings) {
     .map((m) => {
       const details = [m.time == "lunch" ? "Lunch" : "After school", FREQ_LABELS[m.freq]];
       if (m.note) details.push(m.note);
-      return `<li><a class="club-name" href="${CLUBS_URL}">${escapeHtml(m.club)}</a>
+      return `<li><a class="club-name" href="${escapeHtml(m.url || CLUBS_URL)}">${escapeHtml(m.club)}</a>
         <span class="club-details">${escapeHtml(details.join(" · "))}</span></li>`;
     })
     .join("");
