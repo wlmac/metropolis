@@ -56,7 +56,7 @@
         <link rel="stylesheet" href="{% settings_value 'THEME_CSS' %}">
         <link rel="stylesheet"
               type="text/css"
-              href="{% static 'core/css/admin-secondary.css' %}">
+              href="{% static 'core/css/admin-secondary.css' %}?v=2">
     </head>
     <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
           data-admin-utc-offset="{% now 'Z' %}">
