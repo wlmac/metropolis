@@ -197,3 +197,51 @@ class MarkdownListTests(TestCase):
         self.assertIn("<ul>", html)
         self.assertNotIn("<li>\n<p>bullet", html)  # bullet not swallowed into the <ol>
         self.assertEqual(markdown("1. a\n2. b").count("<ol>"), 1)
+
+
+class OrganizationApiPermissionTests(TestCase):
+    def test_exec_cannot_edit_locked_fields(self):
+        from django.contrib.auth.models import Permission
+
+        from core.models import Organization, OrganizationURL
+
+        User = get_user_model()
+        owner = User.objects.create_user("owner", "o@x.ca", "pw")
+        ex = User.objects.create_user("ex", "e@x.ca", "pw")
+        for u in (owner, ex):
+            u.user_permissions.add(
+                Permission.objects.get(codename="change_organization")
+            )
+        org = Organization.objects.create(name="Club", slug="club")
+        org.owners.set([owner])
+        org.execs.set([owner, ex])
+        other = Organization.objects.create(name="Other", slug="other")
+        OrganizationURL.objects.create(organization=other, url="https://other.example")
+
+        c = Client()
+        c.force_login(ex)
+        url = f"/api/v3/obj/organization/single/{org.pk}"
+        body = {
+            "bio": "new",
+            "owners": [ex.pk],
+            "execs": [ex.pk],
+            "slug": "x",
+            "is_active": False,
+            "links": ["https://other.example"],
+        }
+        assert c.patch(url, body, content_type="application/json").status_code == 200
+        org.refresh_from_db()
+        assert org.bio == "new" and org.slug == "club" and org.is_active
+        assert list(org.owners.all()) == [owner] and org.execs.count() == 2
+        assert OrganizationURL.objects.get().organization == other
+
+        c.force_login(owner)
+        r = c.patch(url, {"execs": [ex.pk]}, content_type="application/json")
+        assert r.status_code == 400  # owner must stay an exec
+        assert (
+            c.patch(
+                url, {"execs": [owner.pk]}, content_type="application/json"
+            ).status_code
+            == 200
+        )
+        assert list(org.execs.all()) == [owner]

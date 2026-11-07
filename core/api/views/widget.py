@@ -29,7 +29,7 @@ class MartorImageUpload(APIView):
 
         image = request.FILES["markdown-image-upload"]
 
-        ext = os.path.splitext(image.name)[1]
+        ext = os.path.splitext(image.name)[1].lower()
 
         if ext not in settings.MARTOR_UPLOAD_SAFE_EXTS:
             return Response({"status": 400, "error": "Invalid image format."})
