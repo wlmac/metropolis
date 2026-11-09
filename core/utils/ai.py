@@ -10,9 +10,9 @@ def prompt_gemini(prompt, model=None):
 
     if model is None:
         try:
-            model = settings.GEMINI_MODEL or "models/gemini-2.0-flash"
+            model = settings.GEMINI_MODEL or "models/gemini-flash-latest"
         except AttributeError:
-            model = "models/gemini-2.0-flash"
+            model = "models/gemini-flash-latest"
 
     response = client.models.generate_content(
         model=model,

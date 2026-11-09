@@ -55,6 +55,7 @@ services:
     volumes:
       - ${PWD}/metropolis/local_settings.py:/app-inject/metropolis/docker_local_settings.py:ro
       - ${PWD}/metropolis/local_rsa_privkey.pem:/app-inject/metropolis/local_rsa_privkey.pem:ro
+      - ${PWD}/secrets:/app/secrets:ro
   celery-beat:
     restart: always
     image: ghcr.io/wlmac/metropolis
