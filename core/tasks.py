@@ -609,6 +609,7 @@ def fetch_calendar_events():
             response = prompt_gemini(prompt)
             response = response.text.replace("```json", "").replace("```", "")
             response = loads(response)
+            break
         except Exception:
             response = None
 
@@ -639,6 +640,7 @@ def fetch_calendar_events():
             response = prompt_gemini(prompt)
             response = response.text.replace("```json", "").replace("```", "")
             response = loads(response)
+            break
         except Exception:
             response = None
 
