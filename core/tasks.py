@@ -422,9 +422,9 @@ def fetch_announcements():
             if org_details:
                 announcement_data["organization"] = org_details["organization"]
             else:
-                announcement_data["organization_string"] = el["club_name"]
+                announcement_data["organization_string"] = el["club_name"][:64]
 
-            announcement_data["title"] = el["title"]
+            announcement_data["title"] = el["title"][:64]  # Gemini ignores the limit
             del announcement_data["club_name"]
 
             Announcement.objects.get_or_create(
