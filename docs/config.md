@@ -7,17 +7,22 @@ This section contains the configuration for the banners that appear on the main 
 
 <sub>*local_settings.py*</sub>
 ```py
-BANNER_REFERENCE_TIME = datetime.strptime("2023-11-14", "%Y-%m-%d").replace(tzinfo=timezone.utc)
+BANNER_REFERENCE_TIME = datetime.strptime("2023-11-14", "%Y-%m-%d").replace(
+    tzinfo=timezone.utc
+)
 # ^ not required, but recommended to set to whatever the start date/time
 BANNER3 += [
-       dict(
-           start=BANNER_REFERENCE_TIME, # when to start displaying the banner
-           end=BANNER_REFERENCE_TIME + timedelta(days=5), # when to stop displaying the banner (e.g. 5 days after start)
-           content="Hello Hey!", # banner text
-           icon_url="/static/core/img/logo/logo-maskable-192.png", # optional, displays an icon on the left of the banner
-           cta_link="https://jasoncameron.dev", # optional
-           cta_label="wow! go visit this cool site!", # optional (but required if cta_link is present)
-       )
+    dict(
+        start=BANNER_REFERENCE_TIME,  # when to start displaying the banner
+        end=BANNER_REFERENCE_TIME
+        + timedelta(
+            days=5
+        ),  # when to stop displaying the banner (e.g. 5 days after start)
+        content="Hello Hey!",  # banner text
+        icon_url="/static/core/img/logo/logo-maskable-192.png",  # optional, displays an icon on the left of the banner
+        cta_link="https://jasoncameron.dev",  # optional
+        cta_label="wow! go visit this cool site!",  # optional (but required if cta_link is present)
+    )
 ]
 ```
 the final result will look something like this (depending on the theme)
@@ -41,7 +46,7 @@ The options are as follows
 #### How to change theme
 <sub>*local_settings.py*</sub>
 ```py
-CURRENT_THEME = "halloween" # or any of the other options
+CURRENT_THEME = "halloween"  # or any of the other options
 ```
 
 #### How to add a theme
